@@ -1,0 +1,9 @@
+#b8b992
+#3b4f41
+black
+#87937b
+#617e6a
+white
+#d6d7be
+#a9ae8b
+#000000
