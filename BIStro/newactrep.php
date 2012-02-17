@@ -1,8 +1,8 @@
 <?php
 	require_once ('./inc/func_main.php');
-	pageStart ('Nový případ');
+	pageStart ('Nové hlášení');
 	mainMenu (4);
-	sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>nový případ</strong>');
+	sparklets ('<a href="./cases.php">hlášení</a> &raquo; <strong>nové hlášení</strong>');
 ?>
 <form action="proccase.php" method="post" id="inputform">
 	<div>
@@ -53,6 +53,7 @@
 	  <input type="submit" name="insertcase" id="submitbutton" value="Vložit" />
 	</div>	
 </form>
+
 <?php
 	pageEnd ();
 ?>
