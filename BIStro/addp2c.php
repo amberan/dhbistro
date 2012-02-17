@@ -8,9 +8,12 @@
 		if ($rec=MySQL_Fetch_Assoc($res)) {
 ?>
 
+<div id="obsah">
 <p>
 K případu můžete přiřadit osoby, kterých se týká nebo kterých by se týkat mohl.
 </p>
+</div>
+
 <?php
 	// zpracovani filtru
 	if (!isset($_REQUEST['sort'])) {
