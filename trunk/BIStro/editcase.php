@@ -40,8 +40,7 @@
 <hr />
 <form action="addp2c.php" method="post" class="otherform">
 	<p>
-		Případu můžete přiřadit osoby, které do něj patří. Opačnou akci lze provést u osoby, kde přiřazujete pro osobě případy, do kterých patří.
-		Akce jsou si rovnocenné a je tedy nutná pouze jedna z nich.
+		Případu můžete přiřadit osoby, které do něj patří.
 	</p>
 	<div>
 		<input type="hidden" name="rid" value="<?php echo $_REQUEST['rid']; ?>" />
