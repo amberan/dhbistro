@@ -9,7 +9,7 @@
 ?>
 
 <p>
-K případu můžete přiřadit osoby, kterých se týka nebo kterých by se týkat mohl.
+K případu můžete přiřadit osoby, kterých se týká nebo kterých by se týkat mohl.
 </p>
 <?php
 	// zpracovani filtru
@@ -41,7 +41,7 @@ K případu můžete přiřadit osoby, kterých se týka nebo kterých by se tý
 		<p><input type="checkbox" name="sportraits" value="1"'.(($sportraits)?' checked="checked"':'').'> zobrazit portréty</p>
 	  <div id="filtersubmit"><input type="hidden" name="rid" value="'.$_REQUEST['rid'].'" /><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
-</form><form action="procperson.php" method="post" class="otherform">';
+</form><form action="addpersons.php" method="post" class="otherform">';
 	}
 	filter();
 	// vypis osob
@@ -65,7 +65,7 @@ K případu můžete přiřadit osoby, kterých se týka nebo kterých by se tý
 ';
 		$even=0;
 		while ($rec=MySQL_Fetch_Assoc($res)) {
-		  echo '<tr class="'.(($even%2==0)?'even':'odd').'"><td><input type="checkbox" name="group[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser'])?' checked="checked"':'').' /></td>
+		  echo '<tr class="'.(($even%2==0)?'even':'odd').'"><td><input type="checkbox" name="person[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser'])?' checked="checked"':'').' /></td>
 '.(($sportraits)?'<td><img src="getportrait.php?rid='.$rec['id'].'" alt="portrét chybí" /></td>':'').'
 	<td>'.(($rec['secret'])?'<span class="secret"><a href="readperson.php?rid='.$rec['id'].'">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a></span>':'<a href="readperson.php?rid='.$rec['id'].'">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a>').'</td>
 	</tr>';
@@ -78,8 +78,8 @@ K případu můžete přiřadit osoby, kterých se týka nebo kterých by se tý
 ?>
 
 <div>
-<input type="hidden" name="personid" value="<?php echo $_REQUEST['rid']; ?>" />
-<input type="submit" value="Uložit změny" name="setgroups" class="submitbutton" />
+<input type="hidden" name="caseid" value="<?php echo $_REQUEST['rid']; ?>" />
+<input type="submit" value="Uložit změny" name="addtocase" class="submitbutton" />
 </div>
 </form>
 
