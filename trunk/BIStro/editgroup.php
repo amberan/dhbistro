@@ -31,29 +31,24 @@
 	</div>
 </form>
 <hr />
-<form action="procgroup.php" method="post" class="otherform">
+<form action="addp2g.php" method="post" class="otherform">
 	<p>
-		Skupině můžete přiřadit osoby, které do ní patří. Opačnou akci lze provést u osoby, kde přiřazujete pro změnu skupiny k osobě.
-		Akce jsou si rovnocenné a je tedy nutná pouze jedna z nich.
+		Toto jsou osoby aktuálně přiřazené do skupiny.
 	</p>
+	<ul>
+	<?php
+		$sql="SELECT ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname' FROM ".DB_PREFIX."g2p, ".DB_PREFIX."persons WHERE ".DB_PREFIX."persons.id=".DB_PREFIX."g2p.idperson AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
+		$pers=MySQL_Query ($sql);
+		while ($perc=MySQL_Fetch_Assoc($pers)) {
+			echo '<li><a href="readperson.php?rid='.$perc['id'].'">'.$perc['surname'].', '.$perc['name'].'</a>';
+		}
+	?>
+	</ul>
 	<div>
-		<label for="person">Osoba:</label>
-		<input type="text" id="person" name="person" />
-	</div>
-	<div>
-		<input type="hidden" name="groupid" value="<?php echo $_REQUEST['rid']; ?>" />
-		<input type="submit" value="Přidat osobu" name="setperson" class="submitbutton" />
+		<input type="hidden" name="rid" value="<?php echo $_REQUEST['rid']; ?>" />
+		<input type="submit" value="Upravit osoby" name="setperson" class="submitbutton" />
 	</div>
 </form>
-<ul>
-<?php
-	$sql="SELECT ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname' FROM ".DB_PREFIX."g2p, ".DB_PREFIX."persons WHERE ".DB_PREFIX."persons.id=".DB_PREFIX."g2p.idperson AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
-	$pers=MySQL_Query ($sql);
-	while ($perc=MySQL_Fetch_Assoc($pers)) {
-		echo '<li><a href="readperson.php?rid='.$perc['id'].'">'.$perc['surname'].', '.$perc['name'].'</a> &mdash; <a href="procgroup.php?delperson='.$perc['id'].'&amp;groupid='.$_REQUEST['groupid'].'" onclick="'."return confirm('Opravdu odebrat osobu &quot;".implode(', ',Array(StripSlashes($perc['surname']),StripSlashes($perc['name'])))."&quot; ze skupiny?');".'">odebrat ze skupiny</a></li>';
-	}
-?>
-</ul>
 <hr />
 <form action="procgroup.php" method="post" enctype="multipart/form-data" class="otherform">
 	<p>K osobě je možné nahrát neomezené množství souborů, ale velikost jednoho souboru je omezena na 2 MB.</p>
