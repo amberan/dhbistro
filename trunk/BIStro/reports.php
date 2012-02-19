@@ -2,7 +2,7 @@
 	require_once ('./inc/func_main.php');
 	pageStart ('Hlášení');
 	mainMenu (5);
-	sparklets ('<strong>hlášení</strong>','<a href="newactrep.php">nové hlášení z akce</a> <a href="newintreport.php">nové hlášení o výslechu</a>');
+	sparklets ('<strong>hlášení</strong>','<a href="newactrep.php">nové hlášení z akce</a> <a href="newintrep.php">nové hlášení o výslechu</a>');
 // zpracovani filtru
 	if (!isset($_REQUEST['type'])) {
 	  $f_cat=0;
@@ -51,6 +51,7 @@
 	filter();
 	// vypis aktualit
 	$sql="SELECT
+			".DB_PREFIX."reports.id AS 'id',
 	        ".DB_PREFIX."reports.datum AS 'datum',
 	        ".DB_PREFIX."reports.label AS 'label',
 	        ".DB_PREFIX."reports.task AS 'task',
@@ -62,9 +63,9 @@
 	$res=MySQL_Query ($sql);
 	while ($rec=MySQL_Fetch_Assoc($res)) {
 	  echo '<div class="news_div '.(($rec['type']==1)?'game_news':'system_news').'">
-	<div class="news_head"><h2>'.StripSlashes($rec['label']).'</h2>
-	<p><span>['.Date ('d. m. Y - H:i:s',$rec['datum']).']</span> <strong>'.$rec['autor'].'</strong></p></div>
-	<div>'.StripSlashes($rec['task']).'</div>
+	<div class="news_head"><a href="readactrep.php?rid='.$rec['id'].'">'.StripSlashes($rec['label']).'</a>' .(($usrinfo['right_text'])?'	 | <td><a href="editactrep.php?rid='.$rec['id'].'">upravit</a> | <a href="procactrep.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat hlášení &quot;".StripSlashes($rec['label'])."&quot;?');".'">smazat</a></td>':'').'.</span>
+	<p><span>['.Date ('d. m. Y - H:i:s',$rec['datum']).']</span> '.$rec['autor'].'<br />'
+	.StripSlashes($rec['task']).'</p></div>
 </div>';
 	}
 	pageEnd ();

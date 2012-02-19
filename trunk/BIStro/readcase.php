@@ -100,7 +100,7 @@
 </ul>
 <?php
 		} else {
-		  pageStart ('Skupina neexistuje');
+		  pageStart ('Případ neexistuje');
 			mainMenu (4);
 			sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>případ neexistuje</strong>');
 		  echo '<div id="obsah"><p>Případ neexistuje.</p></div>';
