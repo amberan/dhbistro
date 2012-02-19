@@ -1,5 +1,9 @@
 <?php
 	require_once ('./inc/func_main.php');
+	if (isset($_POST['reportid'])) {
+		$autharray=MySQL_Fetch_Assoc(MySQL_Query("SELECT iduser FROM ".DB_PREFIX."reports WHERE id=".$_POST['reportid']));
+		$author=$autharray['iduser'];
+	}
 	if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete'])) {
 	  MySQL_Query ("UPDATE ".DB_PREFIX."reports SET deleted=1 WHERE id=".$_REQUEST['delete']);
 	  Header ('Location: reports.php');
@@ -25,7 +29,7 @@
 			pageEnd ();
 		}
 	}
-	if (isset($_POST['reportid']) && isset($_POST['editactrep']) && $usrinfo['right_text'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['label']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['task']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['summary']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['impacts']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['details']) && is_numeric($_POST['secret']) && is_numeric($_POST['status'])) {
+	if (isset($_POST['reportid']) && isset($_POST['editactrep']) && ($usrinfo['right_text'] || $usrinfo['id']==$author) && !preg_match ('/^[[:blank:]]*$/i',$_POST['label']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['task']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['summary']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['impacts']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['details']) && is_numeric($_POST['secret']) && is_numeric($_POST['status'])) {
 	  pageStart ('Uložení změn');
 		mainMenu (4);
 		sparklets ('<a href="./reports.php">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>uložení změn</strong>');

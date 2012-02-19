@@ -11,7 +11,7 @@
 			".DB_PREFIX."users.login AS 'autor',
 			".DB_PREFIX."reports.type AS 'type'
 			FROM ".DB_PREFIX."reports, ".DB_PREFIX."users
-			WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id";
+			WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.id=".$_REQUEST['rid'];
 		$res=MySQL_Query ($sql);
 		if ($rec=MySQL_Fetch_Assoc($res)) {
 		  pageStart (StripSlashes($rec['label']));
