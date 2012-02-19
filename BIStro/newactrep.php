@@ -2,20 +2,16 @@
 	require_once ('./inc/func_main.php');
 	pageStart ('Nové hlášení');
 	mainMenu (4);
-	sparklets ('<a href="./cases.php">hlášení</a> &raquo; <strong>nové hlášení</strong>');
+	sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>nové hlášení o výjezdu</strong>');
 ?>
-<form action="proccase.php" method="post" id="inputform">
+<form action="procactrep.php" method="post" id="inputform">
 	<div>
-	  <label for="title">Označení výjezdu:</label>
-	  <input type="text" name="title" id="title" />
+	  <label for="label">Označení výjezdu:</label>
+	  <input type="text" name="label" id="label" />
 	</div>
 	<div>
 	  <label for="task">Úkol:</label>
 	  <input type="text" name="task" id="task" />
-	</div>
-	<div>
-	  <label for="present">Přítomni:</label>
-	  <input type="text" name="present" id="present" />
 	</div>
 	<div>
 	  <label for="secret">Přísně tajné:</label>
@@ -27,8 +23,8 @@
 	<div>
 	  <label for="status">Stav:</label>
 		<select name="status" id="status">
-		  <option value="0">otevřený</option>
-			<option value="1">uzavřený</option>
+		  <option value="0">rozpracované</option>
+			<option value="1">dokončené</option>
 		</select>
 	</div>
 	<div>
@@ -44,13 +40,13 @@
 	  <textarea cols="80" rows="7" name="impact" id="impact"></textarea>
 	</div>
 	<div>
-	  <label for="description">Podrobný popis průběhu:</label>
+	  <label for="details">Podrobný popis průběhu:</label>
 	</div>
 	<div>
-	  <textarea cols="80" rows="7" name="impact" id="impact"></textarea>
+	  <textarea cols="80" rows="7" name="details" id="details"></textarea>
 	</div>
 	<div>
-	  <input type="submit" name="insertcase" id="submitbutton" value="Vložit" />
+	  <input type="submit" name="insertrep" id="submitbutton" value="Vložit" />
 	</div>	
 </form>
 
