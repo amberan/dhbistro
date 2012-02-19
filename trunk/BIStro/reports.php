@@ -16,8 +16,8 @@
 	}
 	switch ($f_cat) {
 	  case 0: $fsql_cat=''; break;
-	  case 1: $fsql_cat=' AND '.DB_PREFIX.'reports.type=0 '; break;
-	  case 2: $fsql_cat=' AND '.DB_PREFIX.'reports.type=1 '; break;
+	  case 1: $fsql_cat=' AND '.DB_PREFIX.'reports.type=1 '; break;
+	  case 2: $fsql_cat=' AND '.DB_PREFIX.'reports.type=2 '; break;
 	  default: $fsql_cat='';
 	}
 	switch ($f_sort) {
@@ -34,11 +34,11 @@
 	  echo '<form action="reports.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
-	  <p>Vypsat <select name="kategorie">
-	<option value="0"'.(($f_cat==0)?' selected="selected"':'').'>všechny</option>
+	  <p>Vypsat hlášení <select name="type">
+	<option value="0"'.(($f_cat==0)?' selected="selected"':'').'>všechna</option>
 	<option value="1"'.(($f_cat==1)?' selected="selected"':'').'>z výjezdu</option>
 	<option value="2"'.(($f_cat==2)?' selected="selected"':'').'>z výslechu</option>
-</select> aktuality a seřadit je podle <select name="sort">
+</select> a seřadit je podle <select name="sort">
 	<option value="1"'.(($f_sort==1)?' selected="selected"':'').'>data sestupně</option>
 	<option value="2"'.(($f_sort==2)?' selected="selected"':'').'>data vzestupně</option>
 	<option value="3"'.(($f_sort==3)?' selected="selected"':'').'>jména autora vzestupně</option>
@@ -49,8 +49,9 @@
 </form>';
 	}
 	filter();
-	// vypis aktualit
-	$sql="SELECT
+	// vypis hlášení
+	if ($usrinfo['right_power']) {
+		$sql="SELECT
 			".DB_PREFIX."reports.id AS 'id',
 	        ".DB_PREFIX."reports.datum AS 'datum',
 	        ".DB_PREFIX."reports.label AS 'label',
@@ -58,13 +59,30 @@
 	        ".DB_PREFIX."users.login AS 'autor',
 	        ".DB_PREFIX."reports.type AS 'type'
 				FROM ".DB_PREFIX."reports, ".DB_PREFIX."users
-				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id ".$fsql_cat."
+				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0".$fsql_cat."
 				ORDER BY ".$fsql_sort;
+	} else {
+		$sql="SELECT
+			".DB_PREFIX."reports.id AS 'id',
+	        ".DB_PREFIX."reports.datum AS 'datum',
+	        ".DB_PREFIX."reports.label AS 'label',
+	        ".DB_PREFIX."reports.task AS 'task',
+	        ".DB_PREFIX."users.login AS 'autor',
+	        ".DB_PREFIX."reports.iduser AS 'iduser',
+	        ".DB_PREFIX."reports.type AS 'type'
+				FROM ".DB_PREFIX."reports, ".DB_PREFIX."users
+				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0".$fsql_cat."
+				ORDER BY ".$fsql_sort;
+	}
 	$res=MySQL_Query ($sql);
 	while ($rec=MySQL_Fetch_Assoc($res)) {
 	  echo '<div class="news_div '.(($rec['type']==1)?'game_news':'system_news').'">
-	<div class="news_head"><a href="readactrep.php?rid='.$rec['id'].'">'.StripSlashes($rec['label']).'</a>' .(($usrinfo['right_text'])?'	 | <td><a href="editactrep.php?rid='.$rec['id'].'">upravit</a> | <a href="procactrep.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat hlášení &quot;".StripSlashes($rec['label'])."&quot;?');".'">smazat</a></td>':'').'.</span>
-	<p><span>['.Date ('d. m. Y - H:i:s',$rec['datum']).']</span> '.$rec['autor'].'<br />'
+	<div class="news_head"><strong><a href="readactrep.php?rid='.$rec['id'].'">'.StripSlashes($rec['label']).'</a></strong>';
+	  if (($usrinfo['right_power']) || $usrinfo['id']==$rec['iduser']) {
+	   	echo '	 | <td><a href="editactrep.php?rid='.$rec['id'].'">upravit</a> | <a href="procactrep.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat hlášení &quot;".StripSlashes($rec['label'])."&quot;?');".'">smazat</a></td>';
+	  }
+	  echo '.</span>
+	<p><span>['.Date ('d. m. Y - H:i:s',$rec['datum']).']</span> '.$rec['autor'].'<br /> <strong>Úkol: </strong>'
 	.StripSlashes($rec['task']).'</p></div>
 </div>';
 	}
