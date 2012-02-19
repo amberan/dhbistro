@@ -93,7 +93,7 @@ echo '<li><a href="readperson.php?rid='.$perc['id'].'">'.$perc['surname'].', '.$
 <hr />
 <form action="addar2c.php" method="post" class="otherform">
 <p>
-Toto jsou případy, ke kterým je hlášení přiřazeno.
+Případy, ke kterým je hlášení přiřazeno.
 </p>
 <ul>
 <?php
