@@ -14,10 +14,19 @@
 		sparklets ('<a href="./reports.php">hlášení</a> &raquo; <a href="./newactrep.php">nové hlášení z výjezdu</a> &raquo; <strong>hlášení nepřidáno</strong>');
 	  $ures=MySQL_Query ("SELECT id FROM ".DB_PREFIX."reports WHERE UCASE(label)=UCASE('".mysql_real_escape_string(safeInput($_POST['label']))."')");
 	  if (MySQL_Num_Rows ($ures)) {
-	    echo '<div id="obsah"><p>Toto označení hlášení již, změňte ho.</p></div>';
+	    echo '<div id="obsah"><p>Toto označení hlášení již existuje, změňte ho.</p></div>';
 	  } else {
 			MySQL_Query ("INSERT INTO ".DB_PREFIX."reports VALUES('','".mysql_real_escape_string(safeInput($_POST['label']))."','".Time()."','".$usrinfo['id']."','".mysql_real_escape_string($_POST['task'])."','".mysql_real_escape_string($_POST['summary'])."','".mysql_real_escape_string($_POST['impact'])."','".mysql_real_escape_string($_POST['details'])."','".$_POST['secret']."','0','".$_POST['status']."','1')");
-			echo '<div id="obsah"><p>Hlášení uloženo.</p></div>';
+			$ridarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."reports WHERE UCASE(label)=UCASE('".mysql_real_escape_string(safeInput($_POST['label']))."')"));
+			$rid=$ridarray['id'];
+			echo '<div id="obsah"><p>Hlášení uloženo.</p></div>
+			<hr />
+			<form action="addp2ar.php" method="post" class="otherform">
+			<div>
+			<input type="hidden" name="rid" value="'.$rid.'" />
+			<input type="submit" value="Přidat k hlášení přítomné osoby" name="setperson" class="submitbutton" />
+			</div>
+			</form>';
 		}
 		pageEnd ();
 	} else {

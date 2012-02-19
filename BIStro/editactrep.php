@@ -71,13 +71,13 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || $usrinfo['id']==$
 </div>
 </form>
 <hr />
-<form action="addp2r.php" method="post" class="otherform">
+<form action="addp2ar.php" method="post" class="otherform">
 <p>
-Toto jsou osoby aktuálně přiřazené k případu.
+Toto jsou osoby aktuálně přiřazené k hlášení.
 </p>
 <ul>
 <?php
-$sql="SELECT ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname' FROM ".DB_PREFIX."c2p, ".DB_PREFIX."persons WHERE ".DB_PREFIX."persons.id=".DB_PREFIX."c2p.idperson AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']." ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
+$sql="SELECT ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname' FROM ".DB_PREFIX."ar2p, ".DB_PREFIX."persons WHERE ".DB_PREFIX."persons.id=".DB_PREFIX."ar2p.idperson AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
 $pers=MySQL_Query ($sql);
 while ($perc=MySQL_Fetch_Assoc($pers)) {
 echo '<li><a href="readperson.php?rid='.$perc['id'].'">'.$perc['surname'].', '.$perc['name'].'</a>';
@@ -91,8 +91,28 @@ echo '<li><a href="readperson.php?rid='.$perc['id'].'">'.$perc['surname'].', '.$
 </form>
 
 <hr />
+<form action="addar2c.php" method="post" class="otherform">
+<p>
+Toto jsou případy, ke kterým je hlášení přiřazeno.
+</p>
+<ul>
+<?php
+$sql="SELECT ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.title AS 'title' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.id=".DB_PREFIX."ar2c.idcase AND ".DB_PREFIX."ar2c.idreport=".$_REQUEST['rid']." ORDER BY ".DB_PREFIX."cases.title ASC";
+$pers=MySQL_Query ($sql);
+while ($perc=MySQL_Fetch_Assoc($pers)) {
+echo '<li><a href="readcase.php?rid='.$perc['id'].'">'.$perc['title'].'</a>';
+}
+?>
+</ul>
+<div>
+<input type="hidden" name="rid" value="<?php echo $_REQUEST['rid']; ?>" />
+<input type="submit" value="Přiřadit k případu" name="setperson" class="submitbutton" />
+</div>
+</form>
+
+<hr />
 <form action="procactrep.php" method="post" enctype="multipart/form-data" class="otherform">
-<p>K reportu je možné nahrát neomezené množství souborů, ale velikost jednoho souboru je omezena na 2 MB.</p>
+<p>K hlášení je možné nahrát neomezené množství souborů, ale velikost jednoho souboru je omezena na 2 MB.</p>
 <div>
 <label for="attachment">Soubor:</label>
 <input type="file" name="attachment" id="attachment" />
