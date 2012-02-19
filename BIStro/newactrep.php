@@ -31,19 +31,19 @@
 	  <label for="summary">Shrnutí:</label>
 	</div>
 	<div>
-	  <textarea cols="80" rows="7" name="summary" id="summary"></textarea>
+	  <textarea cols="80" rows="7" name="summary" id="summary">doplnit</textarea>
 	</div>
 	<div>
 	  <label for="impact">Možné dopady:</label>
 	</div>
 	<div>
-	  <textarea cols="80" rows="7" name="impact" id="impact"></textarea>
+	  <textarea cols="80" rows="7" name="impact" id="impact">doplnit</textarea>
 	</div>
 	<div>
 	  <label for="details">Podrobný popis průběhu:</label>
 	</div>
 	<div>
-	  <textarea cols="80" rows="7" name="details" id="details"></textarea>
+	  <textarea cols="80" rows="7" name="details" id="details">doplnit</textarea>
 	</div>
 	<div>
 	  <input type="submit" name="insertrep" id="submitbutton" value="Vložit" />

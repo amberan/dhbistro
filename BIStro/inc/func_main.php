@@ -57,7 +57,8 @@
 	} else {
 	  $loggedin=false;
 	}
-  
+
+// TOHLE NEZAPOMENOUT ODKOMENTOVAT V OSTRE VERZI	
   // overeni prihlaseni, nutno zmenit jmeno souboru na ostre verzi
   //$free_pages = array ($page_prefix.'/login.php');
 //	if (!$loggedin && !in_array($_SERVER['PHP_SELF'],$free_pages)) {
@@ -118,7 +119,7 @@
 		<li><a href="groups.php">Skupiny</a></li>
 		<li><a href="cases.php">Případy</a></li>
 		<li><a href="persons.php">Osoby</a></li>
-		<li><a href="reports.php">Reporty</a></li>
+		<li><a href="reports.php">Hlášení</a></li>
 		<li><a href="settings.php">Nastavení</a></li>
 		<li><a href="logout.php">Odhlásit</a></li>
 	</ul>

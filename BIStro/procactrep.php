@@ -28,7 +28,7 @@
 	if (isset($_POST['reportid']) && isset($_POST['editactrep']) && $usrinfo['right_text'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['label']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['task']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['summary']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['impacts']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['details']) && is_numeric($_POST['secret']) && is_numeric($_POST['status'])) {
 	  pageStart ('Uložení změn');
 		mainMenu (4);
-		sparklets ('<a href="./hlášein.php">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>uložení změn</strong>');
+		sparklets ('<a href="./reports.php">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>uložení změn</strong>');
 	  $ures=MySQL_Query ("SELECT id FROM ".DB_PREFIX."reports WHERE UCASE(label)=UCASE('".mysql_real_escape_string(safeInput($_POST['label']))."') AND id<>".$_POST['reportid']);
 	  if (MySQL_Num_Rows ($ures)) {
 	    echo '<div id="obsah"><p>Toto označení již existuje, změňte ho.</p></div>';
