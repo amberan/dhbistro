@@ -36,7 +36,7 @@ Hlášení přiřazená k případu.
 $sql="SELECT ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.task AS 'task' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."reports WHERE ".DB_PREFIX."reports.id=".DB_PREFIX."ar2c.idreport AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']." ORDER BY ".DB_PREFIX."reports.label ASC";
 $pers=MySQL_Query ($sql);
 while ($perc=MySQL_Fetch_Assoc($pers)) {
-echo '<li><a href="readactrep.php?rid='.$perc['id'].'">'.$perc['label'].'</a> - '.$perc['label'];
+echo '<li><a href="readactrep.php?rid='.$perc['id'].'">'.$perc['label'].'</a> - '.$perc['task'];
 }
 ?>
 </div>
