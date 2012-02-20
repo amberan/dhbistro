@@ -125,7 +125,7 @@ echo '<li><a href="readcase.php?rid='.$perc['id'].'">'.$perc['title'].'</a>';
 </select>
 </div>
 <div>
-<input type="hidden" name="caseid" value="<?php echo $_REQUEST['rid']; ?>" />
+<input type="hidden" name="reportid" value="<?php echo $_REQUEST['rid']; ?>" />
 <input type="hidden" name="backurl" value="<?php echo 'editactrep.php?rid='.$_REQUEST['rid']; ?>" />
 <input type="submit" name="uploadfile" value="Nahrát soubor k případu" class="submitbutton" />
 </div>
@@ -133,13 +133,13 @@ echo '<li><a href="readcase.php?rid='.$perc['id'].'">'.$perc['title'].'</a>';
 <ul>
 <?php
 if ($usrinfo['right_power']) {
-$sql="SELECT ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=3 ORDER BY ".DB_PREFIX."data.originalname ASC";
+$sql="SELECT ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=4 ORDER BY ".DB_PREFIX."data.originalname ASC";
 } else {
-$sql="SELECT ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=3 AND ".DB_PREFIX."data.secret=0 ORDER BY ".DB_PREFIX."data.originalname ASC";
+$sql="SELECT ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=4 AND ".DB_PREFIX."data.secret=0 ORDER BY ".DB_PREFIX."data.originalname ASC";
 }
 $res=MySQL_Query ($sql);
 while ($rec=MySQL_Fetch_Assoc($res)) {
-echo '<li><a href="getfile.php?idfile='.$rec['id'].'">'.StripSlashes($rec['title']).'</a> &mdash; <a href="procactrep.php?deletefile='.$rec['id'].'&amp;reportid='.$_REQUEST['rid'].'" onclick="'."return confirm('Opravdu odebrat soubor &quot;".StripSlashes($rec['label'])."&quot; náležící k hlášení?');".'">smazat soubor</a></li>';
+echo '<li><a href="getfile.php?idfile='.$rec['id'].'">'.StripSlashes($rec['title']).'</a> &mdash; <a href="procactrep.php?deletefile='.$rec['id'].'&amp;reportid='.$_REQUEST['rid'].'" onclick="'."return confirm('Opravdu odebrat soubor &quot;".StripSlashes($rec['title'])."&quot; náležící k hlášení?');".'">smazat soubor</a></li>';
 }
 ?>
 </ul>
