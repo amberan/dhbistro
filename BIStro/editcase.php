@@ -58,6 +58,26 @@
 </form>
 
 <hr />
+<form action="addc2ar.php" method="post" class="otherform">
+	<p>
+	Hlášení přiřazená k případu.
+	</p>
+<ul>
+<?php
+$sql="SELECT ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.task AS 'task', ".DB_PREFIX."users.login AS 'user' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."reports, ".DB_PREFIX."users WHERE ".DB_PREFIX."reports.id=".DB_PREFIX."ar2c.idreport AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."users.id=".DB_PREFIX."reports.iduser ORDER BY ".DB_PREFIX."reports.label ASC";
+$pers=MySQL_Query ($sql);
+while ($perc=MySQL_Fetch_Assoc($pers)) {
+echo '<li><a href="readactrep.php?rid='.$perc['id'].'">'.$perc['label'].'</a> - '.$perc['task'].' - <b>'.$perc['user'].'</b>';
+}
+?>
+</ul>
+	<div>
+		<input type="hidden" name="rid" value="<?php echo $_REQUEST['rid']; ?>" />
+		<input type="submit" value="Změnit přiřazení hlášení" name="setreport" class="submitbutton" />
+	</div>
+</form>
+
+<hr />
 <form action="proccase.php" method="post" enctype="multipart/form-data" class="otherform">
 	<p>K osobě je možné nahrát neomezené množství souborů, ale velikost jednoho souboru je omezena na 2 MB.</p>
 	<div>
