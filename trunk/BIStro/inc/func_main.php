@@ -11,7 +11,7 @@
 	session_start();
 	
 	// databaze
-  if (!@mysql_connect ('c155um.forpsi.com','dhbistrocz','eqgsCv3t')) {
+  if (!@mysql_connect ('127.0.0.1','dhbistrocz','eqgsCv3t')) {
   	echo 'fail';
     Exit;
   }
@@ -62,7 +62,7 @@
   // overeni prihlaseni, nutno zmenit jmeno souboru na ostre verzi
   $free_pages = array ($page_prefix.'/login.php');
 	if (!$loggedin && !in_array($_SERVER['PHP_SELF'],$free_pages)) {
-		Header ('location: login.php');
+//		Header ('location: login.php');
 	}
 
 	// vypis zacatku stranky
