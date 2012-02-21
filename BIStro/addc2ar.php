@@ -111,12 +111,9 @@ K případu můžete přiřadit hlášení, která se ho týkají.
 	$res=MySQL_Query ($sql);
 	while ($rec=MySQL_Fetch_Assoc($res)) {
 	  echo '<div class="news_div '.(($rec['type']==1)?'game_news':'system_news').'">
-	<div class="news_head"><input type="checkbox" name="report[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser'])?' checked="checked"':'').' /><strong><a href="readactrep.php?rid='.$rec['id'].'">'.StripSlashes($rec['label']).'</a></strong>';
-	  if (($usrinfo['right_power']) || $usrinfo['id']==$rec['iduser']) {
-	   	echo '	 | <td><a href="editactrep.php?rid='.$rec['id'].'">upravit</a> | <a href="procactrep.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat hlášení &quot;".StripSlashes($rec['label'])."&quot;?');".'">smazat</a></td>';
-	  }
-	  echo '.</span>
-	<p><span>['.Date ('d. m. Y - H:i:s',$rec['datum']).']</span> '.$rec['autor'].'<br /> <strong>Úkol: </strong>'
+	<div class="news_head"><input type="checkbox" name="report[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser'])?' checked="checked"':'').' /><strong><a href="readactrep.php?rid='.$rec['id'].'">'.StripSlashes($rec['label']).'</a></strong></span>';
+	  
+	  echo '<p><span>['.Date ('d. m. Y - H:i:s',$rec['datum']).']</span> '.$rec['autor'].'<br /> <strong>Úkol: </strong>'
 	.StripSlashes($rec['task']).'</p></div>
 </div>';
 	}

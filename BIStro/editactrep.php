@@ -3,9 +3,9 @@ require_once ('./inc/func_main.php');
 pageStart ('Úprava hlášení z výjezdu');
 mainMenu (3);
 sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení z výjezdu</strong>');
-$autharray=MySQL_Fetch_Assoc(MySQL_Query("SELECT iduser FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid']));
+$autharray=MySQL_Fetch_Assoc(MySQL_Query("SELECT ".DB_PREFIX."reports.iduser AS 'iduser', ".DB_PREFIX."reports.status AS 'status' FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid']));
 $author=$autharray['iduser'];
-if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || $usrinfo['id']==$author)) {
+if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==$author && $autharray['status']<1))) {
 	$sql="SELECT
 		".DB_PREFIX."reports.id AS 'id',
 		".DB_PREFIX."reports.datum AS 'datum',
@@ -44,7 +44,12 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || $usrinfo['id']==$
 <select name="status" id="status">
 <option value="0"<?php if ($rec['status']==0) { echo ' selected="selected"'; } ?>>rozpracované</option>
 <option value="1"<?php if ($rec['status']==1) { echo ' selected="selected"'; } ?>>dokončené</option>
-<option value="2"<?php if ($rec['status']==2) { echo ' selected="selected"'; } ?>>analyzované</option>
+<?php if ($usrinfo['right_text']) {
+	echo '<option value="2"'; 
+	if ($rec['status']==2) { echo ' selected="selected"'; } 
+	echo '>analyzované</option>';
+	}
+?>
 </select>
 </div>
 <div>
