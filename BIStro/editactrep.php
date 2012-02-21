@@ -111,7 +111,7 @@ echo '<li><a href="readcase.php?rid='.$perc['id'].'">'.$perc['title'].'</a>';
 </ul>
 <div>
 <input type="hidden" name="rid" value="<?php echo $_REQUEST['rid']; ?>" />
-<input type="submit" value="Přiřadit k případu" name="setperson" class="submitbutton" />
+<?php if ($usrinfo['right_text']) echo '<input type="submit" value="Přiřadit k případu" name="setperson" class="submitbutton" />'; ?>
 </div>
 </form>
 

@@ -19,6 +19,16 @@
 	} else {
 		$f_stat=$_REQUEST['status'];
 	}
+	if (!isset($_REQUEST['my'])) {
+		$f_my=0;
+	} else {
+		$f_my=1;
+	}
+	if (!isset($_REQUEST['conn'])) {
+		$f_conn=0;
+	} else {
+		$f_conn=1;
+	}
 	switch ($f_cat) {
 	  case 0: $fsql_cat=''; break;
 	  case 1: $fsql_cat=' AND '.DB_PREFIX.'reports.type=1 '; break;
@@ -39,11 +49,23 @@
 		case 3: $fsql_stat=' AND '.DB_PREFIX.'reports.status=2 '; break;
 		default: $fsql_stat='';
 	}
+	switch ($f_my) {
+		case 0: $fsql_my=''; break;
+		case 1: $fsql_my=' AND '.DB_PREFIX.'reports.iduser='.$usrinfo['id'].' '; break;
+		default: $fsql_my='';
+	}
+	switch ($f_conn) {
+		case 0: $fsql_conn=''; break;
+		case 1: $fsql_conn=' AND '.DB_PREFIX.'ar2c.iduser IS NULL '; break;
+		default: $fsql_conn='';
+	}
 	//
 	function filter () {
 	  global $f_cat;
-		global $f_sort;
-		  global $f_stat;
+	  global $f_sort;
+	  global $f_stat;
+	  global $f_my;
+	  global $f_conn;
 	  echo '<form action="reports.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -61,7 +83,9 @@
 	<option value="2"'.(($f_sort==2)?' selected="selected"':'').'>data vzestupně</option>
 	<option value="3"'.(($f_sort==3)?' selected="selected"':'').'>jména autora vzestupně</option>
 	<option value="4"'.(($f_sort==4)?' selected="selected"':'').'>jména autora sestupně</option>
-</select>.</p>
+</select>.</br>
+	<input type="checkbox" name="my" value="my" class="checkbox"'.(($f_my==1)?' checked="checked"':'').' /> Jen moje.<br />
+	<input type="checkbox" name="conn" value="conn" class="checkbox"'.(($f_conn==1)?' checked="checked"':'').' /> Jen nepřiřazené.</p>
 	  <div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
 </form>';
@@ -75,9 +99,11 @@
 	        ".DB_PREFIX."reports.label AS 'label',
 	        ".DB_PREFIX."reports.task AS 'task',
 	        ".DB_PREFIX."users.login AS 'autor',
-	        ".DB_PREFIX."reports.type AS 'type'
-				FROM ".DB_PREFIX."reports, ".DB_PREFIX."users
-				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0".$fsql_cat.$fsql_stat."
+	        ".DB_PREFIX."reports.type AS 'type',
+	        ".DB_PREFIX."ar2c.iduser 
+	        	FROM ".DB_PREFIX."users, ".DB_PREFIX."reports LEFT JOIN ".DB_PREFIX."ar2c 
+	        	ON ".DB_PREFIX."ar2c.idreport=".DB_PREFIX."reports.id
+				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0".$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn."
 				ORDER BY ".$fsql_sort;
 	} else {
 		$sql="SELECT
@@ -87,17 +113,19 @@
 	        ".DB_PREFIX."reports.task AS 'task',
 	        ".DB_PREFIX."reports.status AS 'status',
 	        ".DB_PREFIX."users.login AS 'autor',
-	        ".DB_PREFIX."reports.iduser AS 'iduser',
-	        ".DB_PREFIX."reports.type AS 'type'
-				FROM ".DB_PREFIX."reports, ".DB_PREFIX."users
-				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0".$fsql_cat.$fsql_stat."
+	        ".DB_PREFIX."reports.iduser AS 'riduser',
+	        ".DB_PREFIX."reports.type AS 'type',
+	        ".DB_PREFIX."ar2c.iduser 
+	        	FROM ".DB_PREFIX."users, ".DB_PREFIX."reports LEFT JOIN ".DB_PREFIX."ar2c 
+	        	ON ".DB_PREFIX."ar2c.idreport=".DB_PREFIX."reports.id
+				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0".$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn."
 				ORDER BY ".$fsql_sort;
 	}
 	$res=MySQL_Query ($sql);
 	while ($rec=MySQL_Fetch_Assoc($res)) {
 	  echo '<div class="news_div '.(($rec['type']==1)?'game_news':'system_news').'">
 	<div class="news_head"><strong><a href="readactrep.php?rid='.$rec['id'].'">'.StripSlashes($rec['label']).'</a></strong>';
-	  if (($usrinfo['right_power']) || ($usrinfo['id']==$rec['iduser'] && $rec['status']<1)) {
+	  if (($usrinfo['right_text']) || ($usrinfo['id']==$rec['riduser'] && $rec['status']<1)) {
 	   	echo '	 | <td><a href="editactrep.php?rid='.$rec['id'].'">upravit</a> | <a href="procactrep.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat hlášení &quot;".StripSlashes($rec['label'])."&quot;?');".'">smazat</a></td>';
 	  }
 	  echo '.</span>
