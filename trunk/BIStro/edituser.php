@@ -13,10 +13,6 @@
 	  <input type="text" name="login" id="login" value="<?php echo StripSlashes($rec['login']); ?>" />
 	</div>
 	<div>
-	  <label for="heslo">Heslo:</label>
-	  <input type="text" name="heslo" id="heslo" value="<?php echo StripSlashes($rec['pwd']); ?>" />
-	</div>
-	<div>
 	  <label for="power">Power user:</label>
 		<select name="power" id="power">
 			<option value="0"<?php if ($rec['right_power']==0) { echo ' selected="selected"'; } ?>>ne</option>
