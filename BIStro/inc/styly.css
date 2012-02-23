@@ -155,11 +155,15 @@ hr {
 }
 
 /***********************************/
-/******** hlavnÃ­ formulÃ¡Å™  *********/
+/******** hlavní formuláø  *********/
 /***********************************/
 
 #inputform {
 	margin: 20px;
+}
+
+#inputform.evilform {
+	margin: 1px;
 }
 
 #inputform label {
@@ -179,6 +183,11 @@ hr {
 	width: 200px;
 }
 
+#inputform input.plus {
+	border: 1px inset #DFB96E;
+	width: 20px;
+}
+
 #inputform textarea {
 	width: 450px;
 	height: 300px;
@@ -192,7 +201,7 @@ hr {
 }
 
 /***********************************/
-/******** dalÅ¡Ã­ formulÃ¡Å™e  *********/
+/******** další  formuláø  *********/
 /***********************************/
 
 .otherform {

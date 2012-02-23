@@ -5,7 +5,7 @@
   $starttime = $mtime;
 	
 	// verze
-	$mazzarino_version='0.9.1 - BIStro';
+	$mazzarino_version='0.9.9 - BIStro';
   
 	// sessions
 	session_start();
@@ -116,11 +116,13 @@
 	<ul>
 		<li><a href="index.php">Aktuality</a></li>
 		'.(($usrinfo['right_power'])?'<li><a href="users.php">Uživatelé</a></li>':'').'
+		<li><a href="evilpoints.php">Zlobody</a></li>
 		<li><a href="groups.php">Skupiny</a></li>
 		<li><a href="cases.php">Případy</a></li>
 		<li><a href="persons.php">Osoby</a></li>
 		<li><a href="reports.php">Hlášení</a></li>
 		<li><a href="settings.php">Nastavení</a></li>
+		'.(($usrinfo['right_power'])?'<li><a href="mapagents.php">Mapa agentů</a></li>':'').'
 		<li><a href="logout.php">Odhlásit</a></li>
 	</ul>
 	<!--form id="search_menu">
