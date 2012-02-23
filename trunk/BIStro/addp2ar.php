@@ -5,6 +5,10 @@
 	sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení</strong>');
 	$autharray=MySQL_Fetch_Assoc(MySQL_Query("SELECT iduser FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid']));
 	$author=$autharray['iduser'];
+	// následuje zjišťování typu reportu
+	// potřebuje zjednodušit
+	$typearray=MySQL_Fetch_Assoc(MySQL_Query("SELECT type FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid'])); // urceni typu hlaseni
+	$type=intval($typearray['type']);
 	if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || $usrinfo['id']==$author)) {
 	  $res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid']);
 		if ($rec=MySQL_Fetch_Assoc($res)) {
@@ -62,6 +66,7 @@ K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se t
 <thead>
 	<tr>
 	<th>#</th>
+	<th>Úloha</th>
 '.(($sportraits)?'<th>Portrét</th>':'').'
 	  <th>Jméno</th>
 	</tr>
@@ -71,6 +76,11 @@ K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se t
 		$even=0;
 		while ($rec=MySQL_Fetch_Assoc($res)) {
 		  echo '<tr class="'.(($even%2==0)?'even':'odd').'"><td><input type="checkbox" name="person[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser'])?' checked="checked"':'').' /></td>
+	<td><select type="role" name="role[]">
+			<option value="0">osoba přítomná</option>'.(($type==1)?'
+			<option value="3">zatčený</option>':'').(($type==2)?'
+			<option value="1">vyslýchaný</option><option value="2">vyslýchající</option>':'').'
+		</select></td>
 '.(($sportraits)?'<td><img src="getportrait.php?rid='.$rec['id'].'" alt="portrét chybí" /></td>':'').'
 	<td>'.(($rec['secret'])?'<span class="secret"><a href="readperson.php?rid='.$rec['id'].'">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a></span>':'<a href="readperson.php?rid='.$rec['id'].'">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a>').'</td>
 	</tr>';
