@@ -2,7 +2,7 @@
 	require_once ('./inc/func_main.php');
 	pageStart ('Hlášení');
 	mainMenu (5);
-	sparklets ('<strong>hlášení</strong>','<a href="newactrep.php">nové hlášení z výjezdu</a>');
+	sparklets ('<strong>hlášení</strong>','<a href="newactrep.php?type=1">nové hlášení z výjezdu</a>; <a href="newactrep.php?type=2">nové hlášení z výslechu</a>');
 // zpracovani filtru
 	if (!isset($_REQUEST['type'])) {
 	  $f_cat=0;
