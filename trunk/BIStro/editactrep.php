@@ -1,11 +1,15 @@
 <?php
 require_once ('./inc/func_main.php');
-pageStart ('Úprava hlášení z výjezdu');
+$reportarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT * FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid'])); // načte data z DB
+$type=intval($reportarray['type']); // určuje typ hlášení
+	$typestring=(($type==1)?'výjezd':(($type==2)?'výslech':'?')); //odvozuje slovní typ hlášení
+$author=$reportarray['iduser']; // určuje autora hlášení
+
+// následuje generování hlavičky
+pageStart ('Úprava hlášení'.(($type==1)?' z výjezdu':(($type==2)?' z výslechu':'')));
 mainMenu (3);
-sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení z výjezdu</strong>');
-$autharray=MySQL_Fetch_Assoc(MySQL_Query("SELECT ".DB_PREFIX."reports.iduser AS 'iduser', ".DB_PREFIX."reports.status AS 'status' FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid']));
-$author=$autharray['iduser'];
-if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==$author && $autharray['status']<1))) {
+sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení'.(($type==1)?' z výjezdu':(($type==2)?' z výslechu':'')).'</strong>');
+if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==$author && $reportarray['status']<1))) {
 	$sql="SELECT
 		".DB_PREFIX."reports.id AS 'id',
 		".DB_PREFIX."reports.datum AS 'datum',
@@ -25,11 +29,11 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 		?>
 <form action="procactrep.php" method="post" id="inputform">
 <div>
-<label for="label">Označení výjezdu:</label>
+<label for="label">Označení<?php echo((($type==1)?' výjezdu':(($type==2)?' výslechu':' hlášení')));?>:</label>
 <input type="text" name="label" id="label" value="<?php echo StripSlashes($rec['label']); ?>" />
 </div>
 <div>
-<label for="task">Úkol:</label>
+<label for="task"><?php echo((($type==1)?'Úkol':(($type==2)?'Předmět výslechu':'Úkol')));?>:</label>
 <input type="text" name="task" id="task" value="<?php echo StripSlashes($rec['task']); ?>" />
 </div>
 <div>
