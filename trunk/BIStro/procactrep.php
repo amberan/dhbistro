@@ -9,13 +9,19 @@
 	  Header ('Location: reports.php');
 	}
 	if (isset($_POST['insertrep']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['label']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['task']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['summary']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['impact']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['details']) && is_numeric($_POST['secret']) && is_numeric($_POST['status']) && is_numeric($_POST['type'])) {
-	  pageStart ('Hlášení uloženo');
-		mainMenu (4);
-		sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>hlášení nepřidáno</strong>');
+	  //pageStart ('Hlášení uloženo');
+	 // mainMenu (4);
+	// sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>hlášení nepřidáno</strong>');
 	  $ures=MySQL_Query ("SELECT id FROM ".DB_PREFIX."reports WHERE UCASE(label)=UCASE('".mysql_real_escape_string(safeInput($_POST['label']))."')");
 	  if (MySQL_Num_Rows ($ures)) {
+	  	pageStart ('Hlášení nepřidáno');
+	  	mainMenu (4);
+	  	sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>hlášení nepřidáno</strong>');
 	    echo '<div id="obsah"><p>Toto označení hlášení již existuje, změňte ho.</p></div>';
 	  } else {
+		  	pageStart ('Hlášení uloženo');
+		  	mainMenu (4);
+		  	sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>hlášení uloženo</strong>');
 			MySQL_Query ("INSERT INTO ".DB_PREFIX."reports VALUES('','".mysql_real_escape_string(safeInput($_POST['label']))."','".Time()."','".$usrinfo['id']."','".mysql_real_escape_string($_POST['task'])."','".mysql_real_escape_string($_POST['summary'])."','".mysql_real_escape_string($_POST['impact'])."','".mysql_real_escape_string($_POST['details'])."','".$_POST['secret']."','0','".$_POST['status']."','".$_POST['type']."')");
 			$ridarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."reports WHERE UCASE(label)=UCASE('".mysql_real_escape_string(safeInput($_POST['label']))."')"));
 			$rid=$ridarray['id'];
@@ -31,7 +37,7 @@
 		pageEnd ();
 	} else {
 	  if (isset($_POST['insertrep'])) {
-		  pageStart ('Hlášení uloženo');
+		  pageStart ('Hlášení nepřidáno!!!');
 			mainMenu (4);
 			sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>hlášení nepřidáno</strong>');
 			echo '<div id="obsah"><p>Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
