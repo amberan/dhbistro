@@ -14,11 +14,12 @@
 			WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.id=".$_REQUEST['rid'];
 		$res=MySQL_Query ($sql);
 		if ($rec=MySQL_Fetch_Assoc($res)) {
-		  pageStart (StripSlashes($rec['label']));
+				$typestring=(($rec['type']==1)?'výjezd':(($rec['type']==2)?'výslech':'?')); //odvozuje slovní typ hlášení
+			pageStart (StripSlashes('Hlášení'.(($rec['type']==1)?' z výjezdu':(($rec['type']==2)?' z výslechu':'')).': '.$rec['label']));
 			mainMenu (4);
-			sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>'.StripSlashes($rec['label']).'</strong>');
+			sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>'.StripSlashes($rec['label']).' ('.$typestring.')</strong>');
 			echo '<h1>'.StripSlashes($rec['label']).'</h1>
-<div id="obsah"><strong>Úkol: </strong>'.StripSlashes($rec['task']).'
+<div id="obsah"><strong>'.(($rec['type']==1)?'Úkol':(($rec['type']==2)?'Předmět výslechu':'Úkol')).': </strong>'.StripSlashes($rec['task']).'
 <br /><strong>Vyhotovil: </strong>'.StripSlashes($rec['autor']).'
 <br /><strong>Datum vyhotovnení: </strong>'.Date ('d. m. Y - H:i:s',$rec['datum']).'
 <h2>Shrnutí</h2>'.StripSlashes($rec['summary']).'
