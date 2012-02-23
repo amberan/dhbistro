@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Počítač: localhost
--- Vygenerováno: Čtv 23. úno 2012, 22:49
+-- Vygenerováno: Čtv 23. úno 2012, 23:03
 -- Verze MySQL: 5.5.20
 -- Verze PHP: 5.3.10
 
@@ -20,16 +20,18 @@ SET time_zone = "+00:00";
 -- Databáze: `dhbistrocz`
 --
 
+-- --------------------------------------------------------
+
 --
--- Vypisuji data pro tabulku `nw_map`
+-- Struktura tabulky `nw_map`
 --
 
-INSERT INTO `nw_map` (`id`, `datum`, `link`) VALUES
-(1, 0, 'http://maps.google.com/maps/ms?msa=0&msid=202010519094597531222.0004b849ff189c5e9f6a7'),
-(17, 1330035093, 'http://blog.peoplecomm.cz/clanek/13-cilu-cesko-slovenske-vychovy'),
-(18, 1330035117, 'http://maps.google.com/maps/ms?msa=0&msid=202010519094597531222.0004b849ff189c5e9f6a7'),
-(19, 1330035187, 'http://maps.google.com/maps/ms?msa=0&msid=202010519094597531222.0004b849ff189c5e9f6a7'),
-(20, 1330035200, 'http://maps.google.com/maps/ms?msa=0&msid=202010519094597531222.0004b849ff189c5e9f6a7');
+CREATE TABLE IF NOT EXISTS `nw_map` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `datum` int(11) NOT NULL DEFAULT '0',
+  `link` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
