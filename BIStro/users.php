@@ -2,7 +2,7 @@
 	require_once ('./inc/func_main.php');
 	pageStart ('Uživatelé');
 	mainMenu (2);
-	sparklets ('<strong>uživatelé</strong>',(($usrinfo['right_power'])?'<a href="newuser.php">přidat uživatele</a>':''));
+	sparklets ('<strong>zlobody</strong>',(($usrinfo['right_power'])?'<a href="newuser.php">přidat uživatele</a>':''));
 	// zpracovani filtru
 	if (!isset($_REQUEST['kategorie'])) {
 	  $f_cat=0;
