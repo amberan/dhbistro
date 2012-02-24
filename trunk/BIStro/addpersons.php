@@ -48,15 +48,17 @@ if (isset($_POST['addtoareport'])) {
 	 // 1: vyslýchaný
 	 // 2: vyslýchající
 	 // 3: zatčený
-	pageStart ('Uložení změn');
-	mainMenu (5);
-	sparklets ('<a href="./reports.php">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>uložení změn</strong>');
-	echo '<div id="obsah"><p>Osoby příslušné k hlášení uloženy.</p></div>';
+
 	if (isset($_POST['person'])) {
 		for ($i=0;$i<Count($person);$i++) {
 			MySQL_Query ("INSERT INTO ".DB_PREFIX."ar2p VALUES('".$person[$i]."','".$_POST['reportid']."','".$usrinfo['id']."','".$role[$i]."')");
 		}
 	}
+	// header('Location: ./editactrep.php?rid='.$_POST['reportid']); // přesměrování zpět na předchozí stránku
+	pageStart ('Uložení změn');
+	mainMenu (5);
+	sparklets ('<a href="./reports.php">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>uložení změn</strong>');
+	echo '<div id="obsah"><p>Osoby příslušné k hlášení uloženy.</p></div>';
 	pageEnd ();
 }
 
