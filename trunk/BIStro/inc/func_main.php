@@ -85,6 +85,7 @@
     <meta name="description" content="city larp management system" />
     <!--[if lt IE 7]><style type="text/css">body {behavior: url('./inc/csshover.htc');}</style><![endif]-->
     <link media="screen" rel="stylesheet" type="text/css" href="./inc/styly.css" />
+    <link media="print" rel="stylesheet" type="text/css" href="./css/print.css" />
 		<link rel="icon" href="favicon.ico" type="image/x-icon" />
 		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 		<script type="text/javascript" src="./js/tiny_mce/tiny_mce_gzip.js"></script>
