@@ -9,6 +9,47 @@ $author=$reportarray['iduser']; // určuje autora hlášení
 pageStart ('Úprava hlášení'.(($type==1)?' z výjezdu':(($type==2)?' z výslechu':'')));
 mainMenu (3);
 sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení'.(($type==1)?' z výjezdu':(($type==2)?' z výslechu':'')).'</strong>');
+
+// kalendář
+function date_picker($name, $startyear=NULL, $endyear=NULL) {
+	global $aday;
+	global $amonth;
+	global $ayear;
+	if($startyear==NULL) $startyear = date("Y")-10;
+	if($endyear==NULL) $endyear=date("Y")+5;
+
+	$months=array('','Leden','Únor','Březen','Duben','Květen',
+			'Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec');
+
+	// roletka dnů
+	$html="<select class=\"day\" name=\"".$name."day\">";
+	for($i=1;$i<=31;$i++)
+	{
+		$html.="<option ".(($i==$aday)?' selected':'')." value='$i'>$i</option>";
+	}
+	$html.="</select> ";
+
+	// roletka měsíců
+	$html.="<select class=\"month\" name=\"".$name."month\">";
+
+	for($i=1;$i<=12;$i++)
+	{
+		$html.="<option ".(($i==$amonth)?' selected':'')." value='$i'>$months[$i]</option>";
+	}
+	$html.="</select> ";
+
+	// roletka let
+	$html.="<select class=\"year\" name=\"".$name."year\">";
+
+	for($i=$startyear;$i<=$endyear;$i++)
+	{
+		$html.="<option ".(($i==$ayear)?' selected':'')." value='$i'>$i</option>";
+	}
+	$html.="</select> ";
+
+		return $html;
+}
+
 if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==$author && $reportarray['status']<1))) {
 	$sql="SELECT
 		".DB_PREFIX."reports.id AS 'id',
@@ -21,12 +62,16 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 		".DB_PREFIX."reports.secret AS 'secret',
 		".DB_PREFIX."reports.status AS 'status',
 		".DB_PREFIX."users.login AS 'autor',
-		".DB_PREFIX."reports.type AS 'type'
+		".DB_PREFIX."reports.type AS 'type',
+		".DB_PREFIX."reports.adatum AS 'adatum'
 		FROM ".DB_PREFIX."reports, ".DB_PREFIX."users
 		WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.id=".$_REQUEST['rid'];
 	$res=MySQL_Query ($sql);
 	if ($rec=MySQL_Fetch_Assoc($res)) {
-		?>
+	$aday=(Date ('j',$rec['adatum']));
+	$amonth=(Date ('n',$rec['adatum']));
+	$ayear=(Date ('Y',$rec['adatum']));
+	?>
 <form action="procactrep.php" method="post" id="inputform">
 <div>
 <label for="label">Označení<?php echo((($type==1)?' výjezdu':(($type==2)?' výslechu':' hlášení')));?>:</label>
@@ -35,6 +80,10 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 <div>
 <label for="task"><?php echo((($type==1)?'Úkol':(($type==2)?'Předmět výslechu':'Úkol')));?>:</label>
 <input type="text" name="task" id="task" value="<?php echo StripSlashes($rec['task']); ?>" />
+</div>
+<div>
+<label for="adatum"><?php if($type==='1'){ ?>Datum akce<?php }else if($type==='2'){ ?>Datum výslechu<?php }; ?>:</label>
+<?php echo date_picker("adatum")?>
 </div>
 <div>
 <label for="secret">Přísně tajné:</label>
