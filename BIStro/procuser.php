@@ -12,7 +12,7 @@
 	  if (MySQL_Num_Rows ($ures)) {
 	    echo '<div id="obsah"><p>Uživatel již existuje, změňte jeho jméno.</p></div>';
 	  } else {
-			MySQL_Query ("INSERT INTO ".DB_PREFIX."users VALUES('','".mysql_real_escape_string(safeInput($_POST['login']))."','".mysql_real_escape_string($_POST['heslo'])."','','','".$_POST['power']."','".$_POST['texty']."','','','')");
+			MySQL_Query ("INSERT INTO ".DB_PREFIX."users VALUES('','".mysql_real_escape_string(safeInput($_POST['login']))."','".mysql_real_escape_string($_POST['heslo'])."','','','".$_POST['power']."','".$_POST['texty']."','','','','')");
 			echo '<div id="obsah"><p>Uživatel vytvořen.</p></div>';
 		}
 		pageEnd ();
@@ -25,7 +25,7 @@
 			pageEnd ();
 		}
 	}
-	if (isset($_POST['userid']) && isset($_POST['edituser']) && $usrinfo['right_power'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['login']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['heslo']) && is_numeric($_POST['power']) && is_numeric($_POST['texty'])) {
+	if (isset($_POST['userid']) && isset($_POST['edituser']) && $usrinfo['right_power'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['login']) && is_numeric($_POST['power']) && is_numeric($_POST['texty'])) {
 	  pageStart ('Uložení změn');
 		mainMenu (2);
 		sparklets ('<a href="./users.php">uživatelé</a> &raquo; <a href="./edituser.php">úprava uživatele</a> &raquo; <strong>uložení změn</strong>');
@@ -33,7 +33,7 @@
 	  if (MySQL_Num_Rows ($ures)) {
 	    echo '<div id="obsah"><p>Uživatel již existuje, změňte jeho jméno.</p></div>';
 	  } else {
-			MySQL_Query ("UPDATE ".DB_PREFIX."users SET login='".mysql_real_escape_string(safeInput($_POST['login']))."', pwd='".mysql_real_escape_string($_POST['heslo'])."', right_power='".$_POST['power']."', right_text='".$_POST['texty']."' WHERE id=".$_POST['userid']);
+			MySQL_Query ("UPDATE ".DB_PREFIX."users SET login='".mysql_real_escape_string(safeInput($_POST['login']))."', right_power='".$_POST['power']."', right_text='".$_POST['texty']."' WHERE id=".$_POST['userid']);
 			echo '<div id="obsah"><p>Uživatel upraven.</p></div>';
 		}
 		pageEnd ();
