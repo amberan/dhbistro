@@ -163,7 +163,7 @@ hr {
 }
 
 #inputform.evilform {
-	margin: 1px;
+	margin: 1px !important;
 }
 
 #inputform label {
@@ -185,7 +185,7 @@ hr {
 
 #inputform input.plus {
 	border: 1px inset #DFB96E;
-	width: 20px;
+	width: 20px !important;
 }
 
 #inputform textarea {
