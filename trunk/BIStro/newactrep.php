@@ -7,10 +7,49 @@
 	else if($type==='2'){sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>nové hlášení z výslechu</strong>');}
 	else { ?>
 <h1>Požadovaný typ hlášení neexistuje - vraťte se prosím <a href="./reports.php" title="">zpět &raquo;</a></h1>
-<?php pageEnd ();exit; }; ?>
+<?php pageEnd ();exit; }; 
+// kalendář
+function date_picker($name, $startyear=NULL, $endyear=NULL)
+{
+    if($startyear==NULL) $startyear = date("Y")-10;
+    if($endyear==NULL) $endyear=date("Y")+5; 
+
+    $months=array('','Leden','Únor','Březen','Duben','Květen',
+    'Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec');
+
+    // roletka dnů
+    $html="<select class=\"day\" name=\"".$name."day\">";
+    for($i=1;$i<=31;$i++)
+    {
+    	$html.="<option value='$i'>$i</option>";
+    }
+    $html.="</select> ";
+    
+    // roletka měsíců
+    $html.="<select class=\"month\" name=\"".$name."month\">";
+
+    for($i=1;$i<=12;$i++)
+    {
+       $html.="<option value='$i'>$months[$i]</option>";
+    }
+    $html.="</select> ";
+
+    // roletka let
+    $html.="<select class=\"year\" name=\"".$name."year\">";
+
+    for($i=$startyear;$i<=$endyear;$i++)
+    {      
+      $html.="<option value='$i'>$i</option>";
+    }
+    $html.="</select> ";
+
+    return $html;
+}
+?>
+
 <form action="procactrep.php" method="post" id="inputform"><?php
 	switch ($type){		
-		// default situace by nemela nikdy nastat, zande nove hlaseni by nemelo mit typ 0 (nula);
+		// default situace by nemela nikdy nastat, zadne nove hlaseni by nemelo mit typ 0 (nula);
 		case 1: ?><input type="hidden" name="type" value="1" /><?php break; // výjezd
 		case 2: ?><input type="hidden" name="type" value="2" /><?php break; // výslech
 		default:?><input type="hidden" name="type" value="0" /><?php  break; }; // tato moznost je zahrnuta pouze jako pojistka  ?>
@@ -21,6 +60,10 @@
 	<div>
 	  <label for="task"><?php if($type==='1'){ ?>Úkol<?php }else if($type==='2'){ ?>Předmět výslechu<?php }; ?>:</label>
 	  <input type="text" name="task" id="task" />
+	</div>
+	<div>
+	  <label for="adatum"><?php if($type==='1'){ ?>Datum akce<?php }else if($type==='2'){ ?>Datum výslechu<?php }; ?>:</label>
+	  <?php echo date_picker("adatum")?>
 	</div>
 	<div>
 	  <label for="secret">Přísně tajné:</label>

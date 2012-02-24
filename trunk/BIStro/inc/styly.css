@@ -183,6 +183,21 @@ hr {
 	width: 200px;
 }
 
+#inputform select.day {
+	border: 1px inset #DFB96E;
+	width: 45px !important;
+}
+
+#inputform select.month {
+	border: 1px inset #DFB96E;
+	width: 85px !important;
+}
+
+#inputform select.year {
+	border: 1px inset #DFB96E;
+	width: 65px !important;
+}
+
 #inputform input.plus {
 	border: 1px inset #DFB96E;
 	width: 20px !important;

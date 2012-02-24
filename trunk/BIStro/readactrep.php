@@ -8,6 +8,7 @@
 			".DB_PREFIX."reports.summary AS 'summary',
 			".DB_PREFIX."reports.impacts AS 'impacts',
 			".DB_PREFIX."reports.details AS 'details',
+			".DB_PREFIX."reports.adatum AS 'adatum',
 			".DB_PREFIX."users.login AS 'autor',
 			".DB_PREFIX."reports.type AS 'type'
 			FROM ".DB_PREFIX."reports, ".DB_PREFIX."users
@@ -23,8 +24,9 @@
 <div id="obsah">
 	<h1><?php echo(StripSlashes($rec['label'])); ?></h1>
 	<strong><?php echo((($rec['type']==1)?'Úkol':(($rec['type']==2)?'Předmět výslechu':'Úkol'))); ?>: </strong><?php echo(StripSlashes($rec['task'])); ?><br />
+	<strong><?php echo((($rec['type']==1)?'Datum akce':(($rec['type']==2)?'Datum výslechu':'Datum akce'))); ?>: </strong><?php echo(Date ('d. m. Y',$rec['adatum'])); ?><br />
 	<strong>Vyhotovil: </strong><?php echo(StripSlashes($rec['autor'])); ?><br />
-	<strong>Datum vyhotovnení: </strong><?php echo(Date ('d. m. Y - H:i:s',$rec['datum'])); ?>
+	<strong>Čas vyhotovnení: </strong><?php echo(Date ('d. m. Y - H:i:s',$rec['datum'])); ?>
 	<h2>Shrnutí</h2><?php echo(StripSlashes($rec['summary'])); ?>
 	<h2>Možné dopady</h2><?php echo(StripSlashes($rec['impacts'])); ?>
 	<h2>Podrobný průběh</h2><?php echo(StripSlashes($rec['details'])); ?>
