@@ -103,7 +103,7 @@
 		while ($rec=MySQL_Fetch_Assoc($res)) { 
 			$i++; 
 			if($i==1){ ?>
-	<hr />
+	<fieldset><legend><strong>Původní jména</strong></legend>
 	<ul id="puvodnijmena">
 			<?php } ?>
 		<li><a href="getfile.php?idfile=<?php echo($rec['id']); ?>" title=""><?php echo(StripSlashes($rec['title'])); ?></a></li>
@@ -112,6 +112,7 @@
 		if($i<>0){ ?>
 	</ul>
 	<!-- end of #puvodnijmena -->
+	</fieldset>
 	<?php 
 		}
 	// konec původních jmen ?>
@@ -127,7 +128,7 @@
 		while ($rec=MySQL_Fetch_Assoc($res)) { 
 			$i++;
 			if($i==1){ ?>
-	<hr />
+	<fieldset><legend><strong>Poznámky</strong></legend>
 	<ul id="poznamky">
 		<?php
 			} ?>
@@ -137,6 +138,7 @@
 		if($i<>0){ ?>
 	</ul>
 	<!-- end of #poznamky -->
+	</fieldset>
 	<?php 
 		}
 	// konec poznámek ?>
