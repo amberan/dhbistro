@@ -148,22 +148,36 @@
 <hr />
 <form action="procperson.php" method="post" class="otherform">
 	<p>K osobě si můžete připsat kolik chcete poznámek.</p>
+	<p>Aktuálně připojené poznámky:</p>
+	<ul>
+	<?php
+	if ($usrinfo['right_power']) {
+		$sql="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes WHERE ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=1 ORDER BY ".DB_PREFIX."notes.datum DESC";
+	} else {
+	  $sql="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes WHERE ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=1 AND (".DB_PREFIX."notes.secret=0 OR ".DB_PREFIX."notes.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."notes.datum DESC";
+	}
+	$res=MySQL_Query ($sql);
+	while ($rec=MySQL_Fetch_Assoc($res)) {
+		echo '<li><a href="readnote.php?rid='.$rec['id'].'">'.StripSlashes($rec['title']).'</a>';
+		if ($rec['secret']==0) echo ' (veřejná)';
+		if ($rec['secret']==1) echo ' (tajná)';
+		if ($rec['secret']==2) echo ' (soukromá)';		
+		if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo ' - <a href="procperson.php?editnote='.$rec['id'].'&amp;personid='.$_REQUEST['rid'].'">upravit poznámku</a> ';
+		if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo ' - <a href="procperson.php?deletenote='.$rec['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('readperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec['title'])."&quot; náležící k osobě?');".'">smazat poznámku</a></li>';
+	}
+	?>
+	</ul>
+	<p>Nová poznámka:</p>
 	<div>
 		<label for="notetitle">Nadpis:</label>
 		<input type="text" name="title" id="notetitle" />
 	</div>
 	<div>
-	  <label for="nsecret">Přísně tajné:</label>
+	  <label for="nsecret">Utajení:</label>
 		<select name="secret" id="nsecret">
-		  <option value="0">ne</option>
-			<option value="1">ano</option>
-		</select>
-	</div>
-		<div>
-	  <label for="personal">Osobní:</label>
-		<select name="personal" id="personal">
-		  <option value="0">ne</option>
-			<option value="1">ano</option>
+		  <option value="0">veřejná</option>
+		  <option value="1">tajná</option>
+		  <option value="2">soukromá</option>
 		</select>
 	</div>
 	<div>
@@ -176,19 +190,6 @@
 		<input type="submit" value="Uložit poznámku" name="setnote" class="submitbutton" />
 	</div>
 </form>
-<ul>
-<?php
-	if ($usrinfo['right_power']) {
-		$sql="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes WHERE ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=1 AND ".DB_PREFIX."notes.deleted=0 ORDER BY ".DB_PREFIX."notes.datum DESC";
-	} else {
-	  $sql="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes WHERE ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=1 AND ".DB_PREFIX."notes.deleted=0 AND (".DB_PREFIX."notes.secret=0 OR ".DB_PREFIX."notes.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."notes.datum DESC";
-	}
-	$res=MySQL_Query ($sql);
-	while ($rec=MySQL_Fetch_Assoc($res)) {
-		echo '<li><a href="readnote.php?rid='.$rec['id'].'">'.StripSlashes($rec['title']).'</a> &mdash; <a href="procperson.php?deletenote='.$rec['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('editperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec['title'])."&quot; náležící k osobě?');".'">smazat poznámku</a></li>';
-	}
-?>
-</ul>
 <?php
 		} else {
 		  echo '<div id="obsah"><p>Osoba neexistuje.</p></div>';
