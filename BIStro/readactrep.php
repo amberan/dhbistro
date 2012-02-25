@@ -9,7 +9,8 @@
 			".DB_PREFIX."reports.impacts AS 'impacts',
 			".DB_PREFIX."reports.details AS 'details',
 			".DB_PREFIX."users.login AS 'autor',
-			".DB_PREFIX."reports.type AS 'type'
+			".DB_PREFIX."reports.type AS 'type',
+			".DB_PREFIX."reports.adatum AS 'adatum'
 			FROM ".DB_PREFIX."reports, ".DB_PREFIX."users
 			WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.id=".$_REQUEST['rid'];
 		$res=MySQL_Query ($sql);
@@ -21,32 +22,22 @@
 			sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>'.StripSlashes($rec_ar['label']).' ('.$typestring.')</strong>');
 ?>
 <div id="obsah">
-<<<<<<< .mine
 	<h1><?php echo(StripSlashes($rec_ar['label'])); ?></h1>
 	<div id="report-hlavicka" class="top">
-		<span>[ <strong>Hlášení<?php echo((($rec_ar['type']==1)?' z výjezdu':(($rec_ar['type']==2)?' z výslechu':' k hlášení')));?></strong> | </span>
+		<span>[ <strong>Hlášení<?php echo((($rec_ar['type']==1)?' z výjezdu':(($rec_ar['type']==2)?' z výslechu':' k akci')));?></strong> | </span>
 		<span><strong>Vyhotovil: </strong><?php echo(StripSlashes($rec_ar['autor'])); ?> | </span>
 		<span><strong>Dne: </strong><?php echo(Date ('d. m. Y',$rec_ar['datum'])); ?> ]</span>
 	</div>
 	<fieldset><legend><h2>Obecné informace</h2></legend>
 	<div id="report-info">
+		<h3>Datum<?php echo((($rec_ar['type']==1)?' výjezdu':(($rec_ar['type']==2)?' výslechu':' akce'))); ?>:</h3>
+		<p><?php echo(Date ('d.m.Y',$rec_ar['adatum'])); ?></p>
+		<div class="clear">&nbsp;</div>
 		<h3><?php echo((($rec_ar['type']==1)?'Úkol':(($rec_ar['type']==2)?'Předmět výslechu':'Úkol'))); ?>:</h3>
 		<p><?php echo(StripSlashes($rec_ar['task'])); ?></p>
 		<div class="clear">&nbsp;</div>
 		<h3>Osoby přítomné:</h3>
 		<p><?php 			
-=======
-	<h1><?php echo(StripSlashes($rec['label'])); ?></h1>
-	<strong><?php echo((($rec['type']==1)?'Úkol':(($rec['type']==2)?'Předmět výslechu':'Úkol'))); ?>: </strong><?php echo(StripSlashes($rec['task'])); ?><br />
-	<strong>Vyhotovil: </strong><?php echo(StripSlashes($rec['autor'])); ?><br />
-	<strong>Datum vyhotovnení: </strong><?php echo(Date ('d. m. Y - H:i:s',$rec['datum'])); ?>
-	<h2>Shrnutí</h2><?php echo(StripSlashes($rec['summary'])); ?>
-	<h2>Možné dopady</h2><?php echo(StripSlashes($rec['impacts'])); ?>
-	<h2>Podrobný průběh</h2><?php echo(StripSlashes($rec['details'])); ?>
-	<hr />
-	<p>Osoby přítomné akci:
-	<?php 			
->>>>>>> .r50
 		if ($usrinfo['right_power']) {
 			$sql="SELECT ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."persons, ".DB_PREFIX."ar2p WHERE ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." AND ".DB_PREFIX."persons.deleted=0 ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
 		} else {
