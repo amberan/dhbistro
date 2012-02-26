@@ -20,8 +20,8 @@
 			$res=MySQL_Query ($sql);
 			if (MySQL_Num_Rows($res)) {
 				$groups=Array();
-				while ($rec=MySQL_Fetch_Assoc($res)) {
-					$groups[]='<a href="./readperson.php?rid='.$rec['id'].'">'.StripSlashes ($rec['surname']).', '.StripSlashes ($rec['name']).'</a>';
+				while ($rec_p=MySQL_Fetch_Assoc($res)) {
+					$groups[]='<a href="./readperson.php?rid='.$rec_p['id'].'">'.StripSlashes ($rec_p['surname']).', '.StripSlashes ($rec_p['name']).'</a>';
 				}
 				echo implode ($groups,', ');
 			} else {?>
