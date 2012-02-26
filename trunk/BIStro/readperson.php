@@ -3,26 +3,30 @@
 	if (is_numeric($_REQUEST['rid'])) {
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."persons WHERE id=".$_REQUEST['rid']);
 		if ($rec=MySQL_Fetch_Assoc($res)) {
-		  $sides=Array('','světlý','temný','člověk','neznámá');
-		  $powers=Array('','neznámá','člověk','mimo kategorie','1. kategorie','2. kategorie','3. kategorie','4. kategorie');
-		  pageStart (StripSlashes($rec['surname']).', '.StripSlashes($rec['name']));
+			$sides=Array('','světlý','temný','člověk','neznámá');
+			$powers=Array('','neznámá','člověk','mimo kategorie','1. kategorie','2. kategorie','3. kategorie','4. kategorie');
+			pageStart (StripSlashes($rec['surname']).', '.StripSlashes($rec['name']));
 			mainMenu (5);
 			sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>'.StripSlashes($rec['surname']).', '.StripSlashes($rec['name']).'</strong>');
-			?><?php 
-						echo '<img src="getportrait.php?rid='.$_REQUEST['rid'].'" alt="portrét chybí" id="portraitimg" />
-			<h1>'.StripSlashes($rec['surname']).', '.StripSlashes($rec['name']).'</h1>
-			<div id="obsah">
-			<p>Jméno: <strong>'.StripSlashes($rec['name']).'</strong><br />
-Příjmení: <strong>'.StripSlashes($rec['surname']).'</strong><br />
-Strana: <strong>';
+			?>
+<div id="obsah">
+	<h1><?php echo(StripSlashes($rec['surname']).', '.StripSlashes($rec['name'])); ?></h1>
+	<img src="getportrait.php?rid=<?php echo($_REQUEST['rid']); ?>" alt="portrét chybí" id="portraitimg" />
+	<div id="info">
+		<h3>Jméno: </h3><p><?php echo(StripSlashes($rec['name'])); ?></p>
+		<div class="clear">&nbsp;</div>
+		<h3>Příjmení: </h3><p><?php echo(StripSlashes($rec['surname'])); ?></p>
+		<div class="clear">&nbsp;</div> 
+		<h3>Strana: </h3><p><?php 
 			switch ($rec['side']) {
 				case 1: $side = 'světlo'; break;
 				case 2: $side = 'tma'; break;
 				case 3: $side = 'člověk'; break;
 				default: $side = 'neznámá'; break;
 			}
-			echo $side.'</strong><br />
-Síla: <strong>';
+			echo $side; ?></p>
+		<div class="clear">&nbsp;</div>
+		<h3>Síla: </h3><p><?php 
 			switch ($rec['power']) {
 				case 1:
 				case 2:
@@ -36,8 +40,9 @@ Síla: <strong>';
 					$power = 'mimo kategorie'; break; 
 				default: $power = 'neznámá'; break;
 			}
-			echo $power.'</strong><br />
-Specializace: <strong>';
+			echo $power; ?></p>
+		<div class="clear">&nbsp;</div>
+		<h3>Specializace: </h3><p><?php 
 			switch ($rec['spec']) {
 				case 1: $side = 'bílý mág'; break;
 				case 2: $side = 'černý mág'; break;
@@ -49,30 +54,32 @@ Specializace: <strong>';
 				case 8: $side = 'zaříkávač'; break;
 				default: $side = 'neznámá'; break;
 			}
-			echo $side.'</strong><br />			
-Přísně tajné: <strong>'.(($rec['secret'])?'ano':'ne').'</strong></p>
-'.StripSlashes($rec['contents']).'
-<hr />
-<p>Patří do skupin: ';
-	if ($usrinfo['right_power']) {
-		$sql="SELECT ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."groups, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idgroup=".DB_PREFIX."groups.id AND ".DB_PREFIX."g2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."groups.deleted=0 ORDER BY ".DB_PREFIX."groups.title ASC";
-	} else {
-		$sql="SELECT ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."groups, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idgroup=".DB_PREFIX."groups.id AND ".DB_PREFIX."g2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."groups.deleted=0 AND ".DB_PREFIX."groups.secret=0 ORDER BY ".DB_PREFIX."groups.title ASC";
-	}
-	$res=MySQL_Query ($sql);
-	if (MySQL_Num_Rows($res)) {
-		$groups=Array();
-		while ($rec=MySQL_Fetch_Assoc($res)) {
-			$groups[]='<a href="./readgroup.php?rid='.$rec['id'].'">'.StripSlashes ($rec['title']).'</a>';
-		}
-		echo implode ($groups,', ');
-	} else {
-		echo '&mdash;';
-	}
-	echo '</p>
-</div>';
-?>
-<hr />
+			echo $side; ?></p>
+		<div class="clear">&nbsp;</div>
+		<h3>Přísně tajné: </h3><p><?php echo (($rec['secret'])?'ano':'ne'); ?></p>
+		<div class="clear">&nbsp;</div>
+		<h3>Patří do skupin: </h3><p><?php
+			if ($usrinfo['right_power']) {
+				$sql="SELECT ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."groups, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idgroup=".DB_PREFIX."groups.id AND ".DB_PREFIX."g2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."groups.deleted=0 ORDER BY ".DB_PREFIX."groups.title ASC";
+			} else {
+				$sql="SELECT ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."groups, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idgroup=".DB_PREFIX."groups.id AND ".DB_PREFIX."g2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."groups.deleted=0 AND ".DB_PREFIX."groups.secret=0 ORDER BY ".DB_PREFIX."groups.title ASC";
+			}
+			$res=MySQL_Query ($sql);
+			if (MySQL_Num_Rows($res)) {
+				$groups=Array();
+				while ($rec=MySQL_Fetch_Assoc($res)) {
+					$groups[]='<a href="./readgroup.php?rid='.$rec['id'].'">'.StripSlashes ($rec['title']).'</a>';
+				}
+				echo implode ($groups,', ');
+			} else {
+				echo '&mdash;';
+			} ?></p>
+		<div class="clear">&nbsp;</div>
+	</div>
+	<!-- end of #info -->
+	<h2>Popis osoby</h2>
+	<div class="field-text"><?php echo StripSlashes($rec['contents']); ?></div>
+
 <!--form action="procperson.php" method="post" enctype="multipart/form-data" class="otherform">
 	<p>K osobě je možné nahrát neomezené množství souborů, ale velikost jednoho souboru je omezena na 2 MB.</p>
 	<div>
@@ -150,6 +157,8 @@ Přísně tajné: <strong>'.(($rec['secret'])?'ano':'ne').'</strong></p>
 	}
 ?>
 </ul>
+</div>
+
 <?php
 		} else {
 			pageStart ('Osoba neexistuje');
