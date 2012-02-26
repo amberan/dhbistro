@@ -130,6 +130,9 @@
 			if($i==1){ ?>
 	<fieldset><legend><strong>Poznámky</strong></legend>
 	<div id="poznamky"><?php
+			}
+			if($i>1){?>
+		<hr /><?php
 			} ?>
 		<div class="poznamka">
 			<h4><a href="readnote.php?rid=<?php echo($rec['id']);?>"><?php echo(StripSlashes($rec['title']));?></a><?php
