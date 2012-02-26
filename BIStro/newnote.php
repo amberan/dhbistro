@@ -2,7 +2,7 @@
 require_once ('./inc/func_main.php');
 pageStart ('Nová poznámka');
 mainMenu (4);
-sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>nová poznámka</strong>');
+sparklets ('<a href="./'.$_REQUEST['sourcepage'].'">osoby</a> &raquo; <strong>nová poznámka</strong>');
 ?>
 <form action="procperson.php" method="post" class="otherform">
 	<p>K osobě si můžete připsat kolik chcete poznámek.</p>
