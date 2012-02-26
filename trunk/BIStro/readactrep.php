@@ -119,9 +119,9 @@
 <!-- následuje seznam poznámek -->
 	<?php // generování poznámek
 		if ($usrinfo['right_power']) {
-			$sql="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes WHERE ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=3 ORDER BY ".DB_PREFIX."notes.datum DESC";
+			$sql="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.note AS 'note', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes WHERE ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=1 AND (".DB_PREFIX."notes.secret<2 OR ".DB_PREFIX."notes.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."notes.datum DESC";
 		} else {
-		  $sql="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes WHERE ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=3 AND (".DB_PREFIX."notes.secret=0 OR ".DB_PREFIX."notes.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."notes.datum DESC";
+		  $sql="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.note AS 'note', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes WHERE ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=1 AND (".DB_PREFIX."notes.secret=0 OR ".DB_PREFIX."notes.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."notes.datum DESC";
 		}
 		$res=MySQL_Query ($sql);
 		$i=0;
@@ -129,18 +129,27 @@
 			$i++;
 			if($i==1){ ?>
 	<fieldset><legend><strong>Poznámky</strong></legend>
-	<ul id="poznamky">
-		<?php
+	<div id="poznamky"><?php
 			} ?>
-		<li><a href="readnote.php?rid=<?php echo($rec['id']); ?>" title=""><?php echo(StripSlashes($rec['title'])); ?></a><?php echo(((($rec['iduser']==$usrinfo['id']) || $usrinfo['right_power'])?' &mdash; <a href="proccase.php?deletenote='.$rec['id'].'&amp;caseid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('readcase.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec['title'])."&quot; náležící k případu?');".'">smazat poznámku</a></li>':'')); ?></li>
-	<?php 
-		}
+		<div class="poznamka">
+			<h4><a href="readnote.php?rid=<?php echo($rec['id']);?>"><?php echo(StripSlashes($rec['title']));?></a><?php
+			if ($rec['secret']==0) echo ' (veřejná)';
+			if ($rec['secret']==1) echo ' (tajná)';
+			if ($rec['secret']==2) echo ' (soukromá)';
+			?></h4>
+			<p><?php echo(StripSlashes($rec['note'])); ?></p>
+			<span class="poznamka-edit-buttons"><?php
+			if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo '<a href="procperson.php?editnote='.$rec['id'].'&amp;personid='.$_REQUEST['rid'].'"><span class="button-text">upravit poznámku</span></a> ';
+			if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo '<a href="procperson.php?deletenote='.$rec['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('readperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec['title'])."&quot; náležící k osobě?');".'"><span class="button-text">smazat poznámku</span></a>';?>
+			</span>
+		</div>
+		<!-- end of .poznamka -->
+	<?php }
 		if($i<>0){ ?>
-	</ul>
+	</div>
 	<!-- end of #poznamky -->
 	</fieldset>
-	<?php 
-		}
+	<?php }
 	// konec poznámek ?>
 </div>
 <!-- end of #obsah -->
