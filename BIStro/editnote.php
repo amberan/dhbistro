@@ -22,12 +22,28 @@
 	</div>
 	<div>
 	  <label for="nsecret">Utajení:</label>
-		<select name="secret" id="nsecret">
+		<select name="nsecret" id="nsecret">
 		  <option value="0"<?php if ($rec['secret']==0) { echo ' selected="selected"'; } ?>>veřejná</option>
 		  <option value="1"<?php if ($rec['secret']==1) { echo ' selected="selected"'; } ?>>tajná</option>
 		  <option value="2"<?php if ($rec['secret']==2) { echo ' selected="selected"'; } ?>>soukromá</option>
 		</select>
 	</div>
+	<?php 
+	if ($usrinfo['right_power']) {
+		$sql="SELECT id, login FROM ".DB_PREFIX."users WHERE deleted=0 ORDER BY login ASC";
+		$res_n=MySQL_Query ($sql);
+		echo '<div>
+		<label for="nowner">Vlastník:</label>
+		<select name="nowner" id="nowner">';
+		while ($rec_n=MySQL_Fetch_Assoc($res_n)) {
+		  		echo '<option value="'.$rec_n['id'].'"'.(($rec_n['id']==$usrinfo['id'])?' selected="selected"':'').'>'.$rec_n['login'].'</option>';
+		};
+		echo '</select>
+			  </div>';
+	} else {
+		echo '<input type="hidden" name="nowner" value="'.$rec['iduser'].'" />';
+	}
+	?>
 	<div>
 		<label for="notebody">Tělo poznámka:</label>
 		<textarea cols="80" rows="7" name="note" id="notebody"><?php echo StripSlashes($rec['note']); ?></textarea>
