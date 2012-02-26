@@ -295,6 +295,7 @@ hr {
 #obsah h1 {margin:0px;}
 #obsah h2 {font-size:1.2em; margin:0.3em 0;}
 #obsah h3 {font-size:1.05em}
+#obsah h4 {font-size:1em; margin:0.1em 0;}
 
 #info {padding:0 10px;}
 #info h3, #info p{display:inline; margin:0.2em 0;}
@@ -304,6 +305,14 @@ hr {
 #obsah .field-text {margin:0.2em; padding:0;}
 
 ul#pripady {margin:0.1em 0; padding-left: 2em;}
+
+.poznamka {position: relative;}
+.poznamka > div {margin:0.3em 0;}
+.poznamka-edit-buttons{position:absolute;right:0px;top:0px;}
+.poznamka-edit-buttons a {display:inline-block;width:16px;height:16px;margin:3px;}
+.poznamka-edit-buttons a span.button-text{display:none;}
+.poznamka-edit-buttons a.edit {background-image:url('../css/edit.png')}
+.poznamka-edit-buttons a.delete {background-image:url('../css/delete.png')}
 
 #portraitimg {
 	position: absolute;
