@@ -140,10 +140,10 @@
 			if ($rec['secret']==1) echo ' (tajná)';
 			if ($rec['secret']==2) echo ' (soukromá)';
 			?></h4>
-			<p><?php echo(StripSlashes($rec['note'])); ?></p>
+			<div><?php echo(StripSlashes($rec['note'])); ?></div>
 			<span class="poznamka-edit-buttons"><?php
-			if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo '<a href="editnote.php?rid='.$rec['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;idtable=4"><span class="button-text">upravit</span></a> ';
-			if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo '<a href="procnote.php?deletenote='.$rec['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('readperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec['title'])."&quot; náležící k osobě?');".'"><span class="button-text">smazat</span></a>';?>
+			if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo '<a class="edit" href="editnote.php?rid='.$rec['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;idtable=4"><span class="button-text">upravit</span></a> ';
+			if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo '<a class="delete" href="procnote.php?deletenote='.$rec['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('readperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec['title'])."&quot; náležící k osobě?');".'"><span class="button-text">smazat</span></a>';?>
 			</span>
 		</div>
 		<!-- end of .poznamka -->
