@@ -8,7 +8,8 @@
 		  pageStart (StripSlashes($rec['surname']).', '.StripSlashes($rec['name']));
 			mainMenu (5);
 			sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>'.StripSlashes($rec['surname']).', '.StripSlashes($rec['name']).'</strong>');
-			echo '<img src="getportrait.php?rid='.$_REQUEST['rid'].'" alt="portrét chybí" id="portraitimg" />
+			?><?php 
+						echo '<img src="getportrait.php?rid='.$_REQUEST['rid'].'" alt="portrét chybí" id="portraitimg" />
 			<h1>'.StripSlashes($rec['surname']).', '.StripSlashes($rec['name']).'</h1>
 			<div id="obsah">
 			<p>Jméno: <strong>'.StripSlashes($rec['name']).'</strong><br />
@@ -151,7 +152,7 @@ Přísně tajné: <strong>'.(($rec['secret'])?'ano':'ne').'</strong></p>
 </ul>
 <?php
 		} else {
-		  pageStart ('Osoba neexistuje');
+			pageStart ('Osoba neexistuje');
 			mainMenu (5);
 			sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>osoba neexistuje</strong>');
 		  echo '<div id="obsah"><p>Osoba neexistuje.</p></div>';
