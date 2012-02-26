@@ -8,7 +8,7 @@
 			pageStart (StripSlashes($rec['surname']).', '.StripSlashes($rec['name']));
 			mainMenu (5);
 			sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>'.StripSlashes($rec['surname']).', '.StripSlashes($rec['name']).'</strong>');
-			?>
+			?>			
 <div id="obsah">
 	<h1><?php echo(StripSlashes($rec['surname']).', '.StripSlashes($rec['name'])); ?></h1>
 	<fieldset><legend><h2>Základní údaje</h2></legend>
@@ -65,11 +65,11 @@
 				} else {
 					$sql="SELECT ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."groups, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idgroup=".DB_PREFIX."groups.id AND ".DB_PREFIX."g2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."groups.deleted=0 AND ".DB_PREFIX."groups.secret=0 ORDER BY ".DB_PREFIX."groups.title ASC";
 				}
-				$res=MySQL_Query ($sql);
-				if (MySQL_Num_Rows($res)) {
+				$res_g=MySQL_Query ($sql);
+				if (MySQL_Num_Rows($res_g)) {
 					$groups=Array();
-					while ($rec=MySQL_Fetch_Assoc($res)) {
-						$groups[]='<a href="./readgroup.php?rid='.$rec['id'].'">'.StripSlashes ($rec['title']).'</a>';
+					while ($rec_g=MySQL_Fetch_Assoc($res_g)) {
+						$groups[]='<a href="./readgroup.php?rid='.$rec_g['id'].'">'.StripSlashes ($rec_g['title']).'</a>';
 					}
 					echo implode ($groups,', ');
 				} else {
@@ -82,7 +82,7 @@
 <!-- náseduje popis osoby -->
 	<fieldset>
 		<legend><h2>Popis osoby</h2></legend>
-		<div class="field-text"><?php echo StripSlashes($rec['contents']); ?></div>
+		<div class="field-text"><?php echo (StripSlashes($rec['contents'])); ?></div>
 	</fieldset>
 	
 <!-- následuje seznam přiložených souborů -->
