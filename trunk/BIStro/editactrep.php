@@ -202,15 +202,15 @@ echo '<li><a href="getfile.php?idfile='.$rec['id'].'">'.StripSlashes($rec['title
 ?>
 </ul>
 <hr />
-<form action="procactrep.php" method="post" class="otherform">
+<form action="procnote.php" method="post" class="otherform">
 	<p>K hlášení si můžete připsat kolik chcete poznámek.</p>
 	<p>Aktuálně připojené poznámky:</p>
 	<ul>
 	<?php
 	if ($usrinfo['right_power']) {
-		$sql="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes WHERE ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=4 ORDER BY ".DB_PREFIX."notes.datum DESC";
+		$sql="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes WHERE ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=4 AND ".DB_PREFIX."notes.deleted=0 ORDER BY ".DB_PREFIX."notes.datum DESC";
 	} else {
-	  $sql="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes WHERE ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=4 AND (".DB_PREFIX."notes.secret=0 OR ".DB_PREFIX."notes.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."notes.datum DESC";
+	  $sql="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes WHERE ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=4 AND ".DB_PREFIX."notes.deleted=0 AND (".DB_PREFIX."notes.secret=0 OR ".DB_PREFIX."notes.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."notes.datum DESC";
 	}
 	$res=MySQL_Query ($sql);
 	while ($rec=MySQL_Fetch_Assoc($res)) {
@@ -218,8 +218,8 @@ echo '<li><a href="getfile.php?idfile='.$rec['id'].'">'.StripSlashes($rec['title
 		if ($rec['secret']==0) echo ' (veřejná)';
 		if ($rec['secret']==1) echo ' (tajná)';
 		if ($rec['secret']==2) echo ' (soukromá)';		
-		if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo ' - <a href="procactrep.php?editnote='.$rec['id'].'&amp;personid='.$_REQUEST['rid'].'">upravit poznámku</a> ';
-		if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo ' - <a href="procactrep.php?deletenote='.$rec['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('readperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec['title'])."&quot; náležící k osobě?');".'">smazat poznámku</a></li>';
+		if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo ' - <a href="procactrep.php?editnote='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'">upravit poznámku</a> ';
+		if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo ' - <a href="procnote.php?deletenote='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('editactrep.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec['title'])."&quot; náležící k hlášení?');".'">smazat poznámku</a></li>';
 	}
 	?>
 	</ul>
@@ -241,8 +241,9 @@ echo '<li><a href="getfile.php?idfile='.$rec['id'].'">'.StripSlashes($rec['title
 		<textarea cols="80" rows="7" name="note" id="notebody"></textarea>
 	</div>
 	<div>
-		<input type="hidden" name="personid" value="<?php echo $_REQUEST['rid']; ?>" />
+		<input type="hidden" name="itemid" value="<?php echo $_REQUEST['rid']; ?>" />
 		<input type="hidden" name="backurl" value="<?php echo 'editactrep.php?rid='.$_REQUEST['rid']; ?>" />
+		<input type="hidden" name="tableid" value="4" />
 		<input type="submit" value="Uložit poznámku" name="setnote" class="submitbutton" />
 	</div>
 </form>
