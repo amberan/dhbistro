@@ -3,13 +3,17 @@
 	if (is_numeric($_REQUEST['rid'])) {
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."cases WHERE id=".$_REQUEST['rid']);
 		if ($rec=MySQL_Fetch_Assoc($res)) {
-		  pageStart (StripSlashes($rec['title']));
+			pageStart (StripSlashes($rec['title']));
 			mainMenu (4);
 			sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>'.StripSlashes($rec['title']).'</strong>');
-			echo '<h1>'.StripSlashes($rec['title']).'</h1>
-<div id="obsah">'.StripSlashes($rec['contents']).'
+?>
+<div id="obsah">
+	<h1><?php echo StripSlashes($rec['title']); ?></h1>
+	<?php echo StripSlashes($rec['contents']); ?>
 <hr />
-<p>Osoby spojené s případem: ';
+	<fieldset><legend><h2>Obecné informace</h2></legend>
+	<div id="info">
+		<h3>Osoby spojené s případem: </h3><p><?php
 	if ($usrinfo['right_power']) {
 		$sql="SELECT ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."c2p.iduser FROM ".DB_PREFIX."persons, ".DB_PREFIX."c2p WHERE ".DB_PREFIX."c2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."persons.deleted=0 ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
 	} else {
@@ -22,11 +26,13 @@
 			$groups[]='<a href="./readperson.php?rid='.$rec['id'].'">'.StripSlashes ($rec['surname']).', '.StripSlashes ($rec['name']).'</a>';
 		}
 		echo implode ($groups,', ');
-	} else {
-		echo '&mdash;';
-	}
-	echo '</p>';
-?>
+	} else {?>
+		<em>K případu nejsou připojeny žádné osoby.</em><?php
+	} ?></p>
+	</div>
+	<!-- end of #info -->
+	</fieldset>
+	
 <hr />
 <p>
 Hlášení přiřazená k případu.
