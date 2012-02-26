@@ -6,7 +6,14 @@
 			if ($rec['secret']==0 || $rec['iduser']==$usrinfo['id'] || $usrinfo['right_power']) {
 			  pageStart (StripSlashes($rec['title']));
 				mainMenu (0);
-				sparklets ('<strong>'.StripSlashes($rec['title']).'</strong>');
+				switch ($_REQUEST['idtable']) {
+					case 1: $sourceurl="persons.php"; $sourcename="osoby"; break;
+					case 2: $sourceurl="groups.php"; $sourcename="skupiny"; break;
+					case 3: $sourceurl="cases.php"; $sourcename="případy"; break;
+					case 4: $sourceurl="reports.php"; $sourcename="hlášení"; break;
+					default: $sourceurl=""; $sourcename=""; break;
+				}
+				sparklets ('<a href="./'.$sourceurl.'">'.$sourcename.'</a> &raquo; <strong>zobrazení poznámky</strong>');
 				echo '<h1>'.StripSlashes($rec['title']).'</h1>
 				<div id="obsah">'.StripSlashes($rec['note']).'</div>';
 			} else {
