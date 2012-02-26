@@ -162,7 +162,7 @@
 		if ($rec['secret']==0) echo ' (veřejná)';
 		if ($rec['secret']==1) echo ' (tajná)';
 		if ($rec['secret']==2) echo ' (soukromá)';		
-		if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo ' - <a href="procperson.php?editnote='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'">upravit poznámku</a> ';
+		if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo ' - <a href="editnote.php?rid='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'">upravit poznámku</a> ';
 		if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo ' - <a href="procnote.php?deletenote='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('editperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec['title'])."&quot; náležící k osobě?');".'">smazat poznámku</a></li>';
 	}
 	?>

@@ -2,13 +2,20 @@
 	require_once ('./inc/func_main.php');
 	pageStart ('Úprava poznámky');
 	mainMenu (2);
-	sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>úprava uživatele</strong>');
+	switch ($_REQUEST['idtable']) {
+		case 1: $sourceurl="persons.php"; $sourcename="osoby"; break;
+		case 2: $sourceurl="groups.php"; $sourcename="skupiny"; break;
+		case 3: $sourceurl="cases.php"; $sourcename="případy"; break;
+		case 4: $sourceurl="reports.php"; $sourcename="hlášení"; break;
+		default: $sourceurl=""; $sourcename=""; break;
+	}
+	sparklets ('<a href="./'.$sourceurl.'">'.$sourcename.'</a> &raquo; <strong>úprava poznámky</strong>');
 	if (is_numeric($_REQUEST['rid'])) {
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."notes WHERE id=".$_REQUEST['rid']);
 		if ($rec=MySQL_Fetch_Assoc($res)) {
 ?>
 
-<form action="procnotes.php" method="post" class="otherform">
+<form action="procnote.php" method="post" class="otherform">
 	<div>
 		<label for="notetitle">Nadpis:</label>
 		<input type="text" name="title" id="notetitle" value="<?php echo StripSlashes($rec['title']); ?>"/>
@@ -26,11 +33,18 @@
 		<textarea cols="80" rows="7" name="note" id="notebody"><?php echo StripSlashes($rec['note']); ?></textarea>
 	</div>
 	<div>
-		<input type="hidden" name="personid" value="<?php echo $_REQUEST['rid']; ?>" />
+		<input type="hidden" name="noteid" value="<?php echo $_REQUEST['rid']; ?>" />
 		<input type="hidden" name="backurl" value="<?php echo 'editnote.php?rid='.$_REQUEST['rid']; ?>" />
-		<input type="submit" value="Uložit poznámku" name="setnote" class="submitbutton" />
+		<input type="hidden" name="idtable" value="<?php echo $_REQUEST['idtable']; ?>" />
+		<input type="submit" value="Uložit poznámku" name="editnote" class="submitbutton" />
 	</div>
 </form>
 <?php
+} else {
+echo '<div id="obsah"><p>Poznámka neexistuje.</p></div>';
+}
+} else {
+echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
+}
 	pageEnd ();
 ?>

@@ -2,9 +2,16 @@
 require_once ('./inc/func_main.php');
 pageStart ('Nová poznámka');
 mainMenu (4);
-sparklets ('<a href="./'.$_REQUEST['sourcepage'].'">osoby</a> &raquo; <strong>nová poznámka</strong>');
+switch ($_REQUEST['idtable']) {
+				case 1: $sourceurl="persons.php"; $sourcename="osoby"; break;
+				case 2: $sourceurl="groups.php"; $sourcename="skupiny"; break;
+				case 3: $sourceurl="cases.php"; $sourcename="případy"; break;
+				case 4: $sourceurl="reports.php"; $sourcename="hlášení"; break;
+				default: $sourceurl=""; $sourcename=""; break;
+			}
+sparklets ('<a href="./'.$sourceurl.'">'.$sourcename.'</a> &raquo; <strong>nová poznámka</strong>');
 ?>
-<form action="procperson.php" method="post" class="otherform">
+<form action="procnote.php" method="post" class="otherform">
 	<p>K osobě si můžete připsat kolik chcete poznámek.</p>
 	<p>Nová poznámka:</p>
 	<div>
@@ -24,8 +31,9 @@ sparklets ('<a href="./'.$_REQUEST['sourcepage'].'">osoby</a> &raquo; <strong>no
 		<textarea cols="80" rows="7" name="note" id="notebody"></textarea>
 	</div>
 	<div>
-		<input type="hidden" name="personid" value="<?php echo $_REQUEST['rid']; ?>" />
-		<input type="hidden" name="backurl" value="persons.php" />
+		<input type="hidden" name="itemid" value="<?php echo $_REQUEST['rid']; ?>" />
+		<input type="hidden" name="backurl" value="<?php echo $sourceurl; ?>" />
+		<input type="hidden" name="tableid" value="<?php echo $_REQUEST['idtable']; ?>" />
 		<input type="submit" value="Uložit poznámku" name="setnote" class="submitbutton" />
 	</div>
 </form>
