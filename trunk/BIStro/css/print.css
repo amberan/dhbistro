@@ -13,7 +13,7 @@ body {
 	float: none;
 	background: #fff url(none);
 }
-#menu, #sparklets, #poznamka-edit-butons {
+#menu, #sparklets, .poznamka-edit-buttons {
 	display: none;
 }
 a:link, a:visited {
