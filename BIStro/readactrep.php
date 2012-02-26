@@ -10,7 +10,11 @@
 			".DB_PREFIX."reports.details AS 'details',
 			".DB_PREFIX."users.login AS 'autor',
 			".DB_PREFIX."reports.type AS 'type',
-			".DB_PREFIX."reports.adatum AS 'adatum'
+			".DB_PREFIX."reports.adatum AS 'adatum',
+			".DB_PREFIX."reports.start AS 'start',
+			".DB_PREFIX."reports.end AS 'end',
+			".DB_PREFIX."reports.energy AS 'energy',
+			".DB_PREFIX."reports.inputs AS 'inputs'
 			FROM ".DB_PREFIX."reports, ".DB_PREFIX."users
 			WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.id=".$_REQUEST['rid'];
 		$res=MySQL_Query ($sql);
@@ -32,6 +36,12 @@
 	<div id="info">
 		<h3>Datum<?php echo((($rec_ar['type']==1)?' výjezdu':(($rec_ar['type']==2)?' výslechu':' akce'))); ?>:</h3>
 		<p><?php echo(Date ('d.m.Y',$rec_ar['adatum'])); ?></p>
+		<div class="clear">&nbsp;</div>
+		<h3>Začátek<?php echo((($rec_ar['type']==1)?' výjezdu':(($rec_ar['type']==2)?' výslechu':' akce'))); ?>:</h3>
+		<p><?php echo(StripSlashes($rec_ar['start'])); ?></p>
+		<div class="clear">&nbsp;</div>
+		<h3>Konec<?php echo((($rec_ar['type']==1)?' výjezdu':(($rec_ar['type']==2)?' výslechu':' akce'))); ?>:</h3>
+		<p><?php echo(StripSlashes($rec_ar['end'])); ?></p>
 		<div class="clear">&nbsp;</div>
 		<h3><?php echo((($rec_ar['type']==1)?'Úkol':(($rec_ar['type']==2)?'Předmět výslechu':'Úkol'))); ?>:</h3>
 		<p><?php echo(StripSlashes($rec_ar['task'])); ?></p>
@@ -89,6 +99,14 @@
 	<fieldset>
 		<legend><h2>Podrobný průběh</h2></legend>
 		<div class="field-text"><?php echo(StripSlashes($rec_ar['details'])); ?></div>
+	</fieldset>
+	<fieldset>
+		<legend><h2>Energetická náročnost</h2></legend>
+		<div class="field-text"><?php echo(StripSlashes($rec_ar['energy'])); ?></div>
+	</fieldset>
+	<fieldset>
+		<legend><h2>Počáteční vstupy</h2></legend>
+		<div class="field-text"><?php echo(StripSlashes($rec_ar['inputs'])); ?></div>
 	</fieldset>
 
 <!-- následuje seznam přiložených souborů -->

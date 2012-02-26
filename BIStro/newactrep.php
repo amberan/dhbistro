@@ -66,6 +66,14 @@ function date_picker($name, $startyear=NULL, $endyear=NULL)
 	  <?php echo date_picker("adatum")?>
 	</div>
 	<div>
+	  <label for="start">Začátek:</label>
+	  <input type="start" name="start" id="start" />
+	</div>
+	<div>
+	  <label for="end">Konec:</label>
+	  <input type="end" name="end" id="end" />
+	</div>
+	<div>
 	  <label for="secret">Přísně tajné:</label>
 		<select name="secret" id="secret">
 			<option value="0">ne</option>
@@ -96,6 +104,18 @@ function date_picker($name, $startyear=NULL, $endyear=NULL)
 	</div>
 	<div>
 	  <textarea cols="80" rows="7" name="details" id="details">doplnit</textarea>
+	</div>
+	<div>
+	  <label for="energy">Energetická náročnost:</label>
+	</div>
+	<div>
+	  <textarea cols="80" rows="7" name="energy" id="energy">kouzla, vstupy do Šera, amulety, artefakty</textarea>
+	</div>
+	<div>
+	  <label for="inputs">Počáteční vstupy:</label>
+	</div>
+	<div>
+	  <textarea cols="80" rows="7" name="inputs" id="inputs">info z analytického atd.</textarea>
 	</div>
 	<div>
 	  <input type="submit" name="insertrep" id="submitbutton" value="Vložit" />
