@@ -304,7 +304,11 @@ hr {
 ul#pripady {margin:0.1em 0; padding-left: 2em;}
 
 #portraitimg {
-	float: right;
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	width: 104px;
+	height: 134px;
 	border: 1px solid #808080;
 	padding: 1px;
 	margin: 20px;
