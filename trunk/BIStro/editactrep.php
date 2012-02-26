@@ -63,7 +63,11 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 		".DB_PREFIX."reports.status AS 'status',
 		".DB_PREFIX."users.login AS 'autor',
 		".DB_PREFIX."reports.type AS 'type',
-		".DB_PREFIX."reports.adatum AS 'adatum'
+		".DB_PREFIX."reports.adatum AS 'adatum',
+		".DB_PREFIX."reports.start AS 'start',
+		".DB_PREFIX."reports.end AS 'end',
+		".DB_PREFIX."reports.energy AS 'energy',
+		".DB_PREFIX."reports.inputs AS 'inputs'
 		FROM ".DB_PREFIX."reports, ".DB_PREFIX."users
 		WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.id=".$_REQUEST['rid'];
 	$res=MySQL_Query ($sql);
@@ -84,6 +88,14 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 <div>
 <label for="adatum"><?php if($type==='1'){ ?>Datum akce<?php }else if($type==='2'){ ?>Datum výslechu<?php }; ?>:</label>
 <?php echo date_picker("adatum")?>
+</div>
+<div>
+<label for="start">Začátek:</label>
+<input type="start" name="start" id="start" value="<?php echo StripSlashes($rec['start']); ?>" />
+</div>
+<div>
+<label for="end">Konec:</label>
+<input type="end" name="end" id="end" value="<?php echo StripSlashes($rec['end']); ?>" />
 </div>
 <div>
 <label for="secret">Přísně tajné:</label>
@@ -124,6 +136,23 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 <textarea cols="80" rows="7" name="details" id="details"><?php echo StripSlashes($rec['details']); ?></textarea>
 </div>
 <div>
+<div>
+<label for="energy">Energetická náročnost:</label>
+</div>
+<div>
+<textarea cols="80" rows="7" name="energy" id="energy"><?php echo StripSlashes($rec['energy']); ?></textarea>
+</div>
+<div>
+<div>
+<label for="details">Počáteční vstupy:</label>
+</div>
+<div>
+<textarea cols="80" rows="7" name="inputs" id="inputs"><?php echo StripSlashes($rec['inputs']); ?></textarea>
+</div>
+<div>
+
+
+
 <input type="hidden" name="reportid" value="<?php echo $rec['id']; ?>" />
 <input type="submit" name="editactrep" id="submitbutton" value="Uložit změny" />
 </div>
