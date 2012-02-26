@@ -19,7 +19,7 @@ body {
 a:link, a:visited {
 	color: #00c;
 	font-weight: bold;
-	text-decoration: underline;
+	text-decoration: none;
 }
 /*
 #obsah a:link:after, #obsah a:visited:after {
