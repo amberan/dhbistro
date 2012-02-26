@@ -111,7 +111,6 @@
 		}
 	// konec seznamu přiložených souborů ?>
 
-<!-- 1111111111111111111111111111 -->
 <!-- následuje seznam poznámek -->
 	<?php // generování poznámek
 		if ($usrinfo['right_power']) {
