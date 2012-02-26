@@ -23,13 +23,13 @@
 ?>
 <div id="obsah">
 	<h1><?php echo(StripSlashes($rec_ar['label'])); ?></h1>
-	<div id="report-hlavicka" class="top">
+	<div id="hlavicka" class="top">
 		<span>[ <strong>Hlášení<?php echo((($rec_ar['type']==1)?' z výjezdu':(($rec_ar['type']==2)?' z výslechu':' k akci')));?></strong> | </span>
 		<span><strong>Vyhotovil: </strong><?php echo(StripSlashes($rec_ar['autor'])); ?> | </span>
 		<span><strong>Dne: </strong><?php echo(Date ('d. m. Y',$rec_ar['datum'])); ?> ]</span>
 	</div>
 	<fieldset><legend><h2>Obecné informace</h2></legend>
-	<div id="report-info">
+	<div id="info">
 		<h3>Datum<?php echo((($rec_ar['type']==1)?' výjezdu':(($rec_ar['type']==2)?' výslechu':' akce'))); ?>:</h3>
 		<p><?php echo(Date ('d.m.Y',$rec_ar['adatum'])); ?></p>
 		<div class="clear">&nbsp;</div>
@@ -80,15 +80,15 @@
 	
 	<fieldset>
 		<legend><h2>Shrnutí</h2></legend>
-		<div class="report-field-text"><?php echo(StripSlashes($rec_ar['summary'])); ?></div>
+		<div class="field-text"><?php echo(StripSlashes($rec_ar['summary'])); ?></div>
 	</fieldset>
 	<fieldset>
 		<legend><h2>Možné dopady</h2></legend>
-		<div class="report-field-text"><?php echo(StripSlashes($rec_ar['impacts'])); ?></div>
+		<div class="field-text"><?php echo(StripSlashes($rec_ar['impacts'])); ?></div>
 	</fieldset>
 	<fieldset>
 		<legend><h2>Podrobný průběh</h2></legend>
-		<div class="report-field-text"><?php echo(StripSlashes($rec_ar['details'])); ?></div>
+		<div class="field-text"><?php echo(StripSlashes($rec_ar['details'])); ?></div>
 	</fieldset>
 
 <!-- následuje seznam přiložených souborů -->
