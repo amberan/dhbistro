@@ -157,7 +157,7 @@
 		if ($rec['secret']==2) echo ' (soukromá)';
 		echo '</h4>';
 		echo '<div id="obsah"><p>'.StripSlashes($rec['note']).'</p></div>';
-		if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo '<a href="editnote='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'">upravit poznámku</a> ';
+		if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo '<a href="editnote.php?rid='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=1">upravit poznámku</a> ';
 		if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo '<a href="procperson.php?deletenote='.$rec['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('readperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec['title'])."&quot; náležící k osobě?');".'">smazat poznámku</a>';
 	}
 ?>
