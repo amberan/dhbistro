@@ -100,6 +100,7 @@
 	        ".DB_PREFIX."reports.task AS 'task',
 	        ".DB_PREFIX."users.login AS 'autor',
 	        ".DB_PREFIX."reports.type AS 'type',
+	        ".DB_PREFIX."reports.status AS 'status',
 	        ".DB_PREFIX."ar2c.iduser 
 	        	FROM ".DB_PREFIX."users, ".DB_PREFIX."reports LEFT JOIN ".DB_PREFIX."ar2c 
 	        	ON ".DB_PREFIX."ar2c.idreport=".DB_PREFIX."reports.id
@@ -130,8 +131,11 @@
 	  }
 	  echo '.</span>
 	<p><span>['.Date ('d. m. Y - H:i:s',$rec['datum']).']</span> '.$rec['autor'].'<br /> <strong>Úkol: </strong>'
-	.StripSlashes($rec['task']).'</p></div>
-</div>';
+	.StripSlashes($rec['task']).'&nbsp; <strong>Stav:</strong> ';
+	  if(($rec['status'])=='0') echo 'Rozpracované';
+	  if(($rec['status'])=='1') echo 'Dokončené';
+	  if(($rec['status'])=='2') echo 'Analyzované';
+	  echo '</p></div></div>';
 	}
 	pageEnd ();
 ?>
