@@ -33,10 +33,9 @@
       $_SESSION['sid']=$sid;
     }
   }
-	
 	// info o uzivateli
 	if (isset($_SESSION['sid'])) {
-		$ures=MySQL_Query ("SELECT
+		$sql = "SELECT
 												".DB_PREFIX."users.id AS 'id',
 												".DB_PREFIX."users.login AS 'login',
 												".DB_PREFIX."users.pwd AS 'pwd',
@@ -48,7 +47,8 @@
 												".DB_PREFIX."users.plan AS 'plan',
 												".DB_PREFIX."loggedin.sid AS 'sid',
 												".DB_PREFIX."loggedin.time AS 'lastaction'
-												FROM ".DB_PREFIX."users, ".DB_PREFIX."loggedin WHERE agent='".mysql_real_escape_string($_SERVER['HTTP_USER_AGENT'])."' AND deleted=0 AND ".DB_PREFIX."loggedin.iduser=".DB_PREFIX."users.id");
+												FROM ".DB_PREFIX."users, ".DB_PREFIX."loggedin WHERE agent='".mysql_real_escape_string($_SERVER['HTTP_USER_AGENT'])."' AND ".DB_PREFIX."loggedin.sid ='".mysql_real_escape_string($_SESSION['sid'])."' AND deleted=0 AND ".DB_PREFIX."loggedin.iduser=".DB_PREFIX."users.id";
+		$ures=MySQL_Query ($sql);
 		if ($usrinfo=MySQL_Fetch_Assoc($ures)) {
 		  $loggedin=true;
 		} else {
