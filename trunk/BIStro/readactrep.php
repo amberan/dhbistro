@@ -75,7 +75,7 @@
 		<!-- end of #pripady -->
 		<div class="clear">&nbsp;</div>				
 	</div>
-	<!-- end of #report-info -->
+	<!-- end of #info -->
 	</fieldset>
 	
 	<fieldset>
