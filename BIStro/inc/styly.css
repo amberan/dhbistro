@@ -294,24 +294,26 @@ hr {
 }
 #obsah h1 {margin:0px;}
 #obsah h2 {font-size:1.2em; margin:0.3em 0;}
-#obsah legend h2 {display:inline-block;}
 #obsah h3 {font-size:1.05em}
-#obsah .field-text {margin:0.2em; padding:0;}
 
 #info {padding:0 10px;}
 #info h3, #info p{display:inline; margin:0.2em 0;}
+
+#obsah fieldset {position: relative;}
+#obsah legend h2 {display:inline-block;}
+#obsah .field-text {margin:0.2em; padding:0;}
 
 ul#pripady {margin:0.1em 0; padding-left: 2em;}
 
 #portraitimg {
 	position: absolute;
-	right: 0px;
-	top: 0px;
+	right: 20px;
+	top: 20px;
 	width: 104px;
 	height: 134px;
 	border: 1px solid #808080;
 	padding: 1px;
-	margin: 20px;
+	margin: 0 0 20px 20px;
 }
 
 /***********************************/
