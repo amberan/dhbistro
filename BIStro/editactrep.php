@@ -220,13 +220,13 @@ echo '<li><a href="readcase.php?rid='.$perc['id'].'">'.$perc['title'].'</a>';
 <ul>
 <?php
 if ($usrinfo['right_power']) {
-$sql="SELECT ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=4 ORDER BY ".DB_PREFIX."data.originalname ASC";
+$sql_f="SELECT ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=4 ORDER BY ".DB_PREFIX."data.originalname ASC";
 } else {
-$sql="SELECT ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=4 AND ".DB_PREFIX."data.secret=0 ORDER BY ".DB_PREFIX."data.originalname ASC";
+$sql_f="SELECT ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=4 AND ".DB_PREFIX."data.secret=0 ORDER BY ".DB_PREFIX."data.originalname ASC";
 }
-$res=MySQL_Query ($sql);
-while ($rec=MySQL_Fetch_Assoc($res)) {
-echo '<li><a href="getfile.php?idfile='.$rec['id'].'">'.StripSlashes($rec['title']).'</a> &mdash; <a href="procactrep.php?deletefile='.$rec['id'].'&amp;reportid='.$_REQUEST['rid'].'" onclick="'."return confirm('Opravdu odebrat soubor &quot;".StripSlashes($rec['title'])."&quot; náležící k hlášení?');".'">smazat soubor</a></li>';
+$res_f=MySQL_Query ($sql_f);
+while ($rec_f=MySQL_Fetch_Assoc($res_f)) {
+echo '<li><a href="getfile.php?idfile='.$rec_f['id'].'">'.StripSlashes($rec_f['title']).'</a> &mdash; <a href="procactrep.php?deletefile='.$rec_f['id'].'&amp;reportid='.$_REQUEST['rid'].'" onclick="'."return confirm('Opravdu odebrat soubor &quot;".StripSlashes($rec_f['title'])."&quot; náležící k hlášení?');".'">smazat soubor</a></li>';
 }
 ?>
 </ul>
@@ -237,18 +237,18 @@ echo '<li><a href="getfile.php?idfile='.$rec['id'].'">'.StripSlashes($rec['title
 	<ul>
 	<?php
 	if ($usrinfo['right_power']) {
-		$sql="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes WHERE ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=4 AND ".DB_PREFIX."notes.deleted=0 ORDER BY ".DB_PREFIX."notes.datum DESC";
+		$sql_n="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes WHERE ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=4 AND ".DB_PREFIX."notes.deleted=0 ORDER BY ".DB_PREFIX."notes.datum DESC";
 	} else {
-	  $sql="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes WHERE ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=4 AND ".DB_PREFIX."notes.deleted=0 AND (".DB_PREFIX."notes.secret=0 OR ".DB_PREFIX."notes.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."notes.datum DESC";
+	  $sql_n="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes WHERE ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=4 AND ".DB_PREFIX."notes.deleted=0 AND (".DB_PREFIX."notes.secret=0 OR ".DB_PREFIX."notes.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."notes.datum DESC";
 	}
-	$res=MySQL_Query ($sql);
-	while ($rec=MySQL_Fetch_Assoc($res)) {
-		echo '<li><a href="readnote.php?rid='.$rec['id'].'&amp;idtable=4">'.StripSlashes($rec['title']).'</a>';
-		if ($rec['secret']==0) echo ' (veřejná)';
-		if ($rec['secret']==1) echo ' (tajná)';
-		if ($rec['secret']==2) echo ' (soukromá)';		
-		if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo ' - <a href="editnote.php?rid='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=4">upravit poznámku</a> ';
-		if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo ' - <a href="procnote.php?deletenote='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('editactrep.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec['title'])."&quot; náležící k hlášení?');".'">smazat poznámku</a></li>';
+	$res_n=MySQL_Query ($sql_n);
+	while ($rec_n=MySQL_Fetch_Assoc($res_n)) {
+		echo '<li><a href="readnote.php?rid='.$rec_n['id'].'&amp;idtable=4">'.StripSlashes($rec_n['title']).'</a>';
+		if ($rec_n['secret']==0) echo ' (veřejná)';
+		if ($rec_n['secret']==1) echo ' (tajná)';
+		if ($rec_n['secret']==2) echo ' (soukromá)';		
+		if (($rec_n['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo ' - <a href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=4">upravit poznámku</a> ';
+		if (($rec_n['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo ' - <a href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('editactrep.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec_n['title'])."&quot; náležící k hlášení?');".'">smazat poznámku</a></li>';
 	}
 	?>
 	</ul>

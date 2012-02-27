@@ -39,6 +39,7 @@
 	if (isset($_POST['setnote'])) {
 		if (!preg_match ('/^[[:blank:]]*$/i',$_POST['note']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['title']) && is_numeric($_POST['secret'])) {
 			MySQL_Query ("INSERT INTO ".DB_PREFIX."notes VALUES('','".mysql_real_escape_string($_POST['note'])."','".mysql_real_escape_string($_POST['title'])."','".Time()."','".$usrinfo['id']."','".$_POST['tableid']."','".$_POST['itemid']."','".$_POST['secret']."','0')");
+			echo '<div id="obsah"><p>Poznámka upravena.</p></div>';
 		}
 		Header ('Location: '.$_POST['backurl']);
 	}
@@ -46,6 +47,7 @@
 	// vymazání poznámky
 	if (isset($_GET['deletenote'])) {
 		MySQl_Query("UPDATE ".DB_PREFIX."notes SET deleted=1 WHERE ".DB_PREFIX."notes.id=".$_GET['deletenote']);
+		echo '<div id="obsah"><p>Poznámka smazána.</p></div>';
 		Header ('Location: '.URLDecode($_GET['backurl']));
 	}
 
