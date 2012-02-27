@@ -5,10 +5,15 @@
 		if ($rec=MySQL_Fetch_Assoc($res)) {
 		  pageStart (StripSlashes($rec['title']));
 			mainMenu (3);
-			sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>'.StripSlashes($rec['title']).'</strong>');
-			echo '<h1>'.StripSlashes($rec['title']).'</h1>
-<div id="obsah">'.StripSlashes($rec['contents']).'
-<hr />
+			if ($_REQUEST['hidenotes']==0) {
+				$hidenotes='&amp;hidenotes=1">skrýt poznámky</a>';
+			} else {
+				$hidenotes='&amp;hidenotes=0">zobrazit poznámky</a>';
+			}
+			sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>'.StripSlashes($rec['title']).'</strong>','<a href="readgroup.php?rid='.$_REQUEST['rid'].$hidenotes);
+			echo '<h1>'.StripSlashes($rec['title']).'</h1>';
+			if ($rec['secret']==1) echo '<h2>TAJNÉ</h2>';
+echo '<div id="obsah">'.StripSlashes($rec['contents']).'<hr />
 <p>Členové: ';
 	if ($usrinfo['right_power']) {
 		$sql="SELECT ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."persons, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." AND ".DB_PREFIX."persons.deleted=0 ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
@@ -29,25 +34,7 @@
 </div>';
 ?>
 <hr />
-<!--form action="procgroup.php" method="post" enctype="multipart/form-data" class="otherform">
-	<p>Ke skupině je možné nahrát neomezené množství souborů, ale velikost jednoho souboru je omezena na 2 MB.</p>
-	<div>
-		<label for="attachment">Soubor:</label>
-		<input type="file" name="attachment" id="attachment" />
-	</div>
-	<div>
-		<label for="usecret">Přísně tajné:</label>
-		<select name="secret" id="usecret">
-			<option value="0">ne</option>
-			<option value="1">ano</option>
-		</select>
-	</div>
-	<div>
-		<input type="hidden" name="groupid" value="<?php echo $_REQUEST['rid']; ?>" />
-		<input type="hidden" name="backurl" value="<?php echo 'readgroup.php?rid='.$_REQUEST['rid']; ?>" />
-		<input type="submit" name="uploadfile" value="Nahrát soubor ke skupině" class="submitbutton" /> 
-	</div>
-</form-->
+
 <ul>
 <?php
 	if ($usrinfo['right_power']) {
@@ -64,6 +51,8 @@
 <hr />
 
 <ul>
+<?php //skryti poznamek 
+if ($_REQUEST['hidenotes']==1) goto hidenotes; ?>
 <!-- následuje seznam poznámek -->
 	<?php // generování poznámek
 		if ($usrinfo['right_power']) {
@@ -101,7 +90,9 @@
 	<!-- end of #poznamky -->
 	</fieldset>
 	<?php }
-	// konec poznámek ?>
+	// konec poznámek 
+	?>
+<?php hidenotes: ?>	
 </ul>
 <?php
 		} else {

@@ -5,12 +5,18 @@
 		if ($rec=MySQL_Fetch_Assoc($res)) {
 			pageStart (StripSlashes($rec['title']));
 			mainMenu (4);
-			sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>'.StripSlashes($rec['title']).'</strong>');
+			if ($_REQUEST['hidenotes']==0) {
+				$hidenotes='&amp;hidenotes=1">skrýt poznámky</a>';
+			} else {
+				$hidenotes='&amp;hidenotes=0">zobrazit poznámky</a>';
+			}
+			sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>'.StripSlashes($rec['title']).'</strong>','<a href="readcase.php?rid='.$_REQUEST['rid'].$hidenotes);
 ?>
 <div id="obsah">
 	<h1><?php echo StripSlashes($rec['title']); ?></h1>
 	<fieldset><legend><h2>Obecné informace</h2></legend>
 		<div id="info">
+			<?php if ($rec['secret']==1) echo '<h2>TAJNÉ</h2>'?>
 			<h3>Osoby spojené s případem: </h3><p><?php
 			if ($usrinfo['right_power']) {
 				$sql="SELECT ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."c2p.iduser FROM ".DB_PREFIX."persons, ".DB_PREFIX."c2p WHERE ".DB_PREFIX."c2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."persons.deleted=0 ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
@@ -80,6 +86,8 @@
 	<?php 
 		}
 	// konec seznamu přiložených souborů ?>
+<?php //skryti poznamek 
+if ($_REQUEST['hidenotes']==1) goto hidenotes; ?>
 <!-- následuje seznam poznámek -->
 	<?php // generování poznámek
 		if ($usrinfo['right_power']) {
@@ -118,7 +126,7 @@
 	</fieldset>
 	<?php }
 	// konec poznámek ?>
-
+<?php hidenotes: ?>	
 </div>
 <!-- end of #obsah -->
 <?php

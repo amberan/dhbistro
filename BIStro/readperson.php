@@ -7,13 +7,19 @@
 			$powers=Array('','neznámá','člověk','mimo kategorie','1. kategorie','2. kategorie','3. kategorie','4. kategorie');
 			pageStart (StripSlashes($rec['surname']).', '.StripSlashes($rec['name']));
 			mainMenu (5);
-			sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>'.StripSlashes($rec['surname']).', '.StripSlashes($rec['name']).'</strong>');
+			if ($_REQUEST['hidenotes']==0) {
+				$hidenotes='&amp;hidenotes=1">skrýt poznámky</a>';
+			} else {
+				$hidenotes='&amp;hidenotes=0">zobrazit poznámky</a>';
+			}
+			sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>'.StripSlashes($rec['surname']).', '.StripSlashes($rec['name']).'</strong>','<a href="readperson.php?rid='.$_REQUEST['rid'].$hidenotes);
 			?>			
 <div id="obsah">
 	<h1><?php echo(StripSlashes($rec['surname']).', '.StripSlashes($rec['name'])); ?></h1>
 	<fieldset><legend><h2>Základní údaje</h2></legend>
 		<img src="getportrait.php?rid=<?php echo($_REQUEST['rid']); ?>" alt="portrét chybí" id="portraitimg" />
 		<div id="info">
+			<?php if ($rec['secret']==1) echo '<h2>TAJNÉ</h2>'?>
 			<h3>Jméno: </h3><p><?php echo(StripSlashes($rec['name'])); ?></p>
 			<div class="clear">&nbsp;</div>
 			<h3>Příjmení: </h3><p><?php echo(StripSlashes($rec['surname'])); ?></p>
@@ -57,8 +63,6 @@
 				}
 				echo $side; ?></p>
 			<div class="clear">&nbsp;</div>
-			<h3>Přísně tajné: </h3><p><?php echo (($rec['secret'])?'ano':'ne'); ?></p>
-			<div class="clear">&nbsp;</div>
 			<h3>Patří do skupin: </h3><p><?php
 				if ($usrinfo['right_power']) {
 					$sql="SELECT ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."groups, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idgroup=".DB_PREFIX."groups.id AND ".DB_PREFIX."g2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."groups.deleted=0 ORDER BY ".DB_PREFIX."groups.title ASC";
@@ -75,6 +79,11 @@
 				} else {
 					echo '&mdash;';
 				} ?></p>
+			<div class="clear">&nbsp;</div>
+			<div class="clear">&nbsp;</div>
+			<div class="clear">&nbsp;</div>
+			<div class="clear">&nbsp;</div>
+			<div class="clear">&nbsp;</div>
 			<div class="clear">&nbsp;</div>
 		</div>
 		<!-- end of #info -->
@@ -111,6 +120,8 @@
 		}
 	// konec seznamu přiložených souborů ?>
 
+<?php //skryti poznamek 
+if ($_REQUEST['hidenotes']==1) goto hidenotes; ?>
 <!-- následuje seznam poznámek -->
 	<?php // generování poznámek
 		if ($usrinfo['right_power']) {
@@ -149,25 +160,8 @@
 	</fieldset>
 	<?php }
 	// konec poznámek ?>
-<!-- 
-	echo '<h3>Poznámky:</h3>';
-	if ($usrinfo['right_power']) {
-		$sql="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.note AS 'note', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes WHERE ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=1 AND ".DB_PREFIX."notes.deleted=0 AND (".DB_PREFIX."notes.secret<2 OR ".DB_PREFIX."notes.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."notes.datum DESC";
-	} else {
-	  $sql="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.note AS 'note', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes WHERE ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=1 AND ".DB_PREFIX."notes.deleted=0 AND (".DB_PREFIX."notes.secret=0 OR ".DB_PREFIX."notes.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."notes.datum DESC";
-	}
-	$res=MySQL_Query ($sql);
-	while ($rec=MySQL_Fetch_Assoc($res)) {
-		echo '<h4><a href="readnote.php?rid='.$rec['id'].'">'.StripSlashes($rec['title']).'</a>';
-		if ($rec['secret']==0) echo ' (veřejná)';
-		if ($rec['secret']==1) echo ' (tajná)';
-		if ($rec['secret']==2) echo ' (soukromá)';
-		echo '</h4>';
-		echo '<div id="obsah"><p>'.StripSlashes($rec['note']).'</p></div>';
-		if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo '<a href="editnote.php?rid='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=1">upravit poznámku</a> ';
-		if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo '<a href="procperson.php?deletenote='.$rec['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('readperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec['title'])."&quot; náležící k osobě?');".'">smazat poznámku</a>';
-	}
-?> -->
+<?php hidenotes: ?>	
+
 </div>
 <!-- end of #obsah -->
 
