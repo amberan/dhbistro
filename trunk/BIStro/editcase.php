@@ -110,6 +110,52 @@ echo '<li><a href="readactrep.php?rid='.$perc['id'].'">'.$perc['label'].'</a> - 
 	}
 ?>
 </ul>
+<hr />
+<form action="procnote.php" method="post" class="otherform">
+	<p>K případu si můžete připsat kolik chcete poznámek.</p>
+	<p>Aktuálně připojené poznámky:</p>
+	<ul>
+	<?php
+	if ($usrinfo['right_power']) {
+		$sql_n="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes WHERE ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=3 AND ".DB_PREFIX."notes.deleted=0 ORDER BY ".DB_PREFIX."notes.datum DESC";
+	} else {
+	  $sql_n="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes WHERE ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=3 AND ".DB_PREFIX."notes.deleted=0 AND (".DB_PREFIX."notes.secret=0 OR ".DB_PREFIX."notes.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."notes.datum DESC";
+	}
+	$res_n=MySQL_Query ($sql_n);
+	while ($rec_n=MySQL_Fetch_Assoc($res_n)) {
+		echo '<li><a href="readnote.php?rid='.$rec_n['id'].'&amp;idtable=4">'.StripSlashes($rec_n['title']).'</a>';
+		if ($rec_n['secret']==0) echo ' (veřejná)';
+		if ($rec_n['secret']==1) echo ' (tajná)';
+		if ($rec_n['secret']==2) echo ' (soukromá)';		
+		if (($rec_n['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo ' - <a href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=3">upravit poznámku</a> ';
+		if (($rec_n['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo ' - <a href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('editactrep.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec_n['title'])."&quot; náležící k hlášení?');".'">smazat poznámku</a></li>';
+	}
+	?>
+	</ul>
+	<p>Nová poznámka:</p>
+	<div>
+		<label for="notetitle">Nadpis:</label>
+		<input type="text" name="title" id="notetitle" />
+	</div>
+	<div>
+	  <label for="nsecret">Utajení:</label>
+		<select name="secret" id="nsecret">
+		  <option value="0">veřejná</option>
+		  <option value="1">tajná</option>
+		  <option value="2">soukromá</option>
+		</select>
+	</div>
+	<div>
+		<label for="notebody">Tělo poznámka:</label>
+		<textarea cols="80" rows="7" name="note" id="notebody"></textarea>
+	</div>
+	<div>
+		<input type="hidden" name="itemid" value="<?php echo $_REQUEST['rid']; ?>" />
+		<input type="hidden" name="backurl" value="<?php echo 'editcase.php?rid='.$_REQUEST['rid']; ?>" />
+		<input type="hidden" name="tableid" value="3" />
+		<input type="submit" value="Uložit poznámku" name="setnote" class="submitbutton" />
+	</div>
+</form>
 <?php
 		} else {
 		  echo '<div id="obsah"><p>Skupina neexistuje.</p></div>';
