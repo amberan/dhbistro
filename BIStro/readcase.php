@@ -62,15 +62,15 @@
 		} else {
 		  $sql="SELECT ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=3 AND ".DB_PREFIX."data.secret=0 ORDER BY ".DB_PREFIX."data.originalname ASC";
 		}
-		$res=MySQL_Query ($sql);
+		$res_f=MySQL_Query ($sql);
 		$i=0;
-		while ($rec=MySQL_Fetch_Assoc($res)) { 
+		while ($rec_f=MySQL_Fetch_Assoc($res_f)) { 
 			$i++; 
 			if($i==1){ ?>
 	<fieldset><legend><strong>Přiložené soubory</strong></legend>
 	<ul id="prilozenadata">
 			<?php } ?>
-		<li><a href="getfile.php?idfile=<?php echo($rec['id']); ?>" title=""><?php echo(StripSlashes($rec['title'])); ?></a></li>
+		<li><a href="getfile.php?idfile=<?php echo($rec_f['id']); ?>" title=""><?php echo(StripSlashes($rec_f['title'])); ?></a></li>
 	<?php 
 		}
 		if($i<>0){ ?>
