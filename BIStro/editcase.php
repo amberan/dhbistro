@@ -123,12 +123,12 @@ echo '<li><a href="readactrep.php?rid='.$perc['id'].'">'.$perc['label'].'</a> - 
 	}
 	$res_n=MySQL_Query ($sql_n);
 	while ($rec_n=MySQL_Fetch_Assoc($res_n)) {
-		echo '<li><a href="readnote.php?rid='.$rec_n['id'].'&amp;idtable=4">'.StripSlashes($rec_n['title']).'</a>';
+		echo '<li><a href="readnote.php?rid='.$rec_n['id'].'&amp;idtable=3">'.StripSlashes($rec_n['title']).'</a>';
 		if ($rec_n['secret']==0) echo ' (veřejná)';
 		if ($rec_n['secret']==1) echo ' (tajná)';
 		if ($rec_n['secret']==2) echo ' (soukromá)';		
 		if (($rec_n['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo ' - <a href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=3">upravit poznámku</a> ';
-		if (($rec_n['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo ' - <a href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('editactrep.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec_n['title'])."&quot; náležící k hlášení?');".'">smazat poznámku</a></li>';
+		if (($rec_n['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo ' - <a href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('editcase.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec_n['title'])."&quot; náležící k hlášení?');".'">smazat poznámku</a></li>';
 	}
 	?>
 	</ul>
