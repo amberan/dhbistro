@@ -1,6 +1,17 @@
 <?php
 	require_once ('./inc/func_main.php');
 	if (is_numeric($_REQUEST['rid'])) {
+		$check=MySQL_Fetch_Assoc(MySQL_Query("SELECT ".DB_PREFIX."users.idperson AS 'aid'
+											FROM ".DB_PREFIX."users, ".DB_PREFIX."reports
+											WHERE ".DB_PREFIX."reports.id=".$_REQUEST['rid']."
+											AND ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id"));
+		if ($check['aid']==0) {
+			$connector='';
+			$notconnected=1;
+		} else {
+			$connector=' AND '.DB_PREFIX.'users.idperson='.DB_PREFIX.'persons.id';
+			$notconnected=0;
+		}
 		$sql="SELECT
 			".DB_PREFIX."reports.datum AS 'datum',
 			".DB_PREFIX."reports.label AS 'label',
@@ -14,26 +25,56 @@
 			".DB_PREFIX."reports.start AS 'start',
 			".DB_PREFIX."reports.end AS 'end',
 			".DB_PREFIX."reports.energy AS 'energy',
-			".DB_PREFIX."reports.inputs AS 'inputs'
-			FROM ".DB_PREFIX."reports, ".DB_PREFIX."users
-			WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.id=".$_REQUEST['rid'];
+			".DB_PREFIX."reports.inputs AS 'inputs',
+			".DB_PREFIX."reports.secret AS 'secret',
+			".DB_PREFIX."persons.name AS 'name',
+			".DB_PREFIX."persons.surname AS 'surname'
+			FROM ".DB_PREFIX."reports, ".DB_PREFIX."users, ".DB_PREFIX."persons
+			WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id 
+			AND ".DB_PREFIX."reports.id=".$_REQUEST['rid'].$connector;
 		$res=MySQL_Query ($sql);
 		if ($rec_ar=MySQL_Fetch_Assoc($res)) {
 				$typestring=(($rec_ar['type']==1)?'výjezd':(($rec_ar['type']==2)?'výslech':'?')); //odvozuje slovní typ hlášení
 			// následuje hlavička
 			pageStart (StripSlashes('Hlášení'.(($rec_ar['type']==1)?' z výjezdu':(($rec_ar['type']==2)?' z výslechu':'')).': '.$rec_ar['label']));
 			mainMenu (4);
-			sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>'.StripSlashes($rec_ar['label']).' ('.$typestring.')</strong>');
+			if (($usrinfo['right_power']) && ($_REQUEST['hidenotes']==0) && ($_REQUEST['truenames']==0)) {
+				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=0">skrýt poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=1">zobrazit celá jména</a>';
+				$author=$rec_ar['autor'];
+			} else if (($usrinfo['right_power']) && ($_REQUEST['hidenotes']==1) && ($_REQUEST['truenames']==0)) {
+				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=0">zobrazit poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=1">zobrazit celá jména</a>';
+				$author=$rec_ar['autor'];
+			} else if (($usrinfo['right_power']) && ($notconnected==0) && ($_REQUEST['hidenotes']==1) && ($_REQUEST['truenames']==1)) {
+				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=1">zobrazit poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=0">zobrazit volací znaky</a>';
+				$author=$rec_ar['surname'].' '.$rec_ar['name'];
+			} else if (($usrinfo['right_power']) && ($notconnected==0) && ($_REQUEST['hidenotes']==0) && ($_REQUEST['truenames']==1)) {
+				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=1">skrýt poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=0">zobrazit volací znaky</a>';
+				$author=$rec_ar['surname'].' '.$rec_ar['name'];
+			} else if (($usrinfo['right_power']) && ($notconnected==1) && ($_REQUEST['hidenotes']==1) && ($_REQUEST['truenames']==1)) {
+				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=1">zobrazit poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=0">zobrazit volací znaky</a>';
+				$author='NENÍ NAPOJEN';
+			} else if (($usrinfo['right_power']) && ($notconnected==1) && ($_REQUEST['hidenotes']==0) && ($_REQUEST['truenames']==1)) {
+				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=1">skrýt poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=0">zobrazit volací znaky</a>';
+				$author='NENÍ NAPOJEN';
+			} else if ($_REQUEST['hidenotes']==0) {
+				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=0">skrýt poznámky</a>';
+				$author=$rec_ar['autor'];
+			} else if ($_REQUEST['hidenotes']==1) {
+				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=0">zobrazit poznámky</a>';
+				$author=$rec_ar['autor'];
+			}
+			sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>'.StripSlashes($rec_ar['label']).' ('.$typestring.')</strong>',$spaction);
 ?>
 <div id="obsah">
 	<h1><?php echo(StripSlashes($rec_ar['label'])); ?></h1>
 	<div id="hlavicka" class="top">
 		<span>[ <strong>Hlášení<?php echo((($rec_ar['type']==1)?' z výjezdu':(($rec_ar['type']==2)?' z výslechu':' k akci')));?></strong> | </span>
-		<span><strong>Vyhotovil: </strong><?php echo(StripSlashes($rec_ar['autor'])); ?> | </span>
+		<span><strong>Vyhotovil: </strong><?php echo(StripSlashes($author)); ?> | </span>
 		<span><strong>Dne: </strong><?php echo(Date ('d. m. Y',$rec_ar['datum'])); ?> ]</span>
 	</div>
 	<fieldset><legend><h2>Obecné informace</h2></legend>
 	<div id="info">
+		<?php if ($rec_ar['secret']==1) echo '<h2>TAJNÉ</h2>'?>
 		<h3>Datum<?php echo((($rec_ar['type']==1)?' výjezdu':(($rec_ar['type']==2)?' výslechu':' akce'))); ?>:</h3>
 		<p><?php echo(Date ('d.m.Y',$rec_ar['adatum'])); ?></p>
 		<div class="clear">&nbsp;</div>
@@ -134,6 +175,8 @@
 	<?php 
 		}
 	// konec seznamu přiložených souborů ?>
+<?php //skryti poznamek 
+if ($_REQUEST['hidenotes']==1) goto hidenotes; ?>
 <!-- následuje seznam poznámek -->
 	<?php // generování poznámek
 		if ($usrinfo['right_power']) {
@@ -172,6 +215,7 @@
 	</fieldset>
 	<?php }
 	// konec poznámek ?>
+<?php hidenotes: ?>	
 </div>
 <!-- end of #obsah -->
 <?php
