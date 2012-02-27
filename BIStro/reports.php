@@ -128,8 +128,10 @@
 	<div class="news_head"><strong><a href="readactrep.php?rid='.$rec['id'].'">'.StripSlashes($rec['label']).'</a></strong>';
 	  if (($usrinfo['right_text']) || ($usrinfo['id']==$rec['riduser'] && $rec['status']<1)) {
 	   	echo '	 | <td><a href="editactrep.php?rid='.$rec['id'].'">upravit</a> | <a href="procactrep.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat hlášení &quot;".StripSlashes($rec['label'])."&quot;?');".'">smazat</a></td>';
-	  }
-	  echo '.</span>
+	  } else {
+	  	echo '   | <td><a href="newnote.php?rid='.$rec['id'].'&idtable=4">přidat poznámku</a></td>';
+	  	}
+	  echo '</span>
 	<p><span>['.Date ('d. m. Y - H:i:s',$rec['datum']).']</span> '.$rec['autor'].'<br /> <strong>Úkol: </strong>'
 	.StripSlashes($rec['task']).'&nbsp; <strong>Stav:</strong> ';
 	  if(($rec['status'])=='0') echo 'Rozpracované';
