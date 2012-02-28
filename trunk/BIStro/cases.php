@@ -5,14 +5,16 @@
 	sparklets ('<strong>případy</strong>','<a href="newcase.php">přidat případ</a>');
 	// zpracovani filtru
 	if (!isset($_REQUEST['sort'])) {
-	  $f_sort=1;
+	  $f_sort=4;
 	} else {
 	  $f_sort=$_REQUEST['sort'];
 	}
 	switch ($f_sort) {
 	  case 1: $fsql_sort=' '.DB_PREFIX.'cases.title ASC '; break;
 	  case 2: $fsql_sort=' '.DB_PREFIX.'cases.title DESC '; break;
-	  default: $fsql_sort=' '.DB_PREFIX.'cases.title ASC ';
+	  case 3: $fsql_sort=' '.DB_PREFIX.'cases.datum ASC '; break;
+	  case 4: $fsql_sort=' '.DB_PREFIX.'cases.datum DESC '; break;
+	  default: $fsql_sort=' '.DB_PREFIX.'cases.datum DESC ';
 	}
 	//
 	function filter () {
@@ -23,6 +25,8 @@
 	  <p>Vypsat všechny případy a seřadit je podle <select name="sort">
 	<option value="1"'.(($f_sort==1)?' selected="selected"':'').'>názvu vzestupně</option>
 	<option value="2"'.(($f_sort==2)?' selected="selected"':'').'>názvu sestupně</option>
+	<option value="3"'.(($f_sort==3)?' selected="selected"':'').'>data vzestupně</option>
+	<option value="4"'.(($f_sort==4)?' selected="selected"':'').'>data sestupně</option>
 </select>.</p>
 	  <div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
@@ -31,9 +35,9 @@
 	filter();
 	// vypis pripadu
 	if ($usrinfo['right_power']) {
-		$sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id' FROM ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.deleted=0 ORDER BY ".$fsql_sort;
+		$sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.datum AS 'datum' FROM ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.deleted=0 ORDER BY ".$fsql_sort;
 	} else {
-	  $sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id' FROM ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.deleted=0 AND ".DB_PREFIX."cases.secret=0 ORDER BY ".$fsql_sort;
+	  $sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.datum AS 'datum' FROM ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.deleted=0 AND ".DB_PREFIX."cases.secret=0 ORDER BY ".$fsql_sort;
 	}
 	$res=MySQL_Query ($sql);
 	if (MySQL_Num_Rows($res)) {
