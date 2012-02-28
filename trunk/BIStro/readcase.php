@@ -7,8 +7,10 @@
 			mainMenu (4);
 			if ($_REQUEST['hidenotes']==0) {
 				$hidenotes='&amp;hidenotes=1">skrýt poznámky</a>';
+				$backurl='readcase.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
 			} else {
 				$hidenotes='&amp;hidenotes=0">zobrazit poznámky</a>';
+				$backurl='readcase.php?rid='.$_REQUEST['rid'].'&hidenotes=1';
 			}
 			sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>'.StripSlashes($rec['title']).'</strong>','<a href="readcase.php?rid='.$_REQUEST['rid'].$hidenotes);
 ?>
@@ -115,7 +117,7 @@ if ($_REQUEST['hidenotes']==1) goto hidenotes; ?>
 			<div><?php echo(StripSlashes($rec_n['note'])); ?></div>
 			<span class="poznamka-edit-buttons"><?php
 			if (($rec_n['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;idtable=3"><span class="button-text">upravit</span></a> ';
-			if (($rec_n['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo '<a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('readcase.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec_n['title'])."&quot; náležící k osobě?');".'"><span class="button-text">smazat</span></a>';?>
+			if (($rec_n['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo '<a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode($backurl).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec_n['title'])."&quot; náležící k osobě?');".'"><span class="button-text">smazat</span></a>';?>
 			</span>
 		</div>
 		<!-- end of .poznamka -->

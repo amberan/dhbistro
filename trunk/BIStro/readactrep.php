@@ -41,27 +41,35 @@
 			if (($usrinfo['right_power']) && ($_REQUEST['hidenotes']==0) && ($_REQUEST['truenames']==0)) {
 				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=0">skrýt poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=1">zobrazit celá jména</a>';
 				$author=$rec_ar['autor'];
+				$backurl='readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=0&truenames=0';
 			} else if (($usrinfo['right_power']) && ($_REQUEST['hidenotes']==1) && ($_REQUEST['truenames']==0)) {
 				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=0">zobrazit poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=1">zobrazit celá jména</a>';
 				$author=$rec_ar['autor'];
+				$backurl='readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=1&truenames=0';
 			} else if (($usrinfo['right_power']) && ($notconnected==0) && ($_REQUEST['hidenotes']==1) && ($_REQUEST['truenames']==1)) {
 				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=1">zobrazit poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=0">zobrazit volací znaky</a>';
 				$author=$rec_ar['surname'].' '.$rec_ar['name'];
+				$backurl='readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=1&truenames=1';
 			} else if (($usrinfo['right_power']) && ($notconnected==0) && ($_REQUEST['hidenotes']==0) && ($_REQUEST['truenames']==1)) {
 				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=1">skrýt poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=0">zobrazit volací znaky</a>';
 				$author=$rec_ar['surname'].' '.$rec_ar['name'];
+				$backurl='readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=0&truenames=1';
 			} else if (($usrinfo['right_power']) && ($notconnected==1) && ($_REQUEST['hidenotes']==1) && ($_REQUEST['truenames']==1)) {
 				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=1">zobrazit poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=0">zobrazit volací znaky</a>';
 				$author='NENÍ NAPOJEN';
+				$backurl='readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=1&truenames=1';
 			} else if (($usrinfo['right_power']) && ($notconnected==1) && ($_REQUEST['hidenotes']==0) && ($_REQUEST['truenames']==1)) {
 				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=1">skrýt poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=0">zobrazit volací znaky</a>';
 				$author='NENÍ NAPOJEN';
+				$backurl='readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=0&truenames=1';
 			} else if ($_REQUEST['hidenotes']==0) {
 				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=0">skrýt poznámky</a>';
 				$author=$rec_ar['autor'];
+				$backurl='readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=0&truenames=0';
 			} else if ($_REQUEST['hidenotes']==1) {
 				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=0">zobrazit poznámky</a>';
 				$author=$rec_ar['autor'];
+				$backurl='readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=1&truenames=0';
 			}
 			sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>'.StripSlashes($rec_ar['label']).' ('.$typestring.')</strong>',$spaction);
 ?>
@@ -204,7 +212,7 @@ if ($_REQUEST['hidenotes']==1) goto hidenotes; ?>
 			<div><?php echo(StripSlashes($rec['note'])); ?></div>
 			<span class="poznamka-edit-buttons"><?php
 			if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo '<a class="edit" href="editnote.php?rid='.$rec['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;idtable=4" title="upravit"><span class="button-text">upravit</span></a> ';
-			if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo '<a class="delete" href="procnote.php?deletenote='.$rec['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('readactrep.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec['title'])."&quot; náležící k osobě?');".'" title="smazat"><span class="button-text">smazat</span></a>';?>
+			if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo '<a class="delete" href="procnote.php?deletenote='.$rec['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode($backurl).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec['title'])."&quot; náležící k osobě?');".'" title="smazat"><span class="button-text">smazat</span></a>';?>
 			</span>
 		</div>
 		<!-- end of .poznamka -->
