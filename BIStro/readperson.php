@@ -65,6 +65,8 @@
 				}
 				echo $side; ?></p>
 			<div class="clear">&nbsp;</div>
+			<h3>Telefon: </h3><p><?php echo(StripSlashes($rec['phone'])); ?></p>
+			<div class="clear">&nbsp;</div>
 			<h3>Patří do skupin: </h3><p><?php
 				if ($usrinfo['right_power']) {
 					$sql="SELECT ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."groups, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idgroup=".DB_PREFIX."groups.id AND ".DB_PREFIX."g2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."groups.deleted=0 ORDER BY ".DB_PREFIX."groups.title ASC";
@@ -81,11 +83,6 @@
 				} else {
 					echo '&mdash;';
 				} ?></p>
-			<div class="clear">&nbsp;</div>
-			<div class="clear">&nbsp;</div>
-			<div class="clear">&nbsp;</div>
-			<div class="clear">&nbsp;</div>
-			<div class="clear">&nbsp;</div>
 			<div class="clear">&nbsp;</div>
 		</div>
 		<!-- end of #info -->
