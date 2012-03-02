@@ -29,6 +29,11 @@
 	} else {
 		$f_conn=1;
 	}
+	if (!isset($_REQUEST['sec'])) {
+		$f_sec=0;
+	} else {
+		$f_sec=1;
+	}
 	switch ($f_cat) {
 	  case 0: $fsql_cat=''; break;
 	  case 1: $fsql_cat=' AND '.DB_PREFIX.'reports.type=1 '; break;
@@ -59,13 +64,15 @@
 		case 1: $fsql_conn=' AND '.DB_PREFIX.'ar2c.iduser IS NULL '; break;
 		default: $fsql_conn='';
 	}
+	switch ($f_sec) {
+		case 0: $fsql_sec=''; break;
+		case 1: $fsql_sec=' AND '.DB_PREFIX.'reports.secret=1 '; break;
+		default: $fsql_sec='';
+	}
+	echo $fsql_sec;
 	//
 	function filter () {
-	  global $f_cat;
-	  global $f_sort;
-	  global $f_stat;
-	  global $f_my;
-	  global $f_conn;
+	  global $f_cat, $f_sort, $f_stat, $f_my, $f_conn, $f_sec, $usrinfo;
 	  echo '<form action="reports.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -85,8 +92,13 @@
 	<option value="4"'.(($f_sort==4)?' selected="selected"':'').'>jména autora sestupně</option>
 </select>.</br>
 	<input type="checkbox" name="my" value="my" class="checkbox"'.(($f_my==1)?' checked="checked"':'').' /> Jen moje.<br />
-	<input type="checkbox" name="conn" value="conn" class="checkbox"'.(($f_conn==1)?' checked="checked"':'').' /> Jen nepřiřazené.</p>
-	  <div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
+	<input type="checkbox" name="conn" value="conn" class="checkbox"'.(($f_conn==1)?' checked="checked"':'').' /> Jen nepřiřazené.';
+	if ($usrinfo['right_power']) {
+		echo '<br /> <input type="checkbox" name="sec" value="sec" class="checkbox"'.(($f_sec==1)?' checked="checked"':'').' /> Jen tajné.</p>';
+	}  else {
+		echo '</p>';
+	}
+	echo '<div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
 </form>';
 	}
@@ -104,7 +116,7 @@
 	        ".DB_PREFIX."ar2c.iduser 
 	        	FROM ".DB_PREFIX."users, ".DB_PREFIX."reports LEFT JOIN ".DB_PREFIX."ar2c 
 	        	ON ".DB_PREFIX."ar2c.idreport=".DB_PREFIX."reports.id
-				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0".$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn."
+				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0".$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn.$fsql_sec."
 				ORDER BY ".$fsql_sort;
 	} else {
 		$sql="SELECT
