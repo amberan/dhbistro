@@ -5,12 +5,13 @@
   $starttime = $mtime;
 	
 	// verze
-	$mazzarino_version='0.9.9 - BIStro';
+	$mazzarino_version='0.9.99 - BIStro';
   
 	// sessions
 	session_start();
 	
 	// databaze
+  //if (!@mysql_connect ('c155um.forpsi.com','dhbistrocz','eqgsCv3t')) {
   if (!@mysql_connect ('127.0.0.1','dhbistrocz','eqgsCv3t')) {
   	echo 'fail';
     Exit;
@@ -124,6 +125,8 @@
 		<li><a href="reports.php">Hlášení</a></li>
 		<li><a href="settings.php">Nastavení</a></li>
 		'.(($usrinfo['right_power'])?'<li><a href="mapagents.php">Mapa agentů</a></li>':'').'
+		<li><a href="http://www.prazskahlidka.cz/forum/index.php" target="_new">Fórum</a></li>
+		<li><a href="http://doodle.com/x39pm7tpgh2py3cw" target="_new">Časová dostupnost</a></li>
 		<li><a href="logout.php">Odhlásit</a></li>
 	</ul>
 	<!--form id="search_menu">
