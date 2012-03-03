@@ -303,14 +303,18 @@ hr {
 #obsah fieldset {position: relative;}
 #obsah legend h2 {display:inline-block;}
 #obsah .field-text {margin:0.2em; padding:0;}
+#obsah .field-text>p {margin: 0.8em 0 0 0;}
+#obsah .field-text>p:first-child {margin: 0 0 0.8em 0;}
 
 ul#pripady {margin:0.1em 0; padding-left: 2em;}
 
-.poznamka {position: relative;}
-.poznamka > div {margin:0.3em 0;}
-.poznamka-edit-buttons{position:absolute;right:0px;top:0px;}
+#poznamky {margin:0.2em; padding:0;}
+#poznamky .poznamka {position: relative;}
+#poznamky .poznamka>div {margin:0.3em 0;}
+
+.poznamka-edit-buttons {position:absolute;right:0px;top:0px;}
 .poznamka-edit-buttons a {display:inline-block;width:16px;height:16px;margin:3px;overflow:hidden;}
-.poznamka-edit-buttons a span.button-text{display:none;}
+.poznamka-edit-buttons a span.button-text {display:none;}
 .poznamka-edit-buttons a.edit {background-image:url('../css/edit.png')}
 .poznamka-edit-buttons a.delete {background-image:url('../css/delete.png')}
 

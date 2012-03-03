@@ -95,7 +95,7 @@
 		<h3><?php echo((($rec_ar['type']==1)?'Úkol':(($rec_ar['type']==2)?'Předmět výslechu':'Úkol'))); ?>:</h3>
 		<p><?php echo(StripSlashes($rec_ar['task'])); ?></p>
 		<div class="clear">&nbsp;</div>
-		<h3>Osoby přítomné:</h3>
+		<h3>Osoby přítomné: </h3>
 		<p><?php 			
 		if ($usrinfo['right_power']) {
 			$sql="SELECT ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."persons, ".DB_PREFIX."ar2p WHERE ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." AND ".DB_PREFIX."persons.deleted=0 ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
@@ -109,8 +109,8 @@
 				$groups[]='<a href="./readperson.php?rid='.$rec_p['id'].'">'.StripSlashes ($rec_p['surname']).', '.StripSlashes ($rec_p['name']).'</a>';
 			}
 			echo implode ($groups,', ');
-		} else {
-			echo '&mdash;';
+		} else { ?>
+			<em>K hlášní nejsou připojeny žádné osoby.</em><?php
 		} ?></p>
 		<div class="clear">&nbsp;</div>
 		<h3>Přiřazené případy:</h3>
@@ -230,8 +230,8 @@ if ($_REQUEST['hidenotes']==1) goto hidenotes; ?>
 		} else {
 		    pageStart ('Hlášení neexistuje');
 			mainMenu (4);
-			sparklets ('<a href="./reports.php">případy</a> &raquo; <strong>případ neexistuje</strong>');
-		    echo '<div id="obsah"><p>Případ neexistuje.</p></div>';
+			sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>hlášení neexistuje</strong>');
+		    echo '<div id="obsah"><p>Hlášení neexistuje.</p></div>';
 		}
 	} else {
 	  echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
