@@ -71,7 +71,12 @@
 				$author=$rec_ar['autor'];
 				$backurl='readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=1&truenames=0';
 			}
-			sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>'.StripSlashes($rec_ar['label']).' ('.$typestring.')</strong>',$spaction);
+			if ($usrinfo['right_text']) {
+				$editbutton='; <a href="editactrep.php?rid='.$_REQUEST['rid'].'">upravit hlášení</a>';
+			} else {
+				$editbutton='';
+			}
+			sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>'.StripSlashes($rec_ar['label']).' ('.$typestring.')</strong>',$spaction.$editbutton);
 ?>
 <div id="obsah">
 	<h1><?php echo(StripSlashes($rec_ar['label'])); ?></h1>

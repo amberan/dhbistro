@@ -22,7 +22,12 @@
 					case 4: $sourceurl="reports.php"; $sourcename="hlášení"; break;
 					default: $sourceurl=""; $sourcename=""; break;
 				}
-				sparklets ('<a href="./'.$sourceurl.'">'.$sourcename.'</a> &raquo; <strong>zobrazení poznámky</strong>');
+				if ($usrinfo['right_text']) {
+					$editbutton='; <a href="editnote.php?rid='.$_REQUEST['rid'].'&amp;idtable='.$_REQUEST['idtable'].'">upravit poznámku</a>';
+				} else {
+					$editbutton='';
+				}
+				sparklets ('<a href="./'.$sourceurl.'">'.$sourcename.'</a> &raquo; <strong>zobrazení poznámky</strong>',$editbutton);
 				echo '<h1>'.StripSlashes($rec['title']).'</h1>
 				<h3>'.StripSlashes($rec['nuser']).'</h3>';
 				if ($rec['secret']==0) echo '<h4>veřejná</h4>';

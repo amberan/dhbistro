@@ -12,7 +12,12 @@
 				$hidenotes='&amp;hidenotes=0">zobrazit poznámky</a>';
 				$backurl='readgroup.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
 			}
-			sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>'.StripSlashes($rec_g['title']).'</strong>','<a href="readgroup.php?rid='.$_REQUEST['rid'].$hidenotes);
+			if ($usrinfo['right_text']) {
+				$editbutton='; <a href="editgroup.php?rid='.$_REQUEST['rid'].'">upravit skupinu</a>';
+			} else {
+				$editbutton='';
+			}
+			sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>'.StripSlashes($rec_g['title']).'</strong>','<a href="readgroup.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton);
 ?>
 <div id="obsah">
 	<h1><?php echo StripSlashes($rec_g['title']); ?></h1>
