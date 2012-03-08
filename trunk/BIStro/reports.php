@@ -130,7 +130,6 @@
 				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0".$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn."
 				ORDER BY ".$fsql_sort;
 	}
-	echo $sql;
 	$res=MySQL_Query ($sql);
 	while ($rec=MySQL_Fetch_Assoc($res)) {
 	  echo '<div class="news_div '.(($rec['type']==1)?'game_news':'system_news').'">
