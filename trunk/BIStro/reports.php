@@ -112,10 +112,8 @@
 	        ".DB_PREFIX."reports.task AS 'task',
 	        ".DB_PREFIX."users.login AS 'autor',
 	        ".DB_PREFIX."reports.type AS 'type',
-	        ".DB_PREFIX."reports.status AS 'status',
-	        ".DB_PREFIX."ar2c.iduser 
-	        	FROM ".DB_PREFIX."users, ".DB_PREFIX."reports LEFT JOIN ".DB_PREFIX."ar2c 
-	        	ON ".DB_PREFIX."ar2c.idreport=".DB_PREFIX."reports.id
+	        ".DB_PREFIX."reports.status AS 'status' 
+	        	FROM ".DB_PREFIX."users, ".DB_PREFIX."reports 
 				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0".$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn.$fsql_sec."
 				ORDER BY ".$fsql_sort;
 	} else {
@@ -127,13 +125,12 @@
 	        ".DB_PREFIX."reports.status AS 'status',
 	        ".DB_PREFIX."users.login AS 'autor',
 	        ".DB_PREFIX."reports.iduser AS 'riduser',
-	        ".DB_PREFIX."reports.type AS 'type',
-	        ".DB_PREFIX."ar2c.iduser 
-	        	FROM ".DB_PREFIX."users, ".DB_PREFIX."reports LEFT JOIN ".DB_PREFIX."ar2c 
-	        	ON ".DB_PREFIX."ar2c.idreport=".DB_PREFIX."reports.id
+	        ".DB_PREFIX."reports.type AS 'type' 
+	        	FROM ".DB_PREFIX."users, ".DB_PREFIX."reports 
 				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0".$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn."
 				ORDER BY ".$fsql_sort;
 	}
+	echo $sql;
 	$res=MySQL_Query ($sql);
 	while ($rec=MySQL_Fetch_Assoc($res)) {
 	  echo '<div class="news_div '.(($rec['type']==1)?'game_news':'system_news').'">
