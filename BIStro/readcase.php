@@ -12,7 +12,12 @@
 				$hidenotes='&amp;hidenotes=0">zobrazit poznámky</a>';
 				$backurl='readcase.php?rid='.$_REQUEST['rid'].'&hidenotes=1';
 			}
-			sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>'.StripSlashes($rec['title']).'</strong>','<a href="readcase.php?rid='.$_REQUEST['rid'].$hidenotes);
+			if ($usrinfo['right_text']) {
+				$editbutton='; <a href="editcase.php?rid='.$_REQUEST['rid'].'">upravit případ</a>';
+			} else {
+				$editbutton='';
+			}
+			sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>'.StripSlashes($rec['title']).'</strong>','<a href="readcase.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton);
 ?>
 <div id="obsah">
 	<h1><?php echo StripSlashes($rec['title']); ?></h1>

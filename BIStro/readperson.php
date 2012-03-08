@@ -14,7 +14,12 @@
 				$hidenotes='&amp;hidenotes=0">zobrazit poznámky</a>';
 				$backurl='readperson.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
 			}
-			sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>'.StripSlashes($rec['surname']).', '.StripSlashes($rec['name']).'</strong>','<a href="readperson.php?rid='.$_REQUEST['rid'].$hidenotes);
+			if ($usrinfo['right_text']) {
+				$editbutton='; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>';
+			} else {
+				$editbutton='';
+			}
+			sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>'.StripSlashes($rec['surname']).', '.StripSlashes($rec['name']).'</strong>','<a href="readperson.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton);
 			?>			
 <div id="obsah">
 	<h1><?php echo(StripSlashes($rec['surname']).', '.StripSlashes($rec['name'])); ?></h1>
