@@ -5,7 +5,12 @@
 		if ($rec_g=MySQL_Fetch_Assoc($res)) {
 		  pageStart (StripSlashes($rec_g['title']));
 			mainMenu (3);
-			if ($_REQUEST['hidenotes']==0) {
+			if (!isset($_REQUEST['hidenotes'])) {
+	  			$hn=0;
+			} else {
+	  			$hn=$_REQUEST['hidenotes'];
+			}
+			if ($hn==0) {
 				$hidenotes='&amp;hidenotes=1">skrýt poznámky</a>';
 				$backurl='readgroup.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
 			} else {
@@ -19,6 +24,51 @@
 			}
 			sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>'.StripSlashes($rec_g['title']).'</strong>','<a href="readgroup.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton);
 ?>
+<?php // zpracovani filtru
+	if (!isset($_REQUEST['sort'])) {
+	  $f_sort=1;
+	} else {
+	  $f_sort=$_REQUEST['sort'];
+	}
+	if (!isset($_POST['sportraits'])) {
+		$sportraits=false;
+	} else {
+		$sportraits=$_POST['sportraits'];
+	}
+	if (!isset($_REQUEST['sec'])) {
+		$f_sec=0;
+	} else {
+		$f_sec=1;
+	}
+	switch ($f_sort) {
+	  case 1: $fsql_sort=' '.DB_PREFIX.'persons.surname, '.DB_PREFIX.'persons.name ASC '; break;
+	  case 2: $fsql_sort=' '.DB_PREFIX.'persons.surname, '.DB_PREFIX.'persons.name DESC '; break;
+	  default: $fsql_sort=' '.DB_PREFIX.'persons.surname, '.DB_PREFIX.'persons.name ASC ';
+	}
+	switch ($f_sec) {
+		case 0: $fsql_sec=''; break;
+		case 1: $fsql_sec=' AND '.DB_PREFIX.'persons.secret=1 '; break;
+		default: $fsql_sec='';
+	}
+	//
+	function filter () {
+		global $f_sort, $sportraits, $f_sec, $usrinfo;
+	  echo '<div id="filter"><form action="readgroup.php" method="post" id="filter">
+	<fieldset>
+	  <legend>Filtr</legend>
+	  <p>Členy skupiny řadit podle <select name="sort">
+	<option value="1"'.(($f_sort==1)?' selected="selected"':'').'>příjmení a jména vzestupně</option>
+	<option value="2"'.(($f_sort==2)?' selected="selected"':'').'>příjmení a jména sestupně</option>
+</select>.</p>
+		<p><input type="checkbox" name="sportraits" value="1"'.(($sportraits)?' checked="checked"':'').'> Zobrazit portréty.</p>';
+	echo '
+	  <input type="hidden" name="rid" value="'.$_REQUEST['rid'].'" />
+	  <div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
+	</fieldset>
+</form></div>';
+	}
+	filter();
+?>
 <div id="obsah">
 	<h1><?php echo StripSlashes($rec_g['title']); ?></h1>
 	<fieldset><legend><h2>Obecné informace</h2></legend>
@@ -27,18 +77,36 @@
 	 	<h2>TAJNÉ</h2><?php } ?>
 	 	<h3>Členové: </h3><p><?php
 		if ($usrinfo['right_power']) {
-			$sql="SELECT ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."persons, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." AND ".DB_PREFIX."persons.deleted=0 ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
+			$sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."persons, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." AND ".DB_PREFIX."persons.deleted=0 ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
 		} else {
-			$sql="SELECT ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."persons, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." AND ".DB_PREFIX."persons.deleted=0 AND ".DB_PREFIX."persons.secret=0 ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
+			$sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."persons, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." AND ".DB_PREFIX."persons.deleted=0 AND ".DB_PREFIX."persons.secret=0 ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
 		}
 		$res=MySQL_Query ($sql);
 		if (MySQL_Num_Rows($res)) {
-			$groups=Array();
-			while ($rec=MySQL_Fetch_Assoc($res)) {
-				$groups[]='<a href="./readperson.php?rid='.$rec['id'].'">'.StripSlashes ($rec['surname']).', '.StripSlashes ($rec['name']).'</a>';
-			}
-			echo implode ($groups,', ');
-		} else { ?>
+	  echo '<div id="obsah">
+<table>
+<thead>
+	<tr>
+'.(($sportraits)?'<th>Portrét</th>':'').'
+	  <th>Jméno</th>
+	  <th>Telefon</th>
+	</tr>
+</thead>
+<tbody>
+';
+		$even=0;
+		while ($rec=MySQL_Fetch_Assoc($res)) {
+		  echo '<tr class="'.(($even%2==0)?'even':'odd').'">
+'.(($sportraits)?'<td><img src="getportrait.php?rid='.$rec['id'].'" alt="portrét chybí" /></td>':'').'
+	<td>'.(($rec['secret'])?'<span class="secret"><a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a></span>':'<a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a>').'</td>
+	<td>'.$rec['phone'].'</td>
+</tr>';
+			$even++;
+		}
+	  echo '</tbody>
+</table>
+</div>';
+	} else { ?>
 			<em>Do skupiny nejsou přiřazeny žádné osoby.</em><?php
 		} ?></p>
 	</div>
@@ -77,7 +145,7 @@
 	// konec seznamu přiložených souborů ?>
 
 <?php //skryti poznamek 
-if ($_REQUEST['hidenotes']==1) goto hidenotes; ?>
+if ($hn==1) goto hidenotes; ?>
 <!-- následuje seznam poznámek -->
 	<?php // generování poznámek
 		if ($usrinfo['right_power']) {
