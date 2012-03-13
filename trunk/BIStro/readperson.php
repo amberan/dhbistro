@@ -7,7 +7,12 @@
 			$powers=Array('','neznámá','člověk','mimo kategorie','1. kategorie','2. kategorie','3. kategorie','4. kategorie');
 			pageStart (StripSlashes($rec['surname']).', '.StripSlashes($rec['name']));
 			mainMenu (5);
-			if ($_REQUEST['hidenotes']==0) {
+			if (!isset($_REQUEST['hidenotes'])) {
+				$hn=0;
+			} else {
+				$hn=$_REQUEST['hidenotes'];
+			}
+			if ($hn==0) {
 				$hidenotes='&amp;hidenotes=1">skrýt poznámky</a>';
 				$backurl='readperson.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
 			} else {
@@ -125,7 +130,7 @@
 	// konec seznamu přiložených souborů ?>
 
 <?php //skryti poznamek 
-if ($_REQUEST['hidenotes']==1) goto hidenotes; ?>
+if ($hn==1) goto hidenotes; ?>
 <!-- následuje seznam poznámek -->
 	<?php // generování poznámek
 		if ($usrinfo['right_power']) {
@@ -153,7 +158,7 @@ if ($_REQUEST['hidenotes']==1) goto hidenotes; ?>
 			<div><?php echo(StripSlashes($rec['note'])); ?></div>
 			<span class="poznamka-edit-buttons"><?php
 			if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo '<a class="edit" href="editnote.php?rid='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=1" title="upravit"><span class="button-text">upravit</span></a> ';
-			if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo '<a class="delete" href="procperson.php?deletenote='.$rec['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode($backurl).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec['title'])."&quot; náležící k osobě?');".'" title="smazat"><span class="button-text">smazat</span></a>'; ?>
+			if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo '<a class="delete" href="procnote.php?deletenote='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('readperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec['title'])."&quot; náležící k osobě?');".'" title="smazat"><span class="button-text">smazat</span></a>'; ?>
 			</span>
 		</div>
 		<!-- end of .poznamka -->

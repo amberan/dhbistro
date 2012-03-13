@@ -5,7 +5,12 @@
 		if ($rec=MySQL_Fetch_Assoc($res)) {
 			pageStart (StripSlashes($rec['title']));
 			mainMenu (4);
-			if ($_REQUEST['hidenotes']==0) {
+			if (!isset($_REQUEST['hidenotes'])) {
+				$hn=0;
+			} else {
+				$hn=$_REQUEST['hidenotes'];
+			}
+			if ($hn==0) {
 				$hidenotes='&amp;hidenotes=1">skrýt poznámky</a>';
 				$backurl='readcase.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
 			} else {
@@ -94,7 +99,7 @@
 		}
 	// konec seznamu přiložených souborů ?>
 <?php //skryti poznamek 
-if ($_REQUEST['hidenotes']==1) goto hidenotes; ?>
+if ($hn==1) goto hidenotes; ?>
 <!-- následuje seznam poznámek -->
 	<?php // generování poznámek
 		if ($usrinfo['right_power']) {
