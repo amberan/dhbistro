@@ -38,35 +38,40 @@
 			// následuje hlavička
 			pageStart (StripSlashes('Hlášení'.(($rec_ar['type']==1)?' z výjezdu':(($rec_ar['type']==2)?' z výslechu':'')).': '.$rec_ar['label']));
 			mainMenu (4);
-			if (($usrinfo['right_power']) && ($_REQUEST['hidenotes']==0) && ($_REQUEST['truenames']==0)) {
+			if (!isset($_REQUEST['hidenotes'])) {
+				$hn=0;
+			} else {
+				$hn=$_REQUEST['hidenotes'];
+			}
+			if (($usrinfo['right_power']) && ($hn==0) && ($_REQUEST['truenames']==0)) {
 				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=0">skrýt poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=1">zobrazit celá jména</a>';
 				$author=$rec_ar['autor'];
 				$backurl='readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=0&truenames=0';
-			} else if (($usrinfo['right_power']) && ($_REQUEST['hidenotes']==1) && ($_REQUEST['truenames']==0)) {
+			} else if (($usrinfo['right_power']) && ($hn==1) && ($_REQUEST['truenames']==0)) {
 				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=0">zobrazit poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=1">zobrazit celá jména</a>';
 				$author=$rec_ar['autor'];
 				$backurl='readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=1&truenames=0';
-			} else if (($usrinfo['right_power']) && ($notconnected==0) && ($_REQUEST['hidenotes']==1) && ($_REQUEST['truenames']==1)) {
+			} else if (($usrinfo['right_power']) && ($notconnected==0) && ($hn==1) && ($_REQUEST['truenames']==1)) {
 				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=1">zobrazit poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=0">zobrazit volací znaky</a>';
 				$author=$rec_ar['surname'].' '.$rec_ar['name'];
 				$backurl='readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=1&truenames=1';
-			} else if (($usrinfo['right_power']) && ($notconnected==0) && ($_REQUEST['hidenotes']==0) && ($_REQUEST['truenames']==1)) {
+			} else if (($usrinfo['right_power']) && ($notconnected==0) && ($hn==0) && ($_REQUEST['truenames']==1)) {
 				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=1">skrýt poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=0">zobrazit volací znaky</a>';
 				$author=$rec_ar['surname'].' '.$rec_ar['name'];
 				$backurl='readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=0&truenames=1';
-			} else if (($usrinfo['right_power']) && ($notconnected==1) && ($_REQUEST['hidenotes']==1) && ($_REQUEST['truenames']==1)) {
+			} else if (($usrinfo['right_power']) && ($notconnected==1) && ($hn==1) && ($_REQUEST['truenames']==1)) {
 				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=1">zobrazit poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=0">zobrazit volací znaky</a>';
 				$author='NENÍ NAPOJEN';
 				$backurl='readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=1&truenames=1';
-			} else if (($usrinfo['right_power']) && ($notconnected==1) && ($_REQUEST['hidenotes']==0) && ($_REQUEST['truenames']==1)) {
+			} else if (($usrinfo['right_power']) && ($notconnected==1) && ($hn==0) && ($_REQUEST['truenames']==1)) {
 				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=1">skrýt poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=0">zobrazit volací znaky</a>';
 				$author='NENÍ NAPOJEN';
 				$backurl='readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=0&truenames=1';
-			} else if ($_REQUEST['hidenotes']==0) {
+			} else if ($hn==0) {
 				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=0">skrýt poznámky</a>';
 				$author=$rec_ar['autor'];
 				$backurl='readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=0&truenames=0';
-			} else if ($_REQUEST['hidenotes']==1) {
+			} else if ($hn==1) {
 				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=0">zobrazit poznámky</a>';
 				$author=$rec_ar['autor'];
 				$backurl='readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=1&truenames=0';
@@ -189,7 +194,7 @@
 		}
 	// konec seznamu přiložených souborů ?>
 <?php //skryti poznamek 
-if ($_REQUEST['hidenotes']==1) goto hidenotes; ?>
+if ($hn==1) goto hidenotes; ?>
 <!-- následuje seznam poznámek -->
 	<?php // generování poznámek
 		if ($usrinfo['right_power']) {
