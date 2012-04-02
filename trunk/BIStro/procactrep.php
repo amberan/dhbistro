@@ -22,10 +22,10 @@
 	  } else {
 		  	pageStart ('Hlášení uloženo');
 		  	mainMenu (4);
-		  	sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>hlášení uloženo</strong>','<a href="readactrep.php?rid='.$_POST['reportid'].'&hidenotes=0&truenames=0">zobrazit uložené&hidenotes=0&truenames=0</a>');
-			MySQL_Query ("INSERT INTO ".DB_PREFIX."reports VALUES('','".mysql_real_escape_string(safeInput($_POST['label']))."','".Time()."','".$usrinfo['id']."','".mysql_real_escape_string($_POST['task'])."','".mysql_real_escape_string($_POST['summary'])."','".mysql_real_escape_string($_POST['impact'])."','".mysql_real_escape_string($_POST['details'])."','".$_POST['secret']."','0','".$_POST['status']."','".$_POST['type']."','".$adatum."','".mysql_real_escape_string(safeInput($_POST['start']))."','".mysql_real_escape_string(safeInput($_POST['end']))."','".mysql_real_escape_string($_POST['energy'])."','".mysql_real_escape_string($_POST['inputs'])."')");
+		  	MySQL_Query ("INSERT INTO ".DB_PREFIX."reports VALUES('','".mysql_real_escape_string(safeInput($_POST['label']))."','".Time()."','".$usrinfo['id']."','".mysql_real_escape_string($_POST['task'])."','".mysql_real_escape_string($_POST['summary'])."','".mysql_real_escape_string($_POST['impact'])."','".mysql_real_escape_string($_POST['details'])."','".$_POST['secret']."','0','".$_POST['status']."','".$_POST['type']."','".$adatum."','".mysql_real_escape_string(safeInput($_POST['start']))."','".mysql_real_escape_string(safeInput($_POST['end']))."','".mysql_real_escape_string($_POST['energy'])."','".mysql_real_escape_string($_POST['inputs'])."')");
 			$ridarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."reports WHERE UCASE(label)=UCASE('".mysql_real_escape_string(safeInput($_POST['label']))."')"));
 			$rid=$ridarray['id'];
+			sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>hlášení uloženo</strong>','<a href="readactrep.php?rid='.$rid.'&hidenotes=0&truenames=0">zobrazit uložené</a>');
 			echo '<div id="obsah"><p>Hlášení uloženo.</p></div>
 			<hr />
 			<form action="addp2ar.php" method="post" class="otherform">
