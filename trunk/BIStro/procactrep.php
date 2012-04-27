@@ -73,6 +73,14 @@
 		$sql="INSERT INTO ".DB_PREFIX."data VALUES('','".$newname."','".mysql_real_escape_string($_FILES['attachment']['name'])."','".mysql_real_escape_string($_FILES['attachment']['type'])."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','4','".$_POST['reportid']."','".$_POST['secret']."')";
 		MySQL_Query ($sql);
 		Header ('Location: '.$_POST['backurl']);
+	} else {
+	  if (isset($_POST['uploadfile'])) {
+		  pageStart ('Přiložení souboru');
+			mainMenu (4);
+			sparklets ('<a href="./cases.php">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>přiložení souboru</strong>');
+			echo '<div id="obsah"><p>Soubor nebyl přiložen, něco se nepodařilo. Možná nebyl zvolen přikládaný soubor.</p></div>';
+			pageEnd ();
+		}
 	}
 	if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {
 		if ($usrinfo['right_text']) {
