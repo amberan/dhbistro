@@ -54,7 +54,7 @@
 		Header ('Location: '.$_POST['backurl']);
 	} else {
 	  if (isset($_POST['uploadfile'])) {
-		  pageStart ('Uložení změn');
+		  pageStart ('Přiložení souboru');
 			mainMenu (4);
 			sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>přiložení souboru</strong>');
 			echo '<div id="obsah"><p>Soubor nebyl přiložen, něco se nepodařilo. Možná nebyl zvolen přikládaný soubor.</p></div>';
