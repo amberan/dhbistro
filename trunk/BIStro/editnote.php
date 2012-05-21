@@ -14,7 +14,7 @@
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."notes WHERE id=".$_REQUEST['rid']);
 		if ($rec=MySQL_Fetch_Assoc($res)) {
 ?>
-
+<div id="obsah">
 <form action="procnote.php" method="post" class="otherform">
 	<div>
 		<label for="notetitle">Nadpis:</label>
@@ -55,6 +55,8 @@
 		<input type="submit" value="Uložit poznámku" name="editnote" class="submitbutton" />
 	</div>
 </form>
+</div>
+<!-- end of #obsah -->
 <?php
 } else {
 echo '<div id="obsah"><p>Poznámka neexistuje.</p></div>';

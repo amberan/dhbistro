@@ -158,9 +158,7 @@ hr {
 /******** hlavní formuláø  *********/
 /***********************************/
 
-#inputform {
-	margin: 20px;
-}
+#inputform { /* margin: 20px;/**/ }
 
 #inputform.evilform {
 	margin: 1px !important;
@@ -204,8 +202,9 @@ hr {
 }
 
 #inputform textarea {
-	width: 450px;
-	height: 300px;
+	width: 100%; /* 450px;/**/
+	height: 100%;/* 300px;/**/
+
 }
 
 #inputform #submitbutton, .otherform .submitbutton {
@@ -312,9 +311,10 @@ ul#pripady {margin:0.1em 0; padding-left: 2em;}
 #poznamky .poznamka {position: relative;}
 #poznamky .poznamka>div {margin:0.3em 0;}
 
-.poznamka-edit-buttons {position:absolute;right:0px;top:0px;}
-.poznamka-edit-buttons a {display:inline-block;width:16px;height:16px;margin:3px;overflow:hidden;}
+div > .poznamka-edit-buttons {position:absolute;right:0px;top:0px;}
+.poznamka-edit-buttons a {display:inline-block;width:16px;height:16px;margin:3px;overflow:hidden;vertical-align:bottom;}
 .poznamka-edit-buttons a span.button-text {display:none;}
+.poznamka-edit-buttons a.new {background-image:url('../css/document-new.png')}
 .poznamka-edit-buttons a.edit {background-image:url('../css/edit.png')}
 .poznamka-edit-buttons a.delete {background-image:url('../css/delete.png')}
 
