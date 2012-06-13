@@ -169,7 +169,7 @@ hr {
 	text-align: right;
 	margin: 0 3px 0 0;
 	float: left;
-	width: 200px;
+	width: 6.2em;
 }
 
 #inputform div {
@@ -178,6 +178,15 @@ hr {
 
 #inputform input, #inputform select {
 	border: 1px inset #DFB96E;
+}
+
+#inputform input#name, 
+#inputform input#surname, 
+#inputform input#phone, 
+#inputform input#portrait, 
+#inputform select#side,
+#inputform select#power,
+#inputform select#spec {
 	width: 200px;
 }
 
