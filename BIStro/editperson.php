@@ -2,10 +2,10 @@
 	require_once ('./inc/func_main.php');
 	pageStart ('Úprava osoby');
 	mainMenu (5);
-	sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>úprava osoba</strong>');
+	sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>úprava osoby</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	  $res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."persons WHERE id=".$_REQUEST['rid']);
-		if ($rec=MySQL_Fetch_Assoc($res)) {
+		if ($rec_p=MySQL_Fetch_Assoc($res)) {
 ?>
 <div id="obsah">
 	<p>Portréty nahrávejte pokud možno ve velikosti 100x130 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen portréty, o rozmazané postavy nebude nouze v přílohách.</p>
@@ -13,54 +13,54 @@
 		<fieldset><legend><h2>Základní údaje</h2></legend>
 			<div id="info">
 				<h3><label for="name">Jméno:</label></h3>
-				<input type="text" name="name" id="name" value="<?php echo StripSlashes($rec['name']); ?>" />
+				<input type="text" name="name" id="name" value="<?php echo StripSlashes($rec_p['name']); ?>" />
 				<div class="clear">&nbsp;</div>
 				<h3><label for="surname">Příjmení:</label></h3>
-				<input type="text" name="surname" id="surname" value="<?php echo StripSlashes($rec['surname']); ?>" />
+				<input type="text" name="surname" id="surname" value="<?php echo StripSlashes($rec_p['surname']); ?>" />
 				<div class="clear">&nbsp;</div>
 				<h3><label for="side">Strana:</label></h3>
 					<select name="side" id="side">
-						<option value="0"<?php if ($rec['side']==0) { echo ' selected="selected"'; } ?>>neznámá</option>
-						<option value="1"<?php if ($rec['side']==1) { echo ' selected="selected"'; } ?>>světlo</option>
-						<option value="2"<?php if ($rec['side']==2) { echo ' selected="selected"'; } ?>>tma</option>
-						<option value="3"<?php if ($rec['side']==3) { echo ' selected="selected"'; } ?>>člověk</option>
+						<option value="0"<?php if ($rec_p['side']==0) { echo ' selected="selected"'; } ?>>neznámá</option>
+						<option value="1"<?php if ($rec_p['side']==1) { echo ' selected="selected"'; } ?>>světlo</option>
+						<option value="2"<?php if ($rec_p['side']==2) { echo ' selected="selected"'; } ?>>tma</option>
+						<option value="3"<?php if ($rec_p['side']==3) { echo ' selected="selected"'; } ?>>člověk</option>
 					</select>
 				<div class="clear">&nbsp;</div>
 				<h3><label for="power">Síla:</label></h3>
 					<select name="power" id="power">
-						<option value="0"<?php if ($rec['power']==0) { echo ' selected="selected"'; } ?>>neznámá</option>
-						<option value="1"<?php if ($rec['power']==1) { echo ' selected="selected"'; } ?>>1. kategorie</option>
-						<option value="2"<?php if ($rec['power']==2) { echo ' selected="selected"'; } ?>>2. kategorie</option>
-						<option value="3"<?php if ($rec['power']==3) { echo ' selected="selected"'; } ?>>3. kategorie</option>
-						<option value="4"<?php if ($rec['power']==4) { echo ' selected="selected"'; } ?>>4. kategorie</option>
-						<option value="5"<?php if ($rec['power']==5) { echo ' selected="selected"'; } ?>>5. kategorie</option>
-						<option value="6"<?php if ($rec['power']==6) { echo ' selected="selected"'; } ?>>6. kategorie</option>
-						<option value="7"<?php if ($rec['power']==7) { echo ' selected="selected"'; } ?>>7. kategorie</option>
-						<option value="8"<?php if ($rec['power']==8) { echo ' selected="selected"'; } ?>>mimo kategorie</option>
+						<option value="0"<?php if ($rec_p['power']==0) { echo ' selected="selected"'; } ?>>neznámá</option>
+						<option value="1"<?php if ($rec_p['power']==1) { echo ' selected="selected"'; } ?>>1. kategorie</option>
+						<option value="2"<?php if ($rec_p['power']==2) { echo ' selected="selected"'; } ?>>2. kategorie</option>
+						<option value="3"<?php if ($rec_p['power']==3) { echo ' selected="selected"'; } ?>>3. kategorie</option>
+						<option value="4"<?php if ($rec_p['power']==4) { echo ' selected="selected"'; } ?>>4. kategorie</option>
+						<option value="5"<?php if ($rec_p['power']==5) { echo ' selected="selected"'; } ?>>5. kategorie</option>
+						<option value="6"<?php if ($rec_p['power']==6) { echo ' selected="selected"'; } ?>>6. kategorie</option>
+						<option value="7"<?php if ($rec_p['power']==7) { echo ' selected="selected"'; } ?>>7. kategorie</option>
+						<option value="8"<?php if ($rec_p['power']==8) { echo ' selected="selected"'; } ?>>mimo kategorie</option>
 					</select>
 				<div class="clear">&nbsp;</div>
 				<h3><label for="spec">Specializace:</label></h3>
 					<select name="spec" id="spec">
-						<option value="0"<?php if ($rec['spec']==0) { echo ' selected="selected"'; } ?>>neznámá</option>
-						<option value="1"<?php if ($rec['spec']==1) { echo ' selected="selected"'; } ?>>bílý mág</option>
-						<option value="2"<?php if ($rec['spec']==2) { echo ' selected="selected"'; } ?>>černý mág</option>
-						<option value="3"<?php if ($rec['spec']==3) { echo ' selected="selected"'; } ?>>léčitel</option>
-						<option value="4"<?php if ($rec['spec']==4) { echo ' selected="selected"'; } ?>>obrateň</option>
-						<option value="5"<?php if ($rec['spec']==5) { echo ' selected="selected"'; } ?>>upír</option>
-						<option value="6"<?php if ($rec['spec']==6) { echo ' selected="selected"'; } ?>>vlkodlak</option>
-						<option value="7"<?php if ($rec['spec']==7) { echo ' selected="selected"'; } ?>>vědma</option>
-						<option value="8"<?php if ($rec['spec']==8) { echo ' selected="selected"'; } ?>>zaříkávač</option>
+						<option value="0"<?php if ($rec_p['spec']==0) { echo ' selected="selected"'; } ?>>neznámá</option>
+						<option value="1"<?php if ($rec_p['spec']==1) { echo ' selected="selected"'; } ?>>bílý mág</option>
+						<option value="2"<?php if ($rec_p['spec']==2) { echo ' selected="selected"'; } ?>>černý mág</option>
+						<option value="3"<?php if ($rec_p['spec']==3) { echo ' selected="selected"'; } ?>>léčitel</option>
+						<option value="4"<?php if ($rec_p['spec']==4) { echo ' selected="selected"'; } ?>>obrateň</option>
+						<option value="5"<?php if ($rec_p['spec']==5) { echo ' selected="selected"'; } ?>>upír</option>
+						<option value="6"<?php if ($rec_p['spec']==6) { echo ' selected="selected"'; } ?>>vlkodlak</option>
+						<option value="7"<?php if ($rec_p['spec']==7) { echo ' selected="selected"'; } ?>>vědma</option>
+						<option value="8"<?php if ($rec_p['spec']==8) { echo ' selected="selected"'; } ?>>zaříkávač</option>
 					</select>
 				<div class="clear">&nbsp;</div>
 				<h3><label for="phone">Telefon:</label></h3>
-				<input type="text" name="phone" id="phone" value="<?php echo StripSlashes($rec['phone']); ?>" />
+				<input type="text" name="phone" id="phone" value="<?php echo StripSlashes($rec_p['phone']); ?>" />
 				<div class="clear">&nbsp;</div>
 				<h3><label for="portrait">Nový portrét:</label></h3>
 				<input type="file" name="portrait" id="portrait" />
 				<div class="clear">&nbsp;</div>
 				<h3><label for="secret">Přísně tajné:</label></h3>
-					<input type="radio" name="secret" id="secret" value="0" <?php if ($rec['secret']==0) { echo 'checked'; } ?>/>ne<br/>
-					<h3><label>&nbsp;</label></h3><input type="radio" name="secret" id="secret" value="1"<?php if ($rec['secret']==1) { echo 'checked'; } ?>>ano
+					<input type="radio" name="secret" id="secret" value="0" <?php if ($rec_p['secret']==0) { echo 'checked'; } ?>/>ne<br/>
+					<h3><label>&nbsp;</label></h3><input type="radio" name="secret" id="secret" value="1"<?php if ($rec_p['secret']==1) { echo 'checked'; } ?>>ano
 				<div class="clear">&nbsp;</div>
 			</div>
 			<!-- end of #info -->
@@ -68,11 +68,11 @@
 		<!-- náseduje popis osoby -->
 		<fieldset><legend><h2>Popis osoby</h2></legend>
 			<div class="field-text">
-				<textarea cols="80" rows="7" name="contents" id="contents"><?php echo StripSlashes($rec['contents']); ?></textarea>
+				<textarea cols="80" rows="7" name="contents" id="contents"><?php echo StripSlashes($rec_p['contents']); ?></textarea>
 			</div>
 			<!-- end of .field-text -->
 		</fieldset>
-		<input type="hidden" name="personid" value="<?php echo $rec['id']; ?>" />
+		<input type="hidden" name="personid" value="<?php echo $rec_p['id']; ?>" />
 		<input type="submit" name="editperson" id="submitbutton" value="Uložit" />
 	</form>
 
@@ -107,19 +107,50 @@
 		<input type="submit" value="Uložit změny" name="setgroups" class="submitbutton" />
 	</div>
 </form>
+
 <hr />
+
+<!-- následuje seznam přiložených souborů -->
+<fieldset><legend><strong>Přiložené soubory</strong></legend>
+	<strong><em>K osobě je možné nahrát neomezené množství souborů, ale velikost jednoho souboru je omezena na 2 MB.</em></strong>
+	<?php //generování seznamu přiložených souborů
+		if ($usrinfo['right_power']) {
+			$sql="SELECT ".DB_PREFIX."data.iduser AS 'iduser', ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.secret AS 'secret', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=1 ORDER BY ".DB_PREFIX."data.originalname ASC";
+		} else {
+		  $sql="SELECT ".DB_PREFIX."data.iduser AS 'iduser', ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.secret AS 'secret', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=1 AND ".DB_PREFIX."data.secret=0 ORDER BY ".DB_PREFIX."data.originalname ASC";
+		}
+		$res=MySQL_Query ($sql);
+		$i=0;
+		while ($rec_f=MySQL_Fetch_Assoc($res)) { 
+			$i++; 
+			if($i==1){ ?>
+	<ul id="prilozenadata">
+			<?php } ?>
+		<li class="soubor"><a href="getfile.php?idfile=<?php echo($rec_f['id']); ?>" title=""><?php echo(StripSlashes($rec_f['title'])); ?></a><?php if($rec_f['secret']==1){ ?> (TAJNÝ)<?php }; ?><span class="poznamka-edit-buttons"><?php
+			if (($rec_f['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo '<a class="delete" title="smazat" href="procperson.php?deletefile='.$rec_f['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('editperson.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat osobu &quot;'.StripSlashes($rec_f['title']).'&quot; náležící k osobě?\')"><span class="button-text">smazat soubor</span></a>'; ?>
+			</span></li>
+			
+	<?php 
+		}
+		if($i<>0){ ?>
+	</ul>
+	<!-- end of #prilozenadata -->
+	<?php 
+		}else{?><br />
+	<em>bez přiložených souborů</em><?php
+		}
+	// konec seznamu přiložených souborů ?>
+</fieldset>
+
 <form action="procperson.php" method="post" enctype="multipart/form-data" class="otherform">
-	<p>K osobě je možné nahrát neomezené množství souborů, ale velikost jednoho souboru je omezena na 2 MB.</p>
 	<div>
 		<label for="attachment">Soubor:</label>
 		<input type="file" name="attachment" id="attachment" />
 	</div>
 	<div>
 		<label for="usecret">Přísně tajné:</label>
-		<select name="secret" id="usecret">
-			<option value="0">ne</option>
-			<option value="1">ano</option>
-		</select>
+	  	<?php if ($rec_p['secret']!=1) { ?><input type="radio" name="secret" id="usecret" value="0" checked/>ne<br/><?php }; ?>
+		<input type="radio" name="secret" id="usecret" value="1" <?php if ($rec_p['secret']==1){ echo 'checked';}; ?>/>ano<br/>
 	</div>
 	<div>
 		<input type="hidden" name="personid" value="<?php echo $_REQUEST['rid']; ?>" />
@@ -127,22 +158,10 @@
 		<input type="submit" name="uploadfile" value="Nahrát soubor k osobě" class="submitbutton" /> 
 	</div>
 </form>
-<ul>
-<?php
-	if ($usrinfo['right_power']) {
-		$sql="SELECT ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=1 ORDER BY ".DB_PREFIX."data.originalname ASC";
-	} else {
-	  $sql="SELECT ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=1 AND ".DB_PREFIX."data.secret=0 ORDER BY ".DB_PREFIX."data.originalname ASC";
-	}
-	$res=MySQL_Query ($sql);
-	while ($rec=MySQL_Fetch_Assoc($res)) {
-		echo '<li><a href="getfile.php?idfile='.$rec['id'].'">'.StripSlashes($rec['title']).'</a> &mdash; <a href="procperson.php?deletefile='.$rec['id'].'&amp;personid='.$_REQUEST['rid'].'" onclick="'."return confirm('Opravdu odebrat osobu &quot;".StripSlashes($rec['title'])."&quot; náležící k osobě?');".'">smazat soubor</a></li>';
-	}
-?>
-</ul>
-<hr />
 
-	<p>K osobě si můžete připsat kolik chcete poznámek.</p>
+<hr />
+<fieldset><legend><strong>Poznámky</strong></legend>
+	<strong><em>K osobě si můžete připsat kolik chcete poznámek.</em></strong>
 	<!-- následuje seznam poznámek -->
 	<?php // generování poznámek
 		if ($usrinfo['right_power']) {
@@ -152,25 +171,24 @@
 		}
 		$res=MySQL_Query ($sql);
 		$i=0;
-		while ($rec=MySQL_Fetch_Assoc($res)) { 
+		while ($rec_n=MySQL_Fetch_Assoc($res)) { 
 			$i++;
 			if($i==1){ ?>
-	<fieldset><legend><strong>Poznámky</strong></legend>
 	<div id="poznamky"><?php
 			}
 			if($i>1){?>
 		<hr /><?php
 			} ?>
 		<div class="poznamka">
-			<h4><?php echo(StripSlashes($rec['title'])).' - '.(StripSlashes($rec['user']));?><?php
-			if ($rec['secret']==0) echo ' (veřejná)';
-			if ($rec['secret']==1) echo ' (tajná)';
-			if ($rec['secret']==2) echo ' (soukromá)';
+			<h4><?php echo(StripSlashes($rec_n['title'])).' - '.(StripSlashes($rec_n['user']));?><?php
+			if ($rec_n['secret']==0) echo ' (veřejná)';
+			if ($rec_n['secret']==1) echo ' (tajná)';
+			if ($rec_n['secret']==2) echo ' (soukromá)';
 			?></h4>
-			<div><?php echo(StripSlashes($rec['note'])); ?></div>
+			<div><?php echo(StripSlashes($rec_n['note'])); ?></div>
 			<span class="poznamka-edit-buttons"><?php
-			if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo '<a class="edit" href="editnote.php?rid='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=1" title="upravit"><span class="button-text">upravit</span></a> ';
-			if (($rec['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo '<a class="delete" href="procnote.php?deletenote='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('readperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec['title'])."&quot; náležící k osobě?');".'" title="smazat"><span class="button-text">smazat</span></a>'; ?>
+			if (($rec_n['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=1" title="upravit"><span class="button-text">upravit</span></a> ';
+			if (($rec_n['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo '<a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('readperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec_n['title'])."&quot; náležící k osobě?');".'" title="smazat"><span class="button-text">smazat</span></a>'; ?>
 			</span>
 		</div>
 		<!-- end of .poznamka -->
@@ -178,10 +196,12 @@
 		if($i<>0){ ?>
 	</div>
 	<!-- end of #poznamky -->
-	</fieldset>
-	<?php }
+	<?php 
+		}else{?><br />
+	<em>bez poznámek</em><?php
+		}
 	// konec poznámek ?>
-
+</fieldset>
 
 <form action="procnote.php" method="post" class="otherform">
 	<ul>
@@ -193,8 +213,8 @@
 	</div>
 	<div>
 	  <label for="nsecret">Utajení:</label>
-	  	<?php if ($rec['secret']!=1) { ?><input type="radio" name="secret" id="nsecret" value="0" checked/>veřejná<br/><?php }; ?>
-		<input type="radio" name="secret" id="nsecret" value="1" <?php if ($rec['secret']==1){ echo 'checked';}; ?>/>tajná<br/>
+	  	<?php if ($rec_p['secret']!=1) { ?><input type="radio" name="secret" id="nsecret" value="0" checked/>veřejná<br/><?php }; ?>
+		<input type="radio" name="secret" id="nsecret" value="1" <?php if ($rec_p['secret']==1){ echo 'checked';}; ?>/>tajná<br/>
 		<input type="radio" name="secret" id="nsecret" value="2" />soukromá
 	</div>
 	<div>
