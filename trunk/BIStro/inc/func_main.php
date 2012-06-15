@@ -76,7 +76,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title><?php echo (($loggedin)?$usrinfo['login'].' @ ':'')?>Mazzarino <?php echo $mazzarino_version;?> | <?php echo $title;?></title>
-    <meta name="Author" content="Jakub Ethan Kraft" />
+    <meta name="Author" content="Jakub Ethan Kraft, David Ambeřan Maleček" />
     <meta name="Copyright" content="2006 - 2007" />
     <meta http-equiv="Content-language" content="cs" />
     <meta http-equiv="Cache-control" content="no-cache" />
@@ -117,16 +117,16 @@
 	  echo '<div id="menu">
 	<ul>
 		<li><a href="index.php">Aktuality</a></li>
-		'.(($usrinfo['right_power'])?'<li><a href="users.php">Uživatelé</a></li>':'').'
-		<li><a href="evilpoints.php">Zlobody</a></li>
-		<li><a href="groups.php">Skupiny</a></li>
-		<li><a href="cases.php">Případy</a></li>
+		<li><a href="reports.php">Hlášení</a></li>	
 		<li><a href="persons.php">Osoby</a></li>
-		<li><a href="reports.php">Hlášení</a></li>
-		<li><a href="settings.php">Nastavení</a></li>
-		'.(($usrinfo['right_power'])?'<li><a href="mapagents.php">Mapa agentů</a></li>':'').'
-		<li><a href="http://www.prazskahlidka.cz/forum/index.php" target="_new">Fórum</a></li>
+		<li><a href="cases.php">Případy</a></li>
+		<li><a href="groups.php">Skupiny</a></li>
+		'.(($usrinfo['right_power'])?'<li><a href="mapagents.php">Mapa agentů</a></li>':'').'		
 		<li><a href="http://doodle.com/x39pm7tpgh2py3cw" target="_new">Časová dostupnost</a></li>
+		<li><a href="http://www.prazskahlidka.cz/forum/index.php" target="_new">Fórum</a></li>
+		<li><a href="evilpoints.php">Zlobody</a></li>
+		<li><a href="settings.php">Nastavení</a></li>
+		'.(($usrinfo['right_power'])?'<li><a href="users.php">Uživatelé</a></li>':'').'
 		<li><a href="logout.php">Odhlásit</a></li>
 	</ul>
 	<!--form id="search_menu">
