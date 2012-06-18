@@ -5,8 +5,8 @@
 	sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>nová osoba</strong>');
 ?>
 <div id="obsah">
-	<h1>Nová osoba</h1>
-	<p>Portréty nahrávejte pokud možno ve velikosti 100x130 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen portréty, o rozmazané postavy nebude nouze v přílohách.</p>
+	<fieldset><legend><h1>Nová osoba</h1></legend>
+	<p id="top-text">Portréty nahrávejte pokud možno ve velikosti 100x130 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen portréty, o rozmazané postavy nebude nouze v přílohách.</p>
 	<form action="procperson.php" method="post" id="inputform" enctype="multipart/form-data">
 		<fieldset><legend><h2>Základní údaje</h2></legend>
 			<div id="info">
@@ -65,8 +65,9 @@
 				<textarea cols="80" rows="7" name="contents" id="contents"></textarea>
 			</div>
 		</fieldset>
-		<input type="submit" name="insertperson" id="submitbutton" value="Vložit" />
+		<input type="submit" name="insertperson" id="submitbutton" value="Vložit" title="Vložit osobu"/>
 	</form>
+	</fieldset>
 </div>
 <!-- end of #obsah -->
 <?php
