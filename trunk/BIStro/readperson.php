@@ -29,7 +29,9 @@
 <div id="obsah">
 	<h1><?php echo(StripSlashes($rec['surname']).', '.StripSlashes($rec['name'])); ?></h1>
 	<fieldset><legend><h2>Základní údaje</h2></legend>
-		<img src="getportrait.php?rid=<?php echo($_REQUEST['rid']); ?>" alt="portrét chybí" id="portraitimg" />
+		<?php if($rec['portrait']==NIL){ ?><img src="#" alt="portrét chybí" id="portraitimg" />
+		<?php }else{ ?><img src="getportrait.php?rid=<?php echo($_REQUEST['rid']); ?>" alt="<?php echo(StripSlashes($rec['name']).' '.StripSlashes($rec['surname'])); ?>" id="portraitimg" />
+		<?php } ?>
 		<div id="info">
 			<?php if ($rec['secret']==1) echo '<h2>TAJNÉ</h2>'?>
 			<h3>Jméno: </h3><p><?php echo(StripSlashes($rec['name'])); ?></p>
