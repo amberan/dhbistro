@@ -219,23 +219,28 @@ a:link, a:visited {
 }
 
 #inputform #submitbutton, .otherform .submitbutton {
-	margin-top: 1em;
+	margin: 0px;
 	width: auto;
 	border: 1px outset #E4E0D8;
 	background-color: #E4E0D8;
 }
-
+#inputform #submitbutton {
+	position: absolute;
+	top: 18pt;
+	right: 10px;
+}
 /***********************************/
 /******** další  formuláø  *********/
 /***********************************/
-
+div.otherform-wrap {width:475px;}
 .otherform {
-	margin: 20px;
+	/* margin: 20px; /**/
+	position:relative;
 }
 
 .otherform input, .otherform select {
 	border: 1px inset #DFB96E;
-	width: 200px;
+	/* width: 200px; /**/
 }
 
 .otherform .checkbox {
@@ -246,7 +251,16 @@ a:link, a:visited {
 	width: 450px;
 	height: 300px;
 }
-
+.otherform .submitbutton {
+	position: absolute;
+	right:0px;
+}
+#new-file .submitbutton, #change-groups .submitbutton {
+	bottom:0px;
+}
+#new-note .submitbutton {
+	top:0px;
+}
 /***********************************/
 /***********  aktuality  ***********/
 /***********************************/
