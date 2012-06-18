@@ -9,8 +9,7 @@
 ?>
 <div id="obsah">
 <fieldset><legend><h1>Úprava osoby: <?php echo(StripSlashes($rec_p['surname']).', '.StripSlashes($rec_p['name'])); ?></h1></legend>
-
-	<p>Portréty nahrávejte pokud možno ve velikosti 100x130 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen portréty, o rozmazané postavy nebude nouze v přílohách.</p>
+	<p id="top-text">Portréty nahrávejte pokud možno ve velikosti 100x130 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen portréty, o rozmazané postavy nebude nouze v přílohách.</p>
 	<form action="procperson.php" method="post" id="inputform" enctype="multipart/form-data">
 		<fieldset><legend><h2>Základní údaje</h2></legend>
 		<?php if($rec_p['portrait']==NIL){ ?><img src="#" alt="portrét chybí" id="portraitimg" />
@@ -78,7 +77,7 @@
 			<!-- end of .field-text -->
 		</fieldset>
 		<input type="hidden" name="personid" value="<?php echo $rec_p['id']; ?>" />
-		<input type="submit" name="editperson" id="submitbutton" value="Uložit" />
+		<input type="submit" name="editperson" id="submitbutton" value="Uložit" title="Uložit změny"/>
 	</form>
 
 </fieldset>
@@ -109,7 +108,7 @@
 		?>
 			<div>
 				<input type="hidden" name="personid" value="<?php echo $_REQUEST['rid']; ?>" />
-				<input type="submit" value="Uložit změny" name="setgroups" class="submitbutton" />
+				<input type="submit" value="Uložit změny" name="setgroups" class="submitbutton"  title="Uložit"/>
 			</div>
 		</form>
 		</fieldset>
@@ -161,7 +160,7 @@
 			<div>
 				<input type="hidden" name="personid" value="<?php echo $_REQUEST['rid']; ?>" />
 				<input type="hidden" name="backurl" value="<?php echo 'editperson.php?rid='.$_REQUEST['rid']; ?>" />
-				<input type="submit" name="uploadfile" value="Nahrát soubor k osobě" class="submitbutton" /> 
+				<input type="submit" name="uploadfile" value="Nahrát soubor k osobě" class="submitbutton" title="Uložit"/> 
 			</div>
 		</form>
 		</fieldset>
@@ -232,7 +231,7 @@
 				<input type="hidden" name="itemid" value="<?php echo $_REQUEST['rid']; ?>" />
 				<input type="hidden" name="backurl" value="<?php echo 'editperson.php?rid='.$_REQUEST['rid']; ?>" />
 				<input type="hidden" name="tableid" value="1" />
-				<input type="submit" value="Uložit poznámku" name="setnote" class="submitbutton" />
+				<input type="submit" value="Uložit poznámku" name="setnote" class="submitbutton" title="Uložit"/>
 			</div>
 		</form>
 		</fieldset>
