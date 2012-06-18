@@ -219,15 +219,20 @@ a:link, a:visited {
 }
 
 #inputform #submitbutton, .otherform .submitbutton {
-	margin: 0px;
-	width: auto;
-	border: 1px outset #E4E0D8;
-	background-color: #E4E0D8;
+	position: absolute;
+	overflow:hidden;
+	text-indent: -1000px;
+	border:none;
+	margin:0px;
+	padding:0px;
+	cursor:pointer;
 }
 #inputform #submitbutton {
-	position: absolute;
 	top: 18pt;
 	right: 10px;
+	width:48px;
+	height:48px;
+	background:url('../css/Save-Big.png') no-repeat scroll 0 0 transparent;
 }
 /***********************************/
 /******** další  formuláø  *********/
@@ -254,6 +259,9 @@ div.otherform-wrap {width:475px;}
 .otherform .submitbutton {
 	position: absolute;
 	right:0px;
+	width:24px;
+	height:24px;
+	background:url('../css/Save-small.png') no-repeat scroll 0 0 transparent;
 }
 #new-file .submitbutton, #change-groups .submitbutton {
 	bottom:0px;
@@ -321,6 +329,8 @@ div.otherform-wrap {width:475px;}
 #obsah h3 {font-size:1.05em}
 #obsah h4 {font-size:1em; margin:0.1em 0;}
 
+#obsah p#top-text {margin-top:0px; padding-right:68px;}
+
 #info {padding:0 10px;}
 #info h3, #info p{display:inline; margin:0.2em 0;}
 
@@ -345,8 +355,7 @@ div > .poznamka-edit-buttons {position:absolute;right:0px;top:0px;}
 
 #portraitimg {
 	position: absolute;
-	right: 20px;
-	top: 20px;
+	right: 1.2em;
 	width: 104px;
 	height: 134px;
 	border: 1px solid #808080;
