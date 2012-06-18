@@ -362,7 +362,11 @@ div > .poznamka-edit-buttons {position:absolute;right:0px;top:0px;}
 	padding: 1px;
 	margin: 0 0 20px 20px;
 }
-
+#portraitimg.noname {
+	text-indent:-1000px;
+	overflow:hidden;
+	background:url('../css/noname.png') no-repeat scroll center transparent;
+}
 /***********************************/
 /************  tabulky  ************/
 /***********************************/
