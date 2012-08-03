@@ -83,9 +83,13 @@ K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se t
 		while ($rec=MySQL_Fetch_Assoc($res)) {
 		  echo '<tr class="'.(($even%2==0)?'even':'odd').'"><td><input type="checkbox" name="person[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser'])?' checked="checked"':'').' /></td>
 	<td><select type="role" name="role[]">
-			<option value="0">osoba přítomná</option>'.(($type==1)?'
-			<option value="3"'.(($rec['role']==3)?' selected="selected"':'').'>zatčený</option>':'').(($type==2)?'
-			<option value="1"'.(($rec['role']==1)?' selected="selected"':'').'>vyslýchaný</option><option value="2"'.(($rec['role']==2)?' selected="selected"':'').'>vyslýchající</option>':'').'
+			<option value="0">osoba přítomná</option>
+			<option value="4"'.(($rec['role']==4)?' selected="selected"':'').'>velitel akce</option>'
+			.(($type==1)?'
+			<option value="3"'.(($rec['role']==3)?' selected="selected"':'').'>zatčený</option>':'')
+			.(($type==2)?'
+			<option value="1"'.(($rec['role']==1)?' selected="selected"':'').'>vyslýchaný</option>
+			<option value="2"'.(($rec['role']==2)?' selected="selected"':'').'>vyslýchající</option>':'').'
 		</select></td>
 '.(($sportraits)?'<td><img src="getportrait.php?rid='.$rec['id'].'" alt="portrét chybí" /></td>':'').'
 	<td>'.(($rec['secret'])?'<span class="secret"><a href="readperson.php?rid='.$rec['id'].'">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a></span>':'<a href="readperson.php?rid='.$rec['id'].'">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a>').'</td>
