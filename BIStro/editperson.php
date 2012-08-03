@@ -83,7 +83,7 @@
 </fieldset>
 
 	<div id="change-groups" class="otherform-wrap">
-		<fieldset><legend><h2>Přazení skupiny</h2></legend>
+		<fieldset><legend><h2>Přiřazení skupiny</h2></legend>
 		<p>Osobě můžete přiřadit skupiny, do kterých patří. Opačnou akci lze provést u skupiny, kde přiřazujete pro změnu osoby dané skupině. Akce jsou si rovnocenné a je tedy nutná pouze jedna z nich.</p>
 		<form action="procperson.php" method="post" class="otherform">
 		<?php
