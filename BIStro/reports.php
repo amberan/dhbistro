@@ -45,6 +45,8 @@
 	  case 2: $fsql_sort=' '.DB_PREFIX.'reports.datum ASC '; break;
 	  case 3: $fsql_sort=' '.DB_PREFIX.'users.login ASC '; break;
 	  case 4: $fsql_sort=' '.DB_PREFIX.'users.login DESC '; break;
+	  case 5: $fsql_sort=' '.DB_PREFIX.'reports.adatum ASC '; break;
+	  case 6: $fsql_sort=' '.DB_PREFIX.'reports.adatum DESC '; break;
 	  default: $fsql_sort=' '.DB_PREFIX.'reports.datum DESC ';
 	}
 	switch ($f_stat) {
@@ -86,10 +88,12 @@
 	<option value="1"'.(($f_cat==1)?' selected="selected"':'').'>z výjezdu</option>
 	<option value="2"'.(($f_cat==2)?' selected="selected"':'').'>z výslechu</option>
 </select> a seřadit je podle <select name="sort">
-	<option value="1"'.(($f_sort==1)?' selected="selected"':'').'>data sestupně</option>
-	<option value="2"'.(($f_sort==2)?' selected="selected"':'').'>data vzestupně</option>
+	<option value="1"'.(($f_sort==1)?' selected="selected"':'').'>data hlášení sestupně</option>
+	<option value="2"'.(($f_sort==2)?' selected="selected"':'').'>data hlášení vzestupně</option>
 	<option value="3"'.(($f_sort==3)?' selected="selected"':'').'>jména autora vzestupně</option>
 	<option value="4"'.(($f_sort==4)?' selected="selected"':'').'>jména autora sestupně</option>
+	<option value="5"'.(($f_sort==5)?' selected="selected"':'').'>data výjezdu vzestupně</option>
+	<option value="6"'.(($f_sort==6)?' selected="selected"':'').'>data výjezdu sestupně</option>
 </select>.</br>
 	<input type="checkbox" name="my" value="my" class="checkbox"'.(($f_my==1)?' checked="checked"':'').' /> Jen moje.<br />
 	<input type="checkbox" name="conn" value="conn" class="checkbox"'.(($f_conn==1)?' checked="checked"':'').' /> Jen nepřiřazené.';
@@ -108,6 +112,7 @@
 		$sql="SELECT
 			".DB_PREFIX."reports.id AS 'id',
 	        ".DB_PREFIX."reports.datum AS 'datum',
+	        ".DB_PREFIX."reports.adatum AS 'adatum',
 	        ".DB_PREFIX."reports.label AS 'label',
 	        ".DB_PREFIX."reports.task AS 'task',
 	        ".DB_PREFIX."users.login AS 'autor',
@@ -120,6 +125,7 @@
 		$sql="SELECT
 			".DB_PREFIX."reports.id AS 'id',
 	        ".DB_PREFIX."reports.datum AS 'datum',
+	        ".DB_PREFIX."reports.adatum AS 'adatum',
 	        ".DB_PREFIX."reports.label AS 'label',
 	        ".DB_PREFIX."reports.task AS 'task',
 	        ".DB_PREFIX."reports.status AS 'status',
@@ -140,7 +146,7 @@
 	  	echo '   | <td><a href="newnote.php?rid='.$rec['id'].'&idtable=4">přidat poznámku</a></td>';
 	  	}
 	  echo '</span>
-	<p><span>['.Date ('d. m. Y - H:i:s',$rec['datum']).']</span> '.$rec['autor'].'<br /> <strong>Úkol: </strong>'
+	<p><span>['.Date ('d. m. Y - H:i:s',$rec['datum']).']</span> '.$rec['autor'].', Datum výjezdu: <span>['.Date ('d. m. Y - H:i:s',$rec['adatum']).']</span><br /> <strong>Úkol: </strong>'
 	.StripSlashes($rec['task']).'&nbsp; <strong>Stav:</strong> ';
 	  if(($rec['status'])=='0') echo 'Rozpracované';
 	  if(($rec['status'])=='1') echo 'Dokončené';
