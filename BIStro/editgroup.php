@@ -5,100 +5,99 @@
 	sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>úprava skupiny</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."groups WHERE id=".$_REQUEST['rid']);
-		if ($rec=MySQL_Fetch_Assoc($res)) {
+		if ($rec_g=MySQL_Fetch_Assoc($res)) {
 ?>
 <div id="obsah">
-	<form action="procgroup.php" method="post" id="inputform">
-			<h1><label for="title">Název:</label></h1>
-			<input type="text" name="title" id="title" value="<?php echo StripSlashes($rec['title']); ?>" />
-			<input type="hidden" name="secret" value="<?php echo (($rec['secret']==0)?'0':'1'); ?>" />
-			<input type="hidden" name="contents" value="<?php echo StripSlashes($rec['contents']); ?>" />
-			<input type="hidden" name="groupid" value="<?php echo $rec['id']; ?>" />
-			<input type="submit" name="editgroup" id="submitbutton" value="Uložit změny" />
-	</form>
-	<fieldset><legend><h2>Obecné informace</h2></legend>
-		<div id="info">	
-			<form action="procgroup.php" method="post" id="inputform">
-				<input type="hidden" name="title" value="<?php echo StripSlashes($rec['title']); ?>" />
-				<h3><label for="secret">Přísně tajné: </label></h3>
-				<select name="secret" id="secret">
-					<option value="0"<?php if ($rec['secret']==0) { echo ' selected="selected"'; } ?>>ne</option>
-					<option value="1"<?php if ($rec['secret']==1) { echo ' selected="selected"'; } ?>>ano</option>
-				</select>
-				<input type="hidden" name="contents" value="<?php echo StripSlashes($rec['contents']); ?>" />
-				<input type="hidden" name="groupid" value="<?php echo $rec['id']; ?>" />
-				<input type="submit" name="editgroup" id="submitbutton" value="Uložit změny" />
-			</form>
-	
-			<form action="addp2g.php" method="post" class="otherform">
-				<h3>Členové: </h3><p><?php
-					$sql="SELECT ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname' FROM ".DB_PREFIX."g2p, ".DB_PREFIX."persons WHERE ".DB_PREFIX."persons.id=".DB_PREFIX."g2p.idperson AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
-					$pers=MySQL_Query ($sql);
-					$persons=Array();
-					while ($perc=MySQL_Fetch_Assoc($pers)) {
-						$persons[]='<a href="readperson.php?rid='.$perc['id'].'">'.$perc['surname'].', '.$perc['name'].'</a>';
-					}
-					echo ((implode($persons, '; ')<>"")?implode($persons, '; '):'<em>Nejsou připojeny žádné osoby.</em>');
-				?></p>
-				<input type="hidden" name="rid" value="<?php echo $_REQUEST['rid']; ?>" />
-				<input type="submit" value="Upravit osoby" name="setperson" class="submitbutton" />
-			</form>
-		</div>
-	</fieldset>
-
+<fieldset><legend><h1>Úprava skupiny: <?php echo StripSlashes($rec_g['title']); ?></h1></legend>
+<form action="procgroup.php" method="post" id="inputform">
+	<div id="info">	
+		<h3><label for="title">Název:</label></h3>
+		<input type="text" name="title" id="title" value="<?php echo StripSlashes($rec_g['title']); ?>" />
+		<div class="clear">&nbsp;</div>
+		<h3><label for="secret">Přísně&nbsp;tajné:</label></h3>
+			<input type="radio" name="secret" value="0" <?php if ($rec_g['secret']==0) { ?>checked="checked"<?php } ?>/>ne<br/>
+			<h3><label>&nbsp;</label></h3><input type="radio" name="secret" value="1"<?php if ($rec_g['secret']==1) { ?>checked="checked"<?php } ?>>ano
+		<div class="clear">&nbsp;</div>
+	</div>
+	<!-- end of #info -->
 	<fieldset><legend><h2>Popis:</h2></legend>
-		<form action="procgroup.php" method="post" id="inputform">
-			<textarea cols="80" rows="7" name="contents" id="contents"><?php echo StripSlashes($rec['contents']); ?></textarea>
-			<div>
-				<input type="hidden" name="title" value="<?php echo StripSlashes($rec['title']); ?>" />
-				<input type="hidden" name="secret" value="<?php echo (($rec['secret']==0)?'0':'1'); ?>" />
-				<input type="hidden" name="groupid" value="<?php echo $rec['id']; ?>" />
-				<input type="submit" name="editgroup" id="submitbutton" value="Uložit změny" />
-			</div>
-		</form>
-	</fieldset>	
+		<textarea cols="80" rows="7" name="contents" id="contents"><?php echo StripSlashes($rec_g['contents']); ?></textarea>
+	</fieldset>
+	<input type="hidden" name="groupid" value="<?php echo $rec_g['id']; ?>" />
+	<input type="submit" name="editgroup" id="submitbutton" value="Uložit změny"  title="Uložit změny"/>
+</form>
+</fieldset>
+
+	<fieldset><legend><h2>Členové: </h2></legend>
+	<form action="addp2g.php" method="post" class="otherform">
+		<input type="hidden" name="rid" value="<?php echo $_REQUEST['rid']; ?>" />
+		<input type="submit" value="Upravit osoby" name="setperson" class="submitbutton editbutton" title="Upravit členy"/>
+	</form>
+	<p><?php
+	$sql="SELECT ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname' FROM ".DB_PREFIX."g2p, ".DB_PREFIX."persons WHERE ".DB_PREFIX."persons.id=".DB_PREFIX."g2p.idperson AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
+	$pers=MySQL_Query ($sql);
+	$persons=Array();
+	while ($perc=MySQL_Fetch_Assoc($pers)) {
+		$persons[]='<a href="readperson.php?rid='.$perc['id'].'">'.$perc['surname'].', '.$perc['name'].'</a>';
+	}
+	echo ((implode($persons, '; ')<>"")?implode($persons, '; '):'<em>Nejsou připojeny žádné osoby.</em>');
+	?></p>
+	</fieldset>
 	
-	<fieldset><legend><h2>Aktuálně připojené soubory:</h2></legend>
-		<form action="procgroup.php" method="post" enctype="multipart/form-data" class="otherform">
-			<div><span>
-				<label for="attachment">Soubor:</label>
-				<input type="file" name="attachment" id="attachment" />
-			</span>
-			<span>&nbsp;</span>
-			<span>
-				<label for="usecret">Přísně tajné:</label>
-				<select name="secret" id="usecret">
-					<option value="0">ne</option>
-					<option value="1">ano</option>
-				</select>
-			</span>
-			<span>&nbsp;</span>
-			<span>
-				<input type="hidden" name="groupid" value="<?php echo $_REQUEST['rid']; ?>" />
-				<input type="hidden" name="backurl" value="<?php echo 'editgroup.php?rid='.$_REQUEST['rid']; ?>" />
-				<input type="submit" name="uploadfile" value="Nahrát soubor ke skupině" class="submitbutton" /> 
-			</span></div>
-			<em style="font-size:smaller;">K osobě je možné nahrát neomezené množství souborů, ale velikost jednoho souboru je omezena na 2 MB.</em>
-		</form>
-		<ul>
-		<?php
+	<!-- následuje seznam přiložených souborů -->
+	<fieldset><legend><h3>Přiložené soubory</h3></legend>
+		<strong><em>K osobě je možné nahrát neomezené množství souborů, ale velikost jednoho souboru je omezena na 2 MB.</em></strong>
+		<?php //generování seznamu přiložených souborů
 			if ($usrinfo['right_power']) {
-				$sql="SELECT ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=2 ORDER BY ".DB_PREFIX."data.originalname ASC";
+				$sql="SELECT ".DB_PREFIX."data.iduser AS 'iduser', ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.secret AS 'secret', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=1 ORDER BY ".DB_PREFIX."data.originalname ASC";
 			} else {
-			  $sql="SELECT ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=2 AND ".DB_PREFIX."data.secret=0 ORDER BY ".DB_PREFIX."data.originalname ASC";
+			  $sql="SELECT ".DB_PREFIX."data.iduser AS 'iduser', ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.secret AS 'secret', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=1 AND ".DB_PREFIX."data.secret=0 ORDER BY ".DB_PREFIX."data.originalname ASC";
 			}
 			$res=MySQL_Query ($sql);
-			while ($rec=MySQL_Fetch_Assoc($res)) {
-				echo '<li><a href="getfile.php?idfile='.$rec['id'].'">'.StripSlashes($rec['title']).'</a> &mdash; <a href="procgroup.php?deletefile='.$rec['id'].'&amp;groupid='.$_REQUEST['rid'].'" onclick="'."return confirm('Opravdu odebrat soubor &quot;".StripSlashes($rec['title'])."&quot; náležící ke skupině?');".'">smazat soubor</a></li>';
+			$i=0;
+			while ($rec_f=MySQL_Fetch_Assoc($res)) { 
+				$i++; 
+				if($i==1){ ?>
+		<ul id="prilozenadata">
+				<?php } ?>
+			<li class="soubor"><a href="getfile.php?idfile=<?php echo($rec_f['id']); ?>" title=""><?php echo(StripSlashes($rec_f['title'])); ?></a><?php if($rec_f['secret']==1){ ?> (TAJNÝ)<?php }; ?><span class="poznamka-edit-buttons"><?php
+				if (($rec_f['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo '<a class="delete" title="smazat" href="procperson.php?deletefile='.$rec_f['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('editperson.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat osobu &quot;'.StripSlashes($rec_f['title']).'&quot; náležící k osobě?\')"><span class="button-text">smazat soubor</span></a>'; ?>
+				</span></li><?php 
 			}
-		?>
+			if($i<>0){ ?>
 		</ul>
+		<!-- end of #prilozenadata -->
+		<?php 
+			}else{?><br />
+		<em>bez přiložených souborů</em><?php
+			}
+		// konec seznamu přiložených souborů ?>
 	</fieldset>
 
-	<fieldset><legend><h2>Aktuálně připojené poznámky:</h2></legend>
-		<form action="procnote.php" method="post" class="otherform">
-			<span class="poznamka-edit-buttons"><a class="new" href="newnote.php?rid=<?php echo $_REQUEST['rid']; ?>&amp;idtable=2" title="nová poznámka"><span class="button-text">nová poznámka</span></a><em style="font-size:smaller;"> (K případu si můžete připsat kolik chcete poznámek.)</em></span>
+	<div id="new-file" class="otherform-wrap">
+		<fieldset><legend><strong>Nový soubor</strong></legend>
+		<form action="procperson.php" method="post" enctype="multipart/form-data" class="otherform">
+			<div>
+				<strong><label for="attachment">Soubor:</label></strong>
+				<input type="file" name="attachment" id="attachment" />
+			</div>
+			<div>
+				<strong><label for="usecret">Přísně tajné:</label></strong>
+			  	<?php if ($rec_g['secret']!=1) { ?>&nbsp;<input type="radio" name="secret" value="0" checked="checked"/>ne&nbsp;/<?php }; ?>
+				&nbsp;<input type="radio" name="secret" value="1" <?php if ($rec_g['secret']==1){ ?>checked="checked"<?php }; ?>/>ano
+			</div>
+			<div>
+				<input type="hidden" name="personid" value="<?php echo $_REQUEST['rid']; ?>" />
+				<input type="hidden" name="backurl" value="<?php echo 'editperson.php?rid='.$_REQUEST['rid']; ?>" />
+				<input type="submit" name="uploadfile" value="Nahrát soubor k osobě" class="submitbutton" title="Uložit"/> 
+			</div>
 		</form>
+		</fieldset>
+	</div>
+	<!-- end of #new-file .otherform-wrap -->
+	
+	<fieldset><legend><h2>Aktuálně připojené poznámky:</h2></legend>
+		<span class="poznamka-edit-buttons"><a class="new" href="newnote.php?rid=<?php echo $_REQUEST['rid']; ?>&amp;idtable=2" title="nová poznámka"><span class="button-text">nová poznámka</span></a><em style="font-size:smaller;"> (K případu si můžete připsat kolik chcete poznámek.)</em></span>
 		<ul>
 		<?php
 		if ($usrinfo['right_power']) {
@@ -120,6 +119,7 @@
 		?>
 		</ul>
 	</fieldset>
+
 </div>
 <!-- end of #obsah -->
 <?php

@@ -63,8 +63,8 @@
 				<input type="file" name="portrait" id="portrait" />
 				<div class="clear">&nbsp;</div>
 				<h3><label for="secret">Přísně&nbsp;tajné:</label></h3>
-					<input type="radio" name="secret" id="secret" value="0" <?php if ($rec_p['secret']==0) { echo 'checked'; } ?>/>ne<br/>
-					<h3><label>&nbsp;</label></h3><input type="radio" name="secret" id="secret" value="1"<?php if ($rec_p['secret']==1) { echo 'checked'; } ?>>ano
+					<input type="radio" name="secret" value="0" <?php if ($rec_p['secret']==0) { ?>checked="checked"<?php } ?>/>ne<br/>
+					<h3><label>&nbsp;</label></h3><input type="radio" name="secret" value="1"<?php if ($rec_p['secret']==1) { ?>checked="checked"<?php } ?>>ano
 				<div class="clear">&nbsp;</div>
 			</div>
 			<!-- end of #info -->
@@ -154,8 +154,8 @@
 			</div>
 			<div>
 				<strong><label for="usecret">Přísně tajné:</label></strong>
-			  	<?php if ($rec_p['secret']!=1) { ?>&nbsp;<input type="radio" name="secret" id="usecret" value="0" checked/>ne&nbsp;/<?php }; ?>
-				&nbsp;<input type="radio" name="secret" id="usecret" value="1" <?php if ($rec_p['secret']==1){ echo 'checked';}; ?>/>ano
+			  	<?php if ($rec_p['secret']!=1) { ?>&nbsp;<input type="radio" name="secret" value="0" checked="checked"/>ne&nbsp;/<?php }; ?>
+				&nbsp;<input type="radio" name="secret" value="1" <?php if ($rec_p['secret']==1){ ?>checked="checked"<?php }; ?>/>ano
 			</div>
 			<div>
 				<input type="hidden" name="personid" value="<?php echo $_REQUEST['rid']; ?>" />
@@ -168,7 +168,7 @@
 	<!-- end of #new-file .otherform-wrap -->
 	
 	<fieldset><legend><h3>Poznámky</h3></legend>
-		<strong><em>K osobě si můžete připsat kolik chcete poznámek.</em></strong>
+		<span class="poznamka-edit-buttons"><a class="new" href="newnote.php?rid=<?php echo $_REQUEST['rid']; ?>&amp;idtable=1" title="nová poznámka"><span class="button-text">nová poznámka</span></a><em style="font-size:smaller;"> (K případu si můžete připsat kolik chcete poznámek.)</em></span>
 		<!-- následuje seznam poznámek -->
 		<?php // generování poznámek
 			if ($usrinfo['right_power']) {
@@ -219,9 +219,9 @@
 			</div>
 			<div>
 			  <strong><label for="nsecret">Utajení:</label></strong>
-			  	<?php if ($rec_p['secret']!=1) { ?>&nbsp;<input type="radio" name="secret" id="nsecret" value="0" checked/>veřejná&nbsp;/<?php }; ?>
-				&nbsp;<input type="radio" name="secret" id="nsecret" value="1" <?php if ($rec_p['secret']==1){ echo 'checked';}; ?>/>tajná&nbsp;/
-				&nbsp;<input type="radio" name="secret" id="nsecret" value="2" />soukromá
+			  	<?php if ($rec_p['secret']!=1) { ?>&nbsp;<input type="radio" name="secret" id="nsecret" value="0" checked="checked"/>veřejná&nbsp;/<?php }; ?>
+				&nbsp;<input type="radio" name="secret" value="1" <?php if ($rec_p['secret']==1){ ?>checked="checked"<?php }; ?>/>tajná&nbsp;/
+				&nbsp;<input type="radio" name="secret" value="2" />soukromá
 			</div>
 			<div>
 				<!--  label for="notebody">Tělo poznámka:</label -->
