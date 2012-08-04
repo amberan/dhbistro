@@ -4,28 +4,28 @@
 	mainMenu (3);
 	sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>nová skupina</strong>');
 ?>
+<div id="obsah">
 <form action="procgroup.php" method="post" id="inputform">
-	<div>
-	  <label for="title">Název:</label>
-	  <input type="text" name="title" id="title" />
+<fieldset><legend><h1>Nová skupina</h1></legend>
+	<div id="info">
+		<h3><label for="title">Název:</label></h3>
+		<input type="text" name="title" id="title" />
+		<div class="clear">&nbsp;</div>	
+		<h3><label for="secret">Přísně&nbsp;tajné:</label></h3>
+			<input type="radio" name="secret" value="0" checked="checked"/>ne<br />
+			<h3><label>&nbsp;</label></h3><input type="radio" name="secret" value="1"/>ano
+		<div class="clear">&nbsp;</div>
 	</div>
-	<div>
-	  <label for="secret">Přísně tajné:</label>
-		<select name="secret" id="secret">
-		  <option value="0">ne</option>
-			<option value="1">ano</option>
-		</select>
-	</div>
-	<div>
-	  <label for="contents">Popis:</label>
-	</div>
-	<div>
-	  <textarea cols="80" rows="7" name="contents" id="contents"></textarea>
-	</div>
-	<div>
-	  <input type="submit" name="insertgroup" id="submitbutton" value="Vložit" />
-	</div>
+	<!-- end of #info -->
+	
+	<fieldset><legend><h2>Popis</h2></legend>
+		  <textarea cols="80" rows="7" name="contents" id="contents"></textarea>
+	</fieldset>
+		  <input type="submit" name="insertgroup" id="submitbutton" value="Vložit" />
+</fieldset>
 </form>
+</div>
+<!-- end of #obsah -->
 <?php
 	pageEnd ();
 ?>

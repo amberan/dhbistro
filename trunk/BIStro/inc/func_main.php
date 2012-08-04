@@ -73,7 +73,7 @@
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cs">
-  <head>
+<head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title><?php echo (($loggedin)?$usrinfo['login'].' @ ':'')?>Mazzarino <?php echo $mazzarino_version;?> | <?php echo $title;?></title>
     <meta name="Author" content="Jakub Ethan Kraft, David Ambeřan Maleček" />
@@ -92,8 +92,9 @@
 		<script type="text/javascript" src="./js/tiny_mce/tiny_mce_gzip.js"></script>
 		<script type="text/javascript" src="./js/tiny_mce_gz.js"></script>
     <script type="text/javascript" src="./js/tiny_mce_settings.js"></script>
-  </head>
-  <body>
+</head>
+<body>
+<div id="wrapper">
 <?php
 	}
 	
@@ -107,7 +108,9 @@
 		$totaltime = ($endtime - $starttime);
 	  echo '		<!-- Vygenerováno za '.$totaltime.' vteřin -->';
 ?>
-	</body>
+</div>
+<!-- end of #wrapper -->
+</body>
 </html>
 <?php
 	}
@@ -127,13 +130,14 @@
 		<li><a href="evilpoints.php">Zlobody</a></li>
 		<li><a href="settings.php">Nastavení</a></li>
 		'.(($usrinfo['right_power'])?'<li><a href="users.php">Uživatelé</a></li>':'').'
-		<li><a href="logout.php">Odhlásit</a></li>
+		<li class="float-right"><a href="logout.php">Odhlásit</a></li>
 	</ul>
-	<!--form id="search_menu">
+	<!-- form id="search_menu">
 		<input type="text" name="query" />
 		<input type="submit" value="Hledat" />
-	</form-->
-</div>';
+	</form -->
+</div>
+<!-- end of #menu -->';
 	}
 	
 	function sparklets ($path,$actions='') {

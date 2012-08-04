@@ -83,7 +83,7 @@
 		}
 		$res=MySQL_Query ($sql);
 		if (MySQL_Num_Rows($res)) {
-	  echo '<div id="obsah">
+	  echo '<div id=""><!-- je treba dostylovat -->
 <table>
 <thead>
 	<tr>
