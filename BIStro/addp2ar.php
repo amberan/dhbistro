@@ -24,7 +24,6 @@
 <p>
 K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se týkat mohl.
 </p>
-</div>
 
 <?php
 	// zpracovani filtru
@@ -67,7 +66,7 @@ K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se t
 	}
 	$res=MySQL_Query ($sql);
 	if (MySQL_Num_Rows($res)) {
-	  echo '<div id="obsah">
+	  echo '<div id="">
 <table>
 <thead>
 	<tr>
@@ -108,6 +107,8 @@ K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se t
 </div>
 </form>
 
+</div>
+<!-- end of #obsah -->
 <?php
 		} else {
 		  echo '<div id="obsah"><p>Hlášení neexistuje. Rid='.$_REQUEST['rid'].'</p></div>';

@@ -14,7 +14,6 @@
 <p>
 Hlášení můžete přiřadit k případu (či případům), kterého se týká.
 </p>
-</div>
 
 <?php
 // zpracovani filtru
@@ -51,7 +50,7 @@ if ($usrinfo['right_power']) {
 }
 $res=MySQL_Query ($sql);
 if (MySQL_Num_Rows($res)) {
-	echo '<div id="obsah">
+	echo '<div id="">
 	<table>
 	<thead>
 	<tr>
@@ -86,6 +85,8 @@ pageEnd ();
 </div>
 </form>
 
+</div>
+<!-- end of #obsah -->
 <?php
 		} else {
 		  echo '<div id="obsah"><p>Hlášení neexistuje. Rid='.$_REQUEST['rid'].'</p></div>';

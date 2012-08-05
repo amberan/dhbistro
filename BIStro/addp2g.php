@@ -12,7 +12,6 @@
 <p>
 Do skupiny můžete přiřadit osoby, které jsou jejími členy.
 </p>
-</div>
 
 <?php
 	// zpracovani filtru
@@ -55,7 +54,7 @@ Do skupiny můžete přiřadit osoby, které jsou jejími členy.
 	}
 	$res=MySQL_Query ($sql);
 	if (MySQL_Num_Rows($res)) {
-	  echo '<div id="obsah">
+	  echo '<div id="">
 <table>
 <thead>
 	<tr>
@@ -86,6 +85,8 @@ Do skupiny můžete přiřadit osoby, které jsou jejími členy.
 </div>
 </form>
 
+</div>
+<!-- end of #obsah -->
 <?php
 		} else {
 		  echo '<div id="obsah"><p>Skupina neexistuje. Rid='.$_REQUEST['rid'].'</p></div>';
