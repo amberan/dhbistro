@@ -12,7 +12,6 @@
 <p>
 K případu můžete přiřadit hlášení, která se ho týkají.
 </p>
-</div>
 
 <?php
 		// zpracovani filtru
@@ -125,6 +124,8 @@ K případu můžete přiřadit hlášení, která se ho týkají.
 </div>
 </form>
 
+</div>
+<!-- end of #obsah -->
 <?php
 		} else {
 		  echo '<div id="obsah"><p>Hlášení neexistuje. Rid='.$_REQUEST['rid'].'</p></div>';

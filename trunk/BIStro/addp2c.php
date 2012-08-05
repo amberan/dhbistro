@@ -12,7 +12,6 @@
 <p>
 K případu můžete přiřadit osoby, kterých se týká nebo kterých by se týkat mohl.
 </p>
-</div>
 
 <?php
 	// zpracovani filtru
@@ -55,7 +54,7 @@ K případu můžete přiřadit osoby, kterých se týká nebo kterých by se t�
 	}
 	$res=MySQL_Query ($sql);
 	if (MySQL_Num_Rows($res)) {
-	  echo '<div id="obsah">
+	  echo '<div id="">
 <table>
 <thead>
 	<tr>
@@ -86,6 +85,8 @@ K případu můžete přiřadit osoby, kterých se týká nebo kterých by se t�
 </div>
 </form>
 
+</div>
+<!-- end of #obsah -->
 <?php
 		} else {
 		  echo '<div id="obsah"><p>Případ neexistuje. Rid='.$_REQUEST['rid'].'</p></div>';
