@@ -5,7 +5,7 @@
   $starttime = $mtime;
 	
 	// verze
-	$mazzarino_version='0.9.99 - BIStro';
+	$mazzarino_version='1.0.1';
   
 	// sessions
 	session_start();
@@ -75,9 +75,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cs">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title><?php echo (($loggedin)?$usrinfo['login'].' @ ':'')?>Mazzarino <?php echo $mazzarino_version;?> | <?php echo $title;?></title>
+    <title><?php echo (($loggedin)?$usrinfo['login'].' @ ':'')?>BIStro <?php echo $mazzarino_version;?> | <?php echo $title;?></title>
     <meta name="Author" content="Jakub Ethan Kraft, David Ambeřan Maleček" />
-    <meta name="Copyright" content="2006 - 2007" />
+    <meta name="Copyright" content="2006 - 2012" />
     <meta http-equiv="Content-language" content="cs" />
     <meta http-equiv="Cache-control" content="no-cache" />
     <meta http-equiv="Pragma" content="no-cache" />
