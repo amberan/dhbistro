@@ -83,7 +83,7 @@ K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se t
 		  echo '<tr class="'.(($even%2==0)?'even':'odd').'"><td><input type="checkbox" name="person[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser'])?' checked="checked"':'').' /></td>
 	<td><select type="role" '.(($rec['iduser'])?' name="role[]':'name="norole[]').'">
 			<option value="0">osoba přítomná</option>
-			<option value="4"'.(($rec['role']==4)?' selected="selected"':'').'>velitel akce</option>'
+			<option value="4"'.(($rec['role']==4)?' selected="selected"':'').'>velitel zásahu</option>'
 			.(($type==1)?'
 			<option value="3"'.(($rec['role']==3)?' selected="selected"':'').'>zatčený</option>':'')
 			.(($type==2)?'
