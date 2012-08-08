@@ -3,15 +3,19 @@ require_once ('./inc/func_main.php');
 pageStart ('Nová poznámka');
 mainMenu (4);
 switch ($_REQUEST['idtable']) {
-				case 1: $sourceurl="editperson.php"; $sourcename="osoby"; break;
-				case 2: $sourceurl="editgroup.php"; $sourcename="skupiny"; break;
-				case 3: $sourceurl="editcase.php"; $sourcename="případy"; break;
-				case 4: $sourceurl="editreport.php"; $sourcename="hlášení"; break;
+				case 1: $sourceurl1="editperson.php"; $sourceurl2="editperson.php"; $sourcename="osoba"; $idtable=1; break;
+				case 2: $sourceurl1="editgroup.php"; $sourceurl2="editgroup.php"; $sourcename="skupina"; $idtable=2;  break;
+				case 3: $sourceurl1="editcase.php"; $sourceurl2="editcase.php"; $sourcename="případ"; $idtable=3; break;
+				case 4: $sourceurl1="editactrep.php"; $sourceurl2="editactrep.php"; $sourcename="hlášení"; $idtable=4; break;
+				case 5: $sourceurl1="readperson.php?rid=".$_REQUEST['rid']."&hidenotes=0"; $sourceurl2="persons.php"; $sourcename="osoby"; $idtable=1; break;
+				case 6: $sourceurl1="readgroup.php?rid=".$_REQUEST['rid']."&hidenotes=0"; $sourceurl2="groups.php"; $sourcename="skupiny"; $idtable=2; break;
+				case 7: $sourceurl1="readcase.php?rid=".$_REQUEST['rid']."&hidenotes=0"; $sourceurl2="cases.php"; $sourcename="případy"; $idtable=3; break;
+				case 8: $sourceurl1="readactrep.php?rid=".$_REQUEST['rid']."&hidenotes=0"; $sourceurl2="reports.php"; $sourcename="hlášení"; $idtable=4; break;
 				default: $sourceurl=""; $sourcename=""; break;
 			}
-sparklets ('<a href="./'.$sourceurl.'">'.$sourcename.'</a> &raquo; <strong>nová poznámka</strong>');
+sparklets ('<a href="./'.$sourceurl2.'">'.$sourcename.'</a> &raquo; <strong>nová poznámka</strong>');
 if (is_numeric($_REQUEST['rid'])) {
-?>
+	?>
 <div id="obsah">
 	<form action="procnote.php" method="post" class="otherform">
 		<p>K osobě si můžete připsat kolik chcete poznámek.</p>
@@ -34,8 +38,8 @@ if (is_numeric($_REQUEST['rid'])) {
 		</div>
 		<div>
 			<input type="hidden" name="itemid" value="<?php echo $_REQUEST['rid']; ?>" />
-			<input type="hidden" name="backurl" value="<?php echo $sourceurl; ?>?rid=<?php echo $_REQUEST['rid']; ?>" />
-			<input type="hidden" name="tableid" value="<?php echo $_REQUEST['idtable']; ?>" />
+			<input type="hidden" name="backurl" value="<?php echo $sourceurl1; ?>?rid=<?php echo $_REQUEST['rid']; ?>" />
+			<input type="hidden" name="tableid" value="<?php echo $idtable; ?>" />
 			<input type="submit" value="Uložit poznámku" name="setnote" class="submitbutton" />
 		</div>
 	</form>
@@ -43,7 +47,7 @@ if (is_numeric($_REQUEST['rid'])) {
 <!-- end of #obsah -->
 <?php
 	}else{
-		echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
+		echo '<div id="obsah"><p>Tohle nezkoušejte.';
 	}
 pageEnd ();
 ?>

@@ -67,7 +67,7 @@
 		while ($rec=MySQL_Fetch_Assoc($res)) {
 		  echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 	<td>'.(($rec['secret'])?'<span class="secret"><a href="readgroup.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a></span>':'<a href="readgroup.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a>').'</td>
-'.(($usrinfo['right_text'])?'	<td><a href="editgroup.php?rid='.$rec['id'].'">upravit</a> | <a href="procgroup.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat skupinu &quot;".StripSlashes($rec['title'])."&quot;?');".'">smazat</a></td>':'<td><a href="newnote.php?rid='.$rec['id'].'&idtable=2">přidat poznámku</a></td>').'
+'.(($usrinfo['right_text'])?'	<td><a href="editgroup.php?rid='.$rec['id'].'">upravit</a> | <a href="procgroup.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat skupinu &quot;".StripSlashes($rec['title'])."&quot;?');".'">smazat</a></td>':'<td><a href="newnote.php?rid='.$rec['id'].'&idtable=6">přidat poznámku</a></td>').'
 </tr>';
 			$even++;
 		}
