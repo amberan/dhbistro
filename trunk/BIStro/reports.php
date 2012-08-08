@@ -143,7 +143,7 @@
 	  if (($usrinfo['right_text']) || ($usrinfo['id']==$rec['riduser'] && $rec['status']<1)) {
 	   	echo '	 | <td><a href="editactrep.php?rid='.$rec['id'].'">upravit</a> | <a href="procactrep.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat hlášení &quot;".StripSlashes($rec['label'])."&quot;?');".'">smazat</a></td>';
 	  } else {
-	  	echo '   | <td><a href="newnote.php?rid='.$rec['id'].'&idtable=4">přidat poznámku</a></td>';
+	  	echo '   | <td><a href="newnote.php?rid='.$rec['id'].'&idtable=8">přidat poznámku</a></td>';
 	  	}
 	  echo '</span>
 	<p><span>['.Date ('d. m. Y - H:i:s',$rec['datum']).']</span> '.$rec['autor'].', Datum akce: <span>['.Date ('d. m. Y - H:i:s',$rec['adatum']).']</span><br /> <strong>Úkol: </strong>'

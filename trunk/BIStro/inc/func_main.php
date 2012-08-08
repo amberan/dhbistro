@@ -62,9 +62,9 @@
 // TOHLE NEZAPOMENOUT ODKOMENTOVAT V OSTRE VERZI	
   // overeni prihlaseni, nutno zmenit jmeno souboru na ostre verzi
   $free_pages = array ($page_prefix.'/login.php');
-	if (!$loggedin && !in_array($_SERVER['PHP_SELF'],$free_pages)) {
+//	if (!$loggedin && !in_array($_SERVER['PHP_SELF'],$free_pages)) {
 //		Header ('location: login.php');
-	}
+//	}
 
 	// vypis zacatku stranky
 	function pageStart ($title,$infotext='') {
