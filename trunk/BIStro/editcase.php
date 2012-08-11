@@ -122,7 +122,7 @@
 	<!-- end of #new-file .otherform-wrap -->
 	
 	<fieldset><legend><h2>Aktuálně připojené poznámky:</h2></legend>
-		<span class="poznamka-edit-buttons"><a class="new" href="newnote.php?rid=<?php echo $_REQUEST['rid']; ?>&amp;idtable=2" title="nová poznámka"><span class="button-text">nová poznámka</span></a><em style="font-size:smaller;"> (K případu si můžete připsat kolik chcete poznámek.)</em></span>
+		<span class="poznamka-edit-buttons"><a class="new" href="newnote.php?rid=<?php echo $_REQUEST['rid']; ?>&amp;idtable=3" title="nová poznámka"><span class="button-text">nová poznámka</span></a><em style="font-size:smaller;"> (K případu si můžete připsat kolik chcete poznámek.)</em></span>
 		<ul>
 		<?php
 		if ($usrinfo['right_power']) {
@@ -132,12 +132,12 @@
 		}
 		$res_n=MySQL_Query ($sql_n);
 		while ($rec_n=MySQL_Fetch_Assoc($res_n)) { ?>
-			<li><a href="readnote.php?rid=<?php echo $rec_n['id']; ?>&amp;idtable=2"><?php echo StripSlashes($rec_n['title']); ?></a> - <?php echo StripSlashes($rec_n['user']); 
+			<li><a href="readnote.php?rid=<?php echo $rec_n['id']; ?>&amp;idtable=3"><?php echo StripSlashes($rec_n['title']); ?></a> - <?php echo StripSlashes($rec_n['user']); 
 			if ($rec_n['secret']==0){ ?> (veřejná)<?php }
 			if ($rec_n['secret']==1){ ?> (tajná)<?php }
 			if ($rec_n['secret']==2){ ?> (soukromá)<?php }
 			?><span class="poznamka-edit-buttons"><?php
-			if (($rec_n['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo ' <a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=2" title="upravit"><span class="button-text">upravit poznámku</span></a>';
+			if (($rec_n['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo ' <a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=3" title="upravit"><span class="button-text">upravit poznámku</span></a>';
 			if (($rec_n['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo ' <a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('editgroup.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec_n['title'])."&quot; náležící k hlášení?');".'" title="smazat"><span class="button-text">smazat poznámku</span></a>';
 			?></span></li><?php
 		}
