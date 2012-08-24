@@ -70,7 +70,7 @@
 			<input class="plus" type="text" name="plus" id="plus" />
 			<input type="hidden" name="usrid" value="'.($rec['id']).'" />
 			<input type="hidden" name="oldpoints" value="'.($rec['zlobody']).'" />
-			<input type="submit" name="addpoints" id="submitbutton" value="Přidat" />
+			<input type="submit" name="addpoints" value="Přidat" />
 			</form>
 	</td>':'').'
 </tr>';
