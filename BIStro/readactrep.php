@@ -81,6 +81,7 @@
 			} else {
 				$editbutton='';
 			}
+			deleteUnread (4,$_REQUEST['rid']);
 			sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>'.StripSlashes($rec_ar['label']).' ('.$typestring.')</strong>',$spaction.$editbutton);
 ?>
 <div id="obsah">

@@ -12,6 +12,7 @@
 			case 4: $sourceurl="reports.php"; $sourcename="hlášení"; break;
 			default: $sourceurl=""; $sourcename=""; break;
 		}
+		unreadRecords ($_REQUEST['idtable'],$_POST['iditem']);
 		sparklets ('<a href="./'.$sourceurl.'">'.$sourcename.'</a> &raquo; <strong>úprava poznámky</strong> &raquo; <strong>uložení změn</strong>');
 		MySQL_Query ("UPDATE ".DB_PREFIX."notes SET title='".mysql_real_escape_string(safeInput($_POST['title']))."', datum='".Time()."', note='".mysql_real_escape_string($_POST['note'])."', secret='".$_POST['nsecret']."', iduser='".$_POST['nowner']."' WHERE id=".$_POST['noteid']);
 		echo '<div id="obsah"><p>Poznámka upravena.</p></div>';
@@ -40,6 +41,7 @@
 		if (!preg_match ('/^[[:blank:]]*$/i',$_POST['note']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['title']) && is_numeric($_POST['secret'])) {
 			MySQL_Query ("INSERT INTO ".DB_PREFIX."notes VALUES('','".mysql_real_escape_string($_POST['note'])."','".mysql_real_escape_string($_POST['title'])."','".Time()."','".$usrinfo['id']."','".$_POST['tableid']."','".$_POST['itemid']."','".$_POST['secret']."','0')");
 	//		echo '<div id="obsah"><p>Poznámka upravena.</p></div>';
+			unreadRecords ($_POST['tableid'],$_POST['itemid']);
 		}
 		Header ('Location: '.$_POST['backurl']);
 	}

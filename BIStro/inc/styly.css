@@ -103,6 +103,10 @@ a:link, a:visited {
 	padding: 1px 5px 2px 5px;
 }
 
+#menu ul li.unread {
+	background-color: #FF0000;
+}
+
 #menu ul li {
 	display: inline;
 }
@@ -296,6 +300,11 @@ div.otherform-wrap {width:475px;}
 .game_news {
   border: 1px solid #e86f2c;
 }
+
+.unread_record {
+  background-color: #ffff33 ;
+}
+
 
 .system_news h2, .game_news h2 {
 	margin-top: 0;

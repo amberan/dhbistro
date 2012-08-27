@@ -13,6 +13,7 @@
 	if (is_numeric($_REQUEST['rid'])) {
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."notes WHERE id=".$_REQUEST['rid']);
 		if ($rec=MySQL_Fetch_Assoc($res)) {
+			echo $rec['iditem'];
 ?>
 <div id="obsah">
 <form action="procnote.php" method="post" class="otherform">
@@ -52,6 +53,7 @@
 		<input type="hidden" name="noteid" value="<?php echo $_REQUEST['rid']; ?>" />
 		<input type="hidden" name="backurl" value="<?php echo 'editnote.php?rid='.$_REQUEST['rid']; ?>" />
 		<input type="hidden" name="idtable" value="<?php echo $_REQUEST['idtable']; ?>" />
+		<input type="hidden" name="itemid" value="<?php echo $rec['iditem']; ?>" />
 		<input type="submit" value="Uložit poznámku" name="editnote" class="submitbutton" />
 	</div>
 </form>

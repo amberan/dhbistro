@@ -50,15 +50,22 @@
 												".DB_PREFIX."loggedin.time AS 'lastaction'
 												FROM ".DB_PREFIX."users, ".DB_PREFIX."loggedin WHERE agent='".mysql_real_escape_string($_SERVER['HTTP_USER_AGENT'])."' AND ".DB_PREFIX."loggedin.sid ='".mysql_real_escape_string($_SESSION['sid'])."' AND deleted=0 AND ".DB_PREFIX."loggedin.iduser=".DB_PREFIX."users.id";
 		$ures=MySQL_Query ($sql);
+
 		if ($usrinfo=MySQL_Fetch_Assoc($ures)) {
 		  $loggedin=true;
+		  
+		  // natazeni tabulky neprectenych zaznamu do promenne
+		  $sql_r="SELECT * FROM ".DB_PREFIX."unread_".$usrinfo['id'];
+		  $res_r=MySQL_Query($sql_r);
+		  while ($unread[]=mysql_fetch_array($res_r));
+		  
 		} else {
 		  $loggedin=false;
 		}
 	} else {
 	  $loggedin=false;
 	}
-
+	
 // TOHLE NEZAPOMENOUT ODKOMENTOVAT V OSTRE VERZI	
   // overeni prihlaseni, nutno zmenit jmeno souboru na ostre verzi
   $free_pages = array ($page_prefix.'/login.php');
@@ -66,7 +73,61 @@
 //		Header ('location: login.php');
 //	}
 
-	// vypis zacatku stranky
+// vyhledani tabulky v neprectenych zaznamech
+function searchTable ($tablenum) { 
+	global $unread;
+	foreach ($unread as $record) {
+   		if ($record['idtable'] == $tablenum)
+       		return true;
+		}
+    	return false;
+}
+
+// vyhledani zaznamu v neprectenych zaznamech
+function searchRecord ($tablenum, $recordnum) {
+	global $unread;
+	foreach ($unread as $record) {
+		if ($record['idtable'] == $tablenum && $record['idrecord'] == $recordnum)
+			return true;
+	}
+	return false;
+}
+
+// zaznam do tabulek neprectenych
+function unreadRecords ($tablenum,$rid) {
+	global $usrinfo, $_POST;
+	$secret=0;
+	if (isset($_POST['secret'])) {
+		$secret=$_POST['secret'];
+	}
+	if (isset($_POST['nsecret'])) {
+		$secret=$_POST['nsecret'];
+	}
+	$sql_ur="SELECT ".DB_PREFIX."users.id as 'id', ".DB_PREFIX."users.right_power as 'right_power' FROM ".DB_PREFIX."users";
+	$res_ur=MySQL_Query ($sql_ur);
+	while ($rec_ur=MySQL_Fetch_Assoc($res_ur)) {
+		if ($secret == 1) {
+			if ($rec_ur['id'] <> $usrinfo['id'] && $rec_ur['right_power'] == 1) {
+				$srsql="INSERT INTO ".DB_PREFIX."unread_".$rec_ur['id']." (idtable, idrecord) VALUES('".$tablenum."', '".$rid."')";
+				MySQL_Query ($srsql);
+			}
+		} else if ($secret == 0) {
+			if ($rec_ur['id'] <> $usrinfo['id']) {
+				$srsql="INSERT INTO ".DB_PREFIX."unread_".$rec_ur['id']." (idtable, idrecord) VALUES('".$tablenum."', '".$rid."')";
+				MySQL_Query ($srsql);
+			}
+		}
+	}
+}
+
+// vymaz z tabulek neprectenych
+function deleteUnread ($tablenum,$rid) {
+	global $usrinfo;
+	$sql_ur="DELETE FROM ".DB_PREFIX."unread_".$usrinfo['id']." WHERE idtable=".$tablenum." AND idrecord=".$rid;
+	MySQL_Query ($sql_ur);
+}
+  
+// vypis zacatku stranky
 	function pageStart ($title,$infotext='') {
 	  global $loggedin, $usrinfo, $mazzarino_version;
 		echo '<?xml version="1.0" encoding="utf-8"?>';
@@ -120,8 +181,8 @@
 	  echo '<div id="menu">
 	<ul>
 		<li><a href="index.php">Aktuality</a></li>
-		<li><a href="reports.php">Hlášení</a></li>	
-		<li><a href="persons.php">Osoby</a></li>
+		<li '.((searchTable(4))?' class="unread"':'').'><a href="reports.php">Hlášení</a></li>	
+		<li '.((searchTable(3))?' class="unread"':'').'><a href="persons.php">Osoby</a></li>
 		<li><a href="cases.php">Případy</a></li>
 		<li><a href="groups.php">Skupiny</a></li>
 		'.(($usrinfo['right_power'])?'<li><a href="mapagents.php">Mapa agentů</a></li>':'').'		
