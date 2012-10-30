@@ -120,11 +120,21 @@ function unreadRecords ($tablenum,$rid) {
 	}
 }
 
-// vymaz z tabulek neprectenych
+// vymaz z tabulek neprectenych pri precteni
 function deleteUnread ($tablenum,$rid) {
 	global $usrinfo;
 	$sql_ur="DELETE FROM ".DB_PREFIX."unread_".$usrinfo['id']." WHERE idtable=".$tablenum." AND idrecord=".$rid;
 	MySQL_Query ($sql_ur);
+}
+
+// vymaz z tabulek neprectenych pri smazani zaznamu
+function deleteAllUnread ($tablenum,$rid) {
+	$sql_ur="SELECT ".DB_PREFIX."users.id as 'id', ".DB_PREFIX."users.right_power as 'right_power' FROM ".DB_PREFIX."users";
+	$res_ur=MySQL_Query ($sql_ur);
+	while ($rec_ur=MySQL_Fetch_Assoc($res_ur)) {
+		$srsql="DELETE FROM ".DB_PREFIX."unread_".$rec_ur['id']." WHERE idtable=".$tablenum." AND idrecord=".$rid;
+		MySQL_Query ($srsql);
+	}
 }
   
 // vypis zacatku stranky
@@ -182,9 +192,9 @@ function deleteUnread ($tablenum,$rid) {
 	<ul>
 		<li><a href="index.php">Aktuality</a></li>
 		<li '.((searchTable(4))?' class="unread"':'').'><a href="reports.php">Hlášení</a></li>	
-		<li '.((searchTable(3))?' class="unread"':'').'><a href="persons.php">Osoby</a></li>
-		<li><a href="cases.php">Případy</a></li>
-		<li><a href="groups.php">Skupiny</a></li>
+		<li '.((searchTable(1))?' class="unread"':'').'><a href="persons.php">Osoby</a></li>
+		<li '.((searchTable(3))?' class="unread"':'').'><a href="cases.php">Případy</a></li>
+		<li '.((searchTable(2))?' class="unread"':'').'><a href="groups.php">Skupiny</a></li>
 		'.(($usrinfo['right_power'])?'<li><a href="mapagents.php">Mapa agentů</a></li>':'').'		
 		<li><a href="http://doodle.com/x39pm7tpgh2py3cw" target="_new">Časová dostupnost</a></li>
 		<li><a href="http://www.prazskahlidka.cz/forum/index.php" target="_new">Fórum</a></li>

@@ -6,6 +6,7 @@
 	}
 	if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete'])) {
 	  MySQL_Query ("UPDATE ".DB_PREFIX."reports SET deleted=1 WHERE id=".$_REQUEST['delete']);
+	  deleteAllUnread($_REQUEST['table'],$_REQUEST['delete']);
 	  Header ('Location: reports.php');
 	}
 	if (isset($_POST['insertrep']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['label']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['task']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['summary']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['impact']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['details']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['start']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['end']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['energy']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['inputs']) && is_numeric($_POST['secret']) && is_numeric($_POST['status']) && is_numeric($_POST['type'])) {

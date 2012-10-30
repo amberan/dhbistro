@@ -13,7 +13,6 @@
 	if (is_numeric($_REQUEST['rid'])) {
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."notes WHERE id=".$_REQUEST['rid']);
 		if ($rec=MySQL_Fetch_Assoc($res)) {
-			echo $rec['iditem'];
 ?>
 <div id="obsah">
 <form action="procnote.php" method="post" class="otherform">
