@@ -22,6 +22,7 @@
 			} else {
 				$editbutton='';
 			}
+			deleteUnread (2,$_REQUEST['rid']);
 			sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>'.StripSlashes($rec_g['title']).'</strong>','<a href="readgroup.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton);
 ?>
 <?php // zpracovani filtru

@@ -22,6 +22,7 @@
 			} else {
 				$editbutton='';
 			}
+			deleteUnread (3,$_REQUEST['rid']);
 			sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>'.StripSlashes($rec['title']).'</strong>','<a href="readcase.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton);
 ?>
 <div id="obsah">
