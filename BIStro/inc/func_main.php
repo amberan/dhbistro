@@ -58,7 +58,6 @@
 		  $sql_r="SELECT * FROM ".DB_PREFIX."unread_".$usrinfo['id'];
 		  $res_r=MySQL_Query($sql_r);
 		  while ($unread[]=mysql_fetch_array($res_r));
-		  
 		} else {
 		  $loggedin=false;
 		}
@@ -103,15 +102,15 @@ function unreadRecords ($tablenum,$rid) {
 	if (isset($_POST['nsecret'])) {
 		$secret=$_POST['nsecret'];
 	}
-	$sql_ur="SELECT ".DB_PREFIX."users.id as 'id', ".DB_PREFIX."users.right_power as 'right_power' FROM ".DB_PREFIX."users";
+	$sql_ur="SELECT ".DB_PREFIX."users.id as 'id', ".DB_PREFIX."users.right_power as 'right_power', ".DB_PREFIX."users.deleted as 'deleted' FROM ".DB_PREFIX."users";
 	$res_ur=MySQL_Query ($sql_ur);
 	while ($rec_ur=MySQL_Fetch_Assoc($res_ur)) {
-		if ($secret == 1) {
+		if ($secret == 1 && $rec_ur['deleted'] <> 1) {
 			if ($rec_ur['id'] <> $usrinfo['id'] && $rec_ur['right_power'] == 1) {
 				$srsql="INSERT INTO ".DB_PREFIX."unread_".$rec_ur['id']." (idtable, idrecord) VALUES('".$tablenum."', '".$rid."')";
 				MySQL_Query ($srsql);
 			}
-		} else if ($secret == 0) {
+		} else if ($secret == 0 && $rec_ur['deleted'] <> 1) {
 			if ($rec_ur['id'] <> $usrinfo['id']) {
 				$srsql="INSERT INTO ".DB_PREFIX."unread_".$rec_ur['id']." (idtable, idrecord) VALUES('".$tablenum."', '".$rid."')";
 				MySQL_Query ($srsql);
