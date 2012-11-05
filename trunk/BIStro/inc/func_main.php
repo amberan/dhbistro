@@ -190,6 +190,7 @@ function deleteAllUnread ($tablenum,$rid) {
 	function mainMenu ($index) {
 	  global $usrinfo;
 	  $currentfile = $_SERVER["PHP_SELF"];
+	  $dlink=MySQL_Fetch_Assoc(MySQL_Query ("SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1"));
 	  echo '<div id="menu">
 	<ul>
 		<li><a href="index.php">Aktuality</a></li>
@@ -197,8 +198,12 @@ function deleteAllUnread ($tablenum,$rid) {
 		<li '.((searchTable(1))?' class="unread"':'').'><a href="persons.php">Osoby</a></li>
 		<li '.((searchTable(3))?' class="unread"':'').'><a href="cases.php">Případy</a></li>
 		<li '.((searchTable(2))?' class="unread"':'').'><a href="groups.php">Skupiny</a></li>
-		'.(($usrinfo['right_power'])?'<li><a href="mapagents.php">Mapa agentů</a></li>':'').'		
-		<li><a href="http://doodle.com/x39pm7tpgh2py3cw" target="_new">Časová dostupnost</a></li>
+		'.(($usrinfo['right_power'])?'<li><a href="mapagents.php">Mapa agentů</a></li>':'').'
+		'.(($usrinfo['right_power'])?'<li><a href="doodle.php">Časová dostupnost</a></li>':'').'
+		
+		<li><a href="'.$dlink['link'].'" target="_new">Časová dostupnost</a></li>
+		
+		
 		<li><a href="http://www.prazskahlidka.cz/forum/index.php" target="_new">Fórum</a></li>
 		<!-- <li><a href="http://www.prazskahlidka.cz/forum2/index.php" target="_new">Fórum</a></li> -->
 		<li><a href="evilpoints.php">Zlobody</a></li>
