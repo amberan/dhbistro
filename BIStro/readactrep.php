@@ -139,7 +139,7 @@
 			}
 			echo implode ($groups,', ');
 		} else { ?>
-			<em>K hlášní nejsou připojeny žádné osoby.</em><?php
+			<em>K hlášení nejsou připojeny žádné osoby.</em><?php
 		} ?></p>
 		<div class="clear">&nbsp;</div>
 		<h3>Přiřazené případy:</h3>

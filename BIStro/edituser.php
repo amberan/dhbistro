@@ -27,6 +27,10 @@
 		</select>
 	</div>
 	<div>
+	  <label for="idperson">Číslo osoby:</label>
+	  <input type="text" name="idperson" id="idperson" value="<?php echo StripSlashes($rec['idperson']); ?>" />
+	</div>
+	<div>
 	  <input type="hidden" name="userid" value="<?php echo $rec['id']; ?>" />
 	  <input type="submit" name="edituser" id="submitbutton" value="Uložit" />
 	</div>
