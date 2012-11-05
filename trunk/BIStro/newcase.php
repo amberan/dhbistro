@@ -23,6 +23,13 @@
 			<option value="1">uzavřený</option>
 		</select>
 	</div>
+<?php 			if ($usrinfo['right_power'] == 1)	{
+				echo '					
+				<label for="notnew">Není nové</label>
+					<input type="checkbox" name="notnew"/><br/>
+				<div class="clear">&nbsp;</div>';
+				}
+?>		
 	<div>
 	  <label for="contents">Popis:</label>
 	</div>

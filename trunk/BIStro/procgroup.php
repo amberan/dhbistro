@@ -13,9 +13,11 @@
 	    echo '<div id="obsah"><p>Skupina již existuje, změňte její jméno.</p></div>';
 	  } else {
 			MySQL_Query ("INSERT INTO ".DB_PREFIX."groups VALUES('','".mysql_real_escape_string(safeInput($_POST['title']))."','".mysql_real_escape_string($_POST['contents'])."','".Time()."','".$usrinfo['id']."','0','".$_POST['secret']."')");
-			$gidarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".mysql_real_escape_string(safeInput($_POST['title']))."')"));
-			$gid=$gidarray['id'];
-			unreadRecords (2,$gid);
+			if (!isset($_POST['notnew'])) {
+				$gidarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".mysql_real_escape_string(safeInput($_POST['title']))."')"));
+				$gid=$gidarray['id'];
+				unreadRecords (2,$gid);
+			}
 			echo '<div id="obsah"><p>Skupina vytvořena.</p></div>';
 		}
 		pageEnd ();
@@ -31,7 +33,9 @@
 	if (isset($_POST['groupid']) && isset($_POST['editgroup']) && $usrinfo['right_text'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match ('/i^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret'])) {
 	  pageStart ('Uložení změn');
 		mainMenu (3);
-		unreadRecords (2,$_POST['groupid']);
+		if (!isset($_POST['notnew'])) {
+			unreadRecords (2,$_POST['groupid']);
+		}
 		sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./editgroup.php?rid='.$_POST['groupid'].'">úprava skupiny</a> &raquo; <strong>uložení změn</strong>');
 	  $ures=MySQL_Query ("SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".mysql_real_escape_string(safeInput($_POST['title']))."') AND id<>".$_POST['groupid']);
 	  if (MySQL_Num_Rows ($ures)) {
@@ -62,7 +66,9 @@
 		move_uploaded_file ($_FILES['attachment']['tmp_name'],'./files/'.$newname);
 		$sql="INSERT INTO ".DB_PREFIX."data VALUES('','".$newname."','".mysql_real_escape_string($_FILES['attachment']['name'])."','".mysql_real_escape_string($_FILES['attachment']['type'])."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','2','".$_POST['groupid']."','".$_POST['secret']."')";
 		MySQL_Query ($sql);
-		unreadRecords (2,$_POST['groupid']);
+		if (!isset($_POST['fnotnew'])) {
+			unreadRecords (2,$_POST['groupid']);
+		}
 		Header ('Location: '.$_POST['backurl']);
 	} else {
 	  if (isset($_POST['uploadfile'])) {

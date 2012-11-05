@@ -32,6 +32,14 @@ if (is_numeric($_REQUEST['rid'])) {
 			  <option value="2">soukromá</option>
 			</select>
 		</div>
+<?php 			if ($usrinfo['right_power'] == 1)	{
+				echo '					
+				<div>
+				<label for="nnotnew">Není nové</label>
+					<input type="checkbox" name="nnotnew"/><br/>
+				</div>';
+				}
+?>		
 		<div>
 			<label for="notebody">Tělo poznámka:</label>
 			<textarea cols="80" rows="7" name="note" id="notebody"></textarea>

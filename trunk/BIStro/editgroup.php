@@ -18,6 +18,13 @@
 			<input type="radio" name="secret" value="0" <?php if ($rec_g['secret']==0) { ?>checked="checked"<?php } ?>/>ne<br/>
 			<h3><label>&nbsp;</label></h3><input type="radio" name="secret" value="1"<?php if ($rec_g['secret']==1) { ?>checked="checked"<?php } ?>>ano
 		<div class="clear">&nbsp;</div>
+<?php 			if ($usrinfo['right_power'] == 1)	{
+				echo '					
+				<h3><label for="notnew">Není nové</label></h3>
+					<input type="checkbox" name="notnew"/><br/>
+				<div class="clear">&nbsp;</div>';
+				}
+?>			
 	</div>
 	<!-- end of #info -->
 	<fieldset><legend><h2>Popis:</h2></legend>
@@ -86,6 +93,14 @@
 			  	<?php if ($rec_g['secret']!=1) { ?>&nbsp;<input type="radio" name="secret" value="0" checked="checked"/>ne&nbsp;/<?php }; ?>
 				&nbsp;<input type="radio" name="secret" value="1" <?php if ($rec_g['secret']==1){ ?>checked="checked"<?php }; ?>/>ano
 			</div>
+<?php 		if ($usrinfo['right_power'] == 1)	{
+			echo '					
+			<div>
+			<strong><label for="fnotnew">Není nové</label></strong>
+			<input type="checkbox" name="fnotnew"/><br/>
+			</div>';
+			}
+?>			
 			<div>
 				<input type="hidden" name="personid" value="<?php echo $_REQUEST['rid']; ?>" />
 				<input type="hidden" name="backurl" value="<?php echo 'editperson.php?rid='.$_REQUEST['rid']; ?>" />

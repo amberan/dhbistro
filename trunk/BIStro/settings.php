@@ -3,9 +3,6 @@
 	pageStart ('Nastavení');
 	mainMenu (6);
 	sparklets ('<strong>nastavení</strong>');
-//	if (!isset ($hiddenpwd)) {
-//		$hiddenpwd='hidden';
-//	}
 ?>
 <script type="text/javascript" language="JavaScript">
 <!--
@@ -22,12 +19,16 @@ function pwdcheck(form)
 <div id="obsah"><strong>Nepoužívejte svá obvyklá hesla</strong>, protože v tomto systému se hesla ukládají nezakódovaná. <strong>Dají se v databázi přímo přečíst</strong>, takže si vymyslete něco čistě pro hru.<p></p></div>
 <form action="procsettings.php" method="post" name="inputform" id="inputform" onSubmit="return pwdcheck(this);">
 	<div>
-	<label for="heslo">Heslo:</label>
-  	<input type="password" name="heslo" id="heslo" value="<?php echo StripSlashes($usrinfo['pwd'])?>"/>
+	<label for="heslo">Staré heslo:</label>
+  	<input type="password" name="soucheslo" id="soucheslo" value=""/>
 	</div>
 	<div>
-	<label for="heslo2">Ověření:</label>
-  	<input type="password" name="heslo2" id="heslo2" value="<?php echo StripSlashes($usrinfo['pwd'])?>"/>
+	<label for="heslo">Nové heslo:</label>
+  	<input type="password" name="heslo" id="heslo" value=""/>
+	</div>
+	<div>
+	<label for="heslo2">Nové znovu:</label>
+  	<input type="password" name="heslo2" id="heslo2" value=""/>
 	</div>
 	<div>
 	  <label for="plan">Aktuální plán:</label>

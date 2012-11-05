@@ -189,6 +189,7 @@ function deleteAllUnread ($tablenum,$rid) {
 	
 	function mainMenu ($index) {
 	  global $usrinfo;
+	  $currentfile = $_SERVER["PHP_SELF"];
 	  echo '<div id="menu">
 	<ul>
 		<li><a href="index.php">Aktuality</a></li>
@@ -204,7 +205,15 @@ function deleteAllUnread ($tablenum,$rid) {
 		<!-- <li><a href="evilpoints.php">Bludišťáky</a></li> -->
 		<li><a href="settings.php">Nastavení</a></li>
 		'.(($usrinfo['right_power'])?'<li><a href="users.php">Uživatelé</a></li>':'').'
+		
+		
+		
+		
+				
 		<li class="float-right"><a href="logout.php">Odhlásit</a></li>
+		
+		
+		<li class="float-right"><a href="procother.php?delallnew='.$currentfile.'" onclick="'."return confirm('Opravdu označit vše jako přečtené?');".'">Přečíst vše</a></li>
 	</ul>
 	<!-- form id="search_menu">
 		<input type="text" name="query" />
