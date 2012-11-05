@@ -18,9 +18,11 @@
 		  $file='';
 		}
 		MySQL_Query ("INSERT INTO ".DB_PREFIX."persons VALUES('','".mysql_real_escape_string(safeInput($_POST['name']))."','".mysql_real_escape_string(safeInput($_POST['surname']))."','".mysql_real_escape_string(safeInput($_POST['phone']))."','".Time()."','".$usrinfo['id']."','".mysql_real_escape_string($_POST['contents'])."','".$_POST['secret']."','0','".$file."', '".$_POST['side']."', '".$_POST['power']."', '".$_POST['spec']."')");
-		$pidarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."persons WHERE UCASE(surname)=UCASE('".mysql_real_escape_string(safeInput($_POST['surname']))."') AND UCASE(name)=UCASE('".mysql_real_escape_string(safeInput($_POST['name']))."') AND side='".$_POST['name']."'"));
-		$pid=$pidarray['id'];
-		unreadRecords (1,$pid);
+		if (!isset($_POST['notnew'])) {
+			$pidarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."persons WHERE UCASE(surname)=UCASE('".mysql_real_escape_string(safeInput($_POST['surname']))."') AND UCASE(name)=UCASE('".mysql_real_escape_string(safeInput($_POST['name']))."') AND side='".$_POST['name']."'"));
+			$pid=$pidarray['id'];
+			unreadRecords (1,$pid);
+		}
 		echo '<div id="obsah"><p>Osoba vytvořena.</p></div>';
 		pageEnd ();
 	} else {
@@ -35,7 +37,9 @@
 	if (isset($_POST['personid']) && isset($_POST['editperson']) && $usrinfo['right_text'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['name']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret']) && is_numeric($_POST['side']) && is_numeric($_POST['power']) && is_numeric($_POST['spec'])) {
 	  pageStart ('Uložení změn');
 		mainMenu (5);
-		unreadRecords (1,$_POST['personid']);
+		if (!isset($_POST['notnew'])) {
+			unreadRecords (1,$_POST['personid']);
+		}
 		sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./editperson.php?rid='.$_POST['personid'].'">úprava osoby</a> &raquo; <strong>uložení změn</strong>');
 		if (is_uploaded_file($_FILES['portrait']['tmp_name'])) {
 		  $ps=MySQL_Query ("SELECT portrait FROM ".DB_PREFIX."persons WHERE id=".$_POST['personid']);
@@ -78,7 +82,9 @@
 			move_uploaded_file ($_FILES['attachment']['tmp_name'],'./files/'.$newname);
 			$sql="INSERT INTO ".DB_PREFIX."data VALUES('','".$newname."','".mysql_real_escape_string($_FILES['attachment']['name'])."','".mysql_real_escape_string($_FILES['attachment']['type'])."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','1','".$_POST['personid']."','".$_POST['secret']."')";
 			MySQL_Query ($sql);
-			unreadRecords (1,$_POST['personid']);
+			if (!isset($_POST['fnotnew'])) {
+				unreadRecords (1,$_POST['personid']);
+			}
 			Header ('Location: '.$_POST['backurl']);
 	} else {
 	  if (isset($_POST['uploadfile'])) {

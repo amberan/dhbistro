@@ -44,8 +44,16 @@
 		echo '<input type="hidden" name="nowner" value="'.$rec['iduser'].'" />';
 	}
 	?>
+<?php 			if ($usrinfo['right_power'] == 1)	{
+				echo '					
+				<div>
+				<label for="nnotnew">Není nové</label>
+					<input type="checkbox" name="nnotnew"/><br/>
+				</div>';
+				}
+?>
 	<div>
-		<label for="notebody">Tělo poznámka:</label>
+		<label for="notebody">Tělo poznámky:</label>
 		<textarea cols="80" rows="7" name="note" id="notebody"><?php echo StripSlashes($rec['note']); ?></textarea>
 	</div>
 	<div>
