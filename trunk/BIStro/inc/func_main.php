@@ -11,12 +11,14 @@
 	session_start();
 	
 	// databaze
-  //if (!@mysql_connect ('c155um.forpsi.com','dhbistrocz','eqgsCv3t')) {
+  //if (!@mysql_connect ('localhost','dhbistrocz','eqgsCv3t')) {
+  //if (!@mysql_connect ('localhost','nhbistro','eqgsCv3t')) {
   if (!@mysql_connect ('127.0.0.1','dhbistrocz','eqgsCv3t')) {
   	echo 'fail';
     Exit;
   }
 	MySQL_Select_DB ('dhbistrocz');
+	// MySQL_Select_DB ('nhbistro');	
   $page_prefix='';
 
 	define ('DB_PREFIX','nw_');
@@ -197,7 +199,9 @@ function deleteAllUnread ($tablenum,$rid) {
 		'.(($usrinfo['right_power'])?'<li><a href="mapagents.php">Mapa agentů</a></li>':'').'		
 		<li><a href="http://doodle.com/x39pm7tpgh2py3cw" target="_new">Časová dostupnost</a></li>
 		<li><a href="http://www.prazskahlidka.cz/forum/index.php" target="_new">Fórum</a></li>
+		<!-- <li><a href="http://www.prazskahlidka.cz/forum2/index.php" target="_new">Fórum</a></li> -->
 		<li><a href="evilpoints.php">Zlobody</a></li>
+		<!-- <li><a href="evilpoints.php">Bludišťáky</a></li> -->
 		<li><a href="settings.php">Nastavení</a></li>
 		'.(($usrinfo['right_power'])?'<li><a href="users.php">Uživatelé</a></li>':'').'
 		<li class="float-right"><a href="logout.php">Odhlásit</a></li>

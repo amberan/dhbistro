@@ -24,6 +24,11 @@
 			} else {
 				$editbutton='';
 			}
+			if ($usrinfo['right_power']) {
+				$editbutton='; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>; číslo osoby: '.$rec['id'].'</a>';
+			} else {
+				$editbutton='';
+			}
 			deleteUnread (1,$_REQUEST['rid']);
 			sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>'.StripSlashes($rec['surname']).', '.StripSlashes($rec['name']).'</strong>','<a href="readperson.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton);
 			?>			

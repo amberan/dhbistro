@@ -36,7 +36,7 @@
 	  if (MySQL_Num_Rows ($ures)) {
 	    echo '<div id="obsah"><p>Uživatel již existuje, změňte jeho jméno.</p></div>';
 	  } else {
-			MySQL_Query ("UPDATE ".DB_PREFIX."users SET login='".mysql_real_escape_string(safeInput($_POST['login']))."', right_power='".$_POST['power']."', right_text='".$_POST['texty']."' WHERE id=".$_POST['userid']);
+			MySQL_Query ("UPDATE ".DB_PREFIX."users SET login='".mysql_real_escape_string(safeInput($_POST['login']))."', right_power='".$_POST['power']."', right_text='".$_POST['texty']."', idperson='".$_POST['idperson']."' WHERE id=".$_POST['userid']);
 			echo '<div id="obsah"><p>Uživatel upraven.</p></div>';
 		}
 		pageEnd ();
