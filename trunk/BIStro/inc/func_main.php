@@ -200,10 +200,7 @@ function deleteAllUnread ($tablenum,$rid) {
 		<li '.((searchTable(2))?' class="unread"':'').'><a href="groups.php">Skupiny</a></li>
 		'.(($usrinfo['right_power'])?'<li><a href="mapagents.php">Mapa agentů</a></li>':'').'
 		'.(($usrinfo['right_power'])?'<li><a href="doodle.php">Časová dostupnost</a></li>':'').'
-		
 		<li><a href="'.$dlink['link'].'" target="_new">Časová dostupnost</a></li>
-		
-		
 		<li><a href="http://www.prazskahlidka.cz/forum/index.php" target="_new">Fórum</a></li>
 		<!-- <li><a href="http://www.prazskahlidka.cz/forum2/index.php" target="_new">Fórum</a></li> -->
 		<li><a href="evilpoints.php">Zlobody</a></li>
