@@ -11,14 +11,36 @@
 	session_start();
 	
 	// databaze
-  //if (!@mysql_connect ('localhost','dhbistrocz','eqgsCv3t')) {
-  //if (!@mysql_connect ('localhost','nhbistro','eqgsCv3t')) {
-  if (!@mysql_connect ('127.0.0.1','dhbistrocz','eqgsCv3t')) {
-  	echo 'fail';
+  switch ($_SERVER["SERVER_NAME"]) {
+  	case '127.0.0.1':
+  		$dbusr='dhbistrocz';
+  		$verze=0;
+  		$point='zlobod';
+  		break;
+  	case 'www.dhbistro.cz':
+  		$dbusr='dhbistrocz';
+  		$verze=1;
+  		$point='zlobod';
+  		break;
+  	case 'nh.dhbistro.cz':
+  		$dbusr='nhbistro';
+  		$verze=2;
+  		$point='bludišťák';
+  		break;
+  	case 'test.dhbistro.cz':
+  		$dbusr='testbistro';
+  		$verze=3;
+  		$point='zlobod';
+  		break;  		  		
+  }
+
+  if (!@mysql_connect ('localhost',$dbusr,'eqgsCv3t')) {
+  	echo 'fail ';
+  	echo $dbconnect;
     Exit;
   }
-	MySQL_Select_DB ('dhbistrocz');
-	// MySQL_Select_DB ('nhbistro');	
+	MySQL_Select_DB ($dbusr);
+
   $page_prefix='';
 
 	define ('DB_PREFIX','nw_');
@@ -67,12 +89,14 @@
 	  $loggedin=false;
 	}
 	
-// TOHLE NEZAPOMENOUT ODKOMENTOVAT V OSTRE VERZI	
+  // ta parametrizaci na verzi je tam proto, ze na lokale to kdoviproc nefunguje	
   // overeni prihlaseni, nutno zmenit jmeno souboru na ostre verzi
   $free_pages = array ($page_prefix.'/login.php');
-//	if (!$loggedin && !in_array($_SERVER['PHP_SELF'],$free_pages)) {
-//		Header ('location: login.php');
-//	}
+  if ($verze > 0) {
+	if (!$loggedin && !in_array($_SERVER['PHP_SELF'],$free_pages)) {
+		Header ('location: login.php');
+	}
+  }
 
 // vyhledani tabulky v neprectenych zaznamech
 function searchTable ($tablenum) { 
@@ -143,6 +167,7 @@ function deleteAllUnread ($tablenum,$rid) {
 	  global $loggedin, $usrinfo, $mazzarino_version;
 		echo '<?xml version="1.0" encoding="utf-8"?>';
 ?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cs">
 <head>
@@ -188,7 +213,7 @@ function deleteAllUnread ($tablenum,$rid) {
 	}
 	
 	function mainMenu ($index) {
-	  global $usrinfo;
+	  global $usrinfo, $verze;
 	  $currentfile = $_SERVER["PHP_SELF"];
 	  $dlink=MySQL_Fetch_Assoc(MySQL_Query ("SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1"));
 	  echo '<div id="menu">
@@ -200,10 +225,8 @@ function deleteAllUnread ($tablenum,$rid) {
 		<li '.((searchTable(2))?' class="unread"':'').'><a href="groups.php">Skupiny</a></li>
 		'.(($usrinfo['right_power'])?'<li><a href="mapagents.php">Mapa agentů</a></li>':'').'
 		'.(($usrinfo['right_power'])?'<li><a href="doodle.php">Časová dostupnost</a></li>':'<li><a href="'.$dlink['link'].'" target="_new">Časová dostupnost</a></li>').'
-		<li><a href="http://www.prazskahlidka.cz/forum/index.php" target="_new">Fórum</a></li>
-		<!-- <li><a href="http://www.prazskahlidka.cz/forum2/index.php" target="_new">Fórum</a></li> -->
-		<li><a href="evilpoints.php">Zlobody</a></li>
-		<!-- <li><a href="evilpoints.php">Bludišťáky</a></li> -->
+		'.(($verze==2)?'<li><a href="http://www.prazskahlidka.cz/forum2/index.php" target="_new">Fórum</a></li>':'<li><a href="http://www.prazskahlidka.cz/forum/index.php" target="_new">Fórum</a></li>').'
+		'.(($verze==2)?'<li><a href="evilpoints.php">Bludišťáky</a></li>':'<li><a href="evilpoints.php">Zlobody</a></li>').'
 		<li><a href="settings.php">Nastavení</a></li>
 		'.(($usrinfo['right_power'])?'<li><a href="users.php">Uživatelé</a></li>':'').'
 		<li class="float-right"><a href="logout.php">Odhlásit</a></li>
