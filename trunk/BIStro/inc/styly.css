@@ -187,7 +187,8 @@ a:link, a:visited {
 #inputform input#name, 
 #inputform input#surname, 
 #inputform input#phone, 
-#inputform input#portrait, 
+#inputform input#portrait,
+#inputform input#symbol, 
 #inputform select#side,
 #inputform select#power,
 #inputform select#spec {
