@@ -387,6 +387,21 @@ div > .poznamka-edit-buttons {position:absolute;right:0px;top:0px;}
 	overflow:hidden;
 	background:url('../css/noname.png') no-repeat scroll center transparent;
 }
+
+#symbolimg {
+	position: absolute;
+	right: 10.2em;
+	width: 104px;
+	height: 134px;
+	border: 1px solid #808080;
+	padding: 1px;
+	margin: 0 0 20px 20px;
+}
+#symbolimg.noname {
+	text-indent:-1000px;
+	overflow:hidden;
+	background:url('../css/noname.png') no-repeat scroll center transparent;
+}
 /***********************************/
 /************  tabulky  ************/
 /***********************************/
