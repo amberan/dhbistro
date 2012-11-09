@@ -9,11 +9,14 @@
 ?>
 <div id="obsah">
 <fieldset><legend><h1>Úprava osoby: <?php echo(StripSlashes($rec_p['surname']).', '.StripSlashes($rec_p['name'])); ?></h1></legend>
-	<p id="top-text">Portréty nahrávejte pokud možno ve velikosti 100x130 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen portréty, o rozmazané postavy nebude nouze v přílohách.</p>
+	<p id="top-text">Portréty nahrávejte pokud možno ve velikosti 100x130 bodů, symboly ve velikosti 100x100 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen portréty, o rozmazané postavy nebude nouze v přílohách. Symboly rovněž nahrávejte jasně rozeznatelné.</p>
 	<form action="procperson.php" method="post" id="inputform" enctype="multipart/form-data">
 		<fieldset><legend><h2>Základní údaje</h2></legend>
 		<?php if($rec_p['portrait']==NULL){ ?><img src="#" alt="portrét chybí" title="portrét chybí" id="portraitimg" class="noname"/>
 		<?php }else{ ?><img src="getportrait.php?rid=<?php echo($_REQUEST['rid']); ?>" alt="<?php echo(StripSlashes($rec_p['name']).' '.StripSlashes($rec_p['surname'])); ?>" id="portraitimg" />
+		<?php } ?>
+		<?php if($rec_p['symbol']==NULL){ ?><img src="#" alt="symbol chybí" title="symbol chybí" id="symbolimg" class="noname"/>
+		<?php }else{ ?><img src="getportrait.php?srid=<?php echo($_REQUEST['rid']); ?>" alt="<?php echo(StripSlashes($rec_p['name']).' '.StripSlashes($rec_p['surname'])); ?>" id="symbolimg" />
 		<?php } ?>
 			<div id="info">
 				<h3><label for="name">Jméno:</label></h3>
@@ -61,6 +64,9 @@
 				<div class="clear">&nbsp;</div>
 				<h3><label for="portrait">Nový&nbsp;portrét:</label></h3>
 				<input type="file" name="portrait" id="portrait" />
+				<div class="clear">&nbsp;</div>
+				<h3><label for="symbol">Nový&nbsp;symbol:</label></h3>
+				<input type="file" name="symbol" id="symbol" />
 				<div class="clear">&nbsp;</div>
 				<h3><label for="secret">Přísně&nbsp;tajné:</label></h3>
 					<input type="radio" name="secret" value="0" <?php if ($rec_p['secret']==0) { ?>checked="checked"<?php } ?>/>ne<br/>

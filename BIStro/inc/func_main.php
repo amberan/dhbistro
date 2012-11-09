@@ -36,7 +36,6 @@
 
   if (!@mysql_connect ('localhost',$dbusr,'eqgsCv3t')) {
   	echo 'fail ';
-  	echo $dbconnect;
     Exit;
   }
 	MySQL_Select_DB ($dbusr);

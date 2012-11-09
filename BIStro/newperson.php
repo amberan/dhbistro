@@ -6,7 +6,7 @@
 ?>
 <div id="obsah">
 	<fieldset><legend><h1>Nová osoba</h1></legend>
-	<p id="top-text">Portréty nahrávejte pokud možno ve velikosti 100x130 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen portréty, o rozmazané postavy nebude nouze v přílohách.</p>
+	<p id="top-text">Portréty nahrávejte pokud možno ve velikosti 100x130 bodů, symboly ve velikosti 100x100 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen portréty, o rozmazané postavy nebude nouze v přílohách. Symboly rovněž nahrávejte jasně rozeznatelné.</p>
 	<form action="procperson.php" method="post" id="inputform" enctype="multipart/form-data">
 		<fieldset><legend><h2>Základní údaje</h2></legend>
 			<div id="info">
@@ -51,6 +51,8 @@
 				<h3><label for="phone">Telefon:</label></h3><input type="text" name="phone" id="phone" />
 				<div class="clear">&nbsp;</div>
 				<h3><label for="portrait">Portrét:</label></h3><input type="file" name="portrait" id="portrait" />
+				<div class="clear">&nbsp;</div>
+				<h3><label for="symbol">Symbol:</label></h3><input type="file" name="symbol" id="symbol" />
 				<div class="clear">&nbsp;</div>
 				<h3><label for="secret">Přísně&nbsp;tajné:</label></h3>
 					<input type="radio" name="secret" value="0" checked="checked"/>ne<br/>

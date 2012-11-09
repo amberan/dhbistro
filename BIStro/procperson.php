@@ -9,15 +9,24 @@
 		mainMenu (5);
 		sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./newperson.php">nová osoba</a> &raquo; <strong>přidána osoba</strong>');
 		if (is_uploaded_file($_FILES['portrait']['tmp_name'])) {
-      $file=Time().MD5(uniqid(Time().Rand()));
-      move_uploaded_file ($_FILES['portrait']['tmp_name'],'./files/'.$file.'tmp');
-			$dst=resize_Image ('./files/'.$file.'tmp',100,130);
-			imagejpeg($dst,'./files/portraits/'.$file);
+      		$file=Time().MD5(uniqid(Time().Rand()));
+     		move_uploaded_file ($_FILES['portrait']['tmp_name'],'./files/'.$file.'tmp');
+			$sdst=resize_Image ('./files/'.$file.'tmp',100,130);
+			imagejpeg($sdst,'./files/portraits/'.$file);
 			unlink('./files/'.$file.'tmp');
 		} else {
 		  $file='';
 		}
-		MySQL_Query ("INSERT INTO ".DB_PREFIX."persons VALUES('','".mysql_real_escape_string(safeInput($_POST['name']))."','".mysql_real_escape_string(safeInput($_POST['surname']))."','".mysql_real_escape_string(safeInput($_POST['phone']))."','".Time()."','".$usrinfo['id']."','".mysql_real_escape_string($_POST['contents'])."','".$_POST['secret']."','0','".$file."', '".$_POST['side']."', '".$_POST['power']."', '".$_POST['spec']."')");
+		if (is_uploaded_file($_FILES['symbol']['tmp_name'])) {
+			$sfile=Time().MD5(uniqid(Time().Rand()));
+			move_uploaded_file ($_FILES['symbol']['tmp_name'],'./files/'.$sfile.'tmp');
+			$sdst=resize_Image ('./files/'.$sfile.'tmp',100,130);
+			imagejpeg($sdst,'./files/symbols/'.$sfile);
+			unlink('./files/'.$sfile.'tmp');
+		} else {
+			$sfile='';
+		}
+		MySQL_Query ("INSERT INTO ".DB_PREFIX."persons VALUES('','".mysql_real_escape_string(safeInput($_POST['name']))."','".mysql_real_escape_string(safeInput($_POST['surname']))."','".mysql_real_escape_string(safeInput($_POST['phone']))."','".Time()."','".$usrinfo['id']."','".mysql_real_escape_string($_POST['contents'])."','".$_POST['secret']."','0','".$file."', '".$_POST['side']."', '".$_POST['power']."', '".$_POST['spec'].$sfile."')");
 		if (!isset($_POST['notnew'])) {
 			$pidarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."persons WHERE UCASE(surname)=UCASE('".mysql_real_escape_string(safeInput($_POST['surname']))."') AND UCASE(name)=UCASE('".mysql_real_escape_string(safeInput($_POST['name']))."') AND side='".$_POST['name']."'"));
 			$pid=$pidarray['id'];
@@ -46,12 +55,24 @@
 		  if ($pc=MySQL_Fetch_Assoc($ps)) {
 		    unlink('./files/portraits/'.$pc['portrait']);
 		  }
-      $file=Time().MD5(uniqid(Time().Rand()));
-      move_uploaded_file ($_FILES['portrait']['tmp_name'],'./files/'.$file.'tmp');
+      		$file=Time().MD5(uniqid(Time().Rand()));
+      		move_uploaded_file ($_FILES['portrait']['tmp_name'],'./files/'.$file.'tmp');
 			$dst=resize_Image ('./files/'.$file.'tmp',100,130);
 			imagejpeg($dst,'./files/portraits/'.$file);
 			unlink('./files/'.$file.'tmp');
 			MySQL_Query ("UPDATE ".DB_PREFIX."persons SET portrait='".$file."' WHERE id=".$_POST['personid']);
+		}
+		if (is_uploaded_file($_FILES['symbol']['tmp_name'])) {
+			$sps=MySQL_Query ("SELECT symbol FROM ".DB_PREFIX."persons WHERE id=".$_POST['personid']);
+			if ($spc=MySQL_Fetch_Assoc($sps)) {
+				unlink('./files/symbols/'.$spc['symbol']);
+			}
+			$sfile=Time().MD5(uniqid(Time().Rand()));
+			move_uploaded_file ($_FILES['symbol']['tmp_name'],'./files/'.$sfile.'tmp');
+			$sdst=resize_Image ('./files/'.$sfile.'tmp',100,130);
+			imagejpeg($sdst,'./files/symbols/'.$sfile);
+			unlink('./files/'.$sfile.'tmp');
+			MySQL_Query ("UPDATE ".DB_PREFIX."persons SET symbol='".$sfile."' WHERE id=".$_POST['personid']);
 		}
 		MySQL_Query ("UPDATE ".DB_PREFIX."persons SET name='".mysql_real_escape_string(safeInput($_POST['name']))."', surname='".mysql_real_escape_string(safeInput($_POST['surname']))."', phone='".mysql_real_escape_string($_POST['phone'])."', datum='".Time()."', iduser='".$usrinfo['id']."', contents='".mysql_real_escape_string($_POST['contents'])."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."' WHERE id=".$_POST['personid']);
 		echo '<div id="obsah"><p>Osoba upravena.</p></div>';

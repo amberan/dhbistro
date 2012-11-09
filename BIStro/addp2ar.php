@@ -55,7 +55,7 @@ K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se t
 		<p><input type="checkbox" name="sportraits" value="1"'.(($sportraits)?' checked="checked"':'').'> zobrazit portréty</p>
 	  <div id="filtersubmit"><input type="hidden" name="rid" value="'.$_REQUEST['rid'].'" /><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
-</form><form action="addpersons.php" method="post" class="otherform">';
+</form><form name="addpersons" action="addpersons.php" method="post" class="otherform">';
 	}
 	filter();
 	// vypis osob
@@ -79,12 +79,28 @@ K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se t
 <tbody>
 ';
 		$even=0;
+		$iterator=0;
 		while ($rec=MySQL_Fetch_Assoc($res)) {
-		  echo '<tr class="'.(($even%2==0)?'even':'odd').'"><td><input type="checkbox" name="person[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser'])?' checked="checked"':'').' /></td>
-	<td><select type="role" '.(($rec['iduser'])?' name="role[]':'name="norole[]').'">
-			<option value="0">osoba přítomná</option>
-			<option value="4"'.(($rec['role']==4)?' selected="selected"':'').'>velitel zásahu</option>'
+			echo '<script type="text/javascript" language="JavaScript">
+			<!--
+			function NameChanger'.$iterator.'()
+			{
+				if(document.addpersons.isthere'.$iterator.'.checked == true) {
+					document.addpersons.role'.$iterator.'.name = "role[]";
+				}
+				if(document.addpersons.isthere'.$iterator.'.checked == false) {
+					document.addpersons.role'.$iterator.'.name = "norole[]";
+				}
+				return true;
+			}
+			// -->
+			</script>';
+			
+		  echo '<tr class="'.(($even%2==0)?'even':'odd').'"><td><input type="checkbox" id="isthere'.$iterator.'" name="person[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser'])?' checked="checked"':'').' onClick="NameChanger'.$iterator.'();"/></td>
+	<td><select type="role" id="role'.$iterator.'" '.(($rec['iduser'])?' name="role[]':'name="norole[]').'">
+			<option value="0">osoba přítomná</option>'
 			.(($type==1)?'
+			<option value="4"'.(($rec['role']==4)?' selected="selected"':'').'>velitel zásahu</option>
 			<option value="3"'.(($rec['role']==3)?' selected="selected"':'').'>zatčený</option>':'')
 			.(($type==2)?'
 			<option value="1"'.(($rec['role']==1)?' selected="selected"':'').'>vyslýchaný</option>
@@ -94,6 +110,7 @@ K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se t
 	<td>'.(($rec['secret'])?'<span class="secret"><a href="readperson.php?rid='.$rec['id'].'">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a></span>':'<a href="readperson.php?rid='.$rec['id'].'">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a>').'</td>
 	</tr>';
 			$even++;
+			$iterator++;
 		}
 	  echo '</tbody>
 </table>
