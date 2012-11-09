@@ -38,6 +38,9 @@
 		<?php if($rec['portrait']==NULL){ ?><img src="#" alt="portrét chybí" tile="portrét chybí" id="portraitimg" class="noname"/>
 		<?php }else{ ?><img src="getportrait.php?rid=<?php echo($_REQUEST['rid']); ?>" alt="<?php echo(StripSlashes($rec['name']).' '.StripSlashes($rec['surname'])); ?>" id="portraitimg" />
 		<?php } ?>
+		<?php if($rec['symbol']==NULL){ ?><img src="#" alt="symbol chybí" tile="symbol chybí" id="symbolimg" class="noname"/>
+		<?php }else{ ?><img src="getportrait.php?srid=<?php echo($_REQUEST['rid']); ?>" alt="<?php echo(StripSlashes($rec['name']).' '.StripSlashes($rec['surname'])); ?>" id="symbolimg" />
+		<?php } ?>
 		<div id="info">
 			<?php if ($rec['secret']==1) echo '<h2>TAJNÉ</h2>'?>
 			<h3>Jméno: </h3><p><?php echo(StripSlashes($rec['name'])); ?></p>

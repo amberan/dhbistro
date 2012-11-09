@@ -48,6 +48,7 @@ if (isset($_POST['addtoareport'])) {
 	 // 1: vyslýchaný
 	 // 2: vyslýchající
 	 // 3: zatčený
+	 // 4: velitel vyjezdu
 
 	if (isset($_POST['person'])) {
 		for ($i=0;$i<Count($person);$i++) {
