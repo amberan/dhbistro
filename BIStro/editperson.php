@@ -72,8 +72,18 @@
 					<input type="radio" name="secret" value="0" <?php if ($rec_p['secret']==0) { ?>checked="checked"<?php } ?>/>ne<br/>
 					<h3><label>&nbsp;</label></h3><input type="radio" name="secret" value="1"<?php if ($rec_p['secret']==1) { ?>checked="checked"<?php } ?>>ano
 				<div class="clear">&nbsp;</div>
+				<h3><label for="dead">Mrtvá:</label></h3>
+					<input type="checkbox" name="dead" value=1 <?php if ($rec_p['dead']==1) { ?>checked="checked"<?php } ?>/><br/>
+				<div class="clear">&nbsp;</div>
 <?php 			if ($usrinfo['right_power'] == 1)	{
-				echo '					
+				echo '
+				<h3><label for="archiv">Archiv:</label></h3>
+					<input type="checkbox" name="archiv" value=1';
+				if ($rec_p['archiv']==1) { 
+					echo ' checked="checked"';
+				}
+				echo '/><br/>
+				<div class="clear">&nbsp;</div>					
 				<h3><label for="notnew">Není nové</label></h3>
 					<input type="checkbox" name="notnew"/><br/>
 				<div class="clear">&nbsp;</div>';

@@ -438,6 +438,19 @@ tr.solved a {
 	color: #a0a0a0;
 }
 
+table.filter {
+	border: 0px;
+	width: 50%;
+}
+
+tr.filter {
+  border: 0px;
+}
+
+td.filter {
+  border: 0px;
+}
+
 /***********************************/
 /********** obecné prvky   *********/
 /***********************************/
