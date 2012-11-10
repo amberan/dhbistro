@@ -2,7 +2,7 @@
 	require_once ('./inc/func_main.php');
 	pageStart ('Úprava skupiny');
 	mainMenu (5);
-	sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>úprava skupiny</strong>');
+	sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>úprava skupiny</strong> &raquo; <strong>přidání osob</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	  $res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."groups WHERE id=".$_REQUEST['rid']);
 		if ($rec=MySQL_Fetch_Assoc($res)) {

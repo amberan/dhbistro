@@ -8,7 +8,6 @@
 	if (isset($_POST['insertperson']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['name']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret']) && is_numeric($_POST['side']) && is_numeric($_POST['power']) && is_numeric($_POST['spec'])) {
 	  pageStart ('Přidána osoba');
 		mainMenu (5);
-		sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./newperson.php">nová osoba</a> &raquo; <strong>přidána osoba</strong>');
 		if (is_uploaded_file($_FILES['portrait']['tmp_name'])) {
       		$file=Time().MD5(uniqid(Time().Rand()));
      		move_uploaded_file ($_FILES['portrait']['tmp_name'],'./files/'.$file.'tmp');
@@ -28,18 +27,19 @@
 			$sfile='';
 		}
 		MySQL_Query ("INSERT INTO ".DB_PREFIX."persons VALUES('','".mysql_real_escape_string(safeInput($_POST['name']))."','".mysql_real_escape_string(safeInput($_POST['surname']))."','".mysql_real_escape_string(safeInput($_POST['phone']))."','".Time()."','".$usrinfo['id']."','".mysql_real_escape_string($_POST['contents'])."','".$_POST['secret']."','0','".$file."', '".$_POST['side']."', '".$_POST['power']."', '".$_POST['spec']."', '".$sfile."')");
+		$pidarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."persons WHERE UCASE(surname)=UCASE('".mysql_real_escape_string(safeInput($_POST['surname']))."') AND UCASE(name)=UCASE('".mysql_real_escape_string(safeInput($_POST['name']))."') AND side='".$_POST['name']."'"));
+		$pid=$pidarray['id'];
 		if (!isset($_POST['notnew'])) {
-			$pidarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."persons WHERE UCASE(surname)=UCASE('".mysql_real_escape_string(safeInput($_POST['surname']))."') AND UCASE(name)=UCASE('".mysql_real_escape_string(safeInput($_POST['name']))."') AND side='".$_POST['name']."'"));
-			$pid=$pidarray['id'];
 			unreadRecords (1,$pid);
 		}
+		sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./newperson.php">nová osoba</a> &raquo; <strong>přidána osoba</strong>','<a href="./readperson.php?rid='.$pid.'">zobrazit vytvořené</a> &raquo; <a href="./editperson.php?rid='.$pid.'">úprava osoby</a>');
 		echo '<div id="obsah"><p>Osoba vytvořena.</p></div>';
 		pageEnd ();
 	} else {
 	  if (isset($_POST['insertperson'])) {
 		  pageStart ('Přidána osoba');
 			mainMenu (5);
-			sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./newperson.php">nová osoba</a> &raquo; <strong>přidána osoba</strong>');
+			sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./newperson.php">nová osoba</a> &raquo; <strong>neúspěšné přidání osoby</strong>');
 			echo '<div id="obsah"><p>Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
 			pageEnd ();
 		}
@@ -50,7 +50,7 @@
 		if (!isset($_POST['notnew'])) {
 			unreadRecords (1,$_POST['personid']);
 		}
-		sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./editperson.php?rid='.$_POST['personid'].'">úprava osoby</a> &raquo; <strong>uložení změn</strong>');
+		sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./editperson.php?rid='.$_POST['personid'].'">úprava osoby</a> &raquo; <strong>uložení změn</strong>','<a href="./readperson.php?rid='.$_POST['personid'].'">zobrazit upravené</a>');
 		if (is_uploaded_file($_FILES['portrait']['tmp_name'])) {
 		  $ps=MySQL_Query ("SELECT portrait FROM ".DB_PREFIX."persons WHERE id=".$_POST['personid']);
 		  if ($pc=MySQL_Fetch_Assoc($ps)) {
@@ -82,7 +82,7 @@
 	  if (isset($_POST['editperson'])) {
 		  pageStart ('Uložení změn');
 			mainMenu (5);
-			sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./editperson.php?rid='.$_POST['personid'].'">úprava osoby</a> &raquo; <strong>uložení změn</strong>');
+			sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./editperson.php?rid='.$_POST['personid'].'">úprava osoby</a> &raquo; <strong>uložení změn neúspešné</strong>');
 			echo '<div id="obsah"><p>Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
 			pageEnd ();
 		}
@@ -92,7 +92,7 @@
 		$group=$_POST['group'];
 		pageStart ('Uložení změn');
 		mainMenu (5);
-		sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./editperson.php?rid='.$_POST['personid'].'">úprava osoby</a> &raquo; <strong>uložení změn</strong>');
+		sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./editperson.php?rid='.$_POST['personid'].'">úprava osoby</a> &raquo; <strong>uložení změn</strong>','<a href="./readperson.php?rid='.$_POST['personid'].'">zobrazit upravené</a>');
 		echo '<div id="obsah"><p>Skupiny pro uživatele uloženy.</p></div>';
 		for ($i=0;$i<Count($group);$i++) {
 			MySQL_Query ("INSERT INTO ".DB_PREFIX."g2p VALUES('".$_POST['personid']."','".$group[$i]."','".$usrinfo['id']."')");
@@ -112,7 +112,7 @@
 	  if (isset($_POST['uploadfile'])) {
 		  pageStart ('Přiložení souboru');
 			mainMenu (5);
-			sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./editperson.php?rid='.$_POST['personid'].'">úprava osoby</a> &raquo; <strong>přiložení souboru</strong>');
+			sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./editperson.php?rid='.$_POST['personid'].'">úprava osoby</a> &raquo; <strong>přiložení souboru neúspěšné</strong>');
 			echo '<div id="obsah"><p>Soubor nebyl přiložen, něco se nepodařilo. Možná nebyl zvolen přikládaný soubor.</p></div>';
 			pageEnd ();
 		}

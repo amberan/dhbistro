@@ -2,7 +2,7 @@
 	require_once ('./inc/func_main.php');
 	pageStart ('Úprava hlášení');
 	mainMenu (5);
-	sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>úprava případu</strong>');
+	sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>úprava případu</strong> &raquo; <strong>přidání hlášení</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	  $res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."cases WHERE id=".$_REQUEST['rid']);
 		if ($rec=MySQL_Fetch_Assoc($res)) {
