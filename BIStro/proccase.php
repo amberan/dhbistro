@@ -2,6 +2,7 @@
 	require_once ('./inc/func_main.php');
 	if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete'])) {
 	  MySQL_Query ("UPDATE ".DB_PREFIX."cases SET deleted=1 WHERE id=".$_REQUEST['delete']);
+	  deleteAllUnread (3,$_REQUEST['delete']);
 	  Header ('Location: cases.php');
 	}
 	if (isset($_POST['insertcase']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret']) && is_numeric($_POST['status'])) {
