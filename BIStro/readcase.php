@@ -57,7 +57,7 @@
 					if($i==1){?>
 				<ul id="pripady"><?php 
 						} ?>
-					<li><a href="readactrep.php?rid=<?php echo $perc['id']; ?>"><?php echo $perc['label']; ?></a> <span class="top">[ <strong><?php echo((($perc['type']==1)?'Výjezd':(($perc['type']==2)?'Výslech':'Hlášení')));?></strong> | <strong>Ze dne:</strong> <?php echo(Date ('d.m.Y',$perc['adatum'])); ?> | <strong>Vyhotovil:</strong> <?php echo $perc['user']; ?> ]</span> - <?php echo $perc['task']; ?></li><?php 
+					<li><a href="readactrep.php?rid=<?php echo $perc['id']; ?>&hidenotes=0&truenames=0"><?php echo $perc['label']; ?></a> <span class="top">[ <strong><?php echo((($perc['type']==1)?'Výjezd':(($perc['type']==2)?'Výslech':'Hlášení')));?></strong> | <strong>Ze dne:</strong> <?php echo(Date ('d.m.Y',$perc['adatum'])); ?> | <strong>Vyhotovil:</strong> <?php echo $perc['user']; ?> ]</span> - <?php echo $perc['task']; ?></li><?php 
 				}
 					if($i<>0){ ?>
 				</ul>
