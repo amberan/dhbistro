@@ -62,9 +62,9 @@
 		default: $fsql_my='';
 	}
 	switch ($f_conn) {
-		case 0: $fsql_conn=''; break;
-		case 1: $fsql_conn=' AND '.DB_PREFIX.'ar2c.iduser IS NULL '; break;
-		default: $fsql_conn='';
+		case 0: $fsql_conn=''; $fsql_conn2=''; break;
+		case 1: $fsql_conn=' AND '.DB_PREFIX.'ar2c.idreport IS NULL '; $fsql_conn2=' LEFT JOIN '.DB_PREFIX.'ar2c ON '.DB_PREFIX.'reports.id='.DB_PREFIX.'ar2c.idreport '; break;
+		default: $fsql_conn=''; $fsql_conn2='';
 	}
 	switch ($f_sec) {
 		case 0: $fsql_sec=''; break;
@@ -72,9 +72,9 @@
 		default: $fsql_sec='';
 	}
 	echo $fsql_sec;
-	//
+	
 	function filter () {
-	  global $f_cat, $f_sort, $f_stat, $f_my, $f_conn, $f_sec, $usrinfo;
+	  global $f_cat, $f_sort, $f_stat, $f_my, $f_conn, $fsql_conn2, $f_sec, $usrinfo;
 	  echo '<form action="reports.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -118,7 +118,7 @@
 	        ".DB_PREFIX."users.login AS 'autor',
 	        ".DB_PREFIX."reports.type AS 'type',
 	        ".DB_PREFIX."reports.status AS 'status' 
-	        	FROM ".DB_PREFIX."users, ".DB_PREFIX."reports 
+	        	FROM ".DB_PREFIX."users, ".DB_PREFIX."reports".$fsql_conn2."
 				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0".$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn.$fsql_sec."
 				ORDER BY ".$fsql_sort;
 	} else {
@@ -132,7 +132,7 @@
 	        ".DB_PREFIX."users.login AS 'autor',
 	        ".DB_PREFIX."reports.iduser AS 'riduser',
 	        ".DB_PREFIX."reports.type AS 'type' 
-	        	FROM ".DB_PREFIX."users, ".DB_PREFIX."reports 
+	        	FROM ".DB_PREFIX."users, ".DB_PREFIX."reports".$fsql_conn2." 
 				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0".$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn."
 				ORDER BY ".$fsql_sort;
 	}
