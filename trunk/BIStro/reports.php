@@ -10,7 +10,7 @@
 	  $f_cat=$_REQUEST['type'];
 	}
 	if (!isset($_REQUEST['sort'])) {
-	  $f_sort=1;
+	  $f_sort=6;
 	} else {
 	  $f_sort=$_REQUEST['sort'];
 	}
@@ -47,7 +47,7 @@
 	  case 4: $fsql_sort=' '.DB_PREFIX.'users.login DESC '; break;
 	  case 5: $fsql_sort=' '.DB_PREFIX.'reports.adatum ASC '; break;
 	  case 6: $fsql_sort=' '.DB_PREFIX.'reports.adatum DESC '; break;
-	  default: $fsql_sort=' '.DB_PREFIX.'reports.datum DESC ';
+	  default: $fsql_sort=' '.DB_PREFIX.'reports.adatum DESC ';
 	}
 	switch ($f_stat) {
 		case 0: $fsql_stat=''; break;
@@ -71,7 +71,6 @@
 		case 1: $fsql_sec=' AND '.DB_PREFIX.'reports.secret=1 '; break;
 		default: $fsql_sec='';
 	}
-	echo $fsql_sec;
 	
 	function filter () {
 	  global $f_cat, $f_sort, $f_stat, $f_my, $f_conn, $fsql_conn2, $f_sec, $usrinfo;
@@ -87,13 +86,13 @@
 	<option value="0"'.(($f_cat==0)?' selected="selected"':'').'>všechna</option>
 	<option value="1"'.(($f_cat==1)?' selected="selected"':'').'>z výjezdu</option>
 	<option value="2"'.(($f_cat==2)?' selected="selected"':'').'>z výslechu</option>
-</select> a seřadit je podle <select name="sort">
+</select> a seřadit je podle <select name="sort" >
 	<option value="1"'.(($f_sort==1)?' selected="selected"':'').'>data hlášení sestupně</option>
 	<option value="2"'.(($f_sort==2)?' selected="selected"':'').'>data hlášení vzestupně</option>
 	<option value="3"'.(($f_sort==3)?' selected="selected"':'').'>jména autora vzestupně</option>
 	<option value="4"'.(($f_sort==4)?' selected="selected"':'').'>jména autora sestupně</option>
 	<option value="5"'.(($f_sort==5)?' selected="selected"':'').'>data výjezdu vzestupně</option>
-	<option value="6"'.(($f_sort==6)?' selected="selected"':'').'>data výjezdu sestupně</option>
+	<option value="6"'.((!$f_sort==6)?'':' selected="selected"').'>data výjezdu sestupně</option>
 </select>.</br>
 	<input type="checkbox" name="my" value="my" class="checkbox"'.(($f_my==1)?' checked="checked"':'').' /> Jen moje.<br />
 	<input type="checkbox" name="conn" value="conn" class="checkbox"'.(($f_conn==1)?' checked="checked"':'').' /> Jen nepřiřazené.';

@@ -2,7 +2,28 @@
 	require_once ('./inc/func_main.php');
 
 if (isset($_POST['addtocase'])) {
-	MySQL_Query ("DELETE FROM ".DB_PREFIX."c2p WHERE ".DB_PREFIX."c2p.idcase=".$_POST['caseid']);
+	MySQL_Query ("DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=0 AND p.dead=0 AND c.idcase=".$_POST['caseid']);
+	if ($usrinfo['right_power']==1 && $_POST['farchiv']==0 && $_POST['fdead']==0) {
+		MySQL_Query ("DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=0 AND p.dead=0 AND c.idcase=".$_POST['caseid']);
+	} 
+	if ($usrinfo['right_power']==0 && $_POST['farchiv']==1 && $_POST['fdead']==0) {
+		MySQL_Query ("DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=1 AND p.dead=0 AND c.idcase=".$_POST['caseid']);
+	}
+	if ($usrinfo['right_power']==0 && $_POST['farchiv']==0 && $_POST['fdead']==1) {
+		MySQL_Query ("DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=0 AND p.dead=1 AND c.idcase=".$_POST['caseid']);
+	}
+	if ($usrinfo['right_power']==1 && $_POST['farchiv']==1 && $_POST['fdead']==0) {
+		MySQL_Query ("DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=1 AND p.dead=0 AND c.idcase=".$_POST['caseid']);
+	}
+	if ($usrinfo['right_power']==0 && $_POST['farchiv']==1 && $_POST['fdead']==1) {
+		MySQL_Query ("DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=1 AND p.dead=1 AND c.idcase=".$_POST['caseid']);
+	}
+	if ($usrinfo['right_power']==1 && $_POST['farchiv']==0 && $_POST['fdead']==1) {
+		MySQL_Query ("DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=0 AND p.dead=1 AND c.idcase=".$_POST['caseid']);
+	}
+	if ($usrinfo['right_power']==1 && $_POST['farchiv']==1 && $_POST['fdead']==1) {
+		MySQL_Query ("DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=1 AND p.dead=1 AND c.idcase=".$_POST['caseid']);
+	}
 	if (isset($_POST['person'])) {
 		$person=$_POST['person'];
 	}
@@ -19,7 +40,28 @@ if (isset($_POST['addtocase'])) {
 }
 
 if (isset($_POST['addtogroup'])) {
-	MySQL_Query ("DELETE FROM ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idgroup=".$_POST['groupid']);
+	MySQL_Query ("DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=0 AND p.dead=0 AND c.idgroup=".$_POST['groupid']);
+	if ($usrinfo['right_power']==1 && $_POST['farchiv']==0 && $_POST['fdead']==0) {
+		MySQL_Query ("DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=0 AND p.dead=0 AND c.idgroup=".$_POST['groupid']);
+	} 
+	if ($usrinfo['right_power']==0 && $_POST['farchiv']==1 && $_POST['fdead']==0) {
+		MySQL_Query ("DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=1 AND p.dead=0 AND c.idgroup=".$_POST['groupid']);
+	}
+	if ($usrinfo['right_power']==0 && $_POST['farchiv']==0 && $_POST['fdead']==1) {
+		MySQL_Query ("DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=0 AND p.dead=1 AND c.idgroup=".$_POST['groupid']);
+	}
+	if ($usrinfo['right_power']==1 && $_POST['farchiv']==1 && $_POST['fdead']==0) {
+		MySQL_Query ("DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=1 AND p.dead=0 AND c.idgroup=".$_POST['groupid']);
+	}
+	if ($usrinfo['right_power']==0 && $_POST['farchiv']==1 && $_POST['fdead']==1) {
+		MySQL_Query ("DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=1 AND p.dead=1 AND c.idgroup=".$_POST['groupid']);
+	}
+	if ($usrinfo['right_power']==1 && $_POST['farchiv']==0 && $_POST['fdead']==1) {
+		MySQL_Query ("DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=0 AND p.dead=1 AND c.idgroup=".$_POST['groupid']);
+	}
+	if ($usrinfo['right_power']==1 && $_POST['farchiv']==1 && $_POST['fdead']==1) {
+		MySQL_Query ("DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=1 AND p.dead=1 AND c.idgroup=".$_POST['groupid']);
+	}
 	if (isset($_POST['person'])) {
 		$person=$_POST['person'];
 	}
@@ -36,7 +78,28 @@ if (isset($_POST['addtogroup'])) {
 }
 
 if (isset($_POST['addtoareport'])) {
-	MySQL_Query ("DELETE FROM ".DB_PREFIX."ar2p WHERE ".DB_PREFIX."ar2p.idreport=".$_POST['reportid']);
+	MySQL_Query ("DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=0 AND p.dead=0 AND c.idreport=".$_POST['reportid']);
+	if ($usrinfo['right_power']==1 && $_POST['farchiv']==0 && $_POST['fdead']==0) {
+		MySQL_Query ("DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=0 AND p.dead=0 AND c.idreport=".$_POST['reportid']);
+	} 
+	if ($usrinfo['right_power']==0 && $_POST['farchiv']==1 && $_POST['fdead']==0) {
+		MySQL_Query ("DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=1 AND p.dead=0 AND c.idreport=".$_POST['reportid']);
+	}
+	if ($usrinfo['right_power']==0 && $_POST['farchiv']==0 && $_POST['fdead']==1) {
+		MySQL_Query ("DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=0 AND p.dead=1 AND c.idreport=".$_POST['reportid']);
+	}
+	if ($usrinfo['right_power']==1 && $_POST['farchiv']==1 && $_POST['fdead']==0) {
+		MySQL_Query ("DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=1 AND p.dead=0 AND c.idreport=".$_POST['reportid']);
+	}
+	if ($usrinfo['right_power']==0 && $_POST['farchiv']==1 && $_POST['fdead']==1) {
+		MySQL_Query ("DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=1 AND p.dead=1 AND c.idreport=".$_POST['reportid']);
+	}
+	if ($usrinfo['right_power']==1 && $_POST['farchiv']==0 && $_POST['fdead']==1) {
+		MySQL_Query ("DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=0 AND p.dead=1 AND c.idreport=".$_POST['reportid']);
+	}
+	if ($usrinfo['right_power']==1 && $_POST['farchiv']==1 && $_POST['fdead']==1) {
+		MySQL_Query ("DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."persons as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=1 AND p.dead=1 AND c.idreport=".$_POST['reportid']);
+	}
 	if (isset($_POST['person'])) {
 		$person=$_POST['person'];
 	}

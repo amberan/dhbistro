@@ -37,14 +37,39 @@ K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se t
 	} else {
 		$sportraits=$_POST['sportraits'];
 	}
+	if (!isset($_POST['ssymbols'])) {
+		$ssymbols=false;
+	} else {
+		$ssymbols=$_POST['ssymbols'];
+	}
+	if (!isset($_POST['fdead'])) {
+		$fdead=0;
+	} else {
+		$fdead=1;
+	}
+	if (!isset($_POST['farchiv'])) {
+		$farchiv=0;
+	} else {
+		$farchiv=1;
+	}
 	switch ($f_sort) {
 	  case 1: $fsql_sort=' '.DB_PREFIX.'persons.surname, '.DB_PREFIX.'persons.name ASC '; break;
 	  case 2: $fsql_sort=' '.DB_PREFIX.'persons.surname, '.DB_PREFIX.'persons.name DESC '; break;
 	  default: $fsql_sort=' '.DB_PREFIX.'persons.surname, '.DB_PREFIX.'persons.name ASC ';
 	}
+	switch ($fdead) {
+		case 0: $fsql_dead=' AND '.DB_PREFIX.'persons.dead=0 '; break;
+		case 1: $fsql_dead=''; break;
+		default: $fsql_dead=' AND '.DB_PREFIX.'persons.dead=0 ';
+	}
+	switch ($farchiv) {
+		case 0: $fsql_archiv=' AND '.DB_PREFIX.'persons.archiv=0 '; break;
+		case 1: $fsql_archiv=''; break;
+		default: $fsql_archiv=' AND '.DB_PREFIX.'persons.archiv=0 ';
+	}
 	// formular filtru
 	function filter () {
-		global $f_sort, $sportraits;
+		global $f_sort, $sportraits, $ssymbols, $farchiv, $fdead;
 	  echo '<form action="addp2ar.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -52,7 +77,15 @@ K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se t
 	<option value="1"'.(($f_sort==1)?' selected="selected"':'').'>příjmení a jména vzestupně</option>
 	<option value="2"'.(($f_sort==2)?' selected="selected"':'').'>příjmení a jména sestupně</option>
 </select>.</p>
-		<p><input type="checkbox" name="sportraits" value="1"'.(($sportraits)?' checked="checked"':'').'> zobrazit portréty</p>
+		<table class="filter">
+	<tr class="filter">
+	<td class="filter"><input type="checkbox" name="sportraits" value="1"'.(($sportraits)?' checked="checked"':'').'> Zobrazit portréty.</td>
+	<td class="filter"><input type="checkbox" name="fdead" value="1"'.(($fdead==1)?' checked="checked"':'').'> Zobrazit i mrtvé.</td>
+	</tr>
+	<td class="filter"><input type="checkbox" name="ssymbols" value="1"'.(($ssymbols)?' checked="checked"':'').'> Zobrazit symboly.</td>
+	<td class="filter"><input type="checkbox" name="farchiv" value="1"'.(($farchiv==1)?' checked="checked"':'').'> Zobrazit i archiv.</td>
+	</tr>
+	</table>
 	  <div id="filtersubmit"><input type="hidden" name="rid" value="'.$_REQUEST['rid'].'" /><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
 </form><form name="addpersons" action="addpersons.php" method="post" class="otherform">';
@@ -60,9 +93,9 @@ K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se t
 	filter();
 	// vypis osob
 	if ($usrinfo['right_power']) {
-		$sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."ar2p.role AS 'role', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."persons LEFT JOIN ".DB_PREFIX."ar2p ON ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."persons.deleted=0 ORDER BY ".$fsql_sort;
+		$sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."ar2p.role AS 'role', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."persons LEFT JOIN ".DB_PREFIX."ar2p ON ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."persons.deleted=0 ".$fsql_dead.$fsql_archiv." ORDER BY ".$fsql_sort;
 	} else {
-	  $sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."ar2p.role AS 'role', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."persons LEFT JOIN ".DB_PREFIX."ar2p ON ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."persons.deleted=0 AND ".DB_PREFIX."persons.secret=0 ORDER BY ".$fsql_sort;
+	  $sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."ar2p.role AS 'role', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."persons LEFT JOIN ".DB_PREFIX."ar2p ON ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."persons.deleted=0 ".$fsql_dead.$fsql_archiv." AND ".DB_PREFIX."persons.secret=0 ORDER BY ".$fsql_sort;
 	}
 	$res=MySQL_Query ($sql);
 	if (MySQL_Num_Rows($res)) {
@@ -72,7 +105,7 @@ K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se t
 	<tr>
 	<th>#</th>
 	<th>Úloha</th>
-'.(($sportraits)?'<th>Portrét</th>':'').'
+'.(($sportraits)?'<th>Portrét</th>':'').(($ssymbols)?'<th>Symbol</th>':'').'
 	  <th>Jméno</th>
 	</tr>
 </thead>
@@ -106,7 +139,7 @@ K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se t
 			<option value="1"'.(($rec['role']==1)?' selected="selected"':'').'>vyslýchaný</option>
 			<option value="2"'.(($rec['role']==2)?' selected="selected"':'').'>vyslýchající</option>':'').'
 		</select></td>
-'.(($sportraits)?'<td><img src="getportrait.php?rid='.$rec['id'].'" alt="portrét chybí" /></td>':'').'
+'.(($sportraits)?'<td><img src="getportrait.php?rid='.$rec['id'].'" alt="portrét chybí" /></td>':'').(($ssymbols)?'<td><img src="getportrait.php?srid='.$rec['id'].'" alt="symbol chybí" /></td>':'').'
 	<td>'.(($rec['secret'])?'<span class="secret"><a href="readperson.php?rid='.$rec['id'].'">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a></span>':'<a href="readperson.php?rid='.$rec['id'].'">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a>').'</td>
 	</tr>';
 			$even++;
@@ -119,6 +152,8 @@ K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se t
 ?>
 
 <div>
+<input type="hidden" name="fdead" value="<?php echo $fdead; ?>" />
+<input type="hidden" name="farchiv" value="<?php echo $farchiv; ?>" />
 <input type="hidden" name="reportid" value="<?php echo $_REQUEST['rid']; ?>" />
 <input type="submit" value="Uložit změny" name="addtoareport" class="submitbutton" />
 </div>
