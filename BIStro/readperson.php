@@ -42,7 +42,12 @@
 		<?php }else{ ?><img src="getportrait.php?srid=<?php echo($_REQUEST['rid']); ?>" alt="<?php echo(StripSlashes($rec['name']).' '.StripSlashes($rec['surname'])); ?>" id="symbolimg" />
 		<?php } ?>
 		<div id="info">
-			<?php if ($rec['secret']==1) echo '<h2>TAJNÉ</h2>'?>
+			<?php 
+			if ($rec['secret']==1 || $rec['dead']==1 || $rec['archiv']==1) echo '<h2>';
+			if ($rec['secret']==1) echo 'TAJNÉ ';
+			if ($rec['dead']==1) echo 'MRTVOLA ';
+			if ($rec['archiv']==1) echo 'ARCHIV';
+			if ($rec['secret']==1 || $rec['dead']==1 || $rec['archiv']==1) echo '</h2>' ?>
 			<h3>Jméno: </h3><p><?php echo(StripSlashes($rec['name'])); ?></p>
 			<div class="clear">&nbsp;</div>
 			<h3>Příjmení: </h3><p><?php echo(StripSlashes($rec['surname'])); ?></p>
