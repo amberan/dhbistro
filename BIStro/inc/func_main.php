@@ -5,10 +5,21 @@
   $starttime = $mtime;
 	
 	// verze
-	$mazzarino_version='1.2.0alfa';
+	$mazzarino_version='1.2.1alfa';
   
 	// sessions
 	session_start();
+	// doba timeoutu ve vterinach
+	$inactive = 600;
+	
+	if(isset($_SESSION['timeout']) ) {
+		$session_life = time() - $_SESSION['timeout'];
+			if($session_life > $inactive) {
+        		session_destroy(); header("Location: login.php");
+			}
+	}
+	
+	$_SESSION['timeout'] = time();
 	
 	// databaze
   switch ($_SERVER["SERVER_NAME"]) {
