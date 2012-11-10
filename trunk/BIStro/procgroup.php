@@ -2,6 +2,7 @@
 	require_once ('./inc/func_main.php');
 	if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete'])) {
 	  MySQL_Query ("UPDATE ".DB_PREFIX."groups SET deleted=1 WHERE id=".$_REQUEST['delete']);
+	  deleteAllUnread (2,$_REQUEST['delete']);
 	  Header ('Location: groups.php');
 	}
 	if (isset($_POST['insertgroup']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret'])) {
