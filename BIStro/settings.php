@@ -6,7 +6,7 @@
 ?>
 <script type="text/javascript" language="JavaScript">
 <!--
-function pwdcheck(form)
+function pwdcheck(form) 
 {
 	if (form.heslo.value != form.heslo2.value) {
 		alert ('Hesla nejsou stejná.');
@@ -14,12 +14,19 @@ function pwdcheck(form)
 	}
 	else return true;
 }
+
 -->
 </script>
+
 <div id="obsah"><strong>Nepoužívejte svá obvyklá hesla</strong>, protože v tomto systému se hesla ukládají nezakódovaná. <strong>Dají se v databázi přímo přečíst</strong>, takže si vymyslete něco čistě pro hru.<p></p></div>
 <form action="procsettings.php" method="post" name="inputform" id="inputform" onSubmit="return pwdcheck(this);">
 	<div>
-	<label for="heslo">Staré heslo:</label>
+	<label for="timeout">Timeout:</label>
+  	<input type="text" name="timeout" id="timeout" value="<?php echo $usrinfo['timeout']?>"/>
+  	Zadávejte ve vteřinách v rozmezí 30 - 1800. 
+	</div>
+	<div>
+	<label for="soucheslo">Staré heslo:</label>
   	<input type="password" name="soucheslo" id="soucheslo" value=""/>
 	</div>
 	<div>

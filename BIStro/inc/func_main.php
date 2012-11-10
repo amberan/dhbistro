@@ -9,18 +9,7 @@
   
 	// sessions
 	session_start();
-	// doba timeoutu ve vterinach
-	$inactive = 600;
-	
-	if(isset($_SESSION['timeout']) ) {
-		$session_life = time() - $_SESSION['timeout'];
-			if($session_life > $inactive) {
-        		session_destroy(); header("Location: login.php");
-			}
-	}
-	
-	$_SESSION['timeout'] = time();
-	
+
 	// databaze
   switch ($_SERVER["SERVER_NAME"]) {
   	case '127.0.0.1':
@@ -78,6 +67,7 @@
 												".DB_PREFIX."users.lastlogon AS 'lastlogon',
 												".DB_PREFIX."users.right_power AS 'right_power',
 												".DB_PREFIX."users.right_text AS 'right_text',
+												".DB_PREFIX."users.timeout AS 'timeout',
 												".DB_PREFIX."users.ip AS 'ip',
 												".DB_PREFIX."users.plan AS 'plan',
 												".DB_PREFIX."loggedin.sid AS 'sid',
@@ -98,6 +88,22 @@
 	} else {
 	  $loggedin=false;
 	}
+
+	// doba timeoutu ve vterinach
+	if (isset($usrinfo['timeout'])) {
+		$inactive = $usrinfo['timeout'];
+	} else {
+		$inactive = 600;
+	}
+	
+	if(isset($_SESSION['timeout']) ) {
+		$session_life = time() - $_SESSION['timeout'];
+		if($session_life > $inactive) {
+			session_destroy(); header("Location: login.php");
+		}
+	}
+	
+	$_SESSION['timeout'] = time();
 	
   // ta parametrizaci na verzi je tam proto, ze na lokale to kdoviproc nefunguje	
   // overeni prihlaseni, nutno zmenit jmeno souboru na ostre verzi
