@@ -21,7 +21,7 @@ K případu můžete přiřadit hlášení, která se ho týkají.
 	  $f_cat=$_REQUEST['type'];
 	}
 	if (!isset($_REQUEST['sort'])) {
-	  $f_sort=1;
+	  $f_sort=6;
 	} else {
 	  $f_sort=$_REQUEST['sort'];
 	}
@@ -41,7 +41,9 @@ K případu můžete přiřadit hlášení, která se ho týkají.
 	  case 2: $fsql_sort=' '.DB_PREFIX.'reports.datum ASC '; break;
 	  case 3: $fsql_sort=' '.DB_PREFIX.'users.login ASC '; break;
 	  case 4: $fsql_sort=' '.DB_PREFIX.'users.login DESC '; break;
-	  default: $fsql_sort=' '.DB_PREFIX.'reports.datum DESC ';
+	  case 5: $fsql_sort=' '.DB_PREFIX.'reports.adatum ASC '; break;
+	  case 6: $fsql_sort=' '.DB_PREFIX.'reports.adatum DESC '; break;
+	  default: $fsql_sort=' '.DB_PREFIX.'reports.adatum DESC ';
 	}
 	switch ($f_stat) {
 		case 0: $fsql_stat=''; break;
@@ -55,9 +57,10 @@ K případu můžete přiřadit hlášení, která se ho týkají.
 	  global $f_cat;
 		global $f_sort;
 		  global $f_stat;
-	  echo '<form action="reports.php" method="post" id="filter">
+	  echo '<form action="addc2ar.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
+<!--
 	  <p>Vypsat <select name="status">
 	<option value="0"'.(($f_stat==0)?' selected="selected"':'').'>všechna</option>
 	<option value="1"'.(($f_stat==1)?' selected="selected"':'').'>rozpracovaná</option>
@@ -67,13 +70,19 @@ K případu můžete přiřadit hlášení, která se ho týkají.
 	<option value="0"'.(($f_cat==0)?' selected="selected"':'').'>všechna</option>
 	<option value="1"'.(($f_cat==1)?' selected="selected"':'').'>z výjezdu</option>
 	<option value="2"'.(($f_cat==2)?' selected="selected"':'').'>z výslechu</option>
-</select> a seřadit je podle <select name="sort">
-	<option value="1"'.(($f_sort==1)?' selected="selected"':'').'>data sestupně</option>
-	<option value="2"'.(($f_sort==2)?' selected="selected"':'').'>data vzestupně</option>
+</select> a 
+-->
+seřadit je podle <select name="sort">
+	<option value="1"'.(($f_sort==1)?' selected="selected"':'').'>data hlášení sestupně</option>
+	<option value="2"'.(($f_sort==2)?' selected="selected"':'').'>data hlášení vzestupně</option>
 	<option value="3"'.(($f_sort==3)?' selected="selected"':'').'>jména autora vzestupně</option>
 	<option value="4"'.(($f_sort==4)?' selected="selected"':'').'>jména autora sestupně</option>
+	<option value="5"'.(($f_sort==5)?' selected="selected"':'').'>data výjezdu vzestupně</option>
+	<option value="6"'.((!$f_sort==6)?'':' selected="selected"').'>data výjezdu sestupně</option>
 </select>.</p>
-	  <div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
+	  <div id="filtersubmit">
+	  <input type="hidden" name="rid" value="'.$_REQUEST['rid'].'" />
+	  <input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
 </form><form action="addreports.php" method="post" class="otherform">';
 	}

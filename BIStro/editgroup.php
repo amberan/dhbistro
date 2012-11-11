@@ -28,7 +28,7 @@
 	</div>
 	<!-- end of #info -->
 	<fieldset><legend><h2>Popis:</h2></legend>
-		<textarea cols="80" rows="7" name="contents" id="contents"><?php echo StripSlashes($rec_g['contents']); ?></textarea>
+		<textarea cols="80" rows="30" name="contents" id="contents"><?php echo StripSlashes($rec_g['contents']); ?></textarea>
 	</fieldset>
 	<input type="hidden" name="groupid" value="<?php echo $rec_g['id']; ?>" />
 	<input type="submit" name="editgroup" id="submitbutton" value="Uložit změny"  title="Uložit změny"/>

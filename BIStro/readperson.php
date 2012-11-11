@@ -21,10 +21,7 @@
 			}
 			if ($usrinfo['right_text']) {
 				$editbutton='; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>';
-			} else {
-				$editbutton='';
-			}
-			if ($usrinfo['right_power']) {
+			} else if ($usrinfo['right_power']) {
 				$editbutton='; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>; číslo osoby: '.$rec['id'].'</a>';
 			} else {
 				$editbutton='';
