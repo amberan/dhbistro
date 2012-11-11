@@ -95,7 +95,7 @@
 		<!-- náseduje popis osoby -->
 		<fieldset><legend><h2>Popis osoby</h2></legend>
 			<div class="field-text">
-				<textarea cols="80" rows="7" name="contents" id="contents"><?php echo StripSlashes($rec_p['contents']); ?></textarea>
+				<textarea cols="80" rows="30" name="contents" id="contents"><?php echo StripSlashes($rec_p['contents']); ?></textarea>
 			</div>
 			<!-- end of .field-text -->
 		</fieldset>

@@ -121,33 +121,33 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 <label for="summary">Shrnutí:</label>
 </div>
 <div>
-<textarea cols="80" rows="7" name="summary" id="summary"><?php echo StripSlashes($rec['summary']); ?></textarea>
+<textarea cols="80" rows="20" name="summary" id="summary"><?php echo StripSlashes($rec['summary']); ?></textarea>
 </div>
 <div>
 <label for="impacts">Možné dopady:</label>
 </div>
 <div>
-<textarea cols="80" rows="7" name="impacts" id="impacts"><?php echo StripSlashes($rec['impacts']); ?></textarea>
+<textarea cols="80" rows="20" name="impacts" id="impacts"><?php echo StripSlashes($rec['impacts']); ?></textarea>
 </div>
 <div>
 <label for="details">Podrobný popis průběhu:</label>
 </div>
 <div>
-<textarea cols="80" rows="7" name="details" id="details"><?php echo StripSlashes($rec['details']); ?></textarea>
+<textarea cols="80" rows="30" name="details" id="details"><?php echo StripSlashes($rec['details']); ?></textarea>
 </div>
 <div>
 <div>
 <label for="energy">Energetická náročnost:</label>
 </div>
 <div>
-<textarea cols="80" rows="7" name="energy" id="energy"><?php echo StripSlashes($rec['energy']); ?></textarea>
+<textarea cols="80" rows="10" name="energy" id="energy"><?php echo StripSlashes($rec['energy']); ?></textarea>
 </div>
 <div>
 <div>
 <label for="details">Počáteční vstupy:</label>
 </div>
 <div>
-<textarea cols="80" rows="7" name="inputs" id="inputs"><?php echo StripSlashes($rec['inputs']); ?></textarea>
+<textarea cols="80" rows="10" name="inputs" id="inputs"><?php echo StripSlashes($rec['inputs']); ?></textarea>
 </div>
 <div>
 

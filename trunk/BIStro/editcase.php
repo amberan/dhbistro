@@ -36,7 +36,7 @@
 			</div>
 			<!-- end of #info -->
 			<fieldset><legend><h2>Obsah:</h2></legend>
-				<textarea cols="80" rows="7" name="contents" id="contents"><?php echo StripSlashes($rec_c['contents']); ?></textarea>
+				<textarea cols="80" rows="30" name="contents" id="contents"><?php echo StripSlashes($rec_c['contents']); ?></textarea>
 			</fieldset>
 			<div>
 			  <input type="hidden" name="caseid" value="<?php echo $rec_c['id']; ?>" />
