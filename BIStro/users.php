@@ -57,6 +57,7 @@
 	  <th>Poslední přihlášení</th>
 	  <th>Power user</th>
 	  <th>Editace hlavních textů</th>
+	  '.(($usrinfo['right_org'])?'<th>Organizátor</th>':'').'
 	  <th>Akce</th>
 	</tr>
 </thead>
@@ -69,6 +70,7 @@
 	<td>'.(($rec['lastlogon'])?Date ('d. m. Y (H:i:s)',$rec['lastlogon']):'nikdy').'</td>
 	<td>'.(($rec['right_power'])?'ano':'ne').'</td>
 	<td>'.(($rec['right_text'])?'ano':'ne').'</td>
+	'.(($usrinfo['right_org'])?'<td>'.(($rec['right_org'])?'ano':'ne').'</td>':'').'
 	<td><a href="edituser.php?rid='.$rec['id'].'">upravit</a> | <a href="procuser.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat uživatele &quot;".$rec['login']."&quot;?');".'">smazat</a></td>
 </tr>';
 			$even++;
