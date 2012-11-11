@@ -123,7 +123,7 @@
 				$res=MySQL_Query ($sql);
 				while ($rec=MySQL_Fetch_Assoc($res)) {
 					echo '<div>'.
-					(($rec['secret'])?'<input type="checkbox" name="group[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser'])?' checked="checked"':'').' />
+					((!$rec['secret'])?'<input type="checkbox" name="group[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser'])?' checked="checked"':'').' />
 					<label>'.$rec['title'].'</label>':(($rec['iduser'])?'<input type="hidden" name="group[]" value="'.$rec['id'].'" />':'')).'
 				</div>';
 				}
