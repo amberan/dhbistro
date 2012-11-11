@@ -67,6 +67,7 @@
 												".DB_PREFIX."users.lastlogon AS 'lastlogon',
 												".DB_PREFIX."users.right_power AS 'right_power',
 												".DB_PREFIX."users.right_text AS 'right_text',
+												".DB_PREFIX."users.right_org AS 'right_org',
 												".DB_PREFIX."users.timeout AS 'timeout',
 												".DB_PREFIX."users.ip AS 'ip',
 												".DB_PREFIX."users.plan AS 'plan',
@@ -175,6 +176,35 @@ function deleteAllUnread ($tablenum,$rid) {
 	while ($rec_ur=MySQL_Fetch_Assoc($res_ur)) {
 		$srsql="DELETE FROM ".DB_PREFIX."unread_".$rec_ur['id']." WHERE idtable=".$tablenum." AND idrecord=".$rid;
 		MySQL_Query ($srsql);
+	}
+}
+
+// ziskani autora zaznamu
+function getAuthor ($recid,$trn) {
+	if ($trn==1) {
+		$sql_ga="SELECT ".DB_PREFIX."persons.name as 'name', ".DB_PREFIX."persons.surname as 'surname', ".DB_PREFIX."users.login as 'nick' FROM ".DB_PREFIX."persons, ".DB_PREFIX."users WHERE ".DB_PREFIX."users.id=".$recid." AND ".DB_PREFIX."persons.id=".DB_PREFIX."users.idperson";
+		$res_ga=MySQL_Query ($sql_ga);
+		if (MySQL_Num_Rows($res_ga)) {
+			while ($rec_ga=MySQL_Fetch_Assoc($res_ga)) {
+				$name=StripSlashes ($rec_ga['surname']).', '.StripSlashes ($rec_ga['name']);
+				return $name;
+			}
+		} else {
+			$name='Uživatel není přiřazen.';
+			return $name;
+		}
+	} else {
+		$sql_ga="SELECT ".DB_PREFIX."users.login as 'nick' FROM ".DB_PREFIX."users WHERE ".DB_PREFIX."users.id=".$rec['iduser'];
+		$res_ga=MySQL_Query ($sql_ga);
+		if (MySQL_Num_Rows($res_ga)) {
+			while ($rec_ga=MySQL_Fetch_Assoc($res_ga)) {
+				$name=StripSlashes ($rec_ga['nick']);
+				return $name;
+			}
+		} else {
+			$name='Neznámo.';
+			return $name;
+		}
 	}
 }
   

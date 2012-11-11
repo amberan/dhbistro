@@ -19,10 +19,12 @@
 				$hidenotes='&amp;hidenotes=0">zobrazit poznámky</a>';
 				$backurl='readperson.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
 			}
-			if ($usrinfo['right_text']) {
-				$editbutton='; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>';
+			if ($usrinfo['right_org']) {
+				$editbutton='; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>; číslo osoby: '.$rec['id'].'; <a href="orgperson.php?rid='.$_REQUEST['rid'].'">organizačně upravit osobu</a>;';
 			} else if ($usrinfo['right_power']) {
-				$editbutton='; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>; číslo osoby: '.$rec['id'].'</a>';
+				$editbutton='; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>; číslo osoby: '.$rec['id'].'';
+			} else if ($usrinfo['right_text']) {
+				$editbutton='; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>';
 			} else {
 				$editbutton='';
 			}
@@ -106,6 +108,18 @@
 				} else {
 					echo '&mdash;';
 				} ?></p>
+			<div class="clear">&nbsp;</div>
+			<h3>Telefon: </h3><p><?php echo(StripSlashes($rec['phone'])); ?></p>
+			<div class="clear">&nbsp;</div>
+			<p><strong>Datum registrace:</strong> <?php echo (($rec['regdate']==0)?'asi dávno':(Date ('d. m. Y',$rec['regdate']))); ?>
+				<strong>Registroval:</strong> <?php 
+				$name=getAuthor($rec['regid'],1);
+				echo (($rec['regid']==0)?'asi Krauz':$name); ?> </p>
+			<div class="clear">&nbsp;</div>
+			<p><strong>Datum poslední změny:</strong> <?php echo(Date ('d. m. Y',$rec['datum'])); ?>
+				<strong>Změnil:</strong> <?php 
+				$name=getAuthor($rec['iduser'],1);
+				echo $name; ?> </p>
 			<div class="clear">&nbsp;</div>
 		</div>
 		<!-- end of #info -->
