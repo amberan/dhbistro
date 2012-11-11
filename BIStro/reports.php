@@ -15,7 +15,7 @@
 	  $f_sort=$_REQUEST['sort'];
 	}
 	if (!isset($_REQUEST['status'])) {
-		$f_stat=0;
+		$f_stat=2;
 	} else {
 		$f_stat=$_REQUEST['status'];
 	}
@@ -54,7 +54,7 @@
 		case 1: $fsql_stat=' AND '.DB_PREFIX.'reports.status=0 '; break;
 		case 2: $fsql_stat=' AND '.DB_PREFIX.'reports.status=1 '; break;
 		case 3: $fsql_stat=' AND '.DB_PREFIX.'reports.status=2 '; break;
-		default: $fsql_stat='';
+		default: $fsql_stat=' AND '.DB_PREFIX.'reports.status=1 ';
 	}
 	switch ($f_my) {
 		case 0: $fsql_my=''; break;
