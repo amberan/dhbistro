@@ -400,6 +400,11 @@ div > .poznamka-edit-buttons {position:absolute;right:0px;top:0px;}
 .poznamka-edit-buttons a.edit {background-image:url('../css/edit.png')}
 .poznamka-edit-buttons a.delete {background-image:url('../css/delete.png')}
 
+.info-delete-symbol {position:absolute;right:13.3em;top:10.5em;}
+.info-delete-symbol a {display:inline-block;width:16px;height:16px;margin:3px;overflow:hidden;vertical-align:bottom;}
+.info-delete-symbol a span.button-text {display:none;}
+.info-delete-symbol a.delete {background-image:url('../css/delete.png')}
+
 #portraitimg {
 	position: absolute;
 	right: 1.2em;
@@ -427,7 +432,7 @@ div > .poznamka-edit-buttons {position:absolute;right:0px;top:0px;}
 #symbolimg.noname {
 	text-indent:-1000px;
 	overflow:hidden;
-	background:url('../css/noname.png') no-repeat scroll center transparent;
+	background:url('../css/nosymbol.png') no-repeat scroll center transparent;
 }
 
 /***********************************/
