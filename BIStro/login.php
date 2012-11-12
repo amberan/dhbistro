@@ -4,7 +4,7 @@
 ?>
 <div id="logincontent">
 	<div id="loginmiddle">
-		<form action="index.php" method="post">
+		<form action="index.php" method="post" id="<?php echo (($verze==0 || $verze==1 || $verze==3)?'dh':'other'); ?>">
   		<div>
   			<label for="loginname">Jméno:</label>
 				<input type="text" name="loginname" id="loginname" tabindex="1" />

@@ -45,7 +45,17 @@ a:link, a:visited {
 	text-align: center;
 }
 
-#logincontent form {
+#logincontent form#dh {
+	text-align: left;
+	position: relative;
+	top: -120px;
+	left: -100px;
+	padding: 150px 20px 20px 20px;
+	background: #e0e0e0 url('../gfx/dhlogo.gif') no-repeat 50% 20px;
+	width: 200px;
+}
+
+#logincontent form#other {
 	text-align: left;
 	position: relative;
 	top: -120px;
