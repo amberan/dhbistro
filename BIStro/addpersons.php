@@ -126,4 +126,21 @@ if (isset($_POST['addtoareport'])) {
 	pageEnd ();
 }
 
+if (isset($_POST['addsolver'])) {
+	MySQL_Query ("DELETE c FROM ".DB_PREFIX."c2s as c, ".DB_PREFIX."users as p WHERE c.iduser=p.id AND c.idcase=".$_POST['caseid']);
+	pageStart ('Uložení změn');
+	mainMenu (5);
+	sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>uložení změn</strong>','<a href="readcase.php?rid='.$_POST['caseid'].'&hidenotes=0">zobrazit upravené</a>');
+	if (isset($_POST['solver'])) {
+		$solver=$_POST['solver'];
+	}
+	echo '<div id="obsah"><p>Případ přiřazen řešitelům.</p></div>';
+	if (isset($_POST['solver'])) {
+		for ($i=0;$i<Count($solver);$i++) {
+			MySQL_Query ("INSERT INTO ".DB_PREFIX."c2s VALUES('".$solver[$i]."','".$_POST['caseid']."','".$usrinfo['id']."')");
+		}
+	}
+	pageEnd ();
+}
+
 ?>

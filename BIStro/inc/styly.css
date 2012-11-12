@@ -176,6 +176,17 @@ a:link, a:visited {
 	width: 6.2em;
 }
 
+#inputform label#login,
+#inputform label#texty,
+#inputform label#poweruser,
+#inputform label#persnum {
+	display: block;
+	text-align: right;
+	margin: 0 3px 0 0;
+	float: left;
+	width: 6.8em;
+}
+
 #inputform div {
 	clear: both;
 }
@@ -193,6 +204,11 @@ a:link, a:visited {
 #inputform select#power,
 #inputform select#spec {
 	width: 200px;
+}
+
+#inputform select#texty,
+#inputform select#poweruser {
+	width: 100px;
 }
 
 #inputform input#notitle {
@@ -403,6 +419,41 @@ div > .poznamka-edit-buttons {position:absolute;right:0px;top:0px;}
 	overflow:hidden;
 	background:url('../css/noname.png') no-repeat scroll center transparent;
 }
+
+/***********************************/
+/***********  dashboard  ***********/
+/***********************************/
+
+#dashboard {
+	position: relative;
+	margin: 0px 5px 0px 5px;
+	padding:20px;
+
+}
+#dashboard .top {
+	font-size: 0.8em;
+}
+#dashboard h1 {margin:0px;}
+#dashboard h2 {font-size:1.2em; margin:0.3em 0;}
+#dashboard h3 {font-size:1.05em; margin:1em 0 0.2em;}
+#dashboard h4 {font-size:1em; margin:0.1em 0;}
+
+#dashboard fieldset>p {margin-top:0px;}
+
+#dashboard p#top-text {margin-top:0px; padding-right:68px;}
+
+#dashboard fieldset {
+	position: relative; 
+	margin:0;
+	background:url('../gfx/corkbg.png') repeat;
+	background-color: #fff9ae;
+	}
+	
+#dashboard legend h2 {display:inline-block;}
+#dashboard .field-text {margin:0.2em; padding:0;}
+#dashboard .field-text>p {margin: 0.8em 0 0 0;}
+#dashboard .field-text>p:first-child {margin: 0 0 0.8em 0;}
+
 /***********************************/
 /************  tabulky  ************/
 /***********************************/

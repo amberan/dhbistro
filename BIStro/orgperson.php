@@ -57,24 +57,27 @@
 			<div id="info">
 				<div class="clear">&nbsp;</div>
 				<div>
-	  			<h3><label for="rdatum">Registrace:</label></h3>
+	  			<h3><label for="rdatum">Vytvořeno:</label></h3>
 	  			</div>
 				<?php echo date_picker("rdatum",$rec_p['regdate'])?>
 				<div class="clear">&nbsp;</div>
+				<div>
+				<h3><label for="regusr">Vytvořil:</label></h3>
+				<select name="regusr" id="regusr">
+				<?php
+					$sql="SELECT ".DB_PREFIX."users.login AS 'login', ".DB_PREFIX."users.id AS 'id' FROM ".DB_PREFIX."users WHERE ".DB_PREFIX."users.deleted=0 ORDER BY ".DB_PREFIX."users.login ASC";
+					$res=MySQL_Query ($sql);
+					while ($rec=MySQL_Fetch_Assoc($res)) {
+						echo '<div>
+						<option value="'.$rec['id'].'" "'.(($rec['id']==$rec_p['iduser'])?' checked="checked"':'').'>'.StripSlashes ($rec['login']).'</option>
+						</div>';
+					}
+				?>
+				</select>
+				</div>
+				<div class="clear">&nbsp;</div>
 			</div>
 			<!-- end of #info -->
-		</fieldset>
-		<fieldset><legend><h2>Registroval</h2></legend>
-		<?php
-			$sql="SELECT ".DB_PREFIX."users.login AS 'login', ".DB_PREFIX."users.id AS 'id' FROM ".DB_PREFIX."users WHERE ".DB_PREFIX."users.deleted=0 ORDER BY ".DB_PREFIX."users.login ASC";
-			$res=MySQL_Query ($sql);
-			while ($rec=MySQL_Fetch_Assoc($res)) {
-				echo '<div>
-				<input type="radio" name="regusr" value="'.$rec['id'].'" class="checkbox"'.(($rec['id']==$rec_p['iduser'])?' checked="checked"':'').' />
-				<label>'.StripSlashes ($rec['login']).'</label>
-				</div>';
-			}
-		?>
 		</fieldset>
 		<input type="hidden" name="personid" value="<?php echo $rec_p['id']; ?>" />
 		<input type="submit" name="orgperson" id="submitbutton" value="Uložit" title="Uložit změny"/>

@@ -111,8 +111,8 @@
 			<div class="clear">&nbsp;</div>
 			<h3>Telefon: </h3><p><?php echo(StripSlashes($rec['phone'])); ?></p>
 			<div class="clear">&nbsp;</div>
-			<p><strong>Datum registrace:</strong> <?php echo (($rec['regdate']==0)?'asi dávno':(Date ('d. m. Y',$rec['regdate']))); ?>
-				<strong>Registroval:</strong> <?php 
+			<p><strong>Datum vytvoření:</strong> <?php echo (($rec['regdate']==0)?'asi dávno':(Date ('d. m. Y',$rec['regdate']))); ?>
+				<strong>Vytvořil:</strong> <?php 
 				$name=getAuthor($rec['regid'],1);
 				echo (($rec['regid']==0)?'asi Krauz':$name); ?> </p>
 			<div class="clear">&nbsp;</div>
