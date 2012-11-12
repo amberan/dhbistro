@@ -44,6 +44,22 @@
 			</div>
 		</form>
 	</fieldset>
+	
+	<fieldset><legend><h2>Řešitelé: </h2></legend>
+		<form action="adds2c.php" method="post" class="otherform">
+			<input type="hidden" name="rid" value="<?php echo $_REQUEST['rid']; ?>" />
+			<input type="submit" value="Upravit řešitele" name="setsolver" class="submitbutton editbutton" title="Upravit řešitele" />
+		</form>
+		<p><?php
+			$sql="SELECT ".DB_PREFIX."users.id AS 'id', ".DB_PREFIX."users.login AS 'login' FROM ".DB_PREFIX."c2s, ".DB_PREFIX."users WHERE ".DB_PREFIX."users.id=".DB_PREFIX."c2s.idsolver AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid']." ORDER BY ".DB_PREFIX."users.login ASC";
+			$pers=MySQL_Query ($sql);
+			$solvers=Array();
+			while ($perc=MySQL_Fetch_Assoc($pers)) {
+				$solvers[]=$perc['login'];
+			}
+			echo ((implode($solvers, '; ')<>"")?implode($solvers, '; '):'<em>Případ nemá přiřazené řešitele.</em>');
+		?></p>		
+	</fieldset>
 
 	<fieldset><legend><h2>Osoby přiřazené k případu: </h2></legend>
 		<form action="addp2c.php" method="post" class="otherform">
@@ -64,7 +80,8 @@
 			echo ((implode($persons, '; ')<>"")?implode($persons, '; '):'<em>Nejsou připojeny žádné osoby.</em>');
 		?></p>		
 	</fieldset>
-
+	
+	
 	<fieldset><legend><h2>Hlášení přiřazená k případu: </h2></legend>
 		<form action="addc2ar.php" method="post" class="otherform">
 			<input type="hidden" name="rid" value="<?php echo $_REQUEST['rid']; ?>" />

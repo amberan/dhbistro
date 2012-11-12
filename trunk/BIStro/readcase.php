@@ -30,6 +30,17 @@
 	<fieldset><legend><h2>Obecné informace</h2></legend>
 		<div id="info">
 			<?php if ($rec['secret']==1) echo '<h2>TAJNÉ</h2>'?>
+			<div class="clear">&nbsp;</div>
+			<h3>Řešitelé: </h3><p><?php
+			$sql="SELECT ".DB_PREFIX."users.id AS 'id', ".DB_PREFIX."users.login AS 'login' FROM ".DB_PREFIX."c2s, ".DB_PREFIX."users WHERE ".DB_PREFIX."users.id=".DB_PREFIX."c2s.idsolver AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid']." ORDER BY ".DB_PREFIX."users.login ASC";
+			$pers=MySQL_Query ($sql);
+			$solvers=Array();
+			while ($perc=MySQL_Fetch_Assoc($pers)) {
+				$solvers[]=$perc['login'];
+			}
+			echo ((implode($solvers, '; ')<>"")?implode($solvers, '; '):'<em>Případ nemá přiřazené řešitele.</em>');
+			?></p>
+			<div class="clear">&nbsp;</div>
 			<h3>Osoby spojené s případem: </h3><p><?php
 			if ($usrinfo['right_power']) {
 				$sql="SELECT ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."c2p.iduser FROM ".DB_PREFIX."persons, ".DB_PREFIX."c2p WHERE ".DB_PREFIX."c2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."persons.deleted=0 ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
