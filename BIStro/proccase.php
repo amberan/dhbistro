@@ -43,7 +43,11 @@
 	  	sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>uložení změn neúspěšné</strong>');
 	    echo '<div id="obsah"><p>Případ již existuje, změňte jeho jméno.</p></div>';
 	  } else {
-			MySQL_Query ("UPDATE ".DB_PREFIX."cases SET title='".mysql_real_escape_string(safeInput($_POST['title']))."', contents='".mysql_real_escape_string($_POST['contents'])."', secret='".$_POST['secret']."', status='".$_POST['status']."' WHERE id=".$_POST['caseid']);
+	  		if ($usrinfo['right_org']==1) {
+	  			MySQL_Query ("UPDATE ".DB_PREFIX."cases SET title='".mysql_real_escape_string(safeInput($_POST['title']))."', contents='".mysql_real_escape_string($_POST['contents'])."', secret='".$_POST['secret']."', status='".$_POST['status']."' WHERE id=".$_POST['caseid']);
+	  		} else {
+				MySQL_Query ("UPDATE ".DB_PREFIX."cases SET title='".mysql_real_escape_string(safeInput($_POST['title']))."', datum='".Time()."', iduser='".$usrinfo['id']."', contents='".mysql_real_escape_string($_POST['contents'])."', secret='".$_POST['secret']."', status='".$_POST['status']."' WHERE id=".$_POST['caseid']);
+	  		}
 			sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>uložení změn</strong>','<a href="./readcase.php?rid='.$_POST['caseid'].'">zobrazit upravené</a>');
 			echo '<div id="obsah"><p>Případ upraven.</p></div>';
 		}
