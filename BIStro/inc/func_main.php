@@ -31,7 +31,12 @@
   		$dbusr='testbistro';
   		$verze=3;
   		$point='zlobod';
-  		break;  		  		
+  		break;
+  	case 'org.dhbistro.cz':
+		$dbusr='orgbistro';
+		$verze=4;
+		$point='zlobod';
+		break;
   }
 
   if (!@mysql_connect ('localhost',$dbusr,'eqgsCv3t')) {
