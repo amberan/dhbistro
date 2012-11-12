@@ -91,9 +91,6 @@
 			pageEnd ();
 		}
 	}
-	
-	
-	
 	if (isset($_POST['personid']) && isset($_POST['orgperson']) && is_numeric($_POST['rdatumday']) && is_numeric($_POST['regusr'])) {
 		pageStart ('Organizační uložení změn');
 		mainMenu (5);
@@ -111,11 +108,6 @@
 			pageEnd ();
 		}
 	}
-	
-	
-	
-	
-	
 	if (isset($_POST['setgroups'])) {
 		MySQL_Query ("DELETE FROM ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".$_POST['personid']);
 		$group=$_POST['group'];
