@@ -100,7 +100,7 @@
 		echo '<div id="obsah"><p>Osoba upravena.</p></div>';
 		pageEnd ();
 	} else {
-		if (isset($_POST['editperson'])) {
+		if (isset($_POST['orgperson'])) {
 			pageStart ('Uložení změn');
 			mainMenu (5);
 			sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./editperson.php?rid='.$_POST['personid'].'">úprava osoby</a> &raquo; <strong>uložení změn neúspešné</strong>');
