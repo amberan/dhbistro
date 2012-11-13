@@ -38,8 +38,14 @@
 	$res_d=MySQL_Query ("SELECT * FROM ".DB_PREFIX."dashboard ORDER BY id DESC LIMIT 1");
 	if ($rec_d=MySQL_Fetch_Assoc($res_d)) {
 		?>
-		<fieldset><legend><h2>Veřejná nástěnka</h2></legend>
-		<h3><p>
+		<fieldset><legend>
+		<h2>Veřejná nástěnka</h2>
+		<strong>Poslední změna:</strong> <?php echo(Date ('d. m. Y',$rec_d['created'])); ?>
+				<strong>Změnil:</strong> <?php 
+				$name=getAuthor($rec_d['iduser'],0);
+				echo $name; ?> 
+		</legend>
+		<p>
 		<?php if (isset($rec_d['content'])) {
 			echo StripSlashes($rec_d['content']);
 		} else {
@@ -52,7 +58,7 @@
 	} else {
 		?>
 		<fieldset><legend><h2>Veřejná nástěnka</h2></legend>
-		<h3><p>Veřejná nástěnka nemá žádný obsah.</p>
+		<p>Veřejná nástěnka nemá žádný obsah.</p>
 		<div class="clear">&nbsp;</div>
 		</fieldset>
 		</div>
