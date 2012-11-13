@@ -94,7 +94,7 @@
 	        ".DB_PREFIX."news.kategorie AS 'kategorie'
 				FROM ".DB_PREFIX."news, ".DB_PREFIX."users
 				WHERE ".DB_PREFIX."news.iduser=".DB_PREFIX."users.id ".$fsql_cat."
-				ORDER BY ".$fsql_sort;
+				ORDER BY ".$fsql_sort."LIMIT 10";
 	$res=MySQL_Query ($sql);
 	while ($rec=MySQL_Fetch_Assoc($res)) {
 	  echo '<div class="news_div '.(($rec['kategorie']==1)?'game_news':'system_news').'">
