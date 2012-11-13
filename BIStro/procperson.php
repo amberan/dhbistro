@@ -147,12 +147,13 @@
 		}
 		Header ('Location: editperson.php?rid='.$_GET['personid']);
 	}
-	if (isset($_GET['deletesymbol']) && is_numeric($_GET['deletesymbol'])) {
+	if (isset($_GET['deletesymbol'])) {
 		if ($usrinfo['right_text']) {
-			UnLink ('./files/symbols'.$_GET['deletesymbol']);
-			MySQL_Query ("UPDATE ".DB_PREFIX."persons SET symbol='' WHERE ".DB_PREFIX."person.id=".$_GET['personid']);
+			UnLink ('./files/symbols/'.$_GET['deletesymbol']);
+			MySQL_Query ("UPDATE ".DB_PREFIX."persons SET symbol='' WHERE ".DB_PREFIX."persons.id=".$_GET['personid']);
 		}
 		Header ('Location: editperson.php?rid='.$_GET['personid']);
 	}
+
 
 ?>
