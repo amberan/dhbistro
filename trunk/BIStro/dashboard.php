@@ -1,7 +1,8 @@
 <?php
 	require_once ('./inc/func_main.php');
-	pageStart ('Aktuality');
+	pageStart ('Nástěnka');
 	mainMenu (1);
+	deleteUnread (6,0);
 	sparklets ('<strong>nástěnka</strong>',(($usrinfo['right_power'])?'<a href="index.php">zobrazit aktuality</a>; <a href="editdashboard.php">upravit nástěnku</a>':'<a href="index.php">zobrazit aktuality</a>'));
 
 // dashboard

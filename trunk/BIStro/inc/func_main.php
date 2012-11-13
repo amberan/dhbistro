@@ -269,7 +269,7 @@ function getAuthor ($recid,$trn) {
 	  $dlink=MySQL_Fetch_Assoc(MySQL_Query ("SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1"));
 	  echo '<div id="menu">
 	<ul>
-		<li><a href="index.php">Aktuality</a></li>
+		<li '.((searchTable(5))?' class="unread"':((searchTable(6))?' class="unread"':'')).'><a href="index.php">Aktuality</a></li>
 		<li '.((searchTable(4))?' class="unread"':'').'><a href="reports.php">Hlášení</a></li>	
 		<li '.((searchTable(1))?' class="unread"':'').'><a href="persons.php">Osoby</a></li>
 		<li '.((searchTable(3))?' class="unread"':'').'><a href="cases.php">Případy</a></li>

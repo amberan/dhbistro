@@ -10,6 +10,7 @@
 		sparklets ('<a href="dashboard.php">nástěnka</a> &raquo; <strong>nástěnka upravena</strong>');
 		$sql="INSERT INTO ".DB_PREFIX."dashboard VALUES('','".Time()."','".$usrinfo['id']."','".mysql_real_escape_string(safeInput($_POST['contents']))."')";
 		MySQL_Query ($sql);
+		unreadRecords (6,0);
 		echo '<div id="obsah"><p>Nástěnka upravena.</p></div>';
 		pageEnd ();
 	}
