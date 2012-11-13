@@ -2,6 +2,7 @@
 	require_once ('./inc/func_main.php');
 	pageStart ('Aktuality');
 	mainMenu (1);
+	deleteUnread (5,0);
 	sparklets ('<strong>aktuality</strong>',(($usrinfo['right_power'])?'<a href="dashboard.php">zobrazit nástěnku</a>; <a href="newnews.php">přidat aktualitu</a>':'<a href="dashboard.php">zobrazit nástěnku</a>'));
 	// zpracovani filtru
 	if (!isset($_REQUEST['kategorie'])) {

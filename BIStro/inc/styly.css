@@ -217,8 +217,13 @@ a:link, a:visited {
 }
 
 #inputform select#texty,
-#inputform select#poweruser {
+#inputform select#poweruser,
+#inputform select#kategorie {
 	width: 100px;
+}
+
+#inputform input#nadpis {
+	width: 300px;
 }
 
 #inputform input#notitle {
