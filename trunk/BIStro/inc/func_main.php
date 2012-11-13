@@ -224,7 +224,7 @@ function getAuthor ($recid,$trn) {
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title><?php echo (($loggedin)?$usrinfo['login'].' @ ':'')?>BIStro <?php echo $mazzarino_version;?> | <?php echo $title;?></title>
-    <meta name="Author" content="Jakub Ethan Kraft, David Ambeřan Maleček" />
+    <meta name="Author" content="David Ambeřan Maleček, Jakub Ethan Kraft" />
     <meta name="Copyright" content="2006 - 2012" />
     <meta http-equiv="Content-language" content="cs" />
     <meta http-equiv="Cache-control" content="no-cache" />
