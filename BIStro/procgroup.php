@@ -34,15 +34,15 @@
 	if (isset($_POST['groupid']) && isset($_POST['editgroup']) && $usrinfo['right_text'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match ('/i^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret'])) {
 	  pageStart ('Uložení změn');
 		mainMenu (3);
-		if (!isset($_POST['notnew'])) {
-			unreadRecords (2,$_POST['groupid']);
-		}
 	  $ures=MySQL_Query ("SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".mysql_real_escape_string(safeInput($_POST['title']))."') AND id<>".$_POST['groupid']);
 	  if (MySQL_Num_Rows ($ures)) {
 	  	sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./editgroup.php?rid='.$_POST['groupid'].'">úprava skupiny</a> &raquo; <strong>uložení změn neúspěšné</strong>');
 	    echo '<div id="obsah"><p>Skupina již existuje, změňte její jméno.</p></div>';
 	  } else {
 			MySQL_Query ("UPDATE ".DB_PREFIX."groups SET title='".mysql_real_escape_string(safeInput($_POST['title']))."', contents='".mysql_real_escape_string($_POST['contents'])."', secret='".$_POST['secret']."' WHERE id=".$_POST['groupid']);
+			if (!isset($_POST['notnew'])) {
+				unreadRecords (2,$_POST['groupid']);
+			}
 			sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./editgroup.php?rid='.$_POST['groupid'].'">úprava skupiny</a> &raquo; <strong>uložení změn</strong>','<a href="./readgroup.php?rid='.$_POST['groupid'].'">zobrazit upravené</a>');
 			echo '<div id="obsah"><p>Skupina upravena.</p></div>';
 		}
