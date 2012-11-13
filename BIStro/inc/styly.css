@@ -131,7 +131,7 @@ a:link, a:visited {
 	font-weight: bold;
 }
 
-#menu ul li a:hover {
+#menu ul li a:hover, #menu ul li a.currentlink {
 	background-color: #0A246A;
 	color: #ffffff;
 }
