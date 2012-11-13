@@ -154,6 +154,4 @@
 		}
 		Header ('Location: editperson.php?rid='.$_GET['personid']);
 	}
-
-
 ?>

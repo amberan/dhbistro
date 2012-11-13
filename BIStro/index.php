@@ -2,7 +2,7 @@
 	require_once ('./inc/func_main.php');
 	pageStart ('Aktuality');
 	mainMenu (1);
-	sparklets ('<strong>aktuality</strong>',(($usrinfo['right_power'])?'<a href="newnews.php">přidat aktualitu</a>':''));
+	sparklets ('<strong>aktuality</strong>',(($usrinfo['right_power'])?'<a href="dashboard.php">zobrazit nástěnku</a>; <a href="newnews.php">přidat aktualitu</a>':'<a href="dashboard.php">zobrazit nástěnku</a>'));
 	// zpracovani filtru
 	if (!isset($_REQUEST['kategorie'])) {
 	  $f_cat=0;
@@ -53,7 +53,7 @@
 // dashboard
 ?>
 <div id="dashboard">
-<fieldset><legend><h2>Dashboard</h2></legend>
+<fieldset><legend><h2>Osobní nástěnka</h2></legend>
 	<h3>Rozpracovaná nedokončená hlášení: <?php
 				$sql_r="SELECT ".DB_PREFIX."reports.secret AS 'secret', ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id' FROM ".DB_PREFIX."reports WHERE ".DB_PREFIX."reports.iduser=".$usrinfo['id']." AND ".DB_PREFIX."reports.status=0 AND ".DB_PREFIX."reports.deleted=0 ORDER BY ".DB_PREFIX."reports.label ASC";
 				$res_r=MySQL_Query ($sql_r);
