@@ -71,7 +71,7 @@
 		<!-- náseduje popis osoby -->
 		<fieldset><legend><h2>Popis osoby</h2></legend>
 			<div class="field-text">
-				<textarea cols="80" rows="7" name="contents" id="contents"></textarea>
+				<textarea cols="80" rows="7" name="contents" id="contents">Doplnit.</textarea>
 			</div>
 		</fieldset>
 		<input type="submit" name="insertperson" id="submitbutton" value="Vložit" title="Vložit osobu"/>
