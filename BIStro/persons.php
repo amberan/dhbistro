@@ -2,7 +2,7 @@
 	require_once ('./inc/func_main.php');
 	pageStart ('Osoby');
 	mainMenu (5);
-	sparklets ('<strong>osoby</strong>','<a href="newperson.php">přidat osobu</a>');
+	sparklets ('<strong>osoby</strong>','<a href="newperson.php">přidat osobu</a>; <a href="symbols.php">nepřiřazené symboly</a>');
 	// zpracovani filtru
 	if (!isset($_REQUEST['sort'])) {
 	  $f_sort=1;
