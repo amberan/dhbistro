@@ -3,33 +3,37 @@
 		pageStart ('Mapa agentů');
 		mainMenu (4);
 		sparklets ('<a href="./mapagents.php">Mapa agentů</a>');
-if ($usrinfo['right_power']) {
+if ($usrinfo['right_power']) { ?>
+<div id="obsah">
+<?php 
 	//Přidání nové mapy
 	if (isset($_POST['newmap'])) {
 		if (isset($_POST['link'])) {
 			MySQL_Query ("INSERT INTO ".DB_PREFIX."map VALUES('','".Time()."','".mysql_real_escape_string(safeInput($_POST['link']))."')");
-			echo '<div id="obsah"><p>Nový link na mapu agentů uložen.</p></div>';
+			echo '<div id=""><p>Nový link na mapu agentů uložen.</p></div>';
 		} else {
-			echo '<div id="obsah"><p>Link na mapu agentů nesmí být prázdný.</p></div>';
+			echo '<div id=""><p>Link na mapu agentů nesmí být prázdný.</p></div>';
 		}
 	}
 	$rec=MySQL_Fetch_Assoc(MySQL_Query ("SELECT link FROM ".DB_PREFIX."map ORDER BY id desc LIMIT 0,1"));
-	echo '<div id="obsah"><a href="'.$rec['link'].'" target=_new>Aktuální mapa agentů</a></div>
-	<form action="mapagents.php" method="post" id="inputform">
-	<div>
-	<label for="label">Vložit nový link na mapu agentů:</label>
+	echo '<div id=""><a href="'.$rec['link'].'" target=_new>Aktuální mapa agentů</a><br/><br/></div>
+	<div class="otherform-wrap">
+		<fieldset>
+			<form action="mapagents.php" method="post" class="otherform">
+			<label for="label"><strong>Vložit&nbsp;nový&nbsp;link&nbsp;na&nbsp;mapu&nbsp;agentů:</strong></label>
+			<input type="text" size="39" name="link" id="link" />
+			<input type="submit" name="newmap" class="submitbutton" value="Vložit" />
+			<div class="clear">&nbsp;</div>
+			</form>
+		</fieldset>
 	</div>
-	<div>
-	<input type="text" name="link" id="link" />
-	<input type="submit" name="newmap" id="submitbutton" value="Vložit" />
-	</div>
-	</form>';
+	<!-- end of .otherform-wrap -->';
 	
 	// vypis starších linků
 	$sql="SELECT * FROM ".DB_PREFIX."map ORDER BY id DESC";
 	$res=MySQL_Query ($sql);
 	if (MySQL_Num_Rows($res)) {
-		echo '<div id="obsah">
+		echo '<div id="">
 		<table>
 		<thead>
 		<tr>
@@ -55,10 +59,13 @@ if ($usrinfo['right_power']) {
 	</div>
 	';
 	} else {
-	  echo '<div id="obsah"><p>Žádné uložené odkazy.</p></div>';
+	  echo '<div id=""><p>Žádné uložené odkazy.</p></div>';
 	}
 } else {
-	echo '<div id="obsah"><p>Tady nemáte co pohledávat.</p></div>';
-}		
+	echo '<div id=""><p>Tady nemáte co pohledávat.</p></div>';
+} ?>
+</div>
+<!-- end of #obsah -->
+<?php	
 pageEnd ();
 ?>

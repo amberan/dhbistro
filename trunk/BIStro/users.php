@@ -29,7 +29,7 @@
 	function filter () {
 	  global $f_cat;
 		global $f_sort;
-	  echo '<form action="users.php" method="post" id="filter">
+	  echo '<div id="filter-wrapper"><form action="users.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat <select name="kategorie">
@@ -42,7 +42,7 @@
 </select>.</p>
 	  <div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
-</form>';
+</form></div><!-- end of #filter-wrapper -->';
 	}
 	filter();
 	// vypis uživatelů
