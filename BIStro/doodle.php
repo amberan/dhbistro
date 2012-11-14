@@ -3,33 +3,37 @@
 		pageStart ('Časová dostupnost');
 		mainMenu (4);
 		sparklets ('<a href="./doode.php">Časová dostupnost</a>');
-if ($usrinfo['right_power']) {
+if ($usrinfo['right_power']) { ?>
+<div id="obsah">
+<?php 
 	//Přidání nového doodlu
 	if (isset($_POST['newlink'])) {
 		if (isset($_POST['link'])) {
 			MySQL_Query ("INSERT INTO ".DB_PREFIX."doodle VALUES('','".Time()."','".mysql_real_escape_string(safeInput($_POST['link']))."')");
-			echo '<div id="obsah"><p>Nový link na doodle uložen.</p></div>';
+			echo '<div id=""><p>Nový link na doodle uložen.</p></div>';
 		} else {
-			echo '<div id="obsah"><p>Link na doodle nesmí být prázdný.</p></div>';
+			echo '<div id=""><p>Link na doodle nesmí být prázdný.</p></div>';
 		}
 	}
 	$rec=MySQL_Fetch_Assoc(MySQL_Query ("SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1"));
-	echo '<div id="obsah"><a href="'.$rec['link'].'" target=_new>Aktuální doodle s časovou dostupností</a></div>
-	<form action="doodle.php" method="post" id="inputform">
-	<div>
-	<label for="label">Vložit nový link na doodle s časovou dostupností:</label>
+	echo '<div id=""><a href="'.$rec['link'].'" target=_new>Aktuální doodle s časovou dostupností</a><br/><br/></div>
+	<div class="otherform-wrap">
+		<fieldset>
+			<form action="doodle.php" method="post" class="otherform">
+			<label for="label"><strong>Vložit&nbsp;nový&nbsp;link&nbsp;na&nbsp;doodle&nbsp;s&nbsp;časovou&nbsp;dostupností:</strong></label>
+			<input type="text" size="39" name="link" id="link" />
+			<input type="submit" name="newlink" class="submitbutton" value="Vložit" />
+			<div class="clear">&nbsp;</div>
+			</form>
+		</fieldset>
 	</div>
-	<div>
-	<input type="text" name="link" id="link" />
-	<input type="submit" name="newlink" id="submitbutton" value="Vložit" />
-	</div>
-	</form>';
+	<!-- end of .otherform-wrap -->';
 	
 	// vypis starších linků
 	$sql="SELECT * FROM ".DB_PREFIX."doodle ORDER BY id DESC";
 	$res=MySQL_Query ($sql);
 	if (MySQL_Num_Rows($res)) {
-		echo '<div id="obsah">
+		echo '<div id="">
 		<table>
 		<thead>
 		<tr>
@@ -55,10 +59,13 @@ if ($usrinfo['right_power']) {
 	</div>
 	';
 	} else {
-	  echo '<div id="obsah"><p>Žádné uložené odkazy.</p></div>';
+	  echo '<div id=""><p>Žádné uložené odkazy.</p></div>';
 	}
 } else {
-	echo '<div id="obsah"><p>Tady nemáte co pohledávat.</p></div>';
-}		
+	echo '<div id=""><p>Tady nemáte co pohledávat.</p></div>';
+}?>
+</div>
+<!-- end of #obsah -->
+<?php
 pageEnd ();
 ?>
