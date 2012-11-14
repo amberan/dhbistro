@@ -4,7 +4,9 @@
 	mainMenu (4);
 	sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>nový případ</strong>');
 ?>
-<form action="proccase.php" method="post" id="inputform">
+<div id="obsah">
+	<fieldset><legend><h1>Nový případ</h1></legend>	
+	<form action="proccase.php" method="post" id="inputform">
 	<div>
 	  <label for="title">Název:</label>
 	  <input type="text" name="title" id="title" />
@@ -40,6 +42,9 @@
 	  <input type="submit" name="insertcase" id="submitbutton" value="Vložit" />
 	</div>
 </form>
+	</fieldset>
+</div>
+<!-- end of #obsah -->
 <?php
 	pageEnd ();
 ?>
