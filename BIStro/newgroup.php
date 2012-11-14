@@ -17,8 +17,8 @@
 		<div class="clear">&nbsp;</div>
 <?php 			if ($usrinfo['right_power'] == 1)	{
 				echo '					
-				<h3><label for="notnew">Není nové</label></h3>
-					<input type="checkbox" name="notnew"/><br/>
+				<h3><label for="notnew">Není&nbsp;nové</label></h3>
+					<input type="checkbox" name="notnew"/>
 				<div class="clear">&nbsp;</div>';
 				}
 ?>			
@@ -28,7 +28,8 @@
 	<fieldset><legend><h2>Popis</h2></legend>
 		  <textarea cols="80" rows="7" name="contents" id="contents"></textarea>
 	</fieldset>
-		  <input type="submit" name="insertgroup" id="submitbutton" value="Vložit" />
+	
+	<input type="submit" name="insertgroup" id="submitbutton" value="Vložit" />
 </fieldset>
 </form>
 </div>

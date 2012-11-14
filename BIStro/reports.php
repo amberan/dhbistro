@@ -74,7 +74,7 @@
 	
 	function filter () {
 	  global $f_cat, $f_sort, $f_stat, $f_my, $f_conn, $fsql_conn2, $f_sec, $usrinfo;
-	  echo '<form action="reports.php" method="post" id="filter">
+	  echo '<div id="filter-wrapper"><form action="reports.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat <select name="status">
@@ -103,7 +103,7 @@
 	}
 	echo '<div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
-</form>';
+</form></div><!-- end of #filter-wrapper -->';
 	}
 	filter();
 	// vypis hlášení

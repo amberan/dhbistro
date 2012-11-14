@@ -54,7 +54,7 @@
 	//
 	function filter () {
 		global $f_sort, $sportraits, $f_sec, $usrinfo;
-	  echo '<div id="filter"><form action="readgroup.php" method="post" id="filter">
+	  echo '<div id="filter-wrapper"><form action="readgroup.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Členy skupiny řadit podle <select name="sort">
@@ -66,7 +66,7 @@
 	  <input type="hidden" name="rid" value="'.$_REQUEST['rid'].'" />
 	  <div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
-</form></div>';
+</form></div><!-- end of #filter-wrapper -->';
 	}
 	filter();
 ?>

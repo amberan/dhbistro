@@ -27,7 +27,7 @@
 	//
 	function filter () {
 	  global $f_sort, $f_sec, $usrinfo;
-	  echo '<form action="groups.php" method="post" id="filter">
+	  echo '<div id="filter-wrapper"><form action="groups.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat všechny skupiny a seřadit je podle <select name="sort">
@@ -42,7 +42,7 @@
 	echo '
 	  <div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
-</form>';
+</form></div><!-- end of #filter-wrapper -->';
 	}
 	filter();
 	// vypis skupin
