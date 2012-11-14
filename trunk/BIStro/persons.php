@@ -106,7 +106,7 @@
 	// formular filtru
 	function filter () {
 		global $f_sort, $sportraits, $ssymbols, $f_sec, $fdead, $farchiv, $usrinfo, $fspec, $fside, $fpow;
-	  echo '<form action="persons.php" method="post" id="filter">
+	  echo '<div id="filter-wrapper"><form action="persons.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat osoby a seřadit je podle <select name="sort">
@@ -164,7 +164,7 @@
 	echo '
 	  <div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
-</form>';
+</form></div><!-- end of #filter-wrapper -->';
 	}
 	filter();
 	// vypis osob
