@@ -39,10 +39,11 @@ function filter () {
 	</select>.</p>
 	<div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
-	</form><form action="addreports.php" method="post" class="otherform">';
+	</form>';
 }
-filter();
-// vypis pripadu
+filter(); ?>
+<form action="addreports.php" method="post" class="otherform">
+<?php // vypis pripadu
 if ($usrinfo['right_power']) {
 	$sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."ar2c.iduser FROM ".DB_PREFIX."cases LEFT JOIN ".DB_PREFIX."ar2c ON ".DB_PREFIX."ar2c.idcase=".DB_PREFIX."cases.id AND ".DB_PREFIX."ar2c.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."cases.deleted=0 ORDER BY ".$fsql_sort;
 } else {
@@ -74,9 +75,8 @@ if (MySQL_Num_Rows($res)) {
 	</div>
 	';
 } else {
-	echo '<div id="obsah"><p>Žádné případy neodpovídají výběru.</p></div>';
+	echo '<div id=""><p>Žádné případy neodpovídají výběru.</p></div>';
 }
-pageEnd ();
 ?>
 
 <div>

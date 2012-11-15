@@ -183,7 +183,7 @@ a:link, a:visited {
 	text-align: right;
 	margin: 0 3px 0 0;
 	float: left;
-	width: 6.2em;
+	width: 8.6em;
 }
 
 #inputform label#login,
@@ -404,6 +404,8 @@ div > .poznamka-edit-buttons {position:absolute;right:0px;top:0px;}
 .poznamka-edit-buttons a.new {background-image:url('../css/document-new.png')}
 .poznamka-edit-buttons a.edit {background-image:url('../css/edit.png')}
 .poznamka-edit-buttons a.delete {background-image:url('../css/delete.png')}
+.poznamka-edit-buttons a.connect {background-image:url('../css/connect.png')}
+/* .connect je nesystematicky, ale pro napravu je treba procistit celou strukturu stylu ve vsech sablonach /**/
 
 .info-delete-symbol {position:absolute;right:13.3em;top:10.5em;}
 .info-delete-symbol a {display:inline-block;width:16px;height:16px;margin:3px;overflow:hidden;vertical-align:bottom;}
