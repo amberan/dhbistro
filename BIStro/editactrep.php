@@ -71,219 +71,272 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 		FROM ".DB_PREFIX."reports, ".DB_PREFIX."users
 		WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.id=".$_REQUEST['rid'];
 	$res=MySQL_Query ($sql);
-	if ($rec=MySQL_Fetch_Assoc($res)) {
-	$aday=(Date ('j',$rec['adatum']));
-	$amonth=(Date ('n',$rec['adatum']));
-	$ayear=(Date ('Y',$rec['adatum']));
+	if ($rec_actr=MySQL_Fetch_Assoc($res)) {
+	$aday=(Date ('j',$rec_actr['adatum']));
+	$amonth=(Date ('n',$rec_actr['adatum']));
+	$ayear=(Date ('Y',$rec_actr['adatum']));
 	?>
+<div id="obsah">
 <form action="procactrep.php" method="post" id="inputform">
-<div>
-<label for="label">Označení<?php echo((($type==1)?' výjezdu':(($type==2)?' výslechu':' hlášení')));?>:</label>
-<input type="text" name="label" id="label" value="<?php echo StripSlashes($rec['label']); ?>" />
-</div>
-<div>
-<label for="task"><?php echo((($type==1)?'Úkol':(($type==2)?'Předmět výslechu':'Úkol')));?>:</label>
-<input type="text" name="task" id="task" value="<?php echo StripSlashes($rec['task']); ?>" />
-</div>
-<div>
-<label for="adatum"><?php if($type==='1'){ ?>Datum akce<?php }else if($type==='2'){ ?>Datum výslechu<?php }; ?>:</label>
-<?php echo date_picker("adatum")?>
-</div>
-<div>
-<label for="start">Začátek:</label>
-<input type="start" name="start" id="start" value="<?php echo StripSlashes($rec['start']); ?>" />
-</div>
-<div>
-<label for="end">Konec:</label>
-<input type="end" name="end" id="end" value="<?php echo StripSlashes($rec['end']); ?>" />
-</div>
-<div>
-<label for="secret">Přísně tajné:</label>
-<select name="secret" id="secret">
-<option value="0"<?php if ($rec['secret']==0) { echo ' selected="selected"'; } ?>>ne</option>
-<option value="1"<?php if ($rec['secret']==1) { echo ' selected="selected"'; } ?>>ano</option>
-</select>
-</div>
-<div>
-<label for="status">Stav:</label>
-<select name="status" id="status">
-<option value="0"<?php if ($rec['status']==0) { echo ' selected="selected"'; } ?>>rozpracované</option>
-<option value="1"<?php if ($rec['status']==1) { echo ' selected="selected"'; } ?>>dokončené</option>
-<?php if ($usrinfo['right_text']) {
-	echo '<option value="2"'; 
-	if ($rec['status']==2) { echo ' selected="selected"'; } 
-	echo '>analyzované</option>';
-	}
-?>
-</select>
-</div>
-<div>
-<label for="summary">Shrnutí:</label>
-</div>
-<div>
-<textarea cols="80" rows="20" name="summary" id="summary"><?php echo StripSlashes($rec['summary']); ?></textarea>
-</div>
-<div>
-<label for="impacts">Možné dopady:</label>
-</div>
-<div>
-<textarea cols="80" rows="20" name="impacts" id="impacts"><?php echo StripSlashes($rec['impacts']); ?></textarea>
-</div>
-<div>
-<label for="details">Podrobný popis průběhu:</label>
-</div>
-<div>
-<textarea cols="80" rows="30" name="details" id="details"><?php echo StripSlashes($rec['details']); ?></textarea>
-</div>
-<div>
-<div>
-<label for="energy">Energetická náročnost:</label>
-</div>
-<div>
-<textarea cols="80" rows="10" name="energy" id="energy"><?php echo StripSlashes($rec['energy']); ?></textarea>
-</div>
-<div>
-<div>
-<label for="details">Počáteční vstupy:</label>
-</div>
-<div>
-<textarea cols="80" rows="10" name="inputs" id="inputs"><?php echo StripSlashes($rec['inputs']); ?></textarea>
-</div>
-<div>
+<fieldset><legend><h1>Úprava hlášení<?php echo (($type==1)?' z výjezdu':(($type==2)?' z výslechu':''));?></h1></legend>
+	<fieldset><legend><h2>Základní údaje</h2></legend>
+		<div id="info">
+			<h3><label for="label">Označení&nbsp;<?php echo (($type==1)?'výjezdu':(($type==2)?'výslechu':'hlášení'));?>:</label></h3>
+			<input type="text" size="80" name="label" id="label" value="<?php echo StripSlashes($rec_actr['label']); ?>" />
+			<div class="clear">&nbsp;</div>
+			<h3><label for="task"><?php echo((($type==1)?'Úkol':(($type==2)?'Předmět&nbsp;výslechu':'Úkol')));?>:</label></h3>
+			<input type="text" size="80" name="task" id="task" value="<?php echo StripSlashes($rec_actr['task']); ?>" />
+			<div class="clear">&nbsp;</div>
+			<h3><label for="adatum"><?php if($type=='1'){ ?>Datum&nbsp;akce<?php }else if($type=='2'){ ?>Datum&nbsp;výslechu<?php }; ?>:</label></h3>
+			<?php echo date_picker("adatum")?>
+			<div class="clear">&nbsp;</div>
+			<h3><label for="start">Začátek:</label></h3>
+			<input type="start" name="start" id="start" value="<?php echo StripSlashes($rec_actr['start']); ?>" />
+			<div class="clear">&nbsp;</div>
+			<h3><label for="end">Konec:</label></h3>
+			<input type="end" name="end" id="end" value="<?php echo StripSlashes($rec_actr['end']); ?>" />
+			<div class="clear">&nbsp;</div>
+			<h3><label for="secret">Přísně tajné:</label></h3>
+			<select name="secret" id="secret">
+			<option value="0"<?php if ($rec_actr['secret']==0) { echo ' selected="selected"'; } ?>>ne</option>
+			<option value="1"<?php if ($rec_actr['secret']==1) { echo ' selected="selected"'; } ?>>ano</option>
+			</select>
+			<div class="clear">&nbsp;</div>
+			<h3><label for="status">Stav:</label></h3>
+			<select name="status" id="status">
+			<option value="0"<?php if ($rec_actr['status']==0) { echo ' selected="selected"'; } ?>>rozpracované</option>
+			<option value="1"<?php if ($rec_actr['status']==1) { echo ' selected="selected"'; } ?>>dokončené</option>
+			<?php if ($usrinfo['right_text']) {
+				echo '<option value="2"'; 
+				if ($rec_actr['status']==2) { echo ' selected="selected"'; } 
+				echo '>analyzované</option>';
+				}
+			?>
+			</select>
+			<div class="clear">&nbsp;</div>
+		</div>
+		<!-- end of #info -->
+	</fieldset>
 
+	<fieldset><legend><h2>Shrnutí:</h2></legend>
+		<textarea cols="80" rows="20" name="summary" id="summary"><?php echo StripSlashes($rec_actr['summary']); ?></textarea>
+	</fieldset>
+	
+	<fieldset><legend><h2>Možné dopady:</h2></legend>
+		<textarea cols="80" rows="20" name="impacts" id="impacts"><?php echo StripSlashes($rec_actr['impacts']); ?></textarea>
+	</fieldset>
+	
+	<fieldset><legend><h2>Podrobný popis průběhu:</h2></legend>
+		<textarea cols="80" rows="30" name="details" id="details"><?php echo StripSlashes($rec_actr['details']); ?></textarea>
+	</fieldset>
+	
+	<fieldset><legend><h2>Energetická náročnost:</h2></legend>
+		<textarea cols="80" rows="10" name="energy" id="energy"><?php echo StripSlashes($rec_actr['energy']); ?></textarea>
+	</fieldset>
+	
+	<fieldset><legend><h2>Počáteční vstupy:</h2></legend>
+		<textarea cols="80" rows="10" name="inputs" id="inputs"><?php echo StripSlashes($rec_actr['inputs']); ?></textarea>
+	</fieldset>	
+	
+	<input type="hidden" name="reportid" value="<?php echo $rec_actr['id']; ?>" />
+	<input type="submit" name="editactrep" id="submitbutton" value="Uložit změny" />
 
-
-<input type="hidden" name="reportid" value="<?php echo $rec['id']; ?>" />
-<input type="submit" name="editactrep" id="submitbutton" value="Uložit změny" />
-</div>
+</fieldset>
 </form>
-<hr />
-<form action="addp2ar.php" method="post" class="otherform">
-<p>
-Toto jsou osoby aktuálně přiřazené k hlášení.
-</p>
-<ul>
-<?php
-if ($usrinfo['right_power']) {
-	$sql="SELECT ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname' FROM ".DB_PREFIX."ar2p, ".DB_PREFIX."persons WHERE ".DB_PREFIX."persons.id=".DB_PREFIX."ar2p.idperson AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
-} else {
-	$sql="SELECT ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname' FROM ".DB_PREFIX."ar2p, ".DB_PREFIX."persons WHERE ".DB_PREFIX."persons.id=".DB_PREFIX."ar2p.idperson AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." AND ".DB_PREFIX."persons.secret=0 ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
-}
-$pers=MySQL_Query ($sql);
-while ($perc=MySQL_Fetch_Assoc($pers)) {
-echo '<li><a href="readperson.php?rid='.$perc['id'].'">'.$perc['surname'].', '.$perc['name'].'</a>';
-}
-?>
-</ul>
-<div>
-<input type="hidden" name="rid" value="<?php echo $_REQUEST['rid']; ?>" />
-<input type="submit" value="Upravit osoby" name="setperson" class="submitbutton" />
-</div>
-</form>
+	
+	<fieldset><legend><h2>Osoby přiřazené k hlášení: </h2></legend>
+		<form action="addp2ar.php" method="post" class="otherform">
+			<input type="hidden" name="rid" value="<?php echo $_REQUEST['rid']; ?>" />
+			<input type="submit" value="Upravit osoby" name="setperson" class="submitbutton editbutton" title="Upravit osoby" />
+		</form>
+		<p><?php
+		if ($usrinfo['right_power']) {
+			$sql="SELECT ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname' FROM ".DB_PREFIX."ar2p, ".DB_PREFIX."persons WHERE ".DB_PREFIX."persons.id=".DB_PREFIX."ar2p.idperson AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
+		} else {
+			$sql="SELECT ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname' FROM ".DB_PREFIX."ar2p, ".DB_PREFIX."persons WHERE ".DB_PREFIX."persons.id=".DB_PREFIX."ar2p.idperson AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." AND ".DB_PREFIX."persons.secret=0 ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
+		}
+		$pers=MySQL_Query ($sql);
+		$persons=Array();
+		while ($perc=MySQL_Fetch_Assoc($pers)) {
+			$persons[]='<a href="readperson.php?rid='.$perc['id'].'">'.$perc['surname'].', '.$perc['name'].'</a>';
+		}
+		echo ((implode($persons, '; ')<>"")?implode($persons, '; '):'<em>Nejsou připojeny žádné osoby.</em>');
+		?></p>
+	</fieldset>
 
-<hr />
-<form action="addar2c.php" method="post" class="otherform">
-<p>
-Případy, ke kterým je hlášení přiřazeno.
-</p>
-<ul>
-<?php
-if ($usrinfo['right_power']) {
-	$sql="SELECT ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.title AS 'title' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.id=".DB_PREFIX."ar2c.idcase AND ".DB_PREFIX."ar2c.idreport=".$_REQUEST['rid']." ORDER BY ".DB_PREFIX."cases.title ASC";
-} else {
-	$sql="SELECT ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.title AS 'title' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.id=".DB_PREFIX."ar2c.idcase AND ".DB_PREFIX."ar2c.idreport=".$_REQUEST['rid']." AND ".DB_PREFIX."cases.secret=0 ORDER BY ".DB_PREFIX."cases.title ASC";
-}
-$pers=MySQL_Query ($sql);
-while ($perc=MySQL_Fetch_Assoc($pers)) {
-echo '<li><a href="readcase.php?rid='.$perc['id'].'">'.$perc['title'].'</a>';
-}
-?>
-</ul>
-<div>
-<input type="hidden" name="rid" value="<?php echo $_REQUEST['rid']; ?>" />
-<?php if ($usrinfo['right_text']) echo '<input type="submit" value="Přiřadit k případu" name="setperson" class="submitbutton" />'; ?>
-</div>
-</form>
+	<fieldset><legend><h3>Přiřazené případy</h3></legend>
+		<!-- tady dochází ke stylové nesystematičnosti, nejedná se o poznámku; pro nápravu je třeba projít všechny šablony -->
+		<p><span class="poznamka-edit-buttons"><a class="connect" href="addar2c.php?rid=<?php echo $_REQUEST['rid']; ?>" title="přiřazení"><span class="button-text">přiřazení případů</span></a><em style="font-size:smaller;"> (přiřazování)</em></span></p>
+		<!-- následuje seznam případů -->
+		<?php // generování seznamu přiřazených případů
+			if ($usrinfo['right_power']) {
+				$sql="SELECT ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.title AS 'title' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.id=".DB_PREFIX."ar2c.idcase AND ".DB_PREFIX."ar2c.idreport=".$_REQUEST['rid']." ORDER BY ".DB_PREFIX."cases.title ASC";
+			} else {
+				$sql="SELECT ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.title AS 'title' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.id=".DB_PREFIX."ar2c.idcase AND ".DB_PREFIX."ar2c.idreport=".$_REQUEST['rid']." AND ".DB_PREFIX."cases.secret=0 ORDER BY ".DB_PREFIX."cases.title ASC";
+			}
+			$pers=MySQL_Query ($sql);
+			
+			$i=0;
+			while ($perc=MySQL_Fetch_Assoc($pers)) { 
+				$i++;
+				if($i==1){ ?>
+		<ul id=""><?php
+				} ?>
+			<li><a href="readcase.php?rid=<?php echo $perc['id']; ?>"><?php echo $perc['title']; ?></a></li>
+		<?php }
+			if($i<>0){ ?>
+		</ul>
+		<!-- end of # -->
+		<?php 
+			}else{?><br />
+		<em>bez poznámek</em><?php
+			}
+		// konec seznamu přiřazených případů ?>
+	</fieldset>
 
-<hr />
-<form action="procactrep.php" method="post" enctype="multipart/form-data" class="otherform">
-<p>K hlášení je možné nahrát neomezené množství souborů, ale velikost jednoho souboru je omezena na 2 MB.</p>
-<div>
-<label for="attachment">Soubor:</label>
-<input type="file" name="attachment" id="attachment" />
-</div>
-<div>
-<label for="usecret">Přísně tajné:</label>
-<select name="secret" id="usecret">
-<option value="0">ne</option>
-<option value="1">ano</option>
-</select>
-</div>
-<div>
-<input type="hidden" name="reportid" value="<?php echo $_REQUEST['rid']; ?>" />
-<input type="hidden" name="backurl" value="<?php echo 'editactrep.php?rid='.$_REQUEST['rid']; ?>" />
-<input type="submit" name="uploadfile" value="Nahrát soubor k případu" class="submitbutton" />
-</div>
-</form>
-<ul>
-<?php
-if ($usrinfo['right_power']) {
-$sql_f="SELECT ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=4 ORDER BY ".DB_PREFIX."data.originalname ASC";
-} else {
-$sql_f="SELECT ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=4 AND ".DB_PREFIX."data.secret=0 ORDER BY ".DB_PREFIX."data.originalname ASC";
-}
-$res_f=MySQL_Query ($sql_f);
-while ($rec_f=MySQL_Fetch_Assoc($res_f)) {
-echo '<li><a href="getfile.php?idfile='.$rec_f['id'].'">'.StripSlashes($rec_f['title']).'</a> &mdash; <a href="procactrep.php?deletefile='.$rec_f['id'].'&amp;reportid='.$_REQUEST['rid'].'" onclick="'."return confirm('Opravdu odebrat soubor &quot;".StripSlashes($rec_f['title'])."&quot; náležící k hlášení?');".'">smazat soubor</a></li>';
-}
-?>
-</ul>
-<hr />
-<form action="procnote.php" method="post" class="otherform">
-	<p>K hlášení si můžete připsat kolik chcete poznámek.</p>
-	<p>Aktuálně připojené poznámky:</p>
-	<ul>
-	<?php
-	if ($usrinfo['right_power']) {
-		$sql_n="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."users.login AS 'user', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes, ".DB_PREFIX."users WHERE ".DB_PREFIX."notes.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=4 AND ".DB_PREFIX."notes.deleted=0 ORDER BY ".DB_PREFIX."notes.datum DESC";
-	} else {
-	  $sql_n="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."users.login AS 'user', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes, ".DB_PREFIX."users WHERE ".DB_PREFIX."notes.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=4 AND ".DB_PREFIX."notes.deleted=0 AND (".DB_PREFIX."notes.secret=0 OR ".DB_PREFIX."notes.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."notes.datum DESC";
-	}
-	$res_n=MySQL_Query ($sql_n);
-	while ($rec_n=MySQL_Fetch_Assoc($res_n)) {
-		echo '<li><a href="readnote.php?rid='.$rec_n['id'].'&amp;idtable=4">'.StripSlashes($rec_n['title']).'</a> -'.(StripSlashes($rec_n['user']));
-		if ($rec_n['secret']==0) echo ' (veřejná)';
-		if ($rec_n['secret']==1) echo ' (tajná)';
-		if ($rec_n['secret']==2) echo ' (soukromá)';		
-		if (($rec_n['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo ' - <a href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=4">upravit poznámku</a> ';
-		if (($rec_n['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo ' - <a href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('editactrep.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec_n['title'])."&quot; náležící k hlášení?');".'">smazat poznámku</a></li>';
-	}
-	?>
-	</ul>
-	<p>Nová poznámka:</p>
-	<div>
-		<label for="notetitle">Nadpis:</label>
-		<input type="text" name="title" id="notetitle" />
+	<!-- následuje seznam přiložených souborů -->
+	<fieldset><legend><h3>Přiložené soubory</h3></legend>
+		<strong><em>K hlášení je možné nahrát neomezené množství souborů, ale velikost jednoho souboru je omezena na 2 MB.</em></strong>
+		<?php //generování seznamu přiložených souborů
+			if ($usrinfo['right_power']) {
+				$sql="SELECT ".DB_PREFIX."data.iduser AS 'iduser', ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.secret AS 'secret', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=4 ORDER BY ".DB_PREFIX."data.originalname ASC";
+			} else {
+			  $sql="SELECT ".DB_PREFIX."data.iduser AS 'iduser', ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.secret AS 'secret', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=4 AND ".DB_PREFIX."data.secret=0 ORDER BY ".DB_PREFIX."data.originalname ASC";
+			}
+			$res=MySQL_Query ($sql);
+			$i=0;
+			while ($rec_f=MySQL_Fetch_Assoc($res)) { 
+				$i++; 
+				if($i==1){ ?>
+		<ul id="prilozenadata">
+				<?php } ?>
+			<li class="soubor"><a href="getfile.php?idfile=<?php echo($rec_f['id']); ?>" title=""><?php echo(StripSlashes($rec_f['title'])); ?></a><?php if($rec_f['secret']==1){ ?> (TAJNÝ)<?php }; ?><span class="poznamka-edit-buttons"><?php
+				if (($rec_f['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo '<a class="delete" title="smazat" href="procgroup.php?deletefile='.$rec_f['id'].'&amp;groupid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('editgroup.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat soubor &quot;'.StripSlashes($rec_f['title']).'&quot; náležící ke skupině?\')"><span class="button-text">smazat soubor</span></a>'; ?>
+				</span></li><?php 
+			}
+			if($i<>0){ ?>
+		</ul>
+		<!-- end of #prilozenadata -->
+		<?php 
+			}else{?><br />
+		<em>bez přiložených souborů</em><?php
+			}
+		// konec seznamu přiložených souborů ?>
+	</fieldset>
+	<!-- formulář přiřazení nových souborů -->
+	<div id="new-file" class="otherform-wrap">
+		<fieldset><legend><strong>Nový soubor</strong></legend>
+		<form action="procactrep.php" method="post" enctype="multipart/form-data" class="otherform">
+			<div>
+				<strong><label for="attachment">Soubor:</label></strong>
+				<input type="file" name="attachment" id="attachment" />
+			</div>
+			<div>
+				<strong><label for="usecret">Přísně tajné:</label></strong>
+			  	<?php if ($rec_actr['secret']!=1) { ?>&nbsp;<input type="radio" name="secret" value="0" checked="checked"/>ne&nbsp;/<?php }; ?>
+				&nbsp;<input type="radio" name="secret" value="1" <?php if ($rec_actr['secret']==1){ ?>checked="checked"<?php }; ?>/>ano
+			</div>
+<?php 		if ($usrinfo['right_power'] == 1)	{
+			echo '					
+			<div>
+			<strong><label for="fnotnew">Není nové</label></strong>
+			<input type="checkbox" name="fnotnew"/><br/>
+			</div>';
+			}
+?>			
+			<div>
+				<input type="hidden" name="reportid" value="<?php echo $_REQUEST['rid']; ?>" />
+				<input type="hidden" name="backurl" value="<?php echo 'editactrep.php?rid='.$_REQUEST['rid']; ?>" />
+				<input type="submit" name="uploadfile" value="Nahrát soubor k případu" class="submitbutton" title="Uložit"/>
+			</div>
+		</form>
+		</fieldset>
 	</div>
-	<div>
-	  <label for="nsecret">Utajení:</label>
-		<select name="secret" id="nsecret">
-		  <option value="0">veřejná</option>
-		  <option value="1">tajná</option>
-		  <option value="2">soukromá</option>
-		</select>
+	<!-- end of #new-file .otherform-wrap -->
+
+	<!-- následuje seznam připojených poznámek -->
+	<fieldset><legend><h3>Poznámky</h3></legend>
+		<span class="poznamka-edit-buttons"><a class="new" href="newnote.php?rid=<?php echo $_REQUEST['rid']; ?>&amp;idtable=1" title="nová poznámka"><span class="button-text">nová poznámka</span></a><em style="font-size:smaller;"> (K hlášení si můžete připsat kolik poznámek chcete.)</em></span>
+		<!-- následuje seznam poznámek -->
+		<?php // generování poznámek
+			if ($usrinfo['right_power']) {
+				$sql="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.note AS 'note', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."users.login AS 'user', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes, ".DB_PREFIX."users WHERE ".DB_PREFIX."notes.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=4 AND ".DB_PREFIX."notes.deleted=0 AND (".DB_PREFIX."notes.secret<2 OR ".DB_PREFIX."notes.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."notes.datum DESC";
+			} else {
+				$sql="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.note AS 'note', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."users.login AS 'user', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes, ".DB_PREFIX."users WHERE ".DB_PREFIX."notes.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=4 AND ".DB_PREFIX."notes.deleted=0 AND (".DB_PREFIX."notes.secret=0 OR ".DB_PREFIX."notes.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."notes.datum DESC";
+			}
+			$res=MySQL_Query ($sql);
+			$i=0;
+			while ($rec_n=MySQL_Fetch_Assoc($res)) { 
+				$i++;
+				if($i==1){ ?>
+		<div id="poznamky"><?php
+				}
+				if($i>1){?>
+			<hr /><?php
+				} ?>
+			<div class="poznamka">
+				<h4><?php echo(StripSlashes($rec_n['title'])).' - '.(StripSlashes($rec_n['user']));?><?php
+				if ($rec_n['secret']==0) echo ' (veřejná)';
+				if ($rec_n['secret']==1) echo ' (tajná)';
+				if ($rec_n['secret']==2) echo ' (soukromá)';
+				?></h4>
+				<div><?php echo(StripSlashes($rec_n['note'])); ?></div>
+				<span class="poznamka-edit-buttons"><?php
+				if (($rec_n['iduser']==$usrinfo['id']) || ($usrinfo['right_text'])) echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=4" title="upravit"><span class="button-text">upravit</span></a> ';
+				if (($rec_n['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo '<a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('editactrep.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec_n['title'])."&quot; náležící k hlášení?');".'" title="smazat"><span class="button-text">smazat</span></a>'; ?>
+				</span>
+			</div>
+			<!-- end of .poznamka -->
+		<?php }
+			if($i<>0){ ?>
+		</div>
+		<!-- end of #poznamky -->
+		<?php 
+			}else{?><br />
+		<em>bez poznámek</em><?php
+			}
+		// konec poznámek ?>
+	</fieldset>
+	<div id="new-note" class="otherform-wrap">
+		<fieldset><legend><strong>Nová poznámka</strong></legend>
+		<form action="procnote.php" method="post" class="otherform">
+			<div>
+				<strong><label for="notetitle">Nadpis:</label></strong>
+				<input type="text" name="title" id="notetitle" />
+			</div>
+			<div>
+			  <strong><label for="nsecret">Utajení:</label></strong>
+			  	<?php if ($rec_actr['secret']!=1) { ?>&nbsp;<input type="radio" name="secret" id="nsecret" value="0" checked="checked"/>veřejná&nbsp;/<?php }; ?>
+				&nbsp;<input type="radio" name="secret" value="1" <?php if ($rec_actr['secret']==1){ ?>checked="checked"<?php }; ?>/>tajná&nbsp;/
+				&nbsp;<input type="radio" name="secret" value="2" />soukromá
+			</div>
+<?php 			if ($usrinfo['right_power'] == 1)	{
+				echo '					
+				<div>
+				<strong><label for="nnotnew">Není nové</label></strong>
+					<input type="checkbox" name="nnotnew"/><br/>
+				</div>';
+				}
+?>
+			<div>
+				<!--  label for="notebody">Tělo poznámka:</label -->
+				<textarea cols="80" rows="7" name="note" id="notebody"></textarea>
+			</div>
+			<div>
+				<input type="hidden" name="itemid" value="<?php echo $_REQUEST['rid']; ?>" />
+				<input type="hidden" name="backurl" value="<?php echo 'editactrep.php?rid='.$_REQUEST['rid']; ?>" />
+				<input type="hidden" name="tableid" value="4" />
+				<input type="submit" value="Uložit poznámku" name="setnote" class="submitbutton" title="Uložit"/>
+			</div>
+		</form>
+		</fieldset>
 	</div>
-	<div>
-		<label for="notebody">Tělo poznámka:</label>
-		<textarea cols="80" rows="7" name="note" id="notebody"></textarea>
-	</div>
-	<div>
-		<input type="hidden" name="itemid" value="<?php echo $_REQUEST['rid']; ?>" />
-		<input type="hidden" name="backurl" value="<?php echo 'editactrep.php?rid='.$_REQUEST['rid']; ?>" />
-		<input type="hidden" name="tableid" value="4" />
-		<input type="submit" value="Uložit poznámku" name="setnote" class="submitbutton" />
-	</div>
-</form>
+	<!-- end of #new-note .otherform-wrap -->
+
+
+
+</div>
+<!-- end of #obsah -->
 <?php
 } else {
 echo '<div id="obsah"><p>Hlášení neexistuje.</p></div>';
