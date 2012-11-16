@@ -1,7 +1,7 @@
 <?php
 require_once ('./inc/func_main.php');
 
-deleteDelUnread(2,24);
+deleteAllUnread(2,24);
 
 ?>
 

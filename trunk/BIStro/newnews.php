@@ -10,7 +10,7 @@
 	<form action="procnews.php" method="post" id="inputform">
 	<div id="info">
 		<h3><label for="nadpis">Nadpis:</label></h3>
-		<input type="text" name="nadpis" id="nadpis"" />
+		<input type="text" name="nadpis" id="nadpis" />
 		<div class="clear">&nbsp;</div>
 		<h3><label for="kategorie">Kategorie:</label></h3>
 			<select name="kategorie" id="kategorie">
@@ -27,6 +27,7 @@
 	</div>
 </form>
 </fieldset>
+</div>
 <?php
 	pageEnd ();
 ?>

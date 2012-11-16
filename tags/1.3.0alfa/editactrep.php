@@ -91,11 +91,11 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 </div>
 <div>
 <label for="start">Začátek:</label>
-<input type="start" name="start" id="start" value="<?php echo StripSlashes($rec['start']); ?>" />
+<input type="text" name="start" id="start" value="<?php echo StripSlashes($rec['start']); ?>" />
 </div>
 <div>
 <label for="end">Konec:</label>
-<input type="end" name="end" id="end" value="<?php echo StripSlashes($rec['end']); ?>" />
+<input type="text" name="end" id="end" value="<?php echo StripSlashes($rec['end']); ?>" />
 </div>
 <div>
 <label for="secret">Přísně tajné:</label>
@@ -136,13 +136,11 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 <textarea cols="80" rows="30" name="details" id="details"><?php echo StripSlashes($rec['details']); ?></textarea>
 </div>
 <div>
-<div>
 <label for="energy">Energetická náročnost:</label>
 </div>
 <div>
 <textarea cols="80" rows="10" name="energy" id="energy"><?php echo StripSlashes($rec['energy']); ?></textarea>
 </div>
-<div>
 <div>
 <label for="details">Počáteční vstupy:</label>
 </div>
