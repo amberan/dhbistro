@@ -116,7 +116,7 @@
 	<!-- end of #new-file .otherform-wrap -->
 	
 	<fieldset><legend><h2>Aktuálně připojené poznámky:</h2></legend>
-		<span class="poznamka-edit-buttons"><a class="new" href="newnote.php?rid=<?php echo $_REQUEST['rid']; ?>&amp;idtable=2" title="nová poznámka"><span class="button-text">nová poznámka</span></a><em style="font-size:smaller;"> (K případu si můžete připsat kolik chcete poznámek.)</em></span>
+		<span class="poznamka-edit-buttons"><a class="new" href="newnote.php?rid=<?php echo $_REQUEST['rid']; ?>&amp;idtable=2&amp;s=<?php echo $rec_g['secret']; ?>" title="nová poznámka"><span class="button-text">nová poznámka</span></a><em style="font-size:smaller;"> (K případu si můžete připsat kolik chcete poznámek.)</em></span>
 		<ul>
 		<?php
 		if ($usrinfo['right_power']) {

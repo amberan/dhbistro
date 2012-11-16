@@ -27,7 +27,9 @@ if (is_numeric($_REQUEST['rid'])) {
 		<div>
 		  <label for="nsecret">Utajení:</label>
 			<select name="secret" id="nsecret">
-			  <option value="0">veřejná</option>
+			  <?php if ($_REQUEST['s']==0) {
+			  	echo '<option value="0">veřejná</option>';
+			  } ?>
 			  <option value="1">tajná</option>
 			  <option value="2">soukromá</option>
 			</select>
