@@ -189,7 +189,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 		<!-- end of # -->
 		<?php 
 			}else{?><br />
-		<em>bez poznámek</em><?php
+		<em>Žádný případ nebyl přiřazen.</em><?php
 			}
 		// konec seznamu přiřazených případů ?>
 	</fieldset>
