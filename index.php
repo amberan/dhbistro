@@ -58,25 +58,33 @@
 				$sql_r="SELECT ".DB_PREFIX."reports.secret AS 'secret', ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id' FROM ".DB_PREFIX."reports WHERE ".DB_PREFIX."reports.iduser=".$usrinfo['id']." AND ".DB_PREFIX."reports.status=0 AND ".DB_PREFIX."reports.deleted=0 ORDER BY ".DB_PREFIX."reports.label ASC";
 				$res_r=MySQL_Query ($sql_r);
 				$rec_count = MySQL_Num_Rows($res_r);
+				echo $rec_count
+				?>
+				</h3><p>
+				<?php
 				if (MySQL_Num_Rows($res_r)) {
 					$reports=Array();
 					while ($rec_r=MySQL_Fetch_Assoc($res_r)) {
 						$reports[]='<a href="./readactrep.php?rid='.$rec_r['id'].'&hidenotes=0&truenames=0">'.StripSlashes ($rec_r['label']).'</a>';
 					}
-					echo $rec_count.'</h3><p>'.implode ($reports,'<br />');
+					echo implode ($reports,'<br />');
 				} else {
-					echo $rec_count.'</h3><p>Nemáte žádná nedokončená hlášení.';
+					echo 'Nemáte žádná nedokončená hlášení.';
 				} ?></p>
 	<div class="clear">&nbsp;</div>
 				<h3>Přiřazené neuzavřené případy: <?php
 			$sql="SELECT ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.title AS 'title' FROM ".DB_PREFIX."c2s, ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.id=".DB_PREFIX."c2s.idcase AND ".DB_PREFIX."c2s.idsolver=".$usrinfo['id']." ORDER BY ".DB_PREFIX."cases.title ASC";
 			$pers=MySQL_Query ($sql);
 			$rec_count = MySQL_Num_Rows($pers);
+			echo $rec_count
+			?>
+			</h3><p>
+			<?php
 			$cases=Array();
 			while ($perc=MySQL_Fetch_Assoc($pers)) {
 				$cases[]='<a href="./readcase.php?rid='.$perc['id'].'&hidenotes=0">'.StripSlashes ($perc['title']).'</a>';
 			}
-			echo $rec_count.'</h3><p>'.((implode($cases, '<br />')<>"")?implode($cases, '<br />'):'<em>Nemáte žádný přiřazený neuzavřený případ.</em>');
+			echo ((implode($cases, '<br />')<>"")?implode($cases, '<br />'):'<em>Nemáte žádný přiřazený neuzavřený případ.</em>');
 			?></p>
 	<div class="clear">&nbsp;</div>
 </fieldset>

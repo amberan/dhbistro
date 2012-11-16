@@ -194,7 +194,7 @@ function getAuthor ($recid,$trn) {
 			return $name;
 		}
 	} else {
-		$sql_ga="SELECT ".DB_PREFIX."users.login as 'nick' FROM ".DB_PREFIX."users WHERE ".DB_PREFIX."users.id=".$rec['iduser'];
+		$sql_ga="SELECT ".DB_PREFIX."users.login as 'nick' FROM ".DB_PREFIX."users WHERE ".DB_PREFIX."users.id=".$recid;
 		$res_ga=MySQL_Query ($sql_ga);
 		if (MySQL_Num_Rows($res_ga)) {
 			while ($rec_ga=MySQL_Fetch_Assoc($res_ga)) {

@@ -71,11 +71,11 @@ function date_picker($name, $startyear=NULL, $endyear=NULL)
 	</div>
 	<div>
 	  <label for="start">Začátek:</label>
-	  <input type="start" name="start" id="start" />
+	  <input type="text" name="start" id="start" />
 	</div>
 	<div>
 	  <label for="end">Konec:</label>
-	  <input type="end" name="end" id="end" />
+	  <input type="text" name="end" id="end" />
 	</div>
 	<div>
 	  <label for="secret">Přísně tajné:</label>
