@@ -50,82 +50,73 @@ function date_picker($name, $startyear=NULL, $endyear=NULL)
     return $html;
 }
 ?>
-
-<form action="procactrep.php" method="post" id="inputform"><?php
+<div id="obsah">
+<form action="procactrep.php" method="post" id="inputform">
+<fieldset><legend><h1>Nové hlášení z <?php echo (($type==1)?'výjezdu':(($type==2)?'výslechu':'#&*'));?></h1></legend>
+	<fieldset><legend><h2>Základní údaje</h2></legend>
+		<div id="info"><?php
 	switch ($type){		
 		// default situace by nemela nikdy nastat, zadne nove hlaseni by nemelo mit typ 0 (nula);
 		case 1: ?><input type="hidden" name="type" value="1" /><?php break; // výjezd
 		case 2: ?><input type="hidden" name="type" value="2" /><?php break; // výslech
 		default:?><input type="hidden" name="type" value="0" /><?php  break; }; // tato moznost je zahrnuta pouze jako pojistka  ?>
-	<div>
-	  <label for="label">Označení <?php if($type==='1'){ ?>výjezdu<?php }else if($type==='2'){ ?>výslechu<?php }; ?>:</label>
-	  <input type="text" name="label" id="label" />
-	</div>
-	<div>
-	  <label for="task"><?php if($type==='1'){ ?>Úkol<?php }else if($type==='2'){ ?>Předmět výslechu<?php }; ?>:</label>
-	  <input type="text" name="task" id="task" />
-	</div>
-	<div>
-	  <label for="adatum"><?php if($type==='1'){ ?>Datum akce<?php }else if($type==='2'){ ?>Datum výslechu<?php }; ?>:</label>
-	  <?php echo date_picker("adatum")?>
-	</div>
-	<div>
-	  <label for="start">Začátek:</label>
-	  <input type="start" name="start" id="start" />
-	</div>
-	<div>
-	  <label for="end">Konec:</label>
-	  <input type="end" name="end" id="end" />
-	</div>
-	<div>
-	  <label for="secret">Přísně tajné:</label>
-		<select name="secret" id="secret">
-			<option value="0">ne</option>
-			<option value="1">ano</option>
-		</select>
-	</div>
-	<div>
-	  <label for="status">Stav:</label>
-		<select name="status" id="status">
-			<option value="0">rozpracované</option>
-			<option value="1">dokončené</option>
-		</select>
-	</div>
-	<div>
-	  <label for="summary">Shrnutí:</label>
-	</div>
-	<div>
-	  <textarea cols="80" rows="7" name="summary" id="summary">doplnit</textarea>
-	</div>
-	<div>
-	  <label for="impact">Možné dopady:</label>
-	</div>
-	<div>
-	  <textarea cols="80" rows="7" name="impact" id="impact">doplnit</textarea>
-	</div>
-	<div>
-	  <label for="details">Podrobný popis průběhu:</label>
-	</div>
-	<div>
-	  <textarea cols="80" rows="7" name="details" id="details">doplnit</textarea>
-	</div>
-	<div>
-	  <label for="energy">Energetická náročnost:</label>
-	</div>
-	<div>
-	  <textarea cols="80" rows="7" name="energy" id="energy">kouzla, vstupy do Šera, amulety, artefakty</textarea>
-	</div>
-	<div>
-	  <label for="inputs">Počáteční vstupy:</label>
-	</div>
-	<div>
-	  <textarea cols="80" rows="7" name="inputs" id="inputs">info z analytického atd.</textarea>
-	</div>
-	<div>
-	  <input type="submit" name="insertrep" id="submitbutton" value="Vložit" />
-	</div>
-</form>
+			<h3><label for="label">Označení <?php if($type==='1'){ ?>výjezdu<?php }else if($type==='2'){ ?>výslechu<?php }; ?>:</label>
+	  		<input type="text" size="80" name="label" id="label" />
+	  		<div class="clear">&nbsp;</div>
+			<h3><label for="task"><?php if($type==='1'){ ?>Úkol<?php }else if($type==='2'){ ?>Předmět výslechu<?php }; ?>:</label></h3>
+	  		<input type="text" size="80" name="task" id="task" />
+	  		<div class="clear">&nbsp;</div>
+			<h3><label for="adatum"><?php if($type==='1'){ ?>Datum akce<?php }else if($type==='2'){ ?>Datum výslechu<?php }; ?>:</label></h3>
+	  		<?php echo date_picker("adatum")?>
+	  		<div class="clear">&nbsp;</div>
+			<h3><label for="start">Začátek:</label></h3>
+	  		<input type="start" name="start" id="start" />
+	  		<div class="clear">&nbsp;</div>
+			<h3><label for="end">Konec:</label></h3>
+			<input type="end" name="end" id="end" />
+	  		<div class="clear">&nbsp;</div>
+			<h3><label for="secret">Přísně tajné:</label></h3>
+			<select name="secret" id="secret">
+				<option value="0">ne</option>
+				<option value="1">ano</option>
+			</select>
+	  		<div class="clear">&nbsp;</div>
+			<h3><label for="status">Stav:</label></h3>
+			<select name="status" id="status">
+				<option value="0">rozpracované</option>
+				<option value="1">dokončené</option>
+			</select>
+			<div class="clear">&nbsp;</div>			
+		</div>
+		<!-- end of #info -->
+	</fieldset>
 
+	<fieldset><legend><h2>Shrnutí:</h2></legend>
+		<textarea cols="80" rows="7" name="summary" id="summary">doplnit</textarea>
+	</fieldset>
+	
+	<fieldset><legend><h2>Možné dopady:</h2></legend>
+		<textarea cols="80" rows="7" name="impact" id="impact">doplnit</textarea>
+	</fieldset>
+	
+	<fieldset><legend><h2>Podrobný popis průběhu:</h2></legend>
+		<textarea cols="80" rows="7" name="details" id="details">doplnit</textarea>
+	</fieldset>
+	
+	<fieldset><legend><h2>Energetická náročnost:</h2></legend>
+		<textarea cols="80" rows="7" name="energy" id="energy">kouzla, vstupy do Šera, amulety, artefakty</textarea>
+	</fieldset>
+	
+	<fieldset><legend><h2>Počáteční vstupy:</h2></legend>
+		<textarea cols="80" rows="7" name="inputs" id="inputs">info z analytického atd.</textarea>
+	</fieldset>
+	
+	<input type="submit" name="insertrep" id="submitbutton" value="Vložit" />
+
+</fieldset>
+</form>
+</div>
+<!-- end of #obsah -->
 <?php
 	pageEnd ();
 ?>
