@@ -91,10 +91,10 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 			<?php echo date_picker("adatum")?>
 			<div class="clear">&nbsp;</div>
 			<h3><label for="start">Začátek:</label></h3>
-			<input type="start" name="start" id="start" value="<?php echo StripSlashes($rec_actr['start']); ?>" />
+			<input type="text" name="start" id="start" value="<?php echo StripSlashes($rec_actr['start']); ?>" />
 			<div class="clear">&nbsp;</div>
 			<h3><label for="end">Konec:</label></h3>
-			<input type="end" name="end" id="end" value="<?php echo StripSlashes($rec_actr['end']); ?>" />
+			<input type="text" name="end" id="end" value="<?php echo StripSlashes($rec_actr['end']); ?>" />
 			<div class="clear">&nbsp;</div>
 			<h3><label for="secret">Přísně tajné:</label></h3>
 			<select name="secret" id="secret">

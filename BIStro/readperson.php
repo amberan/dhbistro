@@ -34,10 +34,10 @@
 <div id="obsah">
 	<h1><?php echo(StripSlashes($rec['surname']).', '.StripSlashes($rec['name'])); ?></h1>
 	<fieldset><legend><h2>Základní údaje</h2></legend>
-		<?php if($rec['portrait']==NULL){ ?><img src="#" alt="portrét chybí" tile="portrét chybí" id="portraitimg" class="noname"/>
+		<?php if($rec['portrait']==NULL){ ?><img src="#" alt="portrét chybí" title="portrét chybí" id="portraitimg" class="noname"/>
 		<?php }else{ ?><img src="getportrait.php?rid=<?php echo($_REQUEST['rid']); ?>" alt="<?php echo(StripSlashes($rec['name']).' '.StripSlashes($rec['surname'])); ?>" id="portraitimg" />
 		<?php } ?>
-		<?php if($rec['symbol']==NULL){ ?><img src="#" alt="symbol chybí" tile="symbol chybí" id="symbolimg" class="noname"/>
+		<?php if($rec['symbol']==NULL){ ?><img src="#" alt="symbol chybí" title="symbol chybí" id="symbolimg" class="noname"/>
 		<?php }else{ ?><img src="getportrait.php?srid=<?php echo($_REQUEST['rid']); ?>" alt="<?php echo(StripSlashes($rec['name']).' '.StripSlashes($rec['surname'])); ?>" id="symbolimg" />
 		<?php } ?>
 		<div id="info">

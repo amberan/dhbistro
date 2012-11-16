@@ -60,7 +60,7 @@ function date_picker($name, $startyear=NULL, $endyear=NULL)
 		case 1: ?><input type="hidden" name="type" value="1" /><?php break; // výjezd
 		case 2: ?><input type="hidden" name="type" value="2" /><?php break; // výslech
 		default:?><input type="hidden" name="type" value="0" /><?php  break; }; // tato moznost je zahrnuta pouze jako pojistka  ?>
-			<h3><label for="label">Označení <?php if($type==='1'){ ?>výjezdu<?php }else if($type==='2'){ ?>výslechu<?php }; ?>:</label>
+			<h3><label for="label">Označení <?php if($type==='1'){ ?>výjezdu<?php }else if($type==='2'){ ?>výslechu<?php }; ?>:</label></h3>
 	  		<input type="text" size="80" name="label" id="label" />
 	  		<div class="clear">&nbsp;</div>
 			<h3><label for="task"><?php if($type==='1'){ ?>Úkol<?php }else if($type==='2'){ ?>Předmět výslechu<?php }; ?>:</label></h3>
@@ -70,10 +70,10 @@ function date_picker($name, $startyear=NULL, $endyear=NULL)
 	  		<?php echo date_picker("adatum")?>
 	  		<div class="clear">&nbsp;</div>
 			<h3><label for="start">Začátek:</label></h3>
-	  		<input type="start" name="start" id="start" />
+	  		<input type="text" name="start" id="start" />
 	  		<div class="clear">&nbsp;</div>
 			<h3><label for="end">Konec:</label></h3>
-			<input type="end" name="end" id="end" />
+			<input type="text" name="end" id="end" />
 	  		<div class="clear">&nbsp;</div>
 			<h3><label for="secret">Přísně tajné:</label></h3>
 			<select name="secret" id="secret">
