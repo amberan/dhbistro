@@ -24,3 +24,15 @@
   			FPassThru ($getf);
   		}
   	}
+  	if (isset($_REQUEST['nrid']) && is_numeric ($_REQUEST['nrid'])) {
+  		$getres=MySQL_Query ("SELECT symbol FROM ".DB_PREFIX."symbols WHERE id=".$_REQUEST['nrid']);
+  		if ($getrec=MySQL_Fetch_Assoc ($getres)) {
+  			header('Content-Type: image/jpg');
+  			header('Content-Disposition: inline; filename="symbol'.$_REQUEST['nrid'].'.jpg"');
+  			header('Expires: 0');
+  			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+  			header('Pragma: public');
+  			$getf=FOpen ("./files/symbols/".$getrec['symbol'],"r");
+  			FPassThru ($getf);
+  		}
+  	}

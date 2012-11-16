@@ -146,7 +146,7 @@ function unreadRecords ($tablenum,$rid) {
 	$secret=0;
 	if (isset($_POST['secret'])) {
 		$secret=$_POST['secret'];
-	}
+	} 
 	if (isset($_POST['nsecret'])) {
 		$secret=$_POST['nsecret'];
 	}
@@ -170,7 +170,11 @@ function unreadRecords ($tablenum,$rid) {
 // vymaz z tabulek neprectenych pri precteni
 function deleteUnread ($tablenum,$rid) {
 	global $usrinfo;
-	$sql_ur="DELETE FROM ".DB_PREFIX."unread_".$usrinfo['id']." WHERE idtable=".$tablenum." AND idrecord=".$rid;
+	if ($rid<>'none') {
+		$sql_ur="DELETE FROM ".DB_PREFIX."unread_".$usrinfo['id']." WHERE idtable=".$tablenum." AND idrecord=".$rid;
+	} else {
+		$sql_ur="DELETE FROM ".DB_PREFIX."unread_".$usrinfo['id']." WHERE idtable=".$tablenum;
+	}
 	MySQL_Query ($sql_ur);
 }
 
