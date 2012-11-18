@@ -10,7 +10,7 @@
 <div id="obsah">
 <fieldset><legend><h1>Úprava symbolu:</h1></legend>
 	<p id="top-text">Symboly nahrávejte pokud možno ve velikosti 100x100 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen symboly jasně rozeznatelné, rozmazané fotky použijte třeba jako přílohu.</p>
-	<form action="procsymbol.php" method="post" id="inputform" enctype="multipart/form-data">
+	<form action="procother.php" method="post" id="inputform" enctype="multipart/form-data">
 		<fieldset class="symbol"><legend><h2>Symbol</h2></legend>
 		<?php if($rec_p['symbol']==NULL){ ?><img src="#" alt="symbol chybí" title="symbol chybí" id="ssymbolimg" class="noname"/>
 		<?php }else{ ?><img src="getportrait.php?nrid=<?php echo($_REQUEST['rid']); ?>" alt="symbol" id="ssymbolimg" />
@@ -40,12 +40,12 @@
 		<!-- náseduje popis osoby -->
 		<fieldset><legend><h2>Popis osoby</h2></legend>
 			<div class="field-text">
-				<textarea cols="80" rows="15" name="contents" id="contents"><?php echo StripSlashes($rec_p['desc']); ?></textarea>
+				<textarea cols="80" rows="15" name="desc" id="desc"><?php echo StripSlashes($rec_p['desc']); ?></textarea>
 			</div>
 			<!-- end of .field-text -->
 		</fieldset>
-		<input type="hidden" name="personid" value="<?php echo $rec_p['id']; ?>" />
-		<input type="submit" name="editperson" id="submitbutton" value="Uložit" title="Uložit změny"/>
+		<input type="hidden" name="symbolid" value="<?php echo $rec_p['id']; ?>" />
+		<input type="submit" name="editsymbol" id="submitbutton" value="Uložit" title="Uložit změny"/>
 	</form>
 
 </fieldset>
