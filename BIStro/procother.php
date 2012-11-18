@@ -20,7 +20,7 @@
 		if (is_uploaded_file($_FILES['symbol']['tmp_name'])) {
 			$sfile=Time().MD5(uniqid(Time().Rand()));
 			move_uploaded_file ($_FILES['symbol']['tmp_name'],'./files/'.$sfile.'tmp');
-			$sdst=resize_Image ('./files/'.$sfile.'tmp',100,130);
+			$sdst=resize_Image ('./files/'.$sfile.'tmp',100,100);
 			imagejpeg($sdst,'./files/symbols/'.$sfile);
 			unlink('./files/'.$sfile.'tmp');
 		} else {
@@ -49,7 +49,44 @@
 	}
 	if (isset($_REQUEST['sdelete']) && is_numeric($_REQUEST['sdelete']) && $usrinfo['right_text']) {
 		MySQL_Query ("UPDATE ".DB_PREFIX."symbols SET deleted=1 WHERE id=".$_REQUEST['sdelete']);
-		deleteAllUnread (1,$_REQUEST['sdelete']);
+		deleteAllUnread (7,$_REQUEST['sdelete']);
 		Header ('Location: symbols.php');
+	}
+	if (isset($_POST['symbolid']) && isset($_POST['editsymbol']) && $usrinfo['right_text'] ) {
+		pageStart ('Uložení změn');
+		mainMenu (5);
+		if (!isset($_POST['notnew'])) {
+			unreadRecords (7,$_POST['symbolid']);
+		}
+		sparklets ('<a href="./symbols.php">symboly</a> &raquo; <a href="./editsymbol.php?rid='.$_POST['symbolid'].'">úprava symbolu</a> &raquo; <strong>uložení změn</strong>');
+		if (is_uploaded_file($_FILES['symbol']['tmp_name'])) {
+			$sps=MySQL_Query ("SELECT symbol FROM ".DB_PREFIX."symbols WHERE id=".$_POST['symbolid']);
+			if ($spc=MySQL_Fetch_Assoc($sps)) {
+				unlink('./files/symbols/'.$spc['symbol']);
+			}
+			$sfile=Time().MD5(uniqid(Time().Rand()));
+			move_uploaded_file ($_FILES['symbol']['tmp_name'],'./files/'.$sfile.'tmp');
+			$sdst=resize_Image ('./files/'.$sfile.'tmp',100,100);
+			imagejpeg($sdst,'./files/symbols/'.$sfile);
+			unlink('./files/'.$sfile.'tmp');
+			MySQL_Query ("UPDATE ".DB_PREFIX."symbols SET symbol='".$sfile."' WHERE id=".$_POST['symbolid']);
+		}
+		if ($usrinfo['right_org']==1) {
+			$sql="UPDATE ".DB_PREFIX."symbols SET `desc`='".mysql_real_escape_string($_POST['desc'])."', archiv='".(isset($_POST['archiv'])?'1':'0')."' WHERE id=".$_POST['symbolid'];
+			MySQL_Query ($sql);
+		} else {
+			$sql="UPDATE ".DB_PREFIX."symbols SET `desc`='".mysql_real_escape_string($_POST['desc'])."', modified='".Time()."', modified_by='".$usrinfo['id']."', archiv='".(isset($_POST['archiv'])?'1':'0')."' WHERE id=".$_POST['symbolid'];
+			MySQL_Query ();
+		}
+		echo '<div id="obsah"><p>Symbol upraven.</p></div>';
+		pageEnd ();
+	} else {
+		if (isset($_POST['editsymbol'])) {
+			pageStart ('Uložení změn');
+			mainMenu (5);
+			sparklets ('<a href="./symbols.php">symboly</a> &raquo; <a href="./editsymbol.php?rid='.$_POST['symbolid'].'">úprava symbolu</a> &raquo; <strong>uložení změn neúspešné</strong>');
+			echo '<div id="obsah"><p>Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
+			pageEnd ();
+		}
 	}
 ?>

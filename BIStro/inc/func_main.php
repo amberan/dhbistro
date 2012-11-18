@@ -275,7 +275,7 @@ function getAuthor ($recid,$trn) {
 	<ul>
 		<li '.((searchTable(5))?' class="unread"':((searchTable(6))?' class="unread"':'')).'><a href="index.php">Aktuality</a></li>
 		<li '.((searchTable(4))?' class="unread"':'').'><a href="reports.php">Hlášení</a></li>	
-		<li '.((searchTable(1))?' class="unread"':'').'><a href="persons.php">Osoby</a></li>
+		<li '.((searchTable(1))?' class="unread"':((searchTable(7))?' class="unread"':'')).'><a href="persons.php">Osoby</a></li>
 		<li '.((searchTable(3))?' class="unread"':'').'><a href="cases.php">Případy</a></li>
 		<li '.((searchTable(2))?' class="unread"':'').'><a href="groups.php">Skupiny</a></li>
 		'.(($usrinfo['right_power'])?'<li><a href="mapagents.php">Mapa agentů</a></li>':'').'
