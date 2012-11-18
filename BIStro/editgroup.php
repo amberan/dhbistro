@@ -87,7 +87,7 @@
 
 	<div id="new-file" class="otherform-wrap">
 		<fieldset><legend><strong>Nový soubor</strong></legend>
-		<form action="procperson.php" method="post" enctype="multipart/form-data" class="otherform">
+		<form action="procgroup.php" method="post" enctype="multipart/form-data" class="otherform">
 			<div>
 				<strong><label for="attachment">Soubor:</label></strong>
 				<input type="file" name="attachment" id="attachment" />
@@ -106,9 +106,9 @@
 			}
 ?>			
 			<div>
-				<input type="hidden" name="personid" value="<?php echo $_REQUEST['rid']; ?>" />
+				<input type="hidden" name="groupid" value="<?php echo $_REQUEST['rid']; ?>" />
 				<input type="hidden" name="backurl" value="<?php echo 'editgroup.php?rid='.$_REQUEST['rid']; ?>" />
-				<input type="submit" name="uploadfile" value="Nahrát soubor k osobě" class="submitbutton" title="Uložit"/> 
+				<input type="submit" name="uploadfile" value="Nahrát soubor ke skupině" class="submitbutton" title="Uložit"/> 
 			</div>
 		</form>
 		</fieldset>

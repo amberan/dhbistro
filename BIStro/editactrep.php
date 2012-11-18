@@ -256,7 +256,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 
 	<!-- následuje seznam připojených poznámek -->
 	<fieldset><legend><h3>Poznámky</h3></legend>
-		<span class="poznamka-edit-buttons"><a class="new" href="newnote.php?rid=<?php echo $_REQUEST['rid']; ?>&amp;idtable=1" title="nová poznámka"><span class="button-text">nová poznámka</span></a><em style="font-size:smaller;"> (K hlášení si můžete připsat kolik poznámek chcete.)</em></span>
+		<span class="poznamka-edit-buttons"><a class="new" href="newnote.php?rid=<?php echo $_REQUEST['rid']; ?>&amp;idtable=4" title="nová poznámka"><span class="button-text">nová poznámka</span></a><em style="font-size:smaller;"> (K hlášení si můžete připsat kolik poznámek chcete.)</em></span>
 		<!-- následuje seznam poznámek -->
 		<?php // generování poznámek
 			if ($usrinfo['right_power']) {
