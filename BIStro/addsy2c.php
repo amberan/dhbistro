@@ -1,10 +1,11 @@
 <?php
 	require_once ('./inc/func_main.php');
-	pageStart ('Úprava hlášení');
+	pageStart ('Přiřazení symbolu');
 	mainMenu (5);
-	sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení</strong>');
-	$autharray=MySQL_Fetch_Assoc(MySQL_Query("SELECT iduser FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid']));
-	$author=$autharray['iduser'];
+	sparklets ('<a href="./symbols.php">nepřiřazené symboly</a> &raquo; <strong>přiřazení symbolu k případu</strong>');
+	$sql="SELECT created_by FROM ".DB_PREFIX."symbols WHERE id=".$_REQUEST['rid'];
+	$autharray=MySQL_Fetch_Assoc(MySQL_Query($sql));
+	$author=$autharray['created_by'];
 	if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || $usrinfo['id']==$author)) {
 	  $res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid']);
 		if ($rec=MySQL_Fetch_Assoc($res)) {
@@ -12,7 +13,7 @@
 
 <div id="obsah">
 <p>
-Hlášení můžete přiřadit k případu (či případům), kterého se týká.
+Symbol můžete přiřadit k případu (či případům), u kterých se vyskytoval.
 </p>
 
 <?php
@@ -30,7 +31,7 @@ switch ($f_sort) {
 //
 function filter () {
 	global $f_sort;
-	echo '<form action="addar2c.php" method="post" id="filter">
+	echo '<form action="addsy2c.php" method="post" id="filter">
 	<fieldset>
 	<legend>Filtr</legend>
 	<p>Vypsat všechny případy a seřadit je podle <select name="sort">
@@ -43,12 +44,12 @@ function filter () {
 	</form>';
 }
 filter(); ?>
-<form action="addreports.php" method="post" class="otherform">
+<form action="addsymbols.php" method="post" class="otherform">
 <?php // vypis pripadu
 if ($usrinfo['right_power']) {
-	$sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."ar2c.iduser FROM ".DB_PREFIX."cases LEFT JOIN ".DB_PREFIX."ar2c ON ".DB_PREFIX."ar2c.idcase=".DB_PREFIX."cases.id AND ".DB_PREFIX."ar2c.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."cases.deleted=0 ORDER BY ".$fsql_sort;
+	$sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."symbol2all.iduser FROM ".DB_PREFIX."cases LEFT JOIN ".DB_PREFIX."symbol2all ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."cases.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." WHERE ".DB_PREFIX."cases.deleted=0 ORDER BY ".$fsql_sort;
 } else {
-	$sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."ar2c.iduser FROM ".DB_PREFIX."cases LEFT JOIN ".DB_PREFIX."ar2c ON ".DB_PREFIX."ar2c.idcase=".DB_PREFIX."cases.id AND ".DB_PREFIX."ar2c.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."cases.deleted=0 AND ".DB_PREFIX."cases.secret=0 ORDER BY ".$fsql_sort;
+	$sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."symbol2all.iduser FROM ".DB_PREFIX."cases LEFT JOIN ".DB_PREFIX."symbol2all ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."cases.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." WHERE ".DB_PREFIX."cases.deleted=0 AND ".DB_PREFIX."cases.secret=0 ORDER BY ".$fsql_sort;
 }
 $res=MySQL_Query ($sql);
 if (MySQL_Num_Rows($res)) {
@@ -81,8 +82,8 @@ if (MySQL_Num_Rows($res)) {
 ?>
 
 <div>
-<input type="hidden" name="reportid" value="<?php echo $_REQUEST['rid']; ?>" />
-<input type="submit" value="Uložit změny" name="addtoareport" class="submitbutton" />
+<input type="hidden" name="symbolid" value="<?php echo $_REQUEST['rid']; ?>" />
+<input type="submit" value="Uložit změny" name="addsymbol2c" class="submitbutton" />
 </div>
 </form>
 
@@ -90,7 +91,7 @@ if (MySQL_Num_Rows($res)) {
 <!-- end of #obsah -->
 <?php
 		} else {
-		  echo '<div id="obsah"><p>Hlášení neexistuje. Rid='.$_REQUEST['rid'].'</p></div>';
+		  echo '<div id="obsah"><p>Symbol neexistuje. Rid='.$_REQUEST['rid'].'</p></div>';
 		}
 	} else {
 	  echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';

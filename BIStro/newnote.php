@@ -11,6 +11,7 @@ switch ($_REQUEST['idtable']) {
 				case 6: $sourceurl1="readgroup.php?rid=".$_REQUEST['rid']."&hidenotes=0"; $sourceurl2="groups.php"; $sourcename="skupiny"; $idtable=2; $typ='e skupině'; break;
 				case 7: $sourceurl1="readcase.php?rid=".$_REQUEST['rid']."&hidenotes=0"; $sourceurl2="cases.php"; $sourcename="případy"; $idtable=3; $typ=' případu'; break;
 				case 8: $sourceurl1="readactrep.php?rid=".$_REQUEST['rid']."&hidenotes=0"; $sourceurl2="reports.php"; $sourcename="hlášení"; $idtable=4; $typ=' hlášení'; break;
+				case 9: $sourceurl1="editsymbol.php"; $sourceurl2="editsymbol.php"; $sourcename="symbol"; $idtable=7; $typ=' symbolu'; break;
 				default: $sourceurl=""; $sourcename=""; break;
 			}
 sparklets ('<a href="./'.$sourceurl2.'?rid='.$_REQUEST['rid'].'">'.$sourcename.'</a> &raquo; <strong>nová poznámka</strong>');

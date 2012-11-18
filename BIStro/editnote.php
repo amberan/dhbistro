@@ -7,6 +7,7 @@
 		case 2: $sourceurl="groups.php"; $sourcename="skupiny"; break;
 		case 3: $sourceurl="cases.php"; $sourcename="případy"; break;
 		case 4: $sourceurl="reports.php"; $sourcename="hlášení"; break;
+		case 7: $sourceurl="symbols.php"; $sourcename="symboly"; break;
 		default: $sourceurl=""; $sourcename=""; break;
 	}
 	sparklets ('<a href="./'.$sourceurl.'">'.$sourcename.'</a> &raquo; <strong>úprava poznámky</strong>');

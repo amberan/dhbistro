@@ -181,7 +181,8 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 				$i++;
 				if($i==1){ ?>
 		<ul id=""><?php
-				} ?>
+				} 
+				?>
 			<li><a href="readcase.php?rid=<?php echo $perc['id']; ?>"><?php echo $perc['title']; ?></a></li>
 		<?php }
 			if($i<>0){ ?>
