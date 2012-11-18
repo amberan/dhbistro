@@ -387,7 +387,7 @@ div.otherform-wrap {width:475px;}
 #info h3, #info p{display:inline; margin:0.2em 0;}
 
 #obsah fieldset {position: relative; margin:0;}
-#obsah fieldset#symbol {position: relative; margin:0; height:350px}
+#obsah fieldset.symbol {position: relative; margin:0; height:150px}
 #obsah legend h2 {display:inline-block;}
 #obsah .field-text {margin:0.2em; padding:0;}
 #obsah .field-text>p {margin: 0.8em 0 0 0;}
@@ -438,6 +438,21 @@ div > .poznamka-edit-buttons {position:absolute;right:0px;top:0px;}
 	margin: 0 0 20px 20px;
 }
 #symbolimg.noname {
+	text-indent:-1000px;
+	overflow:hidden;
+	background:url('../css/nosymbol.png') no-repeat scroll center transparent;
+}
+
+#ssymbolimg {
+	position: absolute;
+	right: 1.2em;
+	width: 104px;
+	height: 104px;
+	border: 1px solid #808080;
+	padding: 1px;
+	margin: 0 0 20px 20px;
+}
+#ssymbolimg.noname {
 	text-indent:-1000px;
 	overflow:hidden;
 	background:url('../css/nosymbol.png') no-repeat scroll center transparent;
