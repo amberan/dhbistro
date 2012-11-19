@@ -89,7 +89,7 @@
 			echo ((implode($cases, '<br />')<>"")?implode($cases, '<br />'):'<em>Nemáte žádný přiřazený neuzavřený případ.</em>');
 			?></p>
 	</td>
-	<td width=50% align="top">
+	<td>
 	<h3>Nedokončené úkoly: <?php
 			$sql_r="SELECT * FROM ".DB_PREFIX."tasks WHERE ".DB_PREFIX."tasks.iduser=".$usrinfo['id']." AND ".DB_PREFIX."tasks.status=0 ORDER BY ".DB_PREFIX."tasks.created ASC";
 			$res_r=MySQL_Query ($sql_r);
