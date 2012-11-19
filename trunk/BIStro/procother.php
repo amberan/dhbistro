@@ -89,4 +89,24 @@
 			pageEnd ();
 		}
 	}
+	if (isset($_REQUEST['acctask']) && is_numeric($_REQUEST['acctask']) && $usrinfo['right_text']) {
+		MySQL_Query ("UPDATE ".DB_PREFIX."tasks SET status=2, modified='".Time()."', modified_by='".$usrinfo['id']."' WHERE id=".$_REQUEST['acctask']);
+//		deleteAllUnread (1,$_REQUEST['delete']);
+		Header ('Location: '.$_SERVER['HTTP_REFERER']);
+	}
+	if (isset($_REQUEST['rtrntask']) && is_numeric($_REQUEST['rtrntask']) && $usrinfo['right_text']) {
+		MySQL_Query ("UPDATE ".DB_PREFIX."tasks SET status=0, modified='".Time()."', modified_by='".$usrinfo['id']."' WHERE id=".$_REQUEST['rtrntask']);
+		//		deleteAllUnread (1,$_REQUEST['delete']);
+		Header ('Location: '.$_SERVER['HTTP_REFERER']);
+	}
+	if (isset($_REQUEST['fnshtask']) && is_numeric($_REQUEST['fnshtask'])) {
+		MySQL_Query ("UPDATE ".DB_PREFIX."tasks SET status=1, modified='".Time()."', modified_by='".$usrinfo['id']."' WHERE id=".$_REQUEST['fnshtask']);
+		//		deleteAllUnread (1,$_REQUEST['delete']);
+		Header ('Location: '.$_SERVER['HTTP_REFERER']);
+	}
+	if (isset($_REQUEST['cncltask']) && is_numeric($_REQUEST['cncltask']) && $usrinfo['right_text']) {
+		MySQL_Query ("UPDATE ".DB_PREFIX."tasks SET status=3, modified='".Time()."', modified_by='".$usrinfo['id']."' WHERE id=".$_REQUEST['cncltask']);
+		//		deleteAllUnread (1,$_REQUEST['delete']);
+		Header ('Location: '.$_SERVER['HTTP_REFERER']);
+	}	
 ?>

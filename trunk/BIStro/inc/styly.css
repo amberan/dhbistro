@@ -157,6 +157,10 @@ a:link, a:visited {
 	font-size: 9pt;
 }
 
+#filter input#task {
+	width: 400px;
+}
+
 /***********************************/
 /************  drobky  *************/
 /***********************************/
@@ -492,6 +496,20 @@ div > .poznamka-edit-buttons {position:absolute;right:0px;top:0px;}
 #dashboard .field-text>p {margin: 0.8em 0 0 0;}
 #dashboard .field-text>p:first-child {margin: 0 0 0.8em 0;}
 
+#dashboard table {
+	width: 100%;
+	border: none;
+}
+
+#dashboard td {
+  border: none;
+  width: 50%;
+  vertical-align: top;
+}
+
+#dashboard tr:hover {
+	background-color: inherit;
+}
 /***********************************/
 /************  tabulky  ************/
 /***********************************/
