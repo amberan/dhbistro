@@ -55,6 +55,7 @@
 ?>
 <div id="dashboard">
 <fieldset><legend><h2>Osobní nástěnka</h2></legend>
+	<table><tr><td>
 	<h3>Rozpracovaná nedokončená hlášení: <?php
 				$sql_r="SELECT ".DB_PREFIX."reports.secret AS 'secret', ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id' FROM ".DB_PREFIX."reports WHERE ".DB_PREFIX."reports.iduser=".$usrinfo['id']." AND ".DB_PREFIX."reports.status=0 AND ".DB_PREFIX."reports.deleted=0 ORDER BY ".DB_PREFIX."reports.label ASC";
 				$res_r=MySQL_Query ($sql_r);
@@ -87,6 +88,27 @@
 			}
 			echo ((implode($cases, '<br />')<>"")?implode($cases, '<br />'):'<em>Nemáte žádný přiřazený neuzavřený případ.</em>');
 			?></p>
+	</td>
+	<td width=50% align="top">
+	<h3>Nedokončené úkoly: <?php
+			$sql_r="SELECT * FROM ".DB_PREFIX."tasks WHERE ".DB_PREFIX."tasks.iduser=".$usrinfo['id']." AND ".DB_PREFIX."tasks.status=0 ORDER BY ".DB_PREFIX."tasks.created ASC";
+			$res_r=MySQL_Query ($sql_r);
+			$rec_count = MySQL_Num_Rows($res_r);
+			echo $rec_count
+			?>
+			</h3><p>
+			<?php
+			if (MySQL_Num_Rows($res_r)) {
+				$tasks=Array();
+				while ($rec_r=MySQL_Fetch_Assoc($res_r)) {
+					$tasks[]=StripSlashes ($rec_r['task']).' ('.getAuthor($rec_r['created_by'],2).') | <a href="procother.php?fnshtask='.$rec_r['id'].'">hotovo</a>';
+				}
+				echo implode ($tasks,'<br />');
+			} else {
+				echo 'Nemáte žádné nedokončené úkoly.';
+			} ?></p>
+	</td>
+	</tr></table>
 	<div class="clear">&nbsp;</div>
 </fieldset>
 </div>

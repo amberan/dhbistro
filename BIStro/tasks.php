@@ -30,6 +30,21 @@
 	
 	}
 
+	// stav
+	function status($status) {
+		switch ($status) {
+			case 0:
+				return 'zadaný';
+			case 1:
+				return 'dokončený';
+			case 2:
+				return 'uzavřený';
+			case 3:
+				return 'zrušený';
+		}
+		
+	}
+
 	// zpracovani filtru
 	if (!isset($_REQUEST['kategorie'])) {
 	  $f_cat=0;
@@ -42,15 +57,16 @@
 	  $f_sort=$_REQUEST['sort'];
 	}
 	switch ($f_cat) {
-	  case 0: $fsql_cat=''; break;
+	  case 0: $fsql_cat=' WHERE '.DB_PREFIX.'tasks.status<3 '; break;
 	  case 1: $fsql_cat=' WHERE '.DB_PREFIX.'tasks.status<2 '; break;
 	  case 2: $fsql_cat=' WHERE '.DB_PREFIX.'tasks.status=1 '; break;
-	  default: $fsql_cat='';
+	  case 3: $fsql_cat=' WHERE '.DB_PREFIX.'tasks.status<4 '; break;
+	  default: $fsql_cat=' WHERE '.DB_PREFIX.'tasks.status<3 ';
 	}
 	switch ($f_sort) {
-	  case 1: $fsql_sort=' '.DB_PREFIX.'users.login ASC '; break;
-	  case 2: $fsql_sort=' '.DB_PREFIX.'users.login DESC '; break;
-	  default: $fsql_sort=' '.DB_PREFIX.'users.login ASC ';
+	  case 1: $fsql_sort=' '.DB_PREFIX.'tasks.created ASC '; break;
+	  case 2: $fsql_sort=' '.DB_PREFIX.'tasks.created DESC '; break;
+	  default: $fsql_sort=' '.DB_PREFIX.'tasks.created ASC ';
 	}
 ?>	
 	<!-- Přidání úkolu -->
@@ -58,7 +74,7 @@
 	<fieldset>
 	<legend>Přidej úkol</legend>
 	<p><label for="task">Zadání:</label>
-	<input type="text" name="task" id="task" width=500px />
+	<input type="text" name="task" id="task" />
 <?php 	
 	$sql="SELECT id, login FROM ".DB_PREFIX."users WHERE deleted=0 ORDER BY login ASC";
 		$res_n=MySQL_Query ($sql);
@@ -87,6 +103,7 @@
 	<option value="0"'.(($f_cat==0)?' selected="selected"':'').'>všechny</option>
 	<option value="1"'.(($f_cat==1)?' selected="selected"':'').'>neuzavřené</option>
 	<option value="2"'.(($f_cat==2)?' selected="selected"':'').'>dokončené</option>
+	<option value="3"'.(($f_cat==3)?' selected="selected"':'').'>i zrušené</option>
 </select> úkoly a seřadit je podle <select name="sort">
 	<option value="1"'.(($f_sort==1)?' selected="selected"':'').'>data zadání vzestupně</option>
 	<option value="2"'.(($f_sort==2)?' selected="selected"':'').'>data zadání sestupně</option>
@@ -97,8 +114,7 @@
 	}
 	filter();
 	// vypis uživatelů
-	$sql="SELECT * FROM ".DB_PREFIX."tasks".$fsql_cat;//" ORDER BY ".$fsql_sort;
-	echo $sql;
+	$sql="SELECT * FROM ".DB_PREFIX."tasks".$fsql_cat." ORDER BY ".$fsql_sort;
 	$res=MySQL_Query ($sql);
 	if (MySQL_Num_Rows($res)) {
 	  echo '<div id="obsah">
@@ -122,12 +138,12 @@
 		  echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 	<td>'.StripSlashes($rec['task']).'</td>
 	<td>'.getAuthor($rec['iduser'],0).'</td>
-	<td>'.$rec['status'].'</td>
+	<td>'.status($rec['status']).'</td>
 	<td>'.(($rec['created'])?Date ('d. m. Y (H:i:s)',$rec['created']):'nikdy').'</td>
 	<td>'.getAuthor($rec['created_by'],0).'</td>
-	<td>'.(($rec['modified'])?Date ('d. m. Y (H:i:s)',$rec['created']):'nikdy').'</td>
-	<td>'.(($rec['modified_by'])?getAuthor($rec['modified_by']):'nikdo').'</td>
-	<td>dokončit | schválit | zrušit</td>
+	<td>'.(($rec['modified'])?Date ('d. m. Y (H:i:s)',$rec['modified']):'nikdy').'</td>
+	<td>'.(($rec['modified_by'])?getAuthor($rec['modified_by'],0):'nikdo').'</td>
+	<td>'.(($rec['status']<>2)?'<a href="procother.php?acctask='.$rec['id'].'">uzavřít</a> ':'').(($rec['status']<>0)?'| <a href="procother.php?rtrntask='.$rec['id'].'">vrátit</a> ':'').(($rec['status']<>3)?'| <a href="procother.php?cncltask='.$rec['id'].'">zrušit</a>':'').'</td>
 </tr>';
 			$even++;
 		}
