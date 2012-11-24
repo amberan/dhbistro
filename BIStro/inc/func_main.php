@@ -3,12 +3,13 @@
   $mtime = explode(" ",$mtime);
   $mtime = $mtime[1] + $mtime[0];
   $starttime = $mtime;
-	
+
 	// verze
 	$mazzarino_version='1.4.0';
   
 	// sessions
 	session_start();
+	$_SESSION['once']=0;
 
 	// databaze
   switch ($_SERVER["SERVER_NAME"]) {
@@ -73,11 +74,13 @@
 												".DB_PREFIX."users.right_power AS 'right_power',
 												".DB_PREFIX."users.right_text AS 'right_text',
 												".DB_PREFIX."users.right_org AS 'right_org',
+												".DB_PREFIX."users.right_aud AS 'right_aud',
 												".DB_PREFIX."users.timeout AS 'timeout',
 												".DB_PREFIX."users.ip AS 'ip',
 												".DB_PREFIX."users.plan AS 'plan',
 												".DB_PREFIX."loggedin.sid AS 'sid',
-												".DB_PREFIX."loggedin.time AS 'lastaction'
+												".DB_PREFIX."loggedin.time AS 'lastaction',
+												".DB_PREFIX."loggedin.ip AS 'currip'
 												FROM ".DB_PREFIX."users, ".DB_PREFIX."loggedin WHERE agent='".mysql_real_escape_string($_SERVER['HTTP_USER_AGENT'])."' AND ".DB_PREFIX."loggedin.sid ='".mysql_real_escape_string($_SESSION['sid'])."' AND deleted=0 AND ".DB_PREFIX."loggedin.iduser=".DB_PREFIX."users.id";
 		$ures=MySQL_Query ($sql);
 
@@ -216,6 +219,18 @@ function getAuthor ($recid,$trn) {
 		}
 	}
 }
+
+//auditni stopa
+function auditTrail ($record_type,$operation_type,$idrecord) {
+	global $usrinfo;
+	$sql_check="SELECT * FROM ".DB_PREFIX."audit_trail WHERE iduser='".$usrinfo['id']."' AND time='".time()."'";
+	$res_check=MySQL_Query ($sql_check);
+	if (MySQL_Num_Rows($res_check)) {
+	} else {
+		$sql_au="INSERT INTO ".DB_PREFIX."audit_trail VALUES('','".$usrinfo['id']."','".time()."','".$operation_type."','".$record_type."','".$idrecord."','".$usrinfo['currip']."','".$usrinfo['right_org']."')";
+		MySql_Query($sql_au);
+	}
+}
   
 // vypis zacatku stranky
 	function pageStart ($title,$infotext='') {
@@ -284,6 +299,7 @@ function getAuthor ($recid,$trn) {
 		'.(($verze==2)?'<li><a href="evilpoints.php">Bludišťáky</a></li>':'<li><a href="evilpoints.php">Zlobody</a></li>').'
 		<li><a href="settings.php">Nastavení</a></li>
 		'.(($usrinfo['right_power'])?'<li><a href="users.php">Uživatelé</a></li>':'').'
+		'.(($usrinfo['right_aud'])?'<li><a href="audit.php">Audit</a></li>':'').'
 		<li class="float-right"><a href="logout.php">Odhlásit</a></li>
 		<li class="float-right"><a href="procother.php?delallnew='.$currentfile.'" onclick="'."return confirm('Opravdu označit vše jako přečtené?');".'">Přečíst vše</a></li>
 	</ul>

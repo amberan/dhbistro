@@ -1,5 +1,6 @@
 <?php
 	require_once ('./inc/func_main.php');
+	auditTrail(1, 1, $_REQUEST['rid']);
 	pageStart ('Úprava osoby');
 	mainMenu (5);
 	sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>úprava osoby</strong>');

@@ -1,5 +1,6 @@
 <?php
 	require_once ('./inc/func_main.php');
+	auditTrail(5, 3, 0);
 	pageStart ('Přidáno');
 	mainMenu (1);
 	sparklets ('<a href="./index.php">aktuality</a> &raquo; <a href="./newnews.php">nová aktualita</a> &raquo; <strong>přidáno</strong>');

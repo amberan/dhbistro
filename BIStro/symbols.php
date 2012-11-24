@@ -1,5 +1,6 @@
 <?php
 	require_once ('./inc/func_main.php');
+	auditTrail(7, 1, 0);
 	pageStart ('Symboly');
 	mainMenu (5);
 	deleteUnread (7,'none');

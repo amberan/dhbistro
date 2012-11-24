@@ -3,6 +3,7 @@
 	if (is_numeric($_REQUEST['rid'])) {
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."groups WHERE id=".$_REQUEST['rid']);
 		if ($rec_g=MySQL_Fetch_Assoc($res)) {
+		  auditTrail(2, 1, $_REQUEST['rid']);
 		  pageStart (StripSlashes($rec_g['title']));
 			mainMenu (3);
 			if (!isset($_REQUEST['hidenotes'])) {

@@ -5,6 +5,7 @@
 	  Header ('Location: '.$_REQUEST['delallnew']);
 	}
 	if (isset($_POST['editdashboard'])) {
+		auditTrail(6, 2, 0);
 		pageStart ('Upravena nástěnka');
 		mainMenu (5);
 		sparklets ('<a href="dashboard.php">nástěnka</a> &raquo; <strong>nástěnka upravena</strong>');
@@ -32,6 +33,7 @@
 		$sql_f="SELECT id FROM ".DB_PREFIX."symbols WHERE created='".$time."' AND created_by='".$usrinfo['id']."' AND modified='".$time."' AND modified_by='".$usrinfo['id']."'";
 		$pidarray=MySQL_Fetch_Assoc(MySQL_Query($sql_f));
 		$pid=$pidarray['id'];
+		auditTrail(7, 3, $pid);
 		if (!isset($_POST['notnew'])) {
 			unreadRecords (7,$pid);
 		}
@@ -48,11 +50,13 @@
 		}
 	}
 	if (isset($_REQUEST['sdelete']) && is_numeric($_REQUEST['sdelete']) && $usrinfo['right_text']) {
+		auditTrail(7, 11, $_REQUEST['sdelete']);
 		MySQL_Query ("UPDATE ".DB_PREFIX."symbols SET deleted=1 WHERE id=".$_REQUEST['sdelete']);
 		deleteAllUnread (7,$_REQUEST['sdelete']);
 		Header ('Location: symbols.php');
 	}
 	if (isset($_POST['symbolid']) && isset($_POST['editsymbol']) && $usrinfo['right_text'] ) {
+		auditTrail(7, 2, $_POST['symbolid']);
 		pageStart ('Uložení změn');
 		mainMenu (5);
 		if (!isset($_POST['notnew'])) {
@@ -90,21 +94,25 @@
 		}
 	}
 	if (isset($_REQUEST['acctask']) && is_numeric($_REQUEST['acctask']) && $usrinfo['right_text']) {
+		auditTrail(10, 2, $_REQUEST['acctask']);
 		MySQL_Query ("UPDATE ".DB_PREFIX."tasks SET status=2, modified='".Time()."', modified_by='".$usrinfo['id']."' WHERE id=".$_REQUEST['acctask']);
 //		deleteAllUnread (1,$_REQUEST['delete']);
 		Header ('Location: '.$_SERVER['HTTP_REFERER']);
 	}
 	if (isset($_REQUEST['rtrntask']) && is_numeric($_REQUEST['rtrntask']) && $usrinfo['right_text']) {
+		auditTrail(10, 2, $_REQUEST['rtrntask']);
 		MySQL_Query ("UPDATE ".DB_PREFIX."tasks SET status=0, modified='".Time()."', modified_by='".$usrinfo['id']."' WHERE id=".$_REQUEST['rtrntask']);
 		//		deleteAllUnread (1,$_REQUEST['delete']);
 		Header ('Location: '.$_SERVER['HTTP_REFERER']);
 	}
 	if (isset($_REQUEST['fnshtask']) && is_numeric($_REQUEST['fnshtask'])) {
+		auditTrail(10, 2, $_REQUEST['fnshtask']);
 		MySQL_Query ("UPDATE ".DB_PREFIX."tasks SET status=1, modified='".Time()."', modified_by='".$usrinfo['id']."' WHERE id=".$_REQUEST['fnshtask']);
 		//		deleteAllUnread (1,$_REQUEST['delete']);
 		Header ('Location: '.$_SERVER['HTTP_REFERER']);
 	}
 	if (isset($_REQUEST['cncltask']) && is_numeric($_REQUEST['cncltask']) && $usrinfo['right_text']) {
+		auditTrail(10, 2, $_REQUEST['cncltask']);
 		MySQL_Query ("UPDATE ".DB_PREFIX."tasks SET status=3, modified='".Time()."', modified_by='".$usrinfo['id']."' WHERE id=".$_REQUEST['cncltask']);
 		//		deleteAllUnread (1,$_REQUEST['delete']);
 		Header ('Location: '.$_SERVER['HTTP_REFERER']);

@@ -5,6 +5,7 @@
 		$author=$autharray['iduser'];
 	}
 	if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete'])) {
+	  auditTrail(4, 11, $_REQUEST['delete']);
 	  MySQL_Query ("UPDATE ".DB_PREFIX."reports SET deleted=1 WHERE id=".$_REQUEST['delete']);
 	  deleteAllUnread($_REQUEST['table'],$_REQUEST['delete']);
 	  Header ('Location: reports.php');
@@ -26,6 +27,7 @@
 		  	MySQL_Query ("INSERT INTO ".DB_PREFIX."reports VALUES('','".mysql_real_escape_string(safeInput($_POST['label']))."','".Time()."','".$usrinfo['id']."','".mysql_real_escape_string($_POST['task'])."','".mysql_real_escape_string($_POST['summary'])."','".mysql_real_escape_string($_POST['impact'])."','".mysql_real_escape_string($_POST['details'])."','".$_POST['secret']."','0','".$_POST['status']."','".$_POST['type']."','".$adatum."','".mysql_real_escape_string(safeInput($_POST['start']))."','".mysql_real_escape_string(safeInput($_POST['end']))."','".mysql_real_escape_string($_POST['energy'])."','".mysql_real_escape_string($_POST['inputs'])."')");
 		  	$ridarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."reports WHERE UCASE(label)=UCASE('".mysql_real_escape_string(safeInput($_POST['label']))."')"));
 			$rid=$ridarray['id'];
+			auditTrail(4, 3, $rid);
 			if ($_POST['status']  <> 0) {
 				unreadRecords (4,$rid);
 		  	}
@@ -50,6 +52,7 @@
 		}
 	}
 	if (isset($_POST['reportid']) && isset($_POST['editactrep']) && ($usrinfo['right_text'] || $usrinfo['id']==$author) && !preg_match ('/^[[:blank:]]*$/i',$_POST['label']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['task']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['summary']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['impacts']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['details']) && is_numeric($_POST['secret']) && is_numeric($_POST['status'])) {
+	  auditTrail(4, 2, $_POST['reportid']);
 	  pageStart ('Uložení změn');
 	  mainMenu (4);
 	  if ($_POST['status']  <> 0) {
@@ -75,6 +78,7 @@
 		}
 	}
 	if (isset($_POST['uploadfile']) && is_uploaded_file($_FILES['attachment']['tmp_name']) && is_numeric($_POST['reportid']) && is_numeric($_POST['secret'])) {
+		auditTrail(4, 4, $_POST['reportid']);
 		$newname=Time().MD5(uniqid(Time().Rand()));
 		move_uploaded_file ($_FILES['attachment']['tmp_name'],'./files/'.$newname);
 		$sql="INSERT INTO ".DB_PREFIX."data VALUES('','".$newname."','".mysql_real_escape_string($_FILES['attachment']['name'])."','".mysql_real_escape_string($_FILES['attachment']['type'])."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','4','".$_POST['reportid']."','".$_POST['secret']."')";
@@ -91,6 +95,7 @@
 		}
 	}
 	if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {
+		auditTrail(4, 5, $_GET['reportid']);
 		if ($usrinfo['right_text']) {
 			$fres=MySQL_Query ("SELECT uniquename FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.id=".$_GET['deletefile']);
 			$frec=MySQL_Fetch_Assoc($fres);

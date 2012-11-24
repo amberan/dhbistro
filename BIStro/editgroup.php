@@ -1,5 +1,6 @@
 <?php
 	require_once ('./inc/func_main.php');
+	auditTrail(2, 1, $_REQUEST['rid']);
 	pageStart ('Úprava skupiny');
 	mainMenu (3);
 	sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>úprava skupiny</strong>');

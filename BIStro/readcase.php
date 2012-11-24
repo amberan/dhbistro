@@ -3,6 +3,7 @@
 	if (is_numeric($_REQUEST['rid'])) {
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."cases WHERE id=".$_REQUEST['rid']);
 		if ($rec=MySQL_Fetch_Assoc($res)) {
+			auditTrail(3, 1, $_REQUEST['rid']);
 			pageStart (StripSlashes($rec['title']));
 			mainMenu (4);
 			if (!isset($_REQUEST['hidenotes'])) {

@@ -3,6 +3,7 @@
 	if (is_numeric($_REQUEST['rid'])) {
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."persons WHERE id=".$_REQUEST['rid']);
 		if ($rec=MySQL_Fetch_Assoc($res)) {
+			auditTrail(1, 1, $_REQUEST['rid']);
 			$sides=Array('','světlý','temný','člověk','neznámá');
 			$powers=Array('','neznámá','člověk','mimo kategorie','1. kategorie','2. kategorie','3. kategorie','4. kategorie');
 			pageStart (StripSlashes($rec['surname']).', '.StripSlashes($rec['name']));

@@ -160,7 +160,7 @@
 <!-- end of #obsah -->
 <?php
 		} else {
-		  echo '<div id="obsah"><p>Osoba neexistuje.</p></div>';
+		  echo '<div id="obsah"><p>Symbol neexistuje.</p></div>';
 		}
 	} else {
 	  echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';

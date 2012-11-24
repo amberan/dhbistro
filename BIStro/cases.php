@@ -1,5 +1,6 @@
 <?php
 	require_once ('./inc/func_main.php');
+	auditTrail(2, 1, 0);
 	pageStart ('Případy');
 	mainMenu (4);
 	sparklets ('<strong>případy</strong>','<a href="newcase.php">přidat případ</a>');

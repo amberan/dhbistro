@@ -1,5 +1,6 @@
 <?php
 	require_once ('./inc/func_main.php');
+	auditTrail(4, 1, 0);
 	pageStart ('Hlášení');
 	mainMenu (5);
 	sparklets ('<strong>hlášení</strong>','<a href="newactrep.php?type=1">nové hlášení z výjezdu</a>; <a href="newactrep.php?type=2">nové hlášení z výslechu</a>');
