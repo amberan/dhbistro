@@ -1,6 +1,7 @@
 <?php
 	require_once ('./inc/func_main.php');
 	if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete']) && $usrinfo['right_text']) {
+	  auditTrail(1, 11, $_REQUEST['delete']);
 	  MySQL_Query ("UPDATE ".DB_PREFIX."persons SET deleted=1 WHERE id=".$_REQUEST['delete']);
 	  deleteAllUnread (1,$_REQUEST['delete']);
 	  Header ('Location: persons.php');
@@ -33,6 +34,7 @@
 		if (!isset($_POST['notnew'])) {
 			unreadRecords (1,$pid);
 		}
+		auditTrail(1, 3, $pid);
 		sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./newperson.php">nová osoba</a> &raquo; <strong>přidána osoba</strong>','<a href="./readperson.php?rid='.$pid.'">zobrazit vytvořené</a> &raquo; <a href="./editperson.php?rid='.$pid.'">úprava osoby</a>');
 		echo '<div id="obsah"><p>Osoba vytvořena.</p></div>';
 		pageEnd ();
@@ -46,6 +48,7 @@
 		}
 	}
 	if (isset($_POST['personid']) && isset($_POST['editperson']) && $usrinfo['right_text'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['name']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret']) && is_numeric($_POST['side']) && is_numeric($_POST['power']) && is_numeric($_POST['spec'])) {
+	  auditTrail(1, 2, $_POST['personid']);
 	  pageStart ('Uložení změn');
 		mainMenu (5);
 		if (!isset($_POST['notnew'])) {
@@ -93,6 +96,7 @@
 		}
 	}
 	if (isset($_POST['personid']) && isset($_POST['orgperson']) && is_numeric($_POST['rdatumday']) && is_numeric($_POST['regusr'])) {
+		auditTrail(1, 10, $_POST['personid']);
 		pageStart ('Organizační uložení změn');
 		mainMenu (5);
 		sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./editperson.php?rid='.$_POST['personid'].'">úprava osoby</a> &raquo; <strong>uložení změn</strong>','<a href="./readperson.php?rid='.$_POST['personid'].'">zobrazit upravené</a>');
@@ -110,6 +114,7 @@
 		}
 	}
 	if (isset($_POST['setgroups'])) {
+		auditTrail(1, 6, $_POST['personid']);
 		MySQL_Query ("DELETE FROM ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".$_POST['personid']);
 		$group=$_POST['group'];
 		pageStart ('Uložení změn');
@@ -122,6 +127,7 @@
 		pageEnd ();
 	}
 	if (isset($_POST['uploadfile']) && is_uploaded_file($_FILES['attachment']['tmp_name']) && is_numeric($_POST['personid']) && is_numeric($_POST['secret'])) {
+			auditTrail(1, 4, $_POST['personid']);
 			$newname=Time().MD5(uniqid(Time().Rand()));
 			move_uploaded_file ($_FILES['attachment']['tmp_name'],'./files/'.$newname);
 			$sql="INSERT INTO ".DB_PREFIX."data VALUES('','".$newname."','".mysql_real_escape_string($_FILES['attachment']['name'])."','".mysql_real_escape_string($_FILES['attachment']['type'])."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','1','".$_POST['personid']."','".$_POST['secret']."')";
@@ -140,6 +146,7 @@
 		}
 	}
 	if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {
+		auditTrail(1, 5, $_POST['personid']);
 		if ($usrinfo['right_text']) {
 			$fres=MySQL_Query ("SELECT uniquename FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.id=".$_GET['deletefile']);
 			$frec=MySQL_Fetch_Assoc($fres);
@@ -149,6 +156,7 @@
 		Header ('Location: editperson.php?rid='.$_GET['personid']);
 	}
 	if (isset($_GET['deletesymbol'])) {
+		auditTrail(1, 2, $_GET['personid']);
 		if ($usrinfo['right_text']) {
 			UnLink ('./files/symbols/'.$_GET['deletesymbol']);
 			MySQL_Query ("UPDATE ".DB_PREFIX."persons SET symbol='' WHERE ".DB_PREFIX."persons.id=".$_GET['personid']);

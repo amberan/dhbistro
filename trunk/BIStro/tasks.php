@@ -1,5 +1,6 @@
 <?php
 	require_once ('./inc/func_main.php');
+	auditTrail(10, 1, 0);
 	
 	// vlozeni noveho ukolu
 	if (isset($_POST['inserttask']) && !empty($_POST['task'])) {
@@ -121,6 +122,7 @@
 <table>
 <thead>
 	<tr>
+	  <th>#</th>
 	  <th>Úkol</th>
 	  <th>Uživatel</th>
 	  <th>Stav</th>
@@ -136,6 +138,7 @@
 		$even=0;
 		while ($rec=MySQL_Fetch_Assoc($res)) {
 		  echo '<tr class="'.(($even%2==0)?'even':'odd').'">
+	<td>'.$rec['id'].'</td>
 	<td>'.StripSlashes($rec['task']).'</td>
 	<td>'.getAuthor($rec['iduser'],0).'</td>
 	<td>'.status($rec['status']).'</td>

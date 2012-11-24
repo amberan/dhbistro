@@ -25,7 +25,7 @@
 		<!-- násedují poznámky k symbolu -->
 		<fieldset><legend><h2>Poznámky k symbolu</h2></legend>
 			<div class="field-text">
-				<textarea cols="80" rows="+ř" name="contents" id="contents">Doplnit.</textarea>
+				<textarea cols="80" rows="15" name="contents" id="contents">Doplnit.</textarea>
 			</div>
 		</fieldset>
 		<input type="submit" name="insertsymbol" id="submitbutton" value="Vložit" title="Vložit symbol"/>

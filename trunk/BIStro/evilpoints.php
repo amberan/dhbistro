@@ -1,5 +1,10 @@
 <?php
 	require_once ('./inc/func_main.php');
+	if (isset($_POST['addpoints'])) {
+		auditTrail(9, 2, 0);
+	} else {
+		auditTrail(9, 1, 0);
+	}
 	pageStart ($point.'y');
 	mainMenu (2);
 	sparklets ('<strong>'.$point.'y</strong>',(($usrinfo['right_power'])?'aktuální stav':''));

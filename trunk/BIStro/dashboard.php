@@ -1,5 +1,6 @@
 <?php
 	require_once ('./inc/func_main.php');
+	auditTrail(6, 1, 0);
 	pageStart ('Nástěnka');
 	mainMenu (1);
 	deleteUnread (6,0);

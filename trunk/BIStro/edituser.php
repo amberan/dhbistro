@@ -73,6 +73,24 @@
 			echo ((implode($cases, '<br />')<>"")?implode($cases, '<br />'):'<em>Uživatel nemá žádný přiřazený neuzavřený případ.</em>');
 			?></p>
 	<div class="clear">&nbsp;</div>
+			<h3>Nedokončené úkoly: <?php
+			$sql_r="SELECT * FROM ".DB_PREFIX."tasks WHERE ".DB_PREFIX."tasks.iduser=".$rec['id']." AND ".DB_PREFIX."tasks.status=0 ORDER BY ".DB_PREFIX."tasks.created ASC";
+			$res_r=MySQL_Query ($sql_r);
+			$rec_count = MySQL_Num_Rows($res_r);
+			echo $rec_count
+			?>
+			</h3><p>
+			<?php
+			if (MySQL_Num_Rows($res_r)) {
+				$tasks=Array();
+				while ($rec_r=MySQL_Fetch_Assoc($res_r)) {
+					$tasks[]=StripSlashes ($rec_r['task']).' ('.getAuthor($rec_r['created_by'],2).')';
+				}
+				echo implode ($tasks,'<br />');
+			} else {
+				echo 'Uživatel nemá žádné nedokončené úkoly.';
+			} ?></p>
+	<div class="clear">&nbsp;</div>
 </fieldset>
 </div>
 
