@@ -14,7 +14,6 @@ function pwdcheck(form)
 	}
 	else return true;
 }
-
 -->
 </script>
 
