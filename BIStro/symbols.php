@@ -80,7 +80,7 @@
 		   			}
 		   	// konec seznamu přiřazených případů
 		  echo '</td>
-'.(($usrinfo['right_text'])?'	<td><a href="editsymbol.php?rid='.$rec['id'].'">upravit</a> | <a href="procother.php?sdelete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat tento symbol?".'">smazat</a> | přiřadit k osobě</td>':'<td><a href="newnote.php?rid='.$rec['id'].'&idtable=7">přidat poznámku</a>').'
+'.(($usrinfo['right_text'])?'	<td><a href="editsymbol.php?rid='.$rec['id'].'">upravit</a> | <a href="procother.php?sdelete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat tento symbol?".'">smazat</a></td>':'<td><a href="newnote.php?rid='.$rec['id'].'&idtable=7">přidat poznámku</a>').'
 </tr>';
 			$even++;
 		}
