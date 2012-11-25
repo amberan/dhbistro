@@ -98,7 +98,7 @@ seřadit je podle <select name="sort">
 	        ".DB_PREFIX."reports.type AS 'type',
 	        ".DB_PREFIX."symbol2all.iduser 
 	        	FROM ".DB_PREFIX."users, ".DB_PREFIX."reports LEFT JOIN ".DB_PREFIX."symbol2all 
-	        	ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."reports.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.idrecord=4
+	        	ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."reports.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4
 				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0".$fsql_cat.$fsql_stat."
 				ORDER BY ".$fsql_sort;
 	} else {
@@ -112,7 +112,7 @@ seřadit je podle <select name="sort">
 	        ".DB_PREFIX."reports.type AS 'type',
 	        ".DB_PREFIX."symbol2all.iduser 
 	        	FROM ".DB_PREFIX."users, ".DB_PREFIX."reports LEFT JOIN ".DB_PREFIX."symbol2all 
-	        	ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."reports.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.idrecord=4
+	        	ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."reports.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4
 				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0".$fsql_cat.$fsql_stat."
 				ORDER BY ".$fsql_sort;
 	}

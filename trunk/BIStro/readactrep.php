@@ -44,27 +44,37 @@
 			} else {
 				$hn=$_REQUEST['hidenotes'];
 			}
-			if (($usrinfo['right_power']) && ($hn==0) && ($_REQUEST['truenames']==0)) {
+			if (!isset($_REQUEST['hidesymbols'])) {
+				$hs=0;
+			} else {
+				$hs=$_REQUEST['hidesymbols'];
+			}
+			if (!isset($_REQUEST['truenames'])) {
+				$tn=0;
+			} else {
+				$tn=$_REQUEST['truenames'];
+			}
+			if (($usrinfo['right_power']) && ($hn==0) && ($tn==0)) {
 				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=0">skrýt poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=1">zobrazit celá jména</a>';
 				$author=$rec_ar['autor'];
 				$backurl='readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=0&truenames=0';
-			} else if (($usrinfo['right_power']) && ($hn==1) && ($_REQUEST['truenames']==0)) {
+			} else if (($usrinfo['right_power']) && ($hn==1) && ($tn==0)) {
 				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=0">zobrazit poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=1">zobrazit celá jména</a>';
 				$author=$rec_ar['autor'];
 				$backurl='readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=1&truenames=0';
-			} else if (($usrinfo['right_power']) && ($notconnected==0) && ($hn==1) && ($_REQUEST['truenames']==1)) {
+			} else if (($usrinfo['right_power']) && ($notconnected==0) && ($hn==1) && ($tn==1)) {
 				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=1">zobrazit poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=0">zobrazit volací znaky</a>';
 				$author=$rec_ar['surname'].' '.$rec_ar['name'];
 				$backurl='readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=1&truenames=1';
-			} else if (($usrinfo['right_power']) && ($notconnected==0) && ($hn==0) && ($_REQUEST['truenames']==1)) {
+			} else if (($usrinfo['right_power']) && ($notconnected==0) && ($hn==0) && ($tn==1)) {
 				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=1">skrýt poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=0">zobrazit volací znaky</a>';
 				$author=$rec_ar['surname'].' '.$rec_ar['name'];
 				$backurl='readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=0&truenames=1';
-			} else if (($usrinfo['right_power']) && ($notconnected==1) && ($hn==1) && ($_REQUEST['truenames']==1)) {
+			} else if (($usrinfo['right_power']) && ($notconnected==1) && ($hn==1) && ($tn==1)) {
 				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=1">zobrazit poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=0">zobrazit volací znaky</a>';
 				$author='NENÍ NAPOJEN';
 				$backurl='readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=1&truenames=1';
-			} else if (($usrinfo['right_power']) && ($notconnected==1) && ($hn==0) && ($_REQUEST['truenames']==1)) {
+			} else if (($usrinfo['right_power']) && ($notconnected==1) && ($hn==0) && ($tn==1)) {
 				$spaction='<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=1">skrýt poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=0">zobrazit volací znaky</a>';
 				$author='NENÍ NAPOJEN';
 				$backurl='readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=0&truenames=1';
@@ -210,6 +220,37 @@
 		<div class="field-text"><?php echo(StripSlashes($rec_ar['inputs'])); ?></div>
 	</fieldset>
 
+	
+	
+<!-- následuje seznam přiložených symbolů -->
+	<?php //skryti symbolů 
+	if ($hs==1) goto hidesymbols; ?>
+	<fieldset><legend><strong>Přiložené symboly</strong></legend>
+	<?php //generování seznamu přiložených symbolů
+	$sql_s="SELECT ".DB_PREFIX."symbol2all.idsymbol AS 'id' FROM ".DB_PREFIX."symbol2all WHERE ".DB_PREFIX."symbol2all.idrecord=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4";
+	$res_s=MySQL_Query ($sql_s);
+	if (MySQL_Num_Rows($res_s)) {
+		$inc=0;
+		?>
+		<div id="symbols">
+		<table>
+		<?php 
+		while ($rec_s=MySQL_Fetch_Assoc($res_s)) {
+			if ($inc==0 || $inc==8) echo '<tr>';
+			echo '<td><img src="getportrait.php?nrid='.$rec_s['id'].'" alt="symbol chybí" /></td>';
+			if ($inc==7) echo '</tr>';
+			$inc++;
+		}
+		?> </table></div> <?php 
+	} else {
+		echo 'Žádné přiložené symboly.';
+	}
+		?>
+		
+	</fieldset>
+	<!-- konec seznamu přiložených symbolů -->
+	<?php hidesymbols: ?>	
+		
 <!-- následuje seznam přiložených souborů -->
 	<?php //generování seznamu přiložených souborů
 		if ($usrinfo['right_power']) {

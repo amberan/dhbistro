@@ -11,20 +11,34 @@
 			} else {
 				$hn=$_REQUEST['hidenotes'];
 			}
-			if ($hn==0) {
-				$hidenotes='&amp;hidenotes=1">skrýt poznámky</a>';
-				$backurl='readcase.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
+			if (!isset($_REQUEST['hidesymbols'])) {
+				$hs=0;
 			} else {
-				$hidenotes='&amp;hidenotes=0">zobrazit poznámky</a>';
-				$backurl='readcase.php?rid='.$_REQUEST['rid'].'&hidenotes=1';
+				$hs=$_REQUEST['hidesymbols'];
 			}
+			
+			
+			if ($hn==0 && $hs==0) {
+				$spaction='<a href="readcase.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;hidesymbols=0">skrýt poznámky</a>; <a href="readcase.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;hidesymbols=1">skrýt symboly</a>';
+				$backurl='readcase.php?rid='.$_REQUEST['rid'].'&hidenotes=0&hidesymbols=0';
+			} else if ($hn==0 && $hs==1) {
+				$spaction='<a href="readcase.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;hidesymbols=1">skrýt poznámky</a>; <a href="readcase.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;hidesymbols=0">zobrazit symboly</a>';
+				$backurl='readcase.php?rid='.$_REQUEST['rid'].'&hidenotes=0&hidesymbols=1';
+			} else if ($hn==1 && $hs==0) {
+				$spaction='<a href="readcase.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;hidesymbols=0">zobrazit poznámky</a>; <a href="readcase.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;hidesymbols=1">skrýt symboly</a>';
+				$backurl='readcase.php?rid='.$_REQUEST['rid'].'&hidenotes=1&hidesymbols=0';
+			} else if ($hn==1 && $hs==1) {
+				$spaction='<a href="readcase.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;hidesymbols=1">zobrazit poznámky</a>; <a href="readcase.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;hidesymbols=0">zobrazit symboly</a>';
+				$backurl='readcase.php?rid='.$_REQUEST['rid'].'&hidenotes=1&hidesymbols=1';
+			}		
+			
 			if ($usrinfo['right_text']) {
 				$editbutton='; <a href="editcase.php?rid='.$_REQUEST['rid'].'">upravit případ</a>';
 			} else {
 				$editbutton='';
 			}
 			deleteUnread (3,$_REQUEST['rid']);
-			sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>'.StripSlashes($rec['title']).'</strong>','<a href="readcase.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton);
+			sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>'.StripSlashes($rec['title']).'</strong>',$spaction.$editbutton);
 ?>
 <div id="obsah">
 	<h1><?php echo StripSlashes($rec['title']); ?></h1>
@@ -94,8 +108,38 @@
 	<fieldset><legend><h2>Popis</h2></legend>
 		<div class="field-text"><?php echo StripSlashes($rec['contents']); ?></div>
 	</fieldset>
+
 	
-<!-- následuje seznam přiložených souborů -->
+<!-- následuje seznam přiložených symbolů -->
+	<?php //skryti symbolů 
+	if ($hs==1) goto hidesymbols; ?>
+	<fieldset><legend><strong>Přiložené symboly</strong></legend>
+	<?php //generování seznamu přiložených symbolů
+	$sql_s="SELECT ".DB_PREFIX."symbol2all.idsymbol AS 'id' FROM ".DB_PREFIX."symbol2all WHERE ".DB_PREFIX."symbol2all.idrecord=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=3";
+	$res_s=MySQL_Query ($sql_s);
+	if (MySQL_Num_Rows($res_s)) {
+		$inc=0;
+		?>
+		<div id="symbols">
+		<table>
+		<?php 
+		while ($rec_s=MySQL_Fetch_Assoc($res_s)) {
+			if ($inc==0 || $inc==8) echo '<tr>';
+			echo '<td><img src="getportrait.php?nrid='.$rec_s['id'].'" alt="symbol chybí" /></td>';
+			if ($inc==7) echo '</tr>';
+			$inc++;
+		}
+		?> </table></div> <?php 
+	} else {
+		echo 'Žádné přiložené symboly.';
+	}
+		?>
+		
+	</fieldset>
+	<!-- konec seznamu přiložených symbolů -->
+	<?php hidesymbols: ?>	
+	
+	<!-- následuje seznam přiložených souborů -->
 	<?php //generování seznamu přiložených souborů
 		if ($usrinfo['right_power']) {
 			$sql="SELECT ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=3 ORDER BY ".DB_PREFIX."data.originalname ASC";
@@ -120,9 +164,9 @@
 	<?php 
 		}
 	// konec seznamu přiložených souborů ?>
-<?php //skryti poznamek 
-if ($hn==1) goto hidenotes; ?>
-<!-- následuje seznam poznámek -->
+	<?php //skryti poznamek 
+	if ($hn==1) goto hidenotes; ?>
+	<!-- následuje seznam poznámek -->
 	<?php // generování poznámek
 		if ($usrinfo['right_power']) {
 			$sql_n="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.note AS 'note', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."users.login AS 'user', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes, ".DB_PREFIX."users WHERE ".DB_PREFIX."notes.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=3 AND ".DB_PREFIX."notes.deleted=0 AND (".DB_PREFIX."notes.secret<2 OR ".DB_PREFIX."notes.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."notes.datum DESC";
