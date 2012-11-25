@@ -129,9 +129,24 @@
 		$f_user=$_REQUEST['user'];
 	}
 	if (!isset($_REQUEST['typ'])) {
-		$f_type=0;
+		$f_type=1;
 	} else {
 		$f_type=$_REQUEST['typ'];
+	}
+	if (!isset($_REQUEST['org'])) {
+		$f_org=0;
+	} else {
+		$f_org=1;
+	}
+	if (!isset($_REQUEST['my'])) {
+		$f_my=0;
+	} else {
+		$f_my=1;
+	}
+	if (!isset($_REQUEST['glob'])) {
+		$f_glob=0;
+	} else {
+		$f_glob=1;
 	}
 	switch ($f_cat) {
 	  case 0: $fsql_cat=' WHERE '.DB_PREFIX.'audit_trail.record_type NOT IN (5,11) '; break;
@@ -159,12 +174,27 @@
 	  case 2: $fsql_sort=' '.DB_PREFIX.'audit_trail.time DESC '; break;
 	  default: $fsql_sort=' '.DB_PREFIX.'audit_trail.time ASC ';
 	}
+	if ($f_org==0) {
+		$fsql_org=' AND '.DB_PREFIX.'audit_trail.org=0';
+	} else {
+		$fsql_org=' ';
+	}
+	if ($f_my==0) {
+		$fsql_my=' AND '.DB_PREFIX.'audit_trail.iduser<>'.$usrinfo['id'];
+	} else {
+		$fsql_my=' ';
+	}
+	if ($f_glob==0) {
+		$fsql_glob=' AND '.DB_PREFIX.'audit_trail.idrecord<>0';
+	} else {
+		$fsql_glob=' ';
+	}
 ?>	
 	
 <?php 
 	// filtr
 	function filter () {
-	  global $f_cat,$f_sort,$f_user,$f_type;
+	  global $f_cat,$f_sort,$f_user,$f_type,$usrinfo,$f_org,$f_my,$f_glob;
 	  echo '<div id="filter-wrapper"><form action="audit.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -198,14 +228,26 @@
 	echo 'a seřadit je podle <select name="sort">
 	<option value="1"'.(($f_sort==1)?' selected="selected"':'').'>času vzestupně</option>
 	<option value="2"'.(($f_sort==2)?' selected="selected"':'').'>času sestupně</option>
-</select>.</p>
-	  <div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
+	</select>.</p>';
+	if ($usrinfo['right_org'] == 1)	{
+		echo '					
+		<label for="org">Zobrazit i zásahy organizátorů</label>
+		<input type="checkbox" name="org" '.(($f_org==1)?' checked="checked"':'').'/><br/>
+		<div class="clear">&nbsp;</div>';
+		}
+	echo '<label for="my">Zobrazit i moje zásahy</label>
+	<input type="checkbox" name="my" '.(($f_my==1)?' checked="checked"':'').'/><br/>
+	<div class="clear">&nbsp;</div>
+	<label for="my">Zobrazit i globální operace</label>
+	<input type="checkbox" name="glob" '.(($f_glob==1)?' checked="checked"':'').'/><br/>
+	<div class="clear">&nbsp;</div>
+	<div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
 </form></div><!-- end of #filter-wrapper -->';
 	}
 	filter();
 	// vypis uživatelů
-	$sql="SELECT * FROM ".DB_PREFIX."audit_trail".$fsql_cat.$fsql_type.$fsql_user." ORDER BY ".$fsql_sort;
+	$sql="SELECT * FROM ".DB_PREFIX."audit_trail".$fsql_cat.$fsql_type.$fsql_org.$fsql_my.$fsql_glob.$fsql_user." ORDER BY ".$fsql_sort;
 	$res=MySQL_Query ($sql);
 	if (MySQL_Num_Rows($res)) {
 	  echo '<div id="obsah">
