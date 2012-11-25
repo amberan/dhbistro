@@ -9,7 +9,7 @@ $author=$reportarray['iduser']; // určuje autora hlášení
 // následuje generování hlavičky
 pageStart ('Úprava hlášení'.(($type==1)?' z výjezdu':(($type==2)?' z výslechu':'')));
 mainMenu (3);
-sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení'.(($type==1)?' z výjezdu':(($type==2)?' z výslechu':'')).'</strong>');
+sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení'.(($type==1)?' z výjezdu':(($type==2)?' z výslechu':'')).'</strong>','<a href="symbols.php">přiřadit symboly</a>');
 
 // kalendář
 function date_picker($name, $startyear=NULL, $endyear=NULL) {

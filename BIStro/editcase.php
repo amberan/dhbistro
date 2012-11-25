@@ -3,7 +3,7 @@
 	auditTrail(3, 1, $_REQUEST['rid']);
 	pageStart ('Úprava případu');
 	mainMenu (3);
-	sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>úprava případu</strong>');
+	sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>úprava případu</strong>','<a href="symbols.php">přiřadit symboly</a>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."cases WHERE id=".$_REQUEST['rid']);
 		if ($rec_c=MySQL_Fetch_Assoc($res)) {

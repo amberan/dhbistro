@@ -559,6 +559,24 @@ td.filter {
 }
 
 /***********************************/
+/************ symboly  *************/
+/***********************************/
+
+#symbols table {
+	width: 100%;
+	border-collapse: collapse;
+	border: none;
+}
+
+#symbols td {
+  border: none;
+}
+
+#symbols tr:hover {
+	background-color: inherit;
+}
+
+/***********************************/
 /********** obecné prvky   *********/
 /***********************************/
 div.clear {width:100%;height:1px !important;margin:0px !important;padding:0px !important;clear:both !important;}
