@@ -256,6 +256,7 @@ function auditTrail ($record_type,$operation_type,$idrecord) {
     <link media="print" rel="stylesheet" type="text/css" href="./css/print.css" />
 		<link rel="icon" href="favicon.ico" type="image/x-icon" />
 		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+		<script type="text/javascript" src="./js/jquery-mini.js"></script>
 		<script type="text/javascript" src="./js/tiny_mce/tiny_mce_gzip.js"></script>
 		<script type="text/javascript" src="./js/tiny_mce_gz.js"></script>
     <script type="text/javascript" src="./js/tiny_mce_settings.js"></script>
