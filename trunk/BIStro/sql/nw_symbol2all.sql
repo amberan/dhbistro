@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Počítač: localhost
--- Vygenerováno: Stř 14. lis 2012, 16:43
+-- Vygenerováno: Ned 25. lis 2012, 21:21
 -- Verze MySQL: 5.5.20
 -- Verze PHP: 5.3.10
 
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `nw_symbol2all` (
   `idrecord` int(11) NOT NULL DEFAULT '0',
   `iduser` int(11) NOT NULL DEFAULT '0',
   `table` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`idsymbol`)
+  PRIMARY KEY (`idsymbol`,`idrecord`,`table`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
