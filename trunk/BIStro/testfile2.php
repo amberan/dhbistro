@@ -1,7 +1,13 @@
 <?php
 require_once ('./inc/func_main.php');
-function backupDB () {
-	global $dbusr;
+
+mysql_query ("SET NAMES  'utf8'");
+$xsoubor="backup".date ("-d-m-Y").".sql";
+$fsoubor="files/backups/".$xsoubor;
+$sql_bck="INSERT INTO ".DB_PREFIX."backups VALUES('','".Time()."','".$xsoubor."')";
+echo $sql_bck;
+MySql_Query ($sql_bck);
+
 function  zalohuj($db,$soubor=""){
 	global $dbusr;
 	
@@ -70,21 +76,13 @@ function  zalohuj($db,$soubor=""){
 
 	return  $text;
 	}
-	
-	$sql_check="SELECT time FROM ".DB_PREFIX."backups ORDER BY time DESC LIMIT 1";
-	$fetch_check=MySQL_Fetch_Assoc(MySql_Query ($sql_check));
-	$last_backup=$fetch_check['time'];
-	echo $last_backup.'<br />';
-	echo round($last_backup,-5);
-	if (round($last_backup,-5)<round(time(),-5)) {
-		mysql_query ("SET NAMES  'utf8'");
-		$xsoubor="backup".time().".sql";
-		$fsoubor="files/backups/".$xsoubor;
-		$sql_bck="INSERT INTO ".DB_PREFIX."backups VALUES('','".Time()."','".$xsoubor."')";
-		MySql_Query ($sql_bck);
-		zalohuj($dbusr,$fsoubor);
-	}
-}
-	?>
+
+
+//	MySQL_Query ("INSERT INTO ".DB_PREFIX."groups VALUES('','".mysql_real_escape_string(safeInput($_POST['title']))."','".mysql_real_escape_string($_POST['contents'])."','".Time()."','".$usrinfo['id']."','0','".$_POST['secret']."')");
+//	$sql="INSERT INTO ".DB_PREFIX."data VALUES('','".$newname."','".mysql_real_escape_string($_FILES['attachment']['name'])."','".mysql_real_escape_string($_FILES['attachment']['type'])."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','2','".$_POST['groupid']."','".$_POST['secret']."')";
+//	MySQL_Query ($sql);
+	zalohuj($dbusr,$fsoubor);
+
+?>
 
 

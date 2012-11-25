@@ -1,5 +1,6 @@
 <?php
 	require_once ('./inc/func_main.php');
+	backupDB();
 	auditTrail(5, 1, 0);
 	pageStart ('Aktuality');
 	mainMenu (1);
