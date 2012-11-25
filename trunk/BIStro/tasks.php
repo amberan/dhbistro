@@ -1,6 +1,10 @@
 <?php
 	require_once ('./inc/func_main.php');
-	auditTrail(10, 1, 0);
+	if (isset($_POST['inserttask'])) {
+		auditTrail(10, 2, 0);
+	} else {
+		auditTrail(10, 1, 0);
+	}
 	
 	// vlozeni noveho ukolu
 	if (isset($_POST['inserttask']) && !empty($_POST['task'])) {
