@@ -2,6 +2,7 @@
 	require_once ('./inc/func_main.php');
 	
 	if (isset($_POST['addsymbol2c'])) {
+		auditTrail(7, 6, $_POST['symbolid']);
 		if ($usrinfo['right_power']==1) {
 			$sql="DELETE FROM ".DB_PREFIX."symbol2all WHERE ".DB_PREFIX."symbol2all.idsymbol=".$_POST['symbolid']." AND ".DB_PREFIX."symbol2all.table=3";
 			MySQL_Query ($sql);
@@ -26,6 +27,7 @@
 	}
 	
 	if (isset($_POST['addsymbol2ar'])) {
+		auditTrail(7, 6, $_POST['symbolid']);
 		if ($usrinfo['right_power']==1) {
 			$sql="DELETE FROM ".DB_PREFIX."symbol2all WHERE ".DB_PREFIX."symbol2all.idsymbol=".$_POST['symbolid']." AND ".DB_PREFIX."symbol2all.table=4";
 			MySQL_Query ($sql);

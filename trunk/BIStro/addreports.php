@@ -2,6 +2,7 @@
 	require_once ('./inc/func_main.php');
 	
 	if (isset($_POST['addtoareport'])) {
+		auditTrail(4, 6, $_POST['reportid']);
 		if ($usrinfo['right_power']==1) {
 			MySQL_Query ("DELETE FROM ".DB_PREFIX."ar2c WHERE ".DB_PREFIX."ar2c.idreport=".$_POST['reportid']);
 		} else {
@@ -23,6 +24,7 @@
 	}
 	
 	if (isset($_POST['addcasetoareport'])) {
+		auditTrail(3, 6, $_POST['caseid']);
 		if ($usrinfo['right_power']==1) {
 			MySQL_Query ("DELETE FROM ".DB_PREFIX."ar2c WHERE ".DB_PREFIX."ar2c.idcase=".$_POST['caseid']);
 		} else {
