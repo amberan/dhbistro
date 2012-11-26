@@ -109,6 +109,7 @@ a:link, a:visited {
 	list-style-image: none;
 	margin: 0;
 	background-color: #D4D0C8;
+	/*background-color: #9E6767;*/
 	border-bottom: 1px solid #808080;
 	padding: 1px 5px 2px 5px;
 }
