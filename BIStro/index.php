@@ -1,7 +1,9 @@
 <?php
 	require_once ('./inc/func_main.php');
 	backupDB();
-	auditTrail(5, 1, 0);
+	if (isset($_SESSION['sid'])) {
+		auditTrail(5, 1, 0);
+	}
 	pageStart ('Aktuality');
 	mainMenu (1);
 	deleteUnread (5,0);

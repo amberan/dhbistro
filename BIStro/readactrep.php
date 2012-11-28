@@ -34,7 +34,9 @@
 			AND ".DB_PREFIX."reports.id=".$_REQUEST['rid'].$connector;
 		$res=MySQL_Query ($sql);
 		if ($rec_ar=MySQL_Fetch_Assoc($res)) {
-			auditTrail(4, 1, $_REQUEST['rid']);
+			if (isset($_SESSION['sid'])) {
+				auditTrail(4, 1, $_REQUEST['rid']);
+			}
 				$typestring=(($rec_ar['type']==1)?'výjezd':(($rec_ar['type']==2)?'výslech':'?')); //odvozuje slovní typ hlášení
 			// následuje hlavička
 			pageStart (StripSlashes('Hlášení'.(($rec_ar['type']==1)?' z výjezdu':(($rec_ar['type']==2)?' z výslechu':'')).': '.$rec_ar['label']));

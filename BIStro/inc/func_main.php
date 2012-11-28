@@ -17,26 +17,31 @@
   		$dbusr='dhbistrocz';
   		$verze=0;
   		$point='zlobod';
+  		$barva='local';
   		break;
   	case 'www.dhbistro.cz':
   		$dbusr='dhbistrocz';
   		$verze=1;
   		$point='zlobod';
+  		$barva='dh';
   		break;
   	case 'nh.dhbistro.cz':
   		$dbusr='nhbistro';
   		$verze=2;
   		$point='bludišťák';
+  		$barva='nh';
   		break;
   	case 'test.dhbistro.cz':
   		$dbusr='testbistro';
   		$verze=3;
   		$point='zlobod';
+  		$barva='test';
   		break;
   	case 'org.dhbistro.cz':
 		$dbusr='orgbistro';
 		$verze=4;
 		$point='zlobod';
+		$barva='org';
 		break;
   }
 
@@ -368,11 +373,11 @@ function backupDB () {
 	}
 	
 	function mainMenu ($index) {
-	  global $usrinfo, $verze;
+	  global $usrinfo, $verze, $barva;
 	  $currentfile = $_SERVER["PHP_SELF"];
 	  $dlink=MySQL_Fetch_Assoc(MySQL_Query ("SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1"));
 	  echo '<div id="menu">
-	<ul>
+	<ul class="'.$barva.'">
 		<li '.((searchTable(5))?' class="unread"':((searchTable(6))?' class="unread"':'')).'><a href="index.php">Aktuality</a></li>
 		<li '.((searchTable(4))?' class="unread"':'').'><a href="reports.php">Hlášení</a></li>	
 		<li '.((searchTable(1))?' class="unread"':((searchTable(7))?' class="unread"':'')).'><a href="persons.php">Osoby</a></li>
