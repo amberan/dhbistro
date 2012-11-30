@@ -108,8 +108,8 @@ a:link, a:visited {
 	display: block;
 	list-style-image: none;
 	margin: 0;
-	background-color: #D4D0C8;
-	/*background-color: #9E6767;*/
+	/*background-color: #D4D0C8;*/
+	background-color: #7c0000;
 	border-bottom: 1px solid #808080;
 	padding: 1px 5px 2px 5px;
 }
@@ -118,7 +118,7 @@ a:link, a:visited {
 	display: block;
 	list-style-image: none;
 	margin: 0;
-	/*background-color: #D4D0C8;*/
+	/*background-color: #7c0000;*/
 	background-color: #9E6767;
 	border-bottom: 1px solid #808080;
 	padding: 1px 5px 2px 5px;
@@ -128,8 +128,8 @@ a:link, a:visited {
 	display: block;
 	list-style-image: none;
 	margin: 0;
-	/*background-color: #EAB5F7;*/
-	background-color: #9E6BC7;
+	/*background-color: #7c0000;*/
+	background-color: #D4D0C8;
 	border-bottom: 1px solid #808080;
 	padding: 1px 5px 2px 5px;
 }
