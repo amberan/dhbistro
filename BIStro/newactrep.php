@@ -51,8 +51,15 @@ function date_picker($name, $startyear=NULL, $endyear=NULL)
 }
 ?>
 <div id="obsah">
+	<script type="text/javascript">
+	<!--
+	window.onload=function(){
+		FixitRight('submitbutton', 'ramecek');
+	};
+	-->
+	</script>
 <form action="procactrep.php" method="post" id="inputform">
-<fieldset><legend><h1>Nové hlášení z <?php echo (($type==1)?'výjezdu':(($type==2)?'výslechu':'#&*'));?></h1></legend>
+<fieldset id="ramecek"><legend><h1>Nové hlášení z <?php echo (($type==1)?'výjezdu':(($type==2)?'výslechu':'#&*'));?></h1></legend>
 	<fieldset><legend><h2>Základní údaje</h2></legend>
 		<div id="info"><?php
 	switch ($type){		
@@ -111,7 +118,7 @@ function date_picker($name, $startyear=NULL, $endyear=NULL)
 		<textarea cols="80" rows="7" name="inputs" id="inputs">info z analytického atd.</textarea>
 	</fieldset>
 	
-	<input type="submit" name="insertrep" id="submitbutton" value="Vložit" />
+	<input type="submit" name="insertrep" id="submitbutton" value="Vložit" title="Vložit" />
 
 </fieldset>
 </form>

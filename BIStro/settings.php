@@ -16,47 +16,15 @@ function pwdcheck(form)
 }
 -->
 </script>
-<script type="text/javascript">
-<!--
-function MrFixit (sonny, daddy){ //both parameters must be ID
-	// Mr.Fixit v1.0
-	// requires jQuery to work !!!
-	var dBorder = ($("#"+daddy).outerWidth(false)-$("#"+daddy).innerWidth())/2;
-	var topStandart = $("#"+sonny).offset().top;
-	var topBuff = topStandart - $("#"+daddy).offset().top - dBorder;
-	
-	var sHeight = $("#"+sonny).outerHeight(false);
-	var dInnerHeight = $("#"+daddy).innerHeight();
-	var maxScrollTop = $("#"+daddy).offset().top + dBorder + dInnerHeight - sHeight - 2*topBuff;
-	var absInnerPos = $("#"+daddy).innerHeight() - sHeight - topBuff;
-
-	$(window).scroll(function(e){	
-		if(($(window).scrollTop() > (topStandart-topBuff)) && ($(window).scrollTop() < maxScrollTop)){
-			$("#"+sonny).css({
-				position: 'fixed',
-				top: topBuff
-			});
-		}else if($(window).scrollTop() >= maxScrollTop){
-			$("#"+sonny).css({
-				position: 'absolute',
-				top: absInnerPos
-			});
-		}else {
-			$("#"+sonny).css({
-				position: 'static',
-				top: topBuff
-			});
-		}
-	});	
-	 $("#"+daddy).click(function(){ alert (maxScrollTop + "px :-[" +"\n"+ $(window).scrollTop() + "px :-]"+"\n"+absInnerPos); });
-}
-window.onload=function(){
-	MrFixit('submitbutton', 'ramecek');
-};
--->
-</script>
 
 <div id="obsah">
+	<script type="text/javascript">
+	<!--
+	window.onload=function(){
+		FixitRight('submitbutton', 'ramecek');
+	};
+	-->
+	</script>
 <form action="procsettings.php" method="post" name="inputform" id="inputform" onSubmit="return pwdcheck(this);">
 <fieldset id="ramecek"><legend><h1>Uživatel: <?php echo $usrinfo['login']; ?></h1></legend>
 	<p>
@@ -86,7 +54,7 @@ window.onload=function(){
 		<textarea cols="140" rows="300" name="plan" id="plan"><?php echo StripSlashes($usrinfo['plan'])?></textarea>
 	</fieldset>
 
-	<input type="submit" name="editsettings" id="submitbutton" value="Vložit" />
+	<input type="submit" name="editsettings" id="submitbutton" value="Vložit"  title="Vložit"/>
 </fieldset>
 </form>
 </div>

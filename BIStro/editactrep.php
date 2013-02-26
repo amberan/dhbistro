@@ -78,8 +78,15 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 	$ayear=(Date ('Y',$rec_actr['adatum']));
 	?>
 <div id="obsah">
+	<script type="text/javascript">
+	<!--
+	window.onload=function(){
+		FixitRight('submitbutton', 'ramecek');
+	};
+	-->
+	</script>
 <form action="procactrep.php" method="post" id="inputform">
-<fieldset><legend><h1>Úprava hlášení<?php echo (($type==1)?' z výjezdu':(($type==2)?' z výslechu':''));?></h1></legend>
+<fieldset id="ramecek"><legend><h1>Úprava hlášení<?php echo (($type==1)?' z výjezdu':(($type==2)?' z výslechu':''));?></h1></legend>
 	<fieldset><legend><h2>Základní údaje</h2></legend>
 		<div id="info">
 			<h3><label for="label">Označení&nbsp;<?php echo (($type==1)?'výjezdu':(($type==2)?'výslechu':'hlášení'));?>:</label></h3>
