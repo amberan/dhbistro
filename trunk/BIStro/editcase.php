@@ -9,7 +9,14 @@
 		if ($rec_c=MySQL_Fetch_Assoc($res)) {
 ?>
 <div id="obsah">
-	<fieldset><legend><h1>Úprava případu: <?php echo(StripSlashes($rec_c['title'])); ?></h1></legend>
+	<script type="text/javascript">
+	<!--
+	window.onload=function(){
+		FixitRight('submitbutton', 'ramecek');
+	};
+	-->
+	</script>
+	<fieldset id="ramecek"><legend><h1>Úprava případu: <?php echo(StripSlashes($rec_c['title'])); ?></h1></legend>
 		<form action="proccase.php" method="post" id="inputform">
 			<div id="info">
 				<h3><label for="title">Název:</label></h3>
@@ -41,7 +48,7 @@
 			</fieldset>
 			<div>
 			  <input type="hidden" name="caseid" value="<?php echo $rec_c['id']; ?>" />
-			  <input type="submit" name="editcase" id="submitbutton" value="Uložit změny" />
+			  <input type="submit" name="editcase" id="submitbutton" value="Uložit změny" title="Uložit změny" />
 			</div>
 		</form>
 	</fieldset>

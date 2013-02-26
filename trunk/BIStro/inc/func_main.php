@@ -331,24 +331,28 @@ function backupDB () {
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cs">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title><?php echo (($loggedin)?$usrinfo['login'].' @ ':'')?>BIStro <?php echo $mazzarino_version;?> | <?php echo $title;?></title>
-    <meta name="Author" content="David Ambeřan Maleček, Jakub Ethan Kraft" />
-    <meta name="Copyright" content="2006 - 2012" />
     <meta http-equiv="Content-language" content="cs" />
     <meta http-equiv="Cache-control" content="no-cache" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <meta name="robots" content="index, follow" />
+    <meta name="Author" content="David Ambeřan Maleček, Jakub Ethan Kraft" />
+    <meta name="Copyright" content="2006 - 2013" />
+    
+    <title><?php echo (($loggedin)?$usrinfo['login'].' @ ':'')?>BIStro <?php echo $mazzarino_version;?> | <?php echo $title;?></title>
     <meta name="description" content="city larp management system" />
+	<link rel="icon" href="favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    
     <!--[if lt IE 7]><style type="text/css">body {behavior: url('./inc/csshover.htc');}</style><![endif]-->
     <link media="all" rel="stylesheet" type="text/css" href="./inc/styly.css" />
     <link media="print" rel="stylesheet" type="text/css" href="./css/print.css" />
-		<link rel="icon" href="favicon.ico" type="image/x-icon" />
-		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-		<script type="text/javascript" src="./js/jquery-mini.js"></script>
-		<script type="text/javascript" src="./js/tiny_mce/tiny_mce_gzip.js"></script>
-		<script type="text/javascript" src="./js/tiny_mce_gz.js"></script>
-    <script type="text/javascript" src="./js/tiny_mce_settings.js"></script>
+	
+	<script type="text/javascript" src="./js/jquery-min.js"></script>
+	<script type="text/javascript" src="./js/tiny_mce/tiny_mce_gzip.js"></script>
+	<script type="text/javascript" src="./js/tiny_mce_gz.js"></script>
+	<script type="text/javascript" src="./js/tiny_mce_settings.js"></script>
+	<script type="text/javascript" src="./js/mrFixit.js"></script>
 </head>
 <body>
 <div id="wrapper">
