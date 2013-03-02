@@ -11,6 +11,13 @@
 ?>
 
 <div id="obsah">
+	<script type="text/javascript">
+	<!--
+	window.onload=function(){
+		FixitRight('button-floating-uloz', 'in-form-table');
+	};
+	-->
+	</script>
 <p>
 Hlášení můžete přiřadit k případu (či případům), kterého se týká.
 </p>
@@ -51,9 +58,11 @@ if ($usrinfo['right_power']) {
 	$sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."ar2c.iduser FROM ".DB_PREFIX."cases LEFT JOIN ".DB_PREFIX."ar2c ON ".DB_PREFIX."ar2c.idcase=".DB_PREFIX."cases.id AND ".DB_PREFIX."ar2c.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."cases.deleted=0 AND ".DB_PREFIX."cases.secret=0 ORDER BY ".$fsql_sort;
 }
 $res=MySQL_Query ($sql);
+?>
+<div id="in-form-table">
+<?php 
 if (MySQL_Num_Rows($res)) {
-	echo '<div id="">
-	<table>
+	echo '	<table>
 	<thead>
 	<tr>
 	<th>#</th>
@@ -71,19 +80,16 @@ if (MySQL_Num_Rows($res)) {
 		</tr>';
 		$even++;
 	}
-	echo '</tbody>
-	</table>
-	</div>
+	echo '</table>
 	';
 } else {
-	echo '<div id=""><p>Žádné případy neodpovídají výběru.</p></div>';
+	echo '<p>Žádné případy neodpovídají výběru.</p>';
 }
 ?>
-
-<div>
-<input type="hidden" name="reportid" value="<?php echo $_REQUEST['rid']; ?>" />
-<input type="submit" value="Uložit změny" name="addtoareport" class="submitbutton" />
+	<input type="hidden" name="reportid" value="<?php echo $_REQUEST['rid']; ?>" />
+	<input id="button-floating-uloz" type="submit" value="Uložit změny" name="addtoareport" class="submitbutton" title="Uložit změny"/>
 </div>
+<!-- end of #in-form-table -->
 </form>
 
 </div>

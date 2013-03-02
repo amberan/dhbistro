@@ -12,7 +12,7 @@
 	<script type="text/javascript">
 	<!--
 	window.onload=function(){
-		FixitRight('submitbutton', 'ramecek');
+		//FixitRight('submitbutton', 'ramecek');
 	};
 	-->
 	</script>

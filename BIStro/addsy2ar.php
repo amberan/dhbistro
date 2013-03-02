@@ -9,6 +9,13 @@
 ?>
 
 <div id="obsah">
+	<script type="text/javascript">
+	<!--
+	window.onload=function(){
+		FixitRight('button-floating-uloz', 'in-form-table');
+	};
+	-->
+	</script>
 <p>
 K případu můžete přiřadit hlášení, která se ho týkají.
 </p>

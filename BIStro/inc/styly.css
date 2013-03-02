@@ -599,6 +599,14 @@ td.filter {
   border: 0px;
 }
 
+#in-form-table {
+	padding: 20px;
+	position: relative;
+}
+#in-form-table #button-floating-uloz {
+	top: 20px;
+	right: -5px;
+}
 /***********************************/
 /************ symboly  *************/
 /***********************************/
