@@ -9,6 +9,13 @@
 ?>
 
 <div id="obsah">
+	<script type="text/javascript">
+	<!--
+	window.onload=function(){
+		FixitRight('button-floating-uloz', 'in-form-table');
+	};
+	-->
+	</script>
 <p>
 K případu můžete přiřadit řešitele.
 </p>
@@ -19,9 +26,11 @@ K případu můžete přiřadit řešitele.
 	// vypis osob
 	$sql="SELECT ".DB_PREFIX."users.id AS 'id', ".DB_PREFIX."users.login AS 'login', ".DB_PREFIX."c2s.iduser FROM ".DB_PREFIX."users LEFT JOIN ".DB_PREFIX."c2s ON ".DB_PREFIX."c2s.idsolver=".DB_PREFIX."users.id AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid']." WHERE ".DB_PREFIX."users.deleted=0 ORDER BY ".DB_PREFIX."users.login ASC";
 	$res=MySQL_Query ($sql);
+?>
+<div id="in-form-table">
+<?php 
 	if (MySQL_Num_Rows($res)) {
-	  echo '<div id="">
-<table>
+	  echo '<table>
 <thead>
 	<tr>
 	<th>#</th>
@@ -37,15 +46,13 @@ K případu můžete přiřadit řešitele.
 			$even++;
 		}
 	  echo '</tbody>
-</table>
-</div>';
+</table>';
 	}
 ?>
-
-<div>
 <input type="hidden" name="caseid" value="<?php echo $_REQUEST['rid']; ?>" />
-<input type="submit" value="Uložit změny" name="addsolver" class="submitbutton" />
+<input id="button-floating-uloz" type="submit" value="Uložit změny" name="addsolver" class="submitbutton" title="Uložit změny"/>
 </div>
+<!-- end of #obsah -->
 </form>
 
 </div>

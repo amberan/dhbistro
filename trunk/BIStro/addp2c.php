@@ -9,6 +9,13 @@
 ?>
 
 <div id="obsah">
+	<script type="text/javascript">
+	<!--
+	window.onload=function(){
+		FixitRight('button-floating-uloz', 'in-form-table');
+	};
+	-->
+	</script>
 <p>
 K případu můžete přiřadit osoby, kterých se týká nebo kterých by se týkat mohl.
 </p>
@@ -86,9 +93,11 @@ K případu můžete přiřadit osoby, kterých se týká nebo kterých by se t�
 	  $sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."c2p.iduser FROM ".DB_PREFIX."persons LEFT JOIN ".DB_PREFIX."c2p ON ".DB_PREFIX."c2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']." WHERE ".DB_PREFIX."persons.deleted=0 ".$fsql_dead.$fsql_archiv." AND ".DB_PREFIX."persons.secret=0 ORDER BY ".$fsql_sort;
 	}
 	$res=MySQL_Query ($sql);
+?>
+<div id="in-form-table">
+<?php 
 	if (MySQL_Num_Rows($res)) {
-	  echo '<div id="">
-<table>
+	  echo '<table>
 <thead>
 	<tr>
 	<th>#</th>
@@ -107,17 +116,15 @@ K případu můžete přiřadit osoby, kterých se týká nebo kterých by se t�
 			$even++;
 		}
 	  echo '</tbody>
-</table>
-</div>';
+</table>';
 	}
 ?>
-
-<div>
 <input type="hidden" name="fdead" value="<?php echo $fdead; ?>" />
 <input type="hidden" name="farchiv" value="<?php echo $farchiv; ?>" />
 <input type="hidden" name="caseid" value="<?php echo $_REQUEST['rid']; ?>" />
-<input type="submit" value="Uložit změny" name="addtocase" class="submitbutton" />
+<input id="button-floating-uloz" type="submit" value="Uložit změny" name="addtocase" class="submitbutton" title="Uložit změny"/>
 </div>
+<!-- end of #obsah -->
 </form>
 
 </div>

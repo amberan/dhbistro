@@ -81,7 +81,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 	<script type="text/javascript">
 	<!--
 	window.onload=function(){
-		FixitRight('submitbutton', 'ramecek');
+		//FixitRight('submitbutton', 'ramecek');
 	};
 	-->
 	</script>

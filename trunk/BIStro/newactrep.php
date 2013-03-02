@@ -54,7 +54,7 @@ function date_picker($name, $startyear=NULL, $endyear=NULL)
 	<script type="text/javascript">
 	<!--
 	window.onload=function(){
-		FixitRight('submitbutton', 'ramecek');
+		//FixitRight('submitbutton', 'ramecek');
 	};
 	-->
 	</script>
