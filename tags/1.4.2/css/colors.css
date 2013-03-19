@@ -1,0 +1,754 @@
+body {
+	background-color: ;
+	margin: 0px;
+	color: ;
+	font-size: 12px;
+	font-family: Verdana, Arial, sans-serif;
+}
+a {
+	text-decoration: none;
+	color: ;
+}
+a.odkaz {
+	color: ;
+}
+img {
+	border: 0px;
+}
+ol, ul {
+	margin-left: 0px;
+	padding-left: 15px;
+	margin-bottom: 2px;
+	margin-top: 2px;
+}
+li {
+	margin-left: 15px;
+	list-style-type: square;
+} /* pokud nekdo <li> neuzavre do listu */
+ul li, ol li {
+	margin-left: 0px;
+}
+form {
+	margin: 0px;
+	padding: 0px;
+}
+/* highlight */
+em {
+	color: ;
+	font-style: normal;
+}
+/* page layout - two columns - 300px/rest */
+div.l2c {
+	clear: both;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+div.l2cn {
+	float: left;
+	width: 300px;
+}
+div.l2cc {
+	margin-left: 300px;
+	overflow: hidden;
+}
+div[class~=l2cc] {
+	overflow: visible;
+}
+/* override pro uvodni stranku */
+body.d-front div.l2cn {
+	width: 212px;
+}
+body.d-front div.l2cc {
+	margin-left: 212px;
+}
+/* page layout - two columns - 50%/50% */
+div.l2h  {
+	clear: both;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+div.l2h1 {
+	float: left;
+	width: 50%;
+}
+div.l2h2 {
+	margin-left: 50%;
+	overflow: hidden;
+}
+div[class~=l2h2] {
+	overflow: visible;
+}
+/* page layout - three columns - 200px/300px/rest */
+div.l3c  {
+	clear: both;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+div.l3c1 {
+	float: left;
+	width: 200px;
+}
+div.l3c2 {
+	float: left;
+	width: 300px;
+}
+div.l3c3 {
+	margin-left: 500px;
+	overflow: hidden;
+}
+div[class~=l3c3] {
+	overflow: visible;
+}
+/* menu */
+ul.m {
+	border: 0px;
+	width: 100%;
+	height: 22px;
+	background-color: ;
+	vertical-align: middle;
+	text-align: left;
+	font-weight: bold;
+	font-family: Arial, sans-serif;
+	margin-bottom: 10px;
+	padding: 0px;
+}
+ul.m li {
+	padding-top: 3px;
+	display: block;
+	float: left;
+	overflow: hidden;
+	background-color: ;
+	text-align: right;
+	padding-right: 3px;
+	margin-left: 1px;
+	border: solid 1px ;
+	width: 60px;
+	height: 17px;
+}
+ul.m span {
+	color: ;
+}
+ul.m a span {
+	color: ;
+}
+ul.m li.a {
+	color: ;
+	background-color: ;
+	border: solid 1px;
+	border-color: #c6c6c8 #3b3b3b #3b3b3b #c6c6c8;
+}
+ul.m .r {
+	float: right;
+}
+/* l1 menu */
+ul.m.l1 {
+}
+/* l2 menu */
+ul.m.l2 {
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-bottom: 15px;
+	margin-top: 5px;
+	width: auto;
+	clear: both;
+}
+/* fixed menu */
+body[class~=fixed] {
+	margin-top: 30px;
+}
+body.fixed ul.m.l1 {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 10;
+}
+/* header */
+div.header {
+	margin: 0px;
+	text-align: center;
+	margin: 0px 10px 0px 10px;
+	height: 70px;
+	vertical-align: middle;
+	font-weight: bold;
+}
+div.header div.i {
+	position: absolute;
+	top: 30px;
+	left: 10px;
+}
+div.header div.nick, div.header a.mail, div.header div.time {
+	display: block;
+	float: left;
+	margin-left: 45px;
+	text-align: left;
+	clear: left;
+}
+div.header div.friends, div.header div.modes {
+	display: block;
+	float: right;
+	clear: right;
+}
+div.header a.mail, div.header div.systext {
+	color: ;
+}
+/* header - iconless */
+body.iconless div.header div.nick, body.iconless div.header a.mail, body.iconless div.header div.time {
+	margin-left: 0px;
+}
+/* header: adless */
+body.adless ul.m.l2 {
+	margin-top: 3px;
+}
+body.adless div.header {
+	margin: 0px;
+	text-align: center;
+	margin: 0px 10px 0px 10px;
+	height: 25px;
+	vertical-align: middle;
+}
+body.adless div.header div, body.adless div.header a {
+	display: block;
+	float: left;
+	margin-left: 0px;
+	clear: none;
+}
+body.adless div.header .i {
+	visibility: hidden;
+	width: 0px;
+	height: 0px;
+	position: relative;
+} /* skryju ikonku v premiovce */
+body.adless div.header div.nick, body.adless div.header a.mail, body.adless div.header div.time {
+	padding-top: 3px
+}
+body.adless div.header div.nick {
+	margin-right: 10px;
+} /* fix pro IE*/
+body.adless div.header div[class~=nick] {
+	margin-right: 0px;
+}
+body.adless div.header div.nick:after {
+	content: " :: ";
+	color: ;
+}
+body.adless div.header a.mail {
+	display: block;
+	float: left;
+	color: ;
+	font-weight: bold;
+	margin-left: 3px;
+	margin-right: 10px;
+} /* fix pro IE*/
+body.adless div.header a[class~=mail] {
+	margin-right: 0px;
+}
+body.adless div.header a.mail:after {
+	content: " :: ";
+	color: ;
+}
+body.adless div.header div.search_box, body.adless div.header div.systext {
+	float: none;
+}
+body.adless div.header div.friends, body.adless div.header div.modes {
+	float: right;
+}
+/* block */
+.b {
+	margin-bottom: 10px;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+body.p-1c div.b, body > div.b {
+	margin-left: 10px;
+	margin-right: 10px;
+} /* 1 column */
+.b h2 {
+	background-color: ;
+	color: ;
+	margin: 0px;
+	text-align: center;
+	vertical-align: middle;
+	border: solid 1px ;
+	font-size: 100%;
+	font-weight: bold;
+	height: 18px;
+}
+.bc {
+	border: solid 1px ;
+	text-align: left;
+	vertical-align: top;
+}
+.bc h2 {
+	height: auto;
+	border: 0px;
+	background-color: transparent;
+}
+h2 + div.bc {
+	border-top: none;
+}
+.b h3 {
+	margin: 3px 0px 3px 0px;
+	font-size: 120%;
+	font-weight: bold;
+}
+/* block - text */
+div.bc.text {
+	padding: 5px;
+}
+/* block - table */
+div.bc table.r_stripes, div.bc table.c_stripes, div.bc table.ch {
+	width: 99%;
+}
+div.bc table[class~=r_stripes], div.bc table[class~=c_stripes], div.bc table[class~=ch] {
+	width: 100%;
+}
+div.bc th {
+	background-color: ;
+	color: ;
+	text-align: center;
+	vertical-align: middle;
+	border: solid 1px ;
+	font-weight: bold;
+	font-size: 100%;
+}
+div.bc th a {
+	color: ;
+}
+/* form elements */
+select {
+	background-color: ;
+}
+input {
+	background-color: ;
+	margin: 1px;
+	border: solid 1px ;
+	height: 18px;
+}
+input[type=text], input[type=password] {
+	height: 14px;
+}
+input[type~=checkbox], input[type~=image] {
+	border: none;
+	margin: auto;
+	height: auto;
+	margin: 2px;
+}
+textarea {
+	background-color: ;
+	margin: 1px;
+	border: solid 1px ;
+	font-size: 12px;
+	font-family: Verdana, Arial, sans-serif;
+}
+/* table - first column */
+table.ch tr td:first-child {
+	color: ;
+	background-color: ;
+	text-align: right;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+}
+table.ch tr td:first-child a {
+	color: ;
+}
+table.ch tr td[colspan]:first-child {
+	text-align: center;
+}
+/* table - c_stripes, r_stripes */
+tr.odd > td, td.odd {
+	background-color: ;
+}
+tr.cat, td.cat, tr.odd td.cat {
+	color: ;
+	background-color: ;
+	text-align: center;
+	letter-spacing: 2px;
+	text-transform: lowercase;
+	height: 20px;
+} /* ? proc se musi prepsat ten odd */
+tr.cat a, td.cat a {
+	color: ;
+}
+tr.cat a:before, td.cat a:before {
+	content: ':: ';
+}
+tr.cat a:after,  td.cat a:after  {
+	content: ' ::';
+}
+/* tabulky - spolecne */
+table.r_stripes td, table.c_stripes td {
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+table.r_stripes td[colspan]:first-child, table.c_stripes td[colspan]:first-child {
+	text-align: center;
+}
+/* writeups */
+div.w {
+	border: solid 1px ;
+	position: relative;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-bottom: 15px;
+	min-height: 50px;
+	background-color: ;
+}
+body.p-1c div.w, body > div.w {
+	margin-left: 10px;
+	margin-right: 10px;
+} /* 1 column */
+div.w div.wi {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 40px;
+	bottom: 0;
+	padding: 0px;
+	background-color: ;
+}
+div.wh, div.wc {
+	margin-left: 40px;
+	padding: 2px;
+	padding-left: 4px;
+	border-left: solid 1px ;
+	background-color: ;
+}
+div.wh {
+	background-color: ;
+	height: 20px;
+	font-weight: bold;
+}
+div[class~=wh] {
+	height: auto;
+	min-height: 20px;
+}
+div.wf {
+	background-color: ;
+	text-align: center;
+	border: 1px solid ;
+	float: right;
+	height: 30px;
+	width: 30px;
+}
+div.w.new div.wh .time.date {
+	color: ;
+} /* nove prispevky */
+div.w div.b {
+	margin: 0px;
+}
+div.wc {
+	height: 22px;
+	min-height: 22px;
+} /* IE hack */
+div[class~=wc] {
+	height: auto;
+} /* vrati zpatky pro ostatni browsery */
+div.wh .activity {
+	font-weight: normal;
+}
+div.wh .activity:before {
+	content: "[";
+	color: ;
+}
+div.wh .activity:after {
+	content: "]";
+	color: ;
+}
+/* reply - asi? :-) */
+div.wc .r {
+	font-weight: bold;
+}
+/* reply overlib */
+#rs {
+	width: 600px;
+}
+/* iconless */
+.iconless div.wi {
+	width: 0px;
+	visibility: hidden;
+}
+.iconless div.wh, .iconless div.wc {
+	margin-left: 0px;
+	border-left: 0px;
+}
+/* dates - centering - somewhere */
+table.r_stripes .time, table.c_stripes .time {
+	text-align: center;
+	display: block;
+	width: 100%;
+}
+body.l-018-1 table.r_stripes .time {
+	display: inline;
+	width: auto;
+	text-align: left;
+} /* fix - zahlavi klubu */
+/* JS menu na ikonkach */
+#im_block {
+	border: solid 1px ;
+	font-size: 85%;
+}
+#im_block, #im_block_left ,#im_block_right {
+	background-color: ;
+	width: 170px;
+}
+#im_block_right {
+	border-top: 1px dashed ;
+}
+#im_block_left a, #im_block_right a {
+	display: block;
+	padding: 2px;
+	color: #000;
+	text-decoration: none;
+}
+#im_block_left a:hover, #im_block_right a:hover {
+	background-color: ;
+	color: #fff;
+}
+/* dmsAutoComplete */
+.acDiv {
+	border: 1px solid ;
+	background-color: ;
+	color:;
+	display: none;
+	position: absolute;
+	z-index: 999;
+	max-height: 200px;
+	overflow-y: auto;
+}
+.acDiv UL {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+}
+.acDiv UL LI {
+	display: block;
+	padding: 2px;
+}
+.acDiv A {
+	color: ;
+}
+.acDiv LI.selected {
+	background-color: ;
+}
+/* icons */
+.i {
+	width: 40px;
+	height: 50px;
+	background-image: url('icobg.gif');
+	background-repeat: no-repeat;
+	display: block;
+}
+/* progress bar */
+.pgbar {
+	border: 1px solid ;
+}
+.pg1, .pg2, .pg3, .pg4, .pg5 {
+} /* jednotlive pruhy...naprihlad stridave barvy apod... */
+/* spoiler */
+.spoiler {
+	display: block;
+	color: ;
+	background-color: ;
+	padding: 10px;
+}
+.spoiler:before, .spoiler:after {
+	content: " * SPOILER! - Ctrl+A * ";
+	color: ;
+}
+/* galerie - obrazek */
+div.image div.bc {
+	text-align: center;
+	background-color: ;
+}
+div.image div.bc img {
+	border: 1px solid ;
+	margin: 50px 0px 50px 0px;
+}
+/* thumbs - obecne */
+.thumbs img {
+	border: 1px solid ;
+}
+/* galerie - nahledy */
+div.thumbs td {
+	text-align: center;
+}
+/* galerie - komentare */
+body.l-020-4 div.thumbs div.wi img {
+	width: 78px;
+	height: 80px;
+}
+body.l-020-4 div.thumbs div[class~=wi] img {
+	width: auto;
+	height: auto;
+	max-width: 78px;
+	max-height: 80px;
+}
+body.l-020-4 div.thumbs div.wi {
+	text-align: center;
+	width: 80px;
+}
+body.l-020-4 div.thumbs div.wh, body.l-020-4 div.thumbs div.wc  {
+	margin-left: 80px;
+}
+body.l-020-4 div.thumbs div.wc {
+	height: 52px;
+	min-height: 52px;
+}
+body.l-020-4 div.thumbs div[class~=wc] {
+	height: auto;
+}
+/* galerie - editace obrazku */
+body.l-020-1 table.ch ul {
+	padding-left: 0px;
+}
+body.l-020-1 table.ch textarea {
+	display: block;
+}
+body.l-020-1 table.ch li {
+	display: inline;
+	list-style-type: none;
+}
+body.l-020-1 table.ch li + li:before {
+	content: ", ";
+	color: ;
+}
+/* gate - infolinky */
+body.l-001-1 td.more {
+	text-align: center;
+}
+/* writeups - dynamic */
+.w-dyn h3 {
+	margin-top: 3px;
+	margin-bottom: 5px;
+}
+.w-dyn ul, .w-dyn ol {
+	padding-left: 0px;
+	margin-top: 15px;
+}
+.w-dyn li {
+	list-style-type: none;
+	margin: 10px 0px 10px 0px;
+}
+/* 2d poll */
+.w-dyn.w2 img {
+	display: block;
+}
+.w-dyn.w2 span.votes, .w-dyn.w2 span.opt-percent, .w-dyn.w2 span.row-percent, .w-dyn.w2 span.col-percent {
+	display: block;
+	float: left;
+	width: 50%;
+}
+.w-dyn.w2 span.votes, .w-dyn.w2 span.opt-percent {
+	font-weight: bold;
+}
+.w-dyn.w2 tr:hover, .w-dyn.w2 tr:hover td {
+	background-color: ;
+}
+.w-dyn.w2 tr:hover span.row-percent {
+	color: ;
+	font-weight: bold;
+}
+/* bodovany obrazek */
+.w-dyn.w4 div.image {
+	background-color: ;
+	text-align: center;
+}
+.w-dyn.w4 div.image img {
+	border: 1px solid ;
+	margin: 50px 0px 50px 0px;
+}
+.w-dyn.w4 td {
+	text-align: center;
+}
+.w-dyn.w4 input {
+	width: 100%;
+	height: 30px;
+}
+/* iconlist */
+div.iconlist td {
+	text-align: center;
+}
+div.iconlist td .i {
+	margin-left: auto;
+	margin-right: auto;
+}
+.navbar td, .navbar .bc {
+	text-align: center;
+}
+/* kluby */
+.df {
+	margin-left: 10px;
+} /* fix pro IE */
+span[class~=df] {
+	margin-left: 0px;
+} /* a zpatky pro inteligentni prohlizece */
+.df a {
+	color: ;
+}
+.df:after {
+	content: "]";
+}
+.df:before {
+	content: " [";
+}
+.dn, .dnf, .dnr { margin-right: 10px; color:  }
+[class~=dn], [class~=dnf], [class~=dnr] {
+	margin-right: 0px;
+}
+[class~=dnf]:before, [class~=dnr]:before {
+	content: " | ";
+	color: ;
+}
+/* diskuze - aktivni lide */
+#topic_active_people img {
+	margin: 3px;
+	display: inline;
+}
+/* top form */
+.tf {
+	width: 700px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+.tf img.i {
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	margin-bottom: 30px;
+}
+.tf .recipient, .tf .owner, .tf .level {
+	float: left;
+	clear: left;
+	width: 120px;
+}
+.tf .recipient input {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+.tf .postlist, .tf .coowners {
+	float: left;
+	clear: left;
+	width: 120px;
+	padding-top: 10px;
+}
+.tf .inputarea, .tf .controls {
+	margin-left: 120px;
+}
+.tf textarea {
+	width: 570px;
+}
+[class~=tf] textarea {
+	width: 95%;
+}
+/* user content */
+body.p-1c div.wc:after, body.p-1c div.bc:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
