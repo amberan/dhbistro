@@ -5,7 +5,7 @@
   $starttime = $mtime;
 
 	// verze
-	$mazzarino_version='1.4.1';
+	$mazzarino_version='1.4.2';
   
 	// sessions
 	session_start();
@@ -393,6 +393,7 @@ function backupDB () {
 		'.(($verze==2)?'<li><a href="evilpoints.php">Bludišťáky</a></li>':'<li><a href="evilpoints.php">Zlobody</a></li>').'
 		<li><a href="settings.php">Nastavení</a></li>
 		'.(($usrinfo['right_power'])?'<li><a href="users.php">Uživatelé</a></li>':'').'
+		'.((!$usrinfo['right_power'] && $usrinfo['right_text'])?'<li><a href="tasks.php">Úkoly</a></li>':'').'
 		'.(($usrinfo['right_aud'])?'<li><a href="audit.php">Audit</a></li>':'').'
 		<li class="float-right"><a href="logout.php">Odhlásit</a></li>
 		<li class="float-right"><a href="procother.php?delallnew='.$currentfile.'" onclick="'."return confirm('Opravdu označit vše jako přečtené?');".'">Přečíst vše</a></li>

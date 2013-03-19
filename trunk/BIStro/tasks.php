@@ -1,5 +1,6 @@
 <?php
 	require_once ('./inc/func_main.php');
+	if ($usrinfo['right_text']) {
 	if (isset($_POST['inserttask'])) {
 		auditTrail(10, 2, 0);
 	} else {
@@ -57,7 +58,7 @@
 	  $f_cat=$_REQUEST['kategorie'];
 	}
 	if (!isset($_REQUEST['sort'])) {
-	  $f_sort=1;
+	  $f_sort=2;
 	} else {
 	  $f_sort=$_REQUEST['sort'];
 	}
@@ -71,7 +72,7 @@
 	switch ($f_sort) {
 	  case 1: $fsql_sort=' '.DB_PREFIX.'tasks.created ASC '; break;
 	  case 2: $fsql_sort=' '.DB_PREFIX.'tasks.created DESC '; break;
-	  default: $fsql_sort=' '.DB_PREFIX.'tasks.created ASC ';
+	  default: $fsql_sort=' '.DB_PREFIX.'tasks.created DESC ';
 	}
 ?>	
 	<!-- Přidání úkolu -->
@@ -99,8 +100,8 @@
 <?php 
 	// filtr
 	function filter () {
-	  global $f_cat;
-		global $f_sort;
+	  global $f_cat, $f_sort;
+//		global $f_sort;
 	  echo '<div id="filter-wrapper"><form action="tasks.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -160,6 +161,14 @@
 ';
 	} else {
 	  echo '<div id="obsah"><p>Žádné úkoly neodpovídají výběru.</p></div>';
+	}
+	} else {
+		auditTrail(10, 1, 0);
+		pageStart ('Přidán úkol');
+		mainMenu (3);
+		sparklets ('<strong>uživatelé</strong> &raquo; <strong>úkoly</strong>');
+		echo '<div id="obsah"><p>Jste si jistí, že máte správná oprávnění?</p></div>';
+		
 	}
 ?>
 <?php
