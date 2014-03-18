@@ -10,6 +10,8 @@
 	// sessions
 	session_start();
 	$_SESSION['once']=0;
+	
+	global $point;
 
 	// databaze
   switch ($_SERVER["SERVER_NAME"]) {
@@ -47,7 +49,7 @@
 
   if (!@mysql_connect ('localhost',$dbusr,'eqgsCv3t')) {
   	echo 'fail ';
-    Exit;
+    exit;
   }
 	MySQL_Select_DB ($dbusr);
 
@@ -232,7 +234,12 @@ function auditTrail ($record_type,$operation_type,$idrecord) {
 	$res_check=MySQL_Query ($sql_check);
 	if (MySQL_Num_Rows($res_check)) {
 	} else {
-		$sql_au="INSERT INTO ".DB_PREFIX."audit_trail VALUES('','".$usrinfo['id']."','".time()."','".$operation_type."','".$record_type."','".$idrecord."','".$usrinfo['currip']."','".$usrinfo['right_org']."')";
+		if (!$usrinfo['currip']) {
+			$currip=$_SERVER['REMOTE_ADDR'];
+		} else {
+			$currip=$usrinfo['currip'];
+		}
+		$sql_au="INSERT INTO ".DB_PREFIX."audit_trail VALUES('','".$usrinfo['id']."','".time()."','".$operation_type."','".$record_type."','".$idrecord."','".$currip."','".$usrinfo['right_org']."')";
 		MySql_Query($sql_au);
 	}
 }
@@ -393,7 +400,7 @@ function backupDB () {
 		'.(($verze==2)?'<li><a href="evilpoints.php">Bludišťáky</a></li>':'<li><a href="evilpoints.php">Zlobody</a></li>').'
 		<li><a href="settings.php">Nastavení</a></li>
 		'.(($usrinfo['right_power'])?'<li><a href="users.php">Uživatelé</a></li>':'').'
-		'.((!$usrinfo['right_power'] && $usrinfo['right_text'])?'<li><a href="tasks.php">Úkoly</a></li>':'').'
+      	'.((!$usrinfo['right_power'] && $usrinfo['right_text'])?'<li><a href="tasks.php">Úkoly</a></li>':'').'
 		'.(($usrinfo['right_aud'])?'<li><a href="audit.php">Audit</a></li>':'').'
 		<li class="float-right"><a href="logout.php">Odhlásit</a></li>
 		<li class="float-right"><a href="procother.php?delallnew='.$currentfile.'" onclick="'."return confirm('Opravdu označit vše jako přečtené?');".'">Přečíst vše</a></li>
