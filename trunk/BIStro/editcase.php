@@ -1,13 +1,28 @@
 <?php
 	require_once ('./inc/func_main.php');
+	$sql_a="SELECT * FROM ".DB_PREFIX."c2s WHERE ".DB_PREFIX."c2s.idsolver=".$usrinfo['id']." AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid'];
+	$res_a=MySQL_Query ($sql_a);
+	$rec_a=MySQL_Fetch_array($res_a);
+	$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."cases WHERE id=".$_REQUEST['rid']);
+	$rec=MySQL_Fetch_Assoc($res);
 	auditTrail(3, 1, $_REQUEST['rid']);
 	pageStart ('Úprava případu');
 	mainMenu (3);
-	sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>úprava případu</strong>','<a href="symbols.php">přiřadit symboly</a>');
+	if (($usrinfo['right_text'])&&(($rec['secret']==0)||($usrinfo['right_power'])||($rec_a['iduser']))) {
+		$symbolbutton=' <a href="symbols.php">přiřadit symboly</a>';
+	} else {
+		$symbolbutton='';
+	}
+	sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>úprava případu</strong>',$symbolbutton);
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."cases WHERE id=".$_REQUEST['rid']);
 		if ($rec_c=MySQL_Fetch_Assoc($res)) {
 ?>
+<?php if (($rec['secret']==1)&&(!$usrinfo['right_power'])&&(!$rec_a['iduser'])) {
+	echo '<div id="obsah"><p>Hezký pokus.</p></div>';
+	goto end;
+	}
+	?>
 <div id="obsah">
 	<script type="text/javascript">
 	<!--
@@ -198,8 +213,9 @@
 </div>
 <!-- end of #obsah -->
 <?php
+	end:
 		} else {
-		  echo '<div id="obsah"><p>Skupina neexistuje.</p></div>';
+		  echo '<div id="obsah"><p>Případ neexistuje.</p></div>';
 		}
 	} else {
 	  echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';

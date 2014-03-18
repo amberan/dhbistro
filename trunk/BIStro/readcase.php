@@ -1,6 +1,9 @@
 <?php
 	require_once ('./inc/func_main.php');
 	if (is_numeric($_REQUEST['rid'])) {
+		$sql_a="SELECT * FROM ".DB_PREFIX."c2s WHERE ".DB_PREFIX."c2s.idsolver=".$usrinfo['id']." AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid'];
+		$res_a=MySQL_Query ($sql_a);
+		$rec_a=MySQL_Fetch_array($res_a);
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."cases WHERE id=".$_REQUEST['rid']);
 		if ($rec=MySQL_Fetch_Assoc($res)) {
 			auditTrail(3, 1, $_REQUEST['rid']);
@@ -32,7 +35,7 @@
 				$backurl='readcase.php?rid='.$_REQUEST['rid'].'&hidenotes=1&hidesymbols=1';
 			}		
 			
-			if ($usrinfo['right_text']) {
+			if (($usrinfo['right_text'])&&(($rec['secret']==0)||($usrinfo['right_power'])||($rec_a['iduser']))) {
 				$editbutton='; <a href="editcase.php?rid='.$_REQUEST['rid'].'">upravit případ</a>';
 			} else {
 				$editbutton='';
@@ -40,8 +43,8 @@
 			deleteUnread (3,$_REQUEST['rid']);
 			sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>'.StripSlashes($rec['title']).'</strong>',$spaction.$editbutton);
 ?>
-<?php if (($rec['secret']==1)&&(!$usrinfo['right_power'])) {
-	echo '<div id="obsah"><p>Hezký pokus..</p></div>';
+<?php if (($rec['secret']==1)&&(!$usrinfo['right_power'])&&(!$rec_a['iduser'])) {
+	echo '<div id="obsah"><p>Hezký pokus.</p></div>';
 	goto end;
 	}
 	?>
