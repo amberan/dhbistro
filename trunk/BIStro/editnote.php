@@ -45,7 +45,7 @@
 		echo '<input type="hidden" name="nowner" value="'.$rec['iduser'].'" />';
 	}
 	?>
-<?php 			if ($usrinfo['right_power'] == 1)	{
+<?php 			if ($usrinfo['right_org'] == 1)	{
 				echo '					
 				<div>
 				<label for="nnotnew">Není nové</label>

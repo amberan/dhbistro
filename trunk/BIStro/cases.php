@@ -10,6 +10,11 @@
 	} else {
 	  $f_sort=$_REQUEST['sort'];
 	}
+	if (!isset($_REQUEST['stat'])) {
+		$f_stat=0;
+	} else {
+		$f_stat=1;
+	}
 	if (!isset($_REQUEST['sec'])) {
 		$f_sec=0;
 	} else {
@@ -27,9 +32,14 @@
 		case 1: $fsql_sec=' AND '.DB_PREFIX.'cases.secret=1 '; break;
 		default: $fsql_sec='';
 	}	
+	switch ($f_stat) {
+		case 0: $fsql_stat=' AND '.DB_PREFIX.'cases.status=0 '; break;
+		case 1: $fsql_stat=''; break;
+		default: $fsql_stat=' AND '.DB_PREFIX.'cases.status=0 ';
+	}
 	//
 	function filter () {
-	  global $f_sort, $f_sec, $usrinfo;
+	  global $f_sort, $f_sec, $f_stat, $usrinfo;
 	  echo '<div id="filter-wrapper"><form action="cases.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -38,7 +48,8 @@
 	<option value="2"'.(($f_sort==2)?' selected="selected"':'').'>názvu sestupně</option>
 	<option value="3"'.(($f_sort==3)?' selected="selected"':'').'>data vzestupně</option>
 	<option value="4"'.(($f_sort==4)?' selected="selected"':'').'>data sestupně</option>
-</select>.';
+</select>.<br />
+<input type="checkbox" name="stat" value="stat" class="checkbox"'.(($f_stat==1)?' checked="checked"':'').' /> I uzavřené.';
 	if ($usrinfo['right_power']) {
 		echo '<br /> <input type="checkbox" name="sec" value="sec" class="checkbox"'.(($f_sec==1)?' checked="checked"':'').' /> Jen tajné.</p>';
 	}  else {
@@ -52,9 +63,9 @@
 	filter();
 	// vypis pripadu
 	if ($usrinfo['right_power']) {
-		$sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.datum AS 'datum' FROM ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.deleted=0".$fsql_sec." ORDER BY ".$fsql_sort;
+		$sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.datum AS 'datum' FROM ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.deleted=0".$fsql_sec.$fsql_stat." ORDER BY ".$fsql_sort;
 	} else {
-	  $sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.datum AS 'datum' FROM ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.deleted=0".$fsql_sec." AND ".DB_PREFIX."cases.secret=0 ORDER BY ".$fsql_sort;
+	  $sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.datum AS 'datum' FROM ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.deleted=0".$fsql_sec.$fsql_stat." AND ".DB_PREFIX."cases.secret=0 ORDER BY ".$fsql_sort;
 	}
 	$res=MySQL_Query ($sql);
 	if (MySQL_Num_Rows($res)) {

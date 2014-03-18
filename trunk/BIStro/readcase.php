@@ -40,6 +40,11 @@
 			deleteUnread (3,$_REQUEST['rid']);
 			sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>'.StripSlashes($rec['title']).'</strong>',$spaction.$editbutton);
 ?>
+<?php if (($rec['secret']==1)&&(!$usrinfo['right_power'])) {
+	echo '<div id="obsah"><p>Hezký pokus..</p></div>';
+	goto end;
+	}
+	?>
 <div id="obsah">
 	<h1><?php echo StripSlashes($rec['title']); ?></h1>
 	<fieldset><legend><h2>Obecné informace</h2></legend>
@@ -208,6 +213,7 @@
 </div>
 <!-- end of #obsah -->
 <?php
+	end:
 		} else {
 		  pageStart ('Případ neexistuje');
 			mainMenu (4);
