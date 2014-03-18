@@ -46,6 +46,8 @@
 						<option value="6">vlkodlak</option>
 						<option value="7">vědma</option>
 						<option value="8">zaříkávač</option>
+						<option value="9">vykladač</option>
+						<option value="10">jasnovidec</option>
 					</select>
 				<div class="clear">&nbsp;</div>
 				<h3><label for="phone">Telefon:</label></h3><input type="text" name="phone" id="phone" />

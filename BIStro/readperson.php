@@ -87,6 +87,8 @@
 					case 6: $side = 'vlkodlak'; break;
 					case 7: $side = 'vědma'; break;
 					case 8: $side = 'zaříkávač'; break;
+					case 9: $side = 'vykladač'; break;
+					case 10: $side = 'jasnovidec'; break;
 					default: $side = 'neznámá'; break;
 				}
 				echo $side; ?></p>

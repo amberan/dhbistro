@@ -68,6 +68,8 @@
 						<option value="6"<?php if ($rec_p['spec']==6) { echo ' selected="selected"'; } ?>>vlkodlak</option>
 						<option value="7"<?php if ($rec_p['spec']==7) { echo ' selected="selected"'; } ?>>vědma</option>
 						<option value="8"<?php if ($rec_p['spec']==8) { echo ' selected="selected"'; } ?>>zaříkávač</option>
+						<option value="9"<?php if ($rec_p['spec']==9) { echo ' selected="selected"'; } ?>>vykladač</option>
+						<option value="10"<?php if ($rec_p['spec']==10) { echo ' selected="selected"'; } ?>>jasnovidec</option>
 					</select>
 				<div class="clear">&nbsp;</div>
 				<h3><label for="phone">Telefon:</label></h3>
@@ -191,7 +193,7 @@
 			  	<?php if ($rec_p['secret']!=1) { ?>&nbsp;<input type="radio" name="secret" value="0" checked="checked"/>ne&nbsp;/<?php }; ?>
 				&nbsp;<input type="radio" name="secret" value="1" <?php if ($rec_p['secret']==1){ ?>checked="checked"<?php }; ?>/>ano
 			</div>
-<?php 			if ($usrinfo['right_power'] == 1)	{
+<?php 			if ($usrinfo['right_org'] == 1)	{
 				echo '					
 				<div>
 				<strong><label for="fnotnew">Není nové</label></strong>
@@ -265,7 +267,7 @@
 				&nbsp;<input type="radio" name="secret" value="1" <?php if ($rec_p['secret']==1){ ?>checked="checked"<?php }; ?>/>tajná&nbsp;/
 				&nbsp;<input type="radio" name="secret" value="2" />soukromá
 			</div>
-<?php 			if ($usrinfo['right_power'] == 1)	{
+<?php 			if ($usrinfo['right_org'] == 1)	{
 				echo '					
 				<div>
 				<strong><label for="nnotnew">Není nové</label></strong>

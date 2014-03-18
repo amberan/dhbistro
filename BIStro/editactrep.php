@@ -245,7 +245,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 			  	<?php if ($rec_actr['secret']!=1) { ?>&nbsp;<input type="radio" name="secret" value="0" checked="checked"/>ne&nbsp;/<?php }; ?>
 				&nbsp;<input type="radio" name="secret" value="1" <?php if ($rec_actr['secret']==1){ ?>checked="checked"<?php }; ?>/>ano
 			</div>
-<?php 		if ($usrinfo['right_power'] == 1)	{
+<?php 		if ($usrinfo['right_org'] == 1)	{
 			echo '					
 			<div>
 			<strong><label for="fnotnew">Není nové</label></strong>
@@ -319,7 +319,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 				&nbsp;<input type="radio" name="secret" value="1" <?php if ($rec_actr['secret']==1){ ?>checked="checked"<?php }; ?>/>tajná&nbsp;/
 				&nbsp;<input type="radio" name="secret" value="2" />soukromá
 			</div>
-<?php 			if ($usrinfo['right_power'] == 1)	{
+<?php 			if ($usrinfo['right_org'] == 1)	{
 				echo '					
 				<div>
 				<strong><label for="nnotnew">Není nové</label></strong>

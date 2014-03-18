@@ -81,6 +81,8 @@
 		case 7: $fsql_fspec=' AND '.DB_PREFIX.'persons.spec=6 '; break;
 		case 8: $fsql_fspec=' AND '.DB_PREFIX.'persons.spec=7 '; break;
 		case 9: $fsql_fspec=' AND '.DB_PREFIX.'persons.spec=8 '; break;
+		case 10: $fsql_fspec=' AND '.DB_PREFIX.'persons.spec=9 '; break;
+		case 11: $fsql_fspec=' AND '.DB_PREFIX.'persons.spec=10 '; break;
 		default: $fsql_fspec='';
 	}
 	switch ($fside) {
@@ -134,6 +136,8 @@
 	<option value="7"'.(($fspec==7)?' selected="selected"':'').'>vlkodlak</option>
 	<option value="8"'.(($fspec==8)?' selected="selected"':'').'>vědma</option>
 	<option value="9"'.(($fspec==9)?' selected="selected"':'').'>zaříkávač</option>
+	<option value="10"'.(($fspec==10)?' selected="selected"':'').'>vykladač</option>
+	<option value="11"'.(($fspec==11)?' selected="selected"':'').'>jasnovidec</option>
 	</select>
 	 Kategorie: 
 	<select name="fpow">

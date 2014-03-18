@@ -21,6 +21,9 @@
 		if (MySQL_Num_Rows($res_ga)) {
 			while ($rec_ga=MySQL_Fetch_Assoc($res_ga)) {
 				$name=StripSlashes ($rec_ga['name']);
+//					if ($name=='zlobody') {
+//						$name=$GLOBALS['point'].'y';
+//					}
 				return $name;
 			}
 		} else {
@@ -148,6 +151,11 @@
 	} else {
 		$f_glob=1;
 	}
+	if (!isset($_REQUEST['count'])) {
+		$f_count='10';
+	} else {
+		$f_count=$_REQUEST['count'];
+	}
 	switch ($f_cat) {
 	  case 0: $fsql_cat=' WHERE '.DB_PREFIX.'audit_trail.record_type NOT IN (5,11) '; break;
 	  case 1: $fsql_cat=' WHERE '.DB_PREFIX.'audit_trail.record_type<>11 '; break;
@@ -189,12 +197,17 @@
 	} else {
 		$fsql_glob=' ';
 	}
+	if ($f_count<>0) {
+		$fsql_count=' LIMIT '.$f_count;
+	} else {
+		$fsql_count=' ';
+	}
 ?>	
 	
 <?php 
 	// filtr
 	function filter () {
-	  global $f_cat,$f_sort,$f_user,$f_type,$usrinfo,$f_org,$f_my,$f_glob;
+	  global $f_cat,$f_sort,$f_user,$f_type,$usrinfo,$f_org,$f_my,$f_glob,$f_count;
 	  echo '<div id="filter-wrapper"><form action="audit.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -241,13 +254,14 @@
 	<label for="my">Zobrazit i globální operace</label>
 	<input type="checkbox" name="glob" '.(($f_glob==1)?' checked="checked"':'').'/><br/>
 	<div class="clear">&nbsp;</div>
+	Zobrazit <input type="text" name="count" size=5 value="'.$f_count.'"> posledních záznamů. (Pro všechny záznamy ponechte pole prázdné).<br/>
 	<div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
 </form></div><!-- end of #filter-wrapper -->';
 	}
 	filter();
 	// vypis uživatelů
-	$sql="SELECT * FROM ".DB_PREFIX."audit_trail".$fsql_cat.$fsql_type.$fsql_org.$fsql_my.$fsql_glob.$fsql_user." ORDER BY ".$fsql_sort;
+	$sql="SELECT * FROM ".DB_PREFIX."audit_trail".$fsql_cat.$fsql_type.$fsql_org.$fsql_my.$fsql_glob.$fsql_user." ORDER BY ".$fsql_sort.$fsql_count;
 	$res=MySQL_Query ($sql);
 	if (MySQL_Num_Rows($res)) {
 	  echo '<div id="obsah">
