@@ -53,12 +53,12 @@
 
 	// zpracovani filtru
 	if (!isset($_REQUEST['kategorie'])) {
-	  $f_cat=0;
+	  $f_cat=1;
 	} else {
 	  $f_cat=$_REQUEST['kategorie'];
 	}
 	if (!isset($_REQUEST['sort'])) {
-	  $f_sort=2;
+	  $f_sort=1;
 	} else {
 	  $f_sort=$_REQUEST['sort'];
 	}
@@ -67,12 +67,12 @@
 	  case 1: $fsql_cat=' WHERE '.DB_PREFIX.'tasks.status<2 '; break;
 	  case 2: $fsql_cat=' WHERE '.DB_PREFIX.'tasks.status=1 '; break;
 	  case 3: $fsql_cat=' WHERE '.DB_PREFIX.'tasks.status<4 '; break;
-	  default: $fsql_cat=' WHERE '.DB_PREFIX.'tasks.status<3 ';
+	  default: $fsql_cat=' WHERE '.DB_PREFIX.'tasks.status<2 ';
 	}
 	switch ($f_sort) {
 	  case 1: $fsql_sort=' '.DB_PREFIX.'tasks.created ASC '; break;
 	  case 2: $fsql_sort=' '.DB_PREFIX.'tasks.created DESC '; break;
-	  default: $fsql_sort=' '.DB_PREFIX.'tasks.created DESC ';
+	  default: $fsql_sort=' '.DB_PREFIX.'tasks.created ASC ';
 	}
 ?>	
 	<!-- Přidání úkolu -->
@@ -100,8 +100,8 @@
 <?php 
 	// filtr
 	function filter () {
-	  global $f_cat, $f_sort;
-//		global $f_sort;
+	  global $f_cat;
+		global $f_sort;
 	  echo '<div id="filter-wrapper"><form action="tasks.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
