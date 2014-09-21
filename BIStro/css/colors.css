@@ -1,16 +1,16 @@
 body {
-	background-color: ;
+/*	background-color: ; */
 	margin: 0px;
-	color: ;
+/*	color: ; */
 	font-size: 12px;
 	font-family: Verdana, Arial, sans-serif;
 }
 a {
 	text-decoration: none;
-	color: ;
+/*	color: ; */
 }
 a.odkaz {
-	color: ;
+/*	color: ; */
 }
 img {
 	border: 0px;
@@ -34,7 +34,7 @@ form {
 }
 /* highlight */
 em {
-	color: ;
+/*	color: ; */
 	font-style: normal;
 }
 /* page layout - two columns - 300px/rest */
@@ -104,7 +104,7 @@ ul.m {
 	border: 0px;
 	width: 100%;
 	height: 22px;
-	background-color: ;
+/*	background-color: ; */
 	vertical-align: middle;
 	text-align: left;
 	font-weight: bold;
@@ -117,7 +117,7 @@ ul.m li {
 	display: block;
 	float: left;
 	overflow: hidden;
-	background-color: ;
+/*	background-color: ; */
 	text-align: right;
 	padding-right: 3px;
 	margin-left: 1px;
@@ -126,14 +126,14 @@ ul.m li {
 	height: 17px;
 }
 ul.m span {
-	color: ;
+/*	color: ; */
 }
 ul.m a span {
-	color: ;
+/*	color: ; */
 }
 ul.m li.a {
-	color: ;
-	background-color: ;
+/*	color: ; 
+	background-color: ; */
 	border: solid 1px;
 	border-color: #c6c6c8 #3b3b3b #3b3b3b #c6c6c8;
 }
@@ -189,7 +189,7 @@ div.header div.friends, div.header div.modes {
 	clear: right;
 }
 div.header a.mail, div.header div.systext {
-	color: ;
+/*	color: ; */
 }
 /* header - iconless */
 body.iconless div.header div.nick, body.iconless div.header a.mail, body.iconless div.header div.time {
@@ -229,12 +229,12 @@ body.adless div.header div[class~=nick] {
 }
 body.adless div.header div.nick:after {
 	content: " :: ";
-	color: ;
+/*	color: ; */
 }
 body.adless div.header a.mail {
 	display: block;
 	float: left;
-	color: ;
+/*	color: ; */
 	font-weight: bold;
 	margin-left: 3px;
 	margin-right: 10px;
@@ -244,7 +244,7 @@ body.adless div.header a[class~=mail] {
 }
 body.adless div.header a.mail:after {
 	content: " :: ";
-	color: ;
+/*	color: ; */
 }
 body.adless div.header div.search_box, body.adless div.header div.systext {
 	float: none;
@@ -263,8 +263,8 @@ body.p-1c div.b, body > div.b {
 	margin-right: 10px;
 } /* 1 column */
 .b h2 {
-	background-color: ;
-	color: ;
+/*	background-color: ; 
+	color: ; */
 	margin: 0px;
 	text-align: center;
 	vertical-align: middle;
@@ -303,8 +303,8 @@ div.bc table[class~=r_stripes], div.bc table[class~=c_stripes], div.bc table[cla
 	width: 100%;
 }
 div.bc th {
-	background-color: ;
-	color: ;
+/*	background-color: ;
+	color: ; */
 	text-align: center;
 	vertical-align: middle;
 	border: solid 1px ;
@@ -312,14 +312,14 @@ div.bc th {
 	font-size: 100%;
 }
 div.bc th a {
-	color: ;
+/*	color: ; */
 }
 /* form elements */
 select {
-	background-color: ;
+/*	background-color: ; */
 }
 input {
-	background-color: ;
+/*	background-color: ; */
 	margin: 1px;
 	border: solid 1px ;
 	height: 18px;
@@ -334,7 +334,7 @@ input[type~=checkbox], input[type~=image] {
 	margin: 2px;
 }
 textarea {
-	background-color: ;
+/*	background-color: ; */
 	margin: 1px;
 	border: solid 1px ;
 	font-size: 12px;
@@ -342,33 +342,33 @@ textarea {
 }
 /* table - first column */
 table.ch tr td:first-child {
-	color: ;
-	background-color: ;
+/*	color: ;
+	background-color: ; */
 	text-align: right;
 	padding-top: 5px;
 	padding-right: 5px;
 	padding-bottom: 5px;
 }
 table.ch tr td:first-child a {
-	color: ;
+/*	color: ; */
 }
 table.ch tr td[colspan]:first-child {
 	text-align: center;
 }
 /* table - c_stripes, r_stripes */
 tr.odd > td, td.odd {
-	background-color: ;
+/*	background-color: ; */
 }
 tr.cat, td.cat, tr.odd td.cat {
-	color: ;
-	background-color: ;
+/*	color: ;
+	background-color: ; */
 	text-align: center;
 	letter-spacing: 2px;
 	text-transform: lowercase;
 	height: 20px;
 } /* ? proc se musi prepsat ten odd */
 tr.cat a, td.cat a {
-	color: ;
+/*	color: ; */
 }
 tr.cat a:before, td.cat a:before {
 	content: ':: ';
@@ -392,7 +392,7 @@ div.w {
 	margin-right: 5px;
 	margin-bottom: 15px;
 	min-height: 50px;
-	background-color: ;
+/*	background-color: ; */
 }
 body.p-1c div.w, body > div.w {
 	margin-left: 10px;
@@ -405,17 +405,17 @@ div.w div.wi {
 	width: 40px;
 	bottom: 0;
 	padding: 0px;
-	background-color: ;
+/*	background-color: ; */
 }
 div.wh, div.wc {
 	margin-left: 40px;
 	padding: 2px;
 	padding-left: 4px;
 	border-left: solid 1px ;
-	background-color: ;
+/*	background-color: ; */
 }
 div.wh {
-	background-color: ;
+/*	background-color: ; */
 	height: 20px;
 	font-weight: bold;
 }
@@ -424,7 +424,7 @@ div[class~=wh] {
 	min-height: 20px;
 }
 div.wf {
-	background-color: ;
+/*	background-color: ; */
 	text-align: center;
 	border: 1px solid ;
 	float: right;
@@ -432,7 +432,7 @@ div.wf {
 	width: 30px;
 }
 div.w.new div.wh .time.date {
-	color: ;
+/*	color: ; */
 } /* nove prispevky */
 div.w div.b {
 	margin: 0px;
@@ -449,11 +449,11 @@ div.wh .activity {
 }
 div.wh .activity:before {
 	content: "[";
-	color: ;
+/*	color: ; */
 }
 div.wh .activity:after {
 	content: "]";
-	color: ;
+/*	color: ; */
 }
 /* reply - asi? :-) */
 div.wc .r {
@@ -489,7 +489,7 @@ body.l-018-1 table.r_stripes .time {
 	font-size: 85%;
 }
 #im_block, #im_block_left ,#im_block_right {
-	background-color: ;
+/*	background-color: ; */
 	width: 170px;
 }
 #im_block_right {
@@ -502,14 +502,14 @@ body.l-018-1 table.r_stripes .time {
 	text-decoration: none;
 }
 #im_block_left a:hover, #im_block_right a:hover {
-	background-color: ;
+/*	background-color: ; */
 	color: #fff;
 }
 /* dmsAutoComplete */
 .acDiv {
 	border: 1px solid ;
-	background-color: ;
-	color:;
+/*	background-color: ;
+	color:; */
 	display: none;
 	position: absolute;
 	z-index: 999;
@@ -526,10 +526,10 @@ body.l-018-1 table.r_stripes .time {
 	padding: 2px;
 }
 .acDiv A {
-	color: ;
+/*	color: ; */
 }
 .acDiv LI.selected {
-	background-color: ;
+/*	background-color: ; */
 }
 /* icons */
 .i {
@@ -548,18 +548,18 @@ body.l-018-1 table.r_stripes .time {
 /* spoiler */
 .spoiler {
 	display: block;
-	color: ;
-	background-color: ;
+/*	color: ;
+	background-color: ; */
 	padding: 10px;
 }
 .spoiler:before, .spoiler:after {
 	content: " * SPOILER! - Ctrl+A * ";
-	color: ;
+/*	color: ; */
 }
 /* galerie - obrazek */
 div.image div.bc {
 	text-align: center;
-	background-color: ;
+/*	background-color: ; */
 }
 div.image div.bc img {
 	border: 1px solid ;
@@ -611,7 +611,7 @@ body.l-020-1 table.ch li {
 }
 body.l-020-1 table.ch li + li:before {
 	content: ", ";
-	color: ;
+/*	color: ; */
 }
 /* gate - infolinky */
 body.l-001-1 td.more {
@@ -643,15 +643,15 @@ body.l-001-1 td.more {
 	font-weight: bold;
 }
 .w-dyn.w2 tr:hover, .w-dyn.w2 tr:hover td {
-	background-color: ;
+/*	background-color: ; */
 }
 .w-dyn.w2 tr:hover span.row-percent {
-	color: ;
+/*	color: ; */
 	font-weight: bold;
 }
 /* bodovany obrazek */
 .w-dyn.w4 div.image {
-	background-color: ;
+/*	background-color: ; */
 	text-align: center;
 }
 .w-dyn.w4 div.image img {
@@ -684,7 +684,7 @@ span[class~=df] {
 	margin-left: 0px;
 } /* a zpatky pro inteligentni prohlizece */
 .df a {
-	color: ;
+/*	color: ; */
 }
 .df:after {
 	content: "]";
@@ -692,13 +692,16 @@ span[class~=df] {
 .df:before {
 	content: " [";
 }
-.dn, .dnf, .dnr { margin-right: 10px; color:  }
+.dn, .dnf, .dnr { 
+    margin-right: 10px; 
+/*    color:   */
+}
 [class~=dn], [class~=dnf], [class~=dnr] {
 	margin-right: 0px;
 }
 [class~=dnf]:before, [class~=dnr]:before {
 	content: " | ";
-	color: ;
+/*	color: ; */
 }
 /* diskuze - aktivni lide */
 #topic_active_people img {
