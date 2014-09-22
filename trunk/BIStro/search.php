@@ -1,7 +1,7 @@
 <?php
 require_once ('./inc/func_main.php');
-$searchedfor="léčitelka";
-/* Vyměnit "Studijní" za $_GET["search"] */
+$searchedfor="maršík";
+/* Vyměnit "léčitelka" za $_GET["search"] */
 $search = mysql_real_escape_string($searchedfor);
 
 /* Případy */
