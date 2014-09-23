@@ -15,19 +15,30 @@ $search = mysql_real_escape_string($searchedfor);
 <?php
 
 /* Případy */
-$res = mysql_query("
-    SELECT ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id'
-    FROM ".DB_PREFIX."cases
-    WHERE MATCH(title, contents) AGAINST ('$search' IN BOOLEAN MODE)
-    ORDER BY 5 * MATCH(title) AGAINST ('$search') + MATCH(contents) AGAINST ('$search') DESC
-");
+if ($usrinfo['right_power']) {
+    $res = mysql_query("
+        SELECT ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret'
+        FROM ".DB_PREFIX."cases
+        WHERE MATCH(title, contents) AGAINST ('$search' IN BOOLEAN MODE)
+        AND ".DB_PREFIX."cases.deleted=0
+        ORDER BY 5 * MATCH(title) AGAINST ('$search') + MATCH(contents) AGAINST ('$search') DESC
+    ");
+} else {
+    $res = mysql_query("
+        SELECT ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret'
+        FROM ".DB_PREFIX."cases
+        WHERE MATCH(title, contents) AGAINST ('$search' IN BOOLEAN MODE)
+        AND ".DB_PREFIX."cases.deleted=0 AND ".DB_PREFIX."cases.secret=0
+        ORDER BY 5 * MATCH(title) AGAINST ('$search') + MATCH(contents) AGAINST ('$search') DESC
+    ");    
+}
 ?>
 <h3>Případy</h3>
 <table>
 <thead>
 	<tr>
-	  <th>ID</th>
 	  <th>Název</th>
+	  <th>Status</th>
 	</tr>
 </thead>
 <tbody>
@@ -35,8 +46,9 @@ $res = mysql_query("
 <?php
 		$even=0;
                 while ($rec=MySQL_Fetch_Assoc($res)) {
-                echo '<tr class="'.(($even%2==0)?'even':'odd').'"><td>'.$rec['id'].'</td>
+                echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 	<td><a href="readcase.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a></td>
+        <td>'.(($rec['status']==0)?'Otevřený':'Uzavřený').''.(($rec['secret']==1)?', Tajný':'').'</td>
         </tr>';
                 $even++;
                 }
@@ -44,23 +56,38 @@ $res = mysql_query("
 </table>';
           
 /* Hlášení */
-$res = mysql_query("
-    SELECT ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id'
-    FROM ".DB_PREFIX."reports
-    WHERE MATCH(label, task, summary, impacts, details) AGAINST ('$search' IN BOOLEAN MODE)
-    ORDER BY 5 * MATCH(label) AGAINST ('$search')
-    + 3 * MATCH(summary) AGAINST ('$search')
-    + 2 * MATCH(task) AGAINST ('$search')
-    + 2 * MATCH(impacts) AGAINST ('$search')
-    + MATCH(details) AGAINST ('$search') DESC
-");
+if ($usrinfo['right_power']) {          
+    $res = mysql_query("
+        SELECT ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."reports.status AS 'status', ".DB_PREFIX."reports.secret AS 'secret'
+        FROM ".DB_PREFIX."reports
+        WHERE MATCH(label, task, summary, impacts, details) AGAINST ('$search' IN BOOLEAN MODE)
+        AND ".DB_PREFIX."reports.deleted=0
+        ORDER BY 5 * MATCH(label) AGAINST ('$search')
+        + 3 * MATCH(summary) AGAINST ('$search')
+        + 2 * MATCH(task) AGAINST ('$search')
+        + 2 * MATCH(impacts) AGAINST ('$search')
+        + MATCH(details) AGAINST ('$search') DESC
+    ");
+} else {
+    $res = mysql_query("
+        SELECT ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."reports.status AS 'status', ".DB_PREFIX."reports.secret AS 'secret'
+        FROM ".DB_PREFIX."reports
+        WHERE MATCH(label, task, summary, impacts, details) AGAINST ('$search' IN BOOLEAN MODE)
+        AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0
+        ORDER BY 5 * MATCH(label) AGAINST ('$search')
+        + 3 * MATCH(summary) AGAINST ('$search')
+        + 2 * MATCH(task) AGAINST ('$search')
+        + 2 * MATCH(impacts) AGAINST ('$search')
+        + MATCH(details) AGAINST ('$search') DESC
+    ");    
+}    
 ?>
 <h3>Hlášení</h3>
 <table>
 <thead>
 	<tr>
-	  <th>ID</th>
 	  <th>Název</th>
+	  <th>Status</th>
 	</tr>
 </thead>
 <tbody>
@@ -68,9 +95,27 @@ $res = mysql_query("
 <?php
 		$even=0;
                 while ($rec=MySQL_Fetch_Assoc($res)) {
-                echo '<tr class="'.(($even%2==0)?'even':'odd').'"><td>'.$rec['id'].'</td>
+                echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 	<td><a href="readactrep.php?rid='.$rec['id'].'&amp;hidenotes=0&amp;truenames=0">'.StripSlashes($rec['label']).'</a></td>
-        </tr>';
+        <td>';
+                
+        switch ($rec['status']) {
+                case 0:
+                    echo 'Rozpracované';
+                    break;
+                case 1:
+                    echo 'Dokončené';
+                    break;
+                case 2:
+                    echo 'Analyzované';
+                    break;
+                case 3:
+                    echo 'Archivované';
+        }
+        if ($rec['secret']==1) {
+                echo ', Tajné';
+        }
+        echo '</td></tr>';
 		
                 $even++;
                 }
@@ -78,21 +123,34 @@ $res = mysql_query("
 </table>';
           
 /* Osoby */
-$res = mysql_query("
-    SELECT ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name'
-    FROM ".DB_PREFIX."persons
-    WHERE MATCH(surname, name, contents) AGAINST ('$search' IN BOOLEAN MODE)
-    ORDER BY 5 * MATCH(surname) AGAINST ('$search')
-    + 3 * MATCH(name) AGAINST ('$search')
-    + MATCH(contents) AGAINST ('$search') DESC
-");
+if ($usrinfo['right_power']) {
+    $res = mysql_query("
+        SELECT ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.archiv AS 'archiv', ".DB_PREFIX."persons.dead AS 'dead', ".DB_PREFIX."persons.secret AS 'secret'
+        FROM ".DB_PREFIX."persons
+        WHERE MATCH(surname, name, contents) AGAINST ('$search' IN BOOLEAN MODE)
+        AND ".DB_PREFIX."persons.deleted=0
+        ORDER BY 5 * MATCH(surname) AGAINST ('$search')
+        + 3 * MATCH(name) AGAINST ('$search')
+        + MATCH(contents) AGAINST ('$search') DESC
+    ");
+} else {
+    $res = mysql_query("
+        SELECT ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.archiv AS 'archiv', ".DB_PREFIX."persons.dead AS 'dead', ".DB_PREFIX."persons.secret AS 'secret'
+        FROM ".DB_PREFIX."persons
+        WHERE MATCH(surname, name, contents) AGAINST ('$search' IN BOOLEAN MODE)
+        AND ".DB_PREFIX."persons.deleted=0 AND ".DB_PREFIX."persons.secret=0
+        ORDER BY 5 * MATCH(surname) AGAINST ('$search')
+        + 3 * MATCH(name) AGAINST ('$search')
+        + MATCH(contents) AGAINST ('$search') DESC
+    ");    
+}
 ?>
 <h3>Osoby</h3>
 <table>
 <thead>
 	<tr>
-	  <th>ID</th>
 	  <th>Jméno</th>
+	  <th>Status</th>
 	</tr>
 </thead>
 <tbody>
@@ -100,8 +158,9 @@ $res = mysql_query("
 <?php
                 $even=0;
                 while ($rec=MySQL_Fetch_Assoc($res)) {
-                echo '<tr class="'.(($even%2==0)?'even':'odd').'"><td>'.$rec['id'].'</td>
+                echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 	<td><a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['surname']).' '.StripSlashes($rec['name']).'</a></td>
+        <td>'.(($rec['archiv']==1)?'Archivovaný':'Aktivní').''.(($rec['dead']==1)?', Mrtvý':'').''.(($rec['secret']==1)?', Tajný':'').'</td>
         </tr>';
 		$even++;
                 }

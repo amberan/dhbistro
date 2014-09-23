@@ -30,6 +30,11 @@ K případu můžete přiřadit hlášení, která se ho týkají.
 	} else {
 		$f_stat=$_REQUEST['status'];
 	}
+        if (!isset($_REQUEST['archiv'])) {
+		$f_archiv=0;
+	} else {
+		$f_archiv=1;
+	}
 	switch ($f_cat) {
 	  case 0: $fsql_cat=''; break;
 	  case 1: $fsql_cat=' AND '.DB_PREFIX.'reports.type=1 '; break;
@@ -52,11 +57,16 @@ K případu můžete přiřadit hlášení, která se ho týkají.
 		case 3: $fsql_stat=' AND '.DB_PREFIX.'reports.status=2 '; break;
 		default: $fsql_stat='';
 	}
-	//
+        switch ($f_archiv) {
+		case 0: $fsql_archiv=' AND '.DB_PREFIX.'reports.status<>3 '; break;
+		case 1: $fsql_archiv=''; break;
+		default: $fsql_archiv=' AND '.DB_PREFIX.'reports.status<>3 ';
+	}
+	// filtr samotny
 	function filter () {
 	  global $f_cat;
 		global $f_sort;
-		  global $f_stat;
+		  global $f_stat, $f_archiv;
 	  echo '<form action="addc2ar.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -79,7 +89,9 @@ seřadit je podle <select name="sort">
 	<option value="4"'.(($f_sort==4)?' selected="selected"':'').'>jména autora sestupně</option>
 	<option value="5"'.(($f_sort==5)?' selected="selected"':'').'>data výjezdu vzestupně</option>
 	<option value="6"'.((!$f_sort==6)?'':' selected="selected"').'>data výjezdu sestupně</option>
-</select>.</p>
+        </select>.<br />
+        <input type="checkbox" name="archiv" value="archiv" class="checkbox"'.(($f_archiv==1)?' checked="checked"':'').' /> I archiv.
+        </p>
 	  <div id="filtersubmit">
 	  <input type="hidden" name="rid" value="'.$_REQUEST['rid'].'" />
 	  <input type="submit" name="filter" value="Filtrovat" /></div>
@@ -99,7 +111,7 @@ seřadit je podle <select name="sort">
 	        ".DB_PREFIX."ar2c.iduser 
 	        	FROM ".DB_PREFIX."users, ".DB_PREFIX."reports LEFT JOIN ".DB_PREFIX."ar2c 
 	        	ON ".DB_PREFIX."ar2c.idreport=".DB_PREFIX."reports.id AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']."
-				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0".$fsql_cat.$fsql_stat."
+				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0".$fsql_cat.$fsql_stat.$fsql_archiv."
 				ORDER BY ".$fsql_sort;
 	} else {
 		$sql="SELECT
@@ -113,7 +125,7 @@ seřadit je podle <select name="sort">
 	        ".DB_PREFIX."ar2c.iduser 
 	        	FROM ".DB_PREFIX."users, ".DB_PREFIX."reports LEFT JOIN ".DB_PREFIX."ar2c 
 	        	ON ".DB_PREFIX."ar2c.idreport=".DB_PREFIX."reports.id AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']."
-				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0".$fsql_cat.$fsql_stat."
+				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0".$fsql_cat.$fsql_stat.$fsql_archiv."
 				ORDER BY ".$fsql_sort;
 	}
 	$res=MySQL_Query ($sql);

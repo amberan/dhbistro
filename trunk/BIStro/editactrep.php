@@ -118,6 +118,9 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 				echo '<option value="2"'; 
 				if ($rec_actr['status']==2) { echo ' selected="selected"'; } 
 				echo '>analyzované</option>';
+                                echo '<option value="3"'; 
+				if ($rec_actr['status']==3) { echo ' selected="selected"'; } 
+				echo '>archivované</option>';
 				}
 			?>
 			</select>

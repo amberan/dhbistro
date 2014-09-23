@@ -35,6 +35,11 @@
 	} else {
 		$f_sec=1;
 	}
+        if (!isset($_REQUEST['archiv'])) {
+		$f_archiv=0;
+	} else {
+		$f_archiv=1;
+	}
 	switch ($f_cat) {
 	  case 0: $fsql_cat=''; break;
 	  case 1: $fsql_cat=' AND '.DB_PREFIX.'reports.type=1 '; break;
@@ -72,9 +77,14 @@
 		case 1: $fsql_sec=' AND '.DB_PREFIX.'reports.secret=1 '; break;
 		default: $fsql_sec='';
 	}
-	
+        switch ($f_archiv) {
+		case 0: $fsql_archiv=' AND '.DB_PREFIX.'reports.status<>3 '; break;
+		case 1: $fsql_archiv=''; break;
+		default: $fsql_archiv='';
+	}
+	// filtr samotny
 	function filter () {
-	  global $f_cat, $f_sort, $f_stat, $f_my, $f_conn, $fsql_conn2, $f_sec, $usrinfo;
+	  global $f_cat, $f_sort, $f_stat, $f_my, $f_conn, $fsql_conn2, $f_sec, $f_archiv, $usrinfo;
 	  echo '<div id="filter-wrapper"><form action="reports.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -96,13 +106,14 @@
 	<option value="6"'.((!$f_sort==6)?'':' selected="selected"').'>data výjezdu sestupně</option>
 </select>.</br>
 	<input type="checkbox" name="my" value="my" class="checkbox"'.(($f_my==1)?' checked="checked"':'').' /> Jen moje.<br />
-	<input type="checkbox" name="conn" value="conn" class="checkbox"'.(($f_conn==1)?' checked="checked"':'').' /> Jen nepřiřazené.';
-	if ($usrinfo['right_power']) {
+	<input type="checkbox" name="conn" value="conn" class="checkbox"'.(($f_conn==1)?' checked="checked"':'').' /> Jen nepřiřazené.<br />
+        <input type="checkbox" name="archiv" value="archiv" class="checkbox"'.(($f_archiv==1)?' checked="checked"':'').' /> I archiv.';
+        if ($usrinfo['right_power']) {
 		echo '<br /> <input type="checkbox" name="sec" value="sec" class="checkbox"'.(($f_sec==1)?' checked="checked"':'').' /> Jen tajné.</p>';
 	}  else {
 		echo '</p>';
 	}
-	echo '<div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
+        echo '<div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
 </form></div><!-- end of #filter-wrapper -->';
 	}
@@ -119,7 +130,7 @@
 	        ".DB_PREFIX."reports.type AS 'type',
 	        ".DB_PREFIX."reports.status AS 'status' 
 	        	FROM ".DB_PREFIX."users, ".DB_PREFIX."reports".$fsql_conn2."
-				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0".$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn.$fsql_sec."
+				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0".$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn.$fsql_sec.$fsql_archiv."
 				ORDER BY ".$fsql_sort;
 	} else {
 		$sql="SELECT
@@ -133,7 +144,7 @@
 	        ".DB_PREFIX."reports.iduser AS 'riduser',
 	        ".DB_PREFIX."reports.type AS 'type' 
 	        	FROM ".DB_PREFIX."users, ".DB_PREFIX."reports".$fsql_conn2." 
-				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0".$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn."
+				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0".$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn.$fsql_archiv."
 				ORDER BY ".$fsql_sort;
 	}
 	$res=MySQL_Query ($sql);
@@ -151,6 +162,7 @@
 	  if(($rec['status'])=='0') echo 'Rozpracované';
 	  if(($rec['status'])=='1') echo 'Dokončené';
 	  if(($rec['status'])=='2') echo 'Analyzované';
+          if(($rec['status'])=='3') echo 'Archivované';
 	  echo '</p></div></div>';
 	}
 	pageEnd ();

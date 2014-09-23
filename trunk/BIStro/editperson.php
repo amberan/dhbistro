@@ -96,8 +96,11 @@
 					echo ' checked="checked"';
 				}
 				echo '/><br/>
-				<div class="clear">&nbsp;</div>					
-				<h3><label for="notnew">Není nové</label></h3>
+				<div class="clear">&nbsp;</div>';
+                            }
+                        if ($usrinfo['right_org'] == 1)	{
+				echo '
+                                <h3><label for="notnew">Není nové</label></h3>
 					<input type="checkbox" name="notnew"/><br/>
 				<div class="clear">&nbsp;</div>';
 				}
