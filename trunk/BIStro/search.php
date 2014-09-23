@@ -1,8 +1,18 @@
 <?php
 require_once ('./inc/func_main.php');
-$searchedfor="maršík";
+auditTrail(3, 1, 0);
+pageStart ('Vyhledávání');
+mainMenu (3);
+sparklets ('<strong>vyhledávání</strong>');
+$searchedfor="upir";
 /* Vyměnit "léčitelka" za $_GET["search"] */
 $search = mysql_real_escape_string($searchedfor);
+?>
+
+<div id="obsah">
+<h2>Výsledky hledání výrazu "<?php echo $searchedfor; ?>"</h2>
+
+<?php
 
 /* Případy */
 $res = mysql_query("
@@ -23,11 +33,13 @@ $res = mysql_query("
 <tbody>
 
 <?php
-		while ($rec=MySQL_Fetch_Assoc($res)) {
-                echo '<tr><td>'.$rec['id'].'</td>
-	<td>'.StripSlashes($rec['title']).'</td>
+		$even=0;
+                while ($rec=MySQL_Fetch_Assoc($res)) {
+                echo '<tr class="'.(($even%2==0)?'even':'odd').'"><td>'.$rec['id'].'</td>
+	<td><a href="readcase.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a></td>
         </tr>';
-		}
+                $even++;
+                }
 	  echo '</tbody>
 </table>';
           
@@ -54,11 +66,14 @@ $res = mysql_query("
 <tbody>
 
 <?php
-		while ($rec=MySQL_Fetch_Assoc($res)) {
-                echo '<tr><td>'.$rec['id'].'</td>
-	<td>'.StripSlashes($rec['label']).'</td>
+		$even=0;
+                while ($rec=MySQL_Fetch_Assoc($res)) {
+                echo '<tr class="'.(($even%2==0)?'even':'odd').'"><td>'.$rec['id'].'</td>
+	<td><a href="readactrep.php?rid='.$rec['id'].'&amp;hidenotes=0&amp;truenames=0">'.StripSlashes($rec['label']).'</a></td>
         </tr>';
-		}
+		
+                $even++;
+                }
 	  echo '</tbody>
 </table>';
           
@@ -83,11 +98,13 @@ $res = mysql_query("
 <tbody>
 
 <?php
-		while ($rec=MySQL_Fetch_Assoc($res)) {
-                echo '<tr><td>'.$rec['id'].'</td>
-	<td>'.StripSlashes($rec['surname']).' '.StripSlashes($rec['name']).'</td>
+                $even=0;
+                while ($rec=MySQL_Fetch_Assoc($res)) {
+                echo '<tr class="'.(($even%2==0)?'even':'odd').'"><td>'.$rec['id'].'</td>
+	<td><a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['surname']).' '.StripSlashes($rec['name']).'</a></td>
         </tr>';
-		}
+		$even++;
+                }
 	  echo '</tbody>
 </table>';          
 
@@ -111,11 +128,13 @@ $res = mysql_query("
 <tbody>
 
 <?php
-		while ($rec=MySQL_Fetch_Assoc($res)) {
-                echo '<tr><td>'.$rec['id'].'</td>
-	<td>'.StripSlashes($rec['title']).'</td>
+		$even=0;
+                while ($rec=MySQL_Fetch_Assoc($res)) {
+                echo '<tr class="'.(($even%2==0)?'even':'odd').'"><td>'.$rec['id'].'</td>
+	<td><a href="readgroup.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a></td>
         </tr>';
-		}
+		$even++;
+                }
 	  echo '</tbody>
 </table>'; 
           
@@ -140,7 +159,9 @@ $res = mysql_query("
 <tbody>
 
 <?php
-		while ($rec=MySQL_Fetch_Assoc($res)) {
+		
+                    $even=0;
+                    while ($rec=MySQL_Fetch_Assoc($res)) {
                     switch ($rec['idtable']) {
                         case 1:
                             $res_note = mysql_query("
@@ -151,6 +172,7 @@ $res = mysql_query("
                                 $noteid = $rec_note['id'];
                                 $notetitle = $rec_note['surname']." ".$rec_note['name'];
                                 $type = "Osoba";
+                                $linktype = "readperson.php?rid=".$rec_note['id']."&amp;hidenotes=0";
                             }
                             break;
                         case 2:
@@ -162,6 +184,7 @@ $res = mysql_query("
                                 $noteid = $rec_note['id'];
                                 $notetitle = $rec_note['title'];
                                 $type = "Skupina";
+                                $linktype = "readgroup.php?rid=".$rec_note['id']."&amp;hidenotes=0";
                             }
                             break;
                         case 3:
@@ -173,6 +196,7 @@ $res = mysql_query("
                                 $noteid = $rec_note['id'];
                                 $notetitle = $rec_note['title'];
                                 $type = "Případ";
+                                $linktype = "readcase.php?rid=".$rec_note['id']."&amp;hidenotes=0";
                             }
                             break;
                         case 4:
@@ -184,6 +208,7 @@ $res = mysql_query("
                                 $noteid = $rec_note['id'];
                                 $notetitle = $rec_note['label'];
                                 $type = "Hlášení";
+                                $linktype = "readactrep.php?rid=".$rec_note['id']."&amp;hidenotes=0&amp;truenames=0";
                             }
                             break;
                         default :
@@ -193,11 +218,13 @@ $res = mysql_query("
                             break;
                     }
 
-                echo '<tr><td>'.$noteid.'</td>
-	<td>'.StripSlashes($notetitle).'</td>
+                echo '<tr class="'.(($even%2==0)?'even':'odd').'"><td>'.$noteid.'</td>
+	<td><a href="'.$linktype.'">'.StripSlashes($notetitle).'</a></td>
         <td>'.StripSlashes($type).'</td>
         </tr>';
-		}
+		
+                $even++;
+                }
 	  echo '</tbody>
 </table>'; 
           
