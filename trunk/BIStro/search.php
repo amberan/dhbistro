@@ -30,8 +30,13 @@ $search = mysql_real_escape_string($searchedfor);
 </form></div><!-- end of #filter-wrapper -->';
         }
 	filter();
-        
+
 if (is_null($searchedfor)) goto searchend;
+
+if (strlen($searchedfor) < 4) {
+    echo '<h2>Výraz "'.$searchedfor.'" je příliš krátký, zadejte výraz o délce alespoň 4 znaky.</h2>';
+    goto searchend;
+}
         
 ?>       
 
