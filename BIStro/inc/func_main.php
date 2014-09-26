@@ -344,7 +344,7 @@ function backupDB () {
     <meta http-equiv="Expires" content="0" />
     <meta name="robots" content="index, follow" />
     <meta name="Author" content="David Ambeřan Maleček, Jakub Ethan Kraft" />
-    <meta name="Copyright" content="2006 - 2013" />
+    <meta name="Copyright" content="2006 - 2014" />
     
     <title><?php echo (($loggedin)?$usrinfo['login'].' @ ':'')?>BIStro <?php echo $mazzarino_version;?> | <?php echo $title;?></title>
     <meta name="description" content="city larp management system" />
@@ -396,11 +396,12 @@ function backupDB () {
 		<li '.((searchTable(2))?' class="unread"':'').'><a href="groups.php">Skupiny</a></li>
 		'.(($usrinfo['right_power'])?'<li><a href="mapagents.php">Mapa agentů</a></li>':'').'
 		'.(($usrinfo['right_power'])?'<li><a href="doodle.php">Časová dostupnost</a></li>':'<li><a href="'.$dlink['link'].'" target="_new">Časová dostupnost</a></li>').'
-		'.(($verze==2)?'<li><a href="http://www.prazskahlidka.cz/forum2/index.php" target="_new">Fórum</a></li>':'<li><a href="http://www.prazskahlidka.cz/forum/index.php" target="_new">Fórum</a></li>').'
+		'.(($verze==2)?'<li><a href="http://www.prazskahlidka.cz/forums/index.php" target="_new">Fórum</a></li>':'<li><a href="http://www.prazskahlidka.cz/forums/index.php" target="_new">Fórum</a></li>').'
 		'.(($verze==2)?'<li><a href="evilpoints.php">Bludišťáky</a></li>':'<li><a href="evilpoints.php">Zlobody</a></li>').'
 		<li><a href="settings.php">Nastavení</a></li>
+                <li><a href="search.php">Vyhledávání</a></li>
 		'.(($usrinfo['right_power'])?'<li><a href="users.php">Uživatelé</a></li>':'').'
-      	'.((!$usrinfo['right_power'] && $usrinfo['right_text'])?'<li><a href="tasks.php">Úkoly</a></li>':'').'
+                '.((!$usrinfo['right_power'] && $usrinfo['right_text'])?'<li><a href="tasks.php">Úkoly</a></li>':'').'
 		'.(($usrinfo['right_aud'])?'<li><a href="audit.php">Audit</a></li>':'').'
 		<li class="float-right"><a href="logout.php">Odhlásit</a></li>
 		<li class="float-right"><a href="procother.php?delallnew='.$currentfile.'" onclick="'."return confirm('Opravdu označit vše jako přečtené?');".'">Přečíst vše</a></li>

@@ -4,10 +4,37 @@ auditTrail(3, 1, 0);
 pageStart ('Vyhledávání');
 mainMenu (3);
 sparklets ('<strong>vyhledávání</strong>');
-$searchedfor="upir";
+/* Prevzit vyhledavane */
+if (!isset($_REQUEST['search'])) {
+	  $searchedfor=NULL;
+	} else {
+	  $searchedfor=$_REQUEST['search'];
+	}
 /* Vyměnit "léčitelka" za $_GET["search"] */
+/* NEJPRVE SPOCITAT POCET ZNAKU a pokud jsou tri a mene, vyhodit chybovou hlasku */
 $search = mysql_real_escape_string($searchedfor);
 ?>
+
+
+<?php
+	function filter () {
+	  global $usrinfo;
+	  echo '<div id="filter-wrapper"><form action="search.php" method="post" id="filter">
+	<fieldset>
+	  <legend>Vyhledávání</legend>
+	  <p>Zadejte vyhledávaný výraz.<br />
+<input type="text" name="search" value="" />';
+	echo '
+	  <div id="filtersubmit"><input type="submit" name="filter" value="Vyhledat" /></div>
+	</fieldset>
+</form></div><!-- end of #filter-wrapper -->';
+        }
+	filter();
+        
+if (is_null($searchedfor)) goto searchend;
+        
+?>       
+
 
 <div id="obsah">
 <h2>Výsledky hledání výrazu "<?php echo $searchedfor; ?>"</h2>
@@ -168,20 +195,32 @@ if ($usrinfo['right_power']) {
 </table>';          
 
 /* Skupiny */
-$res = mysql_query("
-    SELECT ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id'
-    FROM ".DB_PREFIX."groups
-    WHERE MATCH(title, contents) AGAINST ('$search' IN BOOLEAN MODE)
-    ORDER BY 5 * MATCH(title) AGAINST ('$search')
-    + MATCH(contents) AGAINST ('$search') DESC
-");
+if ($usrinfo['right_power']) {
+    $res = mysql_query("
+        SELECT ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.secret AS 'secret'
+        FROM ".DB_PREFIX."groups
+        WHERE MATCH(title, contents) AGAINST ('$search' IN BOOLEAN MODE)
+        AND ".DB_PREFIX."groups.deleted=0
+        ORDER BY 5 * MATCH(title) AGAINST ('$search')
+        + MATCH(contents) AGAINST ('$search') DESC
+    ");
+} else {
+    $res = mysql_query("
+        SELECT ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.secret AS 'secret'
+        FROM ".DB_PREFIX."groups
+        WHERE MATCH(title, contents) AGAINST ('$search' IN BOOLEAN MODE)
+        AND ".DB_PREFIX."groups.deleted=0 AND ".DB_PREFIX."groups.secret=0
+        ORDER BY 5 * MATCH(title) AGAINST ('$search')
+        + MATCH(contents) AGAINST ('$search') DESC
+    ");
+}
 ?>
 <h3>Skupiny</h3>
 <table>
 <thead>
 	<tr>
-	  <th>ID</th>
 	  <th>Název</th>
+	  <th>Status</th>
 	</tr>
 </thead>
 <tbody>
@@ -189,8 +228,9 @@ $res = mysql_query("
 <?php
 		$even=0;
                 while ($rec=MySQL_Fetch_Assoc($res)) {
-                echo '<tr class="'.(($even%2==0)?'even':'odd').'"><td>'.$rec['id'].'</td>
+                echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 	<td><a href="readgroup.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a></td>
+        <td>'.(($rec['secret']==1)?'Tajná':'').'</td>
         </tr>';
 		$even++;
                 }
@@ -198,8 +238,9 @@ $res = mysql_query("
 </table>'; 
           
 /* Poznámky */
+/* POZOR, tady bude hrozny opich udelat ten join pro zobrazeni jen poznamek k nearchivovanym vecem */
 $res = mysql_query("
-    SELECT ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.id AS 'id', ".DB_PREFIX."notes.idtable AS 'idtable', ".DB_PREFIX."notes.iditem AS 'iditem'
+    SELECT ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.id AS 'id', ".DB_PREFIX."notes.idtable AS 'idtable', ".DB_PREFIX."notes.iditem AS 'iditem', ".DB_PREFIX."notes.secret AS 'secret'
     FROM ".DB_PREFIX."notes
     WHERE MATCH(title, note) AGAINST ('$search' IN BOOLEAN MODE)
     ORDER BY 5 * MATCH(title) AGAINST ('$search')
@@ -210,9 +251,10 @@ $res = mysql_query("
 <table>
 <thead>
 	<tr>
-	  <th>ID</th>
-	  <th>Název</th>
+	  <th>Název poznámky</th>
+          <th>Komentuje</th>
           <th>Typ</th>
+          <th>Status</th>
 	</tr>
 </thead>
 <tbody>
@@ -277,14 +319,17 @@ $res = mysql_query("
                             break;
                     }
 
-                echo '<tr class="'.(($even%2==0)?'even':'odd').'"><td>'.$noteid.'</td>
-	<td><a href="'.$linktype.'">'.StripSlashes($notetitle).'</a></td>
-        <td>'.StripSlashes($type).'</td>
-        </tr>';
+                echo '<tr class="'.(($even%2==0)?'even':'odd').'">
+                <td><a href="readnote.php?rid='.$rec['id'].'&idtable='.$rec['idtable'].'">'.StripSlashes($rec['title']).'</a></td>
+                <td><a href="'.$linktype.'">'.StripSlashes($notetitle).'</a></td>
+                <td>'.StripSlashes($type).'</td>
+                <td>'.(($rec['secret']==1)?'Tajná':'').'</td>
+                </tr>';
 		
                 $even++;
                 }
 	  echo '</tbody>
 </table>'; 
-          
+
+searchend:
 ?>
