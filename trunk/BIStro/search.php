@@ -1,6 +1,6 @@
 <?php
 require_once ('./inc/func_main.php');
-auditTrail(3, 1, 0);
+auditTrail(12, 1, 0);
 pageStart ('Vyhledávání');
 mainMenu (3);
 sparklets ('<strong>vyhledávání</strong>');
@@ -10,8 +10,7 @@ if (!isset($_REQUEST['search'])) {
 	} else {
 	  $searchedfor=$_REQUEST['search'];
 	}
-/* Vyměnit "léčitelka" za $_GET["search"] */
-/* NEJPRVE SPOCITAT POCET ZNAKU a pokud jsou tri a mene, vyhodit chybovou hlasku */
+
 $search = mysql_real_escape_string($searchedfor);
 ?>
 
@@ -31,8 +30,12 @@ $search = mysql_real_escape_string($searchedfor);
         }
 	filter();
 
-if (is_null($searchedfor)) goto searchend;
+/* v pripade prazdneho vyhledavani nezobrazi vysledek */        
+        if (is_null($searchedfor)) {
+    goto searchend;
+}
 
+/* v pripade vyrazu kratsiho nez 4 znaky zobrazi chybovou hlasku a preskoci zobrazeni vysledku */
 if (strlen($searchedfor) < 4) {
     echo '<h2>Výraz "'.$searchedfor.'" je příliš krátký, zadejte výraz o délce alespoň 4 znaky.</h2>';
     goto searchend;
