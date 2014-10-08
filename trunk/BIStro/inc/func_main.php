@@ -46,8 +46,14 @@
 		$barva='org';
 		break;
   }
+  
+// vyzvedni heslo k databazi
+$file = "inc/important.php";
+$lines = file($file,FILE_IGNORE_NEW_LINES) or die("fail pwd");;
+$password = $lines[2];
 
-  if (!@mysql_connect ('localhost',$dbusr,'eqgsCv3t')) {
+// kontrola pripojeni
+  if (!@mysql_connect ('localhost',$dbusr,$password)) {
   	echo 'fail ';
     exit;
   }
