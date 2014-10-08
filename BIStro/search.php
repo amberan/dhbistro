@@ -271,13 +271,23 @@ if ($usrinfo['right_power']) {
           
 /* Poznámky */
 /* POZOR, tady bude hrozny opich udelat ten join pro zobrazeni jen poznamek k nearchivovanym vecem */
-$res = mysql_query("
-    SELECT ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.id AS 'id', ".DB_PREFIX."notes.idtable AS 'idtable', ".DB_PREFIX."notes.iditem AS 'iditem', ".DB_PREFIX."notes.secret AS 'secret'
-    FROM ".DB_PREFIX."notes
-    WHERE MATCH(title, note) AGAINST ('$search' IN BOOLEAN MODE)
-    ORDER BY 5 * MATCH(title) AGAINST ('$search')
-    + MATCH(note) AGAINST ('$search') DESC
-");
+if ($usrinfo['right_power']) {
+    $res = mysql_query("
+        SELECT ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.id AS 'id', ".DB_PREFIX."notes.idtable AS 'idtable', ".DB_PREFIX."notes.iditem AS 'iditem', ".DB_PREFIX."notes.secret AS 'secret'
+        FROM ".DB_PREFIX."notes
+        WHERE MATCH(title, note) AGAINST ('$search' IN BOOLEAN MODE) AND ".DB_PREFIX."notes.secret<2
+        ORDER BY 5 * MATCH(title) AGAINST ('$search')
+        + MATCH(note) AGAINST ('$search') DESC
+    ");
+} else {
+    $res = mysql_query("
+        SELECT ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.id AS 'id', ".DB_PREFIX."notes.idtable AS 'idtable', ".DB_PREFIX."notes.iditem AS 'iditem', ".DB_PREFIX."notes.secret AS 'secret'
+        FROM ".DB_PREFIX."notes
+        WHERE MATCH(title, note) AGAINST ('$search' IN BOOLEAN MODE) AND ".DB_PREFIX."notes.secret=0
+        ORDER BY 5 * MATCH(title) AGAINST ('$search')
+        + MATCH(note) AGAINST ('$search') DESC
+    ");
+}
 ?>
 <h3>Poznámky</h3>
 <table>
@@ -298,7 +308,7 @@ $res = mysql_query("
                     switch ($rec['idtable']) {
                         case 1:
                             $res_note = mysql_query("
-                                SELECT ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name'
+                                SELECT ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.secret AS 'secret'
                                 FROM ".DB_PREFIX."persons
                                 WHERE id = ".$rec['iditem']);
                             while ($rec_note=MySQL_Fetch_Assoc($res_note)) {
@@ -306,11 +316,12 @@ $res = mysql_query("
                                 $notetitle = $rec_note['surname']." ".$rec_note['name'];
                                 $type = "Osoba";
                                 $linktype = "readperson.php?rid=".$rec_note['id']."&amp;hidenotes=0";
+                                $secret = $rec_note['secret'];
                             }
                             break;
                         case 2:
                             $res_note = mysql_query("
-                                SELECT ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id'
+                                SELECT ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.secret AS 'secret'
                                 FROM ".DB_PREFIX."groups
                                 WHERE id = ".$rec['iditem']);
                             while ($rec_note=MySQL_Fetch_Assoc($res_note)) {
@@ -318,11 +329,12 @@ $res = mysql_query("
                                 $notetitle = $rec_note['title'];
                                 $type = "Skupina";
                                 $linktype = "readgroup.php?rid=".$rec_note['id']."&amp;hidenotes=0";
+                                $secret = $rec_note['secret'];
                             }
                             break;
                         case 3:
                             $res_note = mysql_query("
-                                SELECT ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id'
+                                SELECT ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.secret AS 'secret'
                                 FROM ".DB_PREFIX."cases
                                 WHERE id = ".$rec['iditem']);
                             while ($rec_note=MySQL_Fetch_Assoc($res_note)) {
@@ -330,11 +342,12 @@ $res = mysql_query("
                                 $notetitle = $rec_note['title'];
                                 $type = "Případ";
                                 $linktype = "readcase.php?rid=".$rec_note['id']."&amp;hidenotes=0";
+                                $secret = $rec_note['secret'];
                             }
                             break;
                         case 4:
                             $res_note = mysql_query("
-                                SELECT ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id'
+                                SELECT ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."reports.secret AS 'secret'
                                 FROM ".DB_PREFIX."reports
                                 WHERE id = ".$rec['iditem']);
                             while ($rec_note=MySQL_Fetch_Assoc($res_note)) {
@@ -342,6 +355,7 @@ $res = mysql_query("
                                 $notetitle = $rec_note['label'];
                                 $type = "Hlášení";
                                 $linktype = "readactrep.php?rid=".$rec_note['id']."&amp;hidenotes=0&amp;truenames=0";
+                                $secret = $rec_note['secret'];
                             }
                             break;
                         default :
@@ -350,7 +364,8 @@ $res = mysql_query("
                                 $type = "Jiná";
                             break;
                     }
-
+                
+        if ($usrinfo['right_power']) {        
                 echo '<tr class="'.(($even%2==0)?'even':'odd').'">
                 <td><a href="readnote.php?rid='.$rec['id'].'&idtable='.$rec['idtable'].'">'.StripSlashes($rec['title']).'</a></td>
                 <td><a href="'.$linktype.'">'.StripSlashes($notetitle).'</a></td>
@@ -359,6 +374,18 @@ $res = mysql_query("
                 </tr>';
 		
                 $even++;
+        } else {
+            if ($secret==0) {
+                echo '<tr class="'.(($even%2==0)?'even':'odd').'">
+                <td><a href="readnote.php?rid='.$rec['id'].'&idtable='.$rec['idtable'].'">'.StripSlashes($rec['title']).'</a></td>
+                <td><a href="'.$linktype.'">'.StripSlashes($notetitle).'</a></td>
+                <td>'.StripSlashes($type).'</td>
+                <td>'.(($rec['secret']==1)?'Tajná':'').'</td>
+                </tr>';
+		
+                $even++;               
+            }
+        }
                 }
 	  echo '</tbody>
 </table>'; 
