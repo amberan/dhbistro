@@ -4,6 +4,12 @@ auditTrail(12, 1, 0);
 pageStart ('Vyhledávání');
 mainMenu (3);
 sparklets ('<strong>vyhledávání</strong>');
+//Zpracování filtru
+if (!isset($_POST['farchiv'])) {
+	$farchiv=0;
+} else {
+	$farchiv=1;
+}
 /* Prevzit vyhledavane */
 if (!isset($_REQUEST['search'])) {
 	  $searchedfor=NULL;
@@ -17,13 +23,16 @@ $search = mysql_real_escape_string($searchedfor);
 
 <?php
 	function filter () {
-	  global $usrinfo;
+	  global $usrinfo, $farchiv;
 	  echo '<div id="filter-wrapper"><form action="search.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Vyhledávání</legend>
 	  <p>Zadejte vyhledávaný výraz.<br />
 <input type="text" name="search" value="" />';
 	echo '
+          <table class="filter">
+          <td class="filter"><input type="checkbox" name="farchiv" value="1"'.(($farchiv==1)?' checked="checked"':'').'> Zobrazit i archiv (uzavřené případy, archivovaná hlášení, mrtvé a archivované osoby).</td>
+          </table>
 	  <div id="filtersubmit"><input type="submit" name="filter" value="Vyhledat" /></div>
 	</fieldset>
 </form></div><!-- end of #filter-wrapper -->';
@@ -50,12 +59,17 @@ if (strlen($searchedfor) < 4) {
 <?php
 
 /* Případy */
+if ($farchiv==0) {
+    $fsql_archiv=' AND '.DB_PREFIX.'cases.status=0 ';
+} else {
+    $fsql_archiv='';
+}
 if ($usrinfo['right_power']) {
     $res = mysql_query("
         SELECT ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret'
         FROM ".DB_PREFIX."cases
         WHERE MATCH(title, contents) AGAINST ('$search' IN BOOLEAN MODE)
-        AND ".DB_PREFIX."cases.deleted=0
+        AND ".DB_PREFIX."cases.deleted=0".$fsql_archiv."
         ORDER BY 5 * MATCH(title) AGAINST ('$search') + MATCH(contents) AGAINST ('$search') DESC
     ");
 } else {
@@ -63,7 +77,7 @@ if ($usrinfo['right_power']) {
         SELECT ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret'
         FROM ".DB_PREFIX."cases
         WHERE MATCH(title, contents) AGAINST ('$search' IN BOOLEAN MODE)
-        AND ".DB_PREFIX."cases.deleted=0 AND ".DB_PREFIX."cases.secret=0
+        AND ".DB_PREFIX."cases.deleted=0 AND ".DB_PREFIX."cases.secret=0".$fsql_archiv."
         ORDER BY 5 * MATCH(title) AGAINST ('$search') + MATCH(contents) AGAINST ('$search') DESC
     ");    
 }
@@ -91,12 +105,17 @@ if ($usrinfo['right_power']) {
 </table>';
           
 /* Hlášení */
+if ($farchiv==0) {
+    $fsql_archiv=' AND '.DB_PREFIX.'reports.status<>3 ';
+} else {
+    $fsql_archiv='';
+}          
 if ($usrinfo['right_power']) {          
     $res = mysql_query("
         SELECT ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."reports.status AS 'status', ".DB_PREFIX."reports.secret AS 'secret'
         FROM ".DB_PREFIX."reports
         WHERE MATCH(label, task, summary, impacts, details) AGAINST ('$search' IN BOOLEAN MODE)
-        AND ".DB_PREFIX."reports.deleted=0
+        AND ".DB_PREFIX."reports.deleted=0".$fsql_archiv."
         ORDER BY 5 * MATCH(label) AGAINST ('$search')
         + 3 * MATCH(summary) AGAINST ('$search')
         + 2 * MATCH(task) AGAINST ('$search')
@@ -108,7 +127,7 @@ if ($usrinfo['right_power']) {
         SELECT ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."reports.status AS 'status', ".DB_PREFIX."reports.secret AS 'secret'
         FROM ".DB_PREFIX."reports
         WHERE MATCH(label, task, summary, impacts, details) AGAINST ('$search' IN BOOLEAN MODE)
-        AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0
+        AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0".$fsql_archiv."
         ORDER BY 5 * MATCH(label) AGAINST ('$search')
         + 3 * MATCH(summary) AGAINST ('$search')
         + 2 * MATCH(task) AGAINST ('$search')
@@ -158,12 +177,17 @@ if ($usrinfo['right_power']) {
 </table>';
           
 /* Osoby */
+if ($farchiv==0) {
+    $fsql_archiv=' AND '.DB_PREFIX.'persons.archiv=0  AND '.DB_PREFIX.'persons.dead=0';
+} else {
+    $fsql_archiv='';
+} 
 if ($usrinfo['right_power']) {
     $res = mysql_query("
         SELECT ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.archiv AS 'archiv', ".DB_PREFIX."persons.dead AS 'dead', ".DB_PREFIX."persons.secret AS 'secret'
         FROM ".DB_PREFIX."persons
         WHERE MATCH(surname, name, contents) AGAINST ('$search' IN BOOLEAN MODE)
-        AND ".DB_PREFIX."persons.deleted=0
+        AND ".DB_PREFIX."persons.deleted=0".$fsql_archiv."
         ORDER BY 5 * MATCH(surname) AGAINST ('$search')
         + 3 * MATCH(name) AGAINST ('$search')
         + MATCH(contents) AGAINST ('$search') DESC
@@ -173,7 +197,7 @@ if ($usrinfo['right_power']) {
         SELECT ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.archiv AS 'archiv', ".DB_PREFIX."persons.dead AS 'dead', ".DB_PREFIX."persons.secret AS 'secret'
         FROM ".DB_PREFIX."persons
         WHERE MATCH(surname, name, contents) AGAINST ('$search' IN BOOLEAN MODE)
-        AND ".DB_PREFIX."persons.deleted=0 AND ".DB_PREFIX."persons.secret=0
+        AND ".DB_PREFIX."persons.deleted=0 AND ".DB_PREFIX."persons.secret=0".$fsql_archiv."
         ORDER BY 5 * MATCH(surname) AGAINST ('$search')
         + 3 * MATCH(name) AGAINST ('$search')
         + MATCH(contents) AGAINST ('$search') DESC
