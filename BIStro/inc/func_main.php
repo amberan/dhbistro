@@ -58,6 +58,10 @@ $password = $lines[2];
     exit;
   }
 	MySQL_Select_DB ($dbusr);
+//	echo $dbusr;
+//	echo $password;
+//	echo $file;
+//	echo $lines;
 
   $page_prefix='';
 
