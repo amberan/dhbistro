@@ -20,30 +20,48 @@
   		$verze=0;
   		$point='zlobod';
   		$barva='local';
+                $hlaseniV='Hlášení';
+                $hlaseniM='hlášení';
   		break;
   	case 'www.dhbistro.cz':
   		$dbusr='dhbistrocz';
   		$verze=1;
   		$point='zlobod';
   		$barva='dh';
+                $hlaseniV='Hlášení';
+                $hlaseniM='hlášení';
   		break;
   	case 'nh.dhbistro.cz':
   		$dbusr='nhbistro';
   		$verze=2;
   		$point='bludišťák';
   		$barva='nh';
+                $hlaseniV='Hlášení';
+                $hlaseniM='hlášení';
   		break;
   	case 'test.dhbistro.cz':
   		$dbusr='testbistro';
   		$verze=3;
   		$point='zlobod';
   		$barva='test';
+                $hlaseniV='Hlášení';
+                $hlaseniM='hlášení';
   		break;
   	case 'org.dhbistro.cz':
 		$dbusr='orgbistro';
 		$verze=4;
 		$point='zlobod';
 		$barva='org';
+                $hlaseniV='Hlášení';
+                $hlaseniM='hlášení';
+		break;
+        case 'enigma.dhbistro.cz':
+		$dbusr='enigmabistro';
+		$verze=5;
+		$point='zlobod';
+		$barva='enigma';
+                $hlaseniV='Zakázka';
+                $hlaseniM='zakázka';
 		break;
   }
   
@@ -394,13 +412,13 @@ function backupDB () {
 	}
 	
 	function mainMenu ($index) {
-	  global $usrinfo, $verze, $barva;
+	  global $usrinfo, $verze, $barva, $hlaseniV;
 	  $currentfile = $_SERVER["PHP_SELF"];
 	  $dlink=MySQL_Fetch_Assoc(MySQL_Query ("SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1"));
 	  echo '<div id="menu">
 	<ul class="'.$barva.'">
 		<li '.((searchTable(5))?' class="unread"':((searchTable(6))?' class="unread"':'')).'><a href="index.php">Aktuality</a></li>
-		<li '.((searchTable(4))?' class="unread"':'').'><a href="reports.php">Hlášení</a></li>	
+		<li '.((searchTable(4))?' class="unread"':'').'><a href="reports.php">'.$hlaseniV.'</a></li>	
 		<li '.((searchTable(1))?' class="unread"':((searchTable(7))?' class="unread"':'')).'><a href="persons.php">Osoby</a></li>
 		<li '.((searchTable(3))?' class="unread"':'').'><a href="cases.php">Případy</a></li>
 		<li '.((searchTable(2))?' class="unread"':'').'><a href="groups.php">Skupiny</a></li>
