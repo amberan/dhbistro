@@ -60,7 +60,7 @@
 					<input type="radio" name="secret" value="0" checked="checked"/>ne<br/>
 					<h3><label>&nbsp;</label></h3><input type="radio" name="secret" value="1">ano					
 				<div class="clear">&nbsp;</div>
-<?php 			if ($usrinfo['right_power'] == 1)	{
+<?php 			if ($usrinfo['right_org'] == 1)	{
 				echo '					
 				<h3><label for="notnew">Není nové</label></h3>
 					<input type="checkbox" name="notnew"/><br/>
