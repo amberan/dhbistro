@@ -1,0 +1,643 @@
+body {
+	margin: 0;
+	padding: 0;
+	background-color: #ffffff;
+}
+
+body, td, th {
+  font-family: "Trebuchet MS", sans-serif;
+	font-size: 10pt;
+}
+
+select, option, input, textarea {
+  font-size: 9pt;
+}
+
+h1 {
+	margin: 20px 0;
+	font-size: 18pt;
+}
+
+hr {
+	background-color: #808080;
+	border: 0px solid #808080;
+	color: #808080;
+	height: 1px;
+	margin: 1em 20px 1em 20px;
+}
+a:link, a:visited {
+	color:blue;
+}
+/***********************************/
+/**********  prihlaseni  ***********/
+/***********************************/
+
+#logincontent {
+	height: 100%;
+	width: 100%;
+	position: absolute;
+}
+
+#loginmiddle {
+  position: absolute;
+	top: 50%;
+	left: 50%;
+	text-align: center;
+}
+
+#logincontent form#dh {
+	text-align: left;
+	position: relative;
+	top: -120px;
+	left: -100px;
+	padding: 150px 20px 20px 20px;
+	background: #e0e0e0 url('../gfx/dhlogo.gif') no-repeat 50% 20px;
+	width: 200px;
+}
+
+#logincontent form#other {
+	text-align: left;
+	position: relative;
+	top: -120px;
+	left: -100px;
+	padding: 140px 20px 20px 20px;
+	background: #e0e0e0 url('../gfx/terra.gif') no-repeat 50% 20px;
+	width: 200px;
+}
+
+#logincontent form label {
+	float: left;
+	width: 50px;
+	text-align: right;
+	margin-right: 5px;
+}
+
+#logincontent form div {
+	clear: both;
+}
+
+#logincontent form p {
+	text-align: center;
+}
+
+#logincontent form input {
+	width: 140px;
+	border: 1px inset black;
+	margin-bottom: 1px;
+}
+
+#logincontent form #logmein {
+	text-align: center;
+	margin-top: 1em;
+}
+
+#logincontent form #logmein input {
+	width: auto;
+	border: 1px outset black;
+}
+
+/***********************************/
+/*************  menu  **************/
+/***********************************/
+
+#menu {
+	/*position: fixed;*/
+}
+
+#menu ul.dh {
+	display: block;
+	list-style-image: none;
+	margin: 0;
+	/*background-color: #D4D0C8;*/
+	background-color: #7c0000;
+	border-bottom: 1px solid #808080;
+	padding: 1px 5px 2px 5px;
+}
+
+#menu ul.test {
+	display: block;
+	list-style-image: none;
+	margin: 0;
+	/*background-color: #7c0000;*/
+	background-color: #9E6767;
+	border-bottom: 1px solid #808080;
+	padding: 1px 5px 2px 5px;
+}
+
+#menu ul.local {
+	display: block;
+	list-style-image: none;
+	margin: 0;
+	/*background-color: #7c0000;*/
+	background-color: #D4D0C8;
+	border-bottom: 1px solid #808080;
+	padding: 1px 5px 2px 5px;
+}
+
+#menu ul.nh {
+	display: block;
+	list-style-image: none;
+	margin: 0;
+	/*background-color: #D4D0C8;*/
+	background-color: #92C6FC;
+	border-bottom: 1px solid #808080;
+	padding: 1px 5px 2px 5px;
+}
+
+#menu ul.org {
+	display: block;
+	list-style-image: none;
+	margin: 0;
+	/*background-color: #D4D0C8;*/
+	background-color: #86909C;
+	border-bottom: 1px solid #808080;
+	padding: 1px 5px 2px 5px;
+}
+
+#menu ul.enigma {
+	display: block;
+	list-style-image: none;
+	margin: 0;
+	/*background-color: #D4D0C8;*/
+	background-color: #06BB54;
+	border-bottom: 1px solid #808080;
+	padding: 1px 5px 2px 5px;
+}        
+
+#menu ul li.unread {
+	background-color: #FF0000;
+}
+
+#menu ul li {
+	display: inline;
+}
+
+#menu ul li a {
+	text-decoration: none;
+	padding: 2px;
+	padding-left: 10px;
+	padding-right: 10px;
+	color: #000000;
+	font-size: 9pt;
+	font-weight: bold;
+}
+
+#menu ul li a:hover, #menu ul li a.currentlink {
+	background-color: #0A246A;
+	color: #ffffff;
+}
+
+/***********************************/
+/*************  filtr  *************/
+/***********************************/
+
+#filter {
+	margin: 20px;
+}
+
+#filter fieldset {
+  border: 1px solid #dfb96e;
+	background-color: #fff9ae;
+}
+
+#filter fieldset legend {
+  border: 1px solid #dfb96e;
+  background-color: #ffd98e;
+	padding-left: 5px;
+	padding-right: 5px;
+	font-size: 9pt;
+}
+
+#filter input#task {
+	width: 400px;
+}
+
+/***********************************/
+/************  drobky  *************/
+/***********************************/
+
+#sparklets {
+	background-color: #e4e0d8;
+	font-size: 8pt;
+	padding: 0 15px;
+	border-bottom: 1px solid #808080;
+}
+
+/***********************************/
+/******** hlavn� formul��  *********/
+/***********************************/
+
+#inputform { /* margin: 20px;/**/ }
+
+#inputform.evilform {
+	margin: 1px !important;
+}
+
+#inputform label {
+	display: block;
+	text-align: right;
+	margin: 0 3px 0 0;
+	float: left;
+	width: 8.6em;
+}
+
+#inputform label#login,
+#inputform label#texty,
+#inputform label#poweruser,
+#inputform label#persnum {
+	display: block;
+	text-align: right;
+	margin: 0 3px 0 0;
+	float: left;
+	width: 6.8em;
+}
+
+#inputform div {
+	clear: both;
+}
+
+#inputform input, #inputform select {
+	border: 1px inset #DFB96E;
+}
+
+#inputform input#name, 
+#inputform input#surname, 
+#inputform input#phone, 
+#inputform input#portrait,
+#inputform input#symbol, 
+#inputform select#side,
+#inputform select#power,
+#inputform select#spec {
+	width: 200px;
+}
+
+#inputform select#texty,
+#inputform select#poweruser,
+#inputform select#kategorie {
+	width: 100px;
+}
+
+#inputform input#nadpis {
+	width: 300px;
+}
+
+#inputform input#notitle {
+	width: 200px;
+}
+#inputform select.day {
+	border: 1px inset #DFB96E;
+	width: 45px !important;
+}
+
+#inputform select.month {
+	border: 1px inset #DFB96E;
+	width: 85px !important;
+}
+
+#inputform select.year {
+	border: 1px inset #DFB96E;
+	width: 65px !important;
+}
+
+#inputform input.plus {
+	border: 1px inset #DFB96E;
+	width: 20px !important;
+}
+
+#inputform textarea {
+	width: 100%; /* 450px;/**/
+	height: 100%;/* 600px;/**/
+
+}
+
+#inputform #submitbutton, .otherform .submitbutton {
+	position: absolute;
+	overflow:hidden;
+	text-indent: -1000px;
+	border:none;
+	margin:0px;
+	padding:0px;
+	cursor:pointer;
+}
+#inputform #submitbutton {
+	top: 18pt;
+	right: 10px;
+	width:48px;
+	height:48px;
+	background:url('../css/Save-Big.png') no-repeat scroll 0 0 transparent;
+} 
+/***********************************/
+/******** dal��  formul��  *********/
+/***********************************/
+div.otherform-wrap {width:475px;}
+.otherform {
+	/* margin: 20px; /**/
+	position:relative;
+}
+
+.otherform input, .otherform select {
+	border: 1px inset #DFB96E;
+	/* width: 200px; /**/
+}
+
+.otherform .checkbox {
+	width: auto;
+}
+
+.otherform textarea {
+	width: 450px;
+	height: 300px;
+}
+.otherform .submitbutton {
+	position: absolute;
+	right:0px;
+	width:24px;
+	height:24px;
+	background:url('../css/Save-small.png') no-repeat scroll 0 0 transparent;
+}
+.otherform .editbutton {
+	display: inline-block;
+    height: 16px;
+    width: 16px;
+    background:url('../css/edit.png')  no-repeat scroll 0 0 transparent;
+}
+#new-file .submitbutton, #change-groups .submitbutton {
+	bottom:0px;
+}
+#new-note .submitbutton {
+	top:0px;
+}
+/***********************************/
+/***********  aktuality  ***********/
+/***********************************/
+
+.news_div {
+	margin: 20px;
+}
+
+.news_div p {
+	margin-bottom: 0;
+}
+
+.system_news, .game_news {
+	padding: 5px;
+	border: 1px solid #476cb1;
+}
+
+.game_news {
+  border: 1px solid #e86f2c;
+}
+
+.unread_record {
+  background-color: #ffff33;
+}
+
+
+.system_news h2, .game_news h2 {
+	margin-top: 0;
+	color: #476cb1;
+	font-size: 12pt;
+}
+
+.game_news h2 {
+	color: #e86f2c;
+}
+
+.news_head h2 {
+	margin: 0;
+}
+
+.news_head span {
+	font-size: 8pt;
+}
+
+.news_head p {
+	margin: 0;
+	margin-bottom: 1em;
+}
+
+/***********************************/
+/*************  obsah  *************/
+/***********************************/
+
+#obsah {
+	position: relative;
+	margin: 0px;
+	padding:20px;
+	width:980px;
+}
+#obsah .top {
+	font-size: 0.8em;
+}
+#obsah h1 {margin:0px;}
+#obsah h2 {font-size:1.2em; margin:0.3em 0;}
+#obsah h3 {font-size:1.05em; margin:1em 0 0.2em;}
+#obsah h4 {font-size:1em; margin:0.1em 0;}
+
+#obsah fieldset>p {margin-top:0px;}
+
+#obsah p#top-text {margin-top:0px; padding-right:68px;}
+
+#info {padding:0 10px;}
+#info h3, #info p{display:inline; margin:0.2em 0;}
+
+#obsah fieldset {position: relative; margin:0;}
+#obsah fieldset.symbol {position: relative; margin:0; height:150px}
+#obsah legend h2 {display:inline-block;}
+#obsah .field-text {margin:0.2em; padding:0;}
+#obsah .field-text>p {margin: 0.8em 0 0 0;}
+#obsah .field-text>p:first-child {margin: 0 0 0.8em 0;}
+
+ul#pripady {margin:0.1em 0; padding-left: 2em;}
+
+#poznamky {margin:0.2em; padding:0;}
+#poznamky .poznamka {position: relative;}
+#poznamky .poznamka>div {margin:0.3em 0;}
+
+div > .poznamka-edit-buttons {position:absolute;right:0px;top:0px;}
+.poznamka-edit-buttons a {display:inline-block;width:16px;height:16px;margin:3px;overflow:hidden;vertical-align:bottom;}
+.poznamka-edit-buttons a span.button-text {display:none;}
+.poznamka-edit-buttons a.new {background-image:url('../css/document-new.png')}
+.poznamka-edit-buttons a.edit {background-image:url('../css/edit.png')}
+.poznamka-edit-buttons a.delete {background-image:url('../css/delete.png')}
+.poznamka-edit-buttons a.connect {background-image:url('../css/connect.png')}
+/* .connect je nesystematicky, ale pro napravu je treba procistit celou strukturu stylu ve vsech sablonach /**/
+
+.info-delete-symbol {position:absolute;right:13.3em;top:10.5em;}
+.info-delete-symbol a {display:inline-block;width:16px;height:16px;margin:3px;overflow:hidden;vertical-align:bottom;}
+.info-delete-symbol a span.button-text {display:none;}
+.info-delete-symbol a.delete {background-image:url('../css/delete.png')}
+
+#portraitimg {
+	position: absolute;
+	right: 1.2em;
+	width: 104px;
+	height: 134px;
+	border: 1px solid #808080;
+	padding: 1px;
+	margin: 0 0 20px 20px;
+}
+#portraitimg.noname {
+	text-indent:-1000px;
+	overflow:hidden;
+	background:url('../css/noname.png') no-repeat scroll center transparent;
+}
+
+#symbolimg {
+	position: absolute;
+	right: 10.2em;
+	width: 104px;
+	height: 104px;
+	border: 1px solid #808080;
+	padding: 1px;
+	margin: 0 0 20px 20px;
+}
+#symbolimg.noname {
+	text-indent:-1000px;
+	overflow:hidden;
+	background:url('../css/nosymbol.png') no-repeat scroll center transparent;
+}
+
+#ssymbolimg {
+	position: absolute;
+	right: 1.2em;
+	width: 104px;
+	height: 104px;
+	border: 1px solid #808080;
+	padding: 1px;
+	margin: 0 0 20px 20px;
+}
+#ssymbolimg.noname {
+	text-indent:-1000px;
+	overflow:hidden;
+	background:url('../css/nosymbol.png') no-repeat scroll center transparent;
+}
+
+/***********************************/
+/***********  dashboard  ***********/
+/***********************************/
+
+#dashboard {
+	position: relative;
+	margin: 0px 5px 0px 5px;
+	padding:20px;
+
+}
+#dashboard .top {
+	font-size: 0.8em;
+}
+#dashboard h1 {margin:0px;}
+#dashboard h2 {font-size:1.2em; margin:0.3em 0;}
+#dashboard h3 {font-size:1.05em; margin:1em 0 0.2em;}
+#dashboard h4 {font-size:1em; margin:0.1em 0;}
+
+#dashboard fieldset>p {margin-top:0px;}
+
+#dashboard p#top-text {margin-top:0px; padding-right:68px;}
+
+#dashboard fieldset {
+	position: relative; 
+	margin:0;
+	background:url('../gfx/corkbg.png') repeat;
+	background-color: #fff9ae;
+	}
+	
+#dashboard legend h2 {display:inline-block;}
+#dashboard .field-text {margin:0.2em; padding:0;}
+#dashboard .field-text>p {margin: 0.8em 0 0 0;}
+#dashboard .field-text>p:first-child {margin: 0 0 0.8em 0;}
+
+#dashboard table {
+	width: 100%;
+	border: none;
+}
+
+#dashboard td {
+  border: none;
+  width: 50%;
+  vertical-align: top;
+}
+
+#dashboard tr:hover {
+	background-color: inherit;
+}
+/***********************************/
+/************  tabulky  ************/
+/***********************************/
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	border: 1px solid black;
+}
+
+th {
+	border: 1px solid #808080;
+	background-color: #e4e0d8;
+}
+
+td {
+  border: 1px solid #d0d0d0;
+}
+
+tr.even {
+  background-color: #f8f8f8;
+}
+
+tr.odd {
+  background-color: #f0f0f0;
+}
+
+tr:hover {
+	background-color: #fff9ae;
+}
+
+tr.solved a {
+	color: #a0a0a0;
+}
+
+table.filter {
+	border: 0px;
+	width: 50%;
+}
+
+tr.filter {
+  border: 0px;
+}
+
+td.filter {
+  border: 0px;
+}
+
+#in-form-table {
+	padding: 20px;
+	position: relative;
+}
+#in-form-table #button-floating-uloz {
+	top: 20px;
+	right: -5px;
+}
+/***********************************/
+/************ symboly  *************/
+/***********************************/
+
+#symbols table {
+	width: 100%;
+	border-collapse: collapse;
+	border: none;
+}
+
+#symbols td {
+  border: none;
+}
+
+#symbols tr:hover {
+	background-color: inherit;
+}
+
+/***********************************/
+/********** obecn� prvky   *********/
+/***********************************/
+div.clear {width:100%;height:1px !important;margin:0px !important;padding:0px !important;clear:both !important;}
+.float-right{float:right;}
+.float-left{float:left;}
