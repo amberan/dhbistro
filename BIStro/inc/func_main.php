@@ -5,7 +5,7 @@
   $starttime = $mtime;
 
 	// verze
-	$mazzarino_version='1.4.5';
+	$mazzarino_version='1.4.3';
   
 	// sessions
 	session_start();
@@ -384,22 +384,9 @@ function backupDB () {
     <link media="print" rel="stylesheet" type="text/css" href="./css/print.css" />
 	
 	<script type="text/javascript" src="./js/jquery-min.js"></script>
-        <script type="text/javascript" src="./js/tinymce/tinymce.min.js"></script>
-        <script type="text/javascript">
-        tinymce.init({
-            selector: "textarea",
-            theme: "modern",
-            plugins: [
-                "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
-                "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
-                "save table contextmenu directionality template paste textcolor"
-            ],
-            toolbar: "undo redo | styleselect fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | forecolor backcolor table",
-            menubar: false,
-            toolbar_items_size: 'small',
-        });
-        </script>
-        
+	<script type="text/javascript" src="./js/tiny_mce/tiny_mce_gzip.js"></script>
+	<script type="text/javascript" src="./js/tiny_mce_gz.js"></script>
+	<script type="text/javascript" src="./js/tiny_mce_settings.js"></script>
 	<script type="text/javascript" src="./js/mrFixit.js"></script>
 </head>
 <body>
