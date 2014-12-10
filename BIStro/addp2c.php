@@ -88,9 +88,9 @@ K případu můžete přiřadit osoby, kterých se týká nebo kterých by se t�
 	filter();
 	// vypis osob
 	if ($usrinfo['right_power']) {
-		$sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."c2p.iduser FROM ".DB_PREFIX."persons LEFT JOIN ".DB_PREFIX."c2p ON ".DB_PREFIX."c2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']." WHERE ".DB_PREFIX."persons.deleted=0 ".$fsql_dead.$fsql_archiv." ORDER BY ".$fsql_sort;
+		$sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.symbol AS 'symbol', ".DB_PREFIX."c2p.iduser FROM ".DB_PREFIX."persons LEFT JOIN ".DB_PREFIX."c2p ON ".DB_PREFIX."c2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']." WHERE ".DB_PREFIX."persons.deleted=0 ".$fsql_dead.$fsql_archiv." ORDER BY ".$fsql_sort;
 	} else {
-	  $sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."c2p.iduser FROM ".DB_PREFIX."persons LEFT JOIN ".DB_PREFIX."c2p ON ".DB_PREFIX."c2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']." WHERE ".DB_PREFIX."persons.deleted=0 ".$fsql_dead.$fsql_archiv." AND ".DB_PREFIX."persons.secret=0 ORDER BY ".$fsql_sort;
+	  $sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.symbol AS 'symbol', ".DB_PREFIX."c2p.iduser FROM ".DB_PREFIX."persons LEFT JOIN ".DB_PREFIX."c2p ON ".DB_PREFIX."c2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']." WHERE ".DB_PREFIX."persons.deleted=0 ".$fsql_dead.$fsql_archiv." AND ".DB_PREFIX."persons.secret=0 ORDER BY ".$fsql_sort;
 	}
 	$res=MySQL_Query ($sql);
 ?>
@@ -110,7 +110,7 @@ K případu můžete přiřadit osoby, kterých se týká nebo kterých by se t�
 		$even=0;
 		while ($rec=MySQL_Fetch_Assoc($res)) {
 		  echo '<tr class="'.(($even%2==0)?'even':'odd').'"><td><input type="checkbox" name="person[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser'])?' checked="checked"':'').' /></td>
-'.(($sportraits)?'<td><img src="getportrait.php?rid='.$rec['id'].'" alt="portrét chybí" /></td>':'').(($ssymbols)?'<td><img src="getportrait.php?srid='.$rec['id'].'" alt="symbol chybí" /></td>':'').'
+'.(($sportraits)?'<td><img src="getportrait.php?rid='.$rec['id'].'" alt="portrét chybí" /></td>':'').(($ssymbols)?'<td><img src="getportrait.php?nrid='.$rec['symbol'].'" alt="symbol chybí" /></td>':'').'
 	<td>'.(($rec['secret'])?'<span class="secret"><a href="readperson.php?rid='.$rec['id'].'">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a></span>':'<a href="readperson.php?rid='.$rec['id'].'">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a>').'</td>
 	</tr>';
 			$even++;

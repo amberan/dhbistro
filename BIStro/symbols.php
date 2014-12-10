@@ -7,7 +7,7 @@
 	sparklets ('<a href="persons.php">osoby</a> &raquo; <strong>nepřiřazené symboly</strong>','<a href="newsymbol.php">nový symbol</a>');
 	
 	// symbolu
-	$sql="SELECT * FROM ".DB_PREFIX."symbols WHERE ".DB_PREFIX."symbols.deleted=0 ORDER BY ".DB_PREFIX."symbols.created DESC";
+	$sql="SELECT * FROM ".DB_PREFIX."symbols WHERE ".DB_PREFIX."symbols.deleted=0 AND ".DB_PREFIX."symbols.assigned=0 ORDER BY ".DB_PREFIX."symbols.created DESC";
 	$res=MySQL_Query ($sql);
 	if (MySQL_Num_Rows($res)) {
 	  echo '<div id="obsah">

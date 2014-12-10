@@ -100,9 +100,9 @@ K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se t
 	filter();
 	// vypis osob
 	if ($usrinfo['right_power']) {
-		$sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."ar2p.role AS 'role', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."persons LEFT JOIN ".DB_PREFIX."ar2p ON ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."persons.deleted=0 ".$fsql_dead.$fsql_archiv." ORDER BY ".$fsql_sort;
+		$sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.symbol AS 'symbol', ".DB_PREFIX."ar2p.role AS 'role', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."persons LEFT JOIN ".DB_PREFIX."ar2p ON ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."persons.deleted=0 ".$fsql_dead.$fsql_archiv." ORDER BY ".$fsql_sort;
 	} else {
-	  $sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."ar2p.role AS 'role', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."persons LEFT JOIN ".DB_PREFIX."ar2p ON ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."persons.deleted=0 ".$fsql_dead.$fsql_archiv." AND ".DB_PREFIX."persons.secret=0 ORDER BY ".$fsql_sort;
+	  $sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.symbol AS 'symbol', ".DB_PREFIX."ar2p.role AS 'role', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."persons LEFT JOIN ".DB_PREFIX."ar2p ON ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."persons.deleted=0 ".$fsql_dead.$fsql_archiv." AND ".DB_PREFIX."persons.secret=0 ORDER BY ".$fsql_sort;
 	}
 	$res=MySQL_Query ($sql);
 ?>
@@ -148,7 +148,7 @@ K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se t
 			<option value="1"'.(($rec['role']==1)?' selected="selected"':'').'>vyslýchaný</option>
 			<option value="2"'.(($rec['role']==2)?' selected="selected"':'').'>vyslýchající</option>':'').'
 		</select></td>
-'.(($sportraits)?'<td><img src="getportrait.php?rid='.$rec['id'].'" alt="portrét chybí" /></td>':'').(($ssymbols)?'<td><img src="getportrait.php?srid='.$rec['id'].'" alt="symbol chybí" /></td>':'').'
+'.(($sportraits)?'<td><img src="getportrait.php?rid='.$rec['id'].'" alt="portrét chybí" /></td>':'').(($ssymbols)?'<td><img src="getportrait.php?nrid='.$rec['symbol'].'" alt="symbol chybí" /></td>':'').'
 	<td>'.(($rec['secret'])?'<span class="secret"><a href="readperson.php?rid='.$rec['id'].'">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a></span>':'<a href="readperson.php?rid='.$rec['id'].'">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a>').'</td>
 	</tr>';
 			$even++;

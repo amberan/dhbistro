@@ -115,7 +115,7 @@
 	
 	
 	<fieldset><legend><h3>Poznámky</h3></legend>
-		<span class="poznamka-edit-buttons"><a class="new" href="newnote.php?rid=<?php echo $_REQUEST['rid']; ?>&amp;idtable=9" title="nová poznámka"><span class="button-text">nová poznámka</span></a><em style="font-size:smaller;"> (K případu si můžete připsat kolik chcete poznámek.)</em></span>
+		<span class="poznamka-edit-buttons"><a class="new" href="newnote.php?rid=<?php echo $_REQUEST['rid']; ?>&amp;idtable=9" title="nová poznámka"><span class="button-text">nová poznámka</span></a><em style="font-size:smaller;"> (K symbolu si můžete připsat kolik chcete poznámek.)</em></span>
 		<!-- následuje seznam poznámek -->
 		<?php // generování poznámek
 			if ($usrinfo['right_power']) {
