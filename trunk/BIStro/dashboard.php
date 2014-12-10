@@ -30,7 +30,7 @@
 				} ?></p>
 	<div class="clear">&nbsp;</div>
 				<h3>Přiřazené neuzavřené případy: <?php
-			$sql="SELECT ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.title AS 'title' FROM ".DB_PREFIX."c2s, ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.id=".DB_PREFIX."c2s.idcase AND ".DB_PREFIX."c2s.idsolver=".$usrinfo['id']." ORDER BY ".DB_PREFIX."cases.title ASC";
+			$sql="SELECT ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.title AS 'title' FROM ".DB_PREFIX."c2s, ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.id=".DB_PREFIX."c2s.idcase AND ".DB_PREFIX."c2s.idsolver=".$usrinfo['id']." AND ".DB_PREFIX."cases.status<>1 AND ".DB_PREFIX."cases.deleted=0 ORDER BY ".DB_PREFIX."cases.title ASC";
 			$pers=MySQL_Query ($sql);
 			$rec_count = MySQL_Num_Rows($pers);
 			echo $rec_count
