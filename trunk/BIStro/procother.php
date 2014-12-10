@@ -1,7 +1,7 @@
 <?php
 	require_once ('./inc/func_main.php');
 	if (isset($_REQUEST['delallnew'])) {
-	  MySQL_Query ("TRUNCATE ".DB_PREFIX."unread_".$usrinfo['id']);
+	  MySQL_Query ("DELETE FROM ".DB_PREFIX."unread WHERE iduser = ".$usrinfo['id']);
 	  Header ('Location: '.$_REQUEST['delallnew']);
 	}
 	if (isset($_POST['editdashboard'])) {

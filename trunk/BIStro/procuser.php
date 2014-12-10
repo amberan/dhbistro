@@ -17,7 +17,6 @@
 			$uidarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."users WHERE UCASE(login)=UCASE('".mysql_real_escape_string(safeInput($_POST['login']))."')"));
 			$uid=$uidarray['id'];
 			auditTrail(8, 3, $uid);
-			MySQL_Query ("CREATE TABLE nw_unread_".$uid." (id int NOT NULL PRIMARY KEY AUTO_INCREMENT, idtable int, idrecord int)");
 			echo '<div id="obsah"><p>Uživatel vytvořen.</p></div>';
 		}
 		pageEnd ();
