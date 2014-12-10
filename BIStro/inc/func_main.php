@@ -123,7 +123,7 @@ $password = $lines[2];
 		  $loggedin=true;
 		  
 		  // natazeni tabulky neprectenych zaznamu do promenne
-		  $sql_r="SELECT * FROM ".DB_PREFIX."unread_".$usrinfo['id'];
+		  $sql_r="SELECT * FROM ".DB_PREFIX."unread WHERE iduser=".$usrinfo['id'];
 		  $res_r=MySQL_Query($sql_r);
 		  while ($unread[]=mysql_fetch_array($res_r));
 		} else {
@@ -193,12 +193,12 @@ function unreadRecords ($tablenum,$rid) {
 	while ($rec_ur=MySQL_Fetch_Assoc($res_ur)) {
 		if ($secret == 1 && $rec_ur['deleted'] <> 1) {
 			if ($rec_ur['id'] <> $usrinfo['id'] && $rec_ur['right_power'] == 1) {
-				$srsql="INSERT INTO ".DB_PREFIX."unread_".$rec_ur['id']." (idtable, idrecord) VALUES('".$tablenum."', '".$rid."')";
+				$srsql="INSERT INTO ".DB_PREFIX."unread (idtable, idrecord, iduser) VALUES('".$tablenum."', '".$rid."', '".$rec_ur['id']."')";
 				MySQL_Query ($srsql);
 			}
 		} else if ($secret == 0 && $rec_ur['deleted'] <> 1) {
 			if ($rec_ur['id'] <> $usrinfo['id']) {
-				$srsql="INSERT INTO ".DB_PREFIX."unread_".$rec_ur['id']." (idtable, idrecord) VALUES('".$tablenum."', '".$rid."')";
+				$srsql="INSERT INTO ".DB_PREFIX."unread (idtable, idrecord, iduser) VALUES('".$tablenum."', '".$rid."', '".$rec_ur['id']."')";
 				MySQL_Query ($srsql);
 			}
 		}
@@ -209,9 +209,9 @@ function unreadRecords ($tablenum,$rid) {
 function deleteUnread ($tablenum,$rid) {
 	global $usrinfo;
 	if ($rid<>'none') {
-		$sql_ur="DELETE FROM ".DB_PREFIX."unread_".$usrinfo['id']." WHERE idtable=".$tablenum." AND idrecord=".$rid;
+		$sql_ur="DELETE FROM ".DB_PREFIX."unread WHERE idtable=".$tablenum." AND idrecord=".$rid." AND iduser=".$usrinfo['id'];
 	} else {
-		$sql_ur="DELETE FROM ".DB_PREFIX."unread_".$usrinfo['id']." WHERE idtable=".$tablenum;
+		$sql_ur="DELETE FROM ".DB_PREFIX."unread WHERE idtable=".$tablenum." AND iduser=".$usrinfo['id'];
 	}
 	MySQL_Query ($sql_ur);
 }
@@ -221,7 +221,7 @@ function deleteAllUnread ($tablenum,$rid) {
 	$sql_ur="SELECT ".DB_PREFIX."users.id as 'id', ".DB_PREFIX."users.right_power as 'right_power' FROM ".DB_PREFIX."users";
 	$res_ur=MySQL_Query ($sql_ur);
 	while ($rec_ur=MySQL_Fetch_Assoc($res_ur)) {
-		$srsql="DELETE FROM ".DB_PREFIX."unread_".$rec_ur['id']." WHERE idtable=".$tablenum." AND idrecord=".$rid;
+		$srsql="DELETE FROM ".DB_PREFIX."unread WHERE idtable=".$tablenum." AND idrecord=".$rid." AND iduser=".$rec_ur['id'];
 		MySQL_Query ($srsql);
 	}
 }
