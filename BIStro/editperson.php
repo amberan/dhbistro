@@ -27,7 +27,7 @@
 		<?php }else{ ?><img src="getportrait.php?nrid=<?php echo($rec_p['symbol']); ?>" alt="<?php echo(StripSlashes($rec_p['name']).' '.StripSlashes($rec_p['surname'])); ?>" id="symbolimg" />
 		<?php } ?>
 		<?php if($rec_p['symbol']==NULL){ ?>
-		<?php }else{ ?><span class="info-delete-symbol"><a class="delete" title="smazat" href="procperson.php?deletesymbol=<?php echo $rec_p['symbol']; ?>&amp;personid=<?php echo $_REQUEST['rid']; ?>&amp;backurl=<?php echo URLEncode('editperson.php?rid='.$_REQUEST['rid']); ?>" onclick="return confirm('Opravdu odebrat symbol?')"><span class="button-text">smazat soubor</span></a></span>
+		<?php }else{ ?><span class="info-delete-symbol"><a class="delete" title="odpojit" href="procperson.php?deletesymbol=<?php echo $rec_p['symbol']; ?>&amp;personid=<?php echo $_REQUEST['rid']; ?>&amp;backurl=<?php echo URLEncode('editperson.php?rid='.$_REQUEST['rid']); ?>" onclick="return confirm('Opravdu odpojit symbol?')"><span class="button-text">smazat soubor</span></a></span>
 		<?php } ?>
 			<div id="info">
 				<h3><label for="name">Jméno:</label></h3>
