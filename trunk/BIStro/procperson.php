@@ -27,7 +27,11 @@
 		} else {
 			$sfile='';
 		}
-		$sql_p="INSERT INTO ".DB_PREFIX."persons VALUES('','".mysql_real_escape_string(safeInput($_POST['name']))."','".mysql_real_escape_string(safeInput($_POST['surname']))."','".mysql_real_escape_string(safeInput($_POST['phone']))."','".Time()."','".$usrinfo['id']."','".mysql_real_escape_string($_POST['contents'])."','".$_POST['secret']."','0','".$file."', '".$_POST['side']."', '".$_POST['power']."', '".$_POST['spec']."', '".$sfile."','0','0','".Time()."','".$usrinfo['id']."')";
+                $sql_sy="INSERT INTO ".DB_PREFIX."symbols VALUES('', '".$sfile."', '', 0, '".Time()."', '".$usrinfo['id']."', '".Time()."', '".$usrinfo['id']."', 0, 1)";
+                MySQL_Query ($sql_sy);
+		$syidarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."symbols WHERE symbol = '".$sfile."'"));
+		$syid=$syidarray['id'];
+		$sql_p="INSERT INTO ".DB_PREFIX."persons VALUES('','".mysql_real_escape_string(safeInput($_POST['name']))."','".mysql_real_escape_string(safeInput($_POST['surname']))."','".mysql_real_escape_string(safeInput($_POST['phone']))."','".Time()."','".$usrinfo['id']."','".mysql_real_escape_string($_POST['contents'])."','".$_POST['secret']."','0','".$file."', '".$_POST['side']."', '".$_POST['power']."', '".$_POST['spec']."', '".$syid."','0','0','".Time()."','".$usrinfo['id']."')";
 		MySQL_Query ($sql_p);
 		$pidarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."persons WHERE UCASE(surname)=UCASE('".mysql_real_escape_string(safeInput($_POST['surname']))."') AND UCASE(name)=UCASE('".mysql_real_escape_string(safeInput($_POST['name']))."') AND side='".$_POST['side']."'"));
 		$pid=$pidarray['id'];
@@ -70,19 +74,25 @@
 		if (is_uploaded_file($_FILES['symbol']['tmp_name'])) {
 			$sps=MySQL_Query ("SELECT symbol FROM ".DB_PREFIX."persons WHERE id=".$_POST['personid']);
 			if ($spc=MySQL_Fetch_Assoc($sps)) {
-				unlink('./files/symbols/'.$spc['symbol']);
+                                $prsn_res=MySQL_Query ("SELECT name, surname FROM ".DB_PREFIX."persons WHERE id=".$_POST['personid']);
+                                $prsn_rec=MySQL_Fetch_Assoc($prsn_res);
+                                $sdate = "<p>".Date("j/m/Y H:i:s", Time())." Odpojeno od ".$prsn_rec['name']." ".$prsn_rec['surname']."</p>";
+                                MySQL_Query ("UPDATE ".DB_PREFIX."symbols SET `desc` = concat('".$sdate."', `desc`), assigned=0 WHERE id=".$spc['symbol']);
 			}
 			$sfile=Time().MD5(uniqid(Time().Rand()));
 			move_uploaded_file ($_FILES['symbol']['tmp_name'],'./files/'.$sfile.'tmp');
 			$sdst=resize_Image ('./files/'.$sfile.'tmp',100,130);
 			imagejpeg($sdst,'./files/symbols/'.$sfile);
 			unlink('./files/'.$sfile.'tmp');
-			MySQL_Query ("UPDATE ".DB_PREFIX."persons SET symbol='".$sfile."' WHERE id=".$_POST['personid']);
+                        $sql_sy="INSERT INTO ".DB_PREFIX."symbols VALUES('', '".$sfile."', '', 0, '".Time()."', '".$usrinfo['id']."', '".Time()."', '".$usrinfo['id']."', 0, 1)";
+                        MySQL_Query ($sql_sy);
+                        $syidarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."symbols WHERE symbol = '".$sfile."'"));
+                        $syid=$syidarray['id'];
 		}
 		if ($usrinfo['right_org']==1) {
-			MySQL_Query ("UPDATE ".DB_PREFIX."persons SET name='".mysql_real_escape_string(safeInput($_POST['name']))."', surname='".mysql_real_escape_string(safeInput($_POST['surname']))."', phone='".mysql_real_escape_string($_POST['phone'])."', contents='".mysql_real_escape_string($_POST['contents'])."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead'])?'1':'0')."', archiv='".(isset($_POST['archiv'])?'1':'0')."' WHERE id=".$_POST['personid']);
+			MySQL_Query ("UPDATE ".DB_PREFIX."persons SET name='".mysql_real_escape_string(safeInput($_POST['name']))."', surname='".mysql_real_escape_string(safeInput($_POST['surname']))."', phone='".mysql_real_escape_string($_POST['phone'])."', contents='".mysql_real_escape_string($_POST['contents'])."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead'])?'1':'0')."', archiv='".(isset($_POST['archiv'])?'1':'0')."', symbol='".(isset($syid)?$syid:'')."' WHERE id=".$_POST['personid']);
 		} else {
-			MySQL_Query ("UPDATE ".DB_PREFIX."persons SET name='".mysql_real_escape_string(safeInput($_POST['name']))."', surname='".mysql_real_escape_string(safeInput($_POST['surname']))."', phone='".mysql_real_escape_string($_POST['phone'])."', datum='".Time()."', iduser='".$usrinfo['id']."', contents='".mysql_real_escape_string($_POST['contents'])."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead'])?'1':'0')."', archiv='".(isset($_POST['archiv'])?'1':'0')."' WHERE id=".$_POST['personid']);
+			MySQL_Query ("UPDATE ".DB_PREFIX."persons SET name='".mysql_real_escape_string(safeInput($_POST['name']))."', surname='".mysql_real_escape_string(safeInput($_POST['surname']))."', phone='".mysql_real_escape_string($_POST['phone'])."', datum='".Time()."', iduser='".$usrinfo['id']."', contents='".mysql_real_escape_string($_POST['contents'])."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead'])?'1':'0')."', archiv='".(isset($_POST['archiv'])?'1':'0')."', symbol='".(isset($syid)?$syid:'')."' WHERE id=".$_POST['personid']);
 		}
 		echo '<div id="obsah"><p>Osoba upravena.</p></div>';
 		pageEnd ();
@@ -158,8 +168,13 @@
 	if (isset($_GET['deletesymbol'])) {
 		auditTrail(1, 2, $_GET['personid']);
 		if ($usrinfo['right_text']) {
-			UnLink ('./files/symbols/'.$_GET['deletesymbol']);
-			MySQL_Query ("UPDATE ".DB_PREFIX."persons SET symbol='' WHERE ".DB_PREFIX."persons.id=".$_GET['personid']);
+                        $sps=MySQL_Query ("SELECT symbol FROM ".DB_PREFIX."persons WHERE id=".$_GET['personid']);
+			$spc=MySQL_Fetch_Assoc($sps);
+                        $prsn_res=MySQL_Query ("SELECT name, surname FROM ".DB_PREFIX."persons WHERE id=".$_GET['personid']);
+                        $prsn_rec=MySQL_Fetch_Assoc($prsn_res);
+                        $sdate = "<p>".Date("j/m/Y H:i:s", Time())." Odpojeno od ".$prsn_rec['name']." ".$prsn_rec['surname']."</p>";
+                        MySQL_Query ("UPDATE ".DB_PREFIX."symbols SET `desc` = concat('".$sdate."', `desc`), assigned=0 WHERE id=".$spc['symbol']);
+                        MySQL_Query ("UPDATE ".DB_PREFIX."persons SET symbol='' WHERE id=".$_GET['personid']);
 		}
 		Header ('Location: editperson.php?rid='.$_GET['personid']);
 	}
