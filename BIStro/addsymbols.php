@@ -86,7 +86,6 @@
             
             // Kopie poznamek k symbolu priradit k osobe
             $sql_n="SELECT * FROM ".DB_PREFIX."notes WHERE iditem=".$_POST['symbolid']." AND idtable=7 AND deleted=0";
-            echo $sql_n;
             $res_n=MySQL_Query($sql_n);
             while ($rec_n=MySQL_Fetch_Assoc($res_n)) {
                 $note_text="Poznámka zkopírována při přiřazení symbolu ".Date("j/m/Y H:i:s", Time())." <br />".$rec_n['note'];
