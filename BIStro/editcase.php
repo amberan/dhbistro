@@ -85,7 +85,8 @@
 	</fieldset>
 
 	<fieldset><legend><h2>Osoby přiřazené k případu: </h2></legend>
-		<form action="addp2c.php" method="post" class="otherform">
+
+		<form action="addp2c.php.php" method="post" class="otherform">
 			<input type="hidden" name="rid" value="<?php echo $_REQUEST['rid']; ?>" />
 			<input type="submit" value="Upravit osoby" name="setperson" class="submitbutton editbutton" title="Upravit osoby přiřazené" />
 		</form>

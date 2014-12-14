@@ -4,6 +4,8 @@
 	  MySQL_Query ("DELETE FROM ".DB_PREFIX."unread WHERE iduser = ".$usrinfo['id']);
 	  Header ('Location: '.$_REQUEST['delallnew']);
 	}
+        
+        // Úprava nástěnky
 	if (isset($_POST['editdashboard'])) {
 		auditTrail(6, 2, 0);
 		pageStart ('Upravena nástěnka');
@@ -15,6 +17,8 @@
 		echo '<div id="obsah"><p>Nástěnka upravena.</p></div>';
 		pageEnd ();
 	}
+        
+        // Přidání symbolu
 	if (isset($_POST['insertsymbol'])) {
 		pageStart ('Přidán symbol');
 		mainMenu (5);
@@ -49,12 +53,15 @@
 			pageEnd ();
 		}
 	}
+        // Vymazani symbolu
 	if (isset($_REQUEST['sdelete']) && is_numeric($_REQUEST['sdelete']) && $usrinfo['right_text']) {
 		auditTrail(7, 11, $_REQUEST['sdelete']);
 		MySQL_Query ("UPDATE ".DB_PREFIX."symbols SET deleted=1 WHERE id=".$_REQUEST['sdelete']);
 		deleteAllUnread (7,$_REQUEST['sdelete']);
 		Header ('Location: symbols.php');
 	}
+        
+        // Uprava symbolu
 	if (isset($_POST['symbolid']) && isset($_POST['editsymbol']) && $usrinfo['right_text'] ) {
 		auditTrail(7, 2, $_POST['symbolid']);
 		pageStart ('Uložení změn');
@@ -80,7 +87,7 @@
 			MySQL_Query ($sql);
 		} else {
 			$sql="UPDATE ".DB_PREFIX."symbols SET `desc`='".mysql_real_escape_string($_POST['desc'])."', modified='".Time()."', modified_by='".$usrinfo['id']."', archiv='".(isset($_POST['archiv'])?'1':'0')."' WHERE id=".$_POST['symbolid'];
-			MySQL_Query ();
+			MySQL_Query ($sql);
 		}
 		echo '<div id="obsah"><p>Symbol upraven.</p></div>';
 		pageEnd ();
@@ -93,6 +100,8 @@
 			pageEnd ();
 		}
 	}
+        
+        // Ukoly
 	if (isset($_REQUEST['acctask']) && is_numeric($_REQUEST['acctask']) && $usrinfo['right_text']) {
 		auditTrail(10, 2, $_REQUEST['acctask']);
 		MySQL_Query ("UPDATE ".DB_PREFIX."tasks SET status=2, modified='".Time()."', modified_by='".$usrinfo['id']."' WHERE id=".$_REQUEST['acctask']);
