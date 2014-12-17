@@ -63,6 +63,13 @@
                 $hlaseniV='Zakázka';
                 $hlaseniM='zakázka';
 		break;
+        case 'nhtest.dhbistro.cz':
+  		$dbusr='nhtestbistro';
+  		$verze=2;
+  		$point='bludišťák';
+  		$barva='test';
+                $hlaseniV='Hlášení';
+                $hlaseniM='hlášení';
   }
   
 // vyzvedni heslo k databazi
