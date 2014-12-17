@@ -81,18 +81,19 @@
 			}
 			$sfile=Time().MD5(uniqid(Time().Rand()));
 			move_uploaded_file ($_FILES['symbol']['tmp_name'],'./files/'.$sfile.'tmp');
-			$sdst=resize_Image ('./files/'.$sfile.'tmp',100,130);
+			$sdst=resize_Image ('./files/'.$sfile.'tmp',100,100);
 			imagejpeg($sdst,'./files/symbols/'.$sfile);
 			unlink('./files/'.$sfile.'tmp');
                         $sql_sy="INSERT INTO ".DB_PREFIX."symbols VALUES('', '".$sfile."', '', 0, '".Time()."', '".$usrinfo['id']."', '".Time()."', '".$usrinfo['id']."', 0, 1)";
                         MySQL_Query ($sql_sy);
                         $syidarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."symbols WHERE symbol = '".$sfile."'"));
                         $syid=$syidarray['id'];
+                        MySQL_Query ("UPDATE ".DB_PREFIX."persons SET symbol='".$syid."' WHERE id=".$_POST['personid']);
 		}
 		if ($usrinfo['right_org']==1) {
-			MySQL_Query ("UPDATE ".DB_PREFIX."persons SET name='".mysql_real_escape_string(safeInput($_POST['name']))."', surname='".mysql_real_escape_string(safeInput($_POST['surname']))."', phone='".mysql_real_escape_string($_POST['phone'])."', contents='".mysql_real_escape_string($_POST['contents'])."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead'])?'1':'0')."', archiv='".(isset($_POST['archiv'])?'1':'0')."', symbol='".(isset($syid)?$syid:'')."' WHERE id=".$_POST['personid']);
+			MySQL_Query ("UPDATE ".DB_PREFIX."persons SET name='".mysql_real_escape_string(safeInput($_POST['name']))."', surname='".mysql_real_escape_string(safeInput($_POST['surname']))."', phone='".mysql_real_escape_string($_POST['phone'])."', contents='".mysql_real_escape_string($_POST['contents'])."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead'])?'1':'0')."', archiv='".(isset($_POST['archiv'])?'1':'0')."' WHERE id=".$_POST['personid']);
 		} else {
-			MySQL_Query ("UPDATE ".DB_PREFIX."persons SET name='".mysql_real_escape_string(safeInput($_POST['name']))."', surname='".mysql_real_escape_string(safeInput($_POST['surname']))."', phone='".mysql_real_escape_string($_POST['phone'])."', datum='".Time()."', iduser='".$usrinfo['id']."', contents='".mysql_real_escape_string($_POST['contents'])."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead'])?'1':'0')."', archiv='".(isset($_POST['archiv'])?'1':'0')."', symbol='".(isset($syid)?$syid:'')."' WHERE id=".$_POST['personid']);
+			MySQL_Query ("UPDATE ".DB_PREFIX."persons SET name='".mysql_real_escape_string(safeInput($_POST['name']))."', surname='".mysql_real_escape_string(safeInput($_POST['surname']))."', phone='".mysql_real_escape_string($_POST['phone'])."', datum='".Time()."', iduser='".$usrinfo['id']."', contents='".mysql_real_escape_string($_POST['contents'])."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead'])?'1':'0')."', archiv='".(isset($_POST['archiv'])?'1':'0')."' WHERE id=".$_POST['personid']);
 		}
 		echo '<div id="obsah"><p>Osoba upravena.</p></div>';
 		pageEnd ();

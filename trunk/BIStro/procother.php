@@ -32,7 +32,7 @@
 			$sfile='';
 		}
 		$time=time();
-		$sql_p="INSERT INTO ".DB_PREFIX."symbols VALUES('', '".$sfile."', '".mysql_real_escape_string($_POST['contents'])."', '0', '".$time."', '".$usrinfo['id']."', '".$time."', '".$usrinfo['id']."', '0')";
+		$sql_p="INSERT INTO ".DB_PREFIX."symbols VALUES('', '".$sfile."', '".mysql_real_escape_string($_POST['contents'])."', '0', '".$time."', '".$usrinfo['id']."', '".$time."', '".$usrinfo['id']."', '0', '0')";
 		MySQL_Query ($sql_p);
 		$sql_f="SELECT id FROM ".DB_PREFIX."symbols WHERE created='".$time."' AND created_by='".$usrinfo['id']."' AND modified='".$time."' AND modified_by='".$usrinfo['id']."'";
 		$pidarray=MySQL_Fetch_Assoc(MySQL_Query($sql_f));
