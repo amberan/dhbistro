@@ -24,13 +24,14 @@
 			$sdst=resize_Image ('./files/'.$sfile.'tmp',100,130);
 			imagejpeg($sdst,'./files/symbols/'.$sfile);
 			unlink('./files/'.$sfile.'tmp');
+                        $sql_sy="INSERT INTO ".DB_PREFIX."symbols VALUES('', '".$sfile."', '', 0, '".Time()."', '".$usrinfo['id']."', '".Time()."', '".$usrinfo['id']."', 0, 1)";
+                        MySQL_Query ($sql_sy);
+                        $syidarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."symbols WHERE symbol = '".$sfile."'"));
+                        $syid=$syidarray['id'];
 		} else {
 			$sfile='';
+                        $syid='';
 		}
-                $sql_sy="INSERT INTO ".DB_PREFIX."symbols VALUES('', '".$sfile."', '', 0, '".Time()."', '".$usrinfo['id']."', '".Time()."', '".$usrinfo['id']."', 0, 1)";
-                MySQL_Query ($sql_sy);
-		$syidarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."symbols WHERE symbol = '".$sfile."'"));
-		$syid=$syidarray['id'];
 		$sql_p="INSERT INTO ".DB_PREFIX."persons VALUES('','".mysql_real_escape_string(safeInput($_POST['name']))."','".mysql_real_escape_string(safeInput($_POST['surname']))."','".mysql_real_escape_string(safeInput($_POST['phone']))."','".Time()."','".$usrinfo['id']."','".mysql_real_escape_string($_POST['contents'])."','".$_POST['secret']."','0','".$file."', '".$_POST['side']."', '".$_POST['power']."', '".$_POST['spec']."', '".$syid."','0','0','".Time()."','".$usrinfo['id']."')";
 		MySQL_Query ($sql_p);
 		$pidarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."persons WHERE UCASE(surname)=UCASE('".mysql_real_escape_string(safeInput($_POST['surname']))."') AND UCASE(name)=UCASE('".mysql_real_escape_string(safeInput($_POST['name']))."') AND side='".$_POST['side']."'"));
