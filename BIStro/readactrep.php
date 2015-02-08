@@ -14,6 +14,7 @@
 		}
 		$sql="SELECT
 			".DB_PREFIX."reports.datum AS 'datum',
+                        ".DB_PREFIX."reports.deleted AS 'deleted',
 			".DB_PREFIX."reports.label AS 'label',
 			".DB_PREFIX."reports.task AS 'task',
 			".DB_PREFIX."reports.summary AS 'summary',
@@ -34,6 +35,9 @@
 			AND ".DB_PREFIX."reports.id=".$_REQUEST['rid'].$connector;
 		$res=MySQL_Query ($sql);
 		if ($rec_ar=MySQL_Fetch_Assoc($res)) {
+                    if (($rec_ar['secret']==1 || $rec_ar['deleted']==1) && !$usrinfo['right_power']) {
+                        unauthorizedAccess(4, $rec_ar['secret'], $rec_ar['deleted'], $_REQUEST['rid']);
+                    }
 			if (isset($_SESSION['sid'])) {
 				auditTrail(4, 1, $_REQUEST['rid']);
 			}
@@ -107,6 +111,7 @@
 	<fieldset><legend><h2>Obecné informace</h2></legend>
 	<div id="info">
 		<?php if ($rec_ar['secret']==1) echo '<h2>TAJNÉ</h2>'?>
+                <?php if ($rec_ar['deleted']==1) echo '<h2>SMAZANÝ ZÁZNAM</h2>'?>
 		<h3>Datum<?php echo((($rec_ar['type']==1)?' výjezdu':(($rec_ar['type']==2)?' výslechu':' akce'))); ?>:</h3>
 		<p><?php echo(Date ('d.m.Y',$rec_ar['adatum'])); ?></p>
 		<div class="clear">&nbsp;</div>

@@ -12,7 +12,7 @@
 				 WHERE ".DB_PREFIX."notes.id=".$_REQUEST['rid']." 
 				AND ".DB_PREFIX."notes.iduser=".DB_PREFIX."users.id");
 		if ($rec=MySQL_Fetch_Assoc($res)) {
-			if ($rec['secret']==0 || $rec['iduser']==$usrinfo['id'] || $usrinfo['right_power']) {
+                        if ($rec['secret']==0 || $rec['iduser']==$usrinfo['id'] || $usrinfo['right_power']) {
 			  pageStart (StripSlashes($rec['title']));
 				mainMenu (0);
 				switch ($_REQUEST['idtable']) {

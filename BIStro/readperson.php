@@ -3,6 +3,9 @@
 	if (is_numeric($_REQUEST['rid'])) {
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."persons WHERE id=".$_REQUEST['rid']);
 		if ($rec=MySQL_Fetch_Assoc($res)) {
+                    if (($rec['secret']==1 || $rec['deleted']==1) && !$usrinfo['right_power']) {
+                        unauthorizedAccess(1, $rec['secret'], $rec['deleted'], $_REQUEST['rid']);
+                    }
 			auditTrail(1, 1, $_REQUEST['rid']);
 			$sides=Array('','světlý','temný','člověk','neznámá');
 			$powers=Array('','neznámá','člověk','mimo kategorie','1. kategorie','2. kategorie','3. kategorie','4. kategorie');
@@ -43,11 +46,12 @@
 		<?php } ?>
 		<div id="info">
 			<?php 
-			if ($rec['secret']==1 || $rec['dead']==1 || $rec['archiv']==1) echo '<h2>';
+			if ($rec['secret']==1 || $rec['dead']==1 || $rec['archiv']==1 || $rec['deleted']==1) echo '<h2>';
 			if ($rec['secret']==1) echo 'TAJNÉ ';
 			if ($rec['dead']==1) echo 'MRTVOLA ';
 			if ($rec['archiv']==1) echo 'ARCHIV';
-			if ($rec['secret']==1 || $rec['dead']==1 || $rec['archiv']==1) echo '</h2>' ?>
+                        if ($rec['deleted']==1) echo 'SMAZANÝ ZÁZNAM';
+			if ($rec['secret']==1 || $rec['dead']==1 || $rec['archiv']==1 || $rec['deleted']==1) echo '</h2>' ?>
 			<h3>Jméno: </h3><p><?php echo(StripSlashes($rec['name'])); ?></p>
 			<div class="clear">&nbsp;</div>
 			<h3>Příjmení: </h3><p><?php echo(StripSlashes($rec['surname'])); ?></p>
@@ -249,7 +253,10 @@ if ($hn==1) goto hidenotes; ?>
 		  echo '<div id="obsah"><p>Osoba neexistuje.</p></div>';
 		}
 	} else {
-	  echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
+        pageStart ('Tohle nezkoušejte');
+        mainMenu (5);
+        sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>tohle nezkoušejte</strong>');    
+	echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
 	}
-	pageEnd ();
+        pageEnd ();
 ?>

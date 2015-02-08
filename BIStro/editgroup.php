@@ -1,12 +1,15 @@
 <?php
 	require_once ('./inc/func_main.php');
-	auditTrail(2, 1, $_REQUEST['rid']);
-	pageStart ('Úprava skupiny');
-	mainMenu (3);
-	sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>úprava skupiny</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."groups WHERE id=".$_REQUEST['rid']);
 		if ($rec_g=MySQL_Fetch_Assoc($res)) {
+                    if (($rec_g['secret']==1 || $rec_g['deleted']==1) && !$usrinfo['right_power']) {
+                        unauthorizedAccess(2, $rec_g['secret'], $rec_g['deleted'], $_REQUEST['rid']);
+                    }
+                    auditTrail(2, 1, $_REQUEST['rid']);
+                    pageStart ('Úprava skupiny');
+                    mainMenu (3);
+                    sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>úprava skupiny</strong>');
 ?>
 <div id="obsah">
 <fieldset><legend><h1>Úprava skupiny: <?php echo StripSlashes($rec_g['title']); ?></h1></legend>
@@ -144,10 +147,16 @@
 <!-- end of #obsah -->
 <?php
 		} else {
-		  echo '<div id="obsah"><p>Skupina neexistuje.</p></div>';
+                    pageStart ('Skupina neexistuje');
+                    mainMenu (5);
+                    sparklets ('<a href="./groups.php">osoby</a> &raquo; <strong>skupina neexistuje</strong>');
+                    echo '<div id="obsah"><p>Skupina neexistuje.</p></div>';
 		}
 	} else {
-	  echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
+            pageStart ('Tohle nezkoušejte');
+            mainMenu (5);
+            sparklets ('<a href="./groups.php">osoby</a> &raquo; <strong>tohle nezkoušejte</strong>');
+            echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
 	}
 	pageEnd ();
 ?>

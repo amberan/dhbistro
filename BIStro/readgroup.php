@@ -3,6 +3,9 @@
 	if (is_numeric($_REQUEST['rid'])) {
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."groups WHERE id=".$_REQUEST['rid']);
 		if ($rec_g=MySQL_Fetch_Assoc($res)) {
+                    if (($rec_g['secret']==1 || $rec_g['deleted']==1) && !$usrinfo['right_power']) {
+                    unauthorizedAccess(2, $rec_g['secret'], $rec_g['deleted'], $_REQUEST['rid']);
+                    }
 		  auditTrail(2, 1, $_REQUEST['rid']);
 		  pageStart (StripSlashes($rec_g['title']));
 			mainMenu (3);
@@ -76,7 +79,9 @@
 	<fieldset><legend><h2>Obecné informace</h2></legend>
 	<div id="info"><?php
 		if($rec_g['secret']==1){ ?>
-	 	<h2>TAJNÉ</h2><?php } ?>
+	 	<h2>TAJNÉ</h2><?php } ?><?php
+		if($rec_g['deleted']==1){ ?>
+	 	<h2>SMAZANÝ ZÁZNAM</h2><?php } ?>
 	 	<h3>Členové: </h3><p><?php
 		if ($usrinfo['right_power']) {
 			$sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."persons, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." AND ".DB_PREFIX."persons.deleted=0 ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";

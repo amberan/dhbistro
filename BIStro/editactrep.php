@@ -1,15 +1,9 @@
 <?php
 require_once ('./inc/func_main.php');
-auditTrail(4, 1, $_REQUEST['rid']);
 $reportarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT * FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid'])); // načte data z DB
 $type=intval($reportarray['type']); // určuje typ hlášení
 	$typestring=(($type==1)?'výjezd':(($type==2)?'výslech':'?')); //odvozuje slovní typ hlášení
 $author=$reportarray['iduser']; // určuje autora hlášení
-
-// následuje generování hlavičky
-pageStart ('Úprava hlášení'.(($type==1)?' z výjezdu':(($type==2)?' z výslechu':'')));
-mainMenu (3);
-sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení'.(($type==1)?' z výjezdu':(($type==2)?' z výslechu':'')).'</strong>','<a href="symbols.php">přiřadit symboly</a>');
 
 // kalendář
 function date_picker($name, $startyear=NULL, $endyear=NULL) {
@@ -57,6 +51,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 		".DB_PREFIX."reports.datum AS 'datum',
 		".DB_PREFIX."reports.label AS 'label',
 		".DB_PREFIX."reports.task AS 'task',
+                ".DB_PREFIX."reports.deleted AS 'deleted',
 		".DB_PREFIX."reports.summary AS 'summary',
 		".DB_PREFIX."reports.impacts AS 'impacts',
 		".DB_PREFIX."reports.details AS 'details',
@@ -73,6 +68,17 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 		WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.id=".$_REQUEST['rid'];
 	$res=MySQL_Query ($sql);
 	if ($rec_actr=MySQL_Fetch_Assoc($res)) {
+            //test oprávněnosti přístupu
+            if (($rec_actr['secret']==1 || $rec_actr['deleted']==1) && !$usrinfo['right_power']) {
+                unauthorizedAccess(4, $rec_actr['secret'], $rec_actr['deleted'], $_REQUEST['rid']);
+            }
+            //auditní stopa
+            auditTrail(4, 1, $_REQUEST['rid']);
+            // následuje generování hlavičky
+            pageStart ('Úprava hlášení'.(($type==1)?' z výjezdu':(($type==2)?' z výslechu':'')));
+            mainMenu (3);
+            sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení'.(($type==1)?' z výjezdu':(($type==2)?' z výslechu':'')).'</strong>','<a href="symbols.php">přiřadit symboly</a>');
+
 	$aday=(Date ('j',$rec_actr['adatum']));
 	$amonth=(Date ('n',$rec_actr['adatum']));
 	$ayear=(Date ('Y',$rec_actr['adatum']));
@@ -351,10 +357,16 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 <!-- end of #obsah -->
 <?php
 } else {
-echo '<div id="obsah"><p>Hlášení neexistuje.</p></div>';
+    pageStart ('Hlášení neexistuje');
+    mainMenu (3);
+    sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>hlášení neexistuje</strong>');
+    echo '<div id="obsah"><p>Hlášení neexistuje.</p></div>';
 }
 } else {
-echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
+    pageStart ('Tohle nezkoušejte.');
+    mainMenu (3);
+    sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>tohle nezkoušejte.</strong>');
+    echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
 }
 pageEnd ();
 ?>
