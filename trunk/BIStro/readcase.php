@@ -6,6 +6,9 @@
 		$rec_a=MySQL_Fetch_array($res_a);
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."cases WHERE id=".$_REQUEST['rid']);
 		if ($rec=MySQL_Fetch_Assoc($res)) {
+                    if (($rec['secret']==1 || $rec['deleted']==1) && !$usrinfo['right_power']) {
+                    unauthorizedAccess(3, $rec['secret'], $rec['deleted'], $_REQUEST['rid']);
+                    }
 			auditTrail(3, 1, $_REQUEST['rid']);
 			pageStart (StripSlashes($rec['title']));
 			mainMenu (4);
@@ -53,6 +56,7 @@
 	<fieldset><legend><h2>Obecné informace</h2></legend>
 		<div id="info">
 			<?php if ($rec['secret']==1) echo '<h2>TAJNÉ</h2>'?>
+                        <?php if ($rec['deleted']==1) echo '<h2>SMAZANÝ ZÁZNAM</h2>'?>
 			<div class="clear">&nbsp;</div>
 			<h3>Řešitelé: </h3><p><?php
 			$sql="SELECT ".DB_PREFIX."users.id AS 'id', ".DB_PREFIX."users.login AS 'login' FROM ".DB_PREFIX."c2s, ".DB_PREFIX."users WHERE ".DB_PREFIX."users.id=".DB_PREFIX."c2s.idsolver AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid']." ORDER BY ".DB_PREFIX."users.login ASC";

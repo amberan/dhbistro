@@ -14,6 +14,7 @@
 	if (is_numeric($_REQUEST['rid'])) {
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."notes WHERE id=".$_REQUEST['rid']);
 		if ($rec=MySQL_Fetch_Assoc($res)) {
+                    if ($rec['secret']==0 || $rec['iduser']==$usrinfo['id'] || $usrinfo['right_power']) {
 ?>
 <div id="obsah">
 <form action="procnote.php" method="post" class="otherform">
@@ -68,6 +69,10 @@
 </div>
 <!-- end of #obsah -->
 <?php
+                        } else {
+				echo '<h1>Nemáte práva</h1>
+				<div id="obsah">Nemáte práva upravovat tuto poznámku.</div>';
+			}
 } else {
 echo '<div id="obsah"><p>Poznámka neexistuje.</p></div>';
 }

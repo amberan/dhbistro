@@ -1,12 +1,16 @@
 <?php
 	require_once ('./inc/func_main.php');
-	auditTrail(1, 1, $_REQUEST['rid']);
-	pageStart ('Úprava osoby');
-	mainMenu (5);
-	sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>úprava osoby</strong>');
+
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	  $res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."persons WHERE id=".$_REQUEST['rid']);
 		if ($rec_p=MySQL_Fetch_Assoc($res)) {
+                    if (($rec_p['secret']==1 || $rec_p['deleted']==1) && !$usrinfo['right_power']) {
+                    unauthorizedAccess(1, $rec_p['secret'], $rec_p['deleted'], $_REQUEST['rid']);
+                    }
+                    auditTrail(1, 1, $_REQUEST['rid']);
+                    pageStart ('Úprava osoby');
+                    mainMenu (5);
+                    sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>úprava osoby</strong>');
 ?>
 <div id="obsah">
 	<script type="text/javascript">
@@ -296,10 +300,16 @@
 <!-- end of #obsah -->
 <?php
 		} else {
-		  echo '<div id="obsah"><p>Osoba neexistuje.</p></div>';
+                    pageStart ('Osoba neexistuje');
+                    mainMenu (5);
+                    sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>osoba neexistuje</strong>');
+                    echo '<div id="obsah"><p>Osoba neexistuje.</p></div>';
 		}
 	} else {
-	  echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
+            pageStart ('Tohle nezkoušejte');
+            mainMenu (5);
+            sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>tohle nezkoušejte</strong>');    
+            echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
 	}
 	pageEnd ();
 ?>

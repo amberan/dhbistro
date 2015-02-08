@@ -1,11 +1,12 @@
 <?php
 	require_once ('./inc/func_main.php');
-	pageStart ('Úprava symbolu');
-	mainMenu (5);
-	sparklets ('<a href="./symbols.php">symboly</a> &raquo; <strong>úprava symbolu</strong>');
+
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	  $res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."symbols WHERE id=".$_REQUEST['rid']);
 		if ($rec_p=MySQL_Fetch_Assoc($res)) {
+                    pageStart ('Úprava symbolu');
+                    mainMenu (5);
+                    sparklets ('<a href="./symbols.php">symboly</a> &raquo; <strong>úprava symbolu</strong>');
 ?>
 <div id="obsah">
 <fieldset><legend><h1>Úprava symbolu:</h1></legend>

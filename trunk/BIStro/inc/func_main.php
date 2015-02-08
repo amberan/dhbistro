@@ -169,9 +169,10 @@ $password = $lines[2];
 function searchTable ($tablenum) { 
 	global $unread;
 	foreach ($unread as $record) {
-   		if ($record['idtable'] == $tablenum)
-       		return true;
-		}
+            if ($record['idtable'] == $tablenum) {
+            return true;
+        }
+    }
     	return false;
 }
 
@@ -179,9 +180,10 @@ function searchTable ($tablenum) {
 function searchRecord ($tablenum, $recordnum) {
 	global $unread;
 	foreach ($unread as $record) {
-		if ($record['idtable'] == $tablenum && $record['idrecord'] == $recordnum)
-			return true;
-	}
+            if ($record['idtable'] == $tablenum && $record['idrecord'] == $recordnum) {
+            return true;
+        }
+    }
 	return false;
 }
 
@@ -277,6 +279,35 @@ function auditTrail ($record_type,$operation_type,$idrecord) {
 		$sql_au="INSERT INTO ".DB_PREFIX."audit_trail VALUES('','".$usrinfo['id']."','".time()."','".$operation_type."','".$record_type."','".$idrecord."','".$currip."','".$usrinfo['right_org']."')";
 		MySql_Query($sql_au);
 	}
+}
+
+//pokus o pristup k tajnemu, soukromemu nebo smazanemu zaznamu
+function unauthorizedAccess ($record_type,$secret,$deleted,$idrecord) {
+	global $usrinfo;
+        switch ($record_type) {
+            case 1:
+                $link='<a href="./persons.php">osoby</a>';
+                break;
+            case 2:
+                $link='<a href="./groups.php">skupiny</a>';
+                break;
+            case 3:
+                $link='<a href="./cases.php">případy</a>';
+                break;
+            case 4:
+                $link='<a href="./reports.php">hlášení</a>';
+                break;
+        }
+        if ($deleted==1) {
+            auditTrail($record_type, 13, $idrecord);
+        } else {
+            auditTrail($record_type, 12, $idrecord);
+        }
+        pageStart ('Neautorizovaný přístup');
+        mainMenu (5);
+        sparklets ($link.' &raquo; <strong>neautorizovaný přístup</strong>');
+        echo '<div id="obsah"><p>Tady nemáš co dělat.</p></div>';
+        exit;
 }
 
 //vytvoreni zalohy
