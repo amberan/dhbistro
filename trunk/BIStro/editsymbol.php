@@ -10,7 +10,8 @@
 ?>
 <div id="obsah">
 <fieldset><legend><h1>Úprava symbolu:</h1></legend>
-	<p id="top-text">Symboly nahrávejte pokud možno ve velikosti 100x100 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen symboly jasně rozeznatelné, rozmazané fotky použijte třeba jako přílohu.</p>
+	<p id="top-text">Symboly nahrávejte pokud možno ve velikosti 100x100 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen symboly jasně rozeznatelné, rozmazané fotky použijte třeba jako přílohu. <br />
+	Pokud zadáváte hodnoty pro čáry, křivky, body, geometrické tvary, písma a speciální znaky, hodnota nabývá velikosti 0 až 10</p>
 	<form action="procother.php" method="post" id="inputform" enctype="multipart/form-data">
 		<fieldset class="symbol"><legend><h2>Symbol</h2></legend>
 		<?php if($rec_p['symbol']==NULL){ ?><img src="#" alt="symbol chybí" title="symbol chybí" id="ssymbolimg" class="noname"/>
@@ -18,8 +19,14 @@
 		<?php } ?>
 			<div id="info">
 				<div class="clear">&nbsp;</div>
-				<h3><label for="symbol">Nový&nbsp;symbol:</label></h3>
-				<input type="file" name="symbol" id="symbol" />
+				<h3><label for="symbol">Nový&nbsp;symbol:</label></h3><input type="file" name="symbol" id="symbol" /><br />	        	
+				<h3><label for="liner">Čáry:</label></h3><input type="range" min="0" max="10" step="1" name="liner" id="liner" list=hodnoty /><br />
+				<h3><label for="curver">Křivky:</label></h3><input type="range" min="0" max="10" step="1" name="curver" id="curver" list=hodnoty /><br />
+				<h3><label for="pointer">Body:</label></h3><input type="range" min="0" max="10" step="1" name="pointer" id="pointer" list=hodnoty /><br />
+				<h3><label for="geometrical">Geom. tvary:</label></h3><input type="range" min="0" max="10" step="1" name="geometrical" id="geometrical" list=hodnoty /><br />
+				<h3><label for="alphabeter">Písma:</label></h3><input type="range" min="0" max="10" step="1" name="alphabeter" id="alphabeter" list=hodnoty /><br />
+				<h3><label for="specialchar">Spec. znaky:</label></h3><input type="range" min="0" max="10" step="1" name="specialchar" id="specialchar" list=hodnoty /><br />
+	        
 				<div class="clear">&nbsp;</div>
 <?php 			if ($usrinfo['right_power'] == 1)	{
 				echo '
