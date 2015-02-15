@@ -33,14 +33,13 @@
 			<div id="info">
 				<div class="clear">&nbsp;</div>
 				<h3><label for="symbol">Nový&nbsp;symbol:</label></h3><input type="file" name="symbol" id="symbol" /><br />	        	
-				<h3><label for="liner">Čáry:</label></h3><input type="range" min="0" max="10" step="1" name="liner" id="liner" list=hodnoty /><br />
-				<h3><label for="curver">Křivky:</label></h3><input type="range" min="0" max="10" step="1" name="curver" id="curver" list=hodnoty /><br />
-				<h3><label for="pointer">Body:</label></h3><input type="range" min="0" max="10" step="1" name="pointer" id="pointer" list=hodnoty /><br />
-				<h3><label for="geometrical">Geom. tvary:</label></h3><input type="range" min="0" max="10" step="1" name="geometrical" id="geometrical" list=hodnoty /><br />
-				<h3><label for="alphabeter">Písma:</label></h3><input type="range" min="0" max="10" step="1" name="alphabeter" id="alphabeter" list=hodnoty /><br />
-				<h3><label for="specialchar">Spec. znaky:</label></h3><input type="range" min="0" max="10" step="1" name="specialchar" id="specialchar" list=hodnoty /><br />
-	        
-				<div class="clear">&nbsp;</div>
+				<h3><label for="liner">Čáry:</label></h3><input type="range" value="0" min="0" max="10" step="1" name="liner" id="liner" list=hodnoty /><br />
+				<h3><label for="curver">Křivky:</label></h3><input type="range" value="0" min="0" max="10" step="1" name="curver" id="curver" list=hodnoty /><br />
+				<h3><label for="pointer">Body:</label></h3><input type="range" value="0" min="0" max="10" step="1" name="pointer" id="pointer" list=hodnoty /><br />
+				<h3><label for="geometrical">Geom. tvary:</label></h3><input type="range" value="0" min="0" max="10" step="1" name="geometrical" id="geometrical" list=hodnoty /><br />
+				<h3><label for="alphabeter">Písma:</label></h3><input type="range" value="0" min="0" max="10" step="1" name="alphabeter" id="alphabeter" list=hodnoty /><br />
+				<h3><label for="specialchar">Spec. znaky:</label></h3><input type="range" value="0" min="0" max="10" step="1" name="specialchar" id="specialchar" list=hodnoty /><br />	        
+			<div class="clear">&nbsp;</div>
 <?php 			if ($usrinfo['right_power'] == 1)	{
 				echo '
 				<h3><label for="archiv">Archiv:</label></h3>

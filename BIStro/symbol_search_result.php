@@ -149,7 +149,7 @@ if (isset($_POST['searchit'])) {
 			$segment_color="";
 		}
 		else {
-			$segment_color="<a class=\"redirection\" href=\"readperson.php?rid=".$input_sql_column."&hidenotes=0\" target=\"_blank\">Zobrazit info k vlastníkovi</a>";
+			$segment_color="<a class=\"redirection\" href=\"readperson.php?rid=".$input_sql_column."&hidenotes=0\">Zobrazit info k vlastníkovi</a>";
 		}
 	
 		return $segment_color;
@@ -199,7 +199,7 @@ if (isset($_POST['searchit'])) {
 			$result.='
 			<div class="result">
 	        	<div class="result_symbol_image">
-	            	<img src="getportrait.php?nrid='.$symbol_record['symbol'].'" height="75" width="75" />
+	            	<img src="getportrait.php?nrid='.$symbol_record['id'].'" height="75" width="75" />
 	            </div>
 	            <div class="result_stats">
 	            	<div class="result_stats_singles">
