@@ -13,6 +13,19 @@
 	<p id="top-text">Symboly nahrávejte pokud možno ve velikosti 100x100 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen symboly jasně rozeznatelné, rozmazané fotky použijte třeba jako přílohu. <br />
 	Pokud zadáváte hodnoty pro čáry, křivky, body, geometrické tvary, písma a speciální znaky, hodnota nabývá velikosti 0 až 10</p>
 	<form action="procother.php" method="post" id="inputform" enctype="multipart/form-data">
+	    	<datalist id=hodnoty>
+				<option>0</option>
+				<option>1</option>
+				<option>2</option>
+				<option>3</option>
+				<option>4</option>
+				<option>5</option>
+				<option>6</option>
+				<option>7</option>
+				<option>8</option>
+				<option>9</option>
+				<option>10</option>
+			</datalist>
 		<fieldset class="symbol"><legend><h2>Symbol</h2></legend>
 		<?php if($rec_p['symbol']==NULL){ ?><img src="#" alt="symbol chybí" title="symbol chybí" id="ssymbolimg" class="noname"/>
 		<?php }else{ ?><img src="getportrait.php?nrid=<?php echo($_REQUEST['rid']); ?>" alt="symbol" id="ssymbolimg" />
