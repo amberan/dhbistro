@@ -4,6 +4,9 @@
         if (isset($_SESSION['sid'])) {
                 auditTrail(5, 1, 0);
         }
+        // ############ Kontrola zalogování
+        //echo 'login ='.$userinfo['login'] ;
+        // ############
         pageStart ('Aktuality');
         mainMenu (1);
         deleteUnread (5,0);
