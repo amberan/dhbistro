@@ -82,11 +82,11 @@
 			unlink('./files/'.$sfile.'tmp');
 			MySQL_Query ("UPDATE ".DB_PREFIX."symbols SET symbol='".$sfile."',
 														  search_lines='".$_POST['liner']."',
-														  search_lines='".$_POST['curver']."',
-														  search_lines='".$_POST['pointer']."',
-														  search_lines='".$_POST['geometrical']."',
-														  search_lines='".$_POST['alphabeter']."',
-														  search_lines='".$_POST['specialchar']."' WHERE id=".$_POST['symbolid']);
+														  search_curves='".$_POST['curver']."',
+														  search_points='".$_POST['pointer']."',
+														  search_geometricals='".$_POST['geometrical']."',
+														  search_alphabetes='".$_POST['alphabeter']."',
+														  search_specialchars='".$_POST['specialchar']."' WHERE id=".$_POST['symbolid']);
 		}
 		if ($usrinfo['right_org']==1) {
 			$sql="UPDATE ".DB_PREFIX."symbols SET `desc`='".mysql_real_escape_string($_POST['desc'])."', archiv='".(isset($_POST['archiv'])?'1':'0')."' WHERE id=".$_POST['symbolid'];
