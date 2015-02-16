@@ -3,7 +3,7 @@
 	auditTrail(1, 1, 0);
 	pageStart ('Osoby');
 	mainMenu (5);
-	sparklets ('<strong>osoby</strong>','<a href="newperson.php">přidat osobu</a>; <a href="symbols.php">nepřiřazené symboly</a>; <a href="symbol_search.php">vyhledat symbol</a>');
+	sparklets ('<strong>osoby</strong>','<a href="newperson.php">přidat osobu</a>; <a href="symbols.php" '.((searchTable(7))?' class="unread"':'').'>nepřiřazené symboly</a>; <a href="symbol_search.php">vyhledat symbol</a>');
 	// zpracovani filtru
 	if (!isset($_REQUEST['sort'])) {
 	  $f_sort=1;
@@ -34,6 +34,11 @@
 		$f_sec=0;
 	} else {
 		$f_sec=1;
+	}
+        if (!isset($_REQUEST['new'])) {
+		$f_new=0;
+	} else {
+		$f_new=1;
 	}
 	if (!isset($_REQUEST['fspec'])) {
 		$fspec=0;
@@ -108,7 +113,7 @@
 	}
 	// formular filtru
 	function filter () {
-		global $f_sort, $sportraits, $ssymbols, $f_sec, $fdead, $farchiv, $usrinfo, $fspec, $fside, $fpow;
+		global $f_sort, $sportraits, $ssymbols, $f_sec, $f_new, $fdead, $farchiv, $usrinfo, $fspec, $fside, $fpow;
 	  echo '<div id="filter-wrapper"><form action="persons.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -157,14 +162,15 @@
 	<tr class="filter">
 	<td class="filter"><input type="checkbox" name="sportraits" value="1"'.(($sportraits)?' checked="checked"':'').'> Zobrazit portréty.</td>
 	<td class="filter"><input type="checkbox" name="fdead" value="1"'.(($fdead==1)?' checked="checked"':'').'> Zobrazit i mrtvé.</td>
+        <td class="filter"><input type="checkbox" name="new" value="1"'.(($f_new==1)?' checked="checked"':'').'> Zobrazit jen nové.</td>
 	</tr>
+        <tr class="filter">
 	<td class="filter"><input type="checkbox" name="ssymbols" value="1"'.(($ssymbols)?' checked="checked"':'').'> Zobrazit symboly.</td>
-	<td class="filter"><input type="checkbox" name="farchiv" value="1"'.(($farchiv==1)?' checked="checked"':'').'> Zobrazit i archiv.</td>
-	</tr>';
+	<td class="filter"><input type="checkbox" name="farchiv" value="1"'.(($farchiv==1)?' checked="checked"':'').'> Zobrazit i archiv.</td>';
 	if ($usrinfo['right_power']) {
 		echo '<td class="filter"><input type="checkbox" name="sec" value="sec" class="checkbox"'.(($f_sec==1)?' checked="checked"':'').' /> Jen tajné.</td></tr></table>';
 	}  else {
-		echo '</table>';
+		echo '</tr></table>';
 	}
 	echo '
 	  <div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
@@ -195,14 +201,16 @@
 ';
 		$even=0;
 		while ($rec=MySQL_Fetch_Assoc($res)) {
-		  echo '<tr class="'.((searchRecord(1,$rec['id']))?' unread_record':(($even%2==0)?'even':'odd')).'">
-'.(($sportraits)?'<td><img src="getportrait.php?rid='.$rec['id'].'" alt="portrét chybí" /></td>':'').'
-'.(($ssymbols)?'<td><img src="getportrait.php?nrid='.$rec['symbol'].'" alt="symbol chybí" /></td>':'').'
-	<td>'.(($rec['secret'])?'<span class="secret"><a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a></span>':'<a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a>').'</td>
-	<td>'.$rec['phone'].'</td>
-'.(($usrinfo['right_text'])?'	<td><a href="editperson.php?rid='.$rec['id'].'">upravit</a> | <a href="procperson.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat osobu &quot;".implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name'])))."&quot;?');".'">smazat</a></td>':'<td><a href="newnote.php?rid='.$rec['id'].'&idtable=5">přidat poznámku</a>').'
-</tr>';
+                    if ($f_new==0 || ($f_new==1 && searchRecord(1,$rec['id']))) {
+                        echo '<tr class="'.((searchRecord(1,$rec['id']))?' unread_record':(($even%2==0)?'even':'odd')).'">
+                        '.(($sportraits)?'<td><img src="getportrait.php?rid='.$rec['id'].'" alt="portrét chybí" /></td>':'').'
+                        '.(($ssymbols)?'<td><img src="getportrait.php?nrid='.$rec['symbol'].'" alt="symbol chybí" /></td>':'').'
+                        <td>'.(($rec['secret'])?'<span class="secret"><a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a></span>':'<a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a>').'</td>
+                        <td>'.$rec['phone'].'</td>
+                        '.(($usrinfo['right_text'])?'	<td><a href="editperson.php?rid='.$rec['id'].'">upravit</a> | <a href="procperson.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat osobu &quot;".implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name'])))."&quot;?');".'">smazat</a></td>':'<td><a href="newnote.php?rid='.$rec['id'].'&idtable=5">přidat poznámku</a>').'
+                        </tr>';
 			$even++;
+                    }
 		}
 	  echo '</tbody>
 </table>

@@ -44,6 +44,11 @@
 	} else {
 		$f_archiv=1;
 	}
+        if (!isset($_REQUEST['new'])) {
+		$f_new=0;
+	} else {
+		$f_new=1;
+	}
 	switch ($f_cat) {
 	  case 0: $fsql_cat=''; break;
 	  case 1: $fsql_cat=' AND '.DB_PREFIX.'reports.type=1 '; break;
@@ -88,7 +93,7 @@
 	}
 	// filtr samotny
 	function filter () {
-	  global $f_cat, $f_sort, $f_stat, $f_my, $f_conn, $fsql_conn2, $f_sec, $f_archiv, $usrinfo, $hlaseniM;
+	  global $f_cat, $f_sort, $f_stat, $f_my, $f_conn, $fsql_conn2, $f_sec, $f_new, $f_archiv, $usrinfo, $hlaseniM;
 	  echo '<div id="filter-wrapper"><form action="reports.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -108,14 +113,19 @@
 	<option value="4"'.(($f_sort==4)?' selected="selected"':'').'>jména autora sestupně</option>
 	<option value="5"'.(($f_sort==5)?' selected="selected"':'').'>data výjezdu vzestupně</option>
 	<option value="6"'.((!$f_sort==6)?'':' selected="selected"').'>data výjezdu sestupně</option>
-</select>.</br>
-	<input type="checkbox" name="my" value="my" class="checkbox"'.(($f_my==1)?' checked="checked"':'').' /> Jen moje.<br />
-	<input type="checkbox" name="conn" value="conn" class="checkbox"'.(($f_conn==1)?' checked="checked"':'').' /> Jen nepřiřazené.<br />
-        <input type="checkbox" name="archiv" value="archiv" class="checkbox"'.(($f_archiv==1)?' checked="checked"':'').' /> I archiv.';
+</select>.</p>
+        <table class="filter">
+	<tr class="filter">
+	<td class="filter"><input type="checkbox" name="my" value="my" class="checkbox"'.(($f_my==1)?' checked="checked"':'').' /> Jen moje.</td>
+        <td class="filter"><input type="checkbox" name="new" value="new" class="checkbox"'.(($f_new==1)?' checked="checked"':'').' /> Jen nové.</td>
+	<td class="filter"><input type="checkbox" name="conn" value="conn" class="checkbox"'.(($f_conn==1)?' checked="checked"':'').' /> Jen nepřiřazené.</td>
+        </tr>
+        <tr class="filter">
+        <td class="filter"><input type="checkbox" name="archiv" value="archiv" class="checkbox"'.(($f_archiv==1)?' checked="checked"':'').' /> I archiv.</td>';
         if ($usrinfo['right_power']) {
-		echo '<br /> <input type="checkbox" name="sec" value="sec" class="checkbox"'.(($f_sec==1)?' checked="checked"':'').' /> Jen tajné.</p>';
+		echo '<td class="filter"><input type="checkbox" name="sec" value="sec" class="checkbox"'.(($f_sec==1)?' checked="checked"':'').' /> Jen tajné.</td></tr></table>';
 	}  else {
-		echo '</p>';
+		echo '</tr></table>';
 	}
         echo '<div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
@@ -153,21 +163,23 @@
 	}
 	$res=MySQL_Query ($sql);
 	while ($rec=MySQL_Fetch_Assoc($res)) {
-	  echo '<div class="news_div '.(($rec['type']==1)?'game_news':'system_news').((searchRecord(4,$rec['id']))?' unread_record':'').'">
-	<div class="news_head"><strong><a href="readactrep.php?rid='.$rec['id'].'&amp;hidenotes=0&amp;truenames=0">'.StripSlashes($rec['label']).'</a></strong>';
-	  if (($usrinfo['right_text']) || ($usrinfo['id']==$rec['riduser'] && $rec['status']<1)) {
-	   	echo '	 | <td><a href="editactrep.php?rid='.$rec['id'].'">upravit</a> | <a href="procactrep.php?delete='.$rec['id'].'&amp;table=4" onclick="'."return confirm('Opravdu smazat &quot;".$hlaseniM."&quot; &quot;".StripSlashes($rec['label'])."&quot;?');".'">smazat</a></td>';
-	  } else {
-	  	echo '   | <td><a href="newnote.php?rid='.$rec['id'].'&idtable=8">přidat poznámku</a></td>';
-	  	}
-	  echo '</span>
-	<p><span>['.Date ('d. m. Y - H:i:s',$rec['datum']).']</span> '.$rec['autor'].', Datum akce: <span>['.Date ('d. m. Y - H:i:s',$rec['adatum']).']</span><br /> <strong>Úkol: </strong>'
-	.StripSlashes($rec['task']).'&nbsp; <strong>Stav:</strong> ';
-	  if(($rec['status'])=='0') echo 'Rozpracované';
-	  if(($rec['status'])=='1') echo 'Dokončené';
-	  if(($rec['status'])=='2') echo 'Analyzované';
-          if(($rec['status'])=='3') echo 'Archivované';
-	  echo '</p></div></div>';
+            if ($f_new==0 || ($f_new==1 && searchRecord(4,$rec['id']))) {
+                echo '<div class="news_div '.(($rec['type']==1)?'game_news':'system_news').((searchRecord(4,$rec['id']))?' unread_record':'').'">
+                <div class="news_head"><strong><a href="readactrep.php?rid='.$rec['id'].'&amp;hidenotes=0&amp;truenames=0">'.StripSlashes($rec['label']).'</a></strong>';
+                  if (($usrinfo['right_text']) || ($usrinfo['id']==$rec['riduser'] && $rec['status']<1)) {
+                        echo '	 | <td><a href="editactrep.php?rid='.$rec['id'].'">upravit</a> | <a href="procactrep.php?delete='.$rec['id'].'&amp;table=4" onclick="'."return confirm('Opravdu smazat &quot;".$hlaseniM."&quot; &quot;".StripSlashes($rec['label'])."&quot;?');".'">smazat</a></td>';
+                  } else {
+                        echo '   | <td><a href="newnote.php?rid='.$rec['id'].'&idtable=8">přidat poznámku</a></td>';
+                        }
+                  echo '</span>
+                <p><span>['.Date ('d. m. Y - H:i:s',$rec['datum']).']</span> '.$rec['autor'].', Datum akce: <span>['.Date ('d. m. Y - H:i:s',$rec['adatum']).']</span><br /> <strong>Úkol: </strong>'
+                .StripSlashes($rec['task']).'&nbsp; <strong>Stav:</strong> ';
+                  if(($rec['status'])=='0') echo 'Rozpracované';
+                  if(($rec['status'])=='1') echo 'Dokončené';
+                  if(($rec['status'])=='2') echo 'Analyzované';
+                  if(($rec['status'])=='3') echo 'Archivované';
+                  echo '</p></div></div>';
+          }
 	}
 	pageEnd ();
 ?>

@@ -223,6 +223,10 @@ a:link, a:visited {
 	border-bottom: 1px solid #808080;
 }
 
+#sparklets a.unread {
+	background-color: #FF0000;
+}
+
 /***********************************/
 /******** hlavn� formul��  *********/
 /***********************************/
