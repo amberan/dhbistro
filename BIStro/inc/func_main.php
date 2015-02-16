@@ -158,12 +158,14 @@ $password = $lines[2];
 	
   // ta parametrizaci na verzi je tam proto, ze na lokale to kdoviproc nefunguje	
   // overeni prihlaseni, nutno zmenit jmeno souboru na ostre verzi
-  $free_pages = array ($page_prefix.'/login.php');
-  if ($verze > 0) {
-	if (!$loggedin && !in_array($_SERVER['PHP_SELF'],$free_pages)) {
-		Header ('location: login.php');
-	}
-  }
+  $free_pages = array ($page_prefix.'login.php');
+  //if ($verze > 0) {
+    $cropedUrlAll = explode("/", $_SERVER['PHP_SELF']);
+    $cropedUrlLast = end($cropedUrlAll);
+    if (!$loggedin && !in_array($cropedUrlLast,$free_pages)) {
+            Header ('location: login.php');
+    }
+  //}
 
 // vyhledani tabulky v neprectenych zaznamech
 function searchTable ($tablenum) { 
