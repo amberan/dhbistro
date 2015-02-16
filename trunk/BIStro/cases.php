@@ -20,6 +20,11 @@
 	} else {
 		$f_sec=1;
 	}
+        if (!isset($_REQUEST['new'])) {
+		$f_new=0;
+	} else {
+		$f_new=1;
+	}
 	switch ($f_sort) {
 	  case 1: $fsql_sort=' '.DB_PREFIX.'cases.title ASC '; break;
 	  case 2: $fsql_sort=' '.DB_PREFIX.'cases.title DESC '; break;
@@ -39,7 +44,7 @@
 	}
 	//
 	function filter () {
-	  global $f_sort, $f_sec, $f_stat, $usrinfo;
+	  global $f_sort, $f_sec, $f_stat, $f_new, $usrinfo;
 	  echo '<div id="filter-wrapper"><form action="cases.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -49,7 +54,8 @@
 	<option value="3"'.(($f_sort==3)?' selected="selected"':'').'>data vzestupně</option>
 	<option value="4"'.(($f_sort==4)?' selected="selected"':'').'>data sestupně</option>
 </select>.<br />
-<input type="checkbox" name="stat" value="stat" class="checkbox"'.(($f_stat==1)?' checked="checked"':'').' /> I uzavřené.';
+<input type="checkbox" name="stat" value="stat" class="checkbox"'.(($f_stat==1)?' checked="checked"':'').' /> I uzavřené. <br />
+<input type="checkbox" name="new" value="new" class="checkbox"'.(($f_new==1)?' checked="checked"':'').' /> Jen nové.';          
 	if ($usrinfo['right_power']) {
 		echo '<br /> <input type="checkbox" name="sec" value="sec" class="checkbox"'.(($f_sec==1)?' checked="checked"':'').' /> Jen tajné.</p>';
 	}  else {
@@ -82,12 +88,14 @@
 ';
 		$even=0;
 		while ($rec=MySQL_Fetch_Assoc($res)) {
-		  echo '<tr class="'.((searchRecord(3,$rec['id']))?' unread_record':(($even%2==0)?'even':'odd')).(($rec['status'])?' solved':'').'">
-	<td>'.(($rec['secret'])?'<span class="secret"><a href="readcase.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a></span>':'<a href="readcase.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a>').'</td>
-	<td>'.(($rec['status'])?'uzavřený':'otevřený').'</td>
-'.(($usrinfo['right_text'])?'	<td><a href="editcase.php?rid='.$rec['id'].'">upravit</a> | <a href="proccase.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat případ &quot;".StripSlashes($rec['title'])."&quot;?');".'">smazat</a></td>':'<td><a href="newnote.php?rid='.$rec['id'].'&idtable=7">přidat poznámku</a></td>').'
-</tr>';
+                    if ($f_new==0 || ($f_new==1 && searchRecord(3,$rec['id']))) {
+                        echo '<tr class="'.((searchRecord(3,$rec['id']))?' unread_record':(($even%2==0)?'even':'odd')).(($rec['status'])?' solved':'').'">
+                        <td>'.(($rec['secret'])?'<span class="secret"><a href="readcase.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a></span>':'<a href="readcase.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a>').'</td>
+                        <td>'.(($rec['status'])?'uzavřený':'otevřený').'</td>
+                        '.(($usrinfo['right_text'])?'	<td><a href="editcase.php?rid='.$rec['id'].'">upravit</a> | <a href="proccase.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat případ &quot;".StripSlashes($rec['title'])."&quot;?');".'">smazat</a></td>':'<td><a href="newnote.php?rid='.$rec['id'].'&idtable=7">přidat poznámku</a></td>').'
+                        </tr>';
 			$even++;
+                    }
 		}
 	  echo '</tbody>
 </table>

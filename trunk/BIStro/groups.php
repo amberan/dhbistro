@@ -15,6 +15,11 @@
 	} else {
 		$f_sec=1;
 	}
+        if (!isset($_REQUEST['new'])) {
+		$f_new=0;
+	} else {
+		$f_new=1;
+	}
 	switch ($f_sort) {
 	  case 1: $fsql_sort=' '.DB_PREFIX.'groups.title ASC '; break;
 	  case 2: $fsql_sort=' '.DB_PREFIX.'groups.title DESC '; break;
@@ -27,14 +32,15 @@
 	}
 	//
 	function filter () {
-	  global $f_sort, $f_sec, $usrinfo;
+	  global $f_sort, $f_sec, $f_new, $usrinfo;
 	  echo '<div id="filter-wrapper"><form action="groups.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat všechny skupiny a seřadit je podle <select name="sort">
 	<option value="1"'.(($f_sort==1)?' selected="selected"':'').'>názvu vzestupně</option>
 	<option value="2"'.(($f_sort==2)?' selected="selected"':'').'>názvu sestupně</option>
-</select>.';
+        </select>.
+        <br /> <input type="checkbox" name="new" value="new" class="checkbox"'.(($f_new==1)?' checked="checked"':'').' /> Jen nové.';
 	if ($usrinfo['right_power']) {
 		echo '<br /> <input type="checkbox" name="sec" value="sec" class="checkbox"'.(($f_sec==1)?' checked="checked"':'').' /> Jen tajné.</p>';
 	}  else {
@@ -66,11 +72,13 @@
 ';
 		$even=0;
 		while ($rec=MySQL_Fetch_Assoc($res)) {
-		  echo '<tr class="'.((searchRecord(2,$rec['id']))?' unread_record':(($even%2==0)?'even':'odd')).'">
-	<td>'.(($rec['secret'])?'<span class="secret"><a href="readgroup.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a></span>':'<a href="readgroup.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a>').'</td>
-'.(($usrinfo['right_text'])?'	<td><a href="editgroup.php?rid='.$rec['id'].'">upravit</a> | <a href="procgroup.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat skupinu &quot;".StripSlashes($rec['title'])."&quot;?');".'">smazat</a></td>':'<td><a href="newnote.php?rid='.$rec['id'].'&idtable=6">přidat poznámku</a></td>').'
-</tr>';
+                    if ($f_new==0 || ($f_new==1 && searchRecord(2,$rec['id']))) {
+                        echo '<tr class="'.((searchRecord(2,$rec['id']))?' unread_record':(($even%2==0)?'even':'odd')).'">
+                        <td>'.(($rec['secret'])?'<span class="secret"><a href="readgroup.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a></span>':'<a href="readgroup.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a>').'</td>
+                        '.(($usrinfo['right_text'])?'	<td><a href="editgroup.php?rid='.$rec['id'].'">upravit</a> | <a href="procgroup.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat skupinu &quot;".StripSlashes($rec['title'])."&quot;?');".'">smazat</a></td>':'<td><a href="newnote.php?rid='.$rec['id'].'&idtable=6">přidat poznámku</a></td>').'
+                        </tr>';
 			$even++;
+                    }
 		}
 	  echo '</tbody>
 </table>
