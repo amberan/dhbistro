@@ -24,7 +24,7 @@
 		$even=0;
 		while ($rec=MySQL_Fetch_Assoc($res)) {
 		  echo '<tr class="'.((searchRecord(7,$rec['id']))?' unread_record':(($even%2==0)?'even':'odd')).'">
-		  <td><img src="getportrait.php?nrid='.$rec['id'].'" alt="symbol chybí" /></td>
+		  <td><a href="readsymbol.php?rid='.$rec['id'].'"><img src="getportrait.php?nrid='.$rec['id'].'" alt="symbol chybí" /></a></td>
 		  <td>'.(StripSlashes($rec['desc'])).'<br />';
 			// generování poznámek
 		  echo '<br /><strong>Poznámky:</strong>';
