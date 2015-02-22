@@ -141,18 +141,18 @@ if (isset($_POST['searchit'])) {
 	
 	// funkce pro string dotazu na osobu
 	
-	function ownerString($input_sql_column)
+	function ownerString($person_id,$symbol_id)
 	{
-		$segment_color;
+		$segment_output;
 	
-		if($input_sql_column === ''){
-			$segment_color="";
+		if($person_id === ''){
+			$segment_output="<a class=\"redirection\" href=\"readsymbol.php?rid=".$symbol_id."&hidenotes=0\">Zobrazit info k symbolu</a>";
 		}
 		else {
-			$segment_color="<a class=\"redirection\" href=\"readperson.php?rid=".$input_sql_column."&hidenotes=0\">Zobrazit info k vlastníkovi</a>";
+			$segment_output="<a class=\"redirection\" href=\"readperson.php?rid=".$person_id."&hidenotes=0\">Zobrazit info k vlastníkovi</a>";
 		}
 	
-		return $segment_color;
+		return $segment_output;
 	}
 	
 //////////////////////////////////////////////////////////////////
@@ -194,7 +194,7 @@ if (isset($_POST['searchit'])) {
 				$color_g = colorSwitch((string)$symbol_record['geometricaling']);
 				$color_a = colorSwitch((string)$symbol_record['alphabeting']);
 				$color_sch = colorSwitch((string)$symbol_record['specialing']);
-				$ownerhttp = ownerString((string)$symbol_record['pid']);
+				$ownerhttp = ownerString((string)$symbol_record['pid'],(string)$symbol_record['id']);
 				
 			$result.='
 			<div class="result">
