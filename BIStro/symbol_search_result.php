@@ -4,15 +4,7 @@
 	pageStart ('Vyhledané symboly');
 	mainMenu (5);
 	sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="newperson.php">přidat osobu</a>; <a href="symbols.php">nepřiřazené symboly</a>; <a href="symbol_search.php">vyhledat symbol</a>');
-
-    // ################# Test načtení proměnných	
-	//$vypis='liner= '.mysql_real_escape_string(htmlspecialchars($_POST['l'])).', 
-	//		curver= '.mysql_real_escape_string(htmlspecialchars($_POST['c'])).', 
-	//				pointer= '.mysql_real_escape_string(htmlspecialchars($_POST['p'])).', 
-	//				geometrical= '.mysql_real_escape_string(htmlspecialchars($_POST['g'])).', 
-	//				alphabeter= '.mysql_real_escape_string(htmlspecialchars($_POST['a'])).', 
-	//				specialchar= '.mysql_real_escape_string(htmlspecialchars($_POST['sch'])).'';
-	//echo $vypis;	
+ 
 if (isset($_POST['searchit'])) {
 	// ############################################## Určení vyhledavaneho znaku #
 	// test input
@@ -70,6 +62,7 @@ if (isset($_POST['searchit'])) {
 				SELECT s.id AS id,
 					   s.assigned AS assigned,
 					   s.symbol AS symbol,
+					   s.deleted AS deleted,
 					CASE WHEN (s.search_lines=0 AND $input_liner>0) THEN 0
 						 WHEN (s.search_lines>0 AND $input_liner=0) THEN 0
 						 WHEN (s.search_lines=0 AND $input_liner=0) THEN null
@@ -110,6 +103,7 @@ if (isset($_POST['searchit'])) {
 				LEFT JOIN ".DB_PREFIX."persons AS p
 				ON s.id = p.symbol				
 				) AS searchsymbol
+				WHERE deleted=0
 				ORDER BY averangepercent DESC
 			");
 			//RESULT
@@ -185,8 +179,10 @@ if (isset($_POST['searchit'])) {
 	    </div>
 	    <?php
 	    	//echo $symbol_record = mysql_fetch_array($symbol_result);
+	    		    
 			$result = '
 	    <div class="central_result_frame">'; while($symbol_record = mysql_fetch_assoc($symbol_result)){
+	    if($usrinfo['right_text']){
 				
 				$color_l = colorSwitch((string)$symbol_record['lining']);
 				$color_c = colorSwitch((string)$symbol_record['curving']);
@@ -225,10 +221,10 @@ if (isset($_POST['searchit'])) {
 	            </div>
 	        </div>';
 			};
+		}
 	    $result.='</div>';
 		
 		echo $result;
-			
 } else {
 	pageEnd();
 }
