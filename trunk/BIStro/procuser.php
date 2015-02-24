@@ -1,6 +1,9 @@
 <?php
 	require_once ('./inc/func_main.php');
 	if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete'])) {
+          if (!$usrinfo['right_power']) {
+                unauthorizedAccess(8, 1, 0, 0);
+          }
 	  auditTrail(8, 11, $_REQUEST['delete']);
 	  MySQL_Query ("UPDATE ".DB_PREFIX."users SET deleted=1 WHERE id=".$_REQUEST['delete']);
 	  Header ('Location: users.php');
