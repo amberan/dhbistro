@@ -59,7 +59,7 @@
                         <?php if ($rec['deleted']==1) echo '<h2>SMAZANÝ ZÁZNAM</h2>'?>
 			<div class="clear">&nbsp;</div>
 			<h3>Řešitelé: </h3><p><?php
-			$sql="SELECT ".DB_PREFIX."users.id AS 'id', ".DB_PREFIX."users.login AS 'login' FROM ".DB_PREFIX."c2s, ".DB_PREFIX."users WHERE ".DB_PREFIX."users.id=".DB_PREFIX."c2s.idsolver AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid']." ORDER BY ".DB_PREFIX."users.login ASC";
+			$sql="SELECT ".DB_PREFIX."users.id AS 'id', ".DB_PREFIX."users.login AS 'login' FROM ".DB_PREFIX."c2s, ".DB_PREFIX."users WHERE ".DB_PREFIX."users.id=".DB_PREFIX."c2s.idsolver AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."users.deleted=0 ORDER BY ".DB_PREFIX."users.login ASC";
 			$pers=MySQL_Query ($sql);
 			$solvers=Array();
 			while ($perc=MySQL_Fetch_Assoc($pers)) {
