@@ -1,5 +1,8 @@
 <?php
 	require_once ('./inc/func_main.php');
+        if (!$usrinfo['right_aud']) {
+            unauthorizedAccess(11, 1, 0, 0);
+        }
 	
 	function operationType ($type) {
 			$sql_ga="SELECT ".DB_PREFIX."operation_type.name as 'name' FROM ".DB_PREFIX."operation_type WHERE ".DB_PREFIX."operation_type.id='".$type."'";

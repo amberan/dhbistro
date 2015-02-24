@@ -3,8 +3,8 @@
 	if (is_numeric($_REQUEST['rid'])) {
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."symbols WHERE id=".$_REQUEST['rid']);
 		if ($rec=MySQL_Fetch_Assoc($res)) {
-                    if ($rec['deleted']==1 && !$usrinfo['right_power']) {
-                        unauthorizedAccess(1, $rec['deleted'], $_REQUEST['rid']);
+                    if (($rec['deleted']==1 || $rec['secret']==1) && !$usrinfo['right_power']) {
+                        unauthorizedAccess(1, $rec['secret'], $rec['deleted'], $_REQUEST['rid']);
                     }
 			auditTrail(7, 1, $_REQUEST['rid']);
             pageStart ('Zobrazení symbolu');
