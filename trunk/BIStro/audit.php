@@ -102,7 +102,7 @@
 				case 2: $link='readgroup.php?rid='.$recid.'&hidenotes=0'; break;
 				case 3: $link='readcase.php?rid='.$recid.'&hidenotes=0'; break;
 				case 4: $link='readactrep.php?rid='.$recid.'&hidenotes=0&truenames=0'; break;
-				case 7: $link='editsymbol.php?rid='.$recid; break;
+				case 7: $link='readsymbol.php?rid='.$recid; break;
 				case 8: $link='edituser.php?rid='.$recid; break;
 				case 10: $link='tasks.php'; break;
 			}

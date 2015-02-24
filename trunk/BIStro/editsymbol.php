@@ -3,7 +3,11 @@
 
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	  $res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."symbols WHERE id=".$_REQUEST['rid']);
-		if ($rec_p=MySQL_Fetch_Assoc($res)) {
+		if ($rec_s=MySQL_Fetch_Assoc($res)) {
+                    if (($rec_s['secret']==1 || $rec_s['deleted']==1) && !$usrinfo['right_power']) {
+                    unauthorizedAccess(7, $rec_s['secret'], $rec_s['deleted'], $_REQUEST['rid']);
+                    }
+                    auditTrail(7, 1, $_REQUEST['rid']);
                     pageStart ('Úprava symbolu');
                     mainMenu (5);
                     sparklets ('<a href="./symbols.php">symboly</a> &raquo; <strong>úprava symbolu</strong>');
@@ -27,43 +31,46 @@
 				<option>10</option>
 			</datalist>
 		<fieldset class="symbol"><legend><h2>Symbol</h2></legend>
-		<?php if($rec_p['symbol']==NULL){ ?><img src="#" alt="symbol chybí" title="symbol chybí" id="ssymbolimg" class="noname"/>
+		<?php if($rec_s['symbol']==NULL){ ?><img src="#" alt="symbol chybí" title="symbol chybí" id="ssymbolimg" class="noname"/>
 		<?php }else{ ?><img src="getportrait.php?nrid=<?php echo($_REQUEST['rid']); ?>" alt="symbol" id="ssymbolimg" />
 		<?php } ?>
 			<div id="info">
 				<h3><label for="symbol">Nový&nbsp;symbol:</label></h3><input type="file" name="symbol" id="symbol" /><br />	        	
-				<h3><label for="liner">Čáry:</label></h3><input type="range" value="0" min="0" max="10" step="1" name="liner" id="liner" list=hodnoty /><br />
-				<h3><label for="curver">Křivky:</label></h3><input type="range" value="0" min="0" max="10" step="1" name="curver" id="curver" list=hodnoty /><br />
-				<h3><label for="pointer">Body:</label></h3><input type="range" value="0" min="0" max="10" step="1" name="pointer" id="pointer" list=hodnoty /><br />
-				<h3><label for="geometrical">Geom. tvary:</label></h3><input type="range" value="0" min="0" max="10" step="1" name="geometrical" id="geometrical" list=hodnoty /><br />
-				<h3><label for="alphabeter">Písma:</label></h3><input type="range" value="0" min="0" max="10" step="1" name="alphabeter" id="alphabeter" list=hodnoty /><br />
-				<h3><label for="specialchar">Spec. znaky:</label></h3><input type="range" value="0" min="0" max="10" step="1" name="specialchar" id="specialchar" list=hodnoty /><br />	        
+				<h3><label for="liner">Čáry:</label></h3><input type="range" value="<?php echo $rec_s['search_lines']; ?>" min="0" max="10" step="1" name="liner" id="liner" list=hodnoty /><br />
+				<h3><label for="curver">Křivky:</label></h3><input type="range" value="<?php echo $rec_s['search_curves']; ?>" min="0" max="10" step="1" name="curver" id="curver" list=hodnoty /><br />
+				<h3><label for="pointer">Body:</label></h3><input type="range" value="<?php echo $rec_s['search_points']; ?>" min="0" max="10" step="1" name="pointer" id="pointer" list=hodnoty /><br />
+				<h3><label for="geometrical">Geom. tvary:</label></h3><input type="range" value="<?php echo $rec_s['search_geometricals']; ?>" min="0" max="10" step="1" name="geometrical" id="geometrical" list=hodnoty /><br />
+				<h3><label for="alphabeter">Písma:</label></h3><input type="range" value="<?php echo $rec_s['search_alphabets']; ?>" min="0" max="10" step="1" name="alphabeter" id="alphabeter" list=hodnoty /><br />
+				<h3><label for="specialchar">Spec. znaky:</label></h3><input type="range" value="<?php echo $rec_s['search_specialchars']; ?>" min="0" max="10" step="1" name="specialchar" id="specialchar" list=hodnoty /><br />	        
 			<div class="clear">&nbsp;</div>
 <?php 			if ($usrinfo['right_power'] == 1)	{
 				echo '
 				<h3><label for="archiv">Archiv:</label></h3>
 					<input type="checkbox" name="archiv" value=1';
-				if ($rec_p['archiv']==1) { 
+				if ($rec_s['archiv']==1) { 
 					echo ' checked="checked"';
 				}
-				echo '/><br/>
+                        }
+				echo '/>';
+                        if ($usrinfo['right_org'] == 1)	{
+				echo '<br/>
 				<div class="clear">&nbsp;</div>					
 				<h3><label for="notnew">Není nové</label></h3>
 					<input type="checkbox" name="notnew"/><br/>
 				<div class="clear">&nbsp;</div>';
-				}
+                        }
 ?>				
 			</div>
 			<!-- end of #info -->
 		</fieldset>
 		<!-- náseduje popis osoby -->
-		<fieldset><legend><h2>Popis osoby</h2></legend>
+		<fieldset><legend><h2>Informace k symbolu</h2></legend>
 			<div class="field-text">
-				<textarea cols="80" rows="15" name="desc" id="desc"><?php echo StripSlashes($rec_p['desc']); ?></textarea>
+				<textarea cols="80" rows="15" name="desc" id="desc"><?php echo StripSlashes($rec_s['desc']); ?></textarea>
 			</div>
 			<!-- end of .field-text -->
 		</fieldset>
-		<input type="hidden" name="symbolid" value="<?php echo $rec_p['id']; ?>" />
+		<input type="hidden" name="symbolid" value="<?php echo $rec_s['id']; ?>" />
 		<input type="submit" name="editsymbol" id="submitbutton" value="Uložit" title="Uložit změny"/>
 	</form>
 

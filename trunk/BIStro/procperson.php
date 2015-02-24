@@ -52,7 +52,7 @@
 			pageEnd ();
 		}
 	}
-	if (isset($_POST['personid']) && isset($_POST['editperson']) && $usrinfo['right_text'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['name']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret']) && is_numeric($_POST['side']) && is_numeric($_POST['power']) && is_numeric($_POST['spec'])) {
+	if (isset($_POST['personid']) && isset($_POST['editperson']) && $usrinfo['right_text'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['name']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['side']) && is_numeric($_POST['power']) && is_numeric($_POST['spec'])) {
 	  auditTrail(1, 2, $_POST['personid']);
 	  pageStart ('Uložení změn');
 		mainMenu (5);
@@ -92,7 +92,7 @@
                         MySQL_Query ("UPDATE ".DB_PREFIX."persons SET symbol='".$syid."' WHERE id=".$_POST['personid']);
 		}
 		if ($usrinfo['right_org']==1) {
-			MySQL_Query ("UPDATE ".DB_PREFIX."persons SET name='".mysql_real_escape_string(safeInput($_POST['name']))."', surname='".mysql_real_escape_string(safeInput($_POST['surname']))."', phone='".mysql_real_escape_string($_POST['phone'])."', contents='".mysql_real_escape_string($_POST['contents'])."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead'])?'1':'0')."', archiv='".(isset($_POST['archiv'])?'1':'0')."' WHERE id=".$_POST['personid']);
+			MySQL_Query ("UPDATE ".DB_PREFIX."persons SET name='".mysql_real_escape_string(safeInput($_POST['name']))."', surname='".mysql_real_escape_string(safeInput($_POST['surname']))."', phone='".mysql_real_escape_string($_POST['phone'])."', contents='".mysql_real_escape_string($_POST['contents'])."', secret='".(isset($_POST['secret'])?'1':'0')."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead'])?'1':'0')."', archiv='".(isset($_POST['archiv'])?'1':'0')."' WHERE id=".$_POST['personid']);
 		} else {
 			MySQL_Query ("UPDATE ".DB_PREFIX."persons SET name='".mysql_real_escape_string(safeInput($_POST['name']))."', surname='".mysql_real_escape_string(safeInput($_POST['surname']))."', phone='".mysql_real_escape_string($_POST['phone'])."', datum='".Time()."', iduser='".$usrinfo['id']."', contents='".mysql_real_escape_string($_POST['contents'])."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead'])?'1':'0')."', archiv='".(isset($_POST['archiv'])?'1':'0')."' WHERE id=".$_POST['personid']);
 		}

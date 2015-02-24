@@ -107,7 +107,7 @@ function date_picker($name, $startyear=NULL, $endyear=NULL)
 	</fieldset>
 	
 	<fieldset><legend><h2>Podrobný popis průběhu:</h2></legend>
-		<textarea cols="80" rows="7" name="details" id="details">doplnit</textarea>
+		<textarea cols="80" rows="30" name="details" id="details">doplnit</textarea>
 	</fieldset>
 	
 	<fieldset><legend><h2>Energetická náročnost:</h2></legend>

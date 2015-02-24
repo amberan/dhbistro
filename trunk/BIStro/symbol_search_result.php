@@ -41,6 +41,8 @@ if (isset($_POST['searchit'])) {
 				   alphabeting,
 				   specialing,
 				   pid,
+                                   ssecret,
+                                   psecret,
 				   CONCAT(name,' ',surname) AS title,
 			(
 				COALESCE(lining,0)+
@@ -63,6 +65,8 @@ if (isset($_POST['searchit'])) {
 					   s.assigned AS assigned,
 					   s.symbol AS symbol,
 					   s.deleted AS deleted,
+                                           s.secret AS ssecret,
+                                           p.secret AS psecret,
 					CASE WHEN (s.search_lines=0 AND $input_liner>0) THEN 0
 						 WHEN (s.search_lines>0 AND $input_liner=0) THEN 0
 						 WHEN (s.search_lines=0 AND $input_liner=0) THEN null
@@ -182,7 +186,7 @@ if (isset($_POST['searchit'])) {
 	    		    
 			$result = '
 	    <div class="central_result_frame">'; while($symbol_record = mysql_fetch_assoc($symbol_result)){
-	    if($usrinfo['right_text']){
+	    if($usrinfo['right_power']){
 				
 				$color_l = colorSwitch((string)$symbol_record['lining']);
 				$color_c = colorSwitch((string)$symbol_record['curving']);
@@ -220,7 +224,47 @@ if (isset($_POST['searchit'])) {
 	                </div>
 	            </div>
 	        </div>';
-			};
+			} else {
+                           if ($symbol_record['ssecret']==0 && $symbol_record['psecret']==0) { 
+                            
+                            $color_l = colorSwitch((string)$symbol_record['lining']);
+                            $color_c = colorSwitch((string)$symbol_record['curving']);
+                            $color_p = colorSwitch((string)$symbol_record['pointing']);
+                            $color_g = colorSwitch((string)$symbol_record['geometricaling']);
+                            $color_a = colorSwitch((string)$symbol_record['alphabeting']);
+                            $color_sch = colorSwitch((string)$symbol_record['specialing']);
+                            $ownerhttp = ownerString((string)$symbol_record['pid'],(string)$symbol_record['id']);
+
+			$result.='
+			<div class="result">
+	        	<div class="result_symbol_image">
+	            	<img src="getportrait.php?nrid='.$symbol_record['id'].'" height="75" width="75" />
+	            </div>
+	            <div class="result_stats">
+	            	<div class="result_stats_singles">
+	                    	<img class="predis_image" src="images/'.$color_l.'.png" height="5" />
+	                    	<img class="predis_image" src="images/'.$color_c.'.png" height="5" />
+	                    	<img class="predis_image" src="images/'.$color_p.'.png" height="5" />
+	                    	<img class="predis_image" src="images/'.$color_g.'.png" height="5" />
+	                    	<img class="predis_image" src="images/'.$color_a.'.png" height="5" />
+	                    	<img class="predis_image" src="images/'.$color_sch.'.png" height="5" />
+	                        <div class="result_stats_singles_parts">
+	                        	<p class="result_stats_singles_parts_text"><b>Vlastník: '.$symbol_record['title'].'</b></p>
+	                        </div>
+	                        <div class="result_stats_singles_url">
+	                        	'.$ownerhttp.'
+	                        </div>
+	                </div>
+	                <div class="result_symbol_avgpercent">
+	                	<div class="result_symbol_avgpercent_margin">
+	                    	<p class="label_text">&nbsp;&nbsp;&nbsp;&nbsp;%</p>
+	                    </div>
+	                	<p class="avgpercent_text">'.number_format($symbol_record['averangepercent'], 1, '.', '').'</p>
+	                </div>
+	            </div>
+	        </div>';
+                           };
+                    };
 		}
 	    $result.='</div>';
 		

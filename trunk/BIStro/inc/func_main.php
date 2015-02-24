@@ -5,7 +5,7 @@
   $starttime = $mtime;
 
 	// verze
-	$mazzarino_version='1.4.5';
+	$mazzarino_version='1.4.6';
   
 	// sessions
 	session_start();

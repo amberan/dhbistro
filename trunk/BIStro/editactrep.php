@@ -136,11 +136,11 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 	</fieldset>
 
 	<fieldset><legend><h2>Shrnutí:</h2></legend>
-		<textarea cols="80" rows="20" name="summary" id="summary"><?php echo StripSlashes($rec_actr['summary']); ?></textarea>
+		<textarea cols="80" rows="7" name="summary" id="summary"><?php echo StripSlashes($rec_actr['summary']); ?></textarea>
 	</fieldset>
 	
 	<fieldset><legend><h2>Možné dopady:</h2></legend>
-		<textarea cols="80" rows="20" name="impacts" id="impacts"><?php echo StripSlashes($rec_actr['impacts']); ?></textarea>
+		<textarea cols="80" rows="7" name="impacts" id="impacts"><?php echo StripSlashes($rec_actr['impacts']); ?></textarea>
 	</fieldset>
 	
 	<fieldset><legend><h2>Podrobný popis průběhu:</h2></legend>
@@ -148,11 +148,11 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 	</fieldset>
 	
 	<fieldset><legend><h2>Energetická náročnost:</h2></legend>
-		<textarea cols="80" rows="10" name="energy" id="energy"><?php echo StripSlashes($rec_actr['energy']); ?></textarea>
+		<textarea cols="80" rows="7" name="energy" id="energy"><?php echo StripSlashes($rec_actr['energy']); ?></textarea>
 	</fieldset>
 	
 	<fieldset><legend><h2>Počáteční vstupy:</h2></legend>
-		<textarea cols="80" rows="10" name="inputs" id="inputs"><?php echo StripSlashes($rec_actr['inputs']); ?></textarea>
+		<textarea cols="80" rows="7" name="inputs" id="inputs"><?php echo StripSlashes($rec_actr['inputs']); ?></textarea>
 	</fieldset>	
 	
 	<input type="hidden" name="reportid" value="<?php echo $rec_actr['id']; ?>" />

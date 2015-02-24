@@ -28,7 +28,7 @@
 		<?php }else{ ?><img src="getportrait.php?rid=<?php echo($_REQUEST['rid']); ?>" alt="<?php echo(StripSlashes($rec_p['name']).' '.StripSlashes($rec_p['surname'])); ?>" id="portraitimg" />
 		<?php } ?>
 		<?php if($rec_p['symbol']==NULL){ ?><img src="#" alt="symbol chybí" title="symbol chybí" id="symbolimg" class="noname"/>
-		<?php }else{ ?><img src="getportrait.php?nrid=<?php echo($rec_p['symbol']); ?>" alt="<?php echo(StripSlashes($rec_p['name']).' '.StripSlashes($rec_p['surname'])); ?>" id="symbolimg" />
+		<?php }else{ ?><a href="readsymbol.php?rid=<?php echo($rec_p['symbol']); ?>"><img src="getportrait.php?nrid=<?php echo($rec_p['symbol']); ?>" alt="<?php echo(StripSlashes($rec_p['name']).' '.StripSlashes($rec_p['surname'])); ?>" id="symbolimg" /></a>
 		<?php } ?>
 		<?php if($rec_p['symbol']==NULL){ ?>
 		<?php }else{ ?><span class="info-delete-symbol"><a class="delete" title="odpojit" href="procperson.php?deletesymbol=<?php echo $rec_p['symbol']; ?>&amp;personid=<?php echo $_REQUEST['rid']; ?>&amp;backurl=<?php echo URLEncode('editperson.php?rid='.$_REQUEST['rid']); ?>" onclick="return confirm('Opravdu odpojit symbol?')"><span class="button-text">smazat soubor</span></a></span>
@@ -85,9 +85,8 @@
 				<h3><label for="symbol">Nový&nbsp;symbol:</label></h3>
 				<input type="file" name="symbol" id="symbol" />
 				<div class="clear">&nbsp;</div>
-				<h3><label for="secret">Přísně&nbsp;tajné:</label></h3>
-					<input type="radio" name="secret" value="0" <?php if ($rec_p['secret']==0) { ?>checked="checked"<?php } ?>/>ne<br/>
-					<h3><label>&nbsp;</label></h3><input type="radio" name="secret" value="1"<?php if ($rec_p['secret']==1) { ?>checked="checked"<?php } ?>>ano
+				<h3><label for="secret">Přísně tajné:</label></h3>
+					<input type="checkbox" name="secret" value=1 <?php if ($rec_p['secret']==1) { ?>checked="checked"<?php } ?>/><br/>
 				<div class="clear">&nbsp;</div>
 				<h3><label for="dead">Mrtvá:</label></h3>
 					<input type="checkbox" name="dead" value=1 <?php if ($rec_p['dead']==1) { ?>checked="checked"<?php } ?>/><br/>
