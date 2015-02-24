@@ -1,5 +1,8 @@
 <?php
 	require_once ('./inc/func_main.php');
+        if (!$usrinfo['right_power']) {
+                        unauthorizedAccess(8, 1, 0, 0);
+                    }
 	auditTrail(8, 1, 0);
 	pageStart ('Uživatelé');
 	mainMenu (2);
