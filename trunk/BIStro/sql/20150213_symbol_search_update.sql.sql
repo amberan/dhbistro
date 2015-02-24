@@ -1,4 +1,4 @@
-INSERT INTO `dhbistrocz`.`nw_operation_type` (`id`, `name`) VALUES ('14', 'vyhledávání');
+INSERT INTO `nw_operation_type` (`id`, `name`) VALUES ('14', 'vyhledávání');
 
 ALTER TABLE `nw_symbols` 
 ADD COLUMN `search_lines` INT NOT NULL DEFAULT 0 AFTER `assigned`, 
