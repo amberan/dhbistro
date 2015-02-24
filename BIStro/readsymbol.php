@@ -86,7 +86,7 @@
 	
 <!-- náseduje popis osoby -->
 	<fieldset>
-		<legend><h2>Popis symbolu</h2></legend>
+		<legend><h2>Informace k symbolu</h2></legend>
 		<div class="field-text"><?php echo (StripSlashes($rec['desc'])); ?></div>
 	</fieldset>	
 	

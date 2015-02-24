@@ -6,6 +6,16 @@
 	  deleteAllUnread (2,$_REQUEST['delete']);
 	  Header ('Location: groups.php');
 	}
+        if (isset($_REQUEST['archive']) && is_numeric($_REQUEST['archive'])) {
+	  auditTrail(2, 2, $_REQUEST['archive']);
+	  MySQL_Query ("UPDATE ".DB_PREFIX."groups SET archived=1 WHERE id=".$_REQUEST['archive']);
+	  Header ('Location: groups.php');
+	}
+        if (isset($_REQUEST['dearchive']) && is_numeric($_REQUEST['dearchive'])) {
+	  auditTrail(2, 2, $_REQUEST['dearchive']);
+	  MySQL_Query ("UPDATE ".DB_PREFIX."groups SET archived=0 WHERE id=".$_REQUEST['dearchive']);
+	  Header ('Location: groups.php');
+	}
 	if (isset($_POST['insertgroup']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret'])) {
 	  pageStart ('Přidána skupina');
 	  mainMenu (3);
@@ -33,7 +43,7 @@
 			pageEnd ();
 		}
 	}
-	if (isset($_POST['groupid']) && isset($_POST['editgroup']) && $usrinfo['right_text'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match ('/i^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret'])) {
+	if (isset($_POST['groupid']) && isset($_POST['editgroup']) && $usrinfo['right_text'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match ('/i^[[:blank:]]*$/i',$_POST['contents'])) {
 	  auditTrail(2, 2, $_POST['groupid']);
 	  pageStart ('Uložení změn');
 		mainMenu (3);
@@ -42,7 +52,7 @@
 	  	sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./editgroup.php?rid='.$_POST['groupid'].'">úprava skupiny</a> &raquo; <strong>uložení změn neúspěšné</strong>');
 	    echo '<div id="obsah"><p>Skupina již existuje, změňte její jméno.</p></div>';
 	  } else {
-			MySQL_Query ("UPDATE ".DB_PREFIX."groups SET title='".mysql_real_escape_string(safeInput($_POST['title']))."', contents='".mysql_real_escape_string($_POST['contents'])."', secret='".$_POST['secret']."' WHERE id=".$_POST['groupid']);
+			MySQL_Query ("UPDATE ".DB_PREFIX."groups SET title='".mysql_real_escape_string(safeInput($_POST['title']))."', contents='".mysql_real_escape_string($_POST['contents'])."', archived='".(isset($_POST['archived'])?'1':'0')."', secret='".(isset($_POST['secret'])?'1':'0')."' WHERE id=".$_POST['groupid']);
 			if (!isset($_POST['notnew'])) {
 				unreadRecords (2,$_POST['groupid']);
 			}

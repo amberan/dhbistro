@@ -80,6 +80,8 @@
 	<div id="info"><?php
 		if($rec_g['secret']==1){ ?>
 	 	<h2>TAJNÉ</h2><?php } ?><?php
+		if($rec_g['archived']==1){ ?>
+	 	<h2>ARCHIV</h2><?php } ?><?php
 		if($rec_g['deleted']==1){ ?>
 	 	<h2>SMAZANÝ ZÁZNAM</h2><?php } ?>
 	 	<h3>Členové: </h3><p><?php

@@ -69,7 +69,7 @@
 		if (!isset($_POST['notnew'])) {
 			unreadRecords (7,$_POST['symbolid']);
 		}
-		sparklets ('<a href="./symbols.php">symboly</a> &raquo; <a href="./editsymbol.php?rid='.$_POST['symbolid'].'">úprava symbolu</a> &raquo; <strong>uložení změn</strong>');
+		sparklets ('<a href="./symbols.php">symboly</a> &raquo; <a href="./editsymbol.php?rid='.$_POST['symbolid'].'">úprava symbolu</a> &raquo; <strong>uložení změn</strong>','<a href="./readsymbol.php?rid='.$_POST['symbolid'].'">zobrazit upravené</a>');
 		if (is_uploaded_file($_FILES['symbol']['tmp_name'])) {
 			$sps=MySQL_Query ("SELECT symbol FROM ".DB_PREFIX."symbols WHERE id=".$_POST['symbolid']);
 			if ($spc=MySQL_Fetch_Assoc($sps)) {
@@ -80,19 +80,13 @@
 			$sdst=resize_Image ('./files/'.$sfile.'tmp',100,100);
 			imagejpeg($sdst,'./files/symbols/'.$sfile);
 			unlink('./files/'.$sfile.'tmp');
-			MySQL_Query ("UPDATE ".DB_PREFIX."symbols SET symbol='".$sfile."',
-														  search_lines='".$_POST['liner']."',
-														  search_curves='".$_POST['curver']."',
-														  search_points='".$_POST['pointer']."',
-														  search_geometricals='".$_POST['geometrical']."',
-														  search_alphabetes='".$_POST['alphabeter']."',
-														  search_specialchars='".$_POST['specialchar']."' WHERE id=".$_POST['symbolid']);
+			MySQL_Query ("UPDATE ".DB_PREFIX."symbols SET symbol='".$sfile."' WHERE id=".$_POST['symbolid']);
 		}
 		if ($usrinfo['right_org']==1) {
-			$sql="UPDATE ".DB_PREFIX."symbols SET `desc`='".mysql_real_escape_string($_POST['desc'])."', archiv='".(isset($_POST['archiv'])?'1':'0')."' WHERE id=".$_POST['symbolid'];
-			MySQL_Query ($sql);
+			$sql="UPDATE ".DB_PREFIX."symbols SET `desc`='".mysql_real_escape_string($_POST['desc'])."', archiv='".(isset($_POST['archiv'])?'1':'0')."', search_lines='".$_POST['liner']."', search_curves='".$_POST['curver']."', search_points='".$_POST['pointer']."', search_geometricals='".$_POST['geometrical']."', search_alphabets='".$_POST['alphabeter']."', search_specialchars='".$_POST['specialchar']."' WHERE id=".$_POST['symbolid'];
+                        MySQL_Query ($sql);
 		} else {
-			$sql="UPDATE ".DB_PREFIX."symbols SET `desc`='".mysql_real_escape_string($_POST['desc'])."', modified='".Time()."', modified_by='".$usrinfo['id']."', archiv='".(isset($_POST['archiv'])?'1':'0')."' WHERE id=".$_POST['symbolid'];
+			$sql="UPDATE ".DB_PREFIX."symbols SET `desc`='".mysql_real_escape_string($_POST['desc'])."', modified='".Time()."', modified_by='".$usrinfo['id']."', archiv='".(isset($_POST['archiv'])?'1':'0')."', search_lines='".$_POST['liner']."', search_curves='".$_POST['curver']."', search_points='".$_POST['pointer']."', search_geometricals='".$_POST['geometrical']."', search_alphabets='".$_POST['alphabeter']."', search_specialchars='".$_POST['specialchar']."' WHERE id=".$_POST['symbolid'];
 			MySQL_Query ($sql);
 		}
 		echo '<div id="obsah"><p>Symbol upraven.</p></div>';

@@ -3,7 +3,7 @@ require_once ('./inc/func_main.php');
 auditTrail(12, 1, 0);
 pageStart ('Vyhledávání');
 mainMenu (3);
-sparklets ('<strong>vyhledávání</strong>');
+sparklets ('<strong>vyhledávání</strong>','<a href="symbol_search.php">vyhledat symbol</a>');
 //Zpracování filtru
 if (!isset($_POST['farchiv'])) {
 	$farchiv=0;
@@ -227,21 +227,26 @@ if ($usrinfo['right_power']) {
 </table>';          
 
 /* Skupiny */
+if ($farchiv==0) {
+    $fsql_archiv=' AND '.DB_PREFIX.'groups.archived=0 ';
+} else {
+    $fsql_archiv='';
+} 
 if ($usrinfo['right_power']) {
     $res = mysql_query("
-        SELECT ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.secret AS 'secret'
+        SELECT ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.archived AS 'archived'
         FROM ".DB_PREFIX."groups
         WHERE MATCH(title, contents) AGAINST ('$search' IN BOOLEAN MODE)
-        AND ".DB_PREFIX."groups.deleted=0
+        AND ".DB_PREFIX."groups.deleted=0".$fsql_archiv."
         ORDER BY 5 * MATCH(title) AGAINST ('$search')
         + MATCH(contents) AGAINST ('$search') DESC
     ");
 } else {
     $res = mysql_query("
-        SELECT ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.secret AS 'secret'
+        SELECT ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.archived AS 'archived'
         FROM ".DB_PREFIX."groups
         WHERE MATCH(title, contents) AGAINST ('$search' IN BOOLEAN MODE)
-        AND ".DB_PREFIX."groups.deleted=0 AND ".DB_PREFIX."groups.secret=0
+        AND ".DB_PREFIX."groups.deleted=0 AND ".DB_PREFIX."groups.secret=0".$fsql_archiv."
         ORDER BY 5 * MATCH(title) AGAINST ('$search')
         + MATCH(contents) AGAINST ('$search') DESC
     ");
@@ -262,7 +267,49 @@ if ($usrinfo['right_power']) {
                 while ($rec=MySQL_Fetch_Assoc($res)) {
                 echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 	<td><a href="readgroup.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a></td>
-        <td>'.(($rec['secret']==1)?'Tajná':'').'</td>
+        <td>'.(($rec['secret']==1)?'Tajná':'').''.(($rec['archived']==1)?' Archivovaná':'').'</td>
+        </tr>';
+		$even++;
+                }
+	  echo '</tbody>
+</table>'; 
+
+/* Symboly */
+/* Není tu ošetřené, aby to nevyhazovalo symboly od tajných osob. Nutno v budoucnu ošetřit. */          
+if ($usrinfo['right_power']) {
+    $res = mysql_query("
+        SELECT ".DB_PREFIX."symbols.id AS 'id', ".DB_PREFIX."symbols.assigned AS 'assigned', ".DB_PREFIX."symbols.secret AS 'secret'
+        FROM ".DB_PREFIX."symbols
+        WHERE MATCH(`desc`) AGAINST ('$search' IN BOOLEAN MODE)
+        AND ".DB_PREFIX."symbols.deleted=0
+        ORDER BY 5 * MATCH(`desc`) AGAINST ('$search') DESC
+    ");
+} else {
+    $res = mysql_query("
+        SELECT ".DB_PREFIX."symbols.id AS 'id', ".DB_PREFIX."symbols.assigned AS 'assigned', ".DB_PREFIX."groups.secret AS 'secret'
+        FROM ".DB_PREFIX."symbols
+        WHERE MATCH(`desc`) AGAINST ('$search' IN BOOLEAN MODE)
+        AND ".DB_PREFIX."symbols.deleted=0 AND ".DB_PREFIX."symbols.secret=0
+        ORDER BY 5 * MATCH(`desc`) AGAINST ('$search') DESC
+    ");
+}
+?>
+<h3>Symboly</h3>
+<table>
+<thead>
+	<tr>
+	  <th>ID</th>
+	  <th>Status</th>
+	</tr>
+</thead>
+<tbody>
+
+<?php
+		$even=0;
+                while ($rec=MySQL_Fetch_Assoc($res)) {
+                echo '<tr class="'.(($even%2==0)?'even':'odd').'">
+	<td><a href="readsymbol.php?rid='.$rec['id'].'&amp;hidenotes=0">'.($rec['id']).'</a></td>
+        <td>'.(($rec['assigned']==1)?'Přiřazený':'Nepřiřazený').''.(($rec['secret']==1)?', Tajný':'').'</td>
         </tr>';
 		$even++;
                 }

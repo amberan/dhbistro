@@ -14,15 +14,23 @@
 <div id="obsah">
 <fieldset><legend><h1>Úprava skupiny: <?php echo StripSlashes($rec_g['title']); ?></h1></legend>
 <form action="procgroup.php" method="post" id="inputform">
-	<div id="info">	
+	<div id="info"><?php
+		if($rec_g['secret']==1){ ?>
+	 	<h2>TAJNÉ</h2><?php } ?><?php
+		if($rec_g['archived']==1){ ?>
+	 	<h2>ARCHIV</h2><?php } ?>	
 		<h3><label for="title">Název:</label></h3>
 		<input type="text" name="title" id="title" value="<?php echo StripSlashes($rec_g['title']); ?>" />
+		
+                <div class="clear">&nbsp;</div>
+                <h3><label for="archived">Archiv:</label></h3>
+			<input type="checkbox" name="archived" value=1 <?php if ($rec_g['archived']==1) { ?>checked="checked"<?php } ?>/><br/>
 		<div class="clear">&nbsp;</div>
-		<h3><label for="secret">Přísně&nbsp;tajné:</label></h3>
-			<input type="radio" name="secret" value="0" <?php if ($rec_g['secret']==0) { ?>checked="checked"<?php } ?>/>ne<br/>
-			<h3><label>&nbsp;</label></h3><input type="radio" name="secret" value="1"<?php if ($rec_g['secret']==1) { ?>checked="checked"<?php } ?>>ano
+		                
+                <h3><label for="secret">Přísně tajné:</label></h3>
+			<input type="checkbox" name="secret" value=1 <?php if ($rec_g['secret']==1) { ?>checked="checked"<?php } ?>/><br/>
 		<div class="clear">&nbsp;</div>
-<?php 			if ($usrinfo['right_org'] == 1)	{
+<?php if ($usrinfo['right_org'] == 1) {
 				echo '					
 				<h3><label for="notnew">Není nové</label></h3>
 					<input type="checkbox" name="notnew"/><br/>
