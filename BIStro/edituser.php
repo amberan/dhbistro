@@ -1,5 +1,8 @@
 <?php
 	require_once ('./inc/func_main.php');
+        if (!$usrinfo['right_power']) {
+            unauthorizedAccess(8, 1, 0, 0);
+        }
 	pageStart ('Úprava uživatele');
 	mainMenu (2);
 	sparklets ('<a href="./users.php">uživatelé</a> &raquo; <strong>úprava uživatele</strong>');
