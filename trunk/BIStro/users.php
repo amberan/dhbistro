@@ -47,7 +47,11 @@
 	}
 	filter();
 	// vypis uživatelů
-	$sql="SELECT * FROM ".DB_PREFIX."users WHERE ".DB_PREFIX."users.deleted=0 ".$fsql_cat." ORDER BY ".$fsql_sort;
+        if ($usrinfo['right_org']) {
+            $sql="SELECT * FROM ".DB_PREFIX."users WHERE ".DB_PREFIX."users.deleted=0 ".$fsql_cat." ORDER BY ".$fsql_sort;
+        } else {
+            $sql="SELECT * FROM ".DB_PREFIX."users WHERE ".DB_PREFIX."users.deleted=0 AND ".DB_PREFIX."users.right_org=0 ".$fsql_cat." ORDER BY ".$fsql_sort;
+        }
 	$res=MySQL_Query ($sql);
 	if (MySQL_Num_Rows($res)) {
 	  echo '<div id="obsah">
