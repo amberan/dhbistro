@@ -86,8 +86,8 @@ if ($usrinfo['right_power']) {
 <table>
 <thead>
 	<tr>
-	  <th>Název</th>
-	  <th>Status</th>
+	  <th width="50%">Název</th>
+	  <th width="50%">Status</th>
 	</tr>
 </thead>
 <tbody>
@@ -140,8 +140,8 @@ if ($usrinfo['right_power']) {
 <table>
 <thead>
 	<tr>
-	  <th>Název</th>
-	  <th>Status</th>
+	  <th width="50%">Název</th>
+	  <th width="50%">Status</th>
 	</tr>
 </thead>
 <tbody>
@@ -208,8 +208,8 @@ if ($usrinfo['right_power']) {
 <table>
 <thead>
 	<tr>
-	  <th>Jméno</th>
-	  <th>Status</th>
+	  <th width="50%">Jméno</th>
+	  <th width="50%">Status</th>
 	</tr>
 </thead>
 <tbody>
@@ -256,8 +256,8 @@ if ($usrinfo['right_power']) {
 <table>
 <thead>
 	<tr>
-	  <th>Název</th>
-	  <th>Status</th>
+	  <th width="50%">Název</th>
+	  <th width="50%">Status</th>
 	</tr>
 </thead>
 <tbody>
@@ -298,8 +298,8 @@ if ($usrinfo['right_power']) {
 <table>
 <thead>
 	<tr>
-	  <th>ID</th>
-	  <th>Status</th>
+	  <th width="50%">ID</th>
+	  <th width="50%">Status</th>
 	</tr>
 </thead>
 <tbody>
@@ -340,10 +340,10 @@ if ($usrinfo['right_power']) {
 <table>
 <thead>
 	<tr>
-	  <th>Název poznámky</th>
-          <th>Komentuje</th>
-          <th>Typ</th>
-          <th>Status</th>
+	  <th width="30%">Název poznámky</th>
+          <th width="30%">Komentuje</th>
+          <th width="20%">Typ</th>
+          <th width="20%">Status</th>
 	</tr>
 </thead>
 <tbody>
