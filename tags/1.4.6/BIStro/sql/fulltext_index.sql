@@ -1,0 +1,14 @@
+alter table nw_persons add fulltext (surname); 
+alter table nw_persons add fulltext (name); 
+alter table nw_persons add fulltext (contents);
+alter table nw_reports add fulltext (label);
+alter table nw_reports add fulltext (task);
+alter table nw_reports add fulltext (summary); 
+alter table nw_reports add fulltext (impacts);
+alter table nw_reports add fulltext (details);
+alter table nw_cases add fulltext (title);
+alter table nw_cases add fulltext (contents);
+alter table nw_groups add fulltext (title);
+alter table nw_groups add fulltext (contents);
+alter table nw_notes add fulltext (title);
+alter table nw_notes add fulltext (note);
