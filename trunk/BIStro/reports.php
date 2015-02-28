@@ -94,7 +94,7 @@
 	// filtr samotny
 	function filter () {
 	  global $f_cat, $f_sort, $f_stat, $f_my, $f_conn, $fsql_conn2, $f_sec, $f_new, $f_archiv, $usrinfo, $hlaseniM;
-	  echo '<div id="filter-wrapper"><form action="reports.php" method="post" id="filter">
+          echo '<div id="filter-wrapper"><form action="reports.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat <select name="status">
