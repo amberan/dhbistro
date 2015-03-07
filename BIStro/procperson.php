@@ -24,7 +24,7 @@
 			$sdst=resize_Image ('./files/'.$sfile.'tmp',100,130);
 			imagejpeg($sdst,'./files/symbols/'.$sfile);
 			unlink('./files/'.$sfile.'tmp');
-                        $sql_sy="INSERT INTO ".DB_PREFIX."symbols VALUES('', '".$sfile."', '', 0, '".Time()."', '".$usrinfo['id']."', '".Time()."', '".$usrinfo['id']."', 0, 1)";
+                        $sql_sy="INSERT INTO ".DB_PREFIX."symbols VALUES('', '".$sfile."', '', 0, '".Time()."', '".$usrinfo['id']."', '".Time()."', '".$usrinfo['id']."', 0, 1, 0, 0, 0, 0, 0, 0, 0)";
                         MySQL_Query ($sql_sy);
                         $syidarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."symbols WHERE symbol = '".$sfile."'"));
                         $syid=$syidarray['id'];
@@ -85,7 +85,7 @@
 			$sdst=resize_Image ('./files/'.$sfile.'tmp',100,100);
 			imagejpeg($sdst,'./files/symbols/'.$sfile);
 			unlink('./files/'.$sfile.'tmp');
-                        $sql_sy="INSERT INTO ".DB_PREFIX."symbols VALUES('', '".$sfile."', '', 0, '".Time()."', '".$usrinfo['id']."', '".Time()."', '".$usrinfo['id']."', 0, 1)";
+                        $sql_sy="INSERT INTO ".DB_PREFIX."symbols VALUES('', '".$sfile."', '', 0, '".Time()."', '".$usrinfo['id']."', '".Time()."', '".$usrinfo['id']."', 0, 1, 0, 0, 0, 0, 0, 0, 0)";
                         MySQL_Query ($sql_sy);
                         $syidarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."symbols WHERE symbol = '".$sfile."'"));
                         $syid=$syidarray['id'];
