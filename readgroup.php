@@ -58,7 +58,7 @@
 	//
 	function filter () {
 		global $f_sort, $sportraits, $f_sec, $usrinfo;
-	  echo '<div id="filter-wrapper"><form action="readgroup.php" method="post" id="filter">
+	  echo '<div id="filter-wrapper"><form action="readgroup.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Členy skupiny řadit podle <select name="sort">
