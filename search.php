@@ -5,7 +5,7 @@ pageStart ('Vyhledávání');
 mainMenu (3);
 sparklets ('<strong>vyhledávání</strong>','<a href="symbol_search.php">vyhledat symbol</a>');
 //Zpracování filtru
-if (!isset($_POST['farchiv'])) {
+if (!isset($_GET['farchiv'])) {
 	$farchiv=0;
 } else {
 	$farchiv=1;

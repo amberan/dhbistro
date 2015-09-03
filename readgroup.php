@@ -35,10 +35,10 @@
 	} else {
 	  $f_sort=$_REQUEST['sort'];
 	}
-	if (!isset($_POST['sportraits'])) {
+	if (!isset($_GET['sportraits'])) {
 		$sportraits=false;
 	} else {
-		$sportraits=$_POST['sportraits'];
+		$sportraits=$_GET['sportraits'];
 	}
 	if (!isset($_REQUEST['sec'])) {
 		$f_sec=0;

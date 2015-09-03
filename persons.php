@@ -10,22 +10,22 @@
 	} else {
 	  $f_sort=$_REQUEST['sort'];
 	}
-	if (!isset($_POST['sportraits'])) {
+	if (!isset($_GET['sportraits'])) {
 		$sportraits=false;
 	} else {
-		$sportraits=$_POST['sportraits'];
+		$sportraits=$_GET['sportraits'];
 	}
-	if (!isset($_POST['ssymbols'])) {
+	if (!isset($_GET['ssymbols'])) {
 		$ssymbols=false;
 	} else {
-		$ssymbols=$_POST['ssymbols'];
+		$ssymbols=$_GET['ssymbols'];
 	}
-	if (!isset($_POST['fdead'])) {
+	if (!isset($_GET['fdead'])) {
 		$fdead=0;
 	} else {
 		$fdead=1;
 	}
-	if (!isset($_POST['farchiv'])) {
+	if (!isset($_GET['farchiv'])) {
 		$farchiv=0;
 	} else {
 		$farchiv=1;
