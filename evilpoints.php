@@ -36,7 +36,7 @@
 	function filter () {
 	  global $f_cat, $point;
 		global $f_sort;
-	  echo '<div id="filter-wrapper"><form action="evilpoints.php" method="post" id="filter">
+	  echo '<div id="filter-wrapper"><form action="evilpoints.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat všechny uživatele a seřadit je podle <select name="sort">

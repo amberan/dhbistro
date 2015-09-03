@@ -45,7 +45,7 @@
 	//
 	function filter () {
 	  global $f_sort, $f_sec, $f_stat, $f_new, $usrinfo;
-	  echo '<div id="filter-wrapper"><form action="cases.php" method="post" id="filter">
+	  echo '<div id="filter-wrapper"><form action="cases.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat všechny případy a seřadit je podle <select name="sort">

@@ -43,7 +43,7 @@
 	//
 	function filter () {
 	  global $f_sort, $f_sec, $f_new, $f_arch, $usrinfo;
-	  echo '<div id="filter-wrapper"><form action="groups.php" method="post" id="filter">
+	  echo '<div id="filter-wrapper"><form action="groups.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat všechny skupiny a seřadit je podle <select name="sort">

@@ -33,7 +33,7 @@
 	function filter () {
 	  global $f_cat;
 		global $f_sort;
-	  echo '<div id="filter-wrapper"><form action="users.php" method="post" id="filter">
+	  echo '<div id="filter-wrapper"><form action="users.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat <select name="kategorie">
