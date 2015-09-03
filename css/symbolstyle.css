@@ -1,0 +1,370 @@
+@CHARSET "UTF-8";
+/* CSS Document */
+
+/*//////////////////////////////////////////////////////////////////////////////////////*/
+/* --------------------------------------------------------------------  Main Page DIVs */
+/*//////////////////////////////////////////////////////////////////////////////////////*/
+
+/* Posouvací frame od topu */
+.top_margin {
+	margin-top: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	border: none;
+	width: 600px;
+	height: 20px;
+	background: none;
+}
+
+/* Frame pro popis stránky*/
+.message_frame {
+	text-align: center;
+	margin-top: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	border: none;
+	width: 600px;
+	height: 30px;
+	background-color: #AAA;
+}
+
+/* Frame pro input metadat */
+.central_frame {
+	text-align: center;
+	margin-top: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	border: none;
+	width: 400px;
+	min-height: 275px;
+	background: none;
+}
+
+/* Frame pro tlačítko Vyhledat */
+.button_frame {
+	text-align: center;
+	margin-top: 5px;
+	margin-left: auto;
+	margin-right: auto;
+	border: none;
+	width: 600px;
+	height: 30px;
+	background: none;
+}
+
+/* Frame pro tlačítka hlavní strana, přidat symbol */
+.back_frame {
+	text-align: center;
+	margin-top: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	border: none;
+	width: 600px;
+	height: 20px;
+	background-color: #CCC;
+	/*background: none;*/
+}
+
+/*//////////////////////////////////////////////////////////////////////////////////////*/
+/* ------------------------------------------------------------------------  Back Frame */
+/*//////////////////////////////////////////////////////////////////////////////////////*/
+
+
+a.redirection {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	color: #000;
+	font-size: 11px;
+	font-family: Arial, Helvetica, sans-serif;
+	text-decoration: none;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+a.redirection:hover {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	color: #F00;
+	font-size: 11px;
+	font-family: Arial, Helvetica, sans-serif;
+	text-decoration: none;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+a.redirection:visited {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	color: #930;
+	font-size: 11px;
+	font-family: Arial, Helvetica, sans-serif;
+	text-decoration: none;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+/*//////////////////////////////////////////////////////////////////////////////////////*/
+/* ---------------------------------------------------------------------  Message Frame */
+/*//////////////////////////////////////////////////////////////////////////////////////*/
+
+p.message_text {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	color: #000;
+	font-size: 14px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	text-decoration: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;	
+}
+
+/*//////////////////////////////////////////////////////////////////////////////////////*/
+/* ---------------------------------------------------------------------  Central Frame */
+/*//////////////////////////////////////////////////////////////////////////////////////*/
+
+.input_frame {
+	margin-top: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	border: none;
+	width: inherit;
+	height: 40px;
+	background: none;
+	padding-top: 5px;
+	padding-bottom: 2px;
+}
+
+.input_text {
+	margin-top: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	border: none;
+	width: 150px;
+	height: 40px;
+	background-color: #fff9ae;
+	float: left;
+}
+
+.input_text_margin {
+	margin-top: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	border: none;
+	width: 150px;
+	height: 13px;
+	background: none;
+}
+
+.input_slider {
+	margin-top: 0px;
+	margin-left: 150px;
+	border: none;
+	width: 250px;
+	height: 40px;
+	background-color: #fff9ae;
+}
+
+.input_slider_numbers {
+	margin-top: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	border: none;
+	width: 250px;
+	height: 8px;
+	background: none;
+}
+
+p.input_slider_numbers_text {
+	margin-top: auto;
+	margin-bottom: auto;
+	color: #000;
+	font-size: 7px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+p.label_text {
+	margin-top: auto;
+	margin-bottom: auto;
+	margin-right: 10px;
+	color: #000;
+	font-size: 12px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	text-decoration: none;	
+}
+
+/*//////////////////////////////////////////////////////////////////////////////////////*/
+/* ---------------------------- RESULT ////-------------------------------------------- */
+/*//////////////////////////////////////////////////////////////////////////////////////*/
+
+/* Frame pro result vyhledavani */
+.central_result_frame {
+	text-align: center;
+	margin-top: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 598px;
+	min-height: 275px;
+	background: none;
+}
+
+/*//////////////////////////////////////////////////////////////////////////////////////*/
+/* ----------------------------------------------------------------------  Predis Frame */
+/*//////////////////////////////////////////////////////////////////////////////////////*/
+
+.predis_symbols {
+	margin-top: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	border: none;
+	width: 600px;
+	height: 15px;
+	background-color: #999;
+	padding: 0px;
+}
+
+.predis_image {
+	margin-top: auto;
+	padding-top: 0px;
+	padding-left: 2px;
+	padding-right: 2px;
+	border: none;
+}
+
+.predis_numbers {
+	margin-top: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	border: none;
+	width: 600px;
+	height: 15px;
+	background-color: #fff9ae;
+}
+
+/*//////////////////////////////////////////////////////////////////////////////////////*/
+/* ---------------------------------------------------------------------  Central Frame */
+/*//////////////////////////////////////////////////////////////////////////////////////*/
+
+.result {
+	margin-top: 0px;
+	margin-left: 0px;
+	margin-right: 0px;
+	border: solid 1px;
+	width: 598px;
+	height: 75px;
+	background-color: #FFF;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	
+}
+
+/* ///////////// Image of symbol */
+.result_symbol_image {
+	margin-top: 0px;
+	margin-left: 0px;
+	border: none;
+	width: 75px;
+	height: 75px;
+	background: none;
+	float: left;
+}
+
+.result_stats {
+	margin-top: 0px;
+	margin-left: 78px;
+	border: none;
+	width: 520px;
+	height: 75px;
+	background: none;
+}
+
+/* ////////////// Dilci statistiky a shody */
+.result_stats_singles {
+	margin-top: 0px;
+	margin-left: 0px;
+	border: none;
+	width: 390px;
+	height: 75px;
+	background-color: #FFF;
+	float: left;
+}
+
+.result_stats_singles_parts {
+	margin-top: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	border: none;
+	width: 390px;
+	height: 25px;
+	background: none;
+	text-align: left;
+}
+
+p.result_stats_singles_parts_text {
+	margin-top: 10px;
+	margin-bottom: 0px;
+	margin-left: 10px;
+	color: #000;
+	font-size: 14px;
+	font-family: Arial, Helvetica, sans-serif;
+	text-decoration: none;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;	
+}
+
+.result_stats_singles_url {
+	margin-top: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	border: none;
+	width: 390px;
+	height: 20px;
+	background: none;
+	text-align: left;
+}
+
+/* ///////////// Procentualni shoda symbolu se zadanim */
+.result_symbol_avgpercent {
+	margin-top: 0px;
+	margin-left: 390px;
+	border: none;
+	width: 130px;
+	height: 75px;
+	background-color: #DDD;
+	text-align: center;	
+}
+
+.result_symbol_avgpercent_margin {
+	margin-top: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	border: none;
+	width: 130px;
+	height: 15px;
+	background: none;	
+}
+
+p.avgpercent_text {
+	margin-top: auto;
+	margin-bottom: auto;
+	margin-left: 5px;
+	color: #000;
+	font-size: 40px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	text-decoration: none;	
+}
+
