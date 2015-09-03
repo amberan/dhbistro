@@ -435,6 +435,7 @@ function backupDB () {
         tinymce.init({
             selector: "textarea",
             theme: "modern",
+            entity_encoding: "raw",
             plugins: [
                 "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
                 "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",

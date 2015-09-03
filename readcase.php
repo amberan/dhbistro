@@ -3,10 +3,10 @@
 	if (is_numeric($_REQUEST['rid'])) {
 		$sql_a="SELECT * FROM ".DB_PREFIX."c2s WHERE ".DB_PREFIX."c2s.idsolver=".$usrinfo['id']." AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid'];
 		$res_a=MySQL_Query ($sql_a);
-		$rec_a=MySQL_Fetch_array($res_a);
+		$rec_a=MySQL_Fetch_Array($res_a);
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."cases WHERE id=".$_REQUEST['rid']);
 		if ($rec=MySQL_Fetch_Assoc($res)) {
-                    if (($rec['secret']==1 || $rec['deleted']==1) && !$usrinfo['right_power']) {
+                    if (($rec['secret']==1 || $rec['deleted']==1) && (!$usrinfo['right_power'] && $usrinfo['id']<>$rec_a['idsolver'])) {
                     unauthorizedAccess(3, $rec['secret'], $rec['deleted'], $_REQUEST['rid']);
                     }
 			auditTrail(3, 1, $_REQUEST['rid']);
