@@ -2,6 +2,7 @@
 	require_once ('./inc/func_main.php');
 	pageStart ('Přiřazení symbolu');
 	mainMenu (5);
+        $custom_Filter = custom_Filter(21);
 	sparklets ('<a href="./symbols.php">nepřiřazené symboly</a> &raquo; <strong>přiřazení symbolu k případu</strong>');
 	$sql="SELECT created_by FROM ".DB_PREFIX."symbols WHERE id=".$_REQUEST['rid'];
 	$autharray=MySQL_Fetch_Assoc(MySQL_Query($sql));
@@ -25,10 +26,10 @@ Symbol můžete přiřadit k případu (či případům), u kterých se vyskytov
 
 <?php
 // zpracovani filtru
-if (!isset($_REQUEST['sort'])) {
+if (!isset($custom_Filter['sort'])) {
 	$f_sort=1;
 } else {
-	$f_sort=$_REQUEST['sort'];
+	$f_sort=$custom_Filter['sort'];
 }
 switch ($f_sort) {
 	case 1: $fsql_sort=' '.DB_PREFIX.'cases.title ASC '; break;

@@ -3,18 +3,19 @@ require_once ('./inc/func_main.php');
 auditTrail(12, 1, 0);
 pageStart ('Vyhledávání');
 mainMenu (3);
+$custom_Filter = custom_Filter(13);
 sparklets ('<strong>vyhledávání</strong>','<a href="symbol_search.php">vyhledat symbol</a>');
 //Zpracování filtru
-if (!isset($_GET['farchiv'])) {
+if (!isset($custom_Filter['farchiv'])) {
 	$farchiv=0;
 } else {
 	$farchiv=1;
 }
 /* Prevzit vyhledavane */
-if (!isset($_REQUEST['search'])) {
+if (!isset($custom_Filter['search'])) {
 	  $searchedfor=NULL;
 	} else {
-	  $searchedfor=$_REQUEST['search'];
+	  $searchedfor=$custom_Filter['search'];
 	}
 
 $search = mysql_real_escape_string($searchedfor);

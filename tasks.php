@@ -11,6 +11,7 @@
 	if (isset($_POST['inserttask']) && !empty($_POST['task'])) {
 		pageStart ('Přidán úkol');
 		mainMenu (3);
+                $custom_Filter = custom_Filter(10);
 		$sql_t="INSERT INTO ".DB_PREFIX."tasks VALUES('','".mysql_real_escape_string(safeInput($_POST['task']))."','".$_POST['target']."','0','".Time()."','".$usrinfo['id']."','','')";
 		MySQL_Query ($sql_t);
 // Ukládání do novinek zakomentováno, protože nevím, jestli se použije. Kdyžtak SMAZAT.
@@ -24,6 +25,7 @@
 	} else if (isset($_POST['inserttask'])) {
 			pageStart ('Přidání úkolu neúspěšné');
 			mainMenu (3);
+                        $custom_Filter = custom_Filter(10);
 			sparklets ('<a href="users.php">uživatelé</a> &raquo; <strong>úkoly</strong>');
 			echo '<div id="obsah"><p>Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
 			pageEnd ();
@@ -32,6 +34,7 @@
 	
 	pageStart ('Úkoly');
 	mainMenu (2);
+        $custom_Filter = custom_Filter(10);
 	sparklets ('<a href="users.php">uživatelé</a> &raquo; <strong>úkoly</strong>');
 	
 	}
@@ -52,15 +55,15 @@
 	}
 
 	// zpracovani filtru
-	if (!isset($_REQUEST['kategorie'])) {
+	if (!isset($custom_Filter['kategorie'])) {
 	  $f_cat=1;
 	} else {
-	  $f_cat=$_REQUEST['kategorie'];
+	  $f_cat=$custom_Filter['kategorie'];
 	}
-	if (!isset($_REQUEST['sort'])) {
+	if (!isset($custom_Filter['sort'])) {
 	  $f_sort=1;
 	} else {
-	  $f_sort=$_REQUEST['sort'];
+	  $f_sort=$custom_Filter['sort'];
 	}
 	switch ($f_cat) {
 	  case 0: $fsql_cat=' WHERE '.DB_PREFIX.'tasks.status<3 '; break;

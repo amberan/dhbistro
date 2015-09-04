@@ -2,6 +2,7 @@
 	require_once ('./inc/func_main.php');
 	pageStart ('Úprava případu');
 	mainMenu (5);
+        $custom_Filter = custom_Filter(15);
 	sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>úprava případu</strong> &raquo; <strong>přidání osob</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	  $res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."cases WHERE id=".$_REQUEST['rid']);
@@ -22,27 +23,27 @@ K případu můžete přiřadit osoby, kterých se týká nebo kterých by se t�
 
 <?php
 	// zpracovani filtru
-	if (!isset($_REQUEST['sort'])) {
+	if (!isset($custom_Filter['sort'])) {
 	  $f_sort=1;
 	} else {
-	  $f_sort=$_REQUEST['sort'];
+	  $f_sort=$custom_Filter['sort'];
 	}
-	if (!isset($_POST['sportraits'])) {
+	if (!isset($custom_Filter['sportraits'])) {
 		$sportraits=false;
 	} else {
-		$sportraits=$_POST['sportraits'];
+		$sportraits=$custom_Filter['sportraits'];
 	}
-	if (!isset($_POST['ssymbols'])) {
+	if (!isset($custom_Filter['ssymbols'])) {
 		$ssymbols=false;
 	} else {
-		$ssymbols=$_POST['ssymbols'];
+		$ssymbols=$custom_Filter['ssymbols'];
 	}
-	if (!isset($_POST['fdead'])) {
+	if (!isset($custom_Filter['fdead'])) {
 		$fdead=0;
 	} else {
 		$fdead=1;
 	}
-	if (!isset($_POST['farchiv'])) {
+	if (!isset($custom_Filter['farchiv'])) {
 		$farchiv=0;
 	} else {
 		$farchiv=1;

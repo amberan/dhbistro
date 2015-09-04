@@ -3,62 +3,63 @@
 	auditTrail(1, 1, 0);
 	pageStart ('Osoby');
 	mainMenu (5);
+        $custom_Filter = custom_Filter(1);
 	sparklets ('<strong>osoby</strong>','<a href="newperson.php">přidat osobu</a>; <a href="symbols.php" '.((searchTable(7))?' class="unread"':'').'>nepřiřazené symboly</a>; <a href="symbol_search.php">vyhledat symbol</a>');
 	// zpracovani filtru
-	if (!isset($_REQUEST['sort'])) {
+	if (!isset($custom_Filter['sort'])) {
 	  $f_sort=1;
 	} else {
-	  $f_sort=$_REQUEST['sort'];
+	  $f_sort=$custom_Filter['sort'];
 	}
-	if (!isset($_GET['sportraits'])) {
+	if (!isset($custom_Filter['sportraits'])) {
 		$sportraits=false;
 	} else {
-		$sportraits=$_GET['sportraits'];
+		$sportraits=$custom_Filter['sportraits'];
 	}
-	if (!isset($_GET['ssymbols'])) {
+	if (!isset($custom_Filter['ssymbols'])) {
 		$ssymbols=false;
 	} else {
-		$ssymbols=$_GET['ssymbols'];
+		$ssymbols=$custom_Filter['ssymbols'];
 	}
-	if (!isset($_GET['fdead'])) {
+	if (!isset($custom_Filter['fdead'])) {
 		$fdead=0;
 	} else {
 		$fdead=1;
 	}
-	if (!isset($_GET['farchiv'])) {
+	if (!isset($custom_Filter['farchiv'])) {
 		$farchiv=0;
 	} else {
 		$farchiv=1;
 	}
-	if (!isset($_REQUEST['sec'])) {
+	if (!isset($custom_Filter['sec'])) {
 		$f_sec=0;
 	} else {
 		$f_sec=1;
 	}
-        if (!isset($_REQUEST['new'])) {
+        if (!isset($custom_Filter['new'])) {
 		$f_new=0;
 	} else {
 		$f_new=1;
 	}
-	if (!isset($_REQUEST['fspec'])) {
+	if (!isset($custom_Filter['fspec'])) {
 		$fspec=0;
 	} else {
-		$fspec=$_REQUEST['fspec'];
+		$fspec=$custom_Filter['fspec'];
 	}
-	if (!isset($_REQUEST['fside'])) {
+	if (!isset($custom_Filter['fside'])) {
 		$fside=0;
 	} else {
-		$fside=$_REQUEST['fside'];
+		$fside=$custom_Filter['fside'];
 	}
-	if (!isset($_REQUEST['fpow'])) {
+	if (!isset($custom_Filter['fpow'])) {
 		$fpow=0;
 	} else {
-		$fpow=$_REQUEST['fpow'];
+		$fpow=$custom_Filter['fpow'];
 	}
 	switch ($f_sort) {
-	  case 1: $fsql_sort=' '.DB_PREFIX.'persons.surname, '.DB_PREFIX.'persons.name ASC '; break;
-	  case 2: $fsql_sort=' '.DB_PREFIX.'persons.surname, '.DB_PREFIX.'persons.name DESC '; break;
-	  default: $fsql_sort=' '.DB_PREFIX.'persons.surname, '.DB_PREFIX.'persons.name ASC ';
+	  case 1: $fsql_sort=' '.DB_PREFIX.'persons.surname ASC, '.DB_PREFIX.'persons.name ASC '; break;
+	  case 2: $fsql_sort=' '.DB_PREFIX.'persons.surname DESC, '.DB_PREFIX.'persons.name DESC '; break;
+	  default: $fsql_sort=' '.DB_PREFIX.'persons.surname ASC, '.DB_PREFIX.'persons.name ASC ';
 	}
 	switch ($f_sec) {
 		case 0: $fsql_sec=''; break;

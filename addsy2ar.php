@@ -2,6 +2,7 @@
 	require_once ('./inc/func_main.php');
 	pageStart ('Přiřazení k hlášení');
 	mainMenu (5);
+        $custom_Filter = custom_Filter(22);
 	sparklets ('<a href="./symbols.php">symboly</a> &raquo; <strong>úprava symbolu</strong> &raquo; <strong>přidání k hlášení</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	  $res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."symbols WHERE id=".$_REQUEST['rid']);
@@ -22,20 +23,20 @@ K případu můžete přiřadit hlášení, která se ho týkají.
 
 <?php
 		// zpracovani filtru
-	if (!isset($_REQUEST['type'])) {
+	if (!isset($custom_Filter['type'])) {
 	  $f_cat=0;
 	} else {
-	  $f_cat=$_REQUEST['type'];
+	  $f_cat=$custom_Filter['type'];
 	}
-	if (!isset($_REQUEST['sort'])) {
+	if (!isset($custom_Filter['sort'])) {
 	  $f_sort=6;
 	} else {
-	  $f_sort=$_REQUEST['sort'];
+	  $f_sort=$custom_Filter['sort'];
 	}
-	if (!isset($_REQUEST['status'])) {
+	if (!isset($custom_Filter['status'])) {
 		$f_stat=0;
 	} else {
-		$f_stat=$_REQUEST['status'];
+		$f_stat=$custom_Filter['status'];
 	}
 	switch ($f_cat) {
 	  case 0: $fsql_cat=''; break;
@@ -85,7 +86,7 @@ seřadit je podle <select name="sort">
 	<option value="3"'.(($f_sort==3)?' selected="selected"':'').'>jména autora vzestupně</option>
 	<option value="4"'.(($f_sort==4)?' selected="selected"':'').'>jména autora sestupně</option>
 	<option value="5"'.(($f_sort==5)?' selected="selected"':'').'>data výjezdu vzestupně</option>
-	<option value="6"'.((!$f_sort==6)?'':' selected="selected"').'>data výjezdu sestupně</option>
+	<option value="6"'.(($f_sort==6)?' selected="selected"':'').'>data výjezdu sestupně</option>
 </select>.</p>
 	  <div id="filtersubmit">
 	  <input type="hidden" name="rid" value="'.$_REQUEST['rid'].'" />

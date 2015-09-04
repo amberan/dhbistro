@@ -3,24 +3,25 @@
 	auditTrail(3, 1, 0);
 	pageStart ('Skupiny');
 	mainMenu (3);
+        $custom_Filter = custom_Filter(2);
 	sparklets ('<strong>skupiny</strong>','<a href="newgroup.php">přidat skupinu</a>');
 	// zpracovani filtru
-	if (!isset($_REQUEST['sort'])) {
+	if (!isset($custom_Filter['sort'])) {
 	  $f_sort=1;
 	} else {
-	  $f_sort=$_REQUEST['sort'];
+	  $f_sort=$custom_Filter['sort'];
 	}
-	if (!isset($_REQUEST['sec'])) {
+	if (!isset($custom_Filter['sec'])) {
 		$f_sec=0;
 	} else {
 		$f_sec=1;
 	}
-        if (!isset($_REQUEST['new'])) {
+        if (!isset($custom_Filter['new'])) {
 		$f_new=0;
 	} else {
 		$f_new=1;
 	}
-        if (!isset($_REQUEST['arch'])) {
+        if (!isset($custom_Filter['arch'])) {
 		$f_arch=0;
 	} else {
 		$f_arch=1;

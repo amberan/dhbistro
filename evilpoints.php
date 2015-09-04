@@ -7,6 +7,7 @@
 	}
 	pageStart ($point.'y');
 	mainMenu (2);
+        $custom_Filter = custom_Filter(9);
 	sparklets ('<strong>'.$point.'y</strong>',(($usrinfo['right_power'])?'aktuální stav':''));
 	//Přidání zlobodů
 	if (isset($_POST['addpoints'])) {
@@ -20,10 +21,10 @@
 	}
 	
 	// zpracovani filtru
-	if (!isset($_REQUEST['sort'])) {
+	if (!isset($custom_Filter['sort'])) {
 	  $f_sort=1;
 	} else {
-	  $f_sort=$_REQUEST['sort'];
+	  $f_sort=$custom_Filter['sort'];
 	}
 	switch ($f_sort) {
 	  case 1: $fsql_sort=' '.DB_PREFIX.'users.login ASC '; break;

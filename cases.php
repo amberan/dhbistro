@@ -3,24 +3,25 @@
 	auditTrail(3, 1, 0);
 	pageStart ('Případy');
 	mainMenu (4);
+        $custom_Filter = custom_Filter(3);
 	sparklets ('<strong>případy</strong>','<a href="newcase.php">přidat případ</a>');
 	// zpracovani filtru
-	if (!isset($_REQUEST['sort'])) {
+	if (!isset($custom_Filter['sort'])) {
 	  $f_sort=4;
 	} else {
-	  $f_sort=$_REQUEST['sort'];
+	  $f_sort=$custom_Filter['sort'];
 	}
-	if (!isset($_REQUEST['stat'])) {
+	if (!isset($custom_Filter['stat'])) {
 		$f_stat=0;
 	} else {
 		$f_stat=1;
 	}
-	if (!isset($_REQUEST['sec'])) {
+	if (!isset($custom_Filter['sec'])) {
 		$f_sec=0;
 	} else {
 		$f_sec=1;
 	}
-        if (!isset($_REQUEST['new'])) {
+        if (!isset($custom_Filter['new'])) {
 		$f_new=0;
 	} else {
 		$f_new=1;

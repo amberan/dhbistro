@@ -6,17 +6,18 @@
 	auditTrail(8, 1, 0);
 	pageStart ('Uživatelé');
 	mainMenu (2);
+        $custom_Filter = custom_Filter(8);
 	sparklets ('<strong>uživatelé</strong>',(($usrinfo['right_power'])?'<a href="tasks.php">úkoly</a>; <a href="newuser.php">přidat uživatele</a>':'<a href="tasks.php">úkoly</a>'));
 	// zpracovani filtru
-	if (!isset($_REQUEST['kategorie'])) {
+	if (!isset($custom_Filter['kategorie'])) {
 	  $f_cat=0;
 	} else {
-	  $f_cat=$_REQUEST['kategorie'];
+	  $f_cat=$custom_Filter['kategorie'];
 	}
-	if (!isset($_REQUEST['sort'])) {
+	if (!isset($custom_Filter['sort'])) {
 	  $f_sort=1;
 	} else {
-	  $f_sort=$_REQUEST['sort'];
+	  $f_sort=$custom_Filter['sort'];
 	}
 	switch ($f_cat) {
 	  case 0: $fsql_cat=''; break;

@@ -3,48 +3,49 @@
 	auditTrail(4, 1, 0);
 	pageStart ('Hlášení');
 	mainMenu (5);
+        $custom_Filter = custom_Filter(4);
         if ($_SERVER["SERVER_NAME"] == 'enigma.dhbistro.cz') {
             sparklets ('<strong>'.$hlaseniM.'</strong>','<a href="newactrep.php?type=1">nová zakázka na amulet</a>; <a href="newactrep.php?type=2">nová zakázka na informace</a>');
         } else {
             sparklets ('<strong>'.$hlaseniM.'</strong>','<a href="newactrep.php?type=1">nové hlášení z výjezdu</a>; <a href="newactrep.php?type=2">nové hlášení z výslechu</a>');
         }
 // zpracovani filtru
-	if (!isset($_REQUEST['type'])) {
+	if (!isset($custom_Filter['type'])) {
 	  $f_cat=0;
 	} else {
-	  $f_cat=$_REQUEST['type'];
+	  $f_cat=$custom_Filter['type'];
 	}
-	if (!isset($_REQUEST['sort'])) {
+	if (!isset($custom_Filter['sort'])) {
 	  $f_sort=6;
 	} else {
-	  $f_sort=$_REQUEST['sort'];
+	  $f_sort=$custom_Filter['sort'];
 	}
-	if (!isset($_REQUEST['status'])) {
+	if (!isset($custom_Filter['status'])) {
 		$f_stat=2;
 	} else {
-		$f_stat=$_REQUEST['status'];
+		$f_stat=$custom_Filter['status'];
 	}
-	if (!isset($_REQUEST['my'])) {
+	if (!isset($custom_Filter['my'])) {
 		$f_my=0;
 	} else {
 		$f_my=1;
 	}
-	if (!isset($_REQUEST['conn'])) {
+	if (!isset($custom_Filter['conn'])) {
 		$f_conn=0;
 	} else {
 		$f_conn=1;
 	}
-	if (!isset($_REQUEST['sec'])) {
+	if (!isset($custom_Filter['sec'])) {
 		$f_sec=0;
 	} else {
 		$f_sec=1;
 	}
-        if (!isset($_REQUEST['archiv'])) {
+        if (!isset($custom_Filter['archiv'])) {
 		$f_archiv=0;
 	} else {
 		$f_archiv=1;
 	}
-        if (!isset($_REQUEST['new'])) {
+        if (!isset($custom_Filter['new'])) {
 		$f_new=0;
 	} else {
 		$f_new=1;

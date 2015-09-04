@@ -514,34 +514,88 @@ function backupDB () {
 	}
 	
 	function resize_Image ($img,$max_width,$max_height) {
-    $size=GetImageSize($img);
-    $width=$size[0];
-    $height=$size[1];
-    $x_ratio=$max_width/$width;
-    $y_ratio=$max_height/$height;
-    if (($width<=$max_width) && ($height<=$max_height)) {
-      $tn_width=$width;
-      $tn_height=$height;
-    } else if (($x_ratio * $height) < $max_height) {
-      $tn_height=ceil($x_ratio * $height);
-      $tn_width=$max_width;
-    } else {
-      $tn_width=ceil($y_ratio * $width);
-      $tn_height=$max_height;
-    }
-    if ($size[2]==1) {
-      $src=ImageCreateFromGIF($img);
-    }
-    if ($size[2]==2) {
-      $src=ImageCreateFromJPEG($img);
-    }
-    if ($size[2]==3) {
-      $src=ImageCreateFromPNG($img);
-    }
-    $dst=ImageCreateTrueColor($tn_width,$tn_height);
-    ImageCopyResampled ($dst,$src,0,0,0,0,$tn_width,$tn_height,$width,$height);
-    Imageinterlace($dst, 1);
-    ImageDestroy($src);
-    return $dst;
-  }
+            $size=GetImageSize($img);
+            $width=$size[0];
+            $height=$size[1];
+            $x_ratio=$max_width/$width;
+            $y_ratio=$max_height/$height;
+            if (($width<=$max_width) && ($height<=$max_height)) {
+              $tn_width=$width;
+              $tn_height=$height;
+            } else if (($x_ratio * $height) < $max_height) {
+              $tn_height=ceil($x_ratio * $height);
+              $tn_width=$max_width;
+            } else {
+              $tn_width=ceil($y_ratio * $width);
+              $tn_height=$max_height;
+            }
+            if ($size[2]==1) {
+              $src=ImageCreateFromGIF($img);
+            }
+            if ($size[2]==2) {
+              $src=ImageCreateFromJPEG($img);
+            }
+            if ($size[2]==3) {
+              $src=ImageCreateFromPNG($img);
+            }
+            $dst=ImageCreateTrueColor($tn_width,$tn_height);
+            ImageCopyResampled ($dst,$src,0,0,0,0,$tn_width,$tn_height,$width,$height);
+            Imageinterlace($dst, 1);
+            ImageDestroy($src);
+            return $dst;
+        }
+        
+// funkce pro ukládání fitru do databáza a načítání filtru z databáze        
+        function custom_Filter ($idtable, $idrecord = 0) {
+            global $usrinfo;
+            switch ($idtable) {
+			case 1: $table="persons"; break;
+			case 2: $table="groups"; break;
+			case 3: $table="cases"; break;
+			case 4: $table="reports"; break;
+                        case 8: $table="users"; break;
+                        case 9: $table="evilpts"; break;
+                        case 10: $table="tasks"; break;
+                        case 11: $table="audit"; break;
+                        case 13: $table="search"; break;
+                        case 14: $table="group".$idrecord; break;
+                        case 15: $table="p2c"; break;
+                        case 16: $table="c2ar"; break;
+                        case 17: $table="p2ar"; break;
+                        case 18: $table="ar2c"; break;
+                        case 19: $table="p2g"; break;
+                        case 20: $table="sy2p"; break;
+                        case 21: $table="sy2c"; break;
+                        case 22: $table="sy2ar"; break;
+		}
+            $sql_cf = "SELECT filter FROM ".DB_PREFIX."users WHERE id = ".$usrinfo['id'];
+            $res_cf=MySQL_Query ($sql_cf);
+            $filter = $_REQUEST;
+            // pokud přichází nový filtr a nejedná se o zadání úkolu či přidání zlobodů, případně pokud se jedná o konkrétní záznam a je nově filtrovaný,
+            // použij nový filtr a ulož ho do databáze
+            if ((!empty($filter) && !isset($_POST['inserttask']) && !isset($_POST['addpoints']) && !isset($filter['rid'])) || (isset($filter['sort']) && isset($filter['rid']))) {
+                if ($res_cf) {
+                    $rec_cf = MySQL_Fetch_Assoc($res_cf);
+                    $filters = unserialize($rec_cf['filter']);
+                    $filters[$table] = $filter;
+                } else {
+                    $filters[$table] = $filter;
+                }
+                $sfilters = serialize($filters);
+                $sql_scf = "UPDATE ".DB_PREFIX."users SET filter='".$sfilters."' WHERE id=".$usrinfo['id'];
+                MySQL_Query ($sql_scf);
+            // v opačném případě zkontroluj, zda existuje odpovídající filtr v databázi, a pokud ano, načti jej    
+            } else {
+                if ($res_cf) {
+                    $rec_cf=MySQL_Fetch_Assoc($res_cf);
+                    $filters = unserialize($rec_cf['filter']);
+                    if (!empty($filters)) {
+                        if (array_key_exists($table, $filters)) {
+                            $filter = $filters[$table];
+                        }
+                    }
+                }
+            }
+            return $filter;
+        }
 ?>

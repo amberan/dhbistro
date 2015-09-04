@@ -2,6 +2,7 @@
 	require_once ('./inc/func_main.php');
 	pageStart ('Úprava hlášení');
 	mainMenu (5);
+        $custom_Filter = custom_Filter(16);
 	sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>úprava případu</strong> &raquo; <strong>přidání hlášení</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	  $res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."cases WHERE id=".$_REQUEST['rid']);
@@ -15,22 +16,22 @@ K případu můžete přiřadit hlášení, která se ho týkají.
 
 <?php
 		// zpracovani filtru
-	if (!isset($_REQUEST['type'])) {
+	if (!isset($custom_Filter['type'])) {
 	  $f_cat=0;
 	} else {
-	  $f_cat=$_REQUEST['type'];
+	  $f_cat=$custom_Filter['type'];
 	}
-	if (!isset($_REQUEST['sort'])) {
+	if (!isset($custom_Filter['sort'])) {
 	  $f_sort=6;
 	} else {
-	  $f_sort=$_REQUEST['sort'];
+	  $f_sort=$custom_Filter['sort'];
 	}
-	if (!isset($_REQUEST['status'])) {
+	if (!isset($custom_Filter['status'])) {
 		$f_stat=0;
 	} else {
-		$f_stat=$_REQUEST['status'];
+		$f_stat=$custom_Filter['status'];
 	}
-        if (!isset($_REQUEST['archiv'])) {
+        if (!isset($custom_Filter['archiv'])) {
 		$f_archiv=0;
 	} else {
 		$f_archiv=1;
@@ -88,7 +89,7 @@ seřadit je podle <select name="sort">
 	<option value="3"'.(($f_sort==3)?' selected="selected"':'').'>jména autora vzestupně</option>
 	<option value="4"'.(($f_sort==4)?' selected="selected"':'').'>jména autora sestupně</option>
 	<option value="5"'.(($f_sort==5)?' selected="selected"':'').'>data výjezdu vzestupně</option>
-	<option value="6"'.((!$f_sort==6)?'':' selected="selected"').'>data výjezdu sestupně</option>
+	<option value="6"'.(($f_sort==6)?' selected="selected"':'').'>data výjezdu sestupně</option>
         </select>.<br />
         <input type="checkbox" name="archiv" value="archiv" class="checkbox"'.(($f_archiv==1)?' checked="checked"':'').' /> I archiv.
         </p>
