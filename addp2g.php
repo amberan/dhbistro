@@ -2,6 +2,7 @@
 	require_once ('./inc/func_main.php');
 	pageStart ('Úprava skupiny');
 	mainMenu (5);
+        $custom_Filter = custom_Filter(19);
 	sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>úprava skupiny</strong> &raquo; <strong>přidání osob</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	  $res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."groups WHERE id=".$_REQUEST['rid']);
@@ -22,35 +23,35 @@ Do skupiny můžete přiřadit osoby, které jsou jejími členy.
 
 <?php
 	// zpracovani filtru
-	if (!isset($_REQUEST['sort'])) {
+	if (!isset($custom_Filter['sort'])) {
 	  $f_sort=1;
 	} else {
-	  $f_sort=$_REQUEST['sort'];
+	  $f_sort=$custom_Filter['sort'];
 	}
-	if (!isset($_POST['sportraits'])) {
+	if (!isset($custom_Filter['sportraits'])) {
 		$sportraits=false;
 	} else {
-		$sportraits=$_POST['sportraits'];
+		$sportraits=$custom_Filter['sportraits'];
 	}
-	if (!isset($_POST['ssymbols'])) {
+	if (!isset($custom_Filter['ssymbols'])) {
 		$ssymbols=false;
 	} else {
-		$ssymbols=$_POST['ssymbols'];
+		$ssymbols=$custom_Filter['ssymbols'];
 	}
-	if (!isset($_POST['fdead'])) {
+	if (!isset($custom_Filter['fdead'])) {
 		$fdead=0;
 	} else {
 		$fdead=1;
 	}
-	if (!isset($_POST['farchiv'])) {
+	if (!isset($custom_Filter['farchiv'])) {
 		$farchiv=0;
 	} else {
 		$farchiv=1;
 	}
 	switch ($f_sort) {
-	  case 1: $fsql_sort=' '.DB_PREFIX.'persons.surname, '.DB_PREFIX.'persons.name ASC '; break;
-	  case 2: $fsql_sort=' '.DB_PREFIX.'persons.surname, '.DB_PREFIX.'persons.name DESC '; break;
-	  default: $fsql_sort=' '.DB_PREFIX.'persons.surname, '.DB_PREFIX.'persons.name ASC ';
+	  case 1: $fsql_sort=' '.DB_PREFIX.'persons.surname ASC, '.DB_PREFIX.'persons.name ASC '; break;
+	  case 2: $fsql_sort=' '.DB_PREFIX.'persons.surname DESC, '.DB_PREFIX.'persons.name DESC '; break;
+	  default: $fsql_sort=' '.DB_PREFIX.'persons.surname ASC, '.DB_PREFIX.'persons.name ASC ';
 	}
 	switch ($fdead) {
 		case 0: $fsql_dead=' AND '.DB_PREFIX.'persons.dead=0 '; break;

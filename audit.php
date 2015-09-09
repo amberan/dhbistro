@@ -116,48 +116,49 @@
 	auditTrail(11, 1, 0);
 	pageStart ('Audit');
 	mainMenu (2);
+        $custom_Filter = custom_Filter(11);
 	sparklets ('<strong>audit</strong>');
 	
 	// zpracovani filtru
-	if (!isset($_REQUEST['kategorie'])) {
+	if (!isset($custom_Filter['kategorie'])) {
 	  $f_cat=0;
 	} else {
-	  $f_cat=$_REQUEST['kategorie'];
+	  $f_cat=$custom_Filter['kategorie'];
 	}
-	if (!isset($_REQUEST['sort'])) {
+	if (!isset($custom_Filter['sort'])) {
 	  $f_sort=2;
 	} else {
-	  $f_sort=$_REQUEST['sort'];
+	  $f_sort=$custom_Filter['sort'];
 	}
-	if (!isset($_REQUEST['user'])) {
+	if (!isset($custom_Filter['user'])) {
 		$f_user=0;
 	} else {
-		$f_user=$_REQUEST['user'];
+		$f_user=$custom_Filter['user'];
 	}
-	if (!isset($_REQUEST['typ'])) {
+	if (!isset($custom_Filter['typ'])) {
 		$f_type=1;
 	} else {
-		$f_type=$_REQUEST['typ'];
+		$f_type=$custom_Filter['typ'];
 	}
-	if (!isset($_REQUEST['org'])) {
+	if (!isset($custom_Filter['org'])) {
 		$f_org=0;
 	} else {
 		$f_org=1;
 	}
-	if (!isset($_REQUEST['my'])) {
+	if (!isset($custom_Filter['my'])) {
 		$f_my=0;
 	} else {
 		$f_my=1;
 	}
-	if (!isset($_REQUEST['glob'])) {
+	if (!isset($custom_Filter['glob'])) {
 		$f_glob=0;
 	} else {
 		$f_glob=1;
 	}
-	if (!isset($_REQUEST['count'])) {
+	if (!isset($custom_Filter['count'])) {
 		$f_count='10';
 	} else {
-		$f_count=$_REQUEST['count'];
+		$f_count=$custom_Filter['count'];
 	}
 	switch ($f_cat) {
 	  case 0: $fsql_cat=' WHERE '.DB_PREFIX.'audit_trail.record_type NOT IN (5,11) '; break;

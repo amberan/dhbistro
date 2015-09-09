@@ -3,18 +3,19 @@ require_once ('./inc/func_main.php');
 auditTrail(12, 1, 0);
 pageStart ('Vyhledávání');
 mainMenu (3);
+$custom_Filter = custom_Filter(13);
 sparklets ('<strong>vyhledávání</strong>','<a href="symbol_search.php">vyhledat symbol</a>');
 //Zpracování filtru
-if (!isset($_POST['farchiv'])) {
+if (!isset($custom_Filter['farchiv'])) {
 	$farchiv=0;
 } else {
 	$farchiv=1;
 }
 /* Prevzit vyhledavane */
-if (!isset($_REQUEST['search'])) {
+if (!isset($custom_Filter['search'])) {
 	  $searchedfor=NULL;
 	} else {
-	  $searchedfor=$_REQUEST['search'];
+	  $searchedfor=$custom_Filter['search'];
 	}
 
 $search = mysql_real_escape_string($searchedfor);
@@ -24,7 +25,7 @@ $search = mysql_real_escape_string($searchedfor);
 <?php
 	function filter () {
 	  global $usrinfo, $farchiv;
-	  echo '<div id="filter-wrapper"><form action="search.php" method="post" id="filter">
+	  echo '<div id="filter-wrapper"><form action="search.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Vyhledávání</legend>
 	  <p>Zadejte vyhledávaný výraz.<br />
@@ -65,21 +66,23 @@ if ($farchiv==0) {
     $fsql_archiv='';
 }
 if ($usrinfo['right_power']) {
-    $res = mysql_query("
+    $sql = "
         SELECT ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret'
         FROM ".DB_PREFIX."cases
         WHERE MATCH(title, contents) AGAINST ('$search' IN BOOLEAN MODE)
         AND ".DB_PREFIX."cases.deleted=0".$fsql_archiv."
         ORDER BY 5 * MATCH(title) AGAINST ('$search') + MATCH(contents) AGAINST ('$search') DESC
-    ");
+    ";
+    $res = mysql_query($sql);
 } else {
-    $res = mysql_query("
+    $sql = "
         SELECT ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret'
         FROM ".DB_PREFIX."cases
         WHERE MATCH(title, contents) AGAINST ('$search' IN BOOLEAN MODE)
         AND ".DB_PREFIX."cases.deleted=0 AND ".DB_PREFIX."cases.secret=0".$fsql_archiv."
         ORDER BY 5 * MATCH(title) AGAINST ('$search') + MATCH(contents) AGAINST ('$search') DESC
-    ");    
+    ";
+    $res = mysql_query($sql);
 }
 ?>
 <h3>Případy</h3>
