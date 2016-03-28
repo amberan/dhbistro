@@ -10,13 +10,14 @@
 ?>
 
 <div id="obsah">
-	<script type="text/javascript">
-	<!--
-	window.onload=function(){
-		FixitRight('button-floating-uloz', 'in-form-table');
-	};
-	-->
-	</script>
+    <script type="text/javascript">
+    <!--
+    window.onload=function(){
+            FixitRight('button-floating-uloz', 'in-form-table');
+    };
+    -->
+    </script>
+    
 <p>
 K případu můžete přiřadit osoby, kterých se týká nebo kterých by se týkat mohl.
 </p>
@@ -95,7 +96,9 @@ K případu můžete přiřadit osoby, kterých se týká nebo kterých by se t�
 	}
 	$res=MySQL_Query ($sql);
 ?>
-<div id="in-form-table">
+
+<div style="padding-top: 0px; padding-bottom: 0px;"id="in-form-table">
+    
 <?php 
 	if (MySQL_Num_Rows($res)) {
 	  echo '<table>
@@ -123,6 +126,7 @@ K případu můžete přiřadit osoby, kterých se týká nebo kterých by se t�
 <input type="hidden" name="fdead" value="<?php echo $fdead; ?>" />
 <input type="hidden" name="farchiv" value="<?php echo $farchiv; ?>" />
 <input type="hidden" name="caseid" value="<?php echo $_REQUEST['rid']; ?>" />
+
 <input id="button-floating-uloz" type="submit" value="Uložit změny" name="addtocase" class="submitbutton" title="Uložit změny"/>
 </div>
 <!-- end of #obsah -->
