@@ -138,23 +138,6 @@
 <!-- násedují přiřazené případy a hlášení -->
 	<fieldset>
 		<legend><h2>Hlášení a případy</h2></legend>
-		<h3>Figuruje v těchto hlášení: </h3><p><?php
-				if ($usrinfo['right_power']) {
-					$sql_r="SELECT ".DB_PREFIX."reports.secret AS 'secret', ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."reports, ".DB_PREFIX."ar2p WHERE ".DB_PREFIX."ar2p.idreport=".DB_PREFIX."reports.id AND ".DB_PREFIX."ar2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."reports.deleted=0 ORDER BY ".DB_PREFIX."reports.label ASC";
-				} else {
-					$sql_r="SELECT ".DB_PREFIX."reports.secret AS 'secret', ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."reports, ".DB_PREFIX."ar2p WHERE ".DB_PREFIX."ar2p.idreport=".DB_PREFIX."reports.id AND ".DB_PREFIX."ar2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0 ORDER BY ".DB_PREFIX."reports.label ASC";
-				}
-				$res_r=MySQL_Query ($sql_r);
-				if (MySQL_Num_Rows($res_r)) {
-					$reports=Array();
-					while ($rec_r=MySQL_Fetch_Assoc($res_r)) {
-						$reports[]='<a href="./readactrep.php?rid='.$rec_r['id'].'&hidenotes=0&truenames=0">'.StripSlashes ($rec_r['label']).'</a>';
-					}
-					echo implode ($reports,'<br />');
-				} else {
-					echo 'Osoba nefiguruje v žádném hlášení.';
-				} ?></p>
-		<div class="clear">&nbsp;</div>
 		<h3>Figuruje v těchto případech: </h3><p><?php
 				if ($usrinfo['right_power']) {
 					$sql_c="SELECT ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."c2p.iduser FROM ".DB_PREFIX."cases, ".DB_PREFIX."c2p WHERE ".DB_PREFIX."c2p.idcase=".DB_PREFIX."cases.id AND ".DB_PREFIX."c2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."cases.deleted=0 ORDER BY ".DB_PREFIX."cases.title ASC";
@@ -170,6 +153,23 @@
 					echo implode ($cases,'<br />');
 				} else {
 					echo 'Osoba nefiguruje v žádném případu.';
+				} ?></p>
+		<div class="clear">&nbsp;</div>
+                <h3>Figuruje v těchto hlášení: </h3><p><?php
+				if ($usrinfo['right_power']) {
+					$sql_r="SELECT ".DB_PREFIX."reports.secret AS 'secret', ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."reports, ".DB_PREFIX."ar2p WHERE ".DB_PREFIX."ar2p.idreport=".DB_PREFIX."reports.id AND ".DB_PREFIX."ar2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."reports.deleted=0 ORDER BY ".DB_PREFIX."reports.label ASC";
+				} else {
+					$sql_r="SELECT ".DB_PREFIX."reports.secret AS 'secret', ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."reports, ".DB_PREFIX."ar2p WHERE ".DB_PREFIX."ar2p.idreport=".DB_PREFIX."reports.id AND ".DB_PREFIX."ar2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0 ORDER BY ".DB_PREFIX."reports.label ASC";
+				}
+				$res_r=MySQL_Query ($sql_r);
+				if (MySQL_Num_Rows($res_r)) {
+					$reports=Array();
+					while ($rec_r=MySQL_Fetch_Assoc($res_r)) {
+						$reports[]='<a href="./readactrep.php?rid='.$rec_r['id'].'&hidenotes=0&truenames=0">'.StripSlashes ($rec_r['label']).'</a>';
+					}
+					echo implode ($reports,'<br />');
+				} else {
+					echo 'Osoba nefiguruje v žádném hlášení.';
 				} ?></p>
 		<div class="clear">&nbsp;</div>
 	</fieldset>

@@ -24,7 +24,7 @@
 	  } else {
 		  	pageStart ('Hlášení uloženo');
 		  	mainMenu (4);
-		  	MySQL_Query ("INSERT INTO ".DB_PREFIX."reports VALUES('','".mysql_real_escape_string(safeInput($_POST['label']))."','".Time()."','".$usrinfo['id']."','".mysql_real_escape_string($_POST['task'])."','".mysql_real_escape_string($_POST['summary'])."','".mysql_real_escape_string($_POST['impact'])."','".mysql_real_escape_string($_POST['details'])."','".$_POST['secret']."','0','".$_POST['status']."','".$_POST['type']."','".$adatum."','".mysql_real_escape_string(safeInput($_POST['start']))."','".mysql_real_escape_string(safeInput($_POST['end']))."','".mysql_real_escape_string($_POST['energy'])."','".mysql_real_escape_string($_POST['inputs'])."')");
+		  	MySQL_Query ("INSERT INTO ".DB_PREFIX."reports VALUES('','".mysql_real_escape_string(safeInput($_POST['label']))."','".Time()."','".$usrinfo['id']."','".mysql_real_escape_string(safeInput($_POST['task']))."','".mysql_real_escape_string($_POST['summary'])."','".mysql_real_escape_string($_POST['impact'])."','".mysql_real_escape_string($_POST['details'])."','".$_POST['secret']."','0','".$_POST['status']."','".$_POST['type']."','".$adatum."','".mysql_real_escape_string(safeInput($_POST['start']))."','".mysql_real_escape_string(safeInput($_POST['end']))."','".mysql_real_escape_string($_POST['energy'])."','".mysql_real_escape_string($_POST['inputs'])."')");
 		  	$ridarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."reports WHERE UCASE(label)=UCASE('".mysql_real_escape_string(safeInput($_POST['label']))."')"));
 			$rid=$ridarray['id'];
 			auditTrail(4, 3, $rid);
@@ -64,7 +64,7 @@
 	  if (MySQL_Num_Rows ($ures)) {
 	    echo '<div id="obsah"><p>Toto označení již existuje, změňte ho.</p></div>';
 	  } else {
-			MySQL_Query ("UPDATE ".DB_PREFIX."reports SET label='".mysql_real_escape_string(safeInput($_POST['label']))."', task='".mysql_real_escape_string(safeInput($_POST['task']))."', summary='".mysql_real_escape_string($_POST['summary'])."', impacts='".mysql_real_escape_string(safeInput($_POST['impacts']))."', details='".mysql_real_escape_string(safeInput($_POST['details']))."', secret='".$_POST['secret']."', status='".$_POST['status']."', adatum='".$adatum."', start='".mysql_real_escape_string(safeInput($_POST['start']))."', end='".mysql_real_escape_string(safeInput($_POST['end']))."', energy='".mysql_real_escape_string($_POST['energy'])."', inputs='".mysql_real_escape_string($_POST['inputs'])."' WHERE id=".$_POST['reportid']);
+			MySQL_Query ("UPDATE ".DB_PREFIX."reports SET label='".mysql_real_escape_string(safeInput($_POST['label']))."', task='".mysql_real_escape_string(safeInput($_POST['task']))."', summary='".mysql_real_escape_string($_POST['summary'])."', impacts='".mysql_real_escape_string($_POST['impacts'])."', details='".mysql_real_escape_string($_POST['details'])."', secret='".$_POST['secret']."', status='".$_POST['status']."', adatum='".$adatum."', start='".mysql_real_escape_string(safeInput($_POST['start']))."', end='".mysql_real_escape_string(safeInput($_POST['end']))."', energy='".mysql_real_escape_string($_POST['energy'])."', inputs='".mysql_real_escape_string($_POST['inputs'])."' WHERE id=".$_POST['reportid']);
 			echo '<div id="obsah"><p>Hlášení upraveno.</p></div>';
 		}
 		pageEnd ();
