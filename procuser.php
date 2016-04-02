@@ -16,7 +16,7 @@
 	  if (MySQL_Num_Rows ($ures)) {
 	    echo '<div id="obsah"><p>Uživatel již existuje, změňte jeho jméno.</p></div>';
 	  } else {
-			MySQL_Query ("INSERT INTO ".DB_PREFIX."users VALUES('','".mysql_real_escape_string(safeInput($_POST['login']))."','".mysql_real_escape_string($_POST['heslo'])."','','','".$_POST['power']."','".$_POST['texty']."','','','','','600','','')");
+			MySQL_Query ("INSERT INTO ".DB_PREFIX."users VALUES('','".mysql_real_escape_string(safeInput($_POST['login']))."','".mysql_real_escape_string($_POST['heslo'])."','','','".$_POST['power']."','".$_POST['texty']."','','','','','600','','','','')");
 			$uidarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."users WHERE UCASE(login)=UCASE('".mysql_real_escape_string(safeInput($_POST['login']))."')"));
 			$uid=$uidarray['id'];
 			auditTrail(8, 3, $uid);
