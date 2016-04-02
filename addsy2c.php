@@ -60,6 +60,9 @@ if ($usrinfo['right_power']) {
 	$sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."symbol2all.iduser FROM ".DB_PREFIX."cases LEFT JOIN ".DB_PREFIX."symbol2all ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."cases.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." WHERE ".DB_PREFIX."cases.deleted=0 AND ".DB_PREFIX."cases.secret=0 ORDER BY ".$fsql_sort;
 }
 $res=MySQL_Query ($sql);
+?>
+<div id="in-form-table">
+<?php
 if (MySQL_Num_Rows($res)) {
 	echo '<div id="">
 	<table>
@@ -89,9 +92,8 @@ if (MySQL_Num_Rows($res)) {
 }
 ?>
 
-<div>
 <input type="hidden" name="symbolid" value="<?php echo $_REQUEST['rid']; ?>" />
-<input type="submit" value="Uložit změny" name="addsymbol2c" class="submitbutton" />
+<input id="button-floating-uloz" type="submit" value="Uložit změny" name="addsymbol2c" class="submitbutton" title="Uložit změny" />
 </div>
 </form>
 

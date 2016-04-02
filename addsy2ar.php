@@ -125,6 +125,9 @@ seřadit je podle <select name="sort">
 				ORDER BY ".$fsql_sort;
 	}
 	$res=MySQL_Query ($sql);
+?>
+<div style="padding-left: 0px; padding-right: 0px; padding-top: 0px; padding-bottom: 0px;" id="in-form-table">
+<?php        
 	while ($rec=MySQL_Fetch_Assoc($res)) {
 	  echo '<div class="news_div '.(($rec['type']==1)?'game_news':'system_news').'">
 	<div class="news_head"><input type="checkbox" name="report[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser'])?' checked="checked"':'').' /><strong><a href="readactrep.php?rid='.$rec['id'].'">'.StripSlashes($rec['label']).'</a></strong></span>';
@@ -135,9 +138,8 @@ seřadit je podle <select name="sort">
 	}
 ?>
 
-<div>
 <input type="hidden" name="symbolid" value="<?php echo $_REQUEST['rid']; ?>" />
-<input type="submit" value="Uložit změny" name="addsymbol2ar" class="submitbutton" />
+<input id="button-floating-uloz" type="submit" value="Uložit změny" name="addsymbol2ar" class="submitbutton" title="Uložit změny" />
 </div>
 </form>
 
