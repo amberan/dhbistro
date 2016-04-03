@@ -418,7 +418,7 @@ function backupDB () {
     <meta http-equiv="Expires" content="0" />
     <meta name="robots" content="index, follow" />
     <meta name="Author" content="David Ambeřan Maleček, Jakub Ethan Kraft" />
-    <meta name="Copyright" content="2006 - 2014" />
+    <meta name="Copyright" content="2006 - 2016" />
     
     <title><?php echo (($loggedin)?$usrinfo['login'].' @ ':'')?>BIStro <?php echo $mazzarino_version;?> | <?php echo $title;?></title>
     <meta name="description" content="city larp management system" />
@@ -429,7 +429,10 @@ function backupDB () {
     <link media="all" rel="stylesheet" type="text/css" href="./inc/styly.css" />
     <link media="print" rel="stylesheet" type="text/css" href="./css/print.css" />
 	
-	<script type="text/javascript" src="./js/jquery-min.js"></script>
+	<!-- <script type="text/javascript" src="./js/jquery-min.js"></script> -->
+        <script src="http://code.jquery.com/jquery-1.12.2.min.js"></script>
+        <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+        <script src="js/jquery.ui.autocomplete.html.js"></script>
         <script type="text/javascript" src="./js/tinymce/tinymce.min.js"></script>
         <script type="text/javascript">
         tinymce.init({

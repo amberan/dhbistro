@@ -234,7 +234,7 @@
 	if ($hs==1) goto hidesymbols; ?>
 	<fieldset><legend><strong>Přiložené symboly</strong></legend>
 	<?php //generování seznamu přiložených symbolů
-	$sql_s="SELECT ".DB_PREFIX."symbol2all.idsymbol AS 'id' FROM ".DB_PREFIX."symbol2all, ".DB_PREFIX."symbols WHERE ".DB_PREFIX."symbol2all.idsymbol = ".DB_PREFIX."symbols.id AND ".DB_PREFIX."symbols.assigned=0 AND ".DB_PREFIX."symbol2all.idrecord=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4";
+	$sql_s="SELECT ".DB_PREFIX."symbol2all.idsymbol AS 'id' FROM ".DB_PREFIX."symbol2all, ".DB_PREFIX."symbols WHERE ".DB_PREFIX."symbol2all.idsymbol = ".DB_PREFIX."symbols.id AND ".DB_PREFIX."symbols.assigned=0 AND ".DB_PREFIX."symbol2all.idrecord=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4 AND ".DB_PREFIX."symbols.deleted=0";
 	$res_s=MySQL_Query ($sql_s);
 	if (MySQL_Num_Rows($res_s)) {
 		$inc=0;
