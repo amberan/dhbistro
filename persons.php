@@ -179,12 +179,14 @@
 </form></div><!-- end of #filter-wrapper -->';
 	}
 	filter();
-	// vypis osob
+	/* Stary vypis osob
 	if ($usrinfo['right_power']) {
 		$sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.archiv AS 'archiv', ".DB_PREFIX."persons.dead AS 'dead', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.symbol AS 'symbol' FROM ".DB_PREFIX."persons WHERE ".DB_PREFIX."persons.deleted=0".$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow." ORDER BY ".$fsql_sort;
 	} else {
 	  $sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.archiv AS 'archiv', ".DB_PREFIX."persons.dead AS 'dead', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.symbol AS 'symbol' FROM ".DB_PREFIX."persons WHERE ".DB_PREFIX."persons.deleted=0 AND ".DB_PREFIX."persons.secret=0".$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow." ORDER BY ".$fsql_sort;
 	}
+	Alternativni vypis osob zahrnujici vice stupnu tajne.*/
+    $sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.archiv AS 'archiv', ".DB_PREFIX."persons.dead AS 'dead', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.symbol AS 'symbol' FROM ".DB_PREFIX."persons WHERE ".DB_PREFIX."persons.deleted=0 AND ".DB_PREFIX."persons.secret<=".$usrinfo['right_power'].$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow." ORDER BY ".$fsql_sort;
 	$res=MySQL_Query ($sql);
 	if (MySQL_Num_Rows($res)) {
 	  echo '<div id="obsah">

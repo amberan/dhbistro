@@ -69,7 +69,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 	$res=MySQL_Query ($sql);
 	if ($rec_actr=MySQL_Fetch_Assoc($res)) {
             //test oprávněnosti přístupu
-            if (($rec_actr['secret']==1 || $rec_actr['deleted']==1) && !$usrinfo['right_power']) {
+            if (($rec_actr['secret']>$usrinfo['right_power']) || $rec_actr['deleted']==1) {
                 unauthorizedAccess(4, $rec_actr['secret'], $rec_actr['deleted'], $_REQUEST['rid']);
             }
             //auditní stopa

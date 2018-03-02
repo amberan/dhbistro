@@ -68,12 +68,13 @@
 </form></div><!-- end of #filter-wrapper -->';
 	}
 	filter();
-	// vypis pripadu
+	/* stary vypis pripadu
 	if ($usrinfo['right_power']) {
 		$sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.datum AS 'datum' FROM ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.deleted=0".$fsql_sec.$fsql_stat." ORDER BY ".$fsql_sort;
 	} else {
 	  $sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.datum AS 'datum' FROM ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.deleted=0".$fsql_sec.$fsql_stat." AND ".DB_PREFIX."cases.secret=0 ORDER BY ".$fsql_sort;
-	}
+	} Alternativni vypis osob*/
+    $sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.datum AS 'datum' FROM ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.deleted=0".$fsql_sec.$fsql_stat." AND ".DB_PREFIX."cases.secret<=".$usrinfo['right_power']." ORDER BY ".$fsql_sort;
 	$res=MySQL_Query ($sql);
 	if (MySQL_Num_Rows($res)) {
 	  echo '<div id="obsah">

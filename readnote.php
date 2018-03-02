@@ -7,12 +7,13 @@
 				".DB_PREFIX."notes.note AS 'note',
 				".DB_PREFIX."notes.secret AS 'secret',
 				".DB_PREFIX."notes.iduser AS 'iduser',
+				".DB_PREFIX."notes.deleted AS 'deleted',
 				".DB_PREFIX."users.login AS 'nuser'
 				 FROM ".DB_PREFIX."notes, ".DB_PREFIX."users
 				 WHERE ".DB_PREFIX."notes.id=".$_REQUEST['rid']." 
 				AND ".DB_PREFIX."notes.iduser=".DB_PREFIX."users.id");
 		if ($rec=MySQL_Fetch_Assoc($res)) {
-                        if ($rec['secret']==0 || $rec['iduser']==$usrinfo['id'] || $usrinfo['right_power']) {
+                        if ((($rec['secret']<=$usrinfo['right_power']) || $rec['iduser']==$usrinfo['id']) && !$rec['deleted']==1) {
 			  pageStart (StripSlashes($rec['title']));
 				mainMenu (0);
 				switch ($_REQUEST['idtable']) {

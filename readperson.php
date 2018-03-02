@@ -3,7 +3,7 @@
 	if (is_numeric($_REQUEST['rid'])) {
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."persons WHERE id=".$_REQUEST['rid']);
 		if ($rec=MySQL_Fetch_Assoc($res)) {
-                    if (($rec['secret']==1 || $rec['deleted']==1) && !$usrinfo['right_power']) {
+                    if (($rec['secret']>$usrinfo['right_power']) || $rec['deleted']==1) {
                         unauthorizedAccess(1, $rec['secret'], $rec['deleted'], $_REQUEST['rid']);
                     }
 			auditTrail(1, 1, $_REQUEST['rid']);
@@ -25,7 +25,7 @@
 			}
 			if ($usrinfo['right_org']) {
 				$editbutton='; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>; číslo osoby: '.$rec['id'].'; <a href="orgperson.php?rid='.$_REQUEST['rid'].'">organizačně upravit osobu</a>;';
-			} else if ($usrinfo['right_power']) {
+			} else if ($usrinfo['right_power'] > 0) {
 				$editbutton='; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>; číslo osoby: '.$rec['id'].'';
 			} else if ($usrinfo['right_text']) {
 				$editbutton='; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>';
@@ -46,8 +46,8 @@
 		<?php } ?>
 		<div id="info">
 			<?php 
-			if ($rec['secret']==1 || $rec['dead']==1 || $rec['archiv']==1 || $rec['deleted']==1) echo '<h2>';
-			if ($rec['secret']==1) echo 'TAJNÉ ';
+			if ($rec['secret'] > 0 || $rec['dead']==1 || $rec['archiv']==1 || $rec['deleted']==1) echo '<h2>';
+			if ($rec['secret'] > 0) echo 'TAJNÉ: '.$rec['secret'];
 			if ($rec['dead']==1) echo 'MRTVOLA ';
 			if ($rec['archiv']==1) echo 'ARCHIV';
                         if ($rec['deleted']==1) echo 'SMAZANÝ ZÁZNAM';

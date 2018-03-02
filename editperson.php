@@ -4,7 +4,7 @@
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	  $res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."persons WHERE id=".$_REQUEST['rid']);
 		if ($rec_p=MySQL_Fetch_Assoc($res)) {
-                    if (($rec_p['secret']==1 || $rec_p['deleted']==1) && !$usrinfo['right_power']) {
+                    if (($rec_p['secret']>$usrinfo['right_power']) || $rec_p['deleted']==1) {
                     unauthorizedAccess(1, $rec_p['secret'], $rec_p['deleted'], $_REQUEST['rid']);
                     }
                     auditTrail(1, 1, $_REQUEST['rid']);
@@ -85,8 +85,12 @@
 				<h3><label for="symbol">Nový&nbsp;symbol:</label></h3>
 				<input type="file" name="symbol" id="symbol" />
 				<div class="clear">&nbsp;</div>
-				<h3><label for="secret">Přísně tajné:</label></h3>
-					<input type="checkbox" name="secret" value=1 <?php if ($rec_p['secret']==1) { ?>checked="checked"<?php } ?>/><br/>
+				<h3><label for="secret">Stupeň utajení:</label></h3>
+                    <select name="secret" id="secret">
+                        <option value="0"<?php if ($rec_p['secret']==0) { echo ' selected="selected"'; } ?>>0</option>
+                        <option value="1"<?php if ($rec_p['secret']==1) { echo ' selected="selected"'; } ?>>1</option>
+                        <option value="2"<?php if ($rec_p['secret']==2) { echo ' selected="selected"'; } ?>>2</option>
+                    </select>
 				<div class="clear">&nbsp;</div>
 				<h3><label for="dead">Mrtvá:</label></h3>
 					<input type="checkbox" name="dead" value=1 <?php if ($rec_p['dead']==1) { ?>checked="checked"<?php } ?>/><br/>

@@ -35,7 +35,7 @@
 			AND ".DB_PREFIX."reports.id=".$_REQUEST['rid'].$connector;
 		$res=MySQL_Query ($sql);
 		if ($rec_ar=MySQL_Fetch_Assoc($res)) {
-                    if (($rec_ar['secret']==1 || $rec_ar['deleted']==1) && !$usrinfo['right_power']) {
+                    if (($rec_ar['secret']>$usrinfo['right_power']) || $rec_ar['deleted']==1) {
                         unauthorizedAccess(4, $rec_ar['secret'], $rec_ar['deleted'], $_REQUEST['rid']);
                     }
 			if (isset($_SESSION['sid'])) {

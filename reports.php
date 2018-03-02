@@ -133,7 +133,7 @@
 </form></div><!-- end of #filter-wrapper -->';
 	}
 	filter();
-	// vypis hlášení
+	/* Stary vypis hlášení
 	if ($usrinfo['right_power']) {
 		$sql="SELECT
 			".DB_PREFIX."reports.id AS 'id',
@@ -161,7 +161,20 @@
 	        	FROM ".DB_PREFIX."users, ".DB_PREFIX."reports".$fsql_conn2." 
 				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0".$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn.$fsql_archiv."
 				ORDER BY ".$fsql_sort;
-	}
+	} Alternativni vypis hlaseni */
+    $sql="SELECT
+                ".DB_PREFIX."reports.id AS 'id',
+                ".DB_PREFIX."reports.datum AS 'datum',
+                ".DB_PREFIX."reports.adatum AS 'adatum',
+                ".DB_PREFIX."reports.label AS 'label',
+                ".DB_PREFIX."reports.task AS 'task',
+                ".DB_PREFIX."reports.status AS 'status',
+                ".DB_PREFIX."users.login AS 'autor',
+                ".DB_PREFIX."reports.iduser AS 'riduser',
+                ".DB_PREFIX."reports.type AS 'type' 
+                    FROM ".DB_PREFIX."users, ".DB_PREFIX."reports".$fsql_conn2." 
+                    WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret<=".$usrinfo['right_power'].$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn.$fsql_archiv."
+                    ORDER BY ".$fsql_sort;
 	$res=MySQL_Query ($sql);
 	while ($rec=MySQL_Fetch_Assoc($res)) {
             if ($f_new==0 || ($f_new==1 && searchRecord(4,$rec['id']))) {

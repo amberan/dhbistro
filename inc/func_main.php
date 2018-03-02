@@ -15,7 +15,7 @@
 
 	// databaze
   switch ($_SERVER["SERVER_NAME"]) {
-  	case '127.0.0.1':
+  	case 'localhost':
   		$dbusr='dhbistrocz';
   		$verze=0;
   		$point='zlobod';
@@ -80,6 +80,8 @@ $password = $lines[2];
 // kontrola pripojeni
   if (!@mysql_connect ('localhost',$dbusr,$password)) {
   	echo 'fail ';
+  	echo $dbusr;
+    echo $password;
     exit;
   }
 	MySQL_Select_DB ($dbusr);
@@ -202,8 +204,8 @@ function unreadRecords ($tablenum,$rid) {
 	$sql_ur="SELECT ".DB_PREFIX."users.id as 'id', ".DB_PREFIX."users.right_power as 'right_power', ".DB_PREFIX."users.deleted as 'deleted' FROM ".DB_PREFIX."users";
 	$res_ur=MySQL_Query ($sql_ur);
 	while ($rec_ur=MySQL_Fetch_Assoc($res_ur)) {
-		if ($secret == 1 && $rec_ur['deleted'] <> 1) {
-			if ($rec_ur['id'] <> $usrinfo['id'] && $rec_ur['right_power'] == 1) {
+		if ($secret > 0 && $rec_ur['deleted'] <> 1) {
+			if ($rec_ur['id'] <> $usrinfo['id'] && $rec_ur['right_power'] > 0) {
 				$srsql="INSERT INTO ".DB_PREFIX."unread (idtable, idrecord, iduser) VALUES('".$tablenum."', '".$rid."', '".$rec_ur['id']."')";
 				MySQL_Query ($srsql);
 			}
@@ -485,14 +487,15 @@ function backupDB () {
 		<li '.((searchTable(1))?' class="unread"':((searchTable(7))?' class="unread"':'')).'><a href="persons.php">Osoby</a></li>
 		<li '.((searchTable(3))?' class="unread"':'').'><a href="cases.php">Případy</a></li>
 		<li '.((searchTable(2))?' class="unread"':'').'><a href="groups.php">Skupiny</a></li>
-		'.(($usrinfo['right_power'])?'<li><a href="mapagents.php">Mapa agentů</a></li>':'').'
-		'.(($usrinfo['right_power'])?'<li><a href="doodle.php">Časová dostupnost</a></li>':'<li><a href="'.$dlink['link'].'" target="_new">Časová dostupnost</a></li>').'
+		'/*Docasne odstranena mapa agentu, stejne to nikdo nepouziva
+        .(($usrinfo['right_power'])?'<li><a href="mapagents.php">Mapa agentů</a></li>':'')*/.'
+		'.(($usrinfo['right_power']>4)?'<li><a href="doodle.php">Časová dostupnost</a></li>':'<li><a href="'.$dlink['link'].'" target="_new">Časová dostupnost</a></li>').'
 		'.(($verze==2)?'<li><a href="http://www.prazskahlidka.cz/forums/index.php" target="_new">Fórum</a></li>':'<li><a href="http://www.prazskahlidka.cz/forums/index.php" target="_new">Fórum</a></li>').'
 		'.(($verze==2)?'<li><a href="evilpoints.php">Bludišťáky</a></li>':'<li><a href="evilpoints.php">Zlobody</a></li>').'
 		<li><a href="settings.php">Nastavení</a></li>
                 <li><a href="search.php">Vyhledávání</a></li>
-		'.(($usrinfo['right_power'])?'<li><a href="users.php">Uživatelé</a></li>':'').'
-                '.((!$usrinfo['right_power'] && $usrinfo['right_text'])?'<li><a href="tasks.php">Úkoly</a></li>':'').'
+		'.(($usrinfo['right_power']>4)?'<li><a href="users.php">Uživatelé</a></li>':'').'
+                '.(($usrinfo['right_power']<5 && $usrinfo['right_text'])?'<li><a href="tasks.php">Úkoly</a></li>':'').'
 		'.(($usrinfo['right_aud'])?'<li><a href="audit.php">Audit</a></li>':'').'
 		<li class="float-right"><a href="logout.php">Odhlásit</a></li>
 		<li class="float-right"><a href="procother.php?delallnew='.$currentfile.'" onclick="'."return confirm('Opravdu označit vše jako přečtené?');".'">Přečíst vše</a></li>

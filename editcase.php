@@ -16,7 +16,7 @@
             }
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."cases WHERE id=".$_REQUEST['rid']);
 		if ($rec_c=MySQL_Fetch_Assoc($res)) {
-                    if (($rec_c['secret']==1 || $rec_c['deleted']==1) && !$usrinfo['right_power']) {
+                    if (($rec['secret']>$usrinfo['right_power']) || $rec['deleted']==1) {
                     unauthorizedAccess(3, $rec_c['secret'], $rec_c['deleted'], $_REQUEST['rid']);
                     }
                     auditTrail(3, 1, $_REQUEST['rid']);

@@ -64,12 +64,13 @@
 </form></div><!-- end of #filter-wrapper -->';
 	}
 	filter();
-	// vypis skupin
+	/* Stary vypis skupin
 	if ($usrinfo['right_power']) {
 		$sql="SELECT ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.archived AS 'archived' FROM ".DB_PREFIX."groups WHERE ".DB_PREFIX."groups.deleted=0".$fsql_sec.$fsql_arch." ORDER BY ".$fsql_sort;
 	} else {
 	  $sql="SELECT ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.archived AS 'archived' FROM ".DB_PREFIX."groups WHERE ".DB_PREFIX."groups.deleted=0".$fsql_sec.$fsql_arch." AND ".DB_PREFIX."groups.secret=0 ORDER BY ".$fsql_sort;
-	}
+	} Alternativni vypis skupin*/
+    $sql="SELECT ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.archived AS 'archived' FROM ".DB_PREFIX."groups WHERE ".DB_PREFIX."groups.deleted=0".$fsql_sec.$fsql_arch." AND ".DB_PREFIX."groups.secret<=".$usrinfo['right_power']." ORDER BY ".$fsql_sort;
 	$res=MySQL_Query ($sql);
 	if (MySQL_Num_Rows($res)) {
 	  echo '<div id="obsah">

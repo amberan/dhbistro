@@ -3,7 +3,7 @@
 	if (is_numeric($_REQUEST['rid'])) {
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."groups WHERE id=".$_REQUEST['rid']);
 		if ($rec_g=MySQL_Fetch_Assoc($res)) {
-                    if (($rec_g['secret']==1 || $rec_g['deleted']==1) && !$usrinfo['right_power']) {
+                    if (($rec_g['secret']>$usrinfo['right_power']) || $rec_g['deleted']==1) {
                     unauthorizedAccess(2, $rec_g['secret'], $rec_g['deleted'], $_REQUEST['rid']);
                     }
 		  auditTrail(2, 1, $_REQUEST['rid']);                  

@@ -14,7 +14,7 @@
 	if (is_numeric($_REQUEST['rid'])) {
 		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."notes WHERE id=".$_REQUEST['rid']);
 		if ($rec=MySQL_Fetch_Assoc($res)) {
-                    if ($rec['secret']==0 || $rec['iduser']==$usrinfo['id'] || $usrinfo['right_power']) {
+                    if ((($rec['secret']<=$usrinfo['right_power']) || $rec['iduser']==$usrinfo['id']) && !$rec['deleted']==1) {
 ?>
 <div id="obsah">
 <form action="procnote.php" method="post" class="otherform">
