@@ -12,10 +12,10 @@
 		pageStart ('Přidán úkol');
 		mainMenu (3);
                 $custom_Filter = custom_Filter(10);
-		$sql_t="INSERT INTO ".DB_PREFIX."tasks VALUES('','".mysql_real_escape_string(safeInput($_POST['task']))."','".$_POST['target']."','0','".Time()."','".$usrinfo['id']."','','')";
-		MySQL_Query ($sql_t);
+		$sql_t="INSERT INTO ".DB_PREFIX."tasks VALUES('','".mysqli_real_escape_string ($database,safeInput($_POST['task']))."','".$_POST['target']."','0','".Time()."','".$usrinfo['id']."','','')";
+		mysqli_query ($database,$sql_t);
 // Ukládání do novinek zakomentováno, protože nevím, jestli se použije. Kdyžtak SMAZAT.
-//		$gidarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".mysql_real_escape_string(safeInput($_POST['title']))."')"));
+//		$gidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".mysqli_real_escape_string ($database,safeInput($_POST['title']))."')"));
 //		$gid=$gidarray['id'];
 //		if (!isset($_POST['notnew'])) {
 //			unreadRecords (2,$gid);
@@ -86,10 +86,10 @@
 	<input type="text" name="task" id="task" />
 <?php 	
 	$sql="SELECT id, login FROM ".DB_PREFIX."users WHERE deleted=0 ORDER BY login ASC";
-		$res_n=MySQL_Query ($sql);
+		$res_n=mysqli_query ($database,$sql);
 		echo '<label for="target">Uživatel:</label>
 		<select name="target" id="target">';
-		while ($rec_n=MySQL_Fetch_Assoc($res_n)) {
+		while ($rec_n=mysqli_fetch_assoc ($res_n)) {
 			echo '<option value="'.$rec_n['id'].'"'.(($rec_n['id']==$usrinfo['id'])?' selected="selected"':'').'>'.$rec_n['login'].'</option>';
 		};
 		echo '</select>';
@@ -103,8 +103,8 @@
 <?php 
 	// filtr
 	function filter () {
-	  global $f_cat;
-		global $f_sort;
+	  global $database,$f_cat;
+		global $database,$f_sort;
 	  echo '<div id="filter-wrapper"><form action="tasks.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -124,8 +124,8 @@
 	filter();
 	// vypis uživatelů
 	$sql="SELECT * FROM ".DB_PREFIX."tasks".$fsql_cat." ORDER BY ".$fsql_sort;
-	$res=MySQL_Query ($sql);
-	if (MySQL_Num_Rows($res)) {
+	$res=mysqli_query ($database,$sql);
+	if (mysqli_num_rows ($res)) {
 	  echo '<div id="obsah">
 <table>
 <thead>
@@ -144,7 +144,7 @@
 <tbody>
 ';
 		$even=0;
-		while ($rec=MySQL_Fetch_Assoc($res)) {
+		while ($rec=mysqli_fetch_assoc ($res)) {
 		  echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 	<td>'.$rec['id'].'</td>
 	<td>'.StripSlashes($rec['task']).'</td>

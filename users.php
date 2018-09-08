@@ -32,8 +32,8 @@
 	}
 	//
 	function filter () {
-	  global $f_cat;
-		global $f_sort;
+	  global $database,$f_cat;
+		global $database,$f_sort;
 	  echo '<div id="filter-wrapper"><form action="users.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -56,8 +56,8 @@
         } else {
             $sql="SELECT * FROM ".DB_PREFIX."users WHERE ".DB_PREFIX."users.deleted=0 AND ".DB_PREFIX."users.right_org=0 ".$fsql_cat." ORDER BY ".$fsql_sort;
         }
-	$res=MySQL_Query ($sql);
-	if (MySQL_Num_Rows($res)) {
+	$res=mysqli_query ($database,$sql);
+	if (mysqli_num_rows ($res)) {
 	  echo '<div id="obsah">
 <table>
 <thead>
@@ -73,7 +73,7 @@
 <tbody>
 ';
 		$even=0;
-		while ($rec=MySQL_Fetch_Assoc($res)) {
+		while ($rec=mysqli_fetch_assoc ($res)) {
 		  echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 	<td>'.StripSlashes($rec['login']).'</td>
 	<td>'.(($rec['lastlogon'])?Date ('d. m. Y (H:i:s)',$rec['lastlogon']):'nikdy').'</td>

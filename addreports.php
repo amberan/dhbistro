@@ -4,9 +4,9 @@
 	if (isset($_POST['addtoareport'])) {
 		auditTrail(4, 6, $_POST['reportid']);
 		if ($usrinfo['right_power']==1) {
-			MySQL_Query ("DELETE FROM ".DB_PREFIX."ar2c WHERE ".DB_PREFIX."ar2c.idreport=".$_POST['reportid']);
+			mysqli_query ($database,"DELETE FROM ".DB_PREFIX."ar2c WHERE ".DB_PREFIX."ar2c.idreport=".$_POST['reportid']);
 		} else {
-			MySQL_Query ("DELETE c FROM ".DB_PREFIX."ar2c as c, ".DB_PREFIX."cases as p WHERE c.idcase=p.id AND p.secret=0 AND c.idreport=".$_POST['reportid']);
+			mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2c as c, ".DB_PREFIX."cases as p WHERE c.idcase=p.id AND p.secret=0 AND c.idreport=".$_POST['reportid']);
 		}
 		if (isset($_POST['case'])) {
 			$case=$_POST['case'];
@@ -17,7 +17,7 @@
 		echo '<div id="obsah"><p>Hlášení přiřazeno k příslušným případům.</p></div>';
 		if (isset($_POST['case'])) {
 			for ($i=0;$i<Count($case);$i++) {
-				MySQL_Query ("INSERT INTO ".DB_PREFIX."ar2c VALUES('".$_POST['reportid']."','".$case[$i]."','".$usrinfo['id']."')");
+				mysqli_query ($database,"INSERT INTO ".DB_PREFIX."ar2c VALUES('".$_POST['reportid']."','".$case[$i]."','".$usrinfo['id']."')");
 			}
 		}
 		pageEnd ();
@@ -26,9 +26,9 @@
 	if (isset($_POST['addcasetoareport'])) {
 		auditTrail(3, 6, $_POST['caseid']);
 		if ($usrinfo['right_power']==1) {
-			MySQL_Query ("DELETE FROM ".DB_PREFIX."ar2c WHERE ".DB_PREFIX."ar2c.idcase=".$_POST['caseid']);
+			mysqli_query ($database,"DELETE FROM ".DB_PREFIX."ar2c WHERE ".DB_PREFIX."ar2c.idcase=".$_POST['caseid']);
 		} else {
-			MySQL_Query ("DELETE c FROM ".DB_PREFIX."ar2c as c, ".DB_PREFIX."reports as p WHERE c.idreport=p.id AND p.secret=0 AND c.idcase=".$_POST['caseid']);
+			mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2c as c, ".DB_PREFIX."reports as p WHERE c.idreport=p.id AND p.secret=0 AND c.idcase=".$_POST['caseid']);
 		}
 		if (isset($_POST['report'])) {
 			$report=$_POST['report'];
@@ -39,7 +39,7 @@
 		echo '<div id="obsah"><p>Hlášení k případu přiložena či odebrána.</p></div>';
 		if (isset($_POST['report'])) {
 			for ($i=0;$i<Count($report);$i++) {
-				MySQL_Query ("INSERT INTO ".DB_PREFIX."ar2c VALUES('".$report[$i]."','".$_POST['caseid']."','".$usrinfo['id']."')");
+				mysqli_query ($database,"INSERT INTO ".DB_PREFIX."ar2c VALUES('".$report[$i]."','".$_POST['caseid']."','".$usrinfo['id']."')");
 			}
 		}
 		pageEnd ();

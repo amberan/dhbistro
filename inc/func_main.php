@@ -11,12 +11,12 @@
 	session_start();
 	$_SESSION['once']=0;
 	
-	global $point;
+	global $database,$point;
 
 	// databaze
   switch ($_SERVER["SERVER_NAME"]) {
   	case 'localhost':
-  		$dbusr='dhbistrocz';
+  		$dbusr=$dbname='dhbistrocz';
   		$verze=0;
   		$point='zlobod';
   		$barva='local';
@@ -24,7 +24,7 @@
                 $hlaseniM='hlášení';
   		break;
   	case 'www.dhbistro.cz':
-  		$dbusr='dhbistrocz';
+  		$dbusr=$dbname='dhbistrocz';
   		$verze=1;
   		$point='zlobod';
   		$barva='dh';
@@ -32,7 +32,7 @@
                 $hlaseniM='hlášení';
   		break;
   	case 'nh.dhbistro.cz':
-  		$dbusr='nhbistro';
+  		$dbusr=$dbname='nhbistro';
   		$verze=2;
   		$point='bludišťák';
   		$barva='nh';
@@ -40,7 +40,7 @@
                 $hlaseniM='hlášení';
   		break;
   	case 'test.dhbistro.cz':
-  		$dbusr='testbistro';
+  		$dbusr=$dbname='testbistro';
   		$verze=3;
   		$point='zlobod';
   		$barva='test';
@@ -48,36 +48,47 @@
                 $hlaseniM='hlášení';
   		break;
   	case 'org.dhbistro.cz':
-		$dbusr='orgbistro';
+		$dbusr=$dbname='orgbistro';
 		$verze=4;
 		$point='zlobod';
 		$barva='org';
                 $hlaseniV='Hlášení';
                 $hlaseniM='hlášení';
 		break;
-        case 'enigma.dhbistro.cz':
-		$dbusr='enigmabistro';
+    case 'enigma.dhbistro.cz':
+		$dbusr=$dbname='enigmabistro';
 		$verze=5;
 		$point='zlobod';
 		$barva='enigma';
                 $hlaseniV='Zakázka';
                 $hlaseniM='zakázka';
 		break;
-        case 'nhtest.dhbistro.cz':
-  		$dbusr='nhtestbistro';
+    case 'nhtest.dhbistro.cz':
+  		$dbusr=$dbname='nhtestbistro';
   		$verze=2;
   		$point='bludišťák';
   		$barva='test';
                 $hlaseniV='Hlášení';
                 $hlaseniM='hlášení';
-  }
+		break;
+	case 'saga':
+		$dbusr='root';
+		$dbname='NHBistro';
+		$verze=2;
+		$point='bludišťák';
+		$barva='nh';
+			  $hlaseniV='Hlášení';
+			  $hlaseniM='hlášení';
+			}
   
 // vyzvedni heslo k databazi
 $file = "inc/important.php";
 $lines = file($file,FILE_IGNORE_NEW_LINES) or die("fail pwd");;
 $password = $lines[2];
 
-// kontrola pripojeni
+$database = mysqli_connect ('localhost',$dbusr,$password,$dbname) or die (mysqli_connect_errno()." ".mysqli_connect_error());
+
+/*KK kontrola pripojeni
   if (!@mysql_connect ('localhost',$dbusr,$password)) {
   	echo 'fail ';
   	echo $dbusr;
@@ -88,22 +99,22 @@ $password = $lines[2];
 //	echo $dbusr;
 //	echo $password;
 //	echo $file;
-//	echo $lines;
+//	echo $lines; KK*/
 
   $page_prefix='';
 
 	define ('DB_PREFIX','nw_');
-  MySQL_Query ("SET NAMES 'utf8'");
+  mysqli_query ($database,"SET NAMES 'utf8'");
   
   // prihlaseni
-  if (isset($_REQUEST['logmein'])) {
-    $logres=MySQL_Query ("SELECT id FROM ".DB_PREFIX."users WHERE login='".mysql_real_escape_string($_REQUEST['loginname'])."' AND pwd='".mysql_real_escape_string($_REQUEST['loginpwd'])."'");
-    if ($logrec=MySQL_Fetch_Array ($logres)) {
-      MySQL_Query ("DELETE FROM ".DB_PREFIX."loggedin WHERE iduser=".$logrec['id']);
+  if (isset($_REQUEST['logmein'])) { 
+	$logres=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."users WHERE login='".mysqli_real_escape_string ($database,$_REQUEST['loginname'])."' AND pwd='".mysqli_real_escape_string ($database,$_REQUEST['loginpwd'])."'");
+	if ($logrec=mysqli_fetch_array ($logres)) {
+      mysqli_query ($database,"DELETE FROM ".DB_PREFIX."loggedin WHERE iduser=".$logrec['id']);
       $sid=md5(uniqid(rand()));
-			MySQL_Query ("INSERT INTO ".DB_PREFIX."loggedin VALUES('".$logrec['id']."','".Time()."','".$sid."','".mysql_real_escape_string($_SERVER['HTTP_USER_AGENT'])."','".$_SERVER['REMOTE_ADDR']."')");
-			//MySQL_Query ("INSERT INTO ".DB_PREFIX."loggedin VALUES('".$logrec['id']."','".Time()."','".$sid."','','')");
-			MySQL_Query ("UPDATE ".DB_PREFIX."users SET lastlogon=".Time().", ip='' WHERE id=".$logrec['id']);
+			mysqli_query ($database,"INSERT INTO ".DB_PREFIX."loggedin VALUES('".$logrec['id']."','".Time()."','".$sid."','".mysqli_real_escape_string ($database,$_SERVER['HTTP_USER_AGENT'])."','".$_SERVER['REMOTE_ADDR']."')");
+			//mysqli_query ($database,"INSERT INTO ".DB_PREFIX."loggedin VALUES('".$logrec['id']."','".Time()."','".$sid."','','')");
+			mysqli_query ($database,"UPDATE ".DB_PREFIX."users SET lastlogon=".Time().", ip='' WHERE id=".$logrec['id']);
       $_SESSION['sid']=$sid;
     }
   }
@@ -125,16 +136,16 @@ $password = $lines[2];
 												".DB_PREFIX."loggedin.sid AS 'sid',
 												".DB_PREFIX."loggedin.time AS 'lastaction',
 												".DB_PREFIX."loggedin.ip AS 'currip'
-												FROM ".DB_PREFIX."users, ".DB_PREFIX."loggedin WHERE agent='".mysql_real_escape_string($_SERVER['HTTP_USER_AGENT'])."' AND ".DB_PREFIX."loggedin.sid ='".mysql_real_escape_string($_SESSION['sid'])."' AND deleted=0 AND ".DB_PREFIX."loggedin.iduser=".DB_PREFIX."users.id";
-		$ures=MySQL_Query ($sql);
+												FROM ".DB_PREFIX."users, ".DB_PREFIX."loggedin WHERE agent='".mysqli_real_escape_string ($database,$_SERVER['HTTP_USER_AGENT'])."' AND ".DB_PREFIX."loggedin.sid ='".mysqli_real_escape_string ($database,$_SESSION['sid'])."' AND deleted=0 AND ".DB_PREFIX."loggedin.iduser=".DB_PREFIX."users.id";
+		$ures=mysqli_query ($database,$sql);
 
-		if ($usrinfo=MySQL_Fetch_Assoc($ures)) {
+		if ($usrinfo=mysqli_fetch_assoc ($ures)) {
 		  $loggedin=true;
 		  
 		  // natazeni tabulky neprectenych zaznamu do promenne
 		  $sql_r="SELECT * FROM ".DB_PREFIX."unread WHERE iduser=".$usrinfo['id'];
-		  $res_r=MySQL_Query($sql_r);
-		  while ($unread[]=mysql_fetch_array($res_r));
+		  $res_r=mysqli_query ($database,$sql_r);
+		  while ($unread[]=mysqli_fetch_array ($res_r));
 		} else {
 		  $loggedin=false;
 		}
@@ -149,15 +160,16 @@ $password = $lines[2];
 		$inactive = 600;
 	}
 	
-	if(isset($_SESSION['timeout']) ) {
+ 	if(isset($_SESSION['timeout']) ) {
 		$session_life = time() - $_SESSION['timeout'];
 		if($session_life > $inactive) {
 			session_destroy(); header("Location: login.php");
 		}
-	}
+	} 
 	
 	$_SESSION['timeout'] = time();
 	
+/*KK 
   // ta parametrizaci na verzi je tam proto, ze na lokale to kdoviproc nefunguje	
   // overeni prihlaseni, nutno zmenit jmeno souboru na ostre verzi
   $free_pages = array ($page_prefix.'login.php');
@@ -168,10 +180,10 @@ $password = $lines[2];
             Header ('location: login.php');
     }
   //}
-
+KK*/
 // vyhledani tabulky v neprectenych zaznamech
 function searchTable ($tablenum) { 
-	global $unread;
+	global $database,$unread;
 	foreach ($unread as $record) {
             if ($record['idtable'] == $tablenum) {
             return true;
@@ -182,7 +194,7 @@ function searchTable ($tablenum) {
 
 // vyhledani zaznamu v neprectenych zaznamech
 function searchRecord ($tablenum, $recordnum) {
-	global $unread;
+	global $database,$unread;
 	foreach ($unread as $record) {
             if ($record['idtable'] == $tablenum && $record['idrecord'] == $recordnum) {
             return true;
@@ -193,7 +205,7 @@ function searchRecord ($tablenum, $recordnum) {
 
 // zaznam do tabulek neprectenych
 function unreadRecords ($tablenum,$rid) {
-	global $usrinfo, $_POST;
+	global $database,$usrinfo, $_POST;
 	$secret=0;
 	if (isset($_POST['secret'])) {
 		$secret=$_POST['secret'];
@@ -202,17 +214,17 @@ function unreadRecords ($tablenum,$rid) {
 		$secret=$_POST['nsecret'];
 	}
 	$sql_ur="SELECT ".DB_PREFIX."users.id as 'id', ".DB_PREFIX."users.right_power as 'right_power', ".DB_PREFIX."users.deleted as 'deleted' FROM ".DB_PREFIX."users";
-	$res_ur=MySQL_Query ($sql_ur);
-	while ($rec_ur=MySQL_Fetch_Assoc($res_ur)) {
+	$res_ur=mysqli_query ($database,$sql_ur);
+	while ($rec_ur=mysqli_fetch_assoc ($res_ur)) {
 		if ($secret > 0 && $rec_ur['deleted'] <> 1) {
 			if ($rec_ur['id'] <> $usrinfo['id'] && $rec_ur['right_power'] > 0) {
 				$srsql="INSERT INTO ".DB_PREFIX."unread (idtable, idrecord, iduser) VALUES('".$tablenum."', '".$rid."', '".$rec_ur['id']."')";
-				MySQL_Query ($srsql);
+				mysqli_query ($database,$srsql);
 			}
 		} else if ($secret == 0 && $rec_ur['deleted'] <> 1) {
 			if ($rec_ur['id'] <> $usrinfo['id']) {
 				$srsql="INSERT INTO ".DB_PREFIX."unread (idtable, idrecord, iduser) VALUES('".$tablenum."', '".$rid."', '".$rec_ur['id']."')";
-				MySQL_Query ($srsql);
+				mysqli_query ($database,$srsql);
 			}
 		}
 	}
@@ -220,22 +232,22 @@ function unreadRecords ($tablenum,$rid) {
 
 // vymaz z tabulek neprectenych pri precteni
 function deleteUnread ($tablenum,$rid) {
-	global $usrinfo;
+	global $database,$usrinfo;
 	if ($rid<>'none') {
 		$sql_ur="DELETE FROM ".DB_PREFIX."unread WHERE idtable=".$tablenum." AND idrecord=".$rid." AND iduser=".$usrinfo['id'];
 	} else {
 		$sql_ur="DELETE FROM ".DB_PREFIX."unread WHERE idtable=".$tablenum." AND iduser=".$usrinfo['id'];
 	}
-	MySQL_Query ($sql_ur);
+	mysqli_query ($database,$sql_ur);
 }
 
 // vymaz z tabulek neprectenych pri smazani zaznamu
 function deleteAllUnread ($tablenum,$rid) {
 	$sql_ur="SELECT ".DB_PREFIX."users.id as 'id', ".DB_PREFIX."users.right_power as 'right_power' FROM ".DB_PREFIX."users";
-	$res_ur=MySQL_Query ($sql_ur);
-	while ($rec_ur=MySQL_Fetch_Assoc($res_ur)) {
+	$res_ur=mysqli_query ($database,$sql_ur);
+	while ($rec_ur=mysqli_fetch_assoc ($res_ur)) {
 		$srsql="DELETE FROM ".DB_PREFIX."unread WHERE idtable=".$tablenum." AND idrecord=".$rid." AND iduser=".$rec_ur['id'];
-		MySQL_Query ($srsql);
+		mysqli_query ($database,$srsql);
 	}
 }
 
@@ -243,9 +255,9 @@ function deleteAllUnread ($tablenum,$rid) {
 function getAuthor ($recid,$trn) {
 	if ($trn==1) {
 		$sql_ga="SELECT ".DB_PREFIX."persons.name as 'name', ".DB_PREFIX."persons.surname as 'surname', ".DB_PREFIX."users.login as 'nick' FROM ".DB_PREFIX."persons, ".DB_PREFIX."users WHERE ".DB_PREFIX."users.id=".$recid." AND ".DB_PREFIX."persons.id=".DB_PREFIX."users.idperson";
-		$res_ga=MySQL_Query ($sql_ga);
-		if (MySQL_Num_Rows($res_ga)) {
-			while ($rec_ga=MySQL_Fetch_Assoc($res_ga)) {
+		$res_ga=mysqli_query ($database,$sql_ga);
+		if (mysqli_num_rows ($res_ga)) {
+			while ($rec_ga=mysqli_fetch_assoc ($res_ga)) {
 				$name=StripSlashes ($rec_ga['surname']).', '.StripSlashes ($rec_ga['name']);
 				return $name;
 			}
@@ -255,9 +267,9 @@ function getAuthor ($recid,$trn) {
 		}
 	} else {
 		$sql_ga="SELECT ".DB_PREFIX."users.login as 'nick' FROM ".DB_PREFIX."users WHERE ".DB_PREFIX."users.id=".$recid;
-		$res_ga=MySQL_Query ($sql_ga);
-		if (MySQL_Num_Rows($res_ga)) {
-			while ($rec_ga=MySQL_Fetch_Assoc($res_ga)) {
+		$res_ga=mysqli_query ($database,$sql_ga);
+		if (mysqli_num_rows ($res_ga)) {
+			while ($rec_ga=mysqli_fetch_assoc ($res_ga)) {
 				$name=StripSlashes ($rec_ga['nick']);
 				return $name;
 			}
@@ -270,10 +282,10 @@ function getAuthor ($recid,$trn) {
 
 //auditni stopa
 function auditTrail ($record_type,$operation_type,$idrecord) {
-	global $usrinfo;
+	global $database,$usrinfo;
 	$sql_check="SELECT * FROM ".DB_PREFIX."audit_trail WHERE iduser='".$usrinfo['id']."' AND time='".time()."'";
-	$res_check=MySQL_Query ($sql_check);
-	if (MySQL_Num_Rows($res_check)) {
+	$res_check=mysqli_query ($database,$sql_check);
+	if (mysqli_num_rows ($res_check)) {
 	} else {
 		if (!$usrinfo['currip']) {
 			$currip=$_SERVER['REMOTE_ADDR'];
@@ -281,13 +293,13 @@ function auditTrail ($record_type,$operation_type,$idrecord) {
 			$currip=$usrinfo['currip'];
 		}
 		$sql_au="INSERT INTO ".DB_PREFIX."audit_trail VALUES('','".$usrinfo['id']."','".time()."','".$operation_type."','".$record_type."','".$idrecord."','".$currip."','".$usrinfo['right_org']."')";
-		MySql_Query($sql_au);
+		mysqli_query ($database,$sql_au);
 	}
 }
 
 //pokus o pristup k tajnemu, soukromemu nebo smazanemu zaznamu
 function unauthorizedAccess ($record_type,$secret,$deleted,$idrecord) {
-	global $usrinfo;
+	global $database,$usrinfo;
         switch ($record_type) {
             case 1:
                 $link='<a href="./persons.php">osoby</a>';
@@ -322,9 +334,9 @@ function unauthorizedAccess ($record_type,$secret,$deleted,$idrecord) {
 
 //vytvoreni zalohy
 function backupDB () {
-	global $dbusr;
+	global $database,$dbusr;
 	function  zalohuj($db,$soubor=""){
-	 global $dbusr;
+	 global $database,$dbusr;
 	 
 		function  keys($prefix,$array){
 			if (empty($array)) { $pocet=0; } else {	$pocet = count ($array); }
@@ -336,18 +348,18 @@ function backupDB () {
 				return  ",\n".$prefix."(".$radky.")";
 		}
 
-		$sql = mysql_query ("SHOW table status  FROM ".$db);
+		$sql = mysqli_query ($database,"SHOW table status  FROM ".$db);
 
 
-		while ($data = mysql_fetch_row ($sql)){
+		while ($data = mysqli_fetch_row ($database,$sql)){
 
 		if (!isset($text)) { $text = '';}
 		$text .= (empty ($text)?"":"\n\n")."--\n-- Struktura tabulky ".$data[0]."\n--\n\n\n";
     	$text .= "CREATE TABLE `".$data[0]."`(\n";
-	    $sqll = mysql_query ("SHOW columns  FROM ".$data[0]);
+	    $sqll = mysqli_query ($database,"SHOW columns  FROM ".$data[0]);
     			$e = true;
 
-		while ($dataa = mysql_fetch_row ($sqll)){
+		while ($dataa = mysqli_fetch_row ($database,$sqll)){
 		if ($e) $e = false;
 			else  $text .= ",\n";
 
@@ -371,12 +383,12 @@ function backupDB () {
     	unset ($PRI,$UNI,$MUL);
 
 	    $text .= "--\n-- Data tabulky ".$data[0]."\n--\n\n";
-		$query = mysql_query ("SELECT  * FROM ".$data[0]."");
-		while ($fetch = mysql_fetch_row ($query)){
+		$query = mysqli_query ($database,"SELECT  * FROM ".$data[0]."");
+		while ($fetch = mysqli_fetch_row ($database,$query)){
 		$pocet_sloupcu = count ($fetch);
 
 		for ($i = 0;$i < $pocet_sloupcu;$i++)
-			@$values .= "'".mysql_escape_string ($fetch[$i])."'".($i < $pocet_sloupcu-1?",":"");
+			@$values .= "'".mysqli_escape_string ($database,$fetch[$i])."'".($i < $pocet_sloupcu-1?",":"");
 			$text .= "\nINSERT INTO `".$data[0]."` VALUES(".$values.");";
 			unset ($values);
 		}
@@ -392,21 +404,21 @@ function backupDB () {
 		}
 	
 		$sql_check="SELECT time FROM ".DB_PREFIX."backups ORDER BY time DESC LIMIT 1";
-		$fetch_check=MySQL_Fetch_Assoc(MySql_Query ($sql_check));
+		$fetch_check=mysqli_fetch_assoc (mysqli_query ($database,$sql_check));
 		$last_backup=$fetch_check['time'];
 		if (round($last_backup,-5)<round(time(),-5)) {
-			mysql_query ("SET NAMES  'utf8'");
+			mysqli_query ($database,"SET NAMES  'utf8'");
 			$xsoubor="backup".time().".sql";
 			$fsoubor="files/backups/".$xsoubor;
 			$sql_bck="INSERT INTO ".DB_PREFIX."backups VALUES('','".Time()."','".$xsoubor."')";
-			MySql_Query ($sql_bck);
+			mysqli_query ($database,$sql_bck);
 			zalohuj($dbusr,$fsoubor);
 		}
 }
   
 // vypis zacatku stranky
 	function pageStart ($title,$infotext='') {
-	  global $loggedin, $usrinfo, $mazzarino_version;
+	  global $database,$loggedin, $usrinfo, $mazzarino_version;
 		echo '<?xml version="1.0" encoding="utf-8"?>';
 ?>
 
@@ -461,7 +473,7 @@ function backupDB () {
 	
 	// vypis konce stranky
 	function pageEnd () {
-	  global $starttime;
+	  global $database,$starttime;
 	  $mtime = microtime();
 		$mtime = explode(" ",$mtime);
 		$mtime = $mtime[1] + $mtime[0];
@@ -477,9 +489,9 @@ function backupDB () {
 	}
 	
 	function mainMenu ($index) {
-	  global $usrinfo, $verze, $barva, $hlaseniV;
+	  global $database,$usrinfo, $verze, $barva, $hlaseniV;
 	  $currentfile = $_SERVER["PHP_SELF"];
-	  $dlink=MySQL_Fetch_Assoc(MySQL_Query ("SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1"));
+	  $dlink=mysqli_fetch_assoc (mysqli_query ($database,"SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1"));
 	  echo '<div id="menu">
 	<ul class="'.$barva.'">
 		<li '.((searchTable(5))?' class="unread"':((searchTable(6))?' class="unread"':'')).'><a href="index.php">Aktuality</a></li>
@@ -553,7 +565,7 @@ function backupDB () {
         
 // funkce pro ukládání fitru do databáza a načítání filtru z databáze        
         function custom_Filter ($idtable, $idrecord = 0) {
-            global $usrinfo;
+            global $database,$usrinfo;
             switch ($idtable) {
 			case 1: $table="persons"; break;
 			case 2: $table="groups"; break;
@@ -575,13 +587,13 @@ function backupDB () {
                         case 22: $table="sy2ar"; break;
 		}
             $sql_cf = "SELECT filter FROM ".DB_PREFIX."users WHERE id = ".$usrinfo['id'];
-            $res_cf=MySQL_Query ($sql_cf);
+            $res_cf=mysqli_query ($database,$sql_cf);
             $filter = $_REQUEST;
             // pokud přichází nový filtr a nejedná se o zadání úkolu či přidání zlobodů, případně pokud se jedná o konkrétní záznam a je nově filtrovaný,
             // použij nový filtr a ulož ho do databáze
             if ((!empty($filter) && !isset($_POST['inserttask']) && !isset($_POST['addpoints']) && !isset($filter['rid'])) || (isset($filter['sort']) && isset($filter['rid']))) {
                 if ($res_cf) {
-                    $rec_cf = MySQL_Fetch_Assoc($res_cf);
+                    $rec_cf = mysqli_fetch_assoc ($res_cf);
                     $filters = unserialize($rec_cf['filter']);
                     $filters[$table] = $filter;
                 } else {
@@ -589,11 +601,11 @@ function backupDB () {
                 }
                 $sfilters = serialize($filters);
                 $sql_scf = "UPDATE ".DB_PREFIX."users SET filter='".$sfilters."' WHERE id=".$usrinfo['id'];
-                MySQL_Query ($sql_scf);
+                mysqli_query ($database,$sql_scf);
             // v opačném případě zkontroluj, zda existuje odpovídající filtr v databázi, a pokud ano, načti jej    
             } else {
                 if ($res_cf) {
-                    $rec_cf=MySQL_Fetch_Assoc($res_cf);
+                    $rec_cf=mysqli_fetch_assoc ($res_cf);
                     $filters = unserialize($rec_cf['filter']);
                     if (!empty($filters)) {
                         if (array_key_exists($table, $filters)) {

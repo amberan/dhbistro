@@ -94,7 +94,7 @@
 	}
 	// filtr samotny
 	function filter () {
-	  global $f_cat, $f_sort, $f_stat, $f_my, $f_conn, $fsql_conn2, $f_sec, $f_new, $f_archiv, $usrinfo, $hlaseniM;
+	  global $database,$f_cat, $f_sort, $f_stat, $f_my, $f_conn, $fsql_conn2, $f_sec, $f_new, $f_archiv, $usrinfo, $hlaseniM;
           echo '<div id="filter-wrapper"><form action="reports.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -175,8 +175,8 @@
                     FROM ".DB_PREFIX."users, ".DB_PREFIX."reports".$fsql_conn2." 
                     WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret<=".$usrinfo['right_power'].$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn.$fsql_archiv."
                     ORDER BY ".$fsql_sort;
-	$res=MySQL_Query ($sql);
-	while ($rec=MySQL_Fetch_Assoc($res)) {
+	$res=mysqli_query ($database,$sql);
+	while ($rec=mysqli_fetch_assoc ($res)) {
             if ($f_new==0 || ($f_new==1 && searchRecord(4,$rec['id']))) {
                 echo '<div class="news_div '.(($rec['type']==1)?'game_news':'system_news').((searchRecord(4,$rec['id']))?' unread_record':'').'">
                 <div class="news_head"><strong><a href="readactrep.php?rid='.$rec['id'].'&amp;hidenotes=0&amp;truenames=0">'.StripSlashes($rec['label']).'</a></strong>';

@@ -6,8 +6,8 @@
 		} else {
 			$sql="SELECT mime, uniquename AS 'soubor', originalname AS 'nazev', size FROM ".DB_PREFIX."data WHERE id=".$_REQUEST['idfile']." AND secret=0";
 		}
-    $getres=MySQL_Query ($sql);
-    if ($getrec=MySQL_Fetch_Assoc ($getres)) {
+    $getres=mysqli_query ($database,$sql);
+    if ($getrec=mysqli_fetch_assoc ($getres)) {
       header('Content-Type: application/octet-stream');
       header('Content-Disposition: attachment; filename="'.$getrec['nazev'].'";');
       header('Expires: 0');

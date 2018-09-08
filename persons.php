@@ -114,7 +114,7 @@
 	}
 	// formular filtru
 	function filter () {
-		global $f_sort, $sportraits, $ssymbols, $f_sec, $f_new, $fdead, $farchiv, $usrinfo, $fspec, $fside, $fpow;
+		global $database,$f_sort, $sportraits, $ssymbols, $f_sec, $f_new, $fdead, $farchiv, $usrinfo, $fspec, $fside, $fpow;
 	  echo '<div id="filter-wrapper"><form action="persons.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -187,8 +187,8 @@
 	}
 	Alternativni vypis osob zahrnujici vice stupnu tajne.*/
     $sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.archiv AS 'archiv', ".DB_PREFIX."persons.dead AS 'dead', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.symbol AS 'symbol' FROM ".DB_PREFIX."persons WHERE ".DB_PREFIX."persons.deleted=0 AND ".DB_PREFIX."persons.secret<=".$usrinfo['right_power'].$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow." ORDER BY ".$fsql_sort;
-	$res=MySQL_Query ($sql);
-	if (MySQL_Num_Rows($res)) {
+	$res=mysqli_query ($database,$sql);
+	if (mysqli_num_rows ($res)) {
 	  echo '<div id="obsah">
 <table>
 <thead>
@@ -204,7 +204,7 @@
 <tbody>
 ';
 		$even=0;
-		while ($rec=MySQL_Fetch_Assoc($res)) {
+		while ($rec=mysqli_fetch_assoc ($res)) {
                     if ($f_new==0 || ($f_new==1 && searchRecord(1,$rec['id']))) {
                         echo '<tr class="'.((searchRecord(1,$rec['id']))?' unread_record':(($even%2==0)?'even':'odd')).'">
                         '.(($sportraits)?'<td><img src="getportrait.php?rid='.$rec['id'].'" alt="portrét chybí" /></td>':'').'

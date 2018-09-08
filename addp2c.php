@@ -5,8 +5,8 @@
         $custom_Filter = custom_Filter(15);
 	sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>úprava případu</strong> &raquo; <strong>přidání osob</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
-	  $res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."cases WHERE id=".$_REQUEST['rid']);
-		if ($rec=MySQL_Fetch_Assoc($res)) {
+	  $res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."cases WHERE id=".$_REQUEST['rid']);
+		if ($rec=mysqli_fetch_assoc ($res)) {
 ?>
 
 <div id="obsah">
@@ -66,7 +66,7 @@ K případu můžete přiřadit osoby, kterých se týká nebo kterých by se t�
 	}
 	// formular filtru
 	function filter () {
-		global $f_sort, $sportraits, $ssymbols, $farchiv, $fdead;
+		global $database,$f_sort, $sportraits, $ssymbols, $farchiv, $fdead;
 	  echo '<form action="addp2c.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -94,13 +94,13 @@ K případu můžete přiřadit osoby, kterých se týká nebo kterých by se t�
 	} else {
 	  $sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.symbol AS 'symbol', ".DB_PREFIX."c2p.iduser FROM ".DB_PREFIX."persons LEFT JOIN ".DB_PREFIX."c2p ON ".DB_PREFIX."c2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']." WHERE ".DB_PREFIX."persons.deleted=0 ".$fsql_dead.$fsql_archiv." AND ".DB_PREFIX."persons.secret=0 ORDER BY ".$fsql_sort;
 	}
-	$res=MySQL_Query ($sql);
+	$res=mysqli_query ($database,$sql);
 ?>
 
 <div style="padding-top: 0px; padding-bottom: 0px;"id="in-form-table">
     
 <?php 
-	if (MySQL_Num_Rows($res)) {
+	if (mysqli_num_rows ($res)) {
 	  echo '<table>
 <thead>
 	<tr>
@@ -112,7 +112,7 @@ K případu můžete přiřadit osoby, kterých se týká nebo kterých by se t�
 <tbody>
 ';
 		$even=0;
-		while ($rec=MySQL_Fetch_Assoc($res)) {
+		while ($rec=mysqli_fetch_assoc ($res)) {
 		  echo '<tr class="'.(($even%2==0)?'even':'odd').'"><td><input type="checkbox" name="person[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser'])?' checked="checked"':'').' /></td>
 '.(($sportraits)?'<td><img src="getportrait.php?rid='.$rec['id'].'" alt="portrét chybí" /></td>':'').(($ssymbols)?'<td><img src="getportrait.php?nrid='.$rec['symbol'].'" alt="symbol chybí" /></td>':'').'
 	<td>'.(($rec['secret'])?'<span class="secret"><a href="readperson.php?rid='.$rec['id'].'">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a></span>':'<a href="readperson.php?rid='.$rec['id'].'">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a>').'</td>

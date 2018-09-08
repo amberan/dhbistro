@@ -13,7 +13,7 @@
 	if (isset($_POST['addpoints'])) {
 		if (is_numeric($_POST['plus'])) {
 			$ep_result=$_POST['oldpoints']+$_POST['plus'];
-			MySQL_Query ("UPDATE ".DB_PREFIX."users SET zlobody=".$ep_result." WHERE id=".$_POST['usrid']."");
+			mysqli_query ($database,"UPDATE ".DB_PREFIX."users SET zlobody=".$ep_result." WHERE id=".$_POST['usrid']."");
 			echo '<div id="obsah"><p>Zlobody přidány.</p></div>';
 		} else {
 			echo '<div id="obsah"><p>Přidané '.$point.'y musí být číselné.</p></div>';
@@ -35,8 +35,8 @@
 	}
 	// Filtr
 	function filter () {
-	  global $f_cat, $point;
-		global $f_sort;
+	  global $database,$f_cat, $point;
+		global $database,$f_sort;
 	  echo '<div id="filter-wrapper"><form action="evilpoints.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -53,8 +53,8 @@
 	filter();
 	// vypis uživatelů
 	$sql="SELECT * FROM ".DB_PREFIX."users WHERE ".DB_PREFIX."users.deleted=0 ORDER BY ".$fsql_sort;
-	$res=MySQL_Query ($sql);
-	if (MySQL_Num_Rows($res)) {
+	$res=mysqli_query ($database,$sql);
+	if (mysqli_num_rows ($res)) {
 	  echo '<div id="obsah">
 <table>
 <thead>
@@ -67,7 +67,7 @@
 <tbody>
 ';
 		$even=0;
-		while ($rec=MySQL_Fetch_Assoc($res)) {
+		while ($rec=mysqli_fetch_assoc ($res)) {
 		  echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 	<td>'.StripSlashes($rec['login']).'</td>
 	<td>'.($rec['zlobody']).'</td>

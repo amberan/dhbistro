@@ -1,8 +1,8 @@
 <?php
 	require_once ('./inc/func_main.php');
 	if (is_numeric($_REQUEST['rid'])) {
-		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."persons WHERE id=".$_REQUEST['rid']);
-		if ($rec=MySQL_Fetch_Assoc($res)) {
+		$res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."persons WHERE id=".$_REQUEST['rid']);
+		if ($rec=mysqli_fetch_assoc ($res)) {
                     if (($rec['secret']>$usrinfo['right_power']) || $rec['deleted']==1) {
                         unauthorizedAccess(1, $rec['secret'], $rec['deleted'], $_REQUEST['rid']);
                     }
@@ -105,10 +105,10 @@
 				} else {
 					$sql="SELECT ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."groups, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idgroup=".DB_PREFIX."groups.id AND ".DB_PREFIX."g2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."groups.deleted=0 AND ".DB_PREFIX."groups.secret=0 ORDER BY ".DB_PREFIX."groups.title ASC";
 				}
-				$res_g=MySQL_Query ($sql);
-				if (MySQL_Num_Rows($res_g)) {
+				$res_g=mysqli_query ($database,$sql);
+				if (mysqli_num_rows ($res_g)) {
 					$groups=Array();
-					while ($rec_g=MySQL_Fetch_Assoc($res_g)) {
+					while ($rec_g=mysqli_fetch_assoc ($res_g)) {
 						$groups[]='<a href="./readgroup.php?rid='.$rec_g['id'].'">'.StripSlashes ($rec_g['title']).'</a>';
 					}
 					echo implode ($groups,', ');
@@ -144,10 +144,10 @@
 				} else {
 					$sql_c="SELECT ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."c2p.iduser FROM ".DB_PREFIX."cases, ".DB_PREFIX."c2p WHERE ".DB_PREFIX."c2p.idcase=".DB_PREFIX."cases.id AND ".DB_PREFIX."c2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."cases.deleted=0 AND ".DB_PREFIX."cases.secret=0 ORDER BY ".DB_PREFIX."cases.title ASC";
 				}
-				$res_c=MySQL_Query ($sql_c);
-				if (MySQL_Num_Rows($res_c)) {
+				$res_c=mysqli_query ($database,$sql_c);
+				if (mysqli_num_rows ($res_c)) {
 					$cases=Array();
-					while ($rec_c=MySQL_Fetch_Assoc($res_c)) {
+					while ($rec_c=mysqli_fetch_assoc ($res_c)) {
 						$cases[]='<a href="./readcase.php?rid='.$rec_c['id'].'">'.StripSlashes ($rec_c['title']).'</a>';
 					}
 					echo implode ($cases,'<br />');
@@ -161,10 +161,10 @@
 				} else {
 					$sql_r="SELECT ".DB_PREFIX."reports.secret AS 'secret', ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."reports, ".DB_PREFIX."ar2p WHERE ".DB_PREFIX."ar2p.idreport=".DB_PREFIX."reports.id AND ".DB_PREFIX."ar2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0 ORDER BY ".DB_PREFIX."reports.label ASC";
 				}
-				$res_r=MySQL_Query ($sql_r);
-				if (MySQL_Num_Rows($res_r)) {
+				$res_r=mysqli_query ($database,$sql_r);
+				if (mysqli_num_rows ($res_r)) {
 					$reports=Array();
-					while ($rec_r=MySQL_Fetch_Assoc($res_r)) {
+					while ($rec_r=mysqli_fetch_assoc ($res_r)) {
 						$reports[]='<a href="./readactrep.php?rid='.$rec_r['id'].'&hidenotes=0&truenames=0">'.StripSlashes ($rec_r['label']).'</a>';
 					}
 					echo implode ($reports,'<br />');
@@ -181,9 +181,9 @@
 		} else {
 		  $sql="SELECT ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=1 AND ".DB_PREFIX."data.secret=0 ORDER BY ".DB_PREFIX."data.originalname ASC";
 		}
-		$res=MySQL_Query ($sql);
+		$res=mysqli_query ($database,$sql);
 		$i=0;
-		while ($rec=MySQL_Fetch_Assoc($res)) { 
+		while ($rec=mysqli_fetch_assoc ($res)) { 
 			$i++; 
 			if($i==1){ ?>
 	<fieldset><legend><strong>Přiložené soubory</strong></legend>
@@ -209,9 +209,9 @@ if ($hn==1) goto hidenotes; ?>
 		} else {
 		    $sql="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.note AS 'note', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."users.login AS 'user', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes, ".DB_PREFIX."users WHERE ".DB_PREFIX."notes.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=1 AND ".DB_PREFIX."notes.deleted=0 AND (".DB_PREFIX."notes.secret=0 OR ".DB_PREFIX."notes.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."notes.datum DESC";
 		}
-		$res=MySQL_Query ($sql);
+		$res=mysqli_query ($database,$sql);
 		$i=0;
-		while ($rec=MySQL_Fetch_Assoc($res)) { 
+		while ($rec=mysqli_fetch_assoc ($res)) { 
 			$i++;
 			if($i==1){ ?>
 	<fieldset><legend><strong>Poznámky</strong></legend>

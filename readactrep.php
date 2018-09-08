@@ -1,7 +1,7 @@
 <?php
 	require_once ('./inc/func_main.php');
 	if (is_numeric($_REQUEST['rid'])) {
-		$check=MySQL_Fetch_Assoc(MySQL_Query("SELECT ".DB_PREFIX."users.idperson AS 'aid'
+		$check=mysqli_fetch_assoc (mysqli_query ($database,"SELECT ".DB_PREFIX."users.idperson AS 'aid'
 											FROM ".DB_PREFIX."users, ".DB_PREFIX."reports
 											WHERE ".DB_PREFIX."reports.id=".$_REQUEST['rid']."
 											AND ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id"));
@@ -33,8 +33,8 @@
 			FROM ".DB_PREFIX."reports, ".DB_PREFIX."users, ".DB_PREFIX."persons
 			WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id 
 			AND ".DB_PREFIX."reports.id=".$_REQUEST['rid'].$connector;
-		$res=MySQL_Query ($sql);
-		if ($rec_ar=MySQL_Fetch_Assoc($res)) {
+		$res=mysqli_query ($database,$sql);
+		if ($rec_ar=mysqli_fetch_assoc ($res)) {
                     if (($rec_ar['secret']>$usrinfo['right_power']) || $rec_ar['deleted']==1) {
                         unauthorizedAccess(4, $rec_ar['secret'], $rec_ar['deleted'], $_REQUEST['rid']);
                     }
@@ -131,10 +131,10 @@
 		} else {
 			$sql="SELECT ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."ar2p.iduser, ".DB_PREFIX."ar2p.role FROM ".DB_PREFIX."persons, ".DB_PREFIX."ar2p WHERE ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." AND ".DB_PREFIX."ar2p.role=".(($rec_ar['type']==1)?'4':(($rec_ar['type']==2)?'2':'4'))." AND ".DB_PREFIX."persons.deleted=0 AND ".DB_PREFIX."persons.secret=0 ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
 		}
-		$res=MySQL_Query ($sql);
-		if (MySQL_Num_Rows($res)) {
+		$res=mysqli_query ($database,$sql);
+		if (mysqli_num_rows ($res)) {
 			$groups=Array();
-			while ($rec_p=MySQL_Fetch_Assoc($res)) {
+			while ($rec_p=mysqli_fetch_assoc ($res)) {
 				$groups[]='<a href="./readperson.php?rid='.$rec_p['id'].'">'.StripSlashes ($rec_p['surname']).', '.StripSlashes ($rec_p['name']).'</a>';
 			}
 			echo implode ($groups,'; ');
@@ -149,10 +149,10 @@
 		} else {
 			$sql="SELECT ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."ar2p.iduser, ".DB_PREFIX."ar2p.role FROM ".DB_PREFIX."persons, ".DB_PREFIX."ar2p WHERE ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." AND ".DB_PREFIX."ar2p.role=".(($rec_ar['type']==1)?'3':(($rec_ar['type']==2)?'1':'3'))." AND ".DB_PREFIX."persons.deleted=0 AND ".DB_PREFIX."persons.secret=0 ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
 		}
-		$res=MySQL_Query ($sql);
-		if (MySQL_Num_Rows($res)) {
+		$res=mysqli_query ($database,$sql);
+		if (mysqli_num_rows ($res)) {
 			$groups=Array();
-			while ($rec_p=MySQL_Fetch_Assoc($res)) {
+			while ($rec_p=mysqli_fetch_assoc ($res)) {
 				$groups[]='<a href="./readperson.php?rid='.$rec_p['id'].'">'.StripSlashes ($rec_p['surname']).', '.StripSlashes ($rec_p['name']).'</a>';
 			}
 			echo implode ($groups,'; ');
@@ -167,10 +167,10 @@
 		} else {
 			$sql="SELECT ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."ar2p.iduser, ".DB_PREFIX."ar2p.role FROM ".DB_PREFIX."persons, ".DB_PREFIX."ar2p WHERE ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." AND ".DB_PREFIX."ar2p.role=0 AND ".DB_PREFIX."persons.deleted=0 AND ".DB_PREFIX."persons.secret=0 ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
 		}
-		$res=MySQL_Query ($sql);
-		if (MySQL_Num_Rows($res)) {
+		$res=mysqli_query ($database,$sql);
+		if (mysqli_num_rows ($res)) {
 			$groups=Array();
-			while ($rec_p=MySQL_Fetch_Assoc($res)) {
+			while ($rec_p=mysqli_fetch_assoc ($res)) {
 				$groups[]='<a href="./readperson.php?rid='.$rec_p['id'].'">'.StripSlashes ($rec_p['surname']).', '.StripSlashes ($rec_p['name']).'</a>';
 			}
 			echo implode ($groups,'; ');
@@ -185,9 +185,9 @@
 		} else {
 			$sql="SELECT ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.title AS 'title' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.id=".DB_PREFIX."ar2c.idcase AND ".DB_PREFIX."ar2c.idreport=".$_REQUEST['rid']." AND ".DB_PREFIX."cases.secret=0 ORDER BY ".DB_PREFIX."cases.title ASC";
 		}
-			$pers=MySQL_Query ($sql);
+			$pers=mysqli_query ($database,$sql);
 			$i=0;
-			while ($perc=MySQL_Fetch_Assoc($pers)){
+			while ($perc=mysqli_fetch_assoc ($pers)){
 				$i++;
 				if($i==1){?>
 		<ul id="pripady"><?php 
@@ -235,14 +235,14 @@
 	<fieldset><legend><strong>Přiložené symboly</strong></legend>
 	<?php //generování seznamu přiložených symbolů
 	$sql_s="SELECT ".DB_PREFIX."symbol2all.idsymbol AS 'id' FROM ".DB_PREFIX."symbol2all, ".DB_PREFIX."symbols WHERE ".DB_PREFIX."symbol2all.idsymbol = ".DB_PREFIX."symbols.id AND ".DB_PREFIX."symbols.assigned=0 AND ".DB_PREFIX."symbol2all.idrecord=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4 AND ".DB_PREFIX."symbols.deleted=0";
-	$res_s=MySQL_Query ($sql_s);
-	if (MySQL_Num_Rows($res_s)) {
+	$res_s=mysqli_query ($database,$sql_s);
+	if (mysqli_num_rows ($res_s)) {
 		$inc=0;
 		?>
 		<div id="symbols">
 		<table>
 		<?php 
-		while ($rec_s=MySQL_Fetch_Assoc($res_s)) {
+		while ($rec_s=mysqli_fetch_assoc ($res_s)) {
 			if ($inc==0 || $inc==8) echo '<tr>';
 			echo '<td><img src="getportrait.php?nrid='.$rec_s['id'].'" alt="symbol chybí" /></td>';
 			if ($inc==7) echo '</tr>';
@@ -265,9 +265,9 @@
 		} else {
 		  $sql="SELECT ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=4 AND ".DB_PREFIX."data.secret=0 ORDER BY ".DB_PREFIX."data.originalname ASC";
 		}
-		$res=MySQL_Query ($sql);
+		$res=mysqli_query ($database,$sql);
 		$i=0;
-		while ($rec=MySQL_Fetch_Assoc($res)) { 
+		while ($rec=mysqli_fetch_assoc ($res)) { 
 			$i++; 
 			if($i==1){ ?>
 	<fieldset><legend><strong>Přiložené soubory</strong></legend>
@@ -292,9 +292,9 @@ if ($hn==1) goto hidenotes; ?>
 		} else {
 		  $sql="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.note AS 'note', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."users.login AS 'user', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes, ".DB_PREFIX."users WHERE ".DB_PREFIX."notes.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=4 AND ".DB_PREFIX."notes.deleted=0 AND (".DB_PREFIX."notes.secret=0 OR ".DB_PREFIX."notes.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."notes.datum DESC";
 		}
-		$res=MySQL_Query ($sql);
+		$res=mysqli_query ($database,$sql);
 		$i=0;
-		while ($rec=MySQL_Fetch_Assoc($res)) { 
+		while ($rec=mysqli_fetch_assoc ($res)) { 
 			$i++;
 			if($i==1){ ?>
 	<fieldset><legend><strong>Poznámky</strong></legend>

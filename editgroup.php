@@ -1,8 +1,8 @@
 <?php
 	require_once ('./inc/func_main.php');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
-		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."groups WHERE id=".$_REQUEST['rid']);
-		if ($rec_g=MySQL_Fetch_Assoc($res)) {
+		$res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."groups WHERE id=".$_REQUEST['rid']);
+		if ($rec_g=mysqli_fetch_assoc ($res)) {
                     if (($rec_g['secret']>$usrinfo['right_power']) || $rec_g['deleted']==1) {
                         unauthorizedAccess(2, $rec_g['secret'], $rec_g['deleted'], $_REQUEST['rid']);
                     }
@@ -58,9 +58,9 @@
 	} else {
 		$sql="SELECT ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname' FROM ".DB_PREFIX."g2p, ".DB_PREFIX."persons WHERE ".DB_PREFIX."persons.id=".DB_PREFIX."g2p.idperson AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." AND ".DB_PREFIX."persons.secret=0 ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
 	}
-	$pers=MySQL_Query ($sql);
+	$pers=mysqli_query ($database,$sql);
 	$persons=Array();
-	while ($perc=MySQL_Fetch_Assoc($pers)) {
+	while ($perc=mysqli_fetch_assoc ($pers)) {
 		$persons[]='<a href="readperson.php?rid='.$perc['id'].'">'.$perc['surname'].', '.$perc['name'].'</a>';
 	}
 	echo ((implode($persons, '; ')<>"")?implode($persons, '; '):'<em>Nejsou připojeny žádné osoby.</em>');
@@ -76,9 +76,9 @@
 			} else {
 			  $sql="SELECT ".DB_PREFIX."data.iduser AS 'iduser', ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.secret AS 'secret', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=1 AND ".DB_PREFIX."data.secret=0 ORDER BY ".DB_PREFIX."data.originalname ASC";
 			}
-			$res=MySQL_Query ($sql);
+			$res=mysqli_query ($database,$sql);
 			$i=0;
-			while ($rec_f=MySQL_Fetch_Assoc($res)) { 
+			while ($rec_f=mysqli_fetch_assoc ($res)) { 
 				$i++; 
 				if($i==1){ ?>
 		<ul id="prilozenadata">
@@ -136,8 +136,8 @@
 		} else {
 		  $sql_n="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."users.login AS 'user', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes, ".DB_PREFIX."users WHERE ".DB_PREFIX."notes.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=2 AND ".DB_PREFIX."notes.deleted=0 AND (".DB_PREFIX."notes.secret=0 OR ".DB_PREFIX."notes.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."notes.datum DESC";
 		}
-		$res_n=MySQL_Query ($sql_n);
-		while ($rec_n=MySQL_Fetch_Assoc($res_n)) { ?>
+		$res_n=mysqli_query ($database,$sql_n);
+		while ($rec_n=mysqli_fetch_assoc ($res_n)) { ?>
 			<li><a href="readnote.php?rid=<?php echo $rec_n['id']; ?>&amp;idtable=2"><?php echo StripSlashes($rec_n['title']); ?></a> - <?php echo StripSlashes($rec_n['user']); 
 			if ($rec_n['secret']==0){ ?> (veřejná)<?php }
 			if ($rec_n['secret']==1){ ?> (tajná)<?php }

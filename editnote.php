@@ -12,8 +12,8 @@
 	}
 	sparklets ('<a href="./'.$sourceurl.'">'.$sourcename.'</a> &raquo; <strong>úprava poznámky</strong>');
 	if (is_numeric($_REQUEST['rid'])) {
-		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."notes WHERE id=".$_REQUEST['rid']);
-		if ($rec=MySQL_Fetch_Assoc($res)) {
+		$res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."notes WHERE id=".$_REQUEST['rid']);
+		if ($rec=mysqli_fetch_assoc ($res)) {
                     if ((($rec['secret']<=$usrinfo['right_power']) || $rec['iduser']==$usrinfo['id']) && !$rec['deleted']==1) {
 ?>
 <div id="obsah">
@@ -33,11 +33,11 @@
 	<?php 
 	if ($usrinfo['right_power']) {
 		$sql="SELECT id, login FROM ".DB_PREFIX."users WHERE deleted=0 ORDER BY login ASC";
-		$res_n=MySQL_Query ($sql);
+		$res_n=mysqli_query ($database,$sql);
 		echo '<div>
 		<label for="nowner">Vlastník:</label>
 		<select name="nowner" id="nowner">';
-		while ($rec_n=MySQL_Fetch_Assoc($res_n)) {
+		while ($rec_n=mysqli_fetch_assoc ($res_n)) {
 		  		echo '<option value="'.$rec_n['id'].'"'.(($rec_n['id']==$usrinfo['id'])?' selected="selected"':'').'>'.$rec_n['login'].'</option>';
 		};
 		echo '</select>

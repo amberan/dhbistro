@@ -5,11 +5,11 @@
         $custom_Filter = custom_Filter(21);
 	sparklets ('<a href="./symbols.php">nepřiřazené symboly</a> &raquo; <strong>přiřazení symbolu k případu</strong>');
 	$sql="SELECT created_by FROM ".DB_PREFIX."symbols WHERE id=".$_REQUEST['rid'];
-	$autharray=MySQL_Fetch_Assoc(MySQL_Query($sql));
+	$autharray=mysqli_fetch_assoc (mysqli_query ($database,$sql));
 	$author=$autharray['created_by'];
 	if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || $usrinfo['id']==$author)) {
-	  $res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid']);
-		if ($rec=MySQL_Fetch_Assoc($res)) {
+	  $res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid']);
+		if ($rec=mysqli_fetch_assoc ($res)) {
 ?>
 
 <div id="obsah">
@@ -38,7 +38,7 @@ switch ($f_sort) {
 }
 //
 function filter () {
-	global $f_sort;
+	global $database,$f_sort;
 	echo '<form action="addsy2c.php" method="post" id="filter">
 	<fieldset>
 	<legend>Filtr</legend>
@@ -59,11 +59,11 @@ if ($usrinfo['right_power']) {
 } else {
 	$sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."symbol2all.iduser FROM ".DB_PREFIX."cases LEFT JOIN ".DB_PREFIX."symbol2all ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."cases.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." WHERE ".DB_PREFIX."cases.deleted=0 AND ".DB_PREFIX."cases.secret=0 ORDER BY ".$fsql_sort;
 }
-$res=MySQL_Query ($sql);
+$res=mysqli_query ($database,$sql);
 ?>
 <div id="in-form-table">
 <?php
-if (MySQL_Num_Rows($res)) {
+if (mysqli_num_rows ($res)) {
 	echo '<div id="">
 	<table>
 	<thead>
@@ -76,7 +76,7 @@ if (MySQL_Num_Rows($res)) {
 	<tbody>
 	';
 	$even=0;
-	while ($rec=MySQL_Fetch_Assoc($res)) {
+	while ($rec=mysqli_fetch_assoc ($res)) {
 		echo '<tr class="'.(($even%2==0)?'even':'odd').(($rec['status'])?' solved':'').'">
 		<td><input type="checkbox" name="case[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser'])?' checked="checked"':'').' /></td><td>'.(($rec['secret'])?'<span class="secret"><a href="readcase.php?rid='.$rec['id'].'">'.StripSlashes($rec['title']).'</a></span>':'<a href="readcase.php?rid='.$rec['id'].'">'.StripSlashes($rec['title']).'</a>').'</td>
 		<td>'.(($rec['status'])?'uzavřen':'&mdash;').'</td>

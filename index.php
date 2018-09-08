@@ -37,8 +37,8 @@
         }
         //
         function filter () {
-          global $f_cat;
-                global $f_sort;
+          global $database,$f_cat;
+                global $database,$f_sort;
           echo '<form action="index.php" method="post" id="filter">
 <!-- FILTR DOCASNE ZRUSEN, ABY SE OTESTOVALO, JESTLI JE VUBEC POTREBA
         <fieldset>
@@ -65,15 +65,15 @@
         <table><tr><td>
         <h3>Rozpracovaná nedokončená hlášení: <?php
                                 $sql_r="SELECT ".DB_PREFIX."reports.secret AS 'secret', ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id' FROM ".DB_PREFIX."reports WHERE ".DB_PREFIX."reports.iduser=".$usrinfo['id']." AND ".DB_PREFIX."reports.status=0 AND ".DB_PREFIX."reports.deleted=0 ORDER BY ".DB_PREFIX."reports.label ASC";
-                                $res_r=MySQL_Query ($sql_r);
-                                $rec_count = MySQL_Num_Rows($res_r);
+                                $res_r=mysqli_query ($database,$sql_r);
+                                $rec_count = mysqli_num_rows ($res_r);
                                 echo $rec_count
                                 ?>
                                 </h3><p>
                                 <?php
-                                if (MySQL_Num_Rows($res_r)) {
+                                if (mysqli_num_rows ($res_r)) {
                                         $reports=Array();
-                                        while ($rec_r=MySQL_Fetch_Assoc($res_r)) {
+                                        while ($rec_r=mysqli_fetch_assoc ($res_r)) {
                                                 $reports[]='<a href="./readactrep.php?rid='.$rec_r['id'].'&hidenotes=0&truenames=0">'.StripSlashes ($rec_r['label']).'</a>';
                                         }
                                         echo implode ($reports,'<br />');
@@ -83,14 +83,14 @@
         <div class="clear">&nbsp;</div>
                                 <h3>Přiřazené neuzavřené případy: <?php
                         $sql="SELECT ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.title AS 'title' FROM ".DB_PREFIX."c2s, ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.id=".DB_PREFIX."c2s.idcase AND ".DB_PREFIX."c2s.idsolver=".$usrinfo['id']." AND ".DB_PREFIX."cases.status<>1 AND ".DB_PREFIX."cases.deleted=0 ORDER BY ".DB_PREFIX."cases.title ASC";
-                        $pers=MySQL_Query ($sql);
-                        $rec_count = MySQL_Num_Rows($pers);
+                        $pers=mysqli_query ($database,$sql);
+                        $rec_count = mysqli_num_rows ($pers);
                         echo $rec_count
                         ?> 
                         </h3><p>
                         <?php
                         $cases=Array();
-                        while ($perc=MySQL_Fetch_Assoc($pers)) {
+                        while ($perc=mysqli_fetch_assoc ($pers)) {
                                 $cases[]='<a href="./readcase.php?rid='.$perc['id'].'&hidenotes=0">'.StripSlashes ($perc['title']).'</a>';
                         }
                         echo ((implode($cases, '<br />')<>"")?implode($cases, '<br />'):'<em>Nemáte žádný přiřazený neuzavřený případ.</em>');
@@ -99,15 +99,15 @@
         <td>
         <h3>Nedokončené úkoly: <?php
                         $sql_r="SELECT * FROM ".DB_PREFIX."tasks WHERE ".DB_PREFIX."tasks.iduser=".$usrinfo['id']." AND ".DB_PREFIX."tasks.status=0 ORDER BY ".DB_PREFIX."tasks.created ASC";
-                        $res_r=MySQL_Query ($sql_r);
-                        $rec_count = MySQL_Num_Rows($res_r);
+                        $res_r=mysqli_query ($database,$sql_r);
+                        $rec_count = mysqli_num_rows ($res_r);
                         echo $rec_count
                         ?>
                         </h3><p>
                         <?php
-                        if (MySQL_Num_Rows($res_r)) {
+                        if (mysqli_num_rows ($res_r)) {
                                 $tasks=Array();
-                                while ($rec_r=MySQL_Fetch_Assoc($res_r)) {
+                                while ($rec_r=mysqli_fetch_assoc ($res_r)) {
                                         $tasks[]=StripSlashes ($rec_r['task']).' ('.getAuthor($rec_r['created_by'],2).') | <a href="procother.php?fnshtask='.$rec_r['id'].'">hotovo</a>';
                                 }
                                 echo implode ($tasks,'<br />');
@@ -132,8 +132,8 @@
                                 FROM ".DB_PREFIX."news, ".DB_PREFIX."users
                                 WHERE ".DB_PREFIX."news.iduser=".DB_PREFIX."users.id ".$fsql_cat."
                                 ORDER BY ".$fsql_sort."LIMIT 10";
-        $res=MySQL_Query ($sql);
-        while ($rec=MySQL_Fetch_Assoc($res)) {
+        $res=mysqli_query ($database,$sql);
+        while ($rec=mysqli_fetch_assoc ($res)) {
           echo '<div class="news_div '.(($rec['kategorie']==1)?'game_news':'system_news').'">
         <div class="news_head"><h2>'.StripSlashes($rec['nadpis']).'</h2>
         <p><span>['.Date ('d. m. Y - H:i:s',$rec['datum']).']</span> <strong>'.$rec['autor'].'</strong></p></div>

@@ -9,13 +9,13 @@ if ($usrinfo['right_power']) { ?>
 	//Přidání nového doodlu
 	if (isset($_POST['newlink'])) {
 		if (isset($_POST['link'])) {
-			MySQL_Query ("INSERT INTO ".DB_PREFIX."doodle VALUES('','".Time()."','".mysql_real_escape_string(safeInput($_POST['link']))."')");
+			mysqli_query ($database,"INSERT INTO ".DB_PREFIX."doodle VALUES('','".Time()."','".mysqli_real_escape_string ($database,safeInput($_POST['link']))."')");
 			echo '<div id=""><p>Nový link na doodle uložen.</p></div>';
 		} else {
 			echo '<div id=""><p>Link na doodle nesmí být prázdný.</p></div>';
 		}
 	}
-	$rec=MySQL_Fetch_Assoc(MySQL_Query ("SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1"));
+	$rec=mysqli_fetch_assoc (mysqli_query ($database,"SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1"));
 	echo '<div id=""><a href="'.$rec['link'].'" target=_new>Aktuální doodle s časovou dostupností</a><br/><br/></div>
 	<div class="otherform-wrap">
 		<fieldset>
@@ -31,8 +31,8 @@ if ($usrinfo['right_power']) { ?>
 	
 	// vypis starších linků
 	$sql="SELECT * FROM ".DB_PREFIX."doodle ORDER BY id DESC";
-	$res=MySQL_Query ($sql);
-	if (MySQL_Num_Rows($res)) {
+	$res=mysqli_query ($database,$sql);
+	if (mysqli_num_rows ($res)) {
 		echo '<div id="">
 		<table>
 		<thead>
@@ -47,7 +47,7 @@ if ($usrinfo['right_power']) { ?>
 		<tbody>
 		';
 		$even=0;
-		while ($rec=MySQL_Fetch_Assoc($res)) {
+		while ($rec=mysqli_fetch_assoc ($res)) {
 		  echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 		<td>'.Date ('d. m. Y - H:i:s',$rec['datum']).'</td>
 		<td><a href="'.($rec['link']).'">'.($rec['link']).'</a></td>
