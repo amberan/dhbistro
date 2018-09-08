@@ -5,7 +5,7 @@
   $starttime = $mtime;
 
 	// verze
-	$mazzarino_version='1.4.6';
+	$mazzarino_version='1.5';
   
 	// sessions
 	session_start();
@@ -88,19 +88,6 @@ $password = $lines[2];
 
 $database = mysqli_connect ('localhost',$dbusr,$password,$dbname) or die (mysqli_connect_errno()." ".mysqli_connect_error());
 
-/*KK kontrola pripojeni
-  if (!@mysql_connect ('localhost',$dbusr,$password)) {
-  	echo 'fail ';
-  	echo $dbusr;
-    echo $password;
-    exit;
-  }
-	MySQL_Select_DB ($dbusr);
-//	echo $dbusr;
-//	echo $password;
-//	echo $file;
-//	echo $lines; KK*/
-
   $page_prefix='';
 
 	define ('DB_PREFIX','nw_');
@@ -169,7 +156,7 @@ $database = mysqli_connect ('localhost',$dbusr,$password,$dbname) or die (mysqli
 	
 	$_SESSION['timeout'] = time();
 	
-/*KK 
+ 
   // ta parametrizaci na verzi je tam proto, ze na lokale to kdoviproc nefunguje	
   // overeni prihlaseni, nutno zmenit jmeno souboru na ostre verzi
   $free_pages = array ($page_prefix.'login.php');
@@ -178,9 +165,9 @@ $database = mysqli_connect ('localhost',$dbusr,$password,$dbname) or die (mysqli
     $cropedUrlLast = end($cropedUrlAll);
     if (!$loggedin && !in_array($cropedUrlLast,$free_pages)) {
             Header ('location: login.php');
-    }
-  //}
-KK*/
+    //}
+  }
+
 // vyhledani tabulky v neprectenych zaznamech
 function searchTable ($tablenum) { 
 	global $database,$unread;
@@ -431,8 +418,8 @@ function backupDB () {
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <meta name="robots" content="index, follow" />
-    <meta name="Author" content="David Ambeřan Maleček, Jakub Ethan Kraft" />
-    <meta name="Copyright" content="2006 - 2016" />
+    <meta name="Author" content="Karel Křemel, David Ambeřan Maleček, Jakub Ethan Kraft" />
+    <meta name="Copyright" content="2006 - 2018" />
     
     <title><?php echo (($loggedin)?$usrinfo['login'].' @ ':'')?>BIStro <?php echo $mazzarino_version;?> | <?php echo $title;?></title>
     <meta name="description" content="city larp management system" />

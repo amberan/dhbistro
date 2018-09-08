@@ -84,7 +84,6 @@ if ($usrinfo['right_power']) {
     ";
     $res = mysqli_query ($database,$sql);
 }
-print_r ($sql);
 ?>
 <h3>Případy</h3>
 <table>
