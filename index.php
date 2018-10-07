@@ -37,8 +37,7 @@
         }
         //
         function filter () {
-          global $database,$f_cat;
-                global $database,$f_sort;
+          global $database,$f_cat,$f_sort;
           echo '<form action="index.php" method="post" id="filter">
 <!-- FILTR DOCASNE ZRUSEN, ABY SE OTESTOVALO, JESTLI JE VUBEC POTREBA
         <fieldset>

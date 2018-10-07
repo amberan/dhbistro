@@ -103,8 +103,7 @@
 <?php 
 	// filtr
 	function filter () {
-	  global $database,$f_cat;
-		global $database,$f_sort;
+	  global $database,$f_cat,$f_sort;
 	  echo '<div id="filter-wrapper"><form action="tasks.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>

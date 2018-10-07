@@ -230,6 +230,7 @@ function deleteUnread ($tablenum,$rid) {
 
 // vymaz z tabulek neprectenych pri smazani zaznamu
 function deleteAllUnread ($tablenum,$rid) {
+	global $database;
 	$sql_ur="SELECT ".DB_PREFIX."users.id as 'id', ".DB_PREFIX."users.right_power as 'right_power' FROM ".DB_PREFIX."users";
 	$res_ur=mysqli_query ($database,$sql_ur);
 	while ($rec_ur=mysqli_fetch_assoc ($res_ur)) {
@@ -240,6 +241,7 @@ function deleteAllUnread ($tablenum,$rid) {
 
 // ziskani autora zaznamu
 function getAuthor ($recid,$trn) {
+	global $database;
 	if ($trn==1) {
 		$sql_ga="SELECT ".DB_PREFIX."persons.name as 'name', ".DB_PREFIX."persons.surname as 'surname', ".DB_PREFIX."users.login as 'nick' FROM ".DB_PREFIX."persons, ".DB_PREFIX."users WHERE ".DB_PREFIX."users.id=".$recid." AND ".DB_PREFIX."persons.id=".DB_PREFIX."users.idperson";
 		$res_ga=mysqli_query ($database,$sql_ga);

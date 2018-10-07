@@ -62,9 +62,7 @@ K případu můžete přiřadit hlášení, která se ho týkají.
 	}
 	//
 	function filter () {
-	  global $database,$f_cat;
-		global $database,$f_sort;
-		  global $database,$f_stat;
+	  global $database,$f_cat,$f_sort,$f_stat;
 	  echo '<form action="addsy2ar.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>

@@ -5,6 +5,7 @@
         }
 	
 	function operationType ($type) {
+		global $database;
 			$sql_ga="SELECT ".DB_PREFIX."operation_type.name as 'name' FROM ".DB_PREFIX."operation_type WHERE ".DB_PREFIX."operation_type.id='".$type."'";
 			$res_ga=mysqli_query ($database,$sql_ga);
 			if (mysqli_num_rows ($res_ga)) {
@@ -19,6 +20,7 @@
 	}
 	
 	function recordType ($type) {
+		global $database;
 		$sql_ga="SELECT ".DB_PREFIX."record_type.name as 'name' FROM ".DB_PREFIX."record_type WHERE ".DB_PREFIX."record_type.id='".$type."'";
 		$res_ga=mysqli_query ($database,$sql_ga);
 		if (mysqli_num_rows ($res_ga)) {
@@ -36,6 +38,7 @@
 	}
 	
 	function getRecord ($type, $idrecord) {
+		global $database;
 		if ($idrecord>0) {
 			switch ($type) {
 				case 1: $sql_type="SELECT ".DB_PREFIX."persons.name as 'name', ".DB_PREFIX."persons.surname as 'surname' FROM ".DB_PREFIX."persons WHERE ".DB_PREFIX."persons.id='".$idrecord."'";

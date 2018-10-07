@@ -35,8 +35,7 @@
 	}
 	// Filtr
 	function filter () {
-	  global $database,$f_cat, $point;
-		global $database,$f_sort;
+	  global $database,$f_cat, $point,$f_sort;
 	  echo '<div id="filter-wrapper"><form action="evilpoints.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>

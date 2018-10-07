@@ -72,9 +72,7 @@ K případu můžete přiřadit hlášení, která se ho týkají.
 	}
 	// filtr samotny
 	function filter () {
-	  global $database,$f_cat;
-		global $database,$f_sort;
-		  global $database,$f_stat, $f_archiv;
+	  global $database,$f_cat,$f_sort,$f_stat, $f_archiv;
 	  echo '<form action="addc2ar.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
