@@ -84,6 +84,7 @@ if ($usrinfo['right_power']) {
     ";
     $res = mysqli_query ($database,$sql);
 }
+
 ?>
 <h3>Případy</h3>
 <table>
@@ -289,7 +290,7 @@ if ($usrinfo['right_power']) {
     ");
 } else {
     $res = mysqli_query ($database,"
-        SELECT ".DB_PREFIX."symbols.id AS 'id', ".DB_PREFIX."symbols.assigned AS 'assigned', ".DB_PREFIX."groups.secret AS 'secret'
+        SELECT ".DB_PREFIX."symbols.id AS 'id', ".DB_PREFIX."symbols.assigned AS 'assigned', ".DB_PREFIX."symbols.secret AS 'secret'
         FROM ".DB_PREFIX."symbols
         WHERE MATCH(`desc`) AGAINST ('$search' IN BOOLEAN MODE)
         AND ".DB_PREFIX."symbols.deleted=0 AND ".DB_PREFIX."symbols.secret=0
