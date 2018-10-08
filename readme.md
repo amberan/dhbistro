@@ -9,48 +9,52 @@
     - odpojit druhou login tabulku
 - vytrhnout bokem menu 
 - header a footer samostatne
-- loop?
-- runtime rework
+- reseni na upgrady databaze mezi verzemi
 - sprava obrazku a priloh
     - zobrazovat nahledy obrazku
     - obrazky zobrazovat v novem okne, namisto stahovani
+    - posterizace/solarizace.... symbolu
 - wikimedia
     - audit bokem (audit, unauthorized)
     - vycisteni html tagu z textu v db (css styly, id, tagy) + konverze markdown syntaxe
+        - https://github.com/Elephant418/Markdownify
+        - https://github.com/thephpleague/html-to-markdown
     - backup samostatne
-- reseni na upgrady databaze mezi verzemi
-- session counter na submitech
+- markdown wysiwyg editor https://github.com/nhnent/tui.editor#easy-wysiwyg-mode
+    - session counter na submitech
+- loop?
+    - runtime rework
 
 ### OTAZKY
 - nw_unread nema zadny index, pritom se hleda podle uzivatele ?
 - jak se resi uzivatele
 - kde je audit
-- co z funkcionality jeste mijim
+- je neco co se da zahodit jako celek? zlobody? dostupnost?
 
 ### OBSAH
 soubor                  | obsah                                     | obsluhovany objekt
 --- | --- | ---
 inc/func_main.php       | knihovna balastu
 inc/important.php       |
-addar2c.php             | uprava hlaseni - report 2 case 
-addc2ar.php             | uprava hlaseni - person 2 report
-addp2ar.php             | uprava hlaseni - case 2 person
-addp2c.php              | uprava pripadu - case 2 solver
-addp2g.php              | uprava skupiny - group 2 person
+addar2c.php             | uprava hlaseni - report 2 case            | report / pripad
+addc2ar.php             | uprava hlaseni - case 2 report            | pripad / report
+addp2ar.php             | uprava hlaseni - person 2 report          | osoba / report
+addp2c.php              | uprava pripadu - person 2 case            | osoba / pripad
+addp2g.php              | uprava skupiny - person 2 group           | osoba / skupina
 addpersons.php          | pridani osoby                             | osoby
 addreports.php          | pridani reportu                           | reporty
-adds2c.php              | uprava pripadu - solver 2 case
-addsy2ar.php            | prirazeni symbolu hlaseni
-addsy2c.php             | prirazeni symbolu pripadu
-addsy2p.php             | prirazeni symbolu osobe
+adds2c.php              | prirazeni symbolu - case                  | symbol / pripad
+addsy2ar.php            | prirazeni symbolu - report                | symbol / report
+addsy2c.php             | prirazeni symbolu - case                  | symbol / pripad
+addsy2p.php             | prirazeni symbolu - person                | symbol / osoba
 addsymbols.php          | pridani symbolu                           | symboly
-asearch.php             |
-asearch_search.php      |
-audit.php               |
+asearch.php             | reziduum?
+asearch_search.php      | reziduum?
+audit.php               | audit
 cases.php               | LIST pripadu                              | pripady
 dashboard.php           | nastenka
 doodle.php              | dostupnost
-editactrep.php          |
+editactrep.php          | uprava reportu                            | reporty
 editcase.php            | uprava pripadu                            | pripady
 editdashboard.php       | uprava nastenky
 editgroup.php           | uprava skupiny                            | skupiny
@@ -59,14 +63,14 @@ editperson.php          | uprava osoby                              | osoby
 editsymbol.php          | uprava symbolu                            | symboly
 edituser.php            | uprava uzivatele                          | uzivatele
 evilpoints.php          | zlobody
-getfile.php             | vraceni prilohy
-getportrait.php         | vraceni fotografie
+getfile.php             | stazeni prilohy
+getportrait.php         | zobrazeni fotografie
 groups.php              | LIST skupiny                              | skupiny
 index.php               | 
 login.php               | prihlasovaci stranka
 logout.php              |
 mapagents.php           | mapa agentu
-newactrep.php           | novy actor report
+newactrep.php           | novy report                               | reporty
 newcase.php             | novy pripad                               | pripady
 newgroup.php            | nova skupina                              | skupiny
 newnews.php             | nova novinka                              | novinky
@@ -76,16 +80,16 @@ newsymbol.php           | novy symbol                               | symboly
 newuser.php             | novy uzivatel                             | uzivatele
 orgperson.php           | ORG uprava osoby                          | osoby
 persons.php             | LIST osoby                                | osoby
-procactrep.php          | zpracovani ??? 
+procactrep.php          | zpracovani reportu                        | reporty
 proccase.php            | zpracovani pripadu                        | pripady
 procgroup.php           | zpracovani skupiny                        | skupiny
 procnews.php            | zpracovani novinek                        | novinky
 procnote.php            | zpracovani poznamek                       | poznamky
-procother.php           | zpracovani
+procother.php           | zpracovani 
 procperson.php          | zpracovani osob                           | osoby
 procsettings.php        | zpracovani nastaveni                      | nastaveni
 procuser.php            | zpracovani uzivatele                      | uzivatele
-readactrep.php          |
+readactrep.php          | DETAIL reportu                            | reporty
 readcase.php            | DETAIL pripadu                            | pripady
 readgroup.php           | DETAIL skupiny                            | skupiny
 readnote.php            | DETAIL poznamky                           | poznamky
@@ -94,8 +98,8 @@ readsymbol.php          | DETAIL symbolu                            | symboly
 reports.php             | LIST reporty                              | reporty
 search.php              | vyhledavani                               | vyhledavani
 settings.php            | nastaveni                                 | nastaveni
-symbolpaint_1.php       |
-symbolpaint.php         |
+symbolpaint_1.php       | jarda???
+symbolpaint.php         | jarda???
 symbol_search.php       | vyhledavani podle symbolu                 | vyhledavani
 symbol_search_result.php| vyhledavani podle symbolu - vysledky      | vyhledavani
 symbols.php             | LIST symboly                              | symboly
