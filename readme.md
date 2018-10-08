@@ -48,8 +48,6 @@ addsy2ar.php            | prirazeni symbolu - report                | symbol / r
 addsy2c.php             | prirazeni symbolu - case                  | symbol / pripad
 addsy2p.php             | prirazeni symbolu - person                | symbol / osoba
 addsymbols.php          | pridani symbolu                           | symboly
-asearch.php             | reziduum?
-asearch_search.php      | reziduum?
 audit.php               | audit
 cases.php               | LIST pripadu                              | pripady
 dashboard.php           | nastenka
@@ -98,8 +96,6 @@ readsymbol.php          | DETAIL symbolu                            | symboly
 reports.php             | LIST reporty                              | reporty
 search.php              | vyhledavani                               | vyhledavani
 settings.php            | nastaveni                                 | nastaveni
-symbolpaint_1.php       | jarda???
-symbolpaint.php         | jarda???
 symbol_search.php       | vyhledavani podle symbolu                 | vyhledavani
 symbol_search_result.php| vyhledavani podle symbolu - vysledky      | vyhledavani
 symbols.php             | LIST symboly                              | symboly
