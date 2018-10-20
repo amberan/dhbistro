@@ -5,8 +5,8 @@
         $custom_Filter = custom_Filter(22);
 	sparklets ('<a href="./symbols.php">symboly</a> &raquo; <strong>úprava symbolu</strong> &raquo; <strong>přidání k hlášení</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
-	  $res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."symbols WHERE id=".$_REQUEST['rid']);
-		if ($rec=MySQL_Fetch_Assoc($res)) {
+	  $res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."symbols WHERE id=".$_REQUEST['rid']);
+		if ($rec=mysqli_fetch_assoc ($res)) {
 ?>
 
 <div id="obsah">
@@ -62,9 +62,7 @@ K případu můžete přiřadit hlášení, která se ho týkají.
 	}
 	//
 	function filter () {
-	  global $f_cat;
-		global $f_sort;
-		  global $f_stat;
+	  global $database,$f_cat,$f_sort,$f_stat;
 	  echo '<form action="addsy2ar.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -124,11 +122,11 @@ seřadit je podle <select name="sort">
 				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0".$fsql_cat.$fsql_stat."
 				ORDER BY ".$fsql_sort;
 	}
-	$res=MySQL_Query ($sql);
+	$res=mysqli_query ($database,$sql);
 ?>
 <div style="padding-left: 0px; padding-right: 0px; padding-top: 0px; padding-bottom: 0px;" id="in-form-table">
 <?php        
-	while ($rec=MySQL_Fetch_Assoc($res)) {
+	while ($rec=mysqli_fetch_assoc ($res)) {
 	  echo '<div class="news_div '.(($rec['type']==1)?'game_news':'system_news').'">
 	<div class="news_head"><input type="checkbox" name="report[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser'])?' checked="checked"':'').' /><strong><a href="readactrep.php?rid='.$rec['id'].'">'.StripSlashes($rec['label']).'</a></strong></span>';
 	  

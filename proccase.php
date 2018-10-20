@@ -2,20 +2,20 @@
 	require_once ('./inc/func_main.php');
 	if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete'])) {
 		auditTrail(3, 11, $_REQUEST['delete']);
-	  MySQL_Query ("UPDATE ".DB_PREFIX."cases SET deleted=1 WHERE id=".$_REQUEST['delete']);
+	  mysqli_query ($database,"UPDATE ".DB_PREFIX."cases SET deleted=1 WHERE id=".$_REQUEST['delete']);
 	  deleteAllUnread (3,$_REQUEST['delete']);
 	  Header ('Location: cases.php');
 	}
 	if (isset($_POST['insertcase']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret']) && is_numeric($_POST['status'])) {
 	  pageStart ('Přidán případ');
 		mainMenu (4);
-	  $ures=MySQL_Query ("SELECT id FROM ".DB_PREFIX."cases WHERE UCASE(title)=UCASE('".mysql_real_escape_string(safeInput($_POST['title']))."')");
-	  if (MySQL_Num_Rows ($ures)) {
+	  $ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."cases WHERE UCASE(title)=UCASE('".mysqli_real_escape_string ($database,safeInput($_POST['title']))."')");
+	  if (mysqli_num_rows ($ures)) {
 	  	sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./newcase.php">nový případ</a> &raquo; <strong>duplicita jména</strong>');
 	    echo '<div id="obsah"><p>Případ již existuje, změňte jeho jméno.</p></div>';
 	  } else {
-	  		MySQL_Query ("INSERT INTO ".DB_PREFIX."cases VALUES('','".mysql_real_escape_string(safeInput($_POST['title']))."','".Time()."','".$usrinfo['id']."','".mysql_real_escape_string($_POST['contents'])."','".$_POST['secret']."','0','".$_POST['status']."')");
-	  		$cidarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."cases WHERE UCASE(title)=UCASE('".mysql_real_escape_string(safeInput($_POST['title']))."')"));
+	  		mysqli_query ($database,"INSERT INTO ".DB_PREFIX."cases VALUES('','".mysqli_real_escape_string ($database,safeInput($_POST['title']))."','".Time()."','".$usrinfo['id']."','".mysqli_real_escape_string ($database,$_POST['contents'])."','".$_POST['secret']."','0','".$_POST['status']."')");
+	  		$cidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."cases WHERE UCASE(title)=UCASE('".mysqli_real_escape_string ($database,safeInput($_POST['title']))."')"));
 	  		$cid=$cidarray['id'];
 	  		auditTrail(3, 3, $cid);
 	  		if (!isset($_POST['notnew'])) {
@@ -41,15 +41,15 @@
 		if (!isset($_POST['notnew'])) {
 			unreadRecords (3,$_POST['caseid']);
 		}
-	  $ures=MySQL_Query ("SELECT id FROM ".DB_PREFIX."cases WHERE UCASE(title)=UCASE('".mysql_real_escape_string(safeInput($_POST['title']))."') AND id<>".$_POST['caseid']);
-	  if (MySQL_Num_Rows ($ures)) {
+	  $ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."cases WHERE UCASE(title)=UCASE('".mysqli_real_escape_string ($database,safeInput($_POST['title']))."') AND id<>".$_POST['caseid']);
+	  if (mysqli_num_rows ($ures)) {
 	  	sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>uložení změn neúspěšné</strong>');
 	    echo '<div id="obsah"><p>Případ již existuje, změňte jeho jméno.</p></div>';
 	  } else {
 	  		if ($usrinfo['right_org']==1) {
-	  			MySQL_Query ("UPDATE ".DB_PREFIX."cases SET title='".mysql_real_escape_string(safeInput($_POST['title']))."', contents='".mysql_real_escape_string($_POST['contents'])."', secret='".$_POST['secret']."', status='".$_POST['status']."' WHERE id=".$_POST['caseid']);
+	  			mysqli_query ($database,"UPDATE ".DB_PREFIX."cases SET title='".mysqli_real_escape_string ($database,safeInput($_POST['title']))."', contents='".mysqli_real_escape_string ($database,$_POST['contents'])."', secret='".$_POST['secret']."', status='".$_POST['status']."' WHERE id=".$_POST['caseid']);
 	  		} else {
-				MySQL_Query ("UPDATE ".DB_PREFIX."cases SET title='".mysql_real_escape_string(safeInput($_POST['title']))."', datum='".Time()."', iduser='".$usrinfo['id']."', contents='".mysql_real_escape_string($_POST['contents'])."', secret='".$_POST['secret']."', status='".$_POST['status']."' WHERE id=".$_POST['caseid']);
+				mysqli_query ($database,"UPDATE ".DB_PREFIX."cases SET title='".mysqli_real_escape_string ($database,safeInput($_POST['title']))."', datum='".Time()."', iduser='".$usrinfo['id']."', contents='".mysqli_real_escape_string ($database,$_POST['contents'])."', secret='".$_POST['secret']."', status='".$_POST['status']."' WHERE id=".$_POST['caseid']);
 	  		}
 			sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>uložení změn</strong>','<a href="./readcase.php?rid='.$_POST['caseid'].'">zobrazit upravené</a>');
 			echo '<div id="obsah"><p>Případ upraven.</p></div>';
@@ -68,8 +68,8 @@
 		auditTrail(3, 4, $_POST['caseid']);
 		$newname=Time().MD5(uniqid(Time().Rand()));
 		move_uploaded_file ($_FILES['attachment']['tmp_name'],'./files/'.$newname);
-		$sql="INSERT INTO ".DB_PREFIX."data VALUES('','".$newname."','".mysql_real_escape_string($_FILES['attachment']['name'])."','".mysql_real_escape_string($_FILES['attachment']['type'])."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','3','".$_POST['caseid']."','".$_POST['secret']."')";
-		MySQL_Query ($sql);
+		$sql="INSERT INTO ".DB_PREFIX."data VALUES('','".$newname."','".mysqli_real_escape_string ($database,$_FILES['attachment']['name'])."','".mysqli_real_escape_string ($database,$_FILES['attachment']['type'])."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','3','".$_POST['caseid']."','".$_POST['secret']."')";
+		mysqli_query ($database,$sql);
 		if (!isset($_POST['fnotnew'])) {
 			unreadRecords (3,$_POST['caseid']);
 		}
@@ -86,10 +86,10 @@
 	if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {
 		auditTrail(3, 5, $_GET['caseid']);
 		if ($usrinfo['right_text']) {
-			$fres=MySQL_Query ("SELECT uniquename FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.id=".$_GET['deletefile']);
-			$frec=MySQL_Fetch_Assoc($fres);
+			$fres=mysqli_query ($database,"SELECT uniquename FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.id=".$_GET['deletefile']);
+			$frec=mysqli_fetch_assoc ($fres);
 			UnLink ('./files/'.$frec['uniquename']);
-			MySQL_Query ("DELETE FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.id=".$_GET['deletefile']);
+			mysqli_query ($database,"DELETE FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.id=".$_GET['deletefile']);
 		}
 		Header ('Location: editcase.php?rid='.$_GET['caseid']);
 	}

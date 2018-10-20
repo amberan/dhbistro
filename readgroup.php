@@ -1,8 +1,8 @@
 <?php
 	require_once ('./inc/func_main.php');
 	if (is_numeric($_REQUEST['rid'])) {
-		$res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."groups WHERE id=".$_REQUEST['rid']);
-		if ($rec_g=MySQL_Fetch_Assoc($res)) {
+		$res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."groups WHERE id=".$_REQUEST['rid']);
+		if ($rec_g=mysqli_fetch_assoc ($res)) {
                     if (($rec_g['secret']>$usrinfo['right_power']) || $rec_g['deleted']==1) {
                     unauthorizedAccess(2, $rec_g['secret'], $rec_g['deleted'], $_REQUEST['rid']);
                     }
@@ -58,7 +58,7 @@
 	}
 	//
 	function filter () {
-		global $f_sort, $sportraits, $f_sec, $usrinfo;
+		global $database,$f_sort, $sportraits, $f_sec, $usrinfo;
 	  echo '<div id="filter-wrapper"><form action="readgroup.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -91,8 +91,8 @@
 		} else {
 			$sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."persons, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." AND ".DB_PREFIX."persons.deleted=0 AND ".DB_PREFIX."persons.secret=0 ORDER BY ".$fsql_sort;
 		}
-		$res=MySQL_Query ($sql);
-		if (MySQL_Num_Rows($res)) {
+		$res=mysqli_query ($database,$sql);
+		if (mysqli_num_rows ($res)) {
 	  echo '<div id=""><!-- je treba dostylovat -->
 <table>
 <thead>
@@ -105,7 +105,7 @@
 <tbody>
 ';
 		$even=0;
-		while ($rec=MySQL_Fetch_Assoc($res)) {
+		while ($rec=mysqli_fetch_assoc ($res)) {
 		  echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 '.(($sportraits)?'<td><img src="getportrait.php?rid='.$rec['id'].'" alt="portrét chybí" /></td>':'').'
 	<td>'.(($rec['secret'])?'<span class="secret"><a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a></span>':'<a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a>').'</td>
@@ -135,9 +135,9 @@
 		} else {
 		  $sql="SELECT ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=2 AND ".DB_PREFIX."data.secret=0 ORDER BY ".DB_PREFIX."data.originalname ASC";
 		}
-		$res=MySQL_Query ($sql);
+		$res=mysqli_query ($database,$sql);
 		$i=0;
-		while ($rec=MySQL_Fetch_Assoc($res)) { 
+		while ($rec=mysqli_fetch_assoc ($res)) { 
 			$i++; 
 			if($i==1){ ?>
 	<fieldset><legend><strong>Přiložené soubory</strong></legend>
@@ -163,9 +163,9 @@ if ($hn==1) goto hidenotes; ?>
 		} else {
 		  $sql_n="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.note AS 'note', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."users.login AS 'user', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes, ".DB_PREFIX."users WHERE ".DB_PREFIX."notes.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=2 AND ".DB_PREFIX."notes.deleted=0 AND (".DB_PREFIX."notes.secret=0 OR ".DB_PREFIX."notes.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."notes.datum DESC";
 		}
-		$res_n=MySQL_Query ($sql_n);
+		$res_n=mysqli_query ($database,$sql_n);
 		$i=0;
-		while ($rec_n=MySQL_Fetch_Assoc($res_n)) { 
+		while ($rec_n=mysqli_fetch_assoc ($res_n)) { 
 			$i++;
 			if($i==1){ ?>
 	<fieldset><legend><strong>Poznámky</strong></legend>

@@ -1,7 +1,7 @@
 <?php
 	require_once ('./inc/func_main.php');
 	if (is_numeric($_REQUEST['rid'])) {
-		$res=MySQL_Query ("SELECT 
+		$res=mysqli_query ($database,"SELECT 
 				".DB_PREFIX."notes.id AS 'id',
 				".DB_PREFIX."notes.title AS 'title',
 				".DB_PREFIX."notes.note AS 'note',
@@ -12,7 +12,7 @@
 				 FROM ".DB_PREFIX."notes, ".DB_PREFIX."users
 				 WHERE ".DB_PREFIX."notes.id=".$_REQUEST['rid']." 
 				AND ".DB_PREFIX."notes.iduser=".DB_PREFIX."users.id");
-		if ($rec=MySQL_Fetch_Assoc($res)) {
+		if ($rec=mysqli_fetch_assoc ($res)) {
                         if ((($rec['secret']<=$usrinfo['right_power']) || $rec['iduser']==$usrinfo['id']) && !$rec['deleted']==1) {
 			  pageStart (StripSlashes($rec['title']));
 				mainMenu (0);

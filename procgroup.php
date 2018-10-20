@@ -2,29 +2,29 @@
 	require_once ('./inc/func_main.php');
 	if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete'])) {
 	  auditTrail(2, 11, $_REQUEST['delete']);
-	  MySQL_Query ("UPDATE ".DB_PREFIX."groups SET deleted=1 WHERE id=".$_REQUEST['delete']);
+	  mysqli_query ($database,"UPDATE ".DB_PREFIX."groups SET deleted=1 WHERE id=".$_REQUEST['delete']);
 	  deleteAllUnread (2,$_REQUEST['delete']);
 	  Header ('Location: groups.php');
 	}
         if (isset($_REQUEST['archive']) && is_numeric($_REQUEST['archive'])) {
 	  auditTrail(2, 2, $_REQUEST['archive']);
-	  MySQL_Query ("UPDATE ".DB_PREFIX."groups SET archived=1 WHERE id=".$_REQUEST['archive']);
+	  mysqli_query ($database,"UPDATE ".DB_PREFIX."groups SET archived=1 WHERE id=".$_REQUEST['archive']);
 	  Header ('Location: groups.php');
 	}
         if (isset($_REQUEST['dearchive']) && is_numeric($_REQUEST['dearchive'])) {
 	  auditTrail(2, 2, $_REQUEST['dearchive']);
-	  MySQL_Query ("UPDATE ".DB_PREFIX."groups SET archived=0 WHERE id=".$_REQUEST['dearchive']);
+	  mysqli_query ($database,"UPDATE ".DB_PREFIX."groups SET archived=0 WHERE id=".$_REQUEST['dearchive']);
 	  Header ('Location: groups.php');
 	}
 	if (isset($_POST['insertgroup']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret'])) {
 	  pageStart ('Přidána skupina');
 	  mainMenu (3);
-	  $ures=MySQL_Query ("SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".mysql_real_escape_string(safeInput($_POST['title']))."')");
-	  if (MySQL_Num_Rows ($ures)) {
+	  $ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".mysqli_real_escape_string ($database,safeInput($_POST['title']))."')");
+	  if (mysqli_num_rows ($ures)) {
 	    echo '<div id="obsah"><p>Skupina již existuje, změňte její jméno.</p></div>';
 	  } else {
-			MySQL_Query ("INSERT INTO ".DB_PREFIX."groups VALUES('','".mysql_real_escape_string(safeInput($_POST['title']))."','".mysql_real_escape_string($_POST['contents'])."','".Time()."','".$usrinfo['id']."','0','".$_POST['secret']."',0)");
-			$gidarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".mysql_real_escape_string(safeInput($_POST['title']))."')"));
+			mysqli_query ($database,"INSERT INTO ".DB_PREFIX."groups VALUES('','".mysqli_real_escape_string ($database,safeInput($_POST['title']))."','".mysqli_real_escape_string ($database,$_POST['contents'])."','".Time()."','".$usrinfo['id']."','0','".$_POST['secret']."',0)");
+			$gidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".mysqli_real_escape_string ($database,safeInput($_POST['title']))."')"));
 			$gid=$gidarray['id'];
 			auditTrail(2, 3, $gid);
 			if (!isset($_POST['notnew'])) {
@@ -47,12 +47,12 @@
 	  auditTrail(2, 2, $_POST['groupid']);
 	  pageStart ('Uložení změn');
 		mainMenu (3);
-	  $ures=MySQL_Query ("SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".mysql_real_escape_string(safeInput($_POST['title']))."') AND id<>".$_POST['groupid']);
-	  if (MySQL_Num_Rows ($ures)) {
+	  $ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".mysqli_real_escape_string ($database,safeInput($_POST['title']))."') AND id<>".$_POST['groupid']);
+	  if (mysqli_num_rows ($ures)) {
 	  	sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./editgroup.php?rid='.$_POST['groupid'].'">úprava skupiny</a> &raquo; <strong>uložení změn neúspěšné</strong>');
 	    echo '<div id="obsah"><p>Skupina již existuje, změňte její jméno.</p></div>';
 	  } else {
-			MySQL_Query ("UPDATE ".DB_PREFIX."groups SET title='".mysql_real_escape_string(safeInput($_POST['title']))."', contents='".mysql_real_escape_string($_POST['contents'])."', archived='".(isset($_POST['archived'])?'1':'0')."', secret='".(isset($_POST['secret'])?'1':'0')."' WHERE id=".$_POST['groupid']);
+			mysqli_query ($database,"UPDATE ".DB_PREFIX."groups SET title='".mysqli_real_escape_string ($database,safeInput($_POST['title']))."', contents='".mysqli_real_escape_string ($database,$_POST['contents'])."', archived='".(isset($_POST['archived'])?'1':'0')."', secret='".(isset($_POST['secret'])?'1':'0')."' WHERE id=".$_POST['groupid']);
 			if (!isset($_POST['notnew'])) {
 				unreadRecords (2,$_POST['groupid']);
 			}
@@ -80,8 +80,8 @@
 		auditTrail(2, 4, $_POST['groupid']);
 		$newname=Time().MD5(uniqid(Time().Rand()));
 		move_uploaded_file ($_FILES['attachment']['tmp_name'],'./files/'.$newname);
-		$sql="INSERT INTO ".DB_PREFIX."data VALUES('','".$newname."','".mysql_real_escape_string($_FILES['attachment']['name'])."','".mysql_real_escape_string($_FILES['attachment']['type'])."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','2','".$_POST['groupid']."','".$_POST['secret']."')";
-		MySQL_Query ($sql);
+		$sql="INSERT INTO ".DB_PREFIX."data VALUES('','".$newname."','".mysqli_real_escape_string ($database,$_FILES['attachment']['name'])."','".mysqli_real_escape_string ($database,$_FILES['attachment']['type'])."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','2','".$_POST['groupid']."','".$_POST['secret']."')";
+		mysqli_query ($database,$sql);
 		if (!isset($_POST['fnotnew'])) {
 			unreadRecords (2,$_POST['groupid']);
 		}
@@ -98,10 +98,10 @@
 	if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {
 		auditTrail(2, 5, $_GET['groupid']);
 		if ($usrinfo['right_text']) {
-			$fres=MySQL_Query ("SELECT uniquename FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.id=".$_GET['deletefile']);
-			$frec=MySQL_Fetch_Assoc($fres);
+			$fres=mysqli_query ($database,"SELECT uniquename FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.id=".$_GET['deletefile']);
+			$frec=mysqli_fetch_assoc ($fres);
 			UnLink ('./files/'.$frec['uniquename']);
-			MySQL_Query ("DELETE FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.id=".$_GET['deletefile']);
+			mysqli_query ($database,"DELETE FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.id=".$_GET['deletefile']);
 		}
 		Header ('Location: editgroup.php?rid='.$_GET['groupid']);
 	}

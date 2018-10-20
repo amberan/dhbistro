@@ -11,8 +11,8 @@
 	<form action="procother.php" method="post" id="inputform">
 	<textarea cols="140" rows="50" name="contents" id="contents">
 	<div class="field-text">
-	<?php $res_d=MySQL_Query ("SELECT * FROM ".DB_PREFIX."dashboard ORDER BY id DESC LIMIT 1");
-	if ($rec_d=MySQL_Fetch_Assoc($res_d)) {
+	<?php $res_d=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."dashboard ORDER BY id DESC LIMIT 1");
+	if ($rec_d=mysqli_fetch_assoc ($res_d)) {
 		if (isset($rec_d['content'])) {
 			echo StripSlashes($rec_d['content']);
 		} else { 

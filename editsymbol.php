@@ -2,8 +2,8 @@
 	require_once ('./inc/func_main.php');
 
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
-	  $res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."symbols WHERE id=".$_REQUEST['rid']);
-		if ($rec_s=MySQL_Fetch_Assoc($res)) {
+	  $res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."symbols WHERE id=".$_REQUEST['rid']);
+		if ($rec_s=mysqli_fetch_assoc ($res)) {
                     if (($rec_s['secret']==1 || $rec_s['deleted']==1) && !$usrinfo['right_power']) {
                     unauthorizedAccess(7, $rec_s['secret'], $rec_s['deleted'], $_REQUEST['rid']);
                     }
@@ -86,10 +86,10 @@
 			} else {
 				$sql="SELECT ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.title AS 'title' FROM ".DB_PREFIX."symbol2all, ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.id=".DB_PREFIX."symbol2all.idrecord AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=3 AND ".DB_PREFIX."cases.secret=0 ORDER BY ".DB_PREFIX."cases.title ASC";
 			}
-			$pers=MySQL_Query ($sql);
+			$pers=mysqli_query ($database,$sql);
 			
 			$i=0;
-			while ($perc=MySQL_Fetch_Assoc($pers)) { 
+			while ($perc=mysqli_fetch_assoc ($pers)) { 
 				$i++;
 				if($i==1){ ?>
 		<ul id=""><?php
@@ -118,10 +118,10 @@
 			} else {
 				$sql="SELECT ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."reports.label AS 'label' FROM ".DB_PREFIX."symbol2all, ".DB_PREFIX."reports WHERE ".DB_PREFIX."reports.id=".DB_PREFIX."symbol2all.idrecord AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4 AND ".DB_PREFIX."reports.secret=0 ORDER BY ".DB_PREFIX."reports.label ASC";
 			}
-			$pers=MySQL_Query ($sql);
+			$pers=mysqli_query ($database,$sql);
 			
 			$i=0;
-			while ($perc=MySQL_Fetch_Assoc($pers)) { 
+			while ($perc=mysqli_fetch_assoc ($pers)) { 
 				$i++;
 				if($i==1){ ?>
 		<ul id=""><?php
@@ -149,9 +149,9 @@
 			} else {
 				$sql="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.note AS 'note', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."users.login AS 'user', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes, ".DB_PREFIX."users WHERE ".DB_PREFIX."notes.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=7 AND ".DB_PREFIX."notes.deleted=0 AND (".DB_PREFIX."notes.secret=0 OR ".DB_PREFIX."notes.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."notes.datum DESC";
 			}
-			$res=MySQL_Query ($sql);
+			$res=mysqli_query ($database,$sql);
 			$i=0;
-			while ($rec_n=MySQL_Fetch_Assoc($res)) { 
+			while ($rec_n=mysqli_fetch_assoc ($res)) { 
 				$i++;
 				if($i==1){ ?>
 		<div id="poznamky"><?php

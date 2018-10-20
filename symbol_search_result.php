@@ -16,12 +16,12 @@ if (isset($_POST['searchit'])) {
 	//		$input_specialchar=3;
 	
 	// real input
-	$input_liner = mysql_real_escape_string(htmlspecialchars($_POST['l']));
-	$input_curver = mysql_real_escape_string(htmlspecialchars($_POST['c']));
-	$input_pointer = mysql_real_escape_string(htmlspecialchars($_POST['p']));
-	$input_geometrical = mysql_real_escape_string(htmlspecialchars($_POST['g']));
-	$input_alphabeter = mysql_real_escape_string(htmlspecialchars($_POST['a']));
-	$input_specialchar = mysql_real_escape_string(htmlspecialchars($_POST['sch']));
+	$input_liner = mysqli_real_escape_string ($database,htmlspecialchars($_POST['l']));
+	$input_curver = mysqli_real_escape_string ($database,htmlspecialchars($_POST['c']));
+	$input_pointer = mysqli_real_escape_string ($database,htmlspecialchars($_POST['p']));
+	$input_geometrical = mysqli_real_escape_string ($database,htmlspecialchars($_POST['g']));
+	$input_alphabeter = mysqli_real_escape_string ($database,htmlspecialchars($_POST['a']));
+	$input_specialchar = mysqli_real_escape_string ($database,htmlspecialchars($_POST['sch']));
 	
 			///////////ECHO TEST PROMENNE
 			//$vypis='liner= '.$l.', curver= '.$c.', pointer= '.$p.', geometrical= '.$g.', alphabeter= '.$a.', specialchar= '.$sch.'';
@@ -111,11 +111,11 @@ if (isset($_POST['searchit'])) {
 				ORDER BY averangepercent DESC
 			");
 			//RESULT
-	mysql_query('SET NAMES utf8');
+	mysqli_query ($database,'SET NAMES utf8');
 	// Kontrola SQL dotazy ////////////////////////
 	//echo $symbol_query_sql;
 	///////////////////////////////////////////////
-		$symbol_result=mysql_query($symbol_query_sql) or die ("Vyhledávání a srovnání symbolů neprošlo! SQL: $symbol_query_sql");
+		$symbol_result=mysqli_query ($database,$symbol_query_sql) or die ("Vyhledávání a srovnání symbolů neprošlo! SQL: $symbol_query_sql");
 	
 ///////////////////////// FUNCTIONS /////////////////////////////
 	
@@ -182,10 +182,10 @@ if (isset($_POST['searchit'])) {
 	        </div>
 	    </div>
 	    <?php
-	    	//echo $symbol_record = mysql_fetch_array($symbol_result);
+	    	//echo $symbol_record = mysqli_fetch_array ($symbol_result);
 	    		    
 			$result = '
-	    <div class="central_result_frame">'; while($symbol_record = mysql_fetch_assoc($symbol_result)){
+	    <div class="central_result_frame">'; while($symbol_record = mysqli_fetch_assoc ($symbol_result)){
 	    if($usrinfo['right_power']){
 				
 				$color_l = colorSwitch((string)$symbol_record['lining']);

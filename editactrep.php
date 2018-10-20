@@ -1,15 +1,15 @@
 <?php
 require_once ('./inc/func_main.php');
-$reportarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT * FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid'])); // načte data z DB
+$reportarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid'])); // načte data z DB
 $type=intval($reportarray['type']); // určuje typ hlášení
 	$typestring=(($type==1)?'výjezd':(($type==2)?'výslech':'?')); //odvozuje slovní typ hlášení
 $author=$reportarray['iduser']; // určuje autora hlášení
 
 // kalendář
 function date_picker($name, $startyear=NULL, $endyear=NULL) {
-	global $aday;
-	global $amonth;
-	global $ayear;
+	global $database,$aday;
+	global $database,$amonth;
+	global $database,$ayear;
 	if($startyear==NULL) $startyear = date("Y")-10;
 	if($endyear==NULL) $endyear=date("Y")+5;
 
@@ -66,8 +66,8 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 		".DB_PREFIX."reports.inputs AS 'inputs'
 		FROM ".DB_PREFIX."reports, ".DB_PREFIX."users
 		WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.id=".$_REQUEST['rid'];
-	$res=MySQL_Query ($sql);
-	if ($rec_actr=MySQL_Fetch_Assoc($res)) {
+	$res=mysqli_query ($database,$sql);
+	if ($rec_actr=mysqli_fetch_assoc ($res)) {
             //test oprávněnosti přístupu
             if (($rec_actr['secret']>$usrinfo['right_power']) || $rec_actr['deleted']==1) {
                 unauthorizedAccess(4, $rec_actr['secret'], $rec_actr['deleted'], $_REQUEST['rid']);
@@ -172,9 +172,9 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 		} else {
 			$sql="SELECT ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname' FROM ".DB_PREFIX."ar2p, ".DB_PREFIX."persons WHERE ".DB_PREFIX."persons.id=".DB_PREFIX."ar2p.idperson AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." AND ".DB_PREFIX."persons.secret=0 ORDER BY ".DB_PREFIX."persons.surname, ".DB_PREFIX."persons.name ASC";
 		}
-		$pers=MySQL_Query ($sql);
+		$pers=mysqli_query ($database,$sql);
 		$persons=Array();
-		while ($perc=MySQL_Fetch_Assoc($pers)) {
+		while ($perc=mysqli_fetch_assoc ($pers)) {
 			$persons[]='<a href="readperson.php?rid='.$perc['id'].'">'.$perc['surname'].', '.$perc['name'].'</a>';
 		}
 		echo ((implode($persons, '; ')<>"")?implode($persons, '; '):'<em>Nejsou připojeny žádné osoby.</em>');
@@ -191,10 +191,10 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 			} else {
 				$sql="SELECT ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.title AS 'title' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.id=".DB_PREFIX."ar2c.idcase AND ".DB_PREFIX."ar2c.idreport=".$_REQUEST['rid']." AND ".DB_PREFIX."cases.secret=0 ORDER BY ".DB_PREFIX."cases.title ASC";
 			}
-			$pers=MySQL_Query ($sql);
+			$pers=mysqli_query ($database,$sql);
 			
 			$i=0;
-			while ($perc=MySQL_Fetch_Assoc($pers)) { 
+			while ($perc=mysqli_fetch_assoc ($pers)) { 
 				$i++;
 				if($i==1){ ?>
 		<ul id=""><?php
@@ -221,9 +221,9 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 			} else {
 			  $sql="SELECT ".DB_PREFIX."data.iduser AS 'iduser', ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.secret AS 'secret', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=4 AND ".DB_PREFIX."data.secret=0 ORDER BY ".DB_PREFIX."data.originalname ASC";
 			}
-			$res=MySQL_Query ($sql);
+			$res=mysqli_query ($database,$sql);
 			$i=0;
-			while ($rec_f=MySQL_Fetch_Assoc($res)) { 
+			while ($rec_f=mysqli_fetch_assoc ($res)) { 
 				$i++; 
 				if($i==1){ ?>
 		<ul id="prilozenadata">
@@ -282,9 +282,9 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 			} else {
 				$sql="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.note AS 'note', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."users.login AS 'user', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes, ".DB_PREFIX."users WHERE ".DB_PREFIX."notes.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."notes.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."notes.idtable=4 AND ".DB_PREFIX."notes.deleted=0 AND (".DB_PREFIX."notes.secret=0 OR ".DB_PREFIX."notes.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."notes.datum DESC";
 			}
-			$res=MySQL_Query ($sql);
+			$res=mysqli_query ($database,$sql);
 			$i=0;
-			while ($rec_n=MySQL_Fetch_Assoc($res)) { 
+			while ($rec_n=mysqli_fetch_assoc ($res)) { 
 				$i++;
 				if($i==1){ ?>
 		<div id="poznamky"><?php

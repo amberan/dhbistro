@@ -5,10 +5,11 @@
         }
 	
 	function operationType ($type) {
+		global $database;
 			$sql_ga="SELECT ".DB_PREFIX."operation_type.name as 'name' FROM ".DB_PREFIX."operation_type WHERE ".DB_PREFIX."operation_type.id='".$type."'";
-			$res_ga=MySQL_Query ($sql_ga);
-			if (MySQL_Num_Rows($res_ga)) {
-				while ($rec_ga=MySQL_Fetch_Assoc($res_ga)) {
+			$res_ga=mysqli_query ($database,$sql_ga);
+			if (mysqli_num_rows ($res_ga)) {
+				while ($rec_ga=mysqli_fetch_assoc ($res_ga)) {
 					$name=StripSlashes ($rec_ga['name']);
 					return $name;
 				}
@@ -19,10 +20,11 @@
 	}
 	
 	function recordType ($type) {
+		global $database;
 		$sql_ga="SELECT ".DB_PREFIX."record_type.name as 'name' FROM ".DB_PREFIX."record_type WHERE ".DB_PREFIX."record_type.id='".$type."'";
-		$res_ga=MySQL_Query ($sql_ga);
-		if (MySQL_Num_Rows($res_ga)) {
-			while ($rec_ga=MySQL_Fetch_Assoc($res_ga)) {
+		$res_ga=mysqli_query ($database,$sql_ga);
+		if (mysqli_num_rows ($res_ga)) {
+			while ($rec_ga=mysqli_fetch_assoc ($res_ga)) {
 				$name=StripSlashes ($rec_ga['name']);
 //					if ($name=='zlobody') {
 //						$name=$GLOBALS['point'].'y';
@@ -36,12 +38,13 @@
 	}
 	
 	function getRecord ($type, $idrecord) {
+		global $database;
 		if ($idrecord>0) {
 			switch ($type) {
 				case 1: $sql_type="SELECT ".DB_PREFIX."persons.name as 'name', ".DB_PREFIX."persons.surname as 'surname' FROM ".DB_PREFIX."persons WHERE ".DB_PREFIX."persons.id='".$idrecord."'";
-						$res_type=MySQL_Query ($sql_type);
-						if (MySQL_Num_Rows($res_type)) {
-							while ($rec_type=MySQL_Fetch_Assoc($res_type)) {
+						$res_type=mysqli_query ($database,$sql_type);
+						if (mysqli_num_rows ($res_type)) {
+							while ($rec_type=mysqli_fetch_assoc ($res_type)) {
 								$name=StripSlashes ($rec_type['surname']).', '.StripSlashes ($rec_type['name']);
 							}
 						} else {
@@ -49,9 +52,9 @@
 						}
 						break;
 				case 2: $sql_type="SELECT ".DB_PREFIX."groups.title as 'name' FROM ".DB_PREFIX."groups WHERE ".DB_PREFIX."groups.id='".$idrecord."'";
-						$res_type=MySQL_Query ($sql_type);
-						if (MySQL_Num_Rows($res_type)) {
-							while ($rec_type=MySQL_Fetch_Assoc($res_type)) {
+						$res_type=mysqli_query ($database,$sql_type);
+						if (mysqli_num_rows ($res_type)) {
+							while ($rec_type=mysqli_fetch_assoc ($res_type)) {
 								$name=StripSlashes ($rec_type['name']);
 							}
 						} else {
@@ -59,9 +62,9 @@
 						}
 						break;
 				case 3: $sql_type="SELECT ".DB_PREFIX."cases.title as 'name' FROM ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.id='".$idrecord."'";
-						$res_type=MySQL_Query ($sql_type);
-						if (MySQL_Num_Rows($res_type)) {
-							while ($rec_type=MySQL_Fetch_Assoc($res_type)) {
+						$res_type=mysqli_query ($database,$sql_type);
+						if (mysqli_num_rows ($res_type)) {
+							while ($rec_type=mysqli_fetch_assoc ($res_type)) {
 								$name=StripSlashes ($rec_type['name']);
 							}
 						} else {
@@ -69,9 +72,9 @@
 						}
 						break;
 				case 4: $sql_type="SELECT ".DB_PREFIX."reports.label as 'name' FROM ".DB_PREFIX."reports WHERE ".DB_PREFIX."reports.id='".$idrecord."'";
-						$res_type=MySQL_Query ($sql_type);
-						if (MySQL_Num_Rows($res_type)) {
-							while ($rec_type=MySQL_Fetch_Assoc($res_type)) {
+						$res_type=mysqli_query ($database,$sql_type);
+						if (mysqli_num_rows ($res_type)) {
+							while ($rec_type=mysqli_fetch_assoc ($res_type)) {
 								$name=StripSlashes ($rec_type['name']);
 							}
 						} else {
@@ -80,9 +83,9 @@
 						break;
 				case 7: $name=$idrecord; break;
 				case 8: $sql_type="SELECT ".DB_PREFIX."users.login as 'name' FROM ".DB_PREFIX."users WHERE ".DB_PREFIX."users.id='".$idrecord."'";
-						$res_type=MySQL_Query ($sql_type);
-						if (MySQL_Num_Rows($res_type)) {
-							while ($rec_type=MySQL_Fetch_Assoc($res_type)) {
+						$res_type=mysqli_query ($database,$sql_type);
+						if (mysqli_num_rows ($res_type)) {
+							while ($rec_type=mysqli_fetch_assoc ($res_type)) {
 								$name=StripSlashes ($rec_type['name']);
 							}
 						} else {
@@ -211,7 +214,7 @@
 <?php 
 	// filtr
 	function filter () {
-	  global $f_cat,$f_sort,$f_user,$f_type,$usrinfo,$f_org,$f_my,$f_glob,$f_count;
+	  global $database,$f_cat,$f_sort,$f_user,$f_type,$usrinfo,$f_org,$f_my,$f_glob,$f_count;
 	  echo '<div id="filter-wrapper"><form action="audit.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -234,8 +237,8 @@
 	  	<option value=0 '.(($f_user==0)?' selected="selected"':'').'>všemi</option>';
  	
 		$sql_u="SELECT id, login FROM ".DB_PREFIX."users WHERE deleted=0 ORDER BY login ASC";
-		$res_u=MySQL_Query ($sql_u);
-		while ($rec_u=MySQL_Fetch_Assoc($res_u)) {
+		$res_u=mysqli_query ($database,$sql_u);
+		while ($rec_u=mysqli_fetch_assoc ($res_u)) {
 			echo '<option value="'.$rec_u['id'].'"'.(($rec_u['id']==$f_user)?' selected="selected"':'').'>'.$rec_u['login'].'</option>';
 		};
 		echo '</select>';
@@ -266,8 +269,8 @@
 	filter();
 	// vypis uživatelů
 	$sql="SELECT * FROM ".DB_PREFIX."audit_trail".$fsql_cat.$fsql_type.$fsql_org.$fsql_my.$fsql_glob.$fsql_user." ORDER BY ".$fsql_sort.$fsql_count;
-	$res=MySQL_Query ($sql);
-	if (MySQL_Num_Rows($res)) {
+	$res=mysqli_query ($database,$sql);
+	if (mysqli_num_rows ($res)) {
 	  echo '<div id="obsah">
 <table>
 <thead>
@@ -283,7 +286,7 @@
 <tbody>
 ';
 		$even=0;
-		while ($rec=MySQL_Fetch_Assoc($res)) {
+		while ($rec=mysqli_fetch_assoc ($res)) {
 		  echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 	<td>'.getAuthor($rec['iduser'],0).'</td>
 	<td>'.(($rec['time'])?Date ('d. m. Y (H:i:s)',$rec['time']):'nikdy').'</td>

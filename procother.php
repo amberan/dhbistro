@@ -1,7 +1,7 @@
 <?php
 	require_once ('./inc/func_main.php');
 	if (isset($_REQUEST['delallnew'])) {
-	  MySQL_Query ("DELETE FROM ".DB_PREFIX."unread WHERE iduser = ".$usrinfo['id']);
+	  mysqli_query ($database,"DELETE FROM ".DB_PREFIX."unread WHERE iduser = ".$usrinfo['id']);
 	  Header ('Location: '.$_REQUEST['delallnew']);
 	}
         
@@ -11,8 +11,8 @@
 		pageStart ('Upravena nástěnka');
 		mainMenu (5);
 		sparklets ('<a href="dashboard.php">nástěnka</a> &raquo; <strong>nástěnka upravena</strong>');
-		$sql="INSERT INTO ".DB_PREFIX."dashboard VALUES('','".Time()."','".$usrinfo['id']."','".mysql_real_escape_string(safeInput($_POST['contents']))."')";
-		MySQL_Query ($sql);
+		$sql="INSERT INTO ".DB_PREFIX."dashboard VALUES('','".Time()."','".$usrinfo['id']."','".mysqli_real_escape_string ($database,safeInput($_POST['contents']))."')";
+		mysqli_query ($database,$sql);
 		unreadRecords (6,0);
 		echo '<div id="obsah"><p>Nástěnka upravena.</p></div>';
 		pageEnd ();
@@ -32,10 +32,10 @@
 			$sfile='';
 		}
 		$time=time();
-		$sql_p="INSERT INTO ".DB_PREFIX."symbols VALUES('', '".$sfile."', '".mysql_real_escape_string($_POST['contents'])."', '0', '".$time."', '".$usrinfo['id']."', '".$time."', '".$usrinfo['id']."', '0', '0', '".mysql_real_escape_string($_POST['liner'])."', '".mysql_real_escape_string($_POST['curver'])."', '".mysql_real_escape_string($_POST['pointer'])."', '".mysql_real_escape_string($_POST['geometrical'])."', '".mysql_real_escape_string($_POST['alphabeter'])."', '".mysql_real_escape_string($_POST['specialchar'])."', 0)";
-                MySQL_Query ($sql_p);
+		$sql_p="INSERT INTO ".DB_PREFIX."symbols VALUES('', '".$sfile."', '".mysqli_real_escape_string ($database,$_POST['contents'])."', '0', '".$time."', '".$usrinfo['id']."', '".$time."', '".$usrinfo['id']."', '0', '0', '".mysqli_real_escape_string ($database,$_POST['liner'])."', '".mysqli_real_escape_string ($database,$_POST['curver'])."', '".mysqli_real_escape_string ($database,$_POST['pointer'])."', '".mysqli_real_escape_string ($database,$_POST['geometrical'])."', '".mysqli_real_escape_string ($database,$_POST['alphabeter'])."', '".mysqli_real_escape_string ($database,$_POST['specialchar'])."', 0)";
+                mysqli_query ($database,$sql_p);
 		$sql_f="SELECT id FROM ".DB_PREFIX."symbols WHERE created='".$time."' AND created_by='".$usrinfo['id']."' AND modified='".$time."' AND modified_by='".$usrinfo['id']."'";
-		$pidarray=MySQL_Fetch_Assoc(MySQL_Query($sql_f));
+		$pidarray=mysqli_fetch_assoc (mysqli_query ($database,$sql_f));
 		$pid=$pidarray['id'];
 		auditTrail(7, 3, $pid);
 		if (!isset($_POST['notnew'])) {
@@ -56,7 +56,7 @@
         // Vymazani symbolu
 	if (isset($_REQUEST['sdelete']) && is_numeric($_REQUEST['sdelete']) && $usrinfo['right_text']) {
 		auditTrail(7, 11, $_REQUEST['sdelete']);
-		MySQL_Query ("UPDATE ".DB_PREFIX."symbols SET deleted=1 WHERE id=".$_REQUEST['sdelete']);
+		mysqli_query ($database,"UPDATE ".DB_PREFIX."symbols SET deleted=1 WHERE id=".$_REQUEST['sdelete']);
 		deleteAllUnread (7,$_REQUEST['sdelete']);
 		Header ('Location: symbols.php');
 	}
@@ -71,8 +71,8 @@
 		}
 		sparklets ('<a href="./symbols.php">symboly</a> &raquo; <a href="./editsymbol.php?rid='.$_POST['symbolid'].'">úprava symbolu</a> &raquo; <strong>uložení změn</strong>','<a href="./readsymbol.php?rid='.$_POST['symbolid'].'">zobrazit upravené</a>');
 		if (is_uploaded_file($_FILES['symbol']['tmp_name'])) {
-			$sps=MySQL_Query ("SELECT symbol FROM ".DB_PREFIX."symbols WHERE id=".$_POST['symbolid']);
-			if ($spc=MySQL_Fetch_Assoc($sps)) {
+			$sps=mysqli_query ($database,"SELECT symbol FROM ".DB_PREFIX."symbols WHERE id=".$_POST['symbolid']);
+			if ($spc=mysqli_fetch_assoc ($sps)) {
 				unlink('./files/symbols/'.$spc['symbol']);
 			}
 			$sfile=Time().MD5(uniqid(Time().Rand()));
@@ -80,14 +80,14 @@
 			$sdst=resize_Image ('./files/'.$sfile.'tmp',100,100);
 			imagejpeg($sdst,'./files/symbols/'.$sfile);
 			unlink('./files/'.$sfile.'tmp');
-			MySQL_Query ("UPDATE ".DB_PREFIX."symbols SET symbol='".$sfile."' WHERE id=".$_POST['symbolid']);
+			mysqli_query ($database,"UPDATE ".DB_PREFIX."symbols SET symbol='".$sfile."' WHERE id=".$_POST['symbolid']);
 		}
 		if ($usrinfo['right_org']==1) {
-			$sql="UPDATE ".DB_PREFIX."symbols SET `desc`='".mysql_real_escape_string($_POST['desc'])."', archiv='".(isset($_POST['archiv'])?'1':'0')."', search_lines='".$_POST['liner']."', search_curves='".$_POST['curver']."', search_points='".$_POST['pointer']."', search_geometricals='".$_POST['geometrical']."', search_alphabets='".$_POST['alphabeter']."', search_specialchars='".$_POST['specialchar']."' WHERE id=".$_POST['symbolid'];
-                        MySQL_Query ($sql);
+			$sql="UPDATE ".DB_PREFIX."symbols SET `desc`='".mysqli_real_escape_string ($database,$_POST['desc'])."', archiv='".(isset($_POST['archiv'])?'1':'0')."', search_lines='".$_POST['liner']."', search_curves='".$_POST['curver']."', search_points='".$_POST['pointer']."', search_geometricals='".$_POST['geometrical']."', search_alphabets='".$_POST['alphabeter']."', search_specialchars='".$_POST['specialchar']."' WHERE id=".$_POST['symbolid'];
+                        mysqli_query ($database,$sql);
 		} else {
-			$sql="UPDATE ".DB_PREFIX."symbols SET `desc`='".mysql_real_escape_string($_POST['desc'])."', modified='".Time()."', modified_by='".$usrinfo['id']."', archiv='".(isset($_POST['archiv'])?'1':'0')."', search_lines='".$_POST['liner']."', search_curves='".$_POST['curver']."', search_points='".$_POST['pointer']."', search_geometricals='".$_POST['geometrical']."', search_alphabets='".$_POST['alphabeter']."', search_specialchars='".$_POST['specialchar']."' WHERE id=".$_POST['symbolid'];
-			MySQL_Query ($sql);
+			$sql="UPDATE ".DB_PREFIX."symbols SET `desc`='".mysqli_real_escape_string ($database,$_POST['desc'])."', modified='".Time()."', modified_by='".$usrinfo['id']."', archiv='".(isset($_POST['archiv'])?'1':'0')."', search_lines='".$_POST['liner']."', search_curves='".$_POST['curver']."', search_points='".$_POST['pointer']."', search_geometricals='".$_POST['geometrical']."', search_alphabets='".$_POST['alphabeter']."', search_specialchars='".$_POST['specialchar']."' WHERE id=".$_POST['symbolid'];
+			mysqli_query ($database,$sql);
 		}
 		echo '<div id="obsah"><p>Symbol upraven.</p></div>';
 		pageEnd ();
@@ -104,25 +104,25 @@
         // Ukoly
 	if (isset($_REQUEST['acctask']) && is_numeric($_REQUEST['acctask']) && $usrinfo['right_text']) {
 		auditTrail(10, 2, $_REQUEST['acctask']);
-		MySQL_Query ("UPDATE ".DB_PREFIX."tasks SET status=2, modified='".Time()."', modified_by='".$usrinfo['id']."' WHERE id=".$_REQUEST['acctask']);
+		mysqli_query ($database,"UPDATE ".DB_PREFIX."tasks SET status=2, modified='".Time()."', modified_by='".$usrinfo['id']."' WHERE id=".$_REQUEST['acctask']);
 //		deleteAllUnread (1,$_REQUEST['delete']);
 		Header ('Location: '.$_SERVER['HTTP_REFERER']);
 	}
 	if (isset($_REQUEST['rtrntask']) && is_numeric($_REQUEST['rtrntask']) && $usrinfo['right_text']) {
 		auditTrail(10, 2, $_REQUEST['rtrntask']);
-		MySQL_Query ("UPDATE ".DB_PREFIX."tasks SET status=0, modified='".Time()."', modified_by='".$usrinfo['id']."' WHERE id=".$_REQUEST['rtrntask']);
+		mysqli_query ($database,"UPDATE ".DB_PREFIX."tasks SET status=0, modified='".Time()."', modified_by='".$usrinfo['id']."' WHERE id=".$_REQUEST['rtrntask']);
 		//		deleteAllUnread (1,$_REQUEST['delete']);
 		Header ('Location: '.$_SERVER['HTTP_REFERER']);
 	}
 	if (isset($_REQUEST['fnshtask']) && is_numeric($_REQUEST['fnshtask'])) {
 		auditTrail(10, 2, $_REQUEST['fnshtask']);
-		MySQL_Query ("UPDATE ".DB_PREFIX."tasks SET status=1, modified='".Time()."', modified_by='".$usrinfo['id']."' WHERE id=".$_REQUEST['fnshtask']);
+		mysqli_query ($database,"UPDATE ".DB_PREFIX."tasks SET status=1, modified='".Time()."', modified_by='".$usrinfo['id']."' WHERE id=".$_REQUEST['fnshtask']);
 		//		deleteAllUnread (1,$_REQUEST['delete']);
 		Header ('Location: '.$_SERVER['HTTP_REFERER']);
 	}
 	if (isset($_REQUEST['cncltask']) && is_numeric($_REQUEST['cncltask']) && $usrinfo['right_text']) {
 		auditTrail(10, 2, $_REQUEST['cncltask']);
-		MySQL_Query ("UPDATE ".DB_PREFIX."tasks SET status=3, modified='".Time()."', modified_by='".$usrinfo['id']."' WHERE id=".$_REQUEST['cncltask']);
+		mysqli_query ($database,"UPDATE ".DB_PREFIX."tasks SET status=3, modified='".Time()."', modified_by='".$usrinfo['id']."' WHERE id=".$_REQUEST['cncltask']);
 		//		deleteAllUnread (1,$_REQUEST['delete']);
 		Header ('Location: '.$_SERVER['HTTP_REFERER']);
 	}	

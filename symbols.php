@@ -8,8 +8,8 @@
 	
 	// symbolu
 	$sql="SELECT * FROM ".DB_PREFIX."symbols WHERE ".DB_PREFIX."symbols.deleted=0 AND ".DB_PREFIX."symbols.assigned=0 ORDER BY ".DB_PREFIX."symbols.created DESC";
-	$res=MySQL_Query ($sql);
-	if (MySQL_Num_Rows($res)) {
+	$res=mysqli_query ($database,$sql);
+	if (mysqli_num_rows ($res)) {
 	  echo '<div id="obsah">
 <table>
 <thead>
@@ -22,7 +22,7 @@
 <tbody>
 ';
 		$even=0;
-		while ($rec=MySQL_Fetch_Assoc($res)) {
+		while ($rec=mysqli_fetch_assoc ($res)) {
 		  echo '<tr class="'.((searchRecord(7,$rec['id']))?' unread_record':(($even%2==0)?'even':'odd')).'">
 		  <td><a href="readsymbol.php?rid='.$rec['id'].'"><img src="getportrait.php?nrid='.$rec['id'].'" alt="symbol chybí" /></a></td>
 		  <td>'.(StripSlashes($rec['desc'])).'<br />';
@@ -34,9 +34,9 @@
 		} else {
 		  $sql_n="SELECT ".DB_PREFIX."notes.iduser AS 'iduser', ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.note AS 'note', ".DB_PREFIX."notes.secret AS 'secret', ".DB_PREFIX."users.login AS 'user', ".DB_PREFIX."notes.id AS 'id' FROM ".DB_PREFIX."notes, ".DB_PREFIX."users WHERE ".DB_PREFIX."notes.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."notes.iditem=".$rec['id']." AND ".DB_PREFIX."notes.idtable=7 AND ".DB_PREFIX."notes.deleted=0 AND (".DB_PREFIX."notes.secret=0 OR ".DB_PREFIX."notes.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."notes.datum DESC";
 		}
-		  		$res_n=MySQL_Query ($sql_n);
+		  		$res_n=mysqli_query ($database,$sql_n);
 		  		$i=0;
-		  		while ($rec_n=MySQL_Fetch_Assoc($res_n)) {
+		  		while ($rec_n=mysqli_fetch_assoc ($res_n)) {
 		  		$i++;
 		  		if($i==1){ ?>
 		  	<div id="poznamky"><?php
@@ -70,10 +70,10 @@
 		  } else {
 		  	$sql_s="SELECT ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.title AS 'title' FROM ".DB_PREFIX."symbol2all, ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.id=".DB_PREFIX."symbol2all.idrecord AND ".DB_PREFIX."symbol2all.idsymbol=".$rec['id']." AND ".DB_PREFIX."symbol2all.table=3 AND ".DB_PREFIX."cases.secret=0 ORDER BY ".DB_PREFIX."cases.title ASC";
 		  }
-		  $pers=MySQL_Query ($sql_s);
+		  $pers=mysqli_query ($database,$sql_s);
 		  	
 		  $i=0;
-		  while ($perc=MySQL_Fetch_Assoc($pers)) {
+		  while ($perc=mysqli_fetch_assoc ($pers)) {
 		  	$i++;
 		  				if($i==1){ ?>
 		  		<strong>Případy:</strong>
@@ -96,10 +96,10 @@
 			} else {
 				$sql_s="SELECT ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."reports.label AS 'label' FROM ".DB_PREFIX."symbol2all, ".DB_PREFIX."reports WHERE ".DB_PREFIX."reports.id=".DB_PREFIX."symbol2all.idrecord AND ".DB_PREFIX."symbol2all.idsymbol=".$rec['id']." AND ".DB_PREFIX."symbol2all.table=4 AND ".DB_PREFIX."reports.secret=0 ORDER BY ".DB_PREFIX."reports.label ASC";
 			}
-			$pers=MySQL_Query ($sql_s);
+			$pers=mysqli_query ($database,$sql_s);
 			 
 			$i=0;
-			while ($perc=MySQL_Fetch_Assoc($pers)) {
+			while ($perc=mysqli_fetch_assoc ($pers)) {
 				$i++;
 				if($i==1){ ?>
 		  		<strong>Hlášení:</strong>

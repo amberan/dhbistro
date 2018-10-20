@@ -1,7 +1,7 @@
 <?php
 	require_once ('./inc/func_main.php');
 	// následuje načtení dat reportu a jejich uložení do vybranných proměných 
-	$reportarray=MySQL_Fetch_Assoc(MySQL_Query("SELECT * FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid'])); // načte data z DB
+	$reportarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid'])); // načte data z DB
 	$type=intval($reportarray['type']); // určuje typ hlášení
 		$typestring=(($type==1)?'výjezd':(($type==2)?'výslech':'?')); //odvozuje slovní typ hlášení
 	$author=$reportarray['iduser']; // určuje autora hlášení
@@ -13,12 +13,12 @@
         $custom_Filter = custom_Filter(17);
 	sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení</strong>'.(($label!='')?' - "'.$label.' ('.$typestring.')"':''));
 	// *** původní načítání autora ---
-	//$autharray=MySQL_Fetch_Assoc(MySQL_Query("SELECT iduser FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid']));
+	//$autharray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT iduser FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid']));
 	//$author=$autharray['iduser'];
 	// --- původní načítání autora ***
 	if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || $usrinfo['id']==$author)) {
-	  $res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid']);
-		if ($rec=MySQL_Fetch_Assoc($res)) {
+	  $res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid']);
+		if ($rec=mysqli_fetch_assoc ($res)) {
 ?>
 
 <div id="obsah">
@@ -77,7 +77,7 @@ K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se t
 	}
 	// formular filtru
 	function filter () {
-		global $f_sort, $sportraits, $ssymbols, $farchiv, $fdead;
+		global $database,$f_sort, $sportraits, $ssymbols, $farchiv, $fdead;
 	  echo '<form action="addp2ar.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -105,11 +105,11 @@ K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se t
 	} else {
 	  $sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.symbol AS 'symbol', ".DB_PREFIX."ar2p.role AS 'role', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."persons LEFT JOIN ".DB_PREFIX."ar2p ON ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."persons.deleted=0 ".$fsql_dead.$fsql_archiv." AND ".DB_PREFIX."persons.secret=0 ORDER BY ".$fsql_sort;
 	}
-	$res=MySQL_Query ($sql);
+	$res=mysqli_query ($database,$sql);
 ?>
 <div id="in-form-table">
 <?php 
-	if (MySQL_Num_Rows($res)) {
+	if (mysqli_num_rows ($res)) {
 	  echo '<table>
 <thead>
 	<tr>
@@ -123,7 +123,7 @@ K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se t
 ';
 		$even=0;
 		$iterator=0;
-		while ($rec=MySQL_Fetch_Assoc($res)) {
+		while ($rec=mysqli_fetch_assoc ($res)) {
 			echo '<script type="text/javascript" language="JavaScript">
 			<!--
 			function NameChanger'.$iterator.'()

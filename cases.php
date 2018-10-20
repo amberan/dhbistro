@@ -45,7 +45,7 @@
 	}
 	//
 	function filter () {
-	  global $f_sort, $f_sec, $f_stat, $f_new, $usrinfo;
+	  global $database,$f_sort, $f_sec, $f_stat, $f_new, $usrinfo;
 	  echo '<div id="filter-wrapper"><form action="cases.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -75,8 +75,8 @@
 	  $sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.datum AS 'datum' FROM ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.deleted=0".$fsql_sec.$fsql_stat." AND ".DB_PREFIX."cases.secret=0 ORDER BY ".$fsql_sort;
 	} Alternativni vypis osob*/
     $sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.datum AS 'datum' FROM ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.deleted=0".$fsql_sec.$fsql_stat." AND ".DB_PREFIX."cases.secret<=".$usrinfo['right_power']." ORDER BY ".$fsql_sort;
-	$res=MySQL_Query ($sql);
-	if (MySQL_Num_Rows($res)) {
+	$res=mysqli_query ($database,$sql);
+	if (mysqli_num_rows ($res)) {
 	  echo '<div id="obsah">
 <table>
 <thead>
@@ -89,7 +89,7 @@
 <tbody>
 ';
 		$even=0;
-		while ($rec=MySQL_Fetch_Assoc($res)) {
+		while ($rec=mysqli_fetch_assoc ($res)) {
                     if ($f_new==0 || ($f_new==1 && searchRecord(3,$rec['id']))) {
                         echo '<tr class="'.((searchRecord(3,$rec['id']))?' unread_record':(($even%2==0)?'even':'odd')).(($rec['status'])?' solved':'').'">
                         <td>'.(($rec['secret'])?'<span class="secret"><a href="readcase.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a></span>':'<a href="readcase.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a>').'</td>

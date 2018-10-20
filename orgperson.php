@@ -4,8 +4,8 @@
 	mainMenu (5);
 	sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>úprava osoby</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
-	  $res=MySQL_Query ("SELECT * FROM ".DB_PREFIX."persons WHERE id=".$_REQUEST['rid']);
-		if ($rec_p=MySQL_Fetch_Assoc($res)) {
+	  $res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."persons WHERE id=".$_REQUEST['rid']);
+		if ($rec_p=mysqli_fetch_assoc ($res)) {
 
 	// kalendář
 	function date_picker($name, $rdate, $startyear=NULL, $endyear=NULL)
@@ -66,8 +66,8 @@
 				<select name="regusr" id="regusr">
 				<?php
 					$sql="SELECT ".DB_PREFIX."users.login AS 'login', ".DB_PREFIX."users.id AS 'id' FROM ".DB_PREFIX."users WHERE ".DB_PREFIX."users.deleted=0 ORDER BY ".DB_PREFIX."users.login ASC";
-					$res=MySQL_Query ($sql);
-					while ($rec=MySQL_Fetch_Assoc($res)) {
+					$res=mysqli_query ($database,$sql);
+					while ($rec=mysqli_fetch_assoc ($res)) {
 						echo '<div>
 						<option value="'.$rec['id'].'" "'.(($rec['id']==$rec_p['iduser'])?' checked="checked"':'').'>'.StripSlashes ($rec['login']).'</option>
 						</div>';

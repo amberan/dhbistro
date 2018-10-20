@@ -1,8 +1,8 @@
 <?php
 	require_once ('./inc/func_main.php');
 	if (isset($_REQUEST['rid']) && is_numeric ($_REQUEST['rid'])) {
-    	$getres=MySQL_Query ("SELECT portrait FROM ".DB_PREFIX."persons WHERE ".(($usrinfo['right_power'])?'':' secret=0 AND ')." id=".$_REQUEST['rid']);
-    	if ($getrec=MySQL_Fetch_Assoc ($getres)) {
+    	$getres=mysqli_query ($database,"SELECT portrait FROM ".DB_PREFIX."persons WHERE ".(($usrinfo['right_power'])?'':' secret=0 AND ')." id=".$_REQUEST['rid']);
+    	if ($getrec=mysqli_fetch_assoc ($getres)) {
       		header('Content-Type: image/jpg');
       		header('Content-Disposition: inline; filename="portrait'.$_REQUEST['rid'].'.jpg"');
       		header('Expires: 0');
@@ -13,8 +13,8 @@
     	}
   	}  
   	if (isset($_REQUEST['srid']) && is_numeric ($_REQUEST['srid'])) {
-  		$getres=MySQL_Query ("SELECT symbol FROM ".DB_PREFIX."persons WHERE ".(($usrinfo['right_power'])?'':' secret=0 AND ')." id=".$_REQUEST['srid']);
-  		if ($getrec=MySQL_Fetch_Assoc ($getres)) {
+  		$getres=mysqli_query ($database,"SELECT symbol FROM ".DB_PREFIX."persons WHERE ".(($usrinfo['right_power'])?'':' secret=0 AND ')." id=".$_REQUEST['srid']);
+  		if ($getrec=mysqli_fetch_assoc ($getres)) {
   			header('Content-Type: image/jpg');
   			header('Content-Disposition: inline; filename="symbol'.$_REQUEST['srid'].'.jpg"');
   			header('Expires: 0');
@@ -25,8 +25,8 @@
   		}
   	}
   	if (isset($_REQUEST['nrid']) && is_numeric ($_REQUEST['nrid'])) {
-  		$getres=MySQL_Query ("SELECT symbol FROM ".DB_PREFIX."symbols WHERE id=".$_REQUEST['nrid']);
-  		if ($getrec=MySQL_Fetch_Assoc ($getres)) {
+  		$getres=mysqli_query ($database,"SELECT symbol FROM ".DB_PREFIX."symbols WHERE id=".$_REQUEST['nrid']);
+  		if ($getrec=mysqli_fetch_assoc ($getres)) {
   			header('Content-Type: image/jpg');
   			header('Content-Disposition: inline; filename="symbol'.$_REQUEST['nrid'].'.jpg"');
   			header('Expires: 0');
