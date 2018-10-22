@@ -1,185 +1,22 @@
 <?php
-  $mtime = microtime();
-  $mtime = explode(" ",$mtime);
-  $mtime = $mtime[1] + $mtime[0];
-  $starttime = $mtime;
-
-	// verze
-	$mazzarino_version='1.5';
-  
-	// sessions
-	session_start();
-	$_SESSION['once']=0;
-	
+	$mtime = microtime();
+	$mtime = explode(" ",$mtime);
+	$mtime = $mtime[1] + $mtime[0];
+	$starttime = $mtime;
 	global $database,$point;
+	$page_prefix='';
+	$mazzarino_version='1.5.1'; // verze
 
-	// databaze
-  switch ($_SERVER["SERVER_NAME"]) {
-  	case 'localhost':
-  		$dbusr=$dbname='dhbistrocz';
-  		$verze=0;
-  		$point='zlobod';
-  		$barva='local';
-                $hlaseniV='Hlášení';
-                $hlaseniM='hlášení';
-  		break;
-  	case 'www.dhbistro.cz':
-  		$dbusr=$dbname='dhbistrocz';
-  		$verze=1;
-  		$point='zlobod';
-  		$barva='dh';
-                $hlaseniV='Hlášení';
-                $hlaseniM='hlášení';
-  		break;
-  	case 'nh.dhbistro.cz':
-  		$dbusr=$dbname='nhbistro';
-  		$verze=2;
-  		$point='bludišťák';
-  		$barva='nh';
-                $hlaseniV='Hlášení';
-                $hlaseniM='hlášení';
-  		break;
-  	case 'test.dhbistro.cz':
-  		$dbusr=$dbname='testbistro';
-  		$verze=3;
-  		$point='zlobod';
-  		$barva='test';
-                $hlaseniV='Hlášení';
-                $hlaseniM='hlášení';
-  		break;
-  	case 'org.dhbistro.cz':
-		$dbusr=$dbname='orgbistro';
-		$verze=4;
-		$point='zlobod';
-		$barva='org';
-                $hlaseniV='Hlášení';
-                $hlaseniM='hlášení';
-		break;
-    case 'enigma.dhbistro.cz':
-		$dbusr=$dbname='enigmabistro';
-		$verze=5;
-		$point='zlobod';
-		$barva='enigma';
-                $hlaseniV='Zakázka';
-                $hlaseniM='zakázka';
-		break;
-    case 'nhtest.dhbistro.cz':
-  		$dbusr=$dbname='nhtestbistro';
-  		$verze=2;
-  		$point='bludišťák';
-  		$barva='test';
-                $hlaseniV='Hlášení';
-                $hlaseniM='hlášení';
-		break;
-	case 'saga':
-		$dbusr='root';
-		$dbname='NHBistro';
-		$verze=2;
-		$point='bludišťák';
-		$barva='nh';
-			  $hlaseniV='Hlášení';
-			  $hlaseniM='hlášení';
-			}
+	require_once('inc/audit_trail.php');
+	require_once('inc/backup.php');
+	require_once('inc/database.php');
+	require_once('inc/footer.php');
+	require_once('inc/header.php');
+	require_once('inc/menu.php');
+	require_once('inc/session.php');
+	require_once('inc/unread.php');
   
-// vyzvedni heslo k databazi
-$file = "inc/important.php";
-$lines = file($file,FILE_IGNORE_NEW_LINES) or die("fail pwd");;
-$password = $lines[2];
-
-$database = mysqli_connect ('localhost',$dbusr,$password,$dbname) or die (mysqli_connect_errno()." ".mysqli_connect_error());
-
-  $page_prefix='';
-
-	define ('DB_PREFIX','nw_');
-  mysqli_query ($database,"SET NAMES 'utf8'");
-  
-  // prihlaseni
-  if (isset($_REQUEST['logmein'])) { 
-	$logres=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."users WHERE login='".mysqli_real_escape_string ($database,$_REQUEST['loginname'])."' AND pwd='".mysqli_real_escape_string ($database,$_REQUEST['loginpwd'])."'");
-	if ($logrec=mysqli_fetch_array ($logres)) {
-      mysqli_query ($database,"DELETE FROM ".DB_PREFIX."loggedin WHERE iduser=".$logrec['id']);
-      $sid=md5(uniqid(rand()));
-			mysqli_query ($database,"INSERT INTO ".DB_PREFIX."loggedin VALUES('".$logrec['id']."','".Time()."','".$sid."','".mysqli_real_escape_string ($database,$_SERVER['HTTP_USER_AGENT'])."','".$_SERVER['REMOTE_ADDR']."')");
-			//mysqli_query ($database,"INSERT INTO ".DB_PREFIX."loggedin VALUES('".$logrec['id']."','".Time()."','".$sid."','','')");
-			mysqli_query ($database,"UPDATE ".DB_PREFIX."users SET lastlogon=".Time().", ip='' WHERE id=".$logrec['id']);
-      $_SESSION['sid']=$sid;
-    }
-  }
-	// info o uzivateli
-	if (isset($_SESSION['sid'])) {
-		$sql = "SELECT
-												".DB_PREFIX."users.id AS 'id',
-												".DB_PREFIX."users.login AS 'login',
-												".DB_PREFIX."users.pwd AS 'pwd',
-												".DB_PREFIX."users.idperson AS 'idperson',
-												".DB_PREFIX."users.lastlogon AS 'lastlogon',
-												".DB_PREFIX."users.right_power AS 'right_power',
-												".DB_PREFIX."users.right_text AS 'right_text',
-												".DB_PREFIX."users.right_org AS 'right_org',
-												".DB_PREFIX."users.right_aud AS 'right_aud',
-												".DB_PREFIX."users.timeout AS 'timeout',
-												".DB_PREFIX."users.ip AS 'ip',
-												".DB_PREFIX."users.plan AS 'plan',
-												".DB_PREFIX."loggedin.sid AS 'sid',
-												".DB_PREFIX."loggedin.time AS 'lastaction',
-												".DB_PREFIX."loggedin.ip AS 'currip'
-												FROM ".DB_PREFIX."users, ".DB_PREFIX."loggedin WHERE agent='".mysqli_real_escape_string ($database,$_SERVER['HTTP_USER_AGENT'])."' AND ".DB_PREFIX."loggedin.sid ='".mysqli_real_escape_string ($database,$_SESSION['sid'])."' AND deleted=0 AND ".DB_PREFIX."loggedin.iduser=".DB_PREFIX."users.id";
-		$ures=mysqli_query ($database,$sql);
-
-		if ($usrinfo=mysqli_fetch_assoc ($ures)) {
-		  $loggedin=true;
-		  
-		  // natazeni tabulky neprectenych zaznamu do promenne
-		  $sql_r="SELECT * FROM ".DB_PREFIX."unread WHERE iduser=".$usrinfo['id'];
-		  $res_r=mysqli_query ($database,$sql_r);
-		  while ($unread[]=mysqli_fetch_array ($res_r));
-		} else {
-		  $loggedin=false;
-		}
-	} else {
-	  $loggedin=false;
-	}
-
-	// doba timeoutu ve vterinach
-	if (isset($usrinfo['timeout'])) {
-		$inactive = $usrinfo['timeout'];
-	} else {
-		$inactive = 600;
-	}
-	
- 	if(isset($_SESSION['timeout']) ) {
-		$session_life = time() - $_SESSION['timeout'];
-		if($session_life > $inactive) {
-			session_destroy(); header("Location: login.php");
-		}
-	} 
-	
-	$_SESSION['timeout'] = time();
-	
- 
-  // ta parametrizaci na verzi je tam proto, ze na lokale to kdoviproc nefunguje	
-  // overeni prihlaseni, nutno zmenit jmeno souboru na ostre verzi
-  $free_pages = array ($page_prefix.'login.php');
-  //if ($verze > 0) {
-    $cropedUrlAll = explode("/", $_SERVER['PHP_SELF']);
-    $cropedUrlLast = end($cropedUrlAll);
-    if (!$loggedin && !in_array($cropedUrlLast,$free_pages)) {
-            Header ('location: login.php');
-    //}
-  }
-
-// vyhledani tabulky v neprectenych zaznamech
-function searchTable ($tablenum) { 
-	global $database,$unread;
-	foreach ($unread as $record) {
-            if ($record['idtable'] == $tablenum) {
-            return true;
-        }
-    }
-    	return false;
-}
-
-// vyhledani zaznamu v neprectenych zaznamech
+// vyhledani zaznamu v neprectenych zaznamech - cases, groups, persons, reports, symbols
 function searchRecord ($tablenum, $recordnum) {
 	global $database,$unread;
 	foreach ($unread as $record) {
@@ -190,56 +27,7 @@ function searchRecord ($tablenum, $recordnum) {
 	return false;
 }
 
-// zaznam do tabulek neprectenych
-function unreadRecords ($tablenum,$rid) {
-	global $database,$usrinfo, $_POST;
-	$secret=0;
-	if (isset($_POST['secret'])) {
-		$secret=$_POST['secret'];
-	} 
-	if (isset($_POST['nsecret'])) {
-		$secret=$_POST['nsecret'];
-	}
-	$sql_ur="SELECT ".DB_PREFIX."users.id as 'id', ".DB_PREFIX."users.right_power as 'right_power', ".DB_PREFIX."users.deleted as 'deleted' FROM ".DB_PREFIX."users";
-	$res_ur=mysqli_query ($database,$sql_ur);
-	while ($rec_ur=mysqli_fetch_assoc ($res_ur)) {
-		if ($secret > 0 && $rec_ur['deleted'] <> 1) {
-			if ($rec_ur['id'] <> $usrinfo['id'] && $rec_ur['right_power'] > 0) {
-				$srsql="INSERT INTO ".DB_PREFIX."unread (idtable, idrecord, iduser) VALUES('".$tablenum."', '".$rid."', '".$rec_ur['id']."')";
-				mysqli_query ($database,$srsql);
-			}
-		} else if ($secret == 0 && $rec_ur['deleted'] <> 1) {
-			if ($rec_ur['id'] <> $usrinfo['id']) {
-				$srsql="INSERT INTO ".DB_PREFIX."unread (idtable, idrecord, iduser) VALUES('".$tablenum."', '".$rid."', '".$rec_ur['id']."')";
-				mysqli_query ($database,$srsql);
-			}
-		}
-	}
-}
-
-// vymaz z tabulek neprectenych pri precteni
-function deleteUnread ($tablenum,$rid) {
-	global $database,$usrinfo;
-	if ($rid<>'none') {
-		$sql_ur="DELETE FROM ".DB_PREFIX."unread WHERE idtable=".$tablenum." AND idrecord=".$rid." AND iduser=".$usrinfo['id'];
-	} else {
-		$sql_ur="DELETE FROM ".DB_PREFIX."unread WHERE idtable=".$tablenum." AND iduser=".$usrinfo['id'];
-	}
-	mysqli_query ($database,$sql_ur);
-}
-
-// vymaz z tabulek neprectenych pri smazani zaznamu
-function deleteAllUnread ($tablenum,$rid) {
-	global $database;
-	$sql_ur="SELECT ".DB_PREFIX."users.id as 'id', ".DB_PREFIX."users.right_power as 'right_power' FROM ".DB_PREFIX."users";
-	$res_ur=mysqli_query ($database,$sql_ur);
-	while ($rec_ur=mysqli_fetch_assoc ($res_ur)) {
-		$srsql="DELETE FROM ".DB_PREFIX."unread WHERE idtable=".$tablenum." AND idrecord=".$rid." AND iduser=".$rec_ur['id'];
-		mysqli_query ($database,$srsql);
-	}
-}
-
-// ziskani autora zaznamu
+// ziskani autora zaznamu - audit, dashboard, edituser, index, readcase, readperson, readsymbol, tasks
 function getAuthor ($recid,$trn) {
 	global $database;
 	if ($trn==1) {
@@ -269,340 +57,96 @@ function getAuthor ($recid,$trn) {
 	}
 }
 
-//auditni stopa
-function auditTrail ($record_type,$operation_type,$idrecord) {
-	global $database,$usrinfo;
-	$sql_check="SELECT * FROM ".DB_PREFIX."audit_trail WHERE iduser='".$usrinfo['id']."' AND time='".time()."'";
-	$res_check=mysqli_query ($database,$sql_check);
-	if (mysqli_num_rows ($res_check)) {
+function safeInput ($input) {
+	$replaced=Array ('"');
+	$replacers=Array ('&quot;');
+	$output=str_replace ($replaced,$replacers,$input);
+	return $output;
+}
+	
+function resize_Image ($img,$max_width,$max_height) {
+	$size=GetImageSize($img);
+	$width=$size[0];
+	$height=$size[1];
+	$x_ratio=$max_width/$width;
+	$y_ratio=$max_height/$height;
+	if (($width<=$max_width) && ($height<=$max_height)) {
+		$tn_width=$width;
+		$tn_height=$height;
+	} else if (($x_ratio * $height) < $max_height) {
+		$tn_height=ceil($x_ratio * $height);
+		$tn_width=$max_width;
 	} else {
-		if (!$usrinfo['currip']) {
-			$currip=$_SERVER['REMOTE_ADDR'];
-		} else {
-			$currip=$usrinfo['currip'];
-		}
-		$sql_au="INSERT INTO ".DB_PREFIX."audit_trail VALUES('','".$usrinfo['id']."','".time()."','".$operation_type."','".$record_type."','".$idrecord."','".$currip."','".$usrinfo['right_org']."')";
-		mysqli_query ($database,$sql_au);
+		$tn_width=ceil($y_ratio * $width);
+		$tn_height=$max_height;
 	}
+	if ($size[2]==1) {
+		$src=ImageCreateFromGIF($img);
+	}
+	if ($size[2]==2) {
+		$src=ImageCreateFromJPEG($img);
+	}
+	if ($size[2]==3) {
+		$src=ImageCreateFromPNG($img);
+	}
+	$dst=ImageCreateTrueColor($tn_width,$tn_height);
+	ImageCopyResampled ($dst,$src,0,0,0,0,$tn_width,$tn_height,$width,$height);
+	Imageinterlace($dst, 1);
+	ImageDestroy($src);
+	return $dst;
 }
-
-//pokus o pristup k tajnemu, soukromemu nebo smazanemu zaznamu
-function unauthorizedAccess ($record_type,$secret,$deleted,$idrecord) {
-	global $database,$usrinfo;
-        switch ($record_type) {
-            case 1:
-                $link='<a href="./persons.php">osoby</a>';
-                break;
-            case 2:
-                $link='<a href="./groups.php">skupiny</a>';
-                break;
-            case 3:
-                $link='<a href="./cases.php">případy</a>';
-                break;
-            case 4:
-                $link='<a href="./reports.php">hlášení</a>';
-                break;
-            case 8:
-                $link='A ven!';
-                break;
-            case 11:
-                $link='A ven!';
-                break;
-        }
-        if ($deleted==1) {
-            auditTrail($record_type, 13, $idrecord);
-        } else {
-            auditTrail($record_type, 12, $idrecord);
-        }
-        pageStart ('Neautorizovaný přístup');
-        mainMenu (5);
-        sparklets ($link.' &raquo; <strong>neautorizovaný přístup</strong>');
-        echo '<div id="obsah"><p>Tady nemáš co dělat.</p></div>';
-        exit;
-}
-
-//vytvoreni zalohy
-function backupDB () {
-	global $database,$dbusr;
-	function  zalohuj($db,$soubor=""){
-	 global $database,$dbusr;
-	 
-		function  keys($prefix,$array){
-			if (empty($array)) { $pocet=0; } else {	$pocet = count ($array); }
-			if (!isset($radky)) { $radky=''; }
-			if ($pocet == 0)
-				return ;
-			for ($i = 0; $i<$pocet; $i++)
-				$radky .= "`".$array[$i]."`".($i != $pocet-1 ? ",":"");
-				return  ",\n".$prefix."(".$radky.")";
-		}
-
-		$sql = mysqli_query ($database,"SHOW table status  FROM ".$db);
-
-
-		while ($data = mysqli_fetch_row ($database,$sql)){
-
-		if (!isset($text)) { $text = '';}
-		$text .= (empty ($text)?"":"\n\n")."--\n-- Struktura tabulky ".$data[0]."\n--\n\n\n";
-    	$text .= "CREATE TABLE `".$data[0]."`(\n";
-	    $sqll = mysqli_query ($database,"SHOW columns  FROM ".$data[0]);
-    			$e = true;
-
-		while ($dataa = mysqli_fetch_row ($database,$sqll)){
-		if ($e) $e = false;
-			else  $text .= ",\n";
-
-			$null = ($dataa[2] == "NO")? "NOT NULL":"NULL";
-			$default = !empty ($dataa[4])? " DEFAULT '".$dataa[4]."'":"";
-
-			if ($default == " DEFAULT 'CURRENT_TIMESTAMP'") $default = " DEFAULT CURRENT_TIMESTAMP";
-	      if ($dataa[3] == "PRI") $PRI[] = $dataa[0];
-    	  		if ($dataa[3] == "UNI") $UNI[] = $dataa[0];
-      			if ($dataa[3] == "MUL") $MUL[] = $dataa[0];
-      			$extra = !empty ($dataa[5])? " ".$dataa[5]:"";
-      			$text .= "`$dataa[0]` $dataa[1] $null$default$extra";
-		}
-		if (!isset($UNI)) $UNI='';
-		if (!isset($PRI)) $PRI='';
-		if (!isset($MUL)) $MUL='';
-		$primary = keys("PRIMARY KEY",$PRI);
-		$unique = keys("UNIQUE KEY",$UNI);
-    	$mul = keys("INDEX",$MUL);
-    	$text .= $primary.$unique.$mul."\n) ENGINE=".$data[1]." COLLATE=".$data[14].";\n\n";
-    	unset ($PRI,$UNI,$MUL);
-
-	    $text .= "--\n-- Data tabulky ".$data[0]."\n--\n\n";
-		$query = mysqli_query ($database,"SELECT  * FROM ".$data[0]."");
-		while ($fetch = mysqli_fetch_row ($database,$query)){
-		$pocet_sloupcu = count ($fetch);
-
-		for ($i = 0;$i < $pocet_sloupcu;$i++)
-			@$values .= "'".mysqli_escape_string ($database,$fetch[$i])."'".($i < $pocet_sloupcu-1?",":"");
-			$text .= "\nINSERT INTO `".$data[0]."` VALUES(".$values.");";
-			unset ($values);
-		}
-		}
-
-		if (!empty ($soubor)){
-		$fp = @fopen ($soubor,"w+");
-		$fw = @fwrite ($fp,$text);
-		@fclose ($fp);
-		}
-
-		return  $text;
-		}
-	
-		$sql_check="SELECT time FROM ".DB_PREFIX."backups ORDER BY time DESC LIMIT 1";
-		$fetch_check=mysqli_fetch_assoc (mysqli_query ($database,$sql_check));
-		$last_backup=$fetch_check['time'];
-		if (round($last_backup,-5)<round(time(),-5)) {
-			mysqli_query ($database,"SET NAMES  'utf8'");
-			$xsoubor="backup".time().".sql";
-			$fsoubor="files/backups/".$xsoubor;
-			$sql_bck="INSERT INTO ".DB_PREFIX."backups VALUES('','".Time()."','".$xsoubor."')";
-			mysqli_query ($database,$sql_bck);
-			zalohuj($dbusr,$fsoubor);
-		}
-}
-  
-// vypis zacatku stranky
-	function pageStart ($title,$infotext='') {
-	  global $database,$loggedin, $usrinfo, $mazzarino_version;
-		echo '<?xml version="1.0" encoding="utf-8"?>';
-?>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="cs">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="Content-language" content="cs" />
-    <meta http-equiv="Cache-control" content="no-cache" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
-    <meta name="robots" content="index, follow" />
-    <meta name="Author" content="Karel Křemel, David Ambeřan Maleček, Jakub Ethan Kraft" />
-    <meta name="Copyright" content="2006 - 2018" />
-    
-    <title><?php echo (($loggedin)?$usrinfo['login'].' @ ':'')?>BIStro <?php echo $mazzarino_version;?> | <?php echo $title;?></title>
-    <meta name="description" content="city larp management system" />
-	<link rel="icon" href="favicon.ico" type="image/x-icon" />
-	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    
-    <!--[if lt IE 7]><style type="text/css">body {behavior: url('./inc/csshover.htc');}</style><![endif]-->
-    <link media="all" rel="stylesheet" type="text/css" href="./inc/styly.css" />
-    <link media="print" rel="stylesheet" type="text/css" href="./css/print.css" />
-	
-	<!-- <script type="text/javascript" src="./js/jquery-min.js"></script> -->
-        <script src="http://code.jquery.com/jquery-1.12.2.min.js"></script>
-        <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-        <script src="js/jquery.ui.autocomplete.html.js"></script>
-        <script type="text/javascript" src="./js/tinymce/tinymce.min.js"></script>
-        <script type="text/javascript">
-        tinymce.init({
-            selector: "textarea",
-            theme: "modern",
-            entity_encoding: "raw",
-            plugins: [
-                "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
-                "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
-                "save table contextmenu directionality template paste textcolor"
-            ],
-            toolbar: "undo redo | styleselect fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | forecolor backcolor table removeformat",
-            menubar: false,
-            toolbar_items_size: 'small',
-        });
-        </script>
-        
-	<script type="text/javascript" src="./js/mrFixit.js"></script>
-</head>
-<body>
-<div id="wrapper">
-<?php
-	}
-	
-	// vypis konce stranky
-	function pageEnd () {
-	  global $database,$starttime;
-	  $mtime = microtime();
-		$mtime = explode(" ",$mtime);
-		$mtime = $mtime[1] + $mtime[0];
-		$endtime = $mtime;
-		$totaltime = ($endtime - $starttime);
-	  echo '		<!-- Vygenerováno za '.$totaltime.' vteřin -->';
-?>
-</div>
-<!-- end of #wrapper -->
-</body>
-</html>
-<?php
-	}
-	
-	function mainMenu ($index) {
-	  global $database,$usrinfo, $verze, $barva, $hlaseniV;
-	  $currentfile = $_SERVER["PHP_SELF"];
-	  $dlink=mysqli_fetch_assoc (mysqli_query ($database,"SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1"));
-	  echo '<div id="menu">
-	<ul class="'.$barva.'">
-		<li '.((searchTable(5))?' class="unread"':((searchTable(6))?' class="unread"':'')).'><a href="index.php">Aktuality</a></li>
-		<li '.((searchTable(4))?' class="unread"':'').'><a href="reports.php">'.$hlaseniV.'</a></li>	
-		<li '.((searchTable(1))?' class="unread"':((searchTable(7))?' class="unread"':'')).'><a href="persons.php">Osoby</a></li>
-		<li '.((searchTable(3))?' class="unread"':'').'><a href="cases.php">Případy</a></li>
-		<li '.((searchTable(2))?' class="unread"':'').'><a href="groups.php">Skupiny</a></li>
-		'/*Docasne odstranena mapa agentu, stejne to nikdo nepouziva
-        .(($usrinfo['right_power'])?'<li><a href="mapagents.php">Mapa agentů</a></li>':'')*/.'
-		'.(($usrinfo['right_power']>4)?'<li><a href="doodle.php">Časová dostupnost</a></li>':'<li><a href="'.$dlink['link'].'" target="_new">Časová dostupnost</a></li>').'
-		'.(($verze==2)?'<li><a href="http://www.prazskahlidka.cz/forums/index.php" target="_new">Fórum</a></li>':'<li><a href="http://www.prazskahlidka.cz/forums/index.php" target="_new">Fórum</a></li>').'
-		'.(($verze==2)?'<li><a href="evilpoints.php">Bludišťáky</a></li>':'<li><a href="evilpoints.php">Zlobody</a></li>').'
-		<li><a href="settings.php">Nastavení</a></li>
-                <li><a href="search.php">Vyhledávání</a></li>
-		'.(($usrinfo['right_power']>4)?'<li><a href="users.php">Uživatelé</a></li>':'').'
-                '.(($usrinfo['right_power']<5 && $usrinfo['right_text'])?'<li><a href="tasks.php">Úkoly</a></li>':'').'
-		'.(($usrinfo['right_aud'])?'<li><a href="audit.php">Audit</a></li>':'').'
-		<li class="float-right"><a href="logout.php">Odhlásit</a></li>
-		<li class="float-right"><a href="procother.php?delallnew='.$currentfile.'" onclick="'."return confirm('Opravdu označit vše jako přečtené?');".'">Přečíst vše</a></li>
-	</ul>
-	<!-- form id="search_menu">
-		<input type="text" name="query" />
-		<input type="submit" value="Hledat" />
-	</form -->
-</div>
-<!-- end of #menu -->';
-	}
-	
-	function sparklets ($path,$actions='') {
-	  echo '<div id="sparklets">Cesta: '.$path.(($actions!='')?' || Akce: '.$actions:'').'</div>';
-	}
-	
-	function safeInput ($input) {
-		$replaced=Array ('"');
-		$replacers=Array ('&quot;');
-	  $output=str_replace ($replaced,$replacers,$input);
-	  return $output;
-	}
-	
-	function resize_Image ($img,$max_width,$max_height) {
-            $size=GetImageSize($img);
-            $width=$size[0];
-            $height=$size[1];
-            $x_ratio=$max_width/$width;
-            $y_ratio=$max_height/$height;
-            if (($width<=$max_width) && ($height<=$max_height)) {
-              $tn_width=$width;
-              $tn_height=$height;
-            } else if (($x_ratio * $height) < $max_height) {
-              $tn_height=ceil($x_ratio * $height);
-              $tn_width=$max_width;
-            } else {
-              $tn_width=ceil($y_ratio * $width);
-              $tn_height=$max_height;
-            }
-            if ($size[2]==1) {
-              $src=ImageCreateFromGIF($img);
-            }
-            if ($size[2]==2) {
-              $src=ImageCreateFromJPEG($img);
-            }
-            if ($size[2]==3) {
-              $src=ImageCreateFromPNG($img);
-            }
-            $dst=ImageCreateTrueColor($tn_width,$tn_height);
-            ImageCopyResampled ($dst,$src,0,0,0,0,$tn_width,$tn_height,$width,$height);
-            Imageinterlace($dst, 1);
-            ImageDestroy($src);
-            return $dst;
-        }
         
 // funkce pro ukládání fitru do databáza a načítání filtru z databáze        
-        function custom_Filter ($idtable, $idrecord = 0) {
-            global $database,$usrinfo;
-            switch ($idtable) {
-			case 1: $table="persons"; break;
-			case 2: $table="groups"; break;
-			case 3: $table="cases"; break;
-			case 4: $table="reports"; break;
-                        case 8: $table="users"; break;
-                        case 9: $table="evilpts"; break;
-                        case 10: $table="tasks"; break;
-                        case 11: $table="audit"; break;
-                        case 13: $table="search"; break;
-                        case 14: $table="group".$idrecord; break;
-                        case 15: $table="p2c"; break;
-                        case 16: $table="c2ar"; break;
-                        case 17: $table="p2ar"; break;
-                        case 18: $table="ar2c"; break;
-                        case 19: $table="p2g"; break;
-                        case 20: $table="sy2p"; break;
-                        case 21: $table="sy2c"; break;
-                        case 22: $table="sy2ar"; break;
+function custom_Filter ($idtable, $idrecord = 0) {
+	global $database,$usrinfo;
+	switch ($idtable) {
+		case 1: $table="persons"; break;
+		case 2: $table="groups"; break;
+		case 3: $table="cases"; break;
+		case 4: $table="reports"; break;
+		case 8: $table="users"; break;
+		case 9: $table="evilpts"; break;
+		case 10: $table="tasks"; break;
+		case 11: $table="audit"; break;
+		case 13: $table="search"; break;
+		case 14: $table="group".$idrecord; break;
+		case 15: $table="p2c"; break;
+		case 16: $table="c2ar"; break;
+		case 17: $table="p2ar"; break;
+		case 18: $table="ar2c"; break;
+		case 19: $table="p2g"; break;
+		case 20: $table="sy2p"; break;
+		case 21: $table="sy2c"; break;
+		case 22: $table="sy2ar"; break;
+	}
+	$sql_cf = "SELECT filter FROM ".DB_PREFIX."users WHERE id = ".$usrinfo['id'];
+	$res_cf=mysqli_query ($database,$sql_cf);
+	$filter = $_REQUEST;
+	// pokud přichází nový filtr a nejedná se o zadání úkolu či přidání zlobodů, případně pokud se jedná o konkrétní záznam a je nově filtrovaný,
+	// použij nový filtr a ulož ho do databáze
+	if ((!empty($filter) && !isset($_POST['inserttask']) && !isset($_POST['addpoints']) && !isset($filter['rid'])) || (isset($filter['sort']) && isset($filter['rid']))) {
+		if ($res_cf) {
+			$rec_cf = mysqli_fetch_assoc ($res_cf);
+			$filters = unserialize($rec_cf['filter']);
+			$filters[$table] = $filter;
+		} else {
+			$filters[$table] = $filter;
 		}
-            $sql_cf = "SELECT filter FROM ".DB_PREFIX."users WHERE id = ".$usrinfo['id'];
-            $res_cf=mysqli_query ($database,$sql_cf);
-            $filter = $_REQUEST;
-            // pokud přichází nový filtr a nejedná se o zadání úkolu či přidání zlobodů, případně pokud se jedná o konkrétní záznam a je nově filtrovaný,
-            // použij nový filtr a ulož ho do databáze
-            if ((!empty($filter) && !isset($_POST['inserttask']) && !isset($_POST['addpoints']) && !isset($filter['rid'])) || (isset($filter['sort']) && isset($filter['rid']))) {
-                if ($res_cf) {
-                    $rec_cf = mysqli_fetch_assoc ($res_cf);
-                    $filters = unserialize($rec_cf['filter']);
-                    $filters[$table] = $filter;
-                } else {
-                    $filters[$table] = $filter;
-                }
-                $sfilters = serialize($filters);
-                $sql_scf = "UPDATE ".DB_PREFIX."users SET filter='".$sfilters."' WHERE id=".$usrinfo['id'];
-                mysqli_query ($database,$sql_scf);
-            // v opačném případě zkontroluj, zda existuje odpovídající filtr v databázi, a pokud ano, načti jej    
-            } else {
-                if ($res_cf) {
-                    $rec_cf=mysqli_fetch_assoc ($res_cf);
-                    $filters = unserialize($rec_cf['filter']);
-                    if (!empty($filters)) {
-                        if (array_key_exists($table, $filters)) {
-                            $filter = $filters[$table];
-                        }
-                    }
-                }
-            }
-            return $filter;
-        }
+		$sfilters = serialize($filters);
+		$sql_scf = "UPDATE ".DB_PREFIX."users SET filter='".$sfilters."' WHERE id=".$usrinfo['id'];
+		mysqli_query ($database,$sql_scf);
+	// v opačném případě zkontroluj, zda existuje odpovídající filtr v databázi, a pokud ano, načti jej    
+	} else {
+		if ($res_cf) {
+			$rec_cf=mysqli_fetch_assoc ($res_cf);
+			$filters = unserialize($rec_cf['filter']);
+			if (!empty($filters)) {
+				if (array_key_exists($table, $filters)) {
+					$filter = $filters[$table];
+				}
+			}
+		}
+	}
+	return $filter;
+}
 ?>

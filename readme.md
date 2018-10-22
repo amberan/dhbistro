@@ -1,41 +1,46 @@
 # BISTRO
 
 ### News and Updates
+1.5.1 - trhani func_main na kusy, backup (INDEX>FULLTEXT)
 1.5 - PHP7 + MySQLi
 
-###TODO
-- vythnout bokem nastaveni DB 
-- vytrhnout bokem session management
-    - odpojit druhou login tabulku
-- vytrhnout bokem menu 
-- header a footer samostatne
-- reseni na upgrady databaze mezi verzemi
+### TODO
+- odpojit druhou login tabulku
+- reseni na upgrady databaze mezi verzemi - inc/backup.php
+- vytrhnout "aktuality" z indexu - wall
 - sprava obrazku a priloh
-    - zobrazovat nahledy obrazku
+    - zobrazovat nahledy obrazku - getfile
     - obrazky zobrazovat v novem okne, namisto stahovani
     - posterizace/solarizace.... symbolu
+- markdown wysiwyg editor https://github.com/nhnent/tui.editor#easy-wysiwyg-mode
+    - session counter na submitech
+- loop?
+    - runtime rework
+- cislovani tabulek pretahnout na nazvy 
 - wikimedia
     - audit bokem (audit, unauthorized)
     - vycisteni html tagu z textu v db (css styly, id, tagy) + konverze markdown syntaxe
         - https://github.com/Elephant418/Markdownify
         - https://github.com/thephpleague/html-to-markdown
-    - backup samostatne
-- markdown wysiwyg editor https://github.com/nhnent/tui.editor#easy-wysiwyg-mode
-    - session counter na submitech
-- loop?
-    - runtime rework
 
 ### OTAZKY
 - nw_unread nema zadny index, pritom se hleda podle uzivatele ?
 - jak se resi uzivatele
-- kde je audit
 - je neco co se da zahodit jako celek? zlobody? dostupnost?
 
 ### OBSAH
 soubor                  | obsah                                     | obsluhovany objekt
 --- | --- | ---
+inc/audit_trail.php     | generovani auditni stopy + zamezeni pristupu
+inc/backup.php          | backup mechanism
+inc/database.php        | database connection mechanism
+inc/footer.php          | fnc footer
 inc/func_main.php       | knihovna balastu
-inc/important.php       |
+inc/important.php       | heslo databaze
+inc/menu.php            | generovani menu
+inc/header.php          | fnc header
+inc/session.php         | obsluha session uzivatele
+inc/unread.php          | obsluha neprectenych objektu
 addar2c.php             | uprava hlaseni - report 2 case            | report / pripad
 addc2ar.php             | uprava hlaseni - case 2 report            | pripad / report
 addp2ar.php             | uprava hlaseni - person 2 report          | osoba / report
@@ -50,7 +55,7 @@ addsy2p.php             | prirazeni symbolu - person                | symbol / o
 addsymbols.php          | pridani symbolu                           | symboly
 audit.php               | audit
 cases.php               | LIST pripadu                              | pripady
-dashboard.php           | nastenka
+dashboard.php           | osobni nastenka
 doodle.php              | dostupnost
 editactrep.php          | uprava reportu                            | reporty
 editcase.php            | uprava pripadu                            | pripady
@@ -64,7 +69,7 @@ evilpoints.php          | zlobody
 getfile.php             | stazeni prilohy
 getportrait.php         | zobrazeni fotografie
 groups.php              | LIST skupiny                              | skupiny
-index.php               | 
+index.php               | sdilena nastenka
 login.php               | prihlasovaci stranka
 logout.php              |
 mapagents.php           | mapa agentu
