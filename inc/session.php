@@ -54,7 +54,7 @@
 	if (isset($usrinfo['timeout'])) {
 		$inactive = $usrinfo['timeout'];
 	} else {
-		$inactive = 600;
+		$inactive = $config['timeout'];
 	}
 	
  	if(isset($_SESSION['timeout']) ) {
@@ -66,11 +66,7 @@
 	
     $_SESSION['timeout'] = time();
     
-    	
- 
-  // ta parametrizaci na verzi je tam proto, ze na lokale to kdoviproc nefunguje	
-  // overeni prihlaseni, nutno zmenit jmeno souboru na ostre verzi
-  $free_pages = array ($page_prefix.'login.php');
+  $free_pages = array ($config['page_prefix'].'login.php');
   //if ($verze > 0) {
     $cropedUrlAll = explode("/", $_SERVER['PHP_SELF']);
     $cropedUrlLast = end($cropedUrlAll);

@@ -1,12 +1,19 @@
 # BISTRO
 
 ### News and Updates
-1.5.1 - trhani func_main na kusy, backup (INDEX>FULLTEXT)
-1.5 - PHP7 + MySQLi
+- **1.5.2**
+  $config[]
+  oprava pocitadla delky zpracovani stranky
+  procisteni HEAD
+  zaznam o zaloze do db pouze pokud se povede, nasledne kontrola na update script
+- **1.5.1**  
+  trhani func_main na kusy  
+  backup (INDEX>FULLTEXT)
+- **1.5**  
+  PHP7 + MySQLi
 
 ### TODO
 - odpojit druhou login tabulku
-- reseni na upgrady databaze mezi verzemi - inc/backup.php
 - vytrhnout "aktuality" z indexu - wall
 - sprava obrazku a priloh
     - zobrazovat nahledy obrazku - getfile
@@ -108,6 +115,7 @@ tasks.php               | LIST ukoly                                | ukoly
 users.php               | LIST uzivatele                            | uzivatele
 
 ### NOTES
+```php
    $file_extension = strtolower(substr(strrchr($filename,"."),1));
             switch ($file_extension) {
                 case "pdf": $ctype="application/pdf"; break;
@@ -121,4 +129,4 @@ users.php               | LIST uzivatele                            | uzivatele
                 case "jpe": case "jpeg":
                 case "jpg": $ctype="image/jpg"; break;
                 default: $ctype="application/force-download";
-            }
+            }```

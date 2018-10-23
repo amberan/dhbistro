@@ -1,13 +1,9 @@
 <?php
-
-	// vypis konce stranky
-	function pageEnd () {
-        echo '		<!-- Vygenerováno za '.(array_sum(explode(" ",microtime())) - $starttime).' vteřin -->';
+function pageEnd () {
+        global $starttime;
+        echo "\n                <!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 ?>
-  </div>
-  <!-- end of #wrapper -->
-  </body>
-  </html>
-  <?php
-      }
- ?>
+                </div>
+        </body>
+</html>
+<?php } ?>

@@ -1,20 +1,20 @@
-<?php
-	$mtime = microtime();
-	$mtime = explode(" ",$mtime);
-	$mtime = $mtime[1] + $mtime[0];
-	$starttime = $mtime;
+<?php $starttime = microtime(true);// (array_sum(explode(" ",microtime())));
+	
 	global $database,$point;
-	$page_prefix='';
-	$mazzarino_version='1.5.1'; // verze
+	
+	$config['page_prefix']='';
+	$config['version']='1.5.2'; 
+	$config['backup_folder'] = "files/backups/";
+	$config['timeout']=600;
 
-	require_once('inc/audit_trail.php');
-	require_once('inc/backup.php');
-	require_once('inc/database.php');
-	require_once('inc/footer.php');
-	require_once('inc/header.php');
-	require_once('inc/menu.php');
-	require_once('inc/session.php');
-	require_once('inc/unread.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'inc/audit_trail.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'inc/backup.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'inc/database.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'inc/footer.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'inc/header.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'inc/menu.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'inc/session.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'inc/unread.php');
   
 // vyhledani zaznamu v neprectenych zaznamech - cases, groups, persons, reports, symbols
 function searchRecord ($tablenum, $recordnum) {

@@ -1,11 +1,10 @@
 <?php
 //vytvoreni zalohy
 function backupDB () {
-	global $database,$dbname;
-	
+	global $database,$dbname,$config;
 	
 	function  zalohuj($db,$soubor=""){
-		global $database,$dbname;		 
+		global $database,$dbname,$config;		 
 
 		function  keys($prefix,$array){
 			if (empty($array)) { $pocet=0; } else {	$pocet = count ($array); }
@@ -28,7 +27,6 @@ function backupDB () {
 
 		$sql = mysqli_query ($database,"SHOW table status  FROM ".$db);
 		while ($data = mysqli_fetch_row ($sql)){
-
 			if (!isset($text)) { $text = '';}
 			$text .= (empty ($text)?"":"\n\n")."--\n-- Struktura tabulky ".$data[0]."\n--\n\n\n";
 			$text .= "CREATE TABLE `".$data[0]."`(\n";
@@ -52,7 +50,7 @@ function backupDB () {
 			$primary = keys("PRIMARY KEY",$PRI);
 			$unique = keys("UNIQUE KEY",$UNI);
 			//$mul = keys("INDEX",$MUL);
-			$mul = keys("FULLTEXT",$MUL); //FULLTEXT
+			$mul = keys("FULLTEXT",$MUL); 
 			$text .= $primary.$unique.$mul."\n) ENGINE=".$data[1]." COLLATE=".$data[14].";\n\n";
 			unset ($PRI,$UNI,$MUL);
 			$text .= "--\n-- Data tabulky ".$data[0]."\n--\n\n";
@@ -65,7 +63,6 @@ function backupDB () {
 					unset ($values);
 			}
 		}
-
 		if (!empty ($soubor)){
 			$fp = @fopen ($soubor,"w+");
 			$fw = @fwrite ($fp,$text);
@@ -73,28 +70,23 @@ function backupDB () {
 		}
 		return  $text;
 	}
-	
+
 	$sql_check="SELECT time FROM ".DB_PREFIX."backups ORDER BY time DESC LIMIT 1";
 	$fetch_check=mysqli_fetch_assoc (mysqli_query ($database,$sql_check));
 	$last_backup=$fetch_check['time'];
 	if (round($last_backup,-5)<round(time(),-5)) {
-		//mysqli_query ($database,"SET NAMES  'utf8'");
-		$xsoubor="backup".time().".sql";
-		$fsoubor="files/backups/".$xsoubor;
-		//zapisovat do db pred vytvorenim zalohy? nemelo by to byt naopak?
-		$sql_bck="INSERT INTO ".DB_PREFIX."backups VALUES('','".Time()."','".$xsoubor."')";  
-		mysqli_query ($database,$sql_bck);
-		zalohuj($dbname,$fsoubor);
+		$backup_file=$_SERVER['DOCUMENT_ROOT'].$config['backup_folder']."backup".time().".sql";
+		zalohuj($dbname,$backup_file);
+		//zapsat zalohu do db, pouze pokud je zaloha vetsi 4kB
+		if (filesize($backup_file) > 4096) {
+			$sql_bck="INSERT INTO ".DB_PREFIX."backups (time, file) VALUES(".Time().",'".$backup_file."')";  
+			mysqli_query ($database,$sql_bck);
+			//pokud existuje update soubor - spustit a prejmenovat
+			$update_file = $_SERVER['DOCUMENT_ROOT']."sql/update-".$config['version'].".php";
+			if (file_exists($update_file)) { 
+				require_once($update_file);
+			}
+		}
 	}
-
-
-
-/* dodelat mechaniku pro upgradovani databaze
-		po probehnuti zalohy  - doplnene o sloupec $mazzarino_version
-		if (sql/*.sql) 
-			run ($item)
-			rename  ($item, $item.TIMESTAMP)
-*/
-
 }
 ?>
