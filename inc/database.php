@@ -68,6 +68,14 @@ switch ($_SERVER["SERVER_NAME"]) {
         $barva='nh';
             $hlaseniV='Hlášení';
             $hlaseniM='hlášení';
+          break;
+    case 'nhtestbistro.talmahera.eu':
+        $dbusr=$dbname='nhtestbistro';
+        $verze=2;
+        $point='bludišťák';
+        $barva='nh';
+            $hlaseniV='Hlášení';
+            $hlaseniM='hlášení';
 }
     
 $lines = file($dbpasswordfile,FILE_IGNORE_NEW_LINES) or die("fail pwd");;
