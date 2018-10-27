@@ -16,7 +16,7 @@
 	require_once($_SERVER['DOCUMENT_ROOT'].'inc/session.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'inc/unread.php');
   
-// vyhledani zaznamu v neprectenych zaznamech - cases, groups, persons, reports, symbols
+// vyhledani zaznamu v neprectenych zaznamech - cases, groups, persons, reports, symbols,
 function searchRecord ($tablenum, $recordnum) {
 	global $database,$unread;
 	foreach ($unread as $record) {
