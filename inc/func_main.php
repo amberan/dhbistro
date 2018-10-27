@@ -4,17 +4,17 @@
 	
 	$config['page_prefix']='';
 	$config['version']='1.5.2'; 
-	$config['backup_folder'] = "files/backups/";
+	$config['backup_folder'] = "/files/backups/";
 	$config['timeout']=600;
 
-	require_once($_SERVER['DOCUMENT_ROOT'].'inc/audit_trail.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'inc/backup.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'inc/database.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'inc/footer.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'inc/header.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'inc/menu.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'inc/session.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'inc/unread.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/audit_trail.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/backup.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/database.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/footer.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/header.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/menu.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/session.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/unread.php');
   
 // vyhledani zaznamu v neprectenych zaznamech - cases, groups, persons, reports, symbols,
 function searchRecord ($tablenum, $recordnum) {

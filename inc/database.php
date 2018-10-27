@@ -1,7 +1,7 @@
 <?php
 
 define ('DB_PREFIX','nw_'); //prefix tabulek
-$dbpasswordfile = $_SERVER['DOCUMENT_ROOT']."inc/important.php";    // soubor s heslem k databazi
+$dbpasswordfile = $_SERVER['DOCUMENT_ROOT']."/inc/important.php";    // soubor s heslem k databazi
   
 switch ($_SERVER["SERVER_NAME"]) {
     case 'localhost':
