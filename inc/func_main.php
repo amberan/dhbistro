@@ -7,7 +7,7 @@ session_start();
 	$config['page_prefix']='';
 	$config['page_free']=array('login.php','logout.php');
 	$config['version']='1.5.3'; 
-	$config['backup_folder'] = "files/backups/";
+	$config['backup_folder'] = "/files/backups/";
 	$config['timeout']=600;
 	
 // *** GENERAL ALERT
@@ -16,18 +16,16 @@ if (isset($_SESSION['message'])) {  // and $_SERVER['REQUEST_URI'] == "/login.ph
 	unset($_SESSION['message']);
 }
 
-	require_once($_SERVER['DOCUMENT_ROOT'].'inc/audit_trail.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'inc/backup.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'inc/database.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'inc/debug.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'inc/footer.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'inc/header.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'inc/menu.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'inc/session.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'inc/unread.php');
-
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/audit_trail.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/backup.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/database.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/footer.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/header.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/menu.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/session.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/unread.php');
   
-// vyhledani zaznamu v neprectenych zaznamech - cases, groups, persons, reports, symbols
+// vyhledani zaznamu v neprectenych zaznamech - cases, groups, persons, reports, symbols,
 function searchRecord ($tablenum, $recordnum) {
 	global $database,$unread;
 	foreach ($unread as $record) {
@@ -160,6 +158,4 @@ function custom_Filter ($idtable, $idrecord = 0) {
 	}
 	return $filter;
 }
-
-xmp ($_SESSION);
 ?>

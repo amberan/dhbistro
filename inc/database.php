@@ -1,7 +1,7 @@
 <?php
 
 define ('DB_PREFIX','nw_'); //prefix tabulek
-$dbpasswordfile = $_SERVER['DOCUMENT_ROOT']."inc/important.php";    // soubor s heslem k databazi
+$dbpasswordfile = $_SERVER['DOCUMENT_ROOT']."/inc/important.php";    // soubor s heslem k databazi
   
 switch ($_SERVER["SERVER_NAME"]) {
     case 'localhost':
@@ -63,6 +63,14 @@ switch ($_SERVER["SERVER_NAME"]) {
     case 'saga':
         $dbusr='root';
         $dbname='NHBistro';
+        $verze=2;
+        $point='bludišťák';
+        $barva='nh';
+            $hlaseniV='Hlášení';
+            $hlaseniM='hlášení';
+          break;
+    case 'nhtestbistro.talmahera.eu':
+        $dbusr=$dbname='nhtestbistro';
         $verze=2;
         $point='bludišťák';
         $barva='nh';
