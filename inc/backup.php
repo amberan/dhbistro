@@ -77,15 +77,21 @@ function backupDB () {
 	if (round($last_backup,-5)<round(time(),-5)) {
 		$backup_file=$_SERVER['DOCUMENT_ROOT'].$config['backup_folder']."backup".time().".sql";
 		zalohuj($dbname,$backup_file);
-		//zapsat zalohu do db, pouze pokud je zaloha vetsi 4kB
+		//pouze pokud je zaloha vetsi 4kB
 		if (filesize($backup_file) > 4096) {
-			$sql_bck="INSERT INTO ".DB_PREFIX."backups (time, file) VALUES(".Time().",'".$backup_file."')";  
+			$sql_bck="INSERT INTO ".DB_PREFIX."backups (time, file, version) VALUES(".Time().",'".$backup_file."','".$config['version']."')";  
 			mysqli_query ($database,$sql_bck);
+			//optimizace tabulek
+			$tablelist_sql = mysqli_query ($database,"SHOW table status  FROM ".$db);
+			while ($tablelist = mysqli_fetch_row ($tablelist_sql)){
+				mysqli_query("OPTIMIZE TABLE ".$tablelist[0]);
+			}
 			//pokud existuje update soubor - spustit a prejmenovat
 			$update_file = $_SERVER['DOCUMENT_ROOT']."sql/update-".$config['version'].".php";
 			if (file_exists($update_file)) { 
 				require_once($update_file);
 			}
+
 		}
 	}
 }

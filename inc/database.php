@@ -76,4 +76,10 @@ $database = mysqli_connect ('localhost',$dbusr,$password,$dbname) or die (mysqli
   
 mysqli_query ($database,"SET NAMES 'utf8'");
 
+//SQL injection  mitigation
+foreach ($_REQUEST as $key => $value) {
+    $_REQUEST[$key] = mysqli_real_escape_string($database,$value);
+}
+
+
 ?>

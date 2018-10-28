@@ -1,18 +1,24 @@
 # BISTRO
 
 ### News and Updates
+- **1.5.3**
+	prepsan session management (odpojena tabulka loggedin)
+    vsechny inputy $_REQUEST osetreny na injection
 - **1.5.2**
-  $config[]
-  oprava pocitadla delky zpracovani stranky
-  procisteni HEAD
-  zaznam o zaloze do db pouze pokud se povede, nasledne kontrola na update script
+    $config[]
+    oprava pocitadla delky zpracovani stranky
+    procisteni HEAD
+    zaznam o zaloze do db pouze pokud se povede, nasledne kontrola na update script
 - **1.5.1**  
-  trhani func_main na kusy  
-  backup (INDEX>FULLTEXT)
+    trhani func_main na kusy  
+    backup (INDEX>FULLTEXT)
 - **1.5**  
-  PHP7 + MySQLi
+    PHP7 + MySQLi
 
 ### TODO
+- data processing musi byt includovany v func_main a nasledne smerovano do prehledu dane funkcionality
+- hashovat hesla
+- dopsat logiku pridavani indexu (sql/update)
 - odpojit druhou login tabulku
 - vytrhnout "aktuality" z indexu - wall
 - sprava obrazku a priloh
@@ -27,13 +33,12 @@
 - wikimedia
     - audit bokem (audit, unauthorized)
     - vycisteni html tagu z textu v db (css styly, id, tagy) + konverze markdown syntaxe
-        - https://github.com/Elephant418/Markdownify
         - https://github.com/thephpleague/html-to-markdown
 
 ### OTAZKY
-- nw_unread nema zadny index, pritom se hleda podle uzivatele ?
-- jak se resi uzivatele
+- nw_unread, nw_audit_traill nemaji zadny index, pritom jsou to ty nejvetsi tabulky
 - je neco co se da zahodit jako celek? zlobody? dostupnost?
+- odhlasuje se pri zmene browseru, ma se odhlasit pri zmene IP?
 
 ### OBSAH
 soubor                  | obsah                                     | obsluhovany objekt
@@ -129,4 +134,8 @@ users.php               | LIST uzivatele                            | uzivatele
                 case "jpe": case "jpeg":
                 case "jpg": $ctype="image/jpg"; break;
                 default: $ctype="application/force-download";
-            }```
+            }
+            
+    $password = hash("SHA512", $_POST["password"] . 'sůůůl');            
+    $password = mysql_real_escape_string((hash("SHA512", $_POST["password"] . 'sůůůl'));
+```

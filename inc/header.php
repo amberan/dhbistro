@@ -1,6 +1,6 @@
 <?php
 function pageStart ($title) {
-    global $database,$loggedin, $usrinfo, $config;
+    global $database, $usrinfo, $config;
     header("Cache-Control: no-cache, no-store, must-revalidate");
     header("Pragma: no-cache");
     header("Expires: -1");
@@ -12,7 +12,7 @@ function pageStart ($title) {
         <meta name="Author" content="Karel Křemel, David Ambeřan Maleček, Jakub Ethan Kraft" />
         <meta name="Copyright" content="2006 - 2018" />
         <meta name="description" content="city larp management system" />
-        <title><?php echo (($loggedin)?$usrinfo['login'].' @ ':'')?>BIStro <?php echo $config['version'];?> | <?php echo $title;?></title>
+        <title><?php echo (($usrinfo)?$usrinfo['login'].' @ ':'')?>BIStro <?php echo $config['version'];?> | <?php echo $title;?></title>
         <link rel="icon" href="favicon.ico" type="image/x-icon" />
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
         <!--[if lt IE 7]><style type="text/css">body {behavior: url('./inc/csshover.htc');}</style><![endif]-->

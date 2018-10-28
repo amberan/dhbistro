@@ -1,5 +1,7 @@
 <?php
 
+
+
 // zaznam do tabulek neprectenych
 function unreadRecords ($tablenum,$rid) {
 	global $database,$usrinfo, $_POST;
@@ -49,6 +51,11 @@ function deleteAllUnread ($tablenum,$rid) {
 	}
 }
 
-
+// natazeni tabulky neprectenych zaznamu do promenne
+if (isset($_SESSION['sid'])) {
+		$sql_r="SELECT * FROM ".DB_PREFIX."unread WHERE iduser=".$usrinfo['id'];
+		$res_r=mysqli_query ($database,$sql_r);
+		while ($unread[]=mysqli_fetch_array ($res_r));
+}
 
 ?>
