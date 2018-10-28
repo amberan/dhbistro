@@ -8,7 +8,7 @@ session_start();
 	$config['page_free']=array('login.php','logout.php');
 	$config['version']='1.5.3'; 
 	$config['backup_folder'] = "/files/backups/";
-	$config['timeout']=30;
+	$config['timeout']=600;
 
 // *** GENERAL ALERT
 if (($_SESSION['message']) != null) { 
