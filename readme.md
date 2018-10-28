@@ -2,18 +2,18 @@
 
 ### News and Updates
 - **1.5.3**
-	prepsan session management (odpojena tabulka loggedin)
-    vsechny inputy $_REQUEST osetreny na injection
-	db to $conf[]
-	debug 
+	prepsan session management (odpojena tabulka loggedin)  
+    vsechny inputy $_REQUEST osetreny na injection  
+	db to $conf[]  
+	debug   
 - **1.5.2**
-    $config[]
-    oprava pocitadla delky zpracovani stranky
-    procisteni HEAD
-    zaznam o zaloze do db pouze pokud se povede, nasledne kontrola na update script
+    $config[]  
+    oprava pocitadla delky zpracovani stranky  
+    procisteni HEAD  
+    zaznam o zaloze do db pouze pokud se povede, nasledne kontrola na update script  
 - **1.5.1**  
     trhani func_main na kusy  
-    backup (INDEX>FULLTEXT)
+    backup (INDEX>FULLTEXT)  
 - **1.5**  
     PHP7 + MySQLi
 
