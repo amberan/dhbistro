@@ -1,5 +1,5 @@
 <?php
-	require_once ('./inc/func_main.php');
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 	pageStart ('Nový uživatel');
 	mainMenu (2);
 	sparklets ('<a href="./users.php">uživatelé</a> &raquo; <strong>nový uživatel</strong>');

@@ -1,5 +1,5 @@
 <?php
-require_once ('./inc/func_main.php');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 pageStart ('Nová poznámka');
 mainMenu (4);
 switch ($_REQUEST['idtable']) {

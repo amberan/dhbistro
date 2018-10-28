@@ -1,5 +1,5 @@
 <?php
-	require_once ('./inc/func_main.php');
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 	if (isset($_POST['reportid'])) {
 		$autharray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT iduser FROM ".DB_PREFIX."reports WHERE id=".$_POST['reportid']));
 		$author=$autharray['iduser'];

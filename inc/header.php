@@ -15,7 +15,7 @@ function pageStart ($title) {
         <title><?php echo (($usrinfo)?$usrinfo['login'].' @ ':'')?>BIStro <?php echo $config['version'];?> | <?php echo $title;?></title>
         <link rel="icon" href="favicon.ico" type="image/x-icon" />
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-        <!--[if lt IE 7]><style type="text/css">body {behavior: url('./inc/csshover.htc');}</style><![endif]-->
+        <!--[if lt IE 7]><style type="text/css">body {behavior: url($_SERVER['DOCUMENT_ROOT'].'/inccsshover.htc');}</style><![endif]-->
         <link media="all" rel="stylesheet" type="text/css" href="./inc/styly.css" />
         <link media="print" rel="stylesheet" type="text/css" href="./css/print.css" />
         <script src="http://code.jquery.com/jquery-1.12.2.min.js"></script>

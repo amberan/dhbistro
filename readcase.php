@@ -1,5 +1,5 @@
 <?php
-	require_once ('./inc/func_main.php');
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 	if (is_numeric($_REQUEST['rid'])) {
 		$sql_a="SELECT * FROM ".DB_PREFIX."c2s WHERE ".DB_PREFIX."c2s.idsolver=".$usrinfo['id']." AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid'];
 		$res_a=mysqli_query ($database,$sql_a);

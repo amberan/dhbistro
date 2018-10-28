@@ -1,5 +1,5 @@
 <?php
-	require_once ('./inc/func_main.php');
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
         if (!$usrinfo['right_power']) {
             unauthorizedAccess(8, 1, 0, 0);
         }

@@ -1,5 +1,5 @@
 <?php
-	require_once ('./inc/func_main.php');
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 	pageStart ('Přiřazení k hlášení');
 	mainMenu (5);
         $custom_Filter = custom_Filter(22);

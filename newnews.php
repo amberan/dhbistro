@@ -1,5 +1,5 @@
 <?php
-	require_once ('./inc/func_main.php');
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 	pageStart ('Nová aktualita');
 	mainMenu (1);
 	sparklets ('<a href="./index.php">aktuality</a> &raquo; <strong>nová aktualita</strong>');

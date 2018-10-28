@@ -1,5 +1,5 @@
 <?php
-	require_once ('./inc/func_main.php');
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 		pageStart ('Časová dostupnost');
 		mainMenu (4);
 		sparklets ('<a href="./doode.php">Časová dostupnost</a>');

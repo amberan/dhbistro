@@ -1,5 +1,5 @@
 <?php
-	require_once ('./inc/func_main.php');
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 	pageStart ('Nová skupina');
 	mainMenu (3);
 	sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>nová skupina</strong>');

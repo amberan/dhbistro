@@ -1,6 +1,5 @@
 <?php
-        require_once ('./inc/func_main.php');
-        backupDB();
+        require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
         if (isset($_SESSION['sid'])) {
                 auditTrail(5, 1, 0);
         }

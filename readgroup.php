@@ -1,5 +1,5 @@
 <?php
-	require_once ('./inc/func_main.php');
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 	if (is_numeric($_REQUEST['rid'])) {
 		$res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."groups WHERE id=".$_REQUEST['rid']);
 		if ($rec_g=mysqli_fetch_assoc ($res)) {

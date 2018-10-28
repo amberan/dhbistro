@@ -1,5 +1,5 @@
 <?php
-	require_once ('./inc/func_main.php');
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 	if (is_numeric ($_REQUEST['idfile'])) {
 		if ($usrinfo['right_power']) {
 			$sql="SELECT mime, uniquename AS 'soubor', originalname AS 'nazev', size FROM ".DB_PREFIX."data WHERE id=".$_REQUEST['idfile'];

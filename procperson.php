@@ -1,5 +1,5 @@
 <?php
-	require_once ('./inc/func_main.php');
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 	if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete']) && $usrinfo['right_text']) {
 	  auditTrail(1, 11, $_REQUEST['delete']);
 	  mysqli_query ($database,"UPDATE ".DB_PREFIX."persons SET deleted=1 WHERE id=".$_REQUEST['delete']);

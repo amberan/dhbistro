@@ -1,5 +1,5 @@
 <?php
-	require_once ('./inc/func_main.php');
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 
 if (isset($_POST['addtocase'])) {
 	auditTrail(3, 6, $_POST['caseid']);

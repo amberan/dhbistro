@@ -1,5 +1,5 @@
 <?php
-require_once ('./inc/func_main.php');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 $reportarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid'])); // načte data z DB
 $type=intval($reportarray['type']); // určuje typ hlášení
 	$typestring=(($type==1)?'výjezd':(($type==2)?'výslech':'?')); //odvozuje slovní typ hlášení

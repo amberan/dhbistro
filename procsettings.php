@@ -1,5 +1,5 @@
 <?php
-	require_once ('./inc/func_main.php');
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 	if (isset($_POST['editsettings']) && !is_numeric($_POST['timeout'])) {
 		pageStart ('Uložení změn');
 		mainMenu (6);

@@ -1,5 +1,5 @@
 <?php
-	require_once ('./inc/func_main.php');
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 	pageStart ('Nové hlášení');
 	mainMenu (4);
 	$type=mysqli_real_escape_string ($database,$_GET['type']); // nacitani typu hlaseni z prikazove radky prohlizece (zakladni ochrana proti SQL injection)

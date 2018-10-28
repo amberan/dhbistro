@@ -1,13 +1,13 @@
 <?php
-	require_once ('./inc/func_main.php');
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 	auditTrail(4, 1, 0);
 	pageStart ('Hlášení');
 	mainMenu (5);
         $custom_Filter = custom_Filter(4);
         if ($_SERVER["SERVER_NAME"] == 'enigma.dhbistro.cz') {
-            sparklets ('<strong>'.$hlaseniM.'</strong>','<a href="newactrep.php?type=1">nová zakázka na amulet</a>; <a href="newactrep.php?type=2">nová zakázka na informace</a>');
+            sparklets ('<strong>'.$text['hlaseniM'].'</strong>','<a href="newactrep.php?type=1">nová zakázka na amulet</a>; <a href="newactrep.php?type=2">nová zakázka na informace</a>');
         } else {
-            sparklets ('<strong>'.$hlaseniM.'</strong>','<a href="newactrep.php?type=1">nové hlášení z výjezdu</a>; <a href="newactrep.php?type=2">nové hlášení z výslechu</a>');
+            sparklets ('<strong>'.$text['hlaseniM'].'</strong>','<a href="newactrep.php?type=1">nové hlášení z výjezdu</a>; <a href="newactrep.php?type=2">nové hlášení z výslechu</a>');
         }
 // zpracovani filtru
 	if (!isset($custom_Filter['type'])) {
@@ -94,7 +94,7 @@
 	}
 	// filtr samotny
 	function filter () {
-	  global $database,$f_cat, $f_sort, $f_stat, $f_my, $f_conn, $fsql_conn2, $f_sec, $f_new, $f_archiv, $usrinfo, $hlaseniM;
+	  global $database,$f_cat, $f_sort, $f_stat, $f_my, $f_conn, $fsql_conn2, $f_sec, $f_new, $f_archiv, $usrinfo, $text;
           echo '<div id="filter-wrapper"><form action="reports.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -103,13 +103,13 @@
 	<option value="1"'.(($f_stat==1)?' selected="selected"':'').'>rozpracovaná</option>
 	<option value="2"'.(($f_stat==2)?' selected="selected"':'').'>dokončená</option>
 	<option value="3"'.(($f_stat==3)?' selected="selected"':'').'>analyzovaná</option>
-</select> '.$hlaseniM.' <select name="type">
+</select> '.$text['hlaseniM'].' <select name="type">
 	<option value="0"'.(($f_cat==0)?' selected="selected"':'').'>všechna</option>
 	<option value="1"'.(($f_cat==1)?' selected="selected"':'').'>z výjezdu</option>
 	<option value="2"'.(($f_cat==2)?' selected="selected"':'').'>z výslechu</option>
 </select> a seřadit je podle <select name="sort" >
-	<option value="1"'.(($f_sort==1)?' selected="selected"':'').'>data '.$hlaseniM.' sestupně</option>
-	<option value="2"'.(($f_sort==2)?' selected="selected"':'').'>data '.$hlaseniM.' vzestupně</option>
+	<option value="1"'.(($f_sort==1)?' selected="selected"':'').'>data '.$text['hlaseniM'].' sestupně</option>
+	<option value="2"'.(($f_sort==2)?' selected="selected"':'').'>data '.$text['hlaseniM'].' vzestupně</option>
 	<option value="3"'.(($f_sort==3)?' selected="selected"':'').'>jména autora vzestupně</option>
 	<option value="4"'.(($f_sort==4)?' selected="selected"':'').'>jména autora sestupně</option>
 	<option value="5"'.(($f_sort==5)?' selected="selected"':'').'>data výjezdu vzestupně</option>
@@ -181,7 +181,7 @@
                 echo '<div class="news_div '.(($rec['type']==1)?'game_news':'system_news').((searchRecord(4,$rec['id']))?' unread_record':'').'">
                 <div class="news_head"><strong><a href="readactrep.php?rid='.$rec['id'].'&amp;hidenotes=0&amp;truenames=0">'.StripSlashes($rec['label']).'</a></strong>';
                   if (($usrinfo['right_text']) || ($usrinfo['id']==$rec['riduser'] && $rec['status']<1)) {
-                        echo '	 | <td><a href="editactrep.php?rid='.$rec['id'].'">upravit</a> | <a href="procactrep.php?delete='.$rec['id'].'&amp;table=4" onclick="'."return confirm('Opravdu smazat &quot;".$hlaseniM."&quot; &quot;".StripSlashes($rec['label'])."&quot;?');".'">smazat</a></td>';
+                        echo '	 | <td><a href="editactrep.php?rid='.$rec['id'].'">upravit</a> | <a href="procactrep.php?delete='.$rec['id'].'&amp;table=4" onclick="'."return confirm('Opravdu smazat &quot;".$text['hlaseniM']."&quot; &quot;".StripSlashes($rec['label'])."&quot;?');".'">smazat</a></td>';
                   } else {
                         echo '   | <td><a href="newnote.php?rid='.$rec['id'].'&idtable=8">přidat poznámku</a></td>';
                         }

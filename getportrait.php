@@ -1,5 +1,5 @@
 <?php
-	require_once ('./inc/func_main.php');
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 	if (isset($_REQUEST['rid']) && is_numeric ($_REQUEST['rid'])) {
     	$getres=mysqli_query ($database,"SELECT portrait FROM ".DB_PREFIX."persons WHERE ".(($usrinfo['right_power'])?'':' secret=0 AND ')." id=".$_REQUEST['rid']);
     	if ($getrec=mysqli_fetch_assoc ($getres)) {

@@ -1,10 +1,10 @@
 <?php
 //vytvoreni zalohy
 function backupDB () {
-	global $database,$dbname,$config;
+	global $database,$config;
 	
-	function  zalohuj($db,$soubor=""){
-		global $database,$dbname,$config;		 
+	function  zalohuj($soubor=""){
+		global $database,$config;		 
 
 		function  keys($prefix,$array){
 			if (empty($array)) { $pocet=0; } else {	$pocet = count ($array); }
@@ -25,7 +25,7 @@ function backupDB () {
 
 		}
 
-		$sql = mysqli_query ($database,"SHOW table status  FROM ".$db);
+		$sql = mysqli_query ($database,"SHOW table status  FROM ".$config['dbdatabase']);
 		while ($data = mysqli_fetch_row ($sql)){
 			if (!isset($text)) { $text = '';}
 			$text .= (empty ($text)?"":"\n\n")."--\n-- Struktura tabulky ".$data[0]."\n--\n\n\n";
@@ -76,17 +76,17 @@ function backupDB () {
 	$last_backup=$fetch_check['time'];
 	if (round($last_backup,-5)<round(time(),-5)) {
 		$backup_file=$_SERVER['DOCUMENT_ROOT'].$config['backup_folder']."backup".time().".sql";
-		zalohuj($dbname,$backup_file);
+		zalohuj($backup_file);
 		//pouze pokud je zaloha vetsi 4kB
 		if (filesize($backup_file) > 4096) {
 			$sql_bck="INSERT INTO ".DB_PREFIX."backups (time, file, version) VALUES(".Time().",'".$backup_file."','".$config['version']."')";  
 			mysqli_query ($database,$sql_bck);
 			//optimizace tabulek
-			$tablelist_sql = mysqli_query ($database,"SHOW table status  FROM ".$db);
-			while ($tablelist = mysqli_fetch_row ($tablelist_sql)){
-				mysqli_query("OPTIMIZE TABLE ".$tablelist[0]);
+			$tablelist_sql = mysqli_query($database,"SHOW table status FROM ".$config['dbdatabase']);
+			while ($tablelist = mysqli_fetch_row($tablelist_sql)){
+				mysqli_query($database,"OPTIMIZE TABLE ".$tablelist[0]);
 			}
-			//pokud existuje update soubor - spustit a prejmenovat
+			// pokud existuje update soubor - spustit a prejmenovat
 			$update_file = $_SERVER['DOCUMENT_ROOT']."sql/update-".$config['version'].".php";
 			if (file_exists($update_file)) { 
 				require_once($update_file);

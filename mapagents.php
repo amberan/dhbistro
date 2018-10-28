@@ -1,5 +1,5 @@
 <?php
-	require_once ('./inc/func_main.php');
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 		pageStart ('Mapa agentů');
 		mainMenu (4);
 		sparklets ('<a href="./mapagents.php">Mapa agentů</a>');

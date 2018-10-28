@@ -4,6 +4,8 @@
 - **1.5.3**
 	prepsan session management (odpojena tabulka loggedin)
     vsechny inputy $_REQUEST osetreny na injection
+	db to $conf[]
+	debug 
 - **1.5.2**
     $config[]
     oprava pocitadla delky zpracovani stranky
@@ -19,7 +21,6 @@
 - data processing musi byt includovany v func_main a nasledne smerovano do prehledu dane funkcionality
 - hashovat hesla
 - dopsat logiku pridavani indexu (sql/update)
-- odpojit druhou login tabulku
 - vytrhnout "aktuality" z indexu - wall
 - sprava obrazku a priloh
     - zobrazovat nahledy obrazku - getfile
@@ -46,6 +47,7 @@ soubor                  | obsah                                     | obsluhovan
 inc/audit_trail.php     | generovani auditni stopy + zamezeni pristupu
 inc/backup.php          | backup mechanism
 inc/database.php        | database connection mechanism
+inc/debug.php			| debug messaging
 inc/footer.php          | fnc footer
 inc/func_main.php       | knihovna balastu
 inc/important.php       | heslo databaze

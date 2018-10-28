@@ -1,5 +1,5 @@
 <?php
-	require_once ('./inc/func_main.php');
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 	if (isset($_REQUEST['delallnew'])) {
 	  mysqli_query ($database,"DELETE FROM ".DB_PREFIX."unread WHERE iduser = ".$usrinfo['id']);
 	  Header ('Location: '.$_REQUEST['delallnew']);

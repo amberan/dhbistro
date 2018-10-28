@@ -1,5 +1,5 @@
 <?php
-	require_once ('./inc/func_main.php');
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 	auditTrail(3, 1, 0);
 	pageStart ('Skupiny');
 	mainMenu (3);

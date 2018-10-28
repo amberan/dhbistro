@@ -1,5 +1,5 @@
 <?php
-	require_once ('./inc/func_main.php');
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 	if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete'])) {
           if (!$usrinfo['right_power']) {
                 unauthorizedAccess(8, 1, 0, 0);

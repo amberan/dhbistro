@@ -1,5 +1,5 @@
 <?php
-	require_once ('./inc/func_main.php');
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	  $res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."persons WHERE id=".$_REQUEST['rid']);

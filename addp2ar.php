@@ -1,5 +1,5 @@
 <?php
-	require_once ('./inc/func_main.php');
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 	// následuje načtení dat reportu a jejich uložení do vybranných proměných 
 	$reportarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid'])); // načte data z DB
 	$type=intval($reportarray['type']); // určuje typ hlášení

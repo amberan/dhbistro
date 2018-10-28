@@ -1,5 +1,5 @@
 <?php
-	require_once ('./inc/func_main.php');
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 	if (is_numeric($_REQUEST['rid'])) {
 		$check=mysqli_fetch_assoc (mysqli_query ($database,"SELECT ".DB_PREFIX."users.idperson AS 'aid'
 											FROM ".DB_PREFIX."users, ".DB_PREFIX."reports
