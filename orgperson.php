@@ -51,9 +51,9 @@
 			
 ?>
 <div id="obsah">
-<fieldset><legend><h1>Organizační úprava osoby: <?php echo(StripSlashes($rec_p['surname']).', '.StripSlashes($rec_p['name'])); ?></h1></legend>
+<fieldset><h1><legend>Organizační úprava osoby: <?php echo(StripSlashes($rec_p['surname']).', '.StripSlashes($rec_p['name'])); ?></legend></h1>
 	<form action="procperson.php" method="post" id="inputform" enctype="multipart/form-data">
-		<fieldset><legend><h2>Základní údaje</h2></legend>
+		<fieldset><h2><legend>Základní údaje</legend></h2>
 			<div id="info">
 				<div class="clear">&nbsp;</div>
 				<div>

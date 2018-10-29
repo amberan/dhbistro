@@ -108,7 +108,7 @@
 		<span><strong>Vyhotovil: </strong><?php echo(StripSlashes($author)); ?> | </span>
 		<span><strong>Dne: </strong><?php echo(Date ('d. m. Y',$rec_ar['datum'])); ?> ]</span>
 	</div>
-	<fieldset><legend><h2>Obecné informace</h2></legend>
+	<fieldset><h2><legend>Obecné informace</legend></h2>
 	<div id="info">
 		<?php if ($rec_ar['secret']==1) echo '<h2>TAJNÉ</h2>'?>
                 <?php if ($rec_ar['deleted']==1) echo '<h2>SMAZANÝ ZÁZNAM</h2>'?>
@@ -207,23 +207,23 @@
 	</fieldset>
 	
 	<fieldset>
-		<legend><h2>Shrnutí</h2></legend>
+		<h2><legend>Shrnutí</legend></h2>
 		<div class="field-text"><?php echo(StripSlashes($rec_ar['summary'])); ?></div>
 	</fieldset>
 	<fieldset>
-		<legend><h2>Možné dopady</h2></legend>
+		<h2><legend>Možné dopady</legend></h2>
 		<div class="field-text"><?php echo(StripSlashes($rec_ar['impacts'])); ?></div>
 	</fieldset>
 	<fieldset>
-		<legend><h2>Podrobný průběh</h2></legend>
+		<h2><legend>Podrobný průběh</legend></h2>
 		<div class="field-text"><?php echo(StripSlashes($rec_ar['details'])); ?></div>
 	</fieldset>
 	<fieldset>
-		<legend><h2>Energetická náročnost</h2></legend>
+		<h2><legend>Energetická náročnost</legend></h2>
 		<div class="field-text"><?php echo(StripSlashes($rec_ar['energy'])); ?></div>
 	</fieldset>
 	<fieldset>
-		<legend><h2>Počáteční vstupy</h2></legend>
+		<h2><legend>Počáteční vstupy</legend></h2>
 		<div class="field-text"><?php echo(StripSlashes($rec_ar['inputs'])); ?></div>
 	</fieldset>
 

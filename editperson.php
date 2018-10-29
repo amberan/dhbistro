@@ -20,10 +20,10 @@
 	};
 	-->
 	</script>
-<fieldset id="ramecek"><legend><h1>Úprava osoby: <?php echo(StripSlashes($rec_p['surname']).', '.StripSlashes($rec_p['name'])); ?></h1></legend>
+<fieldset id="ramecek"><h1><legend>Úprava osoby: <?php echo(StripSlashes($rec_p['surname']).', '.StripSlashes($rec_p['name'])); ?></legend></h1>
 	<p id="top-text">Portréty nahrávejte pokud možno ve velikosti 100x130 bodů, symboly ve velikosti 100x100 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen portréty, o rozmazané postavy nebude nouze v přílohách. Symboly rovněž nahrávejte jasně rozeznatelné.</p>
 	<form action="procperson.php" method="post" id="inputform" enctype="multipart/form-data">
-		<fieldset><legend><h2>Základní údaje</h2></legend>
+		<fieldset><h2><legend>Základní údaje</legend></h2>
 		<?php if($rec_p['portrait']==NULL){ ?><img src="#" alt="portrét chybí" title="portrét chybí" id="portraitimg" class="noname"/>
 		<?php }else{ ?><img src="getportrait.php?rid=<?php echo($_REQUEST['rid']); ?>" alt="<?php echo(StripSlashes($rec_p['name']).' '.StripSlashes($rec_p['surname'])); ?>" id="portraitimg" />
 		<?php } ?>
@@ -109,7 +109,7 @@
 			<!-- end of #info -->
 		</fieldset>
 		<!-- náseduje popis osoby -->
-		<fieldset><legend><h2>Popis osoby</h2></legend>
+		<fieldset><h2><legend>Popis osoby</legend></h2>
 			<div class="field-text">
 				<textarea cols="80" rows="30" name="contents" id="contents"><?php echo StripSlashes($rec_p['contents']); ?></textarea>
 			</div>
@@ -122,7 +122,7 @@
 </fieldset>
 
 	<div id="change-groups" class="otherform-wrap">
-		<fieldset><legend><h2>Přiřazení skupiny</h2></legend>
+		<fieldset><h2><legend>Přiřazení skupiny</legend></h2>
 		<p>Osobě můžete přiřadit skupiny, do kterých patří. Opačnou akci lze provést u skupiny, kde přiřazujete pro změnu osoby dané skupině. Akce jsou si rovnocenné a je tedy nutná pouze jedna z nich.</p>
 		<form action="procperson.php" method="post" class="otherform">
 		<?php
@@ -155,7 +155,7 @@
 	<!-- end of #change-groups .otherform-wrap -->
 
 	<!-- následuje seznam přiložených souborů -->
-	<fieldset><legend><h3>Přiložené soubory</h3></legend>
+	<fieldset><h3><legend>Přiložené soubory</legend></h3>
 		<strong><em>K osobě je možné nahrát neomezené množství souborů, ale velikost jednoho souboru je omezena na 2 MB.</em></strong>
 		<?php //generování seznamu přiložených souborů
 			if ($usrinfo['right_power']) {
@@ -214,7 +214,7 @@
 	</div>
 	<!-- end of #new-file .otherform-wrap -->
 	
-	<fieldset><legend><h3>Poznámky</h3></legend>
+	<fieldset><h3><legend>Poznámky</legend></h3>
 		<span class="poznamka-edit-buttons"><a class="new" href="newnote.php?rid=<?php echo $_REQUEST['rid']; ?>&amp;idtable=1&amp;s=<?php echo $rec_p['secret']; ?>" title="nová poznámka"><span class="button-text">nová poznámka</span></a><em style="font-size:smaller;"> (K případu si můžete připsat kolik chcete poznámek.)</em></span>
 		<!-- následuje seznam poznámek -->
 		<?php // generování poznámek

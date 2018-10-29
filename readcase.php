@@ -43,7 +43,7 @@ if (is_numeric($_REQUEST['rid'])) {
 ?>
 <div id="obsah">
 	<h1><?php echo StripSlashes($rec['title']); ?></h1>
-	<fieldset><legend><h2>Obecné informace</h2></legend>
+	<fieldset><h2><legend>Obecné informace</legend></h2>
 		<div id="info">
 			<?php if ($rec['secret']==1) echo '<h2>TAJNÉ</h2>'?>
 			<?php if ($rec['deleted']==1) echo '<h2>SMAZANÝ ZÁZNAM</h2>'?>
@@ -108,7 +108,7 @@ if (is_numeric($_REQUEST['rid'])) {
 		<!-- end of #info -->
 	</fieldset>
 	
-	<fieldset><legend><h2>Popis</h2></legend>
+	<fieldset><h2><legend>Popis</legend></h2>
 		<div class="field-text"><?php echo StripSlashes($rec['contents']); ?></div>
 	</fieldset>
 

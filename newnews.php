@@ -6,7 +6,7 @@
 ?>
 
 <div id="obsah">
-<fieldset><legend><h2>Nová aktualita</h2></legend>
+<fieldset><h2><legend>Nová aktualita</legend></h2>
 	<form action="procnews.php" method="post" id="inputform">
 	<div id="info">
 		<h3><label for="nadpis">Nadpis:</label></h3>
@@ -18,7 +18,7 @@
 				<option value="2">systémová</option>
 			</select>
 		<div class="clear">&nbsp;</div>
-		<fieldset><legend><h3>Obsah</h3></legend>
+		<fieldset><h3><legend>Obsah</legend></h3>
   		<div class="field-text">
 		<textarea cols="140" rows="50" name="obsah" id="obsah"></textarea>
 		</div>

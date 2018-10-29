@@ -12,7 +12,7 @@
 ?>
 <div id="obsah">
 <form action="procuser.php" method="post" id="inputform" class="inputform">
-	<fieldset><legend><h2>Základní údaje</h2></legend>
+	<fieldset><h2><legend>Základní údaje</legend></h2>
 	<div>
 	  <h3><label for="login" id="login">Login:</label></h3>
 	  <input type="text" name="login" id="login" value="<?php echo StripSlashes($rec['login']); ?>" />
@@ -42,7 +42,7 @@
 	</fieldset>
 </form>
 
-<fieldset><legend><h2>Nedodělky</h2></legend>
+<fieldset><h2><legend>Nedodělky</legend></h2>
 	<h3>Rozpracovaná nedokončená hlášení: <?php
 				$sql_r="SELECT ".DB_PREFIX."reports.secret AS 'secret', ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id' FROM ".DB_PREFIX."reports WHERE ".DB_PREFIX."reports.iduser=".$rec['id']." AND ".DB_PREFIX."reports.status=0 AND ".DB_PREFIX."reports.deleted=0 ORDER BY ".DB_PREFIX."reports.label ASC";
 				$res_r=mysqli_query ($database,$sql_r);

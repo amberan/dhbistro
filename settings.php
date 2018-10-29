@@ -26,12 +26,12 @@ function pwdcheck(form)
 	-->
 	</script>
 <form action="procsettings.php" method="post" name="inputform" id="inputform" onSubmit="return pwdcheck(this);">
-<fieldset id="ramecek"><legend><h1>Uživatel: <?php echo $usrinfo['login']; ?></h1></legend>
+<fieldset id="ramecek"><h1><legend>Uživatel: <?php echo $usrinfo['login']; ?></legend></h1>
 	<p>
 		<strong>Nepoužívejte svá obvyklá hesla</strong>, protože v tomto systému se hesla ukládají nezakódovaná.<br/>
 		<strong>Dají se v databázi přímo přečíst</strong>, takže si vymyslete něco čistě pro hru.
 	</p>
-	<fieldset><legend><h2>Základní&nbsp;nastavení</h2></legend>
+	<fieldset><h2><legend>Základní&nbsp;nastavení</legend></h2>
 	<div id="info">
 		<h3><label for="timeout">Timeout:</label></h3>	
 	  	<input type="text" name="timeout" id="timeout" value="<?php echo $usrinfo['timeout']?>"/>
@@ -50,7 +50,7 @@ function pwdcheck(form)
 	<!-- end of #info -->
 	</fieldset>
 
-	<fieldset><legend><h2>Aktuální plán:</h2></legend>
+	<fieldset><h2><legend>Aktuální plán:</legend></h2>
 		<textarea cols="140" rows="300" name="plan" id="plan"><?php echo StripSlashes($usrinfo['plan'])?></textarea>
 	</fieldset>
 

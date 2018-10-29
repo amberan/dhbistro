@@ -7,7 +7,7 @@
 ?>
 
 <div id="obsah">
-<fieldset><legend><h2>Obsah nástěnky</h2></legend>
+<fieldset><h2><legend>Obsah nástěnky</legend></h2>
 	<form action="procother.php" method="post" id="inputform">
 	<textarea cols="140" rows="50" name="contents" id="contents">
 	<div class="field-text">

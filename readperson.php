@@ -37,7 +37,7 @@
 			?>			
 <div id="obsah">
 	<h1><?php echo(StripSlashes($rec['surname']).', '.StripSlashes($rec['name'])); ?></h1>
-	<fieldset><legend><h2>Základní údaje</h2></legend>
+	<fieldset><h2><legend>Základní údaje</legend></h2>
 		<?php if($rec['portrait']==NULL){ ?><img src="#" alt="portrét chybí" title="portrét chybí" id="portraitimg" class="noname"/>
 		<?php }else{ ?><img src="getportrait.php?rid=<?php echo($_REQUEST['rid']); ?>" alt="<?php echo(StripSlashes($rec['name']).' '.StripSlashes($rec['surname'])); ?>" id="portraitimg" />
 		<?php } ?>
@@ -131,13 +131,13 @@
 	</fieldset>
 <!-- náseduje popis osoby -->
 	<fieldset>
-		<legend><h2>Popis osoby</h2></legend>
+		<h2><legend>Popis osoby</legend></h2>
 		<div class="field-text"><?php echo (StripSlashes($rec['contents'])); ?></div>
 	</fieldset>
 	
 <!-- násedují přiřazené případy a hlášení -->
 	<fieldset>
-		<legend><h2>Hlášení a případy</h2></legend>
+		<h2><legend>Hlášení a případy</legend></h2>
 		<h3>Figuruje v těchto případech: </h3><p><?php
 				if ($usrinfo['right_power']) {
 					$sql_c="SELECT ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."c2p.iduser FROM ".DB_PREFIX."cases, ".DB_PREFIX."c2p WHERE ".DB_PREFIX."c2p.idcase=".DB_PREFIX."cases.id AND ".DB_PREFIX."c2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."cases.deleted=0 ORDER BY ".DB_PREFIX."cases.title ASC";

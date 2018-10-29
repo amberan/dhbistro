@@ -59,7 +59,7 @@
 // dashboard
 ?>
 <div id="dashboard">
-<fieldset><legend><h2>Osobní nástěnka</h2></legend>
+<fieldset><h2><legend>Osobní nástěnka</legend></h2>
         <table><tr><td>
         <h3>Rozpracovaná nedokončená hlášení: <?php
                                 $sql_r="SELECT ".DB_PREFIX."reports.secret AS 'secret', ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id' FROM ".DB_PREFIX."reports WHERE ".DB_PREFIX."reports.iduser=".$usrinfo['id']." AND ".DB_PREFIX."reports.status=0 AND ".DB_PREFIX."reports.deleted=0 ORDER BY ".DB_PREFIX."reports.label ASC";
