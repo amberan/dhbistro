@@ -172,5 +172,5 @@ function custom_Filter ($idtable, $idrecord = 0) {
 }
 echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 
-xmp ($_SESSION);
+debug ($_SESSION,"session");
 ?>
