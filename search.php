@@ -42,14 +42,13 @@ $search = mysqli_real_escape_string ($database,$searchedfor);
 
 /* v pripade prazdneho vyhledavani nezobrazi vysledek */        
         if (is_null($searchedfor)) {
-    goto searchend;
-}
-
+/* nothing to do */
+		} elseif (strlen($searchedfor) < 4) {
 /* v pripade vyrazu kratsiho nez 4 znaky zobrazi chybovou hlasku a preskoci zobrazeni vysledku */
-if (strlen($searchedfor) < 4) {
+
     echo '<h2>Výraz "'.$searchedfor.'" je příliš krátký, zadejte výraz o délce alespoň 4 znaky.</h2>';
-    goto searchend;
-}
+    
+} else {
         
 ?>       
 
@@ -441,5 +440,6 @@ if ($usrinfo['right_power']) {
 	  echo '</tbody>
 </table>'; 
 
-searchend:
+			}
+pageEnd();
 ?>

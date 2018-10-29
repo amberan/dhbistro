@@ -1,12 +1,14 @@
 # BISTRO
 
 ### News and Updates
-- **1.5.3**
+- **1.5.4**  
+	removal of all GOTO  
+- **1.5.3**  
 	prepsan session management (odpojena tabulka loggedin)  
     vsechny inputy $_REQUEST osetreny na injection  
 	db to $conf[]  
 	debug   
-- **1.5.2**
+- **1.5.2**  
     $config[]  
     oprava pocitadla delky zpracovani stranky  
     procisteni HEAD  

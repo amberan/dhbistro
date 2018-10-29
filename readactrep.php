@@ -231,7 +231,7 @@
 	
 <!-- následuje seznam přiložených symbolů -->
 	<?php //skryti symbolů 
-	if ($hs==1) goto hidesymbols; ?>
+	if ($hs!=1){ ?>
 	<fieldset><legend><strong>Přiložené symboly</strong></legend>
 	<?php //generování seznamu přiložených symbolů
 	$sql_s="SELECT ".DB_PREFIX."symbol2all.idsymbol AS 'id' FROM ".DB_PREFIX."symbol2all, ".DB_PREFIX."symbols WHERE ".DB_PREFIX."symbol2all.idsymbol = ".DB_PREFIX."symbols.id AND ".DB_PREFIX."symbols.assigned=0 AND ".DB_PREFIX."symbol2all.idrecord=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4 AND ".DB_PREFIX."symbols.deleted=0";
@@ -256,7 +256,7 @@
 		
 	</fieldset>
 	<!-- konec seznamu přiložených symbolů -->
-	<?php hidesymbols: ?>	
+<?php } ?>	
 		
 <!-- následuje seznam přiložených souborů -->
 	<?php //generování seznamu přiložených souborů
@@ -284,7 +284,7 @@
 		}
 	// konec seznamu přiložených souborů ?>
 <?php //skryti poznamek 
-if ($hn==1) goto hidenotes; ?>
+if ($hn!=1) { ?>
 <!-- následuje seznam poznámek -->
 	<?php // generování poznámek
 		if ($usrinfo['right_power']) {
@@ -323,7 +323,7 @@ if ($hn==1) goto hidenotes; ?>
 	</fieldset>
 	<?php }
 	// konec poznámek ?>
-<?php hidenotes: ?>	
+<?php } ?>	
 </div>
 <!-- end of #obsah -->
 <?php

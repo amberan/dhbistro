@@ -1,5 +1,6 @@
 <?php 
-$starttime = microtime(true);
+$time = $starttime = microtime(true);
+$mem = memory_get_usage();
 session_start();
 	
 	global $database,$text;
@@ -15,15 +16,24 @@ if (($_SESSION['message']) != null) {
 	echo "\n<script>alert('".$_SESSION['message']."')</script>\n";
 	unset($_SESSION['message']);
 }
-	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/debug.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/debug.php');  
+	echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/audit_trail.php');
+	echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/backup.php');
+	echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/database.php');
+	echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/footer.php');
+	echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/header.php');
+	echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/menu.php');
+	echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/session.php');
+	echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/unread.php');
+	echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 
 	backupDB();
 
@@ -160,5 +170,7 @@ function custom_Filter ($idtable, $idrecord = 0) {
 	}
 	return $filter;
 }
+echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
+
 xmp ($_SESSION);
 ?>

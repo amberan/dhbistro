@@ -155,7 +155,7 @@
 	// konec seznamu přiložených souborů ?>
 
 <?php //skryti poznamek 
-if ($hn==1) goto hidenotes; ?>
+if ($hn!=1) { ?>
 <!-- následuje seznam poznámek -->
 	<?php // generování poznámek
 		if ($usrinfo['right_power']) {
@@ -195,7 +195,7 @@ if ($hn==1) goto hidenotes; ?>
 	<?php }
 	// konec poznámek 
 	?>
-<?php hidenotes: ?>	
+<?php } ?>	
 </div>
 <!-- end of #obsah -->
 <?php

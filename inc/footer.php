@@ -1,9 +1,15 @@
 <?php
 function pageEnd () {
-        global $starttime;
-        echo "\n                <!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
+        global $starttime,$time,$mem;
 ?>
                 </div>
         </body>
 </html>
-<?php } ?>
+<?php
+   echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
+
+  xmp(array(
+	'memory' => (memory_get_usage() - $mem) / (1024 * 1024),
+	'seconds' => microtime(TRUE) - $time
+  ));
+} ?>

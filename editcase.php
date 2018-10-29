@@ -26,8 +26,7 @@
 ?>
 <?php if (($rec['secret']==1)&&(!$usrinfo['right_power'])&&(!$rec_a['iduser'])) {
 	echo '<div id="obsah"><p>Hezký pokus.</p></div>';
-	goto end;
-	}
+	} else {
 	?>
 <div id="obsah">
 	<script type="text/javascript">
@@ -220,7 +219,7 @@
 </div>
 <!-- end of #obsah -->
 <?php
-	end:
+	}
 		} else {
                   pageStart ('Případ neexistuje');
                   mainMenu (3);

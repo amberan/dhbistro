@@ -1,6 +1,5 @@
 <?php
 
-   
 function mainMenu ($index) {
 	global $database,$usrinfo,$config,$text;
 	$currentfile = $_SERVER["PHP_SELF"];

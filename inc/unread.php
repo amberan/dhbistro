@@ -1,7 +1,5 @@
 <?php
 
-
-
 // zaznam do tabulek neprectenych
 function unreadRecords ($tablenum,$rid) {
 	global $database,$usrinfo, $_POST;
