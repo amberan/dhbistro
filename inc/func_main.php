@@ -9,33 +9,26 @@ session_start();
 	$config['page_free']=array('login.php','logout.php');
 	$config['version']='1.5.3'; 
 	$config['backup_folder'] = "/files/backups/";
-	$config['timeout']=600;
+	$config['timeout']=599;
 
 // *** GENERAL ALERT
-if (($_SESSION['message']) != null) { 
+if (isset($_SESSION['message']) and $_SESSION['message'] != null) { 
 	echo "\n<script>alert('".$_SESSION['message']."')</script>\n";
 	unset($_SESSION['message']);
 }
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/debug.php');  
-	echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/audit_trail.php');
-	echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/backup.php');
-	echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/database.php');
-	echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/footer.php');
-	echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/header.php');
-	echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/menu.php');
-	echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/session.php');
-	echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/unread.php');
-	echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
+	echo "\n<!-- require_once za 	".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 
 	backupDB();
+	echo "\n<!-- backupDB za 		".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 
 // vyhledani zaznamu v neprectenych zaznamech - cases, groups, persons, reports, symbols,
 function searchRecord ($tablenum, $recordnum) {
@@ -47,6 +40,8 @@ function searchRecord ($tablenum, $recordnum) {
     }
 	return false;
 }
+
+echo "\n<!-- searchRecord za 	".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 
 // ziskani autora zaznamu - audit, dashboard, edituser, index, readcase, readperson, readsymbol, tasks
 function getAuthor ($recid,$trn) {
@@ -77,6 +72,7 @@ function getAuthor ($recid,$trn) {
 		}
 	}
 }
+echo "\n<!-- getAuthor za 		".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 
 function safeInput ($input) {
 	$replaced=Array ('"');
@@ -84,7 +80,8 @@ function safeInput ($input) {
 	$output=str_replace ($replaced,$replacers,$input);
 	return $output;
 }
-	
+echo "\n<!-- safeInput za 		".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
+
 function resize_Image ($img,$max_width,$max_height) {
 	$size=GetImageSize($img);
 	$width=$size[0];
@@ -116,7 +113,8 @@ function resize_Image ($img,$max_width,$max_height) {
 	ImageDestroy($src);
 	return $dst;
 }
-        
+echo "\n<!-- resize_image za 	".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
+
 // funkce pro ukládání fitru do databáza a načítání filtru z databáze        
 function custom_Filter ($idtable, $idrecord = 0) {
 	global $database,$usrinfo;
@@ -170,7 +168,9 @@ function custom_Filter ($idtable, $idrecord = 0) {
 	}
 	return $filter;
 }
-echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
+echo "\n<!-- customFilter za 	".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
+
+echo "\n<!-- func_main za 		".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 
 debug ($_SESSION,"session");
 ?>

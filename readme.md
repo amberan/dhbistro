@@ -3,6 +3,7 @@
 ### News and Updates
 - **1.5.4**  
 	removal of all GOTO  
+	html compliance
 - **1.5.3**  
 	prepsan session management (odpojena tabulka loggedin)  
     vsechny inputy $_REQUEST osetreny na injection  
@@ -20,6 +21,7 @@
     PHP7 + MySQLi
 
 ### TODO
+- omezit audit na nejaky rozumne vykreslitelny pocet
 - data processing musi byt includovany v func_main a nasledne smerovano do prehledu dane funkcionality
 - hashovat hesla
 - dopsat logiku pridavani indexu (sql/update)

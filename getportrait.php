@@ -8,8 +8,9 @@
       		header('Expires: 0');
       		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
       		header('Pragma: public');
-      		$getf=FOpen ("./files/portraits/".$getrec['portrait'],"r");
-      		FPassThru ($getf);
+      		if (filesize("./files/portraits/".$getrec['portrait'])) {
+				$getf=FOpen ("./files/portraits/".$getrec['portrait'],"r");
+      			FPassThru ($getf);}
     	}
   	}  
   	if (isset($_REQUEST['srid']) && is_numeric ($_REQUEST['srid'])) {
@@ -20,8 +21,9 @@
   			header('Expires: 0');
   			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
   			header('Pragma: public');
-  			$getf=FOpen ("./files/symbols/".$getrec['symbol'],"r");
-  			FPassThru ($getf);
+		  if (filesize("./files/symbols/".$getrec['symbol'])) {
+				$getf=FOpen ("./files/symbols/".$getrec['symbol'],"r");
+  				FPassThru ($getf);}
   		}
   	}
   	if (isset($_REQUEST['nrid']) && is_numeric ($_REQUEST['nrid'])) {
@@ -32,7 +34,8 @@
   			header('Expires: 0');
   			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
   			header('Pragma: public');
-  			$getf=FOpen ("./files/symbols/".$getrec['symbol'],"r");
-  			FPassThru ($getf);
+			  if (filesize("./files/symbols/".$getrec['symbol'])) {
+				$getf=FOpen ("./files/symbols/".$getrec['symbol'],"r");
+  			FPassThru ($getf);}
   		}
   	}

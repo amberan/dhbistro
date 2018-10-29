@@ -17,24 +17,6 @@ function pageStart ($title) {
 	<!--[if lt IE 7]><style type="text/css">body {behavior: url('<?php echo $_SERVER['DOCUMENT_ROOT']; ?>/inc/csshover.htc');}</style><![endif]-->
 	<link media="all" rel="stylesheet" type="text/css" href="./inc/styly.css" />
 	<link media="print" rel="stylesheet" type="text/css" href="./css/print.css" />
-	<script src="http://code.jquery.com/jquery-1.12.2.min.js"></script>
-	<script src="./js/mrFixit.js"></script>
-	<script src="./js/tinymce/tinymce.min.js"></script>
-	<script>
-	tinymce.init({
-		selector: "textarea",
-		theme: "modern",
-		entity_encoding: "raw",
-		plugins: [
-			"advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
-			"searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
-			"save table contextmenu directionality template paste textcolor"
-		],
-		toolbar: "undo redo | styleselect fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | forecolor backcolor table removeformat",
-		menubar: false,
-		toolbar_items_size: 'small',
-	});
-	</script>
 </head>
 <body>
 	<div id="wrapper">
