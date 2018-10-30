@@ -161,6 +161,7 @@ function custom_Filter ($idtable, $idrecord = 0) {
 	}
 	return $filter;
 }
-
-debug ($_SESSION,"session");
+if (substr(basename($_SERVER['REQUEST_URI']), 0, strpos(basename($_SERVER['REQUEST_URI']), '?')) != "getportrait.php" AND substr(basename($_SERVER['REQUEST_URI']), 0, strpos(basename($_SERVER['REQUEST_URI']), '?')) != "getfile.php") { 
+	debug ($_SESSION,"session");
+}
 ?>

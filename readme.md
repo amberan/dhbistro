@@ -6,6 +6,7 @@
 	html validni
 	presunuti vsech css souboru do css adresare
 	backup fallback na starou db
+	odstraneni debug dat z priloh
 - **1.5.3**  
 	prepsan session management (odpojena tabulka loggedin)  
     vsechny inputy $_REQUEST osetreny na injection  
