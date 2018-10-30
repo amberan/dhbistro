@@ -25,10 +25,8 @@ if (isset($_SESSION['message']) and $_SESSION['message'] != null) {
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/menu.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/session.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/unread.php');
-	echo "\n<!-- require_once za 	".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 
 	backupDB();
-	echo "\n<!-- backupDB za 		".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 
 // vyhledani zaznamu v neprectenych zaznamech - cases, groups, persons, reports, symbols,
 function searchRecord ($tablenum, $recordnum) {
@@ -40,8 +38,6 @@ function searchRecord ($tablenum, $recordnum) {
     }
 	return false;
 }
-
-echo "\n<!-- searchRecord za 	".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 
 // ziskani autora zaznamu - audit, dashboard, edituser, index, readcase, readperson, readsymbol, tasks
 function getAuthor ($recid,$trn) {
@@ -72,7 +68,6 @@ function getAuthor ($recid,$trn) {
 		}
 	}
 }
-echo "\n<!-- getAuthor za 		".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 
 function safeInput ($input) {
 	$replaced=Array ('"');
@@ -80,7 +75,6 @@ function safeInput ($input) {
 	$output=str_replace ($replaced,$replacers,$input);
 	return $output;
 }
-echo "\n<!-- safeInput za 		".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 
 function resize_Image ($img,$max_width,$max_height) {
 	$size=GetImageSize($img);
@@ -113,7 +107,6 @@ function resize_Image ($img,$max_width,$max_height) {
 	ImageDestroy($src);
 	return $dst;
 }
-echo "\n<!-- resize_image za 	".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 
 // funkce pro ukládání fitru do databáza a načítání filtru z databáze        
 function custom_Filter ($idtable, $idrecord = 0) {
@@ -168,9 +161,6 @@ function custom_Filter ($idtable, $idrecord = 0) {
 	}
 	return $filter;
 }
-echo "\n<!-- customFilter za 	".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
-
-echo "\n<!-- func_main za 		".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 
 debug ($_SESSION,"session");
 ?>

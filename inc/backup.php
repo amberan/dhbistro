@@ -92,7 +92,7 @@ function backupDB () {
 				mysqli_query($database,"OPTIMIZE TABLE ".$tablelist[0]);
 			}
 			// pokud existuje update soubor - spustit a prejmenovat
-			$update_file = $_SERVER['DOCUMENT_ROOT']."sql/update-".$config['version'].".php";
+			$update_file = $_SERVER['DOCUMENT_ROOT']."/sql/update-".$config['version'].".php";
 			if (file_exists($update_file)) { 
 				require_once($update_file);
 			}

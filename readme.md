@@ -23,6 +23,7 @@
     PHP7 + MySQLi
 
 ### TODO
+- komprimovat backup
 - omezit audit na nejaky rozumne vykreslitelny pocet
 - data processing musi byt includovany v func_main a nasledne smerovano do prehledu dane funkcionality
 - hashovat hesla
@@ -129,6 +130,9 @@ tasks.php               | LIST ukoly                                | ukoly
 users.php               | LIST uzivatele                            | uzivatele
 
 ### NOTES
+http://nhtestbistro.talmahera.eu/
+ftp://www.talmahera.eu/nhtestbistro.talmahera.eu/error_log
+
 ```php
    $file_extension = strtolower(substr(strrchr($filename,"."),1));
             switch ($file_extension) {
