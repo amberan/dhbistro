@@ -73,7 +73,7 @@ switch ($_SERVER["SERVER_NAME"]) {
         $config['dbuser']='root';
         $config['dbdatabase']='NHBistro';
         $config['verze']=2;
-        $config['barva']='nh';
+        $config['barva']='local';
 		$config['debug']=true;
 
 		$text['point']='bludišťák';
@@ -83,7 +83,7 @@ switch ($_SERVER["SERVER_NAME"]) {
     case 'nhtestbistro.talmahera.eu':
         $config['dbuser']=$config['dbdatabase']='nhtestbistro';
         $config['verze']=2;
-        $config['barva']='nh';
+        $config['barva']='test';
 		$config['debug']=true;
 		
 		$text['point']='bludišťák';

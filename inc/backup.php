@@ -79,7 +79,12 @@ function backupDB () {
 		zalohuj($backup_file);
 		//pouze pokud je zaloha vetsi 4kB
 		if (filesize($backup_file) > 4096) {
-			$sql_bck="INSERT INTO ".DB_PREFIX."backups (time, file, version) VALUES(".Time().",'".$backup_file."','".$config['version']."')";  
+			$check_sql=mysqli_query($database,"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."users' and column_name='sid'");
+			if(mysqli_num_rows($check_sql)== 0) { //old backup 1.5.2>
+				$sql_bck="INSERT INTO ".DB_PREFIX."backups (time, file) VALUES(".Time().",'".$backup_file."')";  
+			} else { //new backup 1.5.2<
+				$sql_bck="INSERT INTO ".DB_PREFIX."backups (time, file, version) VALUES(".Time().",'".$backup_file."','".$config['version']."')";  
+			}
 			mysqli_query ($database,$sql_bck);
 			//optimizace tabulek
 			$tablelist_sql = mysqli_query($database,"SHOW table status FROM ".$config['dbdatabase']);

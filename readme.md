@@ -2,12 +2,14 @@
 
 ### News and Updates
 - **1.5.4**  
-	removal of all GOTO  
-	html compliance
+	odstraneni vsech GOTO  
+	html validni
+	presunuti vsech css souboru do css adresare
+	backup fallback na starou db
 - **1.5.3**  
 	prepsan session management (odpojena tabulka loggedin)  
     vsechny inputy $_REQUEST osetreny na injection  
-	db to $conf[]  
+	konfigurace db presunuta do $conf[]  
 	debug   
 - **1.5.2**  
     $config[]  
@@ -39,6 +41,7 @@
     - audit bokem (audit, unauthorized)
     - vycisteni html tagu z textu v db (css styly, id, tagy) + konverze markdown syntaxe
         - https://github.com/thephpleague/html-to-markdown
+- pri neuspesnem loginu se vypisuji chyby do logu
 
 ### OTAZKY
 - nw_unread, nw_audit_traill nemaji zadny index, pritom jsou to ty nejvetsi tabulky
