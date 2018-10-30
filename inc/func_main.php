@@ -8,7 +8,9 @@ session_start();
 	$config['page_prefix']='';
 	$config['page_free']=array('login.php','logout.php');
 	$config['version']='1.5.3'; 
-	$config['backup_folder'] = "/files/backups/";
+	$config['folder_backup'] = "/files/backups/";
+	$config['folder_portrait'] = "/files/portraits/";
+	$config['folder_symbol'] = "/files/symbols/";
 	$config['timeout']=599;
 
 // *** GENERAL ALERT
