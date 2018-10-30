@@ -89,6 +89,16 @@ switch ($_SERVER["SERVER_NAME"]) {
 		$text['point']='bludišťák';
 		$text['hlaseniV']='Hlášení';
 		$text['hlaseniM']='hlášení';
+	break;
+    case 'dhtestbistro.talmahera.eu':
+        $config['dbuser']=$config['dbdatabase']='dhtestbistro';
+        $config['verze']=3;
+        $config['barva']='test';
+		$config['debug']=true;
+		
+		$text['point']='zlobod';
+		$text['hlaseniV']='Hlášení';
+		$text['hlaseniM']='hlášení';
 }
     
 $lines = file($dbpasswordfile,FILE_IGNORE_NEW_LINES) or die("fail pwd");;
