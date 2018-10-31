@@ -5,7 +5,7 @@ $dbpasswordfile = $_SERVER['DOCUMENT_ROOT']."/inc/important.php";    // soubor s
   
 switch ($_SERVER["SERVER_NAME"]) {
     case 'localhost':
-        $config['dbusr']=$config['dbname']='dhbistrocz';
+        $config['dbuser']=$config['dbdatabase']='dhbistrocz';
         $config['verze']=0;
         $config['barva']='local';
 
@@ -100,9 +100,9 @@ switch ($_SERVER["SERVER_NAME"]) {
 		$text['hlaseniV']='Hlášení';
 		$text['hlaseniM']='hlášení';
 }
-    
 $lines = file($dbpasswordfile,FILE_IGNORE_NEW_LINES) or die("fail pwd");;
 $password = $lines[2];
+
 $database = mysqli_connect ('localhost',$config['dbuser'],$password,$config['dbdatabase']) or die (mysqli_connect_errno()." ".mysqli_connect_error());
   
 mysqli_query ($database,"SET NAMES 'utf8'");
