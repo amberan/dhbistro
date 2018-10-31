@@ -48,7 +48,7 @@
 ### OTAZKY
 - nw_unread, nw_audit_traill nemaji zadny index, pritom jsou to ty nejvetsi tabulky
 - je neco co se da zahodit jako celek? zlobody? dostupnost?
-- odhlasuje se pri zmene browseru, ma se odhlasit pri zmene IP?
+- potrebujeme $config['timeout'] - nestaci udaj v DB?
 
 ### OBSAH
 soubor                  | obsah                                     | obsluhovany objekt

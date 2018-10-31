@@ -5,13 +5,15 @@ session_start();
 	
 	global $database,$text;
 	
-	$config['page_prefix']='';
-	$config['page_free']=array('login.php','logout.php');
-	$config['version']='1.5.3'; 
-	$config['folder_backup'] = "/files/backups/";
-	$config['folder_portrait'] = "/files/portraits/";
-	$config['folder_symbol'] = "/files/symbols/";
-	$config['timeout']=599;
+	define ('DB_PREFIX','nw_'); // prefix tabulek
+	$config['dbpass'] = "/inc/important.php"; // soubor s heslem k databazi
+	$config['page_prefix']=''; // uri cesta mezi domenou a adresarem bistra
+	$config['page_free']=array('login.php','logout.php'); // stranky dostupne bez prihlaseni
+	$config['version']='1.5.3';  // verze bistra
+	$config['folder_backup'] = "/files/backups/"; // adresar pro generovani zaloh
+	$config['folder_portrait'] = "/files/portraits/"; // adresar s portrety
+	$config['folder_symbol'] = "/files/symbols/"; // adresar se symboly
+	$config['timeout']=599; //session ttl
 
 // *** GENERAL ALERT
 if (isset($_SESSION['message']) and $_SESSION['message'] != null) { 
@@ -163,6 +165,7 @@ function custom_Filter ($idtable, $idrecord = 0) {
 	}
 	return $filter;
 }
+
 if (substr(basename($_SERVER['REQUEST_URI']), 0, strpos(basename($_SERVER['REQUEST_URI']), '?')) != "getportrait.php" AND substr(basename($_SERVER['REQUEST_URI']), 0, strpos(basename($_SERVER['REQUEST_URI']), '?')) != "getfile.php") { 
 	debug ($_SESSION,"session");
 }

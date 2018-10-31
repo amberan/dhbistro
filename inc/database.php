@@ -1,8 +1,5 @@
 <?php
 
-define ('DB_PREFIX','nw_'); //prefix tabulek
-$dbpasswordfile = $_SERVER['DOCUMENT_ROOT']."/inc/important.php";    // soubor s heslem k databazi
-  
 switch ($_SERVER["SERVER_NAME"]) {
     case 'localhost':
         $config['dbusr']=$config['dbname']='dhbistrocz';
@@ -112,7 +109,7 @@ switch ($_SERVER["SERVER_NAME"]) {
 		$text['hlaseniM']='hlášení';
 }
     
-$lines = file($dbpasswordfile,FILE_IGNORE_NEW_LINES) or die("fail pwd");;
+$lines = file($_SERVER['DOCUMENT_ROOT'].$config['dbpass'],FILE_IGNORE_NEW_LINES) or die("fail pwd");;
 $password = $lines[2];
 $database = mysqli_connect ('localhost',$config['dbuser'],$password,$config['dbdatabase']) or die (mysqli_connect_errno()." ".mysqli_connect_error());
   
