@@ -64,8 +64,9 @@ function backupDB () {
 			}
 		}
 		if (!empty ($soubor)){
+			$gztext = gzencode($text, 9);
 			$fp = @fopen ($soubor,"w+");
-			$fw = @fwrite ($fp,$text);
+			$fw = @fwrite ($fp,$gztext);
 			@fclose ($fp);
 		}
 		return  $text;
@@ -75,7 +76,7 @@ function backupDB () {
 	$fetch_check=mysqli_fetch_assoc (mysqli_query ($database,$sql_check));
 	$last_backup=$fetch_check['time'];
 	if (round($last_backup,-5)<round(time(),-5)) {
-		$backup_file=$_SERVER['DOCUMENT_ROOT'].$config['backup_folder']."backup".time().".sql";
+		$backup_file=$_SERVER['DOCUMENT_ROOT'].$config['folder_backup']."backup".time().".sql.gz";
 		zalohuj($backup_file);
 		//pouze pokud je zaloha vetsi 4kB
 		if (filesize($backup_file) > 4096) {

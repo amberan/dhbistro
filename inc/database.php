@@ -79,7 +79,18 @@ switch ($_SERVER["SERVER_NAME"]) {
 		$text['point']='bludišťák';
 		$text['hlaseniV']='Hlášení';
 		$text['hlaseniM']='hlášení';
-          break;
+		  break;
+	case 'bistro.alembiq.net':
+		$config['dbuser']='aliunde';
+		$config['dbdatabase']='test';
+		$config['verze']=2;
+		$config['barva']='test';
+		$config['debug']=true;
+		
+		$text['point']='bludišťák';
+		$text['hlaseniV']='Hlášení';
+		$text['hlaseniM']='hlášení';
+		break;		  
     case 'nhtestbistro.talmahera.eu':
         $config['dbuser']=$config['dbdatabase']='nhtestbistro';
         $config['verze']=2;

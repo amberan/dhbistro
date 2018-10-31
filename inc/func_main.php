@@ -8,7 +8,9 @@ session_start();
 	$config['page_prefix']='';
 	$config['page_free']=array('login.php','logout.php');
 	$config['version']='1.5.3'; 
-	$config['backup_folder'] = "/files/backups/";
+	$config['folder_backup'] = "/files/backups/";
+	$config['folder_portrait'] = "/files/portraits/";
+	$config['folder_symbol'] = "/files/symbols/";
 	$config['timeout']=599;
 
 // *** GENERAL ALERT
@@ -161,6 +163,7 @@ function custom_Filter ($idtable, $idrecord = 0) {
 	}
 	return $filter;
 }
-
-debug ($_SESSION,"session");
+if (substr(basename($_SERVER['REQUEST_URI']), 0, strpos(basename($_SERVER['REQUEST_URI']), '?')) != "getportrait.php" AND substr(basename($_SERVER['REQUEST_URI']), 0, strpos(basename($_SERVER['REQUEST_URI']), '?')) != "getfile.php") { 
+	debug ($_SESSION,"session");
+}
 ?>

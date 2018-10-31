@@ -6,6 +6,8 @@
 	html validni
 	presunuti vsech css souboru do css adresare
 	backup fallback na starou db
+	odstraneni debug dat z priloh
+	zaloha je komprimovana
 - **1.5.3**  
 	prepsan session management (odpojena tabulka loggedin)  
     vsechny inputy $_REQUEST osetreny na injection  
@@ -23,7 +25,6 @@
     PHP7 + MySQLi
 
 ### TODO
-- komprimovat backup
 - omezit audit na nejaky rozumne vykreslitelny pocet
 - data processing musi byt includovany v func_main a nasledne smerovano do prehledu dane funkcionality
 - hashovat hesla
