@@ -1,18 +1,18 @@
 # BISTRO
 
 ### News and Updates
-- **1.5.4**  
+- **1.5.4 IN PROGRESS**  
 	odstraneni vsech GOTO  
-	html validni
-	presunuti vsech css souboru do css adresare
-	backup fallback na starou db
-	odstraneni debug dat z priloh
-	zaloha je komprimovana
+	html validni  
+	presunuti vsech css souboru do css adresare  
+	backup fallback na starou db  
+	odstraneni debug dat z priloh  
+	zaloha je komprimovana  
 - **1.5.3**  
 	prepsan session management (odpojena tabulka loggedin)  
     vsechny inputy $_REQUEST osetreny na injection  
 	konfigurace db presunuta do $conf[]  
-	debug   
+	debug  
 - **1.5.2**  
     $config[]  
     oprava pocitadla delky zpracovani stranky  
@@ -22,33 +22,7 @@
     trhani func_main na kusy  
     backup (INDEX>FULLTEXT)  
 - **1.5**  
-    PHP7 + MySQLi
-
-### TODO
-- omezit audit na nejaky rozumne vykreslitelny pocet
-- data processing musi byt includovany v func_main a nasledne smerovano do prehledu dane funkcionality
-- hashovat hesla
-- dopsat logiku pridavani indexu (sql/update)
-- vytrhnout "aktuality" z indexu - wall
-- sprava obrazku a priloh
-    - zobrazovat nahledy obrazku - getfile
-    - obrazky zobrazovat v novem okne, namisto stahovani
-    - posterizace/solarizace.... symbolu
-- markdown wysiwyg editor https://github.com/nhnent/tui.editor#easy-wysiwyg-mode
-    - session counter na submitech
-- loop?
-    - runtime rework
-- cislovani tabulek pretahnout na nazvy 
-- wikimedia
-    - audit bokem (audit, unauthorized)
-    - vycisteni html tagu z textu v db (css styly, id, tagy) + konverze markdown syntaxe
-        - https://github.com/thephpleague/html-to-markdown
-- pri neuspesnem loginu se vypisuji chyby do logu
-
-### OTAZKY
-- nw_unread, nw_audit_traill nemaji zadny index, pritom jsou to ty nejvetsi tabulky
-- je neco co se da zahodit jako celek? zlobody? dostupnost?
-- potrebujeme $config['timeout'] - nestaci udaj v DB?
+    PHP7 + MySQLi  
 
 ### OBSAH
 soubor                  | obsah                                     | obsluhovany objekt
@@ -130,26 +104,12 @@ symbols.php             | LIST symboly                              | symboly
 tasks.php               | LIST ukoly                                | ukoly
 users.php               | LIST uzivatele                            | uzivatele
 
-### NOTES
+### LINKS
+https://dhbistro.leankit.com/board/24275378
+
 http://nhtestbistro.talmahera.eu/
 ftp://www.talmahera.eu/nhtestbistro.talmahera.eu/error_log
+http://dhtestbistro.talmahera.eu/
+ftp://www.talmahera.eu/dhtestbistro.talmahera.eu/error_log
 
-```php
-   $file_extension = strtolower(substr(strrchr($filename,"."),1));
-            switch ($file_extension) {
-                case "pdf": $ctype="application/pdf"; break;
-                case "exe": $ctype="application/octet-stream"; break;
-                case "zip": $ctype="application/zip"; break;
-                case "doc": $ctype="application/msword"; break;
-                case "xls": $ctype="application/vnd.ms-excel"; break;
-                case "ppt": $ctype="application/vnd.ms-powerpoint"; break;
-                case "gif": $ctype="image/gif"; break;
-                case "png": $ctype="image/png"; break;
-                case "jpe": case "jpeg":
-                case "jpg": $ctype="image/jpg"; break;
-                default: $ctype="application/force-download";
-            }
-            
-    $password = hash("SHA512", $_POST["password"] . 'sůůůl');            
-    $password = mysql_real_escape_string((hash("SHA512", $_POST["password"] . 'sůůůl'));
-```
+
