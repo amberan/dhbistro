@@ -25,12 +25,8 @@ function pwdcheck(form)
 	};
 	-->
 	</script>
-<form action="procsettings.php" method="post" name="inputform" id="inputform" onSubmit="return pwdcheck(this);">
+<form action="settings.php" method="post" name="inputform" id="inputform" onSubmit="return pwdcheck(this);">
 <fieldset id="ramecek"><h1><legend>Uživatel: <?php echo $usrinfo['login']; ?></legend></h1>
-	<p>
-		<strong>Nepoužívejte svá obvyklá hesla</strong>, protože v tomto systému se hesla ukládají nezakódovaná.<br/>
-		<strong>Dají se v databázi přímo přečíst</strong>, takže si vymyslete něco čistě pro hru.
-	</p>
 	<fieldset><h2><legend>Základní&nbsp;nastavení</legend></h2>
 	<div id="info">
 		<h3><label for="timeout">Timeout:</label></h3>	

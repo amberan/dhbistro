@@ -1,7 +1,8 @@
 # BISTRO
 
 ### News and Updates
-- **1.5.4 IN PROGRESS**  
+- **1.5.4**  
+	md5 hesla
 	odstraneni vsech GOTO  
 	html validni  
 	presunuti vsech css souboru do css adresare  

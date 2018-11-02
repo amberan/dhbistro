@@ -9,28 +9,27 @@ session_start();
 	$config['dbpass'] = "/inc/important.php"; // soubor s heslem k databazi
 	$config['page_prefix']=''; // uri cesta mezi domenou a adresarem bistra
 	$config['page_free']=array('login.php','logout.php'); // stranky dostupne bez prihlaseni
-	$config['version']='1.5.3';  // verze bistra
+	$config['version']='1.5.4';  // verze bistra
 	$config['folder_backup'] = "/files/backups/"; // adresar pro generovani zaloh
 	$config['folder_portrait'] = "/files/portraits/"; // adresar s portrety
 	$config['folder_symbol'] = "/files/symbols/"; // adresar se symboly
 	$config['timeout']=599; //session ttl
 
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/debug.php');  
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/database.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/backup.php');
+	backupDB();
+	require_once($_SERVER['DOCUMENT_ROOT'].'/processing/settings.php');
 // *** GENERAL ALERT
 if (isset($_SESSION['message']) and $_SESSION['message'] != null) { 
 	echo "\n<script>alert('".$_SESSION['message']."')</script>\n";
-	unset($_SESSION['message']);
-}
-	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/debug.php');  
+	unset($_SESSION['message']);}
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/audit_trail.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/backup.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/database.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/footer.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/header.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/menu.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/session.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/unread.php');
-
-	backupDB();
 
 // vyhledani zaznamu v neprectenych zaznamech - cases, groups, persons, reports, symbols,
 function searchRecord ($tablenum, $recordnum) {

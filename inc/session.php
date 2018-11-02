@@ -6,7 +6,7 @@ $sid = session_id();
 
 // zpracovani login formulare
 if (isset($_REQUEST['logmein'])) { 
-	$logres=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."users WHERE login='".$_REQUEST['loginname']."' AND pwd='".$_REQUEST['loginpwd']."'");
+	$logres=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."users WHERE login='".$_REQUEST['loginname']."' AND pwd=md5('".$_POST['loginpwd']."')");
 	if(mysqli_num_rows($check_sql)== 0 and $logrec=mysqli_fetch_array ($logres)) { // old login 1.5.3>
 		mysqli_query ($database,"DELETE FROM ".DB_PREFIX."loggedin WHERE iduser=".$logrec['id']);
 		mysqli_query ($database,"INSERT INTO ".DB_PREFIX."loggedin VALUES('".$logrec['id']."','".Time()."','".session_id()."','".mysqli_real_escape_string ($database,$_SERVER['HTTP_USER_AGENT'])."','".$_SERVER['REMOTE_ADDR']."')");
