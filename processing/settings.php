@@ -13,7 +13,7 @@
 			$_SESSION['message'] = "Nesouhlasí staré heslo, nastavení nebylo uloženo.";
 		}
 	} elseif (isset($_REQUEST['editsettings'])) {
-		mysqli_query ($database,"UPDATE ".DB_PREFIX."users SET plan='".mysqli_real_escape_string ($database,$_REQUEST['plan'])."', timeout='".$_REQUEST['timeout']."' WHERE sid='".$_SESSION['sid']."'");
+		mysqli_query ($database,"UPDATE ".DB_PREFIX."users SET plan='".$_REQUEST['plan']."', timeout='".$_REQUEST['timeout']."' WHERE sid='".$_SESSION['sid']."'");
 		$_SESSION['message'] = "Nastavení uloženo.";
 	}
 ?>
