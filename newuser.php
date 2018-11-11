@@ -4,7 +4,7 @@
 	mainMenu (2);
 	sparklets ('<a href="./users.php">uživatelé</a> &raquo; <strong>nový uživatel</strong>');
 ?>
-<form action="procuser.php" method="post" id="inputform">
+<form action="processing/users.php" method="post" id="inputform">
 	<div>
 	  <label for="login">Login:</label>
 	  <input type="text" name="login" id="login" />

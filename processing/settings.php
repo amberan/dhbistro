@@ -1,5 +1,6 @@
 <?php
 
+
 	if (isset($_REQUEST['editsettings']) && !is_numeric($_REQUEST['timeout'])) {
 		$_SESSION['message'] = "Timeout není číslo, nastavení nebylo uloženo.";
 	} else if (isset($_REQUEST['editsettings']) && ($_REQUEST['timeout'] > 1800 || $_REQUEST['timeout'] < 30)) {

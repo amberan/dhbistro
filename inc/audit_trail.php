@@ -48,7 +48,8 @@ function unauthorizedAccess ($record_type,$secret,$deleted,$idrecord) {
         pageStart ('Neautorizovaný přístup');
         mainMenu (5);
         sparklets ($link.' &raquo; <strong>neautorizovaný přístup</strong>');
-        echo '<div id="obsah"><p>Tady nemáš co dělat.</p></div>';
+		echo '<div id="obsah"><p>Tady nemáš co dělat.</p></div>';
+		$_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
         exit;
 }
 

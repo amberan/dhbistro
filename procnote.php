@@ -41,10 +41,10 @@
 
 	// nová poznámka
 	if (isset($_POST['setnote'])) {
-		if (!preg_match ('/^[[:blank:]]*$/i',$_POST['note']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['title']) && is_numeric($_POST['secret'])) {
+		if (!preg_match ('/^[[:blank:]]*$/i',$_POST['note']) /*&& !preg_match ('/^[[:blank:]]*$/i',$_POST['title'])*/ && is_numeric($_POST['secret'])) {
 			auditTrail($_POST['tableid'], 7, $_POST['itemid']);
 			mysqli_query ($database,"INSERT INTO ".DB_PREFIX."notes VALUES('','".mysqli_real_escape_string ($database,$_POST['note'])."','".mysqli_real_escape_string ($database,$_POST['title'])."','".Time()."','".$usrinfo['id']."','".$_POST['tableid']."','".$_POST['itemid']."','".$_POST['secret']."','0')");
-	//		echo '<div id="obsah"><p>Poznámka upravena.</p></div>';
+			$_SESSION['message'] = "Poznámka uložena";
 			if (!isset($_POST['nnotnew'])) {
 				unreadRecords ($_POST['tableid'],$_POST['itemid']);
 			}

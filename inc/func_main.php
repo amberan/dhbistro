@@ -2,45 +2,40 @@
 $time = $starttime = microtime(true);
 $mem = memory_get_usage();
 session_start();
+//$sid = session_id();
 	
-	global $database,$text;
+//global $database,$text;
 	
-	define ('DB_PREFIX','nw_'); // prefix tabulek
-	$config['dbpass'] = "/inc/important.php"; // soubor s heslem k databazi
-	$config['page_prefix']=''; // uri cesta mezi domenou a adresarem bistra
-	$config['page_free']=array('login.php','logout.php'); // stranky dostupne bez prihlaseni
-	$config['version']='1.5.4';  // verze bistra
-	$config['folder_backup'] = "/files/backups/"; // adresar pro generovani zaloh
-	$config['folder_portrait'] = "/files/portraits/"; // adresar s portrety
-	$config['folder_symbol'] = "/files/symbols/"; // adresar se symboly
-	$config['timeout']=599; //session ttl
+define ('DB_PREFIX','nw_'); // prefix tabulek
+$config['dbpass'] = "/inc/important.php"; // soubor s heslem k databazi
+$config['page_prefix']=''; // uri cesta mezi domenou a adresarem bistra
+$config['page_free']=array('login.php','logout.php'); // stranky dostupne bez prihlaseni
+$config['version']='1.5.5';  // verze bistra
+$config['folder_backup'] = "/files/backups/"; // adresar pro generovani zaloh
+$config['folder_portrait'] = "/files/portraits/"; // adresar s portrety
+$config['folder_symbol'] = "/files/symbols/"; // adresar se symboly
 
+// *** TECHNICAL LIBRARIES
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/debug.php');  
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/database.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/backup.php');
 	backupDB();
-	require_once($_SERVER['DOCUMENT_ROOT'].'/processing/settings.php');
-// *** GENERAL ALERT
-if (isset($_SESSION['message']) and $_SESSION['message'] != null) { 
-	echo "\n<script>alert('".$_SESSION['message']."')</script>\n";
-	unset($_SESSION['message']);}
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/session.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/audit_trail.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/image.php');
+// *** PROCESSING
+	require_once($_SERVER['DOCUMENT_ROOT'].'/processing/settings.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/processing/users.php');
+// *** GENERAL ALERT - overit, ze funguje s odlasovanim nahore - asi bude potreba prenaset message prez session destroy
+	if (isset($_SESSION['message']) and $_SESSION['message'] != null) { 
+		echo "\n<script>window.onload = function(){alert('".$_SESSION['message']."');}</script>\n";
+		unset($_SESSION['message']);}
+// *** LIBRARIES FOR DISPLAYING DATA
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/footer.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/header.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/menu.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/session.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/unread.php');
 
-// vyhledani zaznamu v neprectenych zaznamech - cases, groups, persons, reports, symbols,
-function searchRecord ($tablenum, $recordnum) {
-	global $database,$unread;
-	foreach ($unread as $record) {
-            if ($record['idtable'] == $tablenum && $record['idrecord'] == $recordnum) {
-            return true;
-        }
-    }
-	return false;
-}
 
 // ziskani autora zaznamu - audit, dashboard, edituser, index, readcase, readperson, readsymbol, tasks
 function getAuthor ($recid,$trn) {
@@ -77,38 +72,6 @@ function safeInput ($input) {
 	$replacers=Array ('&quot;');
 	$output=str_replace ($replaced,$replacers,$input);
 	return $output;
-}
-
-function resize_Image ($img,$max_width,$max_height) {
-	$size=GetImageSize($img);
-	$width=$size[0];
-	$height=$size[1];
-	$x_ratio=$max_width/$width;
-	$y_ratio=$max_height/$height;
-	if (($width<=$max_width) && ($height<=$max_height)) {
-		$tn_width=$width;
-		$tn_height=$height;
-	} else if (($x_ratio * $height) < $max_height) {
-		$tn_height=ceil($x_ratio * $height);
-		$tn_width=$max_width;
-	} else {
-		$tn_width=ceil($y_ratio * $width);
-		$tn_height=$max_height;
-	}
-	if ($size[2]==1) {
-		$src=ImageCreateFromGIF($img);
-	}
-	if ($size[2]==2) {
-		$src=ImageCreateFromJPEG($img);
-	}
-	if ($size[2]==3) {
-		$src=ImageCreateFromPNG($img);
-	}
-	$dst=ImageCreateTrueColor($tn_width,$tn_height);
-	ImageCopyResampled ($dst,$src,0,0,0,0,$tn_width,$tn_height,$width,$height);
-	Imageinterlace($dst, 1);
-	ImageDestroy($src);
-	return $dst;
 }
 
 // funkce pro ukládání fitru do databáza a načítání filtru z databáze        

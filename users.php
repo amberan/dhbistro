@@ -1,12 +1,13 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-        if ($usrinfo['right_power']<5) {
-                        unauthorizedAccess(8, 1, 0, 0);
-                    }
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+if ($usrinfo['right_power']<5) {
+	unauthorizedAccess(8, 1, 0, 0);
+	$_SESSION['message'] = "";
+} else {
 	auditTrail(8, 1, 0);
 	pageStart ('Uživatelé');
 	mainMenu (2);
-        $custom_Filter = custom_Filter(8);
+    $custom_Filter = custom_Filter(8);
 	sparklets ('<strong>uživatelé</strong>',(($usrinfo['right_power'])?'<a href="tasks.php">úkoly</a>; <a href="newuser.php">přidat uživatele</a>':'<a href="tasks.php">úkoly</a>'));
 	// zpracovani filtru
 	if (!isset($custom_Filter['kategorie'])) {
@@ -33,7 +34,7 @@
 	//
 	function filter () {
 	  global $database,$f_cat,$f_sort;
-	  echo '<div id="filter-wrapper"><form action="users.php" method="get" id="filter">
+	  echo '<div id="filter-wrapper"><form action="/users.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat <select name="kategorie">
@@ -79,8 +80,17 @@
 	<td>'.(($rec['right_power'])?'ano':'ne').'</td>
 	<td>'.(($rec['right_text'])?'ano':'ne').'</td>
 	'.(($usrinfo['right_org'])?'<td>'.(($rec['right_org'])?'ano':'ne').'</td>':'').'
-	<td><a href="edituser.php?rid='.$rec['id'].'">upravit</a> | <a href="procuser.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat uživatele &quot;".$rec['login']."&quot;?');".'">smazat</a></td>
-</tr>';
+	<td><a class="button" href="edituser.php?rid='.$rec['id'].'">upravit</a>';
+			if ($rec['id'] != $usrinfo['id']) {
+				echo '  <a class="button" href="users.php?user_reset='.$rec['id'].'" onclick="'."return confirm('Opravdu vygenerovat nové heslo pro uživatele &quot;".$rec['login']."&quot;?');".'">nové heslo</a>';
+				if ($rec['suspended'] == "1") {
+					echo '  <a class="button" href="users.php?user_unlock='.$rec['id'].'" onclick="'."return confirm('Opravdu odemknout uživatele &quot;".$rec['login']."&quot;?');".'">odemknout</a>';
+				} else {
+					echo '  <a class="button" href="users.php?user_lock='.$rec['id'].'" onclick="'."return confirm('Opravdu zamknout uživatele &quot;".$rec['login']."&quot;?');".'">zamknout</a>';
+				}
+			echo '  <a class="button" href="users.php?user_delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat uživatele &quot;".$rec['login']."&quot;?');".'">smazat</a></td>';
+			}
+		echo '</tr>';
 			$even++;
 		}
 	  echo '</tbody>
@@ -90,6 +100,7 @@
 	} else {
 	  echo '<div id="obsah"><p>Žádní uživatelé neodpovídají výběru.</p></div>';
 	}
+}
 ?>
 <?php
 	pageEnd ();

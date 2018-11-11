@@ -56,4 +56,17 @@ if (isset($_SESSION['sid'])) {
 		while ($unread[]=mysqli_fetch_array ($res_r));
 }
 
+
+// vyhledani zaznamu v neprectenych zaznamech - cases, groups, persons, reports, symbols,
+function searchRecord ($tablenum, $recordnum) {
+	global $database,$unread;
+	foreach ($unread as $record) {
+            if ($record['idtable'] == $tablenum && $record['idrecord'] == $recordnum) {
+            return true;
+        }
+    }
+	return false;
+}
+
+
 ?>

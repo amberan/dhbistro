@@ -582,6 +582,7 @@ th {
 
 td {
   border: 1px solid #d0d0d0;
+  padding: 0.55em;
 }
 
 tr.even {
@@ -707,8 +708,20 @@ div.clear {width:100%;height:1px !important;margin:0px !important;padding:0px !i
   }
 }
 
+a.button {
+	background-color: #476cb1 ; 
+	color: white;
+	padding: 0.3em;
+	position: relative;
+	text-decoration: none;
+	text-transform: uppercase;
+	}
+a:hover.button {
+	background-color: #0A246A ;
+	cursor: pointer;
+	}
 
 
-pre.session { position: fixed; width: 300px; height:300px; top: 150px; right:0; color: lightgreen; background-color: black; z-index:10; opacity:0.4; overflow: auto;} 
-pre { position: fixed; width: 300px; height:150px; top: 450px; right:0; color: lightgreen; background-color: black; z-index:10; opacity:0.4; overflow: auto;}
-pre.timer{ position: fixed; width: 300px; height:100px; top: 600px; right:0; color: lightgreen; background-color: black; z-index:10; opacity:0.4; overflow: auto;} 
+pre.session { position: fixed; width: 300px; height:250px; top: 150px; right:0; color: lightgreen; background-color: black; z-index:10; opacity:0.4; overflow: auto;} 
+pre { position: fixed; width: 300px; height:200px; top: 400px; right:0; color: lightgreen; background-color: black; z-index:10; opacity:0.4; overflow: auto;}
+pre.timer{ position: fixed; width: 300px; height:90px; top: 600px; right:0; color: lightgreen; background-color: black; z-index:10; opacity:0.4; overflow: auto;} 

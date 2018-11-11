@@ -1,6 +1,10 @@
 # BISTRO
 
 ### News and Updates
+- **1.5.5**   
+	novinky vytazeny z indexu  
+	ukladaji se i poznamky bez nazvu    
+	reset hesla, zamknuti a odemknuti uzivatele  	
 - **1.5.4**  
 	md5 hesla
 	odstraneni vsech GOTO  
@@ -9,6 +13,7 @@
 	backup fallback na starou db  
 	odstraneni debug dat z priloh  
 	zaloha je komprimovana  
+	zpracovani nastaveni nove
 - **1.5.3**  
 	prepsan session management (odpojena tabulka loggedin)  
     vsechny inputy $_REQUEST osetreny na injection  
@@ -34,11 +39,14 @@ inc/database.php        | database connection mechanism
 inc/debug.php			| debug messaging
 inc/footer.php          | fnc footer
 inc/func_main.php       | knihovna balastu
+inc/image.php			| manipulace s obrazky
 inc/important.php       | heslo databaze
 inc/menu.php            | generovani menu
 inc/header.php          | fnc header
 inc/session.php         | obsluha session uzivatele
 inc/unread.php          | obsluha neprectenych objektu
+processing/users.php    | zpracovani uzivatele                      | uzivatele
+processing/settings.php	| zpracovani osobnich nastaveni
 addar2c.php             | uprava hlaseni - report 2 case            | report / pripad
 addc2ar.php             | uprava hlaseni - case 2 report            | pripad / report
 addp2ar.php             | uprava hlaseni - person 2 report          | osoba / report
@@ -77,6 +85,7 @@ newgroup.php            | nova skupina                              | skupiny
 newnews.php             | nova novinka                              | novinky
 newnote.php             | nova poznamka                             | poznamky
 newperson.php           | nova osoba                                | osoby
+news.php				| LIST novinky								| novinky
 newsymbol.php           | novy symbol                               | symboly
 newuser.php             | novy uzivatel                             | uzivatele
 orgperson.php           | ORG uprava osoby                          | osoby
@@ -88,8 +97,6 @@ procnews.php            | zpracovani novinek                        | novinky
 procnote.php            | zpracovani poznamek                       | poznamky
 procother.php           | zpracovani 
 procperson.php          | zpracovani osob                           | osoby
-procsettings.php        | zpracovani nastaveni                      | nastaveni
-procuser.php            | zpracovani uzivatele                      | uzivatele
 readactrep.php          | DETAIL reportu                            | reporty
 readcase.php            | DETAIL pripadu                            | pripady
 readgroup.php           | DETAIL skupiny                            | skupiny

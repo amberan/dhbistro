@@ -1,4 +1,5 @@
 <?php
+
 	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
         if (!$usrinfo['right_power']) {
             unauthorizedAccess(8, 1, 0, 0);
@@ -11,7 +12,7 @@
 		if ($rec=mysqli_fetch_assoc ($res)) {
 ?>
 <div id="obsah">
-<form action="procuser.php" method="post" id="inputform" class="inputform">
+<form action="processing/users.php" method="post" id="inputform" class="inputform">
 	<fieldset><h2><legend>Základní údaje</legend></h2>
 	<div>
 	  <h3><label for="login" id="login">Login:</label></h3>
