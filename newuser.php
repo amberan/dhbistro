@@ -4,7 +4,7 @@
 	mainMenu (2);
 	sparklets ('<a href="./users.php">uživatelé</a> &raquo; <strong>nový uživatel</strong>');
 ?>
-<form action="processing/users.php" method="post" id="inputform">
+<form action="users.php" method="post" id="inputform">
 	<div>
 	  <label for="login">Login:</label>
 	  <input type="text" name="login" id="login" />
@@ -14,14 +14,14 @@
 	  <input type="text" name="heslo" id="heslo" />
 	</div>
 	<div>
-	  <label for="power">Power user:</label>
+	<span class="powerlevel">POWER USER</span>
 		<select name="power" id="power">
 			<option value="0">ne</option>
 			<option value="1">ano</option>
 		</select>
 	</div>
 	<div>
-	  <label for="texty">Editace hlavních textů:</label>
+	<span class="powerlevel">EDITOR</span>
 		<select name="texty" id="texty">
 			<option value="0">ne</option>
 			<option value="1">ano</option>

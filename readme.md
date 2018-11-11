@@ -1,11 +1,14 @@
 # BISTRO
 
 ### News and Updates
-- **1.5.5**   
+- **1.5.6 IN PROGRESS**   
+    vsechny inputy $_GET $_POST osetreny na injection  
+	nove nastylovani spravy uzivatelu  
+- **1.5.5 SUSPEND USER**   
 	novinky vytazeny z indexu  
 	ukladaji se i poznamky bez nazvu    
 	reset hesla, zamknuti a odemknuti uzivatele  	
-- **1.5.4**  
+- **1.5.4 MD5 PASSWORD**  
 	md5 hesla
 	odstraneni vsech GOTO  
 	html validni  
@@ -14,20 +17,20 @@
 	odstraneni debug dat z priloh  
 	zaloha je komprimovana  
 	zpracovani nastaveni nove
-- **1.5.3**  
+- **1.5.3 SESSION MANAGEMENT REWORK**  
 	prepsan session management (odpojena tabulka loggedin)  
     vsechny inputy $_REQUEST osetreny na injection  
 	konfigurace db presunuta do $conf[]  
 	debug  
-- **1.5.2**  
+- **1.5.2 DATABASE UPDATE SCRIPT**  
     $config[]  
     oprava pocitadla delky zpracovani stranky  
     procisteni HEAD  
     zaznam o zaloze do db pouze pokud se povede, nasledne kontrola na update script  
-- **1.5.1**  
+- **1.5.1 BACKUP UPDATE**  
     trhani func_main na kusy  
     backup (INDEX>FULLTEXT)  
-- **1.5**  
+- **1.5 PHP7**  
     PHP7 + MySQLi  
 
 ### OBSAH

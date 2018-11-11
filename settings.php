@@ -1,6 +1,6 @@
 <?php
 	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-	pageStart ('Nastavení');
+	pageStart ('Nastavení'); 
 	mainMenu (6);
 	sparklets ('<strong>nastavení</strong>');
 ?>

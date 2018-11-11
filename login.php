@@ -8,14 +8,14 @@
   		<div>
   			<label for="loginname">Jméno:</label>
 				<input type="text" name="loginname" id="loginname" tabindex="1" />
-			</div>
-			<div>
-				<label for="loginpwd">Heslo:</label>
-				<input type="password" name="loginpwd" id="loginpwd" tabindex="2" />
-			</div>
-			<div id="logmein">
-				<input type="submit" name="logmein" value="Přihlásit" tabindex="3" />
-			</div>
+		</div>
+		<div>
+			<label for="loginpwd">Heslo:</label>
+			<input type="password" name="loginpwd" id="loginpwd" tabindex="2" />
+		</div>
+		<div id="logmein">
+			<input type="submit" name="logmein"  value="Přihlásit" tabindex="3" />
+		</div>
 		</form>
 	</div>
 </div>

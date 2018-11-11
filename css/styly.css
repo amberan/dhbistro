@@ -1,3 +1,30 @@
+.Clear{*zoom:1}
+.Clear:before,.Clear:after{content:"";display:table}
+.Clear:after{clear:both}
+.Hide{display:none}
+.Underline{text-decoration:underline}
+img{max-width:100%;height:auto}
+*:focus{outline:none;border:0}
+*{-webkit-margin-before:0;margin-before:0;-webkit-margin-after:0;margin-after:0;-webkit-margin-start:0;margin-start:0;-webkit-margin-end:0;margin-end:0;-webkit-margin-block-start:0;margin-block-start:0;-webkit-margin-block-end:0;margin-block-end:0;-webkit-padding-start:0;padding-start:0;-webkit-padding-end:0;padding-end:0;-webkit-padding-inline-start:0;padding-inline-start:0;-webkit-padding-inline-end:0;padding-inline-end:0}
+*,*:before,*:after{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
+html,body,div,span,applet,object,iframe,blockquote,button,pre,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,input,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;vertical-align:baseline;-webkit-margin-before:0;margin-before:0;-webkit-margin-after:0;margin-after:0;-webkit-margin-start:0;margin-start:0;-webkit-margin-end:0;margin-end:0;-webkit-margin-block-start:0;margin-block-start:0;-webkit-margin-block-end:0;margin-block-end:0;-webkit-padding-start:0;padding-start:0;-webkit-padding-end:0;padding-end:0;-webkit-padding-inline-start:0;padding-inline-start:0;-webkit-padding-inline-end:0;padding-inline-end:0}
+h1,h2,h3,h4,h5,h6,p,a{-webkit-margin-before:0;margin-before:0;-webkit-margin-after:0;margin-after:0;-webkit-margin-start:0;margin-start:0;-webkit-margin-end:0;margin-end:0;-webkit-margin-block-start:0;margin-block-start:0;-webkit-margin-block-end:0;margin-block-end:0;-webkit-padding-start:0;padding-start:0;-webkit-padding-end:0;padding-end:0;-webkit-padding-inline-start:0;padding-inline-start:0;-webkit-padding-inline-end:0;padding-inline-end:0}
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}
+body{min-height:100vh}
+ol,ul{list-style:none}
+blockquote,q{quotes:none}
+blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}
+table{border-collapse:collapse;border-spacing:0}
+a{cursor:pointer;outline:none;text-decoration:none}
+a:visited{outline:none;text-decoration:none}
+a:hover{text-decoration:none}
+a:active,a:focus{outline:none;text-decoration:none}
+strong{font-weight:700}
+em{font-style:italic}
+
+
+
+
 body {
 	margin: 0;
 	padding: 0;
@@ -52,7 +79,7 @@ a:link, a:visited {
 	left: -100px;
 	padding: 150px 20px 20px 20px;
 	background: #e0e0e0 url('../gfx/dhlogo.gif') no-repeat 50% 20px;
-	width: 200px;
+	width: 250px;
 }
 
 #logincontent form#other {
@@ -62,7 +89,7 @@ a:link, a:visited {
 	left: -100px;
 	padding: 140px 20px 20px 20px;
 	background: #e0e0e0 url('../gfx/terra.gif') no-repeat 50% 20px;
-	width: 200px;
+	width: 250px;
 }
 
 #logincontent form label {
@@ -73,6 +100,7 @@ a:link, a:visited {
 }
 
 #logincontent form div {
+	width: 200px;
 	clear: both;
 }
 
@@ -212,6 +240,15 @@ a:link, a:visited {
 	width: 400px;
 }
 
+#filtersubmit input {
+
+	background-color: #ccc ; 
+	color: #000;
+	padding: 0.3em;
+	position: relative;
+	text-decoration: none;
+	margin: 0.5em;
+}
 /***********************************/
 /************  drobky  *************/
 /***********************************/
@@ -582,7 +619,7 @@ th {
 
 td {
   border: 1px solid #d0d0d0;
-  padding: 0.55em;
+  padding: 0.5em;
 }
 
 tr.even {
@@ -645,7 +682,7 @@ td.filter {
 /***********************************/
 div.clear {width:100%;height:1px !important;margin:0px !important;padding:0px !important;clear:both !important;}
 .float-right{float:right;}
-.float-left{float:left;}
+.float-{float:left;}
 
 /***********************************/
 /********** autocomplete   *********/
@@ -708,6 +745,13 @@ div.clear {width:100%;height:1px !important;margin:0px !important;padding:0px !i
   }
 }
 
+
+/************* DEBUG ***************/
+pre.session { position: fixed; width: 300px; height:250px; top: 150px; right:0; color: lightgreen; background-color: black; z-index:10; opacity:0.4; overflow: auto;} 
+pre { position: fixed; width: 300px; height:200px; top: 400px; right:0; color: lightgreen; background-color: black; z-index:10; opacity:0.4; overflow: auto;}
+pre.timer{ position: fixed; width: 300px; height:90px; top: 600px; right:0; color: lightgreen; background-color: black; z-index:10; opacity:0.4; overflow: auto;} 
+
+/************ TLACITKA *************/
 a.button {
 	background-color: #476cb1 ; 
 	color: white;
@@ -715,13 +759,29 @@ a.button {
 	position: relative;
 	text-decoration: none;
 	text-transform: uppercase;
+	margin: 0 0.2em 0 0.2em;
 	}
 a:hover.button {
 	background-color: #0A246A ;
 	cursor: pointer;
 	}
 
+/********* DIV TABULKY *************/
+.table { display: table; margin: 0 auto; }
+.row { display: table-row; padding: 1em; }
+.cell { display: table-cell; padding: 0.7em;}
+.cell div { padding: 0.2em; }
+.even {	background-color: #f8f8f8;}
+.odd { background-color: #f0f0f0; }
+.middle{  vertical-align: middle; }
 
-pre.session { position: fixed; width: 300px; height:250px; top: 150px; right:0; color: lightgreen; background-color: black; z-index:10; opacity:0.4; overflow: auto;} 
-pre { position: fixed; width: 300px; height:200px; top: 400px; right:0; color: lightgreen; background-color: black; z-index:10; opacity:0.4; overflow: auto;}
-pre.timer{ position: fixed; width: 300px; height:90px; top: 600px; right:0; color: lightgreen; background-color: black; z-index:10; opacity:0.4; overflow: auto;} 
+/*********** UZIVATELE *************/
+.powerlevel {
+	background-color: #99dd99 ; 
+	color: white;
+	padding: 0.25em;
+	margin: 0em;
+	position: relative;
+	text-decoration: none;
+	text-transform: uppercase;
+}

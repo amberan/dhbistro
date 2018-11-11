@@ -1,32 +1,31 @@
 <?php
-
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-        if (!$usrinfo['right_power']) {
-            unauthorizedAccess(8, 1, 0, 0);
-        }
-	pageStart ('Úprava uživatele');
-	mainMenu (2);
-	sparklets ('<a href="./users.php">uživatelé</a> &raquo; <strong>úprava uživatele</strong>');
-	if (is_numeric($_REQUEST['rid'])) {
-		$res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."users WHERE id=".$_REQUEST['rid']);
-		if ($rec=mysqli_fetch_assoc ($res)) {
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+if (!$usrinfo['right_power']) {
+	unauthorizedAccess(8, 1, 0, 0);
+}
+pageStart ('Úprava uživatele');
+mainMenu (2);
+sparklets ('<a href="./users.php">uživatelé</a> &raquo; <strong>úprava uživatele</strong>');
+if (is_numeric($_REQUEST['rid'])) {
+	$res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."users WHERE id=".$_REQUEST['rid']);
+	if ($rec=mysqli_fetch_assoc ($res)) {
 ?>
 <div id="obsah">
-<form action="processing/users.php" method="post" id="inputform" class="inputform">
+<form action="users.php" method="post" id="inputform" class="inputform">
 	<fieldset><h2><legend>Základní údaje</legend></h2>
 	<div>
 	  <h3><label for="login" id="login">Login:</label></h3>
 	  <input type="text" name="login" id="login" value="<?php echo StripSlashes($rec['login']); ?>" />
 	</div>
 	<div>
-	  <h3><label for="power" id="poweruser">Power user:</label></h3>
+		<span class="powerlevel">POWER USER</span>
 		<select name="power" id="poweruser">
 			<option value="0"<?php if ($rec['right_power']==0) { echo ' selected="selected"'; } ?>>ne</option>
 			<option value="1"<?php if ($rec['right_power']==1) { echo ' selected="selected"'; } ?>>ano</option>
 		</select>
 	</div>
 	<div>
-	  <h3><label for="texty" id="texty">Editace textů:</label></h3>
+		<span class="powerlevel">EDITOR</span>
 		<select name="texty" id="texty">
 			<option value="0"<?php if ($rec['right_text']==0) { echo ' selected="selected"'; } ?>>ne</option>
 			<option value="1"<?php if ($rec['right_text']==1) { echo ' selected="selected"'; } ?>>ano</option>

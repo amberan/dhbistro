@@ -57,51 +57,35 @@ elseif (isset($_REQUEST['user_reset']) && is_numeric($_REQUEST['user_reset'])) {
 
 // vytvorit uzivatele
 if (isset($_POST['insertuser']) && $usrinfo['right_power'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['login']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['heslo']) && is_numeric($_POST['power']) && is_numeric($_POST['texty'])) {
-	pageStart ('Přidán uživatel');
-	mainMenu (2);
-	sparklets ('<a href="./users.php">uživatelé</a> &raquo; <a href="./newuser.php">nový uživatel</a> &raquo; <strong>přidán uživatel</strong>');
-	$ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."users WHERE UCASE(login)=UCASE('".mysqli_real_escape_string ($database,safeInput($_POST['login']))."')");
+	$ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."users WHERE UCASE(login)=UCASE('".$_POST['login']."')");
 	if (mysqli_num_rows ($ures)) {
-		echo '<div id="obsah"><p>Uživatel již existuje, změňte jeho jméno.</p></div>';
+		$_SESSION['message']= "Uživatel již existuje, změňte jeho jméno.";
 	} else {
-		mysqli_query ($database,"INSERT INTO ".DB_PREFIX."users VALUES('','".mysqli_real_escape_string ($database,safeInput($_POST['login']))."','".mysqli_real_escape_string ($database,$_POST['heslo'])."','','','".$_POST['power']."','".$_POST['texty']."','','','','','600','','','','')");
-		$uidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."users WHERE UCASE(login)=UCASE('".mysqli_real_escape_string ($database,safeInput($_POST['login']))."')"));
+		mysqli_query ($database,"INSERT INTO ".DB_PREFIX."users (login,pwd,right_power,right_text,timeout) VALUES('".$_POST['login']."','".$_POST['heslo']."','".$_POST['power']."','".$_POST['texty']."','600')");
+		$uidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."users WHERE UCASE(login)=UCASE('".$_POST['login']."')"));
 		$uid=$uidarray['id'];
 		auditTrail(8, 3, $uid);
-		echo '<div id="obsah"><p>Uživatel vytvořen.</p></div>';
+		$_SESSION['message']= "Uživatel ".$_POST['login']." vytvořen.";
 	}
-	pageEnd ();
 } else {
   	if (isset($_POST['insertuser'])) {
-		pageStart ('Přidán uživatel');
-		mainMenu (2);
-		sparklets ('<a href="./users.php">uživatelé</a> &raquo; <a href="./newuser.php">nový uživatel</a> &raquo; <strong>přidán uživatel</strong>');
-		echo '<div id="obsah"><p>Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
-		pageEnd ();
+$_SESSION['message']= "Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.";
 	}
 }
 
 // upravit uzivatele
 if (isset($_POST['userid']) && isset($_POST['edituser']) && $usrinfo['right_power'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['login']) && is_numeric($_POST['power']) && is_numeric($_POST['texty'])) {
 	auditTrail(8, 2, $_POST['userid']);
-	pageStart ('Uložení změn');
-	mainMenu (2);
-	sparklets ('<a href="./users.php">uživatelé</a> &raquo; <a href="./edituser.php">úprava uživatele</a> &raquo; <strong>uložení změn</strong>');
-	$ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."users WHERE UCASE(login)=UCASE('".mysqli_real_escape_string ($database,safeInput($_POST['login']))."') AND id<>".$_POST['userid']);
+	$ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."users WHERE UCASE(login)=UCASE('".$_POST['login']."') AND id<>".$_POST['userid']);
 	if (mysqli_num_rows ($ures)) {
-		echo '<div id="obsah"><p>Uživatel již existuje, změňte jeho jméno.</p></div>';
+		$_SESSION['message']= "Uživatel již existuje, změňte jeho jméno.";
 	} else {
-		mysqli_query ($database,"UPDATE ".DB_PREFIX."users SET login='".mysqli_real_escape_string ($database,safeInput($_POST['login']))."', right_power='".$_POST['power']."', right_text='".$_POST['texty']."', idperson='".$_POST['idperson']."' WHERE id=".$_POST['userid']);
-		echo '<div id="obsah"><p>Uživatel upraven.</p></div>';
+		mysqli_query ($database,"UPDATE ".DB_PREFIX."users SET login='".$_POST['login']."', right_power='".$_POST['power']."', right_text='".$_POST['texty']."', idperson='".$_POST['idperson']."' WHERE id=".$_POST['userid']);
+		$_SESSION['message']= "Uživatel ".$_POST['login']." upraven.";
 	}
-	pageEnd ();
 } else {
 	if (isset($_POST['edituser'])) {
-		pageStart ('Uložení změn');
-		mainMenu (2);
-		sparklets ('<a href="./users.php">uživatelé</a> &raquo; <a href="./edituser.php">úprava uživatele</a> &raquo; <strong>uložení změn</strong>');
-		echo '<div id="obsah"><p>Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
-		pageEnd ();
+		$_SESSION['message']= "Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva.";
 	}
 }
 ?>

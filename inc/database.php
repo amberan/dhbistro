@@ -122,6 +122,11 @@ mysqli_query ($database,"SET NAMES 'utf8'");
 foreach ($_REQUEST as $key => $value) {
     $_REQUEST[$key] = mysqli_real_escape_string($database,$value);
 }
-
+foreach ($_POST as $key => $value) {
+    $_POST[$key] = mysqli_real_escape_string($database,$value);
+}
+foreach ($_GET as $key => $value) {
+    $_GET[$key] = mysqli_real_escape_string($database,$value);
+}
 
 ?>
