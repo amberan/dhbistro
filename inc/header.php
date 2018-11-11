@@ -8,7 +8,7 @@ function pageStart ($title) {
 <html lang="cs-CZ">
   <head>
     <meta charset="UTF-8" />
-	<meta name="Author" content="Karel Křemel, David Ambeřan Maleček, Jakub Ethan Kraft" />
+	<meta name="Author" content="Karel Křemel, David Ambeřan Maleček, Jarda Ernedar Fišer, Jakub Ethan Kraft" />
 	<meta name="Copyright" content="2006 - 2018" />
 	<meta name="description" content="city larp management system" />
 	<title><?php echo (($usrinfo)?$usrinfo['login'].' @ ':'')?>BIStro <?php echo $config['version'];?> | <?php echo $title;?></title>

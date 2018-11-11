@@ -1,6 +1,6 @@
 <?php
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-if ($usrinfo['right_power']<5) {
+if ($usrinfo['right_power']<1) {
 	unauthorizedAccess(8, 1, 0, 0);
 	$_SESSION['message'] = "";
 } else {

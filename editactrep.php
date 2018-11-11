@@ -10,7 +10,12 @@ function date_picker($name, $startyear=NULL, $endyear=NULL) {
 	global $database,$aday;
 	global $database,$amonth;
 	global $database,$ayear;
-	if($startyear==NULL) $startyear = date("Y")-10;
+	global $usrinfo;
+    if ($usrinfo['right_org'] == 1) {
+        if($startyear==NULL) $startyear = date("Y")-40;
+    } else {
+        if($startyear==NULL) $startyear = date("Y")-10;
+    }
 	if($endyear==NULL) $endyear=date("Y")+5;
 
 	$months=array('','Leden','Únor','Březen','Duben','Květen',

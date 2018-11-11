@@ -9,6 +9,7 @@ switch ($_SERVER["SERVER_NAME"]) {
 	$text['point']='zlobod';
         $text['hlaseniV']='Hlášení';
         $text['hlaseniM']='hlášení';
+        $config['debug']=true;
         break;
     case 'www.dhbistro.cz':
         $config['dbuser']=$config['dbdatabase']='dhbistrocz';

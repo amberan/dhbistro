@@ -89,7 +89,6 @@
                     <select name="secret" id="secret">
                         <option value="0"<?php if ($rec_p['secret']==0) { echo ' selected="selected"'; } ?>>0</option>
                         <option value="1"<?php if ($rec_p['secret']==1) { echo ' selected="selected"'; } ?>>1</option>
-                        <option value="2"<?php if ($rec_p['secret']==2) { echo ' selected="selected"'; } ?>>2</option>
                     </select>
 				<div class="clear">&nbsp;</div>
 				<h3><label for="dead">Mrtvá:</label></h3>
