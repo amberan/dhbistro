@@ -45,13 +45,14 @@ function unauthorizedAccess ($record_type,$secret,$deleted,$idrecord) {
         } else {
             auditTrail($record_type, 12, $idrecord);
         }
-        pageStart ('Neautorizovaný přístup');
-        mainMenu (5);
-        sparklets ($link.' &raquo; <strong>neautorizovaný přístup</strong>');
+        //pageStart ('Neautorizovaný přístup');
+        //mainMenu (5);
+        //sparklets ($link.' &raquo; <strong>neautorizovaný přístup</strong>');
 //		echo '<div id="obsah"><p>Tady nemáš co dělat.</p></div>';
 		$_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
-		pageEnd ();
-		exit();
+		Header ('location: index.php');
+		//pageEnd ();
+		//exit();
 
 }
 

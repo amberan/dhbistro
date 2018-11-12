@@ -97,7 +97,11 @@ function backupDB () {
 			if (file_exists($update_file)) { 
 				require_once($update_file);
 			}
-
+			//odmazani UNREAD pro smazane uzivatele
+			$deletedusers_sql = mysqli_query($database,"select id from ".DB_PREFIX."users where deleted=1");
+			while ($deletedusers = mysqli_fetch_row($deletedusers_sql)) {
+				mysqli_query ($database,"DELETE FROM ".DB_PREFIX."unread WHERE iduser = ".$deletedusers[0]);
+			}
 		}
 	}
 }

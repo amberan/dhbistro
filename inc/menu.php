@@ -22,7 +22,7 @@ function mainMenu ($index) {
 			  '.(($usrinfo['right_power']<1 && $usrinfo['right_text'])?'<li><a href="tasks.php">Úkoly</a></li>':'').'
 	  '.(($usrinfo['right_aud'])?'<li><a href="audit.php">Audit</a></li>':'').'
 	  <li class="float-right"><a href="logout.php">Odhlásit</a></li>
-	  <li class="float-right"><a href="procother.php?delallnew='.$currentfile.'" onclick="'."return confirm('Opravdu označit vše jako přečtené?');".'">Přečíst vše</a></li>
+	  <li class="float-right"><a href="'.$currentfile.'?delallnew=true" onclick="'."return confirm('Opravdu označit vše jako přečtené?');".'">Přečíst vše</a></li>
   </ul>
   <!-- form id="search_menu">
 	  <input type="text" name="query" />

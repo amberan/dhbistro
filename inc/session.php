@@ -4,7 +4,11 @@ $check_sql=mysqli_query($database,"SELECT COLUMN_NAME FROM information_schema.co
 
 // zpracovani login formulare
 if (isset($_REQUEST['logmein'])) { 
-	$logres=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."users WHERE login='".$_REQUEST['loginname']."' AND pwd=md5('".$_POST['loginpwd']."') "); // AND deleted=0 AND suspended=0
+	if (mysqli_num_rows($check_sql)== 0) { // without suspended 1.5.5>
+		$logres=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."users WHERE login='".$_REQUEST['loginname']."' AND pwd=md5('".$_POST['loginpwd']."') and deleted=0 ");
+	} else { //with suspended 1.5.5<
+		$logres=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."users WHERE login='".$_REQUEST['loginname']."' AND pwd=md5('".$_POST['loginpwd']."') and deleted=0 and suspended=0 "); 
+	}
 	if($logrec=mysqli_fetch_array ($logres)) {
 		$_SESSION['sid']=session_id(); 
 		mysqli_query ($database,"UPDATE ".DB_PREFIX."users SET sid='".$_SESSION['sid']."', lastlogon=".Time().", ip='".$_SERVER['REMOTE_ADDR']."', user_agent='".mysqli_real_escape_string ($database,$_SERVER['HTTP_USER_AGENT'])."' WHERE id=".$logrec['id']);
@@ -16,7 +20,7 @@ if (isset($_SESSION['sid'])) {
 		$usersql = "SELECT id, login, pwd, idperson, lastlogon as 'lastaction', right_power, right_text, right_org, right_aud, timeout, ip as 'currip', plan, sid
 		FROM ".DB_PREFIX."users 
 		WHERE deleted=0 AND ".DB_PREFIX."users.sid ='".$_SESSION['sid']."' AND user_agent='".mysqli_real_escape_string ($database,$_SERVER['HTTP_USER_AGENT'])."'";
-	} elseif (isset($_SESSION['sid'])) { //with suspended 1.5.5<
+	} else { //with suspended 1.5.5<
 		$usersql = "SELECT id, login, pwd, idperson, lastlogon as 'lastaction', right_power, right_text, right_org, right_aud, timeout, ip as 'currip', plan, sid
 		FROM ".DB_PREFIX."users 
 		WHERE deleted=0 AND suspended=0 AND ".DB_PREFIX."users.sid ='".$_SESSION['sid']."' AND user_agent='".mysqli_real_escape_string ($database,$_SERVER['HTTP_USER_AGENT'])."'";

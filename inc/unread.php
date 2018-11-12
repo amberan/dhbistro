@@ -1,5 +1,11 @@
 <?php
 
+if (isset($_REQUEST['delallnew'])) {
+	mysqli_query ($database,"DELETE FROM ".DB_PREFIX."unread WHERE iduser = ".$usrinfo['id']);
+	$_SESSION['message'] = "Označeno jako přečtené";
+  }
+
+
 // zaznam do tabulek neprectenych
 function unreadRecords ($tablenum,$rid) {
 	global $database,$usrinfo, $_POST;

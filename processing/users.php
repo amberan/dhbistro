@@ -61,10 +61,15 @@ if (isset($_POST['insertuser']) && $usrinfo['right_power'] && !preg_match ('/^[[
 	if (mysqli_num_rows ($ures)) {
 		$_SESSION['message']= "Uživatel již existuje, změňte jeho jméno.";
 	} else {
-		mysqli_query ($database,"INSERT INTO ".DB_PREFIX."users (login,pwd,right_power,right_text,timeout) VALUES('".$_POST['login']."','".$_POST['heslo']."','".$_POST['power']."','".$_POST['texty']."','600')");
+		mysqli_query ($database,"INSERT INTO ".DB_PREFIX."users (login,pwd,right_power,right_text,timeout) VALUES('".$_POST['login']."','md5(".$_POST['heslo'].")','".$_POST['power']."','".$_POST['texty']."','600')");
 		$uidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."users WHERE UCASE(login)=UCASE('".$_POST['login']."')"));
-		$uid=$uidarray['id'];
-		auditTrail(8, 3, $uid);
+		if ($usrinfo['right_aud'] > 0) {
+			mysqli_query ($database,"UPDATE ".DB_PREFIX."users set right_aud='".$_POST['auditor']."' WHERE id=".$uidarray['id']);
+		}
+		if ($usrinfo['right_org'] > 0) {
+			mysqli_query ($database,"UPDATE ".DB_PREFIX."users set right_org='".$_POST['organizator']."' WHERE id=".$uidarray['id']);
+		}
+		auditTrail(8, 3, $uidarray['id']);
 		$_SESSION['message']= "Uživatel ".$_POST['login']." vytvořen.";
 	}
 } else {
@@ -81,6 +86,14 @@ if (isset($_POST['userid']) && isset($_POST['edituser']) && $usrinfo['right_powe
 		$_SESSION['message']= "Uživatel již existuje, změňte jeho jméno.";
 	} else {
 		mysqli_query ($database,"UPDATE ".DB_PREFIX."users SET login='".$_POST['login']."', right_power='".$_POST['power']."', right_text='".$_POST['texty']."', idperson='".$_POST['idperson']."' WHERE id=".$_POST['userid']);
+		if ($usrinfo['right_aud'] > 0) {
+			mysqli_query ($database,"UPDATE ".DB_PREFIX."users set right_aud='".$_POST['auditor']."' WHERE id=".$_POST['userid']);
+			debug ("update audit");
+		}
+		if ($usrinfo['right_org'] > 0) {
+			mysqli_query ($database,"UPDATE ".DB_PREFIX."users set right_org='".$_POST['organizator']."' WHERE id=".$_POST['userid']);
+	
+		}
 		$_SESSION['message']= "Uživatel ".$_POST['login']." upraven.";
 	}
 } else {

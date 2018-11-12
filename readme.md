@@ -3,7 +3,9 @@
 ### News and Updates
 - **1.5.6 IN PROGRESS**   
     vsechny inputy $_GET $_POST osetreny na injection  
-	nove nastylovani spravy uzivatelu  
+	nove nastylovani loginu, spravy uzivatelu  
+	moznost editace vsech typu prav
+	mazani unread pro smazane uzivatele
 - **1.5.5 SUSPEND USER**   
 	novinky vytazeny z indexu  
 	ukladaji se i poznamky bez nazvu    
@@ -73,7 +75,6 @@ editgroup.php           | uprava skupiny                            | skupiny
 editnote.php            | uprava poznamek                           | poznamky
 editperson.php          | uprava osoby                              | osoby
 editsymbol.php          | uprava symbolu                            | symboly
-edituser.php            | uprava uzivatele                          | uzivatele
 evilpoints.php          | zlobody
 getfile.php             | stazeni prilohy
 getportrait.php         | zobrazeni fotografie
@@ -90,7 +91,6 @@ newnote.php             | nova poznamka                             | poznamky
 newperson.php           | nova osoba                                | osoby
 news.php				| LIST novinky								| novinky
 newsymbol.php           | novy symbol                               | symboly
-newuser.php             | novy uzivatel                             | uzivatele
 orgperson.php           | ORG uprava osoby                          | osoby
 persons.php             | LIST osoby                                | osoby
 procactrep.php          | zpracovani reportu                        | reporty
@@ -114,6 +114,8 @@ symbol_search_result.php| vyhledavani podle symbolu - vysledky      | vyhledavan
 symbols.php             | LIST symboly                              | symboly
 tasks.php               | LIST ukoly                                | ukoly
 users.php               | LIST uzivatele                            | uzivatele
+usersedit.php           | uprava uzivatele                          | uzivatele
+usersnew.php            | novy uzivatel                             | uzivatele
 
 ### LINKS
 https://dhbistro.leankit.com/board/24275378
