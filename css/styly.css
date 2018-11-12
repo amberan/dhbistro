@@ -22,13 +22,12 @@ a:active,a:focus{outline:none;text-decoration:none}
 strong{font-weight:700}
 em{font-style:italic}
 
-body, td, th {font-size: 1.1em; font-family: "Trebuchet MS", sans-serif;}
-select, option, input, textarea, label { font-size: 1.1em;}
+body, td, th, select, option, input, textarea, label {font-size: 0.9em; font-family: "Trebuchet MS", sans-serif;}
 
-h1 {margin: 1.4em 0; font-size: 1.4em;}
-h2 {margin: 1.3em 0; font-size: 1.3em;}
-h3 {margin: 1.2em 0; font-size: 1.2em;}
-h4 {margin: 1.1em 0; font-size: 1.1em;}
+h1 {margin: 1.2em 0; font-size: 1.2em;}
+h2 {margin: 1.1em 0; font-size: 1.1em;}
+h3 {margin: 1em 0; font-size: 1em;}
+h4 {margin: 0.9em 0; font-size: 0.9em;}
 
 a:link, a:visited { color: #476cb1;}
 a:hover { color: #0A246A; }
@@ -68,7 +67,7 @@ a:hover.button, input[type=submit]:hover {
 
 	/**********  FILTRY  ***********/
 #filtr { background-color: #ddd; padding: 0 10em 0 10em;  text-align: center; }
-#filtr select {font-size: 0.8em; border: 0.1em inset #ddd; background: #eee; }
+#filtr select { border: 0.1em inset #ddd; background: #eee; }
 #filtr #filterbutton { background-color: #999; margin: 1em; }
 
 /********* DIV TABULKY *************/
@@ -86,7 +85,7 @@ a:hover.button, input[type=submit]:hover {
 #users a.button:hover, #user #submitbutton:hover {background-color: #0A246A ;}
 #users span.button, #user span.button {background-color: #99dd99 ; color: #fefefe; padding:0.25em; margin-right: 0.2em;}
 #users .cell div {  padding: 0.25em; }
-#users .name {font-size:medium; font-weight: bold;  margin: 0.6em -0.2em;}
+#users .name {font-size:1.1em; font-weight: bold;  margin: 0.6em -0.2em;}
 #users .permissions { display:inline-block  ;}
 #user input, #user select { border: 0.1em inset #ddd; background: #fefefe; width: 10em; margin: 0 0.5em; float: right; }
 #user { padding: 1em;}
@@ -191,7 +190,7 @@ a:hover.button, input[type=submit]:hover {
 	padding-left: 10px;
 	padding-right: 10px;
 	color: #000000;
-	font-size: 9pt;
+	font-size: 0.9em;
 	font-weight: bold;
 }
 
@@ -218,7 +217,7 @@ a:hover.button, input[type=submit]:hover {
   background-color: #ffd98e;
 	padding-left: 5px;
 	padding-right: 5px;
-	font-size: 9pt;
+	font-size: 0.9em;
 }
 
 #filter input#task {
@@ -240,7 +239,7 @@ a:hover.button, input[type=submit]:hover {
 
 #sparklets {
 	background-color: #e4e0d8;
-	font-size: 10pt;
+	font-size: 0.9em;
 	padding: 0.25em 0.5em;
 	border-bottom: 1px solid #808080;
 }
@@ -422,7 +421,7 @@ div.otherform-wrap {width:475px;}
 .system_news h2, .game_news h2 {
 	margin-top: 0;
 	color: #476cb1;
-	font-size: 12pt;
+	font-size: 1.1em;
 }
 
 .game_news h2 {
@@ -434,7 +433,7 @@ div.otherform-wrap {width:475px;}
 }
 
 .news_head span {
-	font-size: 8pt;
+	font-size: 0.9em;
 }
 
 .news_head p {
@@ -456,9 +455,9 @@ div.otherform-wrap {width:475px;}
 	font-size: 0.8em;
 }
 #obsah h1 {margin:0px;}
-#obsah h2 {font-size:1.2em; margin:0.3em 0;}
-#obsah h3 {font-size:1.05em; margin:1em 0 0.2em;}
-#obsah h4 {font-size:1em; margin:0.1em 0;}
+#obsah h2 {font-size:1.1em; margin:0.3em 0;}
+#obsah h3 {font-size:1em; margin:1em 0 0.2em;}
+#obsah h4 {font-size:0.9em; margin:0.1em 0;}
 
 #obsah fieldset>p {margin-top:0px;}
 
@@ -550,12 +549,12 @@ div > .poznamka-edit-buttons {position:absolute;right:0px;top:0px;}
 
 }
 #dashboard .top {
-	font-size: 0.8em;
+	font-size: 0.9em;
 }
 #dashboard h1 {margin:0px;}
-#dashboard h2 {font-size:1.2em; margin:0.3em 0;}
-#dashboard h3 {font-size:1.05em; margin:1em 0 0.2em;}
-#dashboard h4 {font-size:1em; margin:0.1em 0;}
+#dashboard h2 {font-size:1.1em; margin:0.3em 0;}
+#dashboard h3 {font-size:1em; margin:1em 0 0.2em;}
+#dashboard h4 {font-size:0.9em; margin:0.1em 0;}
 
 #dashboard fieldset>p {margin-top:0px;}
 

@@ -15,7 +15,7 @@
           echo '<div class="news_div '.(($rec['kategorie']==1)?'game_news':'system_news').'">
         <div class="news_head"><h2>'.StripSlashes($rec['nadpis']).'</h2>
         <p><span>['.Date ('d. m. Y - H:i:s',$rec['datum']).']</span> <strong>'.$rec['autor'].'</strong></p></div>
-        <div>'.StripSlashes($rec['obsah']).'</div>
+        <div>'.StripSlashes($rec['obsah']).'<br></div>
 </div>';
         }
 ?>

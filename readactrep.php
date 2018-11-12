@@ -107,6 +107,7 @@
 		<span>[ <strong>Hlášení<?php echo((($rec_ar['type']==1)?' z výjezdu':(($rec_ar['type']==2)?' z výslechu':' k akci')));?></strong> | </span>
 		<span><strong>Vyhotovil: </strong><?php echo(StripSlashes($author)); ?> | </span>
 		<span><strong>Dne: </strong><?php echo(Date ('d. m. Y',$rec_ar['datum'])); ?> ]</span>
+		<br>
 	</div>
 	<fieldset><h2><legend>Obecné informace</legend></h2>
 	<div id="info">

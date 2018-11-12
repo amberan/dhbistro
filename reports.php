@@ -186,7 +186,7 @@
                         echo '   | <td><a href="newnote.php?rid='.$rec['id'].'&idtable=8">přidat poznámku</a></td>';
                         }
                   echo '</span>
-                <p><span>['.Date ('d. m. Y - H:i:s',$rec['datum']).']</span> '.$rec['autor'].', Datum akce: <span>['.Date ('d. m. Y - H:i:s',$rec['adatum']).']</span><br /> <strong>Úkol: </strong>'
+                <p>['.Date ('d. m. Y - H:i:s',$rec['datum']).']  '.$rec['autor'].', Datum akce: ['.Date ('d. m. Y - H:i:s',$rec['adatum']).'] <br /> <strong>Úkol: </strong>'
                 .StripSlashes($rec['task']).'&nbsp; <strong>Stav:</strong> ';
                   if(($rec['status'])=='0') echo 'Rozpracované';
                   if(($rec['status'])=='1') echo 'Dokončené';
