@@ -119,14 +119,18 @@ $database = mysqli_connect ('localhost',$config['dbuser'],$password,$config['dbd
 mysqli_query ($database,"SET NAMES 'utf8'");
 
 //SQL injection  mitigation
-foreach ($_REQUEST as $key => $value) {
-    $_REQUEST[$key] = mysqli_real_escape_string($database,$value);
-}
-foreach ($_POST as $key => $value) {
-    $_POST[$key] = mysqli_real_escape_string($database,$value);
-}
-foreach ($_GET as $key => $value) {
-    $_GET[$key] = mysqli_real_escape_string($database,$value);
-}
+function escape_array($array) {
+	global $database;
+	foreach($array as $key=>$value) {
+	   if(is_array($value)) { escape_array($value); }
+	   else { $array[$key] = mysqli_real_escape_string($database, $value); }
+	}
+	return $array;
+ }
+
+ escape_array ($_REQUEST);
+ escape_array ($_POST);
+ escape_array ($_GET);
+ 
 
 ?>

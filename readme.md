@@ -6,6 +6,7 @@
 	nove nastylovani loginu, spravy uzivatelu  
 	moznost editace vsech typu prav
 	mazani unread pro smazane uzivatele
+	BUGFIX: $_REQUEST,$_POST,$_GET vicerozmerne pole
 - **1.5.5 SUSPEND USER**   
 	novinky vytazeny z indexu  
 	ukladaji se i poznamky bez nazvu    
