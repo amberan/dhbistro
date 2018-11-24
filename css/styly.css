@@ -106,7 +106,7 @@ a:hover.button, input[type=submit]:hover {
 #logincontent form #logmein { text-align: center; margin-top: 1em;}
 
 
-
+fieldset {border: 1px black solid; padding: 0.5em; }
 
 /***********************************/
 /*************  menu  **************/

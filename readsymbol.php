@@ -34,7 +34,7 @@
 			?>
 <div id="obsah">
 	<h1>Symbol</h1>
-	<fieldset><h2><legend>Základní údaje</legend></h2>
+	<fieldset><legend><strong>Základní údaje</strong></legend>
 		<?php if($rec['symbol']==NULL){ ?><img src="#" alt="symbol chybí" title="symbol chybí" id="symbolimg" class="noname"/>
 		<?php }else{ ?><img src="getportrait.php?nrid=<?php echo($rec['id']); ?>" id="symbolimg" />
 		<?php } ?>
@@ -86,13 +86,13 @@
 	
 <!-- náseduje popis osoby -->
 	<fieldset>
-		<h2><legend>Informace k symbolu</legend></h2>
+		<legend><strong>Informace k symbolu</strong></legend>
 		<div class="field-text"><?php echo (StripSlashes($rec['desc'])); ?></div>
 	</fieldset>	
 	
 <!-- násedují přiřazené případy a hlášení -->
 	<fieldset>
-		<h2><legend>Hlášení a případy</legend></h2>
+		<legend><strong>Hlášení a případy</strong></legend>
 		<h3>Výskyt v případech</h3><!-- následuje seznam případů -->
 		<?php // generování seznamu přiřazených případů
 			if ($usrinfo['right_power']) {
@@ -149,7 +149,7 @@
 		<div class="clear">&nbsp;</div>
 	</fieldset>
 	
-	<fieldset><h3><legend>Poznámky</legend></h3>
+	<fieldset><legend><strong>Poznámky</strong></legend>
 	<!-- následuje seznam poznámek -->
 		<?php // generování poznámek
 			if ($usrinfo['right_power']) {

@@ -97,8 +97,8 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 	-->
 	</script>
 <form action="procactrep.php" method="post" id="inputform">
-<fieldset id="ramecek"><h1><legend>Úprava hlášení<?php echo (($type==1)?' z výjezdu':(($type==2)?' z výslechu':''));?></legend></h1>
-	<fieldset><h2><legend>Základní údaje</legend></h2>
+<fieldset id="ramecek"><legend><strong>Úprava hlášení<?php echo (($type==1)?' z výjezdu':(($type==2)?' z výslechu':''));?></strong></legend>
+	<fieldset><legend><strong>Základní údaje</strong></legend>
 		<div id="info">
 			<h3><label for="label">Označení&nbsp;<?php echo (($type==1)?'výjezdu':(($type==2)?'výslechu':'hlášení'));?>:</label></h3>
 			<input type="text" size="80" name="label" id="label" value="<?php echo StripSlashes($rec_actr['label']); ?>" />
@@ -140,23 +140,23 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 		<!-- end of #info -->
 	</fieldset>
 
-	<fieldset><h2><legend>Shrnutí:</legend></h2>
+	<fieldset><legend><strong>Shrnutí:</strong></legend>
 		<textarea cols="80" rows="7" name="summary" id="summary"><?php echo StripSlashes($rec_actr['summary']); ?></textarea>
 	</fieldset>
 	
-	<fieldset><h2><legend>Možné dopady:</legend></h2>
+	<fieldset><legend><strong>Možné dopady:</strong></legend>
 		<textarea cols="80" rows="7" name="impacts" id="impacts"><?php echo StripSlashes($rec_actr['impacts']); ?></textarea>
 	</fieldset>
 	
-	<fieldset><h2><legend>Podrobný popis průběhu:</legend></h2>
+	<fieldset><legend><strong>Podrobný popis průběhu:</strong></legend>
 		<textarea cols="80" rows="30" name="details" id="details"><?php echo StripSlashes($rec_actr['details']); ?></textarea>
 	</fieldset>
 	
-	<fieldset><h2><legend>Energetická náročnost:</legend></h2>
+	<fieldset><legend><strong>Energetická náročnost:</strong></legend>
 		<textarea cols="80" rows="7" name="energy" id="energy"><?php echo StripSlashes($rec_actr['energy']); ?></textarea>
 	</fieldset>
 	
-	<fieldset><h2><legend>Počáteční vstupy:</legend></h2>
+	<fieldset><legend><strong>Počáteční vstupy:</strong></legend>
 		<textarea cols="80" rows="7" name="inputs" id="inputs"><?php echo StripSlashes($rec_actr['inputs']); ?></textarea>
 	</fieldset>	
 	
@@ -166,7 +166,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 </fieldset>
 </form>
 	
-	<fieldset><h2><legend>Osoby přiřazené k hlášení: </legend></h2>
+	<fieldset><legend><strong>Osoby přiřazené k hlášení: </strong></legend>
 		<form action="addp2ar.php" method="post" class="otherform">
 			<input type="hidden" name="rid" value="<?php echo $_REQUEST['rid']; ?>" />
 			<input type="submit" value="Upravit osoby" name="setperson" class="submitbutton editbutton" title="Upravit osoby" />
@@ -186,7 +186,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 		?></p>
 	</fieldset>
 
-	<fieldset><h3><legend>Přiřazené případy</legend></h3>
+	<fieldset><legend><strong>Přiřazené případy</strong></legend>
 		<!-- tady dochází ke stylové nesystematičnosti, nejedná se o poznámku; pro nápravu je třeba projít všechny šablony -->
 		<p><span class="poznamka-edit-buttons"><a class="connect" href="addar2c.php?rid=<?php echo $_REQUEST['rid']; ?>" title="přiřazení"><span class="button-text">přiřazení případů</span></a><em style="font-size:smaller;"> (přiřazování)</em></span></p>
 		<!-- následuje seznam případů -->
@@ -218,7 +218,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 	</fieldset>
 
 	<!-- následuje seznam přiložených souborů -->
-	<fieldset><h3><legend>Přiložené soubory</legend></h3>
+	<fieldset><legend><strong>Přiložené soubory</strong></legend>
 		<strong><em>K hlášení je možné nahrát neomezené množství souborů, ale velikost jednoho souboru je omezena na 2 MB.</em></strong>
 		<?php //generování seznamu přiložených souborů
 			if ($usrinfo['right_power']) {
@@ -278,7 +278,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 	<!-- end of #new-file .otherform-wrap -->
 
 	<!-- následuje seznam připojených poznámek -->
-	<fieldset><h3><legend>Poznámky</legend></h3>
+	<fieldset><legend><strong>Poznámky</strong></legend>
 		<span class="poznamka-edit-buttons"><a class="new" href="newnote.php?rid=<?php echo $_REQUEST['rid']; ?>&amp;idtable=4" title="nová poznámka"><span class="button-text">nová poznámka</span></a><em style="font-size:smaller;"> (K hlášení si můžete připsat kolik poznámek chcete.)</em></span>
 		<!-- následuje seznam poznámek -->
 		<?php // generování poznámek

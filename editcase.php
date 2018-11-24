@@ -36,7 +36,7 @@
 	};
 	-->
 	</script>
-	<fieldset id="ramecek"><h1><legend>Úprava případu: <?php echo(StripSlashes($rec_c['title'])); ?></legend></h1>
+	<fieldset id="ramecek"><legend><strong>Úprava případu: <?php echo(StripSlashes($rec_c['title'])); ?></strong></legend>
 		<form action="proccase.php" method="post" id="inputform">
 			<div id="info">
 				<h3><label for="title">Název:</label></h3>
@@ -63,7 +63,7 @@
 ?>				
 			</div>
 			<!-- end of #info -->
-			<fieldset><h2><legend>Obsah:</legend></h2>
+			<fieldset><legend><strong>Obsah:</strong></legend>
 				<textarea cols="80" rows="30" name="contents" id="contents"><?php echo StripSlashes($rec_c['contents']); ?></textarea>
 			</fieldset>
 			<div>
@@ -73,7 +73,7 @@
 		</form>
 	</fieldset>
 	
-	<fieldset><h2><legend>Řešitelé: </legend></h2>
+	<fieldset><legend><strong>Řešitelé: </strong></legend>
 		<form action="adds2c.php" method="post" class="otherform">
 			<input type="hidden" name="rid" value="<?php echo $_REQUEST['rid']; ?>" />
 			<input type="submit" value="Upravit řešitele" name="setsolver" class="submitbutton editbutton" title="Upravit řešitele" />
@@ -89,7 +89,7 @@
 		?></p>		
 	</fieldset>
 
-	<fieldset><h2><legend>Osoby přiřazené k případu: </legend></h2>
+	<fieldset><legend><strong>Osoby přiřazené k případu: </strong></legend>
 
 		<form action="addp2c.php" method="post" class="otherform">
 			<input type="hidden" name="rid" value="<?php echo $_REQUEST['rid']; ?>" />
@@ -111,7 +111,7 @@
 	</fieldset>
 	
 	
-	<fieldset><h2><legend>Hlášení přiřazená k případu: </legend></h2>
+	<fieldset><legend><strong>Hlášení přiřazená k případu: </strong></legend>
 		<form action="addc2ar.php" method="post" class="otherform">
 			<input type="hidden" name="rid" value="<?php echo $_REQUEST['rid']; ?>" />
 			<input type="submit" value="Změnit přiřazení hlášení" name="setreport" class="submitbutton editbutton" title="Změnit přiřazení hlášení" />
@@ -134,7 +134,7 @@
 	</fieldset>
 
 	<!-- následuje seznam přiložených souborů -->
-	<fieldset><h3><legend>Přiložené soubory</legend></h3>
+	<fieldset><legend><strong>Přiložené soubory</strong></legend>
 		<strong><em>K osobě je možné nahrát neomezené množství souborů, ale velikost jednoho souboru je omezena na 2 MB.</em></strong>
 		<?php //generování seznamu přiložených souborů
 			if ($usrinfo['right_power']) {
@@ -193,7 +193,7 @@
 	</div>
 	<!-- end of #new-file .otherform-wrap -->
 	
-	<fieldset><h2><legend>Aktuálně připojené poznámky:</legend></h2>
+	<fieldset><legend><strong>Aktuálně připojené poznámky:</strong></legend>
 		<span class="poznamka-edit-buttons"><a class="new" href="newnote.php?rid=<?php echo $_REQUEST['rid']; ?>&amp;idtable=3" title="nová poznámka"><span class="button-text">nová poznámka</span></a><em style="font-size:smaller;"> (K případu si můžete připsat kolik chcete poznámek.)</em></span>
 		<ul>
 		<?php

@@ -12,7 +12,7 @@
                     sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>úprava skupiny</strong>');
 ?>
 <div id="obsah">
-<fieldset><h1><legend>Úprava skupiny: <?php echo StripSlashes($rec_g['title']); ?></legend></h1>
+<fieldset><legend><strong>Úprava skupiny: <?php echo StripSlashes($rec_g['title']); ?></strong></legend>
 <form action="procgroup.php" method="post" id="inputform">
 	<div id="info"><?php
 		if($rec_g['secret']==1){ ?>
@@ -39,7 +39,7 @@
 ?>			
 	</div>
 	<!-- end of #info -->
-	<fieldset><h2><legend>Popis:</legend></h2>
+	<fieldset><legend><strong>Popis:</strong></legend>
 		<textarea cols="80" rows="30" name="contents" id="contents"><?php echo StripSlashes($rec_g['contents']); ?></textarea>
 	</fieldset>
 	<input type="hidden" name="groupid" value="<?php echo $rec_g['id']; ?>" />
@@ -47,7 +47,7 @@
 </form>
 </fieldset>
 
-	<fieldset><h2><legend>Členové: </legend></h2>
+	<fieldset><legend><strong>Členové: </strong></legend>
 	<form action="addp2g.php" method="post" class="otherform">
 		<input type="hidden" name="rid" value="<?php echo $_REQUEST['rid']; ?>" />
 		<input type="submit" value="Upravit osoby" name="setperson" class="submitbutton editbutton" title="Upravit členy"/>
@@ -68,7 +68,7 @@
 	</fieldset>
 	
 	<!-- následuje seznam přiložených souborů -->
-	<fieldset><h3><legend>Přiložené soubory</legend></h3>
+	<fieldset><legend><strong>Přiložené soubory</strong></legend>
 		<strong><em>Ke skupině je možné nahrát neomezené množství souborů, ale velikost jednoho souboru je omezena na 2 MB.</em></strong>
 		<?php //generování seznamu přiložených souborů
 			if ($usrinfo['right_power']) {
@@ -127,7 +127,7 @@
 	</div>
 	<!-- end of #new-file .otherform-wrap -->
 	
-	<fieldset><h2><legend>Aktuálně připojené poznámky:</legend></h2>
+	<fieldset><legend><strong>Aktuálně připojené poznámky:</strong></legend>
 		<span class="poznamka-edit-buttons"><a class="new" href="newnote.php?rid=<?php echo $_REQUEST['rid']; ?>&amp;idtable=2&amp;s=<?php echo $rec_g['secret']; ?>" title="nová poznámka"><span class="button-text">nová poznámka</span></a><em style="font-size:smaller;"> (K případu si můžete připsat kolik chcete poznámek.)</em></span>
 		<ul>
 		<?php

@@ -5,7 +5,7 @@
 	sparklets ('<a href="persons.php">osoby</a> &raquo; <a href="symbols.php">nepřiřazené symboly</a> &raquo; <strong>nový symbol</strong>');
 ?>
 <div id="obsah">
-	<fieldset><h1><legend>Nový symbol</legend></h1>
+	<fieldset><legend><strong>Nový symbol</strong></legend>
 	<p id="top-text">Symboly nahrávejte pokud možno ve velikosti 100x100 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen symboly jasně rozeznatelné, rozmazané fotky použijte třeba jako přílohu. <br />
 	Pokud zadáváte hodnoty pro čáry, křivky, body, geometrické tvary, písma a speciální znaky, hodnota nabývá velikosti 0 až 10.</p>
 	<form action="procother.php" method="post" id="inputform" enctype="multipart/form-data">
@@ -22,7 +22,7 @@
 				<option>9</option>
 				<option>10</option>
 			</datalist>
-		<fieldset><h2><legend>Základní údaje</legend></h2>
+		<fieldset><legend><strong>Základní údaje</strong></legend>
 			<div id="info">
 				<h3><label for="symbol">Symbol:</label></h3><input type="file" name="symbol" id="symbol" /><br />	        	
 				<h3><label for="liner">Čáry:</label></h3><input type="range" value="0" min="0" max="10" step="1" name="liner" id="liner" list=hodnoty /><br />
@@ -43,7 +43,7 @@
 			<!-- end of #info -->
 		</fieldset>
 		<!-- násedují poznámky k symbolu -->
-		<fieldset><h2><legend>Poznámky k symbolu</legend></h2>
+		<fieldset><legend><strong>Poznámky k symbolu</strong></legend>
 			<div class="field-text">
 				<textarea cols="80" rows="15" name="contents" id="contents">Doplnit.</textarea>
 			</div>

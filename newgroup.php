@@ -6,7 +6,7 @@
 ?>
 <div id="obsah">
 <form action="procgroup.php" method="post" id="inputform">
-<fieldset><h1><legend>Nová skupina</legend></h1>
+<fieldset><legend><strong>Nová skupina</strong></legend>
 	<div id="info">
 		<h3><label for="title">Název:</label></h3>
 		<input type="text" name="title" id="title" />
@@ -25,7 +25,7 @@
 	</div>
 	<!-- end of #info -->
 	
-	<fieldset><h2><legend>Popis</legend></h2>
+	<fieldset><legend><strong>Popis</strong></legend>
 		  <textarea cols="80" rows="7" name="contents" id="contents"></textarea>
 	</fieldset>
 	

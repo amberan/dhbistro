@@ -26,8 +26,8 @@ function pwdcheck(form)
 	-->
 	</script>
 <form action="settings.php" method="post" name="inputform" id="inputform" onSubmit="return pwdcheck(this);">
-<fieldset id="ramecek"><h1><legend>Uživatel: <?php echo $usrinfo['login']; ?></legend></h1>
-	<fieldset><h2><legend>Základní&nbsp;nastavení</legend></h2>
+<fieldset id="ramecek"><legend><strong>Uživatel: <?php echo $usrinfo['login']; ?></strong></legend>
+	<fieldset><legend><strong>Základní&nbsp;nastavení</strong></legend>
 	<div id="info">
 		<h3><label for="timeout">Timeout:</label></h3>	
 	  	<input type="text" name="timeout" id="timeout" value="<?php echo $usrinfo['timeout']?>"/>
@@ -46,7 +46,7 @@ function pwdcheck(form)
 	<!-- end of #info -->
 	</fieldset>
 
-	<fieldset><h2><legend>Aktuální plán:</legend></h2>
+	<fieldset><legend><strong>Aktuální plán:</strong></legend>
 		<textarea cols="140" rows="300" name="plan" id="plan"><?php echo StripSlashes($usrinfo['plan'])?></textarea>
 	</fieldset>
 

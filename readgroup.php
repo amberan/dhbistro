@@ -77,7 +77,7 @@
 ?>
 <div id="obsah">
 	<h1><?php echo StripSlashes($rec_g['title']); ?></h1>
-	<fieldset><h2><legend>Obecné informace</legend></h2>
+	<fieldset><legend><strong>Obecné informace</strong></legend>
 	<div id="info"><?php
 		if($rec_g['secret']==1){ ?>
 	 	<h2>TAJNÉ</h2><?php } ?><?php
@@ -124,7 +124,7 @@
 	</fieldset>
 	
 	<fieldset>
-		<h2><legend>Popis</legend></h2>
+		<legend><strong>Popis</strong></legend>
 		<div class="field-text"><?php echo(StripSlashes($rec_g['contents'])); ?></div>
 	</fieldset>
 

@@ -13,7 +13,7 @@
                     sparklets ('<a href="./symbols.php">symboly</a> &raquo; <strong>úprava symbolu</strong>');
 ?>
 <div id="obsah">
-<fieldset><h1><legend>Úprava symbolu:</legend></h1>
+<fieldset><legend><strong>Úprava symbolu:</strong></legend>
 	<p id="top-text">Symboly nahrávejte pokud možno ve velikosti 100x100 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen symboly jasně rozeznatelné, rozmazané fotky použijte třeba jako přílohu. <br />
 	Pokud zadáváte hodnoty pro čáry, křivky, body, geometrické tvary, písma a speciální znaky, hodnota nabývá velikosti 0 až 10</p>
 	<form action="procother.php" method="post" id="inputform" enctype="multipart/form-data">
@@ -30,7 +30,7 @@
 				<option>9</option>
 				<option>10</option>
 			</datalist>
-		<fieldset class="symbol"><h2><legend>Symbol</legend></h2>
+		<fieldset class="symbol"><legend><strong>Symbol</strong></legend>
 		<?php if($rec_s['symbol']==NULL){ ?><img src="#" alt="symbol chybí" title="symbol chybí" id="ssymbolimg" class="noname"/>
 		<?php }else{ ?><img src="getportrait.php?nrid=<?php echo($_REQUEST['rid']); ?>" alt="symbol" id="ssymbolimg" />
 		<?php } ?>
@@ -64,7 +64,7 @@
 			<!-- end of #info -->
 		</fieldset>
 		<!-- náseduje popis osoby -->
-		<fieldset><h2><legend>Informace k symbolu</legend></h2>
+		<fieldset><legend><strong>Informace k symbolu</strong></legend>
 			<div class="field-text">
 				<textarea cols="80" rows="15" name="desc" id="desc"><?php echo StripSlashes($rec_s['desc']); ?></textarea>
 			</div>
@@ -76,7 +76,7 @@
 
 </fieldset>
 
-	<fieldset><h3><legend>Výskyt v případech</legend></h3>
+	<fieldset><legend><strong>Výskyt v případech</strong></legend>
 		<!-- tady dochází ke stylové nesystematičnosti, nejedná se o poznámku; pro nápravu je třeba projít všechny šablony -->
 		<p><span class="poznamka-edit-buttons"><a class="connect" href="addsy2c.php?rid=<?php echo $_REQUEST['rid']; ?>" title="přiřazení"><span class="button-text">přiřazení případů</span></a><em style="font-size:smaller;"> (přiřazování)</em></span></p>
 		<!-- následuje seznam případů -->
@@ -108,7 +108,7 @@
 	</fieldset>
 
 	
-	<fieldset><h3><legend>Výskyt v hlášení</legend></h3>
+	<fieldset><legend><strong>Výskyt v hlášení</strong></legend>
 		<!-- tady dochází ke stylové nesystematičnosti, nejedná se o poznámku; pro nápravu je třeba projít všechny šablony -->
 		<p><span class="poznamka-edit-buttons"><a class="connect" href="addsy2ar.php?rid=<?php echo $_REQUEST['rid']; ?>" title="přiřazení"><span class="button-text">přiřazení hlášení</span></a><em style="font-size:smaller;"> (přiřazování)</em></span></p>
 		<!-- následuje seznam případů -->
@@ -140,7 +140,7 @@
 	</fieldset>	
 	
 	
-	<fieldset><h3><legend>Poznámky</legend></h3>
+	<fieldset><legend><strong>Poznámky</strong></legend>
 		<span class="poznamka-edit-buttons"><a class="new" href="newnote.php?rid=<?php echo $_REQUEST['rid']; ?>&amp;idtable=9" title="nová poznámka"><span class="button-text">nová poznámka</span></a><em style="font-size:smaller;"> (K symbolu si můžete připsat kolik chcete poznámek.)</em></span>
 		<!-- následuje seznam poznámek -->
 		<?php // generování poznámek

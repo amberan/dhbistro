@@ -9,7 +9,7 @@
 // dashboard
 ?>
 <div id="dashboard">
-<fieldset><h2><legend>Osobní nástěnka</legend></h2>
+<fieldset><legend><strong>Osobní nástěnka</strong></legend>
 	<table><tr><td>
 	<h3>Rozpracovaná nedokončená hlášení: <?php
 				$sql_r="SELECT ".DB_PREFIX."reports.secret AS 'secret', ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id' FROM ".DB_PREFIX."reports WHERE ".DB_PREFIX."reports.iduser=".$usrinfo['id']." AND ".DB_PREFIX."reports.status=0 AND ".DB_PREFIX."reports.deleted=0 ORDER BY ".DB_PREFIX."reports.label ASC";
@@ -70,8 +70,7 @@
 	$res_d=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."dashboard ORDER BY id DESC LIMIT 1");
 	if ($rec_d=mysqli_fetch_assoc ($res_d)) {
 		?>
-		<fieldset><legend>
-		<h2>Veřejná nástěnka</h2>
+		<fieldset><legend>Veřejná nástěnka
 		<strong>Poslední změna:</strong> <?php echo(Date ('d. m. Y',$rec_d['created'])); ?>
 				<strong>Změnil:</strong> <?php 
 				$name=getAuthor($rec_d['iduser'],0);
@@ -89,7 +88,7 @@
 	<?php 
 	} else {
 		?>
-		<fieldset><h2><legend>Veřejná nástěnka</legend></h2>
+		<fieldset><legend><strong>Veřejná nástěnka</strong></legend>
 		<p>Veřejná nástěnka nemá žádný obsah.</p>
 		<div class="clear">&nbsp;</div>
 		</fieldset>		

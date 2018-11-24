@@ -6,7 +6,7 @@
 ?>
 <div id="obsah">	
 <form action="proccase.php" method="post" id="inputform">
-<fieldset><h1><legend>Nový případ</legend></h1>
+<fieldset><legend><strong>Nový případ</strong></legend>
 	<div id="info">
 		<h3><label for="title">Název:</label></h3>
 		<input type="text" name="title" id="title" />
@@ -31,7 +31,7 @@
 	</div>
 	<!-- end of #info -->
 		
-	<fieldset><h2><legend>Popis</legend></h2>
+	<fieldset><legend><strong>Popis</strong></legend>
 		<textarea cols="80" rows="7" name="contents" id="contents">Doplnit.</textarea>
 	</fieldset>
 	

@@ -59,8 +59,8 @@ function date_picker($name, $startyear=NULL, $endyear=NULL)
 	-->
 	</script>
 <form action="procactrep.php" method="post" id="inputform">
-<fieldset id="ramecek"><h1><legend>Nové hlášení z <?php echo (($type==1)?'výjezdu':(($type==2)?'výslechu':'#&*'));?></legend></h1>
-	<fieldset><h2><legend>Základní údaje</legend></h2>
+<fieldset id="ramecek"><legend><strong>Nové hlášení z <?php echo (($type==1)?'výjezdu':(($type==2)?'výslechu':'#&*'));?></strong></legend>
+	<fieldset><legend><strong>Základní údaje</strong></legend>
 		<div id="info"><?php
 	switch ($type){		
 		// default situace by nemela nikdy nastat, zadne nove hlaseni by nemelo mit typ 0 (nula);
@@ -98,23 +98,23 @@ function date_picker($name, $startyear=NULL, $endyear=NULL)
 		<!-- end of #info -->
 	</fieldset>
 
-	<fieldset><h2><legend>Shrnutí:</legend></h2>
+	<fieldset><legend><strong>Shrnutí:</strong></legend>
 		<textarea cols="80" rows="7" name="summary" id="summary">doplnit</textarea>
 	</fieldset>
 	
-	<fieldset><h2><legend>Možné dopady:</legend></h2>
+	<fieldset><legend><strong>Možné dopady:</strong></legend>
 		<textarea cols="80" rows="7" name="impact" id="impact">doplnit</textarea>
 	</fieldset>
 	
-	<fieldset><h2><legend>Podrobný popis průběhu:</legend></h2>
+	<fieldset><legend><strong>Podrobný popis průběhu:</strong></legend>
 		<textarea cols="80" rows="30" name="details" id="details">doplnit</textarea>
 	</fieldset>
 	
-	<fieldset><h2><legend>Energetická náročnost:</legend></h2>
+	<fieldset><legend><strong>Energetická náročnost:</strong></legend>
 		<textarea cols="80" rows="7" name="energy" id="energy">kouzla, vstupy do Šera, amulety, artefakty</textarea>
 	</fieldset>
 	
-	<fieldset><h2><legend>Počáteční vstupy:</legend></h2>
+	<fieldset><legend><strong>Počáteční vstupy:</strong></legend>
 		<textarea cols="80" rows="7" name="inputs" id="inputs">info z analytického atd.</textarea>
 	</fieldset>
 	
