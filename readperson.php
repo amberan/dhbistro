@@ -157,15 +157,15 @@
 		<div class="clear">&nbsp;</div>
                 <h3>Figuruje v těchto hlášení: </h3><p><?php
 				if ($usrinfo['right_power']) {
-					$sql_r="SELECT ".DB_PREFIX."reports.secret AS 'secret', ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."reports, ".DB_PREFIX."ar2p WHERE ".DB_PREFIX."ar2p.idreport=".DB_PREFIX."reports.id AND ".DB_PREFIX."ar2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."reports.deleted=0 ORDER BY ".DB_PREFIX."reports.label ASC";
+					$sql_r="SELECT ".DB_PREFIX."reports.adatum as date_created, ".DB_PREFIX."reports.datum as date_changed, ".DB_PREFIX."reports.secret AS 'secret', ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."reports, ".DB_PREFIX."ar2p WHERE ".DB_PREFIX."ar2p.idreport=".DB_PREFIX."reports.id AND ".DB_PREFIX."ar2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."reports.deleted=0 ORDER BY ".DB_PREFIX."reports.label ASC";
 				} else {
-					$sql_r="SELECT ".DB_PREFIX."reports.secret AS 'secret', ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."reports, ".DB_PREFIX."ar2p WHERE ".DB_PREFIX."ar2p.idreport=".DB_PREFIX."reports.id AND ".DB_PREFIX."ar2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0 ORDER BY ".DB_PREFIX."reports.label ASC";
+					$sql_r="SELECT ".DB_PREFIX."reports.adatum as date_created, ".DB_PREFIX."reports.datum as date_changed, ".DB_PREFIX."reports.secret AS 'secret', ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."reports, ".DB_PREFIX."ar2p WHERE ".DB_PREFIX."ar2p.idreport=".DB_PREFIX."reports.id AND ".DB_PREFIX."ar2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0 ORDER BY ".DB_PREFIX."reports.label ASC";
 				}
 				$res_r=mysqli_query ($database,$sql_r);
 				if (mysqli_num_rows ($res_r)) {
 					$reports=Array();
 					while ($rec_r=mysqli_fetch_assoc ($res_r)) {
-						$reports[]='<a href="./readactrep.php?rid='.$rec_r['id'].'&hidenotes=0&truenames=0">'.StripSlashes ($rec_r['label']).'</a>';
+						$reports[]='<a href="./readactrep.php?rid='.$rec_r['id'].'&hidenotes=0&truenames=0">'.StripSlashes ($rec_r['label']).'</a> | vytvořeno: '.(Date ('d. m. Y',$rec_r['date_created'])).' | změněno: '.(Date ('d. m. Y',$rec_r['date_changed']));
 					}
 					echo implode ($reports,'<br />');
 				} else {

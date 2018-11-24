@@ -66,7 +66,7 @@ if ($farchiv==0) {
 }
 if ($usrinfo['right_power']) {
     $sql = "
-        SELECT ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret'
+        SELECT ".DB_PREFIX."cases.datum as date_changed, ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret'
         FROM ".DB_PREFIX."cases
         WHERE MATCH(title, contents) AGAINST ('$search' IN BOOLEAN MODE)
         AND ".DB_PREFIX."cases.deleted=0".$fsql_archiv."
@@ -75,7 +75,7 @@ if ($usrinfo['right_power']) {
     $res = mysqli_query ($database,$sql);
 } else {
     $sql = "
-        SELECT ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret'
+        SELECT ".DB_PREFIX."cases.datum as date_changed, ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret'
         FROM ".DB_PREFIX."cases
         WHERE MATCH(title, contents) AGAINST ('$search' IN BOOLEAN MODE)
         AND ".DB_PREFIX."cases.deleted=0 AND ".DB_PREFIX."cases.secret=0".$fsql_archiv."
@@ -90,7 +90,8 @@ if ($usrinfo['right_power']) {
 <thead>
 	<tr>
 	  <th width="50%">Název</th>
-	  <th width="50%">Status</th>
+	  <th width="15%">Změněno</th>
+	  <th width="15%">Status</th>
 	</tr>
 </thead>
 <tbody>
@@ -100,7 +101,8 @@ if ($usrinfo['right_power']) {
                 while ($rec=mysqli_fetch_assoc ($res)) {
                 echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 	<td><a href="readcase.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a></td>
-        <td>'.(($rec['status']==0)?'Otevřený':'Uzavřený').''.(($rec['secret']==1)?', Tajný':'').'</td>
+	<td>'.(Date ('d. m. Y',$rec['date_changed'])).'</td>
+	<td>'.(($rec['status']==0)?'Otevřený':'Uzavřený').''.(($rec['secret']==1)?', Tajný':'').'</td>
         </tr>';
                 $even++;
                 }
@@ -115,7 +117,7 @@ if ($farchiv==0) {
 }          
 if ($usrinfo['right_power']) {          
     $res = mysqli_query ($database,"
-        SELECT ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."reports.status AS 'status', ".DB_PREFIX."reports.secret AS 'secret'
+        SELECT ".DB_PREFIX."reports.adatum as date_created, ".DB_PREFIX."reports.datum as date_changed,  ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."reports.status AS 'status', ".DB_PREFIX."reports.secret AS 'secret'
         FROM ".DB_PREFIX."reports
         WHERE MATCH(label, task, summary, impacts, details) AGAINST ('$search' IN BOOLEAN MODE)
         AND ".DB_PREFIX."reports.deleted=0".$fsql_archiv."
@@ -127,7 +129,7 @@ if ($usrinfo['right_power']) {
     ");
 } else {
     $res = mysqli_query ($database,"
-        SELECT ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."reports.status AS 'status', ".DB_PREFIX."reports.secret AS 'secret'
+        SELECT ".DB_PREFIX."reports.adatum as date_created, ".DB_PREFIX."reports.datum as date_changed,  ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."reports.status AS 'status', ".DB_PREFIX."reports.secret AS 'secret'
         FROM ".DB_PREFIX."reports
         WHERE MATCH(label, task, summary, impacts, details) AGAINST ('$search' IN BOOLEAN MODE)
         AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0".$fsql_archiv."
@@ -144,7 +146,9 @@ if ($usrinfo['right_power']) {
 <thead>
 	<tr>
 	  <th width="50%">Název</th>
-	  <th width="50%">Status</th>
+	  <th width="15%">Vytvořeno</th>
+	  <th width="15%">Změněno</th>
+	  <th width="15%">Status</th>
 	</tr>
 </thead>
 <tbody>
@@ -154,8 +158,9 @@ if ($usrinfo['right_power']) {
                 while ($rec=mysqli_fetch_assoc ($res)) {
                 echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 	<td><a href="readactrep.php?rid='.$rec['id'].'&amp;hidenotes=0&amp;truenames=0">'.StripSlashes($rec['label']).'</a></td>
+		<td>'.(Date ('d. m. Y',$rec['date_created'])).'</td>
+		<td>'.(Date ('d. m. Y',$rec['date_changed'])).'</td>
         <td>';
-                
         switch ($rec['status']) {
                 case 0:
                     echo 'Rozpracované';
@@ -187,7 +192,7 @@ if ($farchiv==0) {
 } 
 if ($usrinfo['right_power']) {
     $res = mysqli_query ($database,"
-        SELECT ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.archiv AS 'archiv', ".DB_PREFIX."persons.dead AS 'dead', ".DB_PREFIX."persons.secret AS 'secret'
+        SELECT ".DB_PREFIX."persons.regdate as date_created, ".DB_PREFIX."persons.datum as date_changed, ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.archiv AS 'archiv', ".DB_PREFIX."persons.dead AS 'dead', ".DB_PREFIX."persons.secret AS 'secret'
         FROM ".DB_PREFIX."persons
         WHERE MATCH(surname, name, contents) AGAINST ('$search' IN BOOLEAN MODE)
         AND ".DB_PREFIX."persons.deleted=0".$fsql_archiv."
@@ -197,7 +202,7 @@ if ($usrinfo['right_power']) {
     ");
 } else {
     $res = mysqli_query ($database,"
-        SELECT ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.archiv AS 'archiv', ".DB_PREFIX."persons.dead AS 'dead', ".DB_PREFIX."persons.secret AS 'secret'
+        SELECT ".DB_PREFIX."persons.regdate as date_created, ".DB_PREFIX."persons.datum as date_changed, ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.archiv AS 'archiv', ".DB_PREFIX."persons.dead AS 'dead', ".DB_PREFIX."persons.secret AS 'secret'
         FROM ".DB_PREFIX."persons
         WHERE MATCH(surname, name, contents) AGAINST ('$search' IN BOOLEAN MODE)
         AND ".DB_PREFIX."persons.deleted=0 AND ".DB_PREFIX."persons.secret=0".$fsql_archiv."
@@ -212,7 +217,9 @@ if ($usrinfo['right_power']) {
 <thead>
 	<tr>
 	  <th width="50%">Jméno</th>
-	  <th width="50%">Status</th>
+	  <th width="15%">Vytvořeno</th>
+	  <th width="15%">Změněno</th>
+	  <th width="15%">Status</th>
 	</tr>
 </thead>
 <tbody>
@@ -222,7 +229,10 @@ if ($usrinfo['right_power']) {
                 while ($rec=mysqli_fetch_assoc ($res)) {
                 echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 	<td><a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['surname']).' '.StripSlashes($rec['name']).'</a></td>
-        <td>'.(($rec['archiv']==1)?'Archivovaný':'Aktivní').''.(($rec['dead']==1)?', Mrtvý':'').''.(($rec['secret']==1)?', Tajný':'').'</td>
+	<td>'.(Date ('d. m. Y',$rec['date_created'])).'</td>
+	<td>'.(Date ('d. m. Y',$rec['date_changed'])).'</td>
+
+	<td>'.(($rec['archiv']==1)?'Archivovaný':'Aktivní').''.(($rec['dead']==1)?', Mrtvý':'').''.(($rec['secret']==1)?', Tajný':'').'</td>
         </tr>';
 		$even++;
                 }
@@ -237,7 +247,7 @@ if ($farchiv==0) {
 } 
 if ($usrinfo['right_power']) {
     $res = mysqli_query ($database,"
-        SELECT ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.archived AS 'archived'
+        SELECT  ".DB_PREFIX."groups.datum as date_changed, ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.archived AS 'archived'
         FROM ".DB_PREFIX."groups
         WHERE MATCH(title, contents) AGAINST ('$search' IN BOOLEAN MODE)
         AND ".DB_PREFIX."groups.deleted=0".$fsql_archiv."
@@ -246,7 +256,7 @@ if ($usrinfo['right_power']) {
     ");
 } else {
     $res = mysqli_query ($database,"
-        SELECT ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.archived AS 'archived'
+        SELECT  ".DB_PREFIX."groups.datum as date_changed, ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.archived AS 'archived'
         FROM ".DB_PREFIX."groups
         WHERE MATCH(title, contents) AGAINST ('$search' IN BOOLEAN MODE)
         AND ".DB_PREFIX."groups.deleted=0 AND ".DB_PREFIX."groups.secret=0".$fsql_archiv."
@@ -260,7 +270,8 @@ if ($usrinfo['right_power']) {
 <thead>
 	<tr>
 	  <th width="50%">Název</th>
-	  <th width="50%">Status</th>
+	  <th width="15%">Změněno</th>
+	  <th width="15%">Status</th>
 	</tr>
 </thead>
 <tbody>
@@ -270,7 +281,9 @@ if ($usrinfo['right_power']) {
                 while ($rec=mysqli_fetch_assoc ($res)) {
                 echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 	<td><a href="readgroup.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a></td>
-        <td>'.(($rec['secret']==1)?'Tajná':'').''.(($rec['archived']==1)?' Archivovaná':'').'</td>
+	<td>'.(Date ('d. m. Y',$rec['date_changed'])).'</td>
+
+	<td>'.(($rec['secret']==1)?'Tajná':'').''.(($rec['archived']==1)?' Archivovaná':'').'</td>
         </tr>';
 		$even++;
                 }
@@ -281,7 +294,7 @@ if ($usrinfo['right_power']) {
 /* Není tu ošetřené, aby to nevyhazovalo symboly od tajných osob. Nutno v budoucnu ošetřit. */          
 if ($usrinfo['right_power']) {
     $res = mysqli_query ($database,"
-        SELECT ".DB_PREFIX."symbols.id AS 'id', ".DB_PREFIX."symbols.assigned AS 'assigned', ".DB_PREFIX."symbols.secret AS 'secret'
+        SELECT ".DB_PREFIX."symbols.created as date_created, ".DB_PREFIX."symbols.modified as date_changed,  ".DB_PREFIX."symbols.id AS 'id', ".DB_PREFIX."symbols.assigned AS 'assigned', ".DB_PREFIX."symbols.secret AS 'secret'
         FROM ".DB_PREFIX."symbols
         WHERE MATCH(`desc`) AGAINST ('$search' IN BOOLEAN MODE)
         AND ".DB_PREFIX."symbols.deleted=0
@@ -289,7 +302,7 @@ if ($usrinfo['right_power']) {
     ");
 } else {
     $res = mysqli_query ($database,"
-        SELECT ".DB_PREFIX."symbols.id AS 'id', ".DB_PREFIX."symbols.assigned AS 'assigned', ".DB_PREFIX."symbols.secret AS 'secret'
+        SELECT  ".DB_PREFIX."symbols.created as date_created, ".DB_PREFIX."symbols.modified as date_changed, ".DB_PREFIX."symbols.id AS 'id', ".DB_PREFIX."symbols.assigned AS 'assigned', ".DB_PREFIX."symbols.secret AS 'secret'
         FROM ".DB_PREFIX."symbols
         WHERE MATCH(`desc`) AGAINST ('$search' IN BOOLEAN MODE)
         AND ".DB_PREFIX."symbols.deleted=0 AND ".DB_PREFIX."symbols.secret=0
@@ -302,7 +315,9 @@ if ($usrinfo['right_power']) {
 <thead>
 	<tr>
 	  <th width="50%">ID</th>
-	  <th width="50%">Status</th>
+	  <th width="15%">Vytvořeno</th>
+	  <th width="15%">Změněno</th>
+	  <th width="15%">Status</th>
 	</tr>
 </thead>
 <tbody>
@@ -312,7 +327,10 @@ if ($usrinfo['right_power']) {
                 while ($rec=mysqli_fetch_assoc ($res)) {
                 echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 	<td><a href="readsymbol.php?rid='.$rec['id'].'&amp;hidenotes=0">'.($rec['id']).'</a></td>
-        <td>'.(($rec['assigned']==1)?'Přiřazený':'Nepřiřazený').''.(($rec['secret']==1)?', Tajný':'').'</td>
+	<td>'.(Date ('d. m. Y',$rec['date_created'])).'</td>
+	<td>'.(Date ('d. m. Y',$rec['date_changed'])).'</td>
+
+	<td>'.(($rec['assigned']==1)?'Přiřazený':'Nepřiřazený').''.(($rec['secret']==1)?', Tajný':'').'</td>
         </tr>';
 		$even++;
                 }
@@ -323,7 +341,7 @@ if ($usrinfo['right_power']) {
 /* POZOR, tady bude hrozny opich udelat ten join pro zobrazeni jen poznamek k nearchivovanym vecem */
 if ($usrinfo['right_power']) {
     $res = mysqli_query ($database,"
-        SELECT ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.id AS 'id', ".DB_PREFIX."notes.idtable AS 'idtable', ".DB_PREFIX."notes.iditem AS 'iditem', ".DB_PREFIX."notes.secret AS 'secret'
+        SELECT ".DB_PREFIX."notes.datum as date_created, ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.id AS 'id', ".DB_PREFIX."notes.idtable AS 'idtable', ".DB_PREFIX."notes.iditem AS 'iditem', ".DB_PREFIX."notes.secret AS 'secret'
         FROM ".DB_PREFIX."notes
         WHERE MATCH(title, note) AGAINST ('$search' IN BOOLEAN MODE) AND ".DB_PREFIX."notes.secret<2
         ORDER BY 5 * MATCH(title) AGAINST ('$search')
@@ -331,7 +349,7 @@ if ($usrinfo['right_power']) {
     ");
 } else {
     $res = mysqli_query ($database,"
-        SELECT ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.id AS 'id', ".DB_PREFIX."notes.idtable AS 'idtable', ".DB_PREFIX."notes.iditem AS 'iditem', ".DB_PREFIX."notes.secret AS 'secret'
+        SELECT ".DB_PREFIX."notes.datum as date_created, ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.id AS 'id', ".DB_PREFIX."notes.idtable AS 'idtable', ".DB_PREFIX."notes.iditem AS 'iditem', ".DB_PREFIX."notes.secret AS 'secret'
         FROM ".DB_PREFIX."notes
         WHERE MATCH(title, note) AGAINST ('$search' IN BOOLEAN MODE) AND ".DB_PREFIX."notes.secret=0
         ORDER BY 5 * MATCH(title) AGAINST ('$search')
@@ -345,8 +363,9 @@ if ($usrinfo['right_power']) {
 	<tr>
 	  <th width="30%">Název poznámky</th>
           <th width="30%">Komentuje</th>
-          <th width="20%">Typ</th>
-          <th width="20%">Status</th>
+          <th width="15%">Typ</th>
+		  <th width="15%">Vytvořeno</th>
+          <th width="15%">Status</th>
 	</tr>
 </thead>
 <tbody>
@@ -419,7 +438,8 @@ if ($usrinfo['right_power']) {
                 echo '<tr class="'.(($even%2==0)?'even':'odd').'">
                 <td><a href="readnote.php?rid='.$rec['id'].'&idtable='.$rec['idtable'].'">'.StripSlashes($rec['title']).'</a></td>
                 <td><a href="'.$linktype.'">'.StripSlashes($notetitle).'</a></td>
-                <td>'.StripSlashes($type).'</td>
+				<td>'.StripSlashes($type).'</td>
+				<td>'.(Date ('d. m. Y',$rec['date_created'])).'</td>
                 <td>'.(($rec['secret']==1)?'Tajná':'').'</td>
                 </tr>';
 		
@@ -429,7 +449,8 @@ if ($usrinfo['right_power']) {
                 echo '<tr class="'.(($even%2==0)?'even':'odd').'">
                 <td><a href="readnote.php?rid='.$rec['id'].'&idtable='.$rec['idtable'].'">'.StripSlashes($rec['title']).'</a></td>
                 <td><a href="'.$linktype.'">'.StripSlashes($notetitle).'</a></td>
-                <td>'.StripSlashes($type).'</td>
+				<td>'.StripSlashes($type).'</td>
+				<td>'.(Date ('d. m. Y',$rec['date_created'])).'</td>
                 <td>'.(($rec['secret']==1)?'Tajná':'').'</td>
                 </tr>';
 		
