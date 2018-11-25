@@ -1,4 +1,4 @@
-<h1 class="center">Úpravit uživatele</h1>
+<h1 class="center">Upravit uživatele</h1>
 <div class="table" id="user">
 <?php
 if (!$usrinfo['right_power']) {

@@ -151,7 +151,7 @@
 				<?php } ?>
 			<li class="soubor"><a href="getfile.php?idfile=<?php echo($rec_f['id']); ?>" title=""><?php echo(StripSlashes($rec_f['title'])); ?></a><?php if($rec_f['secret']==1){ ?> (TAJNÝ)<?php }; ?><span class="poznamka-edit-buttons"><?php
 				if (($rec_f['iduser']==$usrinfo['id']) || ($usrinfo['right_power'])) echo '<a class="delete" title="smazat" href="proccase.php?deletefile='.$rec_f['id'].'&amp;caseid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('editcase.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat soubor &quot;'.StripSlashes($rec_f['title']).'&quot; náležící k případu?\')"><span class="button-text">smazat soubor</span></a>'; ?>
-				</span></li><?php 
+				</span><br><br></li><?php 
 			}
 			if($i<>0){ ?>
 		</ul>
@@ -194,7 +194,9 @@
 	<!-- end of #new-file .otherform-wrap -->
 	
 	<fieldset><legend><strong>Aktuálně připojené poznámky:</strong></legend>
-		<span class="poznamka-edit-buttons"><a class="new" href="newnote.php?rid=<?php echo $_REQUEST['rid']; ?>&amp;idtable=3" title="nová poznámka"><span class="button-text">nová poznámka</span></a><em style="font-size:smaller;"> (K případu si můžete připsat kolik chcete poznámek.)</em></span>
+		<span class="poznamka-edit-buttons"><a class="new" href="newnote.php?rid=<?php echo $_REQUEST['rid']; ?>&amp;idtable=3" title="nová poznámka">
+		<span class="button-text">nová poznámka</span></a><em style="font-size:smaller;"> (K případu si můžete připsat kolik chcete poznámek.)</em></span>
+		<br><br>
 		<ul>
 		<?php
 		if ($usrinfo['right_power']) {
@@ -204,7 +206,7 @@
 		}
 		$res_n=mysqli_query ($database,$sql_n);
 		while ($rec_n=mysqli_fetch_assoc ($res_n)) { ?>
-			<li><a href="readnote.php?rid=<?php echo $rec_n['id']; ?>&amp;idtable=3"><?php echo StripSlashes($rec_n['title']); ?></a> - <?php echo StripSlashes($rec_n['user']); 
+			<li class="Clear"><a href="readnote.php?rid=<?php echo $rec_n['id']; ?>&amp;idtable=3"><?php echo StripSlashes($rec_n['title']); ?></a> - <?php echo StripSlashes($rec_n['user']); 
 			if ($rec_n['secret']==0){ ?> (veřejná)<?php }
 			if ($rec_n['secret']==1){ ?> (tajná)<?php }
 			if ($rec_n['secret']==2){ ?> (soukromá)<?php }
