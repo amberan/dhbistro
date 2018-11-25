@@ -11,12 +11,11 @@ if (isset($_REQUEST['logmein'])) {
 	}
 	if($logrec=mysqli_fetch_array ($logres)) {
 		$_SESSION['sid']=session_id(); 
-		error_log("UPDATE ".DB_PREFIX."users set sid='' where sid='".$_SESSION['sid']."'");
 		mysqli_query ($database,"UPDATE ".DB_PREFIX."users set sid='' where sid='".$_SESSION['sid']."'");
-		error_log("UPDATE ".DB_PREFIX."users SET sid='".$_SESSION['sid']."', lastlogon=".Time().", ip='".$_SERVER['REMOTE_ADDR']."', user_agent='".mysqli_real_escape_string ($database,$_SERVER['HTTP_USER_AGENT'])."' WHERE id=".$logrec['id']);
+		error_log("LOGIN SUCCESS: ".$_REQUEST['loginname']);
 		mysqli_query ($database,"UPDATE ".DB_PREFIX."users SET sid='".$_SESSION['sid']."', lastlogon=".Time().", ip='".$_SERVER['REMOTE_ADDR']."', user_agent='".mysqli_real_escape_string ($database,$_SERVER['HTTP_USER_AGENT'])."' WHERE id=".$logrec['id']);
 	} else {
-		error_log("FAILED LOGIN: ".$_REQUEST['loginname']);
+		error_log("LOGIN FAILED: ".$_REQUEST['loginname']);
 	}
 }
 // info o uzivateli
