@@ -61,8 +61,8 @@
 	  case 2: $fsql_sort=' '.DB_PREFIX.'reports.datum ASC '; break;
 	  case 3: $fsql_sort=' '.DB_PREFIX.'users.login ASC '; break;
 	  case 4: $fsql_sort=' '.DB_PREFIX.'users.login DESC '; break;
-	  case 5: $fsql_sort=' '.DB_PREFIX.'reports.adatum ASC '; break;
-	  case 6: $fsql_sort=' '.DB_PREFIX.'reports.adatum DESC '; break;
+	  case 5: $fsql_sort=' '.DB_PREFIX.'reports.adatum ASC, '.DB_PREFIX.'reports.start ASC '; break;
+	  case 6: $fsql_sort=' '.DB_PREFIX.'reports.adatum DESC, '.DB_PREFIX.'reports.start DESC '; break;
 	  default: $fsql_sort=' '.DB_PREFIX.'reports.adatum DESC ';
 	}
 	switch ($f_stat) {
@@ -171,10 +171,13 @@
                 ".DB_PREFIX."reports.status AS 'status',
                 ".DB_PREFIX."users.login AS 'autor',
                 ".DB_PREFIX."reports.iduser AS 'riduser',
-                ".DB_PREFIX."reports.type AS 'type' 
+				".DB_PREFIX."reports.type AS 'type' ,
+				".DB_PREFIX."reports.start AS 'start',
+				".DB_PREFIX."reports.end AS 'end'  
                     FROM ".DB_PREFIX."users, ".DB_PREFIX."reports".$fsql_conn2." 
                     WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret<=".$usrinfo['right_power'].$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn.$fsql_archiv."
-                    ORDER BY ".$fsql_sort;
+					ORDER BY ".$fsql_sort;
+
 	$res=mysqli_query ($database,$sql);
 	while ($rec=mysqli_fetch_assoc ($res)) {
             if ($f_new==0 || ($f_new==1 && searchRecord(4,$rec['id']))) {
@@ -186,7 +189,7 @@
                         echo '   | <td><a href="newnote.php?rid='.$rec['id'].'&idtable=8">přidat poznámku</a></td>';
                         }
                   echo '</span>
-                <p>['.Date ('d. m. Y - H:i:s',$rec['datum']).']  '.$rec['autor'].', Datum akce: ['.Date ('d. m. Y - H:i:s',$rec['adatum']).'] <br /> <strong>Úkol: </strong>'
+                <p>['.Date ('d. m. Y - H:i:s',$rec['datum']).']  '.$rec['autor'].', Datum akce: ['.Date ('d. m. Y',$rec['adatum']).' - '.$rec['start'].'-'.$rec['end'].']<br /> <strong>Úkol: </strong>'
                 .StripSlashes($rec['task']).'&nbsp; <strong>Stav:</strong> ';
                   if(($rec['status'])=='0') echo 'Rozpracované';
                   if(($rec['status'])=='1') echo 'Dokončené';

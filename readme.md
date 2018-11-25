@@ -9,7 +9,8 @@
 	BUGFIX: $_REQUEST,$_POST,$_GET vicerozmerne pole
 	BUGFIX: generovani hesel novych uzivatelu
 	zobrazovani data vytvoreni a zmeny u jednotlivych objektu (osoby, vyhledavani)
-	zobrazovani priloh u hlaseni, osob
+	zobrazovani priloh u hlaseni, osob, pripadu
+	BUGFIX razeni reportu podle data/casu vyjezdu
 - **1.5.5 SUSPEND USER**   
 	novinky vytazeny z indexu  
 	ukladaji se i poznamky bez nazvu    
