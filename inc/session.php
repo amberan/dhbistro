@@ -15,6 +15,8 @@ if (isset($_REQUEST['logmein'])) {
 		mysqli_query ($database,"UPDATE ".DB_PREFIX."users set sid='' where sid='".$_SESSION['sid']."'");
 		error_log("UPDATE ".DB_PREFIX."users SET sid='".$_SESSION['sid']."', lastlogon=".Time().", ip='".$_SERVER['REMOTE_ADDR']."', user_agent='".mysqli_real_escape_string ($database,$_SERVER['HTTP_USER_AGENT'])."' WHERE id=".$logrec['id']);
 		mysqli_query ($database,"UPDATE ".DB_PREFIX."users SET sid='".$_SESSION['sid']."', lastlogon=".Time().", ip='".$_SERVER['REMOTE_ADDR']."', user_agent='".mysqli_real_escape_string ($database,$_SERVER['HTTP_USER_AGENT'])."' WHERE id=".$logrec['id']);
+	} else {
+		error_log("FAILED LOGIN: ".$_REQUEST['loginname']);
 	}
 }
 // info o uzivateli
@@ -38,7 +40,7 @@ if (isset($_SESSION['sid'])) {
 // *** FORCED LOGOUT - timeout, unallowed pages
 function logout_forced($msg) {
 	global $database,$_SESSION;
-	error_log("FORCED LOGOUT: ".$_SESSION['sid']);
+	error_log("FORCED LOGOUT: ".$msg." - ".$_SESSION['sid']);
 	if (isset($_SESSION['sid'])) {
 		mysqli_query ($database,"UPDATE ".DB_PREFIX."users set sid=null WHERE sid=".$_SESSION['sid']);
 	}
