@@ -2,14 +2,13 @@
 
 ### News and Updates
 - **1.5.6 IN PROGRESS**   
-    vsechny inputy $_GET $_POST osetreny na injection  
 	nove nastylovani loginu, spravy uzivatelu  
 	moznost editace vsech typu prav
 	mazani unread pro smazane uzivatele
-	BUGFIX: $_REQUEST,$_POST,$_GET vicerozmerne pole
-	BUGFIX: generovani hesel novych uzivatelu
 	zobrazovani data vytvoreni a zmeny u jednotlivych objektu (osoby, vyhledavani)
 	zobrazovani priloh u hlaseni, osob, pripadu
+	BUGFIX: $_REQUEST,$_POST,$_GET vicerozmerne pole osetrejeni SQL injection
+	BUGFIX: generovani hesel novych uzivatelu
 	BUGFIX razeni reportu podle data/casu vyjezdu
 - **1.5.5 SUSPEND USER**   
 	novinky vytazeny z indexu  
