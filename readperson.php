@@ -177,9 +177,9 @@
 <!-- následuje seznam přiložených souborů -->
 	<?php //generování seznamu přiložených souborů
 		if ($usrinfo['right_power']) {
-			$sql="SELECT ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=1 ORDER BY ".DB_PREFIX."data.originalname ASC";
+			$sql="SELECT ".DB_PREFIX."data.mime as mime, ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=1 ORDER BY ".DB_PREFIX."data.originalname ASC";
 		} else {
-		  $sql="SELECT ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=1 AND ".DB_PREFIX."data.secret=0 ORDER BY ".DB_PREFIX."data.originalname ASC";
+		  $sql="SELECT ".DB_PREFIX."data.mime as mime, ".DB_PREFIX."data.originalname AS 'title', ".DB_PREFIX."data.id AS 'id' FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."data.idtable=1 AND ".DB_PREFIX."data.secret=0 ORDER BY ".DB_PREFIX."data.originalname ASC";
 		}
 		$res=mysqli_query ($database,$sql);
 		$i=0;
@@ -188,9 +188,12 @@
 			if($i==1){ ?>
 	<fieldset><legend><strong>Přiložené soubory</strong></legend>
 	<ul id="prilozenadata">
-			<?php } ?>
-		<li><a href="getfile.php?idfile=<?php echo($rec['id']); ?>" title=""><?php echo(StripSlashes($rec['title'])); ?></a></li>
-	<?php 
+			<?php }
+						if (in_array($rec['mime'],$config['mime-image'])) { ?>
+							<li><a href="getfile.php?idfile=<?php echo($rec['id']); ?>"><img  width="300px" alt="<?php echo(StripSlashes($rec['title'])); ?>" src="getfile.php?idfile=<?php echo($rec['id']); ?>"></a></li>
+			<?php		} else { ?>
+							<li><a href="getfile.php?idfile=<?php echo($rec['id']); ?>"><?php echo(StripSlashes($rec['title'])); ?></a></li>
+			<?php }
 		}
 		if($i<>0){ ?>
 	</ul>

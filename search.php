@@ -43,10 +43,10 @@ $search = mysqli_real_escape_string ($database,$searchedfor);
 /* v pripade prazdneho vyhledavani nezobrazi vysledek */        
         if (is_null($searchedfor)) {
 /* nothing to do */
-		} elseif (strlen($searchedfor) < 4) {
+		} elseif (strlen($searchedfor) < 3) {
 /* v pripade vyrazu kratsiho nez 4 znaky zobrazi chybovou hlasku a preskoci zobrazeni vysledku */
 
-    echo '<h2>Výraz "'.$searchedfor.'" je příliš krátký, zadejte výraz o délce alespoň 4 znaky.</h2>';
+    echo '<h2>Výraz "'.$searchedfor.'" je příliš krátký, zadejte výraz o délce alespoň 3 znaky.</h2>';
     
 } else {
         

@@ -8,7 +8,12 @@
 		}
     $getres=mysqli_query ($database,$sql);
     if ($getrec=mysqli_fetch_assoc ($getres)) {
-      header('Content-Type: application/octet-stream');
+		if (in_array($getrec['mime'],$config['mime-image'])) {
+			header('Content-Type: '.$getrec['mime']);
+		} else {
+			header('Content-Type: application/octet-stream');
+
+		}
       header('Content-Disposition: attachment; filename="'.$getrec['nazev'].'";');
       header('Expires: 0');
       header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
@@ -18,4 +23,5 @@
       FPassThru ($getf);
     }
   }
+
 ?>

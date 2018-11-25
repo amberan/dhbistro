@@ -14,6 +14,7 @@ $config['version']='1.5.5';  // verze bistra
 $config['folder_backup'] = "/files/backups/"; // adresar pro generovani zaloh
 $config['folder_portrait'] = "/files/portraits/"; // adresar s portrety
 $config['folder_symbol'] = "/files/symbols/"; // adresar se symboly
+$config['mime-image'] = array("image/jpeg","image/pjpeg", "image/png");
 
 // *** TECHNICAL LIBRARIES
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/debug.php');  
