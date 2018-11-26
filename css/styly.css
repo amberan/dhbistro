@@ -107,6 +107,7 @@ a:hover.button, input[type=submit]:hover {
 
 
 fieldset {border: 1px black solid; padding: 0.5em; }
+ul li, ul li ul li {list-style-type: disc; margin-left: 1em;}
 
 /***********************************/
 /*************  menu  **************/
