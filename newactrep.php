@@ -2,7 +2,7 @@
 	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 	pageStart ('Nové hlášení');
 	mainMenu (4);
-	$type=mysqli_real_escape_string ($database,$_GET['type']); // nacitani typu hlaseni z prikazove radky prohlizece (zakladni ochrana proti SQL injection)
+	$type=$_GET['type']; // nacitani typu hlaseni z prikazove radky prohlizece (zakladni ochrana proti SQL injection)
 	if($type==='1'){sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>nové hlášení z výjezdu</strong>');}
 	else if($type==='2'){sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>nové hlášení z výslechu</strong>');}
 	else { ?>

@@ -9,7 +9,7 @@ if ($usrinfo['right_power']) { ?>
 	//Přidání nového doodlu
 	if (isset($_POST['newlink'])) {
 		if (isset($_POST['link'])) {
-			mysqli_query ($database,"INSERT INTO ".DB_PREFIX."doodle VALUES('','".Time()."','".mysqli_real_escape_string ($database,safeInput($_POST['link']))."')");
+			mysqli_query ($database,"INSERT INTO ".DB_PREFIX."doodle VALUES('','".Time()."','".$_POST['link']."')");
 			echo '<div id=""><p>Nový link na doodle uložen.</p></div>';
 		} else {
 			echo '<div id=""><p>Link na doodle nesmí být prázdný.</p></div>';

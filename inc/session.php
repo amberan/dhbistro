@@ -13,7 +13,7 @@ if (isset($_REQUEST['logmein'])) {
 		$_SESSION['sid']=session_id(); 
 		mysqli_query ($database,"UPDATE ".DB_PREFIX."users set sid='' where sid='".$_SESSION['sid']."'");
 		error_log("LOGIN SUCCESS: ".$_REQUEST['loginname']);
-		mysqli_query ($database,"UPDATE ".DB_PREFIX."users SET sid='".$_SESSION['sid']."', lastlogon=".Time().", ip='".$_SERVER['REMOTE_ADDR']."', user_agent='".mysqli_real_escape_string ($database,$_SERVER['HTTP_USER_AGENT'])."' WHERE id=".$logrec['id']);
+		mysqli_query ($database,"UPDATE ".DB_PREFIX."users SET sid='".$_SESSION['sid']."', lastlogon=".Time().", ip='".$_SERVER['REMOTE_ADDR']."', user_agent='".$_SERVER['HTTP_USER_AGENT']."' WHERE id=".$logrec['id']);
 	} else {
 		error_log("LOGIN FAILED: ".$_REQUEST['loginname']);
 	}
@@ -23,11 +23,11 @@ if (isset($_SESSION['sid'])) {
 	if (mysqli_num_rows($check_sql)== 0) { // without suspended 1.5.5>
 		$usersql = "SELECT id, login, pwd, idperson, lastlogon as 'lastaction', right_power, right_text, right_org, right_aud, timeout, ip as 'currip', plan, sid
 		FROM ".DB_PREFIX."users 
-		WHERE deleted=0 AND ".DB_PREFIX."users.sid ='".$_SESSION['sid']."' AND user_agent='".mysqli_real_escape_string ($database,$_SERVER['HTTP_USER_AGENT'])."'";
+		WHERE deleted=0 AND ".DB_PREFIX."users.sid ='".$_SESSION['sid']."' AND user_agent='".$_SERVER['HTTP_USER_AGENT']."'";
 	} else { //with suspended 1.5.5<
 		$usersql = "SELECT id, login, pwd, idperson, lastlogon as 'lastaction', right_power, right_text, right_org, right_aud, timeout, ip as 'currip', plan, sid
 		FROM ".DB_PREFIX."users 
-		WHERE deleted=0 AND suspended=0 AND ".DB_PREFIX."users.sid ='".$_SESSION['sid']."' AND user_agent='".mysqli_real_escape_string ($database,$_SERVER['HTTP_USER_AGENT'])."'";
+		WHERE deleted=0 AND suspended=0 AND ".DB_PREFIX."users.sid ='".$_SESSION['sid']."' AND user_agent='".$_SERVER['HTTP_USER_AGENT']."'";
 	} 
 	if ($usrinfo=mysqli_fetch_assoc (mysqli_query ($database,$usersql))) {
 		$_SESSION['inactiveallowance'] = $usrinfo['timeout'];

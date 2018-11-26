@@ -19,12 +19,12 @@
 	if (isset($_POST['insertgroup']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret'])) {
 	  pageStart ('Přidána skupina');
 	  mainMenu (3);
-	  $ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".mysqli_real_escape_string ($database,safeInput($_POST['title']))."')");
+	  $ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".$_POST['title']."')");
 	  if (mysqli_num_rows ($ures)) {
 	    echo '<div id="obsah"><p>Skupina již existuje, změňte její jméno.</p></div>';
 	  } else {
-			mysqli_query ($database,"INSERT INTO ".DB_PREFIX."groups VALUES('','".mysqli_real_escape_string ($database,safeInput($_POST['title']))."','".mysqli_real_escape_string ($database,$_POST['contents'])."','".Time()."','".$usrinfo['id']."','0','".$_POST['secret']."',0)");
-			$gidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".mysqli_real_escape_string ($database,safeInput($_POST['title']))."')"));
+			mysqli_query ($database,"INSERT INTO ".DB_PREFIX."groups VALUES('','".$_POST['title']."','".$_POST['contents']."','".Time()."','".$usrinfo['id']."','0','".$_POST['secret']."',0)");
+			$gidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".$_POST['title']."')"));
 			$gid=$gidarray['id'];
 			auditTrail(2, 3, $gid);
 			if (!isset($_POST['notnew'])) {
@@ -47,12 +47,12 @@
 	  auditTrail(2, 2, $_POST['groupid']);
 	  pageStart ('Uložení změn');
 		mainMenu (3);
-	  $ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".mysqli_real_escape_string ($database,safeInput($_POST['title']))."') AND id<>".$_POST['groupid']);
+	  $ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".$_POST['title']."') AND id<>".$_POST['groupid']);
 	  if (mysqli_num_rows ($ures)) {
 	  	sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./editgroup.php?rid='.$_POST['groupid'].'">úprava skupiny</a> &raquo; <strong>uložení změn neúspěšné</strong>');
 	    echo '<div id="obsah"><p>Skupina již existuje, změňte její jméno.</p></div>';
 	  } else {
-			mysqli_query ($database,"UPDATE ".DB_PREFIX."groups SET title='".mysqli_real_escape_string ($database,safeInput($_POST['title']))."', contents='".mysqli_real_escape_string ($database,$_POST['contents'])."', archived='".(isset($_POST['archived'])?'1':'0')."', secret='".(isset($_POST['secret'])?'1':'0')."' WHERE id=".$_POST['groupid']);
+			mysqli_query ($database,"UPDATE ".DB_PREFIX."groups SET title='".$_POST['title']."', contents='".$_POST['contents']."', archived='".(isset($_POST['archived'])?'1':'0')."', secret='".(isset($_POST['secret'])?'1':'0')."' WHERE id=".$_POST['groupid']);
 			if (!isset($_POST['notnew'])) {
 				unreadRecords (2,$_POST['groupid']);
 			}
@@ -80,7 +80,7 @@
 		auditTrail(2, 4, $_POST['groupid']);
 		$newname=Time().MD5(uniqid(Time().Rand()));
 		move_uploaded_file ($_FILES['attachment']['tmp_name'],'./files/'.$newname);
-		$sql="INSERT INTO ".DB_PREFIX."data VALUES('','".$newname."','".mysqli_real_escape_string ($database,$_FILES['attachment']['name'])."','".mysqli_real_escape_string ($database,$_FILES['attachment']['type'])."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','2','".$_POST['groupid']."','".$_POST['secret']."')";
+		$sql="INSERT INTO ".DB_PREFIX."data VALUES('','".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','2','".$_POST['groupid']."','".$_POST['secret']."')";
 		mysqli_query ($database,$sql);
 		if (!isset($_POST['fnotnew'])) {
 			unreadRecords (2,$_POST['groupid']);

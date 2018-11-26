@@ -15,7 +15,7 @@
 	 // mainMenu (4);
 	// sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>hlášení nepřidáno</strong>');
 	  $adatum = mktime(0,0,0,$_POST['adatummonth'],$_POST['adatumday'],$_POST['adatumyear']);
-	  $ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."reports WHERE UCASE(label)=UCASE('".mysqli_real_escape_string ($database,safeInput($_POST['label']))."')");
+	  $ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."reports WHERE UCASE(label)=UCASE('".$_POST['label']."')");
 	  if (mysqli_num_rows ($ures)) {
 	  	pageStart ('Hlášení nepřidáno');
 	  	mainMenu (4);
@@ -24,8 +24,8 @@
 	  } else {
 		  	pageStart ('Hlášení uloženo');
 		  	mainMenu (4);
-		  	mysqli_query ($database,"INSERT INTO ".DB_PREFIX."reports VALUES('','".mysqli_real_escape_string ($database,safeInput($_POST['label']))."','".Time()."','".$usrinfo['id']."','".mysqli_real_escape_string ($database,safeInput($_POST['task']))."','".mysqli_real_escape_string ($database,$_POST['summary'])."','".mysqli_real_escape_string ($database,$_POST['impact'])."','".mysqli_real_escape_string ($database,$_POST['details'])."','".$_POST['secret']."','0','".$_POST['status']."','".$_POST['type']."','".$adatum."','".mysqli_real_escape_string ($database,safeInput($_POST['start']))."','".mysqli_real_escape_string ($database,safeInput($_POST['end']))."','".mysqli_real_escape_string ($database,$_POST['energy'])."','".mysqli_real_escape_string ($database,$_POST['inputs'])."')");
-		  	$ridarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."reports WHERE UCASE(label)=UCASE('".mysqli_real_escape_string ($database,safeInput($_POST['label']))."')"));
+		  	mysqli_query ($database,"INSERT INTO ".DB_PREFIX."reports VALUES('','".$_POST['label']."','".Time()."','".$usrinfo['id']."','".$_POST['task']."','".$_POST['summary']."','".$_POST['impact']."','".$_POST['details']."','".$_POST['secret']."','0','".$_POST['status']."','".$_POST['type']."','".$adatum."','".$_POST['start']."','".$_POST['end']."','".$_POST['energy']."','".$_POST['inputs']."')");
+		  	$ridarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."reports WHERE UCASE(label)=UCASE('".$_POST['label']."')"));
 			$rid=$ridarray['id'];
 			auditTrail(4, 3, $rid);
 			if ($_POST['status']  <> 0) {
@@ -60,11 +60,11 @@
 	  }
 	  sparklets ('<a href="./reports.php">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>uložení změn</strong>','<a href="readactrep.php?rid='.$_POST['reportid'].'&hidenotes=0&truenames=0">zobrazit upravené</a>');
 	  $adatum = mktime(0,0,0,$_POST['adatummonth'],$_POST['adatumday'],$_POST['adatumyear']);
-	  $ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."reports WHERE UCASE(label)=UCASE('".mysqli_real_escape_string ($database,safeInput($_POST['label']))."') AND id<>".$_POST['reportid']);
+	  $ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."reports WHERE UCASE(label)=UCASE('".$_POST['label']."') AND id<>".$_POST['reportid']);
 	  if (mysqli_num_rows ($ures)) {
 	    echo '<div id="obsah"><p>Toto označení již existuje, změňte ho.</p></div>';
 	  } else {
-			mysqli_query ($database,"UPDATE ".DB_PREFIX."reports SET label='".mysqli_real_escape_string ($database,safeInput($_POST['label']))."', task='".mysqli_real_escape_string ($database,safeInput($_POST['task']))."', summary='".mysqli_real_escape_string ($database,$_POST['summary'])."', impacts='".mysqli_real_escape_string ($database,$_POST['impacts'])."', details='".mysqli_real_escape_string ($database,$_POST['details'])."', secret='".$_POST['secret']."', status='".$_POST['status']."', adatum='".$adatum."', start='".mysqli_real_escape_string ($database,safeInput($_POST['start']))."', end='".mysqli_real_escape_string ($database,safeInput($_POST['end']))."', energy='".mysqli_real_escape_string ($database,$_POST['energy'])."', inputs='".mysqli_real_escape_string ($database,$_POST['inputs'])."' WHERE id=".$_POST['reportid']);
+			mysqli_query ($database,"UPDATE ".DB_PREFIX."reports SET label='".$_POST['label']."', task='".$_POST['task']."', summary='".$_POST['summary']."', impacts='".$_POST['impacts']."', details='".$_POST['details']."', secret='".$_POST['secret']."', status='".$_POST['status']."', adatum='".$adatum."', start='".$_POST['start']."', end='".$_POST['end']."', energy='".$_POST['energy']."', inputs='".$_POST['inputs']."' WHERE id=".$_POST['reportid']);
 			echo '<div id="obsah"><p>Hlášení upraveno.</p></div>';
 		}
 		pageEnd ();
@@ -81,7 +81,7 @@
 		auditTrail(4, 4, $_POST['reportid']);
 		$newname=Time().MD5(uniqid(Time().Rand()));
 		move_uploaded_file ($_FILES['attachment']['tmp_name'],'./files/'.$newname);
-		$sql="INSERT INTO ".DB_PREFIX."data VALUES('','".$newname."','".mysqli_real_escape_string ($database,$_FILES['attachment']['name'])."','".mysqli_real_escape_string ($database,$_FILES['attachment']['type'])."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','4','".$_POST['reportid']."','".$_POST['secret']."')";
+		$sql="INSERT INTO ".DB_PREFIX."data VALUES('','".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','4','".$_POST['reportid']."','".$_POST['secret']."')";
 		mysqli_query ($database,$sql);
 		unreadRecords (4,$_POST['reportid']);
 		Header ('Location: '.$_POST['backurl']);

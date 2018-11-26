@@ -9,7 +9,7 @@ if ($usrinfo['right_power']) { ?>
 	//Přidání nové mapy
 	if (isset($_POST['newmap'])) {
 		if (isset($_POST['link'])) {
-			mysqli_query ($database,"INSERT INTO ".DB_PREFIX."map VALUES('','".Time()."','".mysqli_real_escape_string ($database,safeInput($_POST['link']))."')");
+			mysqli_query ($database,"INSERT INTO ".DB_PREFIX."map VALUES('','".Time()."','".$_POST['link']."')");
 			echo '<div id=""><p>Nový link na mapu agentů uložen.</p></div>';
 		} else {
 			echo '<div id=""><p>Link na mapu agentů nesmí být prázdný.</p></div>';

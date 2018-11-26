@@ -32,9 +32,9 @@
 			$sfile='';
                         $syid='';
 		}
-		$sql_p="INSERT INTO ".DB_PREFIX."persons VALUES('','".mysqli_real_escape_string ($database,safeInput($_POST['name']))."','".mysqli_real_escape_string ($database,safeInput($_POST['surname']))."','".mysqli_real_escape_string ($database,safeInput($_POST['phone']))."','".Time()."','".$usrinfo['id']."','".mysqli_real_escape_string ($database,$_POST['contents'])."','".$_POST['secret']."','0','".$file."', '".$_POST['side']."', '".$_POST['power']."', '".$_POST['spec']."', '".$syid."','0','0','".Time()."','".$usrinfo['id']."')";
+		$sql_p="INSERT INTO ".DB_PREFIX."persons VALUES('','".$_POST['name']."','".$_POST['surname']."','".$_POST['phone']."','".Time()."','".$usrinfo['id']."','".$_POST['contents']."','".$_POST['secret']."','0','".$file."', '".$_POST['side']."', '".$_POST['power']."', '".$_POST['spec']."', '".$syid."','0','0','".Time()."','".$usrinfo['id']."')";
 		mysqli_query ($database,$sql_p);
-		$pidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."persons WHERE UCASE(surname)=UCASE('".mysqli_real_escape_string ($database,safeInput($_POST['surname']))."') AND UCASE(name)=UCASE('".mysqli_real_escape_string ($database,safeInput($_POST['name']))."') AND side='".$_POST['side']."'"));
+		$pidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."persons WHERE UCASE(surname)=UCASE('".$_POST['surname']."') AND UCASE(name)=UCASE('".$_POST['name']."') AND side='".$_POST['side']."'"));
 		$pid=$pidarray['id'];
 		if (!isset($_POST['notnew'])) {
 			unreadRecords (1,$pid);
@@ -92,9 +92,9 @@
                         mysqli_query ($database,"UPDATE ".DB_PREFIX."persons SET symbol='".$syid."' WHERE id=".$_POST['personid']);
 		}
 		if ($usrinfo['right_org']==1) {
-			mysqli_query ($database,"UPDATE ".DB_PREFIX."persons SET name='".mysqli_real_escape_string ($database,safeInput($_POST['name']))."', surname='".mysqli_real_escape_string ($database,safeInput($_POST['surname']))."', phone='".mysqli_real_escape_string ($database,$_POST['phone'])."', contents='".mysqli_real_escape_string ($database,$_POST['contents'])."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead'])?'1':'0')."', archiv='".(isset($_POST['archiv'])?'1':'0')."' WHERE id=".$_POST['personid']);
+			mysqli_query ($database,"UPDATE ".DB_PREFIX."persons SET name='".$_POST['name']."', surname='".$_POST['surname']."', phone='".$_POST['phone']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead'])?'1':'0')."', archiv='".(isset($_POST['archiv'])?'1':'0')."' WHERE id=".$_POST['personid']);
 		} else {
-			mysqli_query ($database,"UPDATE ".DB_PREFIX."persons SET name='".mysqli_real_escape_string ($database,safeInput($_POST['name']))."', surname='".mysqli_real_escape_string ($database,safeInput($_POST['surname']))."', phone='".mysqli_real_escape_string ($database,$_POST['phone'])."', datum='".Time()."', iduser='".$usrinfo['id']."', contents='".mysqli_real_escape_string ($database,$_POST['contents'])."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead'])?'1':'0')."', archiv='".(isset($_POST['archiv'])?'1':'0')."' WHERE id=".$_POST['personid']);
+			mysqli_query ($database,"UPDATE ".DB_PREFIX."persons SET name='".$_POST['name']."', surname='".$_POST['surname']."', phone='".$_POST['phone']."', datum='".Time()."', iduser='".$usrinfo['id']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead'])?'1':'0')."', archiv='".(isset($_POST['archiv'])?'1':'0')."' WHERE id=".$_POST['personid']);
 		}
 		echo '<div id="obsah"><p>Osoba upravena.</p></div>';
 		pageEnd ();
@@ -142,7 +142,7 @@
 			auditTrail(1, 4, $_POST['personid']);
 			$newname=Time().MD5(uniqid(Time().Rand()));
 			move_uploaded_file ($_FILES['attachment']['tmp_name'],'./files/'.$newname);
-			$sql="INSERT INTO ".DB_PREFIX."data VALUES('','".$newname."','".mysqli_real_escape_string ($database,$_FILES['attachment']['name'])."','".mysqli_real_escape_string ($database,$_FILES['attachment']['type'])."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','1','".$_POST['personid']."','".$_POST['secret']."')";
+			$sql="INSERT INTO ".DB_PREFIX."data VALUES('','".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','1','".$_POST['personid']."','".$_POST['secret']."')";
 			mysqli_query ($database,$sql);
 			if (!isset($_POST['fnotnew'])) {
 				unreadRecords (1,$_POST['personid']);

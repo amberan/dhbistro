@@ -17,7 +17,7 @@
 			unreadRecords ($_POST['idtable'],$_POST['itemid']);
 		}
 		sparklets ('<a href="./'.$sourceurl.'">'.$sourcename.'</a> &raquo; <strong>úprava poznámky</strong> &raquo; <strong>uložení změn</strong>');
-		mysqli_query ($database,"UPDATE ".DB_PREFIX."notes SET title='".mysqli_real_escape_string ($database,safeInput($_POST['title']))."', datum='".Time()."', note='".mysqli_real_escape_string ($database,$_POST['note'])."', secret='".$_POST['nsecret']."', iduser='".$_POST['nowner']."' WHERE id=".$_POST['noteid']);
+		mysqli_query ($database,"UPDATE ".DB_PREFIX."notes SET title='".$_POST['title']."', datum='".Time()."', note='".$_POST['note']."', secret='".$_POST['nsecret']."', iduser='".$_POST['nowner']."' WHERE id=".$_POST['noteid']);
 		echo '<div id="obsah"><p>Poznámka upravena.</p></div>';
 		pageEnd ();
 	} else {
@@ -43,7 +43,7 @@
 	if (isset($_POST['setnote'])) {
 		if (!preg_match ('/^[[:blank:]]*$/i',$_POST['note']) /*&& !preg_match ('/^[[:blank:]]*$/i',$_POST['title'])*/ && is_numeric($_POST['secret'])) {
 			auditTrail($_POST['tableid'], 7, $_POST['itemid']);
-			mysqli_query ($database,"INSERT INTO ".DB_PREFIX."notes VALUES('','".mysqli_real_escape_string ($database,$_POST['note'])."','".mysqli_real_escape_string ($database,$_POST['title'])."','".Time()."','".$usrinfo['id']."','".$_POST['tableid']."','".$_POST['itemid']."','".$_POST['secret']."','0')");
+			mysqli_query ($database,"INSERT INTO ".DB_PREFIX."notes VALUES('','".$_POST['note']."','".$_POST['title']."','".Time()."','".$usrinfo['id']."','".$_POST['tableid']."','".$_POST['itemid']."','".$_POST['secret']."','0')");
 			$_SESSION['message'] = "Poznámka uložena";
 			if (!isset($_POST['nnotnew'])) {
 				unreadRecords ($_POST['tableid'],$_POST['itemid']);

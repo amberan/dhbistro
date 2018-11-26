@@ -16,12 +16,12 @@ if (isset($_POST['searchit'])) {
 	//		$input_specialchar=3;
 	
 	// real input
-	$input_liner = mysqli_real_escape_string ($database,htmlspecialchars($_POST['l']));
-	$input_curver = mysqli_real_escape_string ($database,htmlspecialchars($_POST['c']));
-	$input_pointer = mysqli_real_escape_string ($database,htmlspecialchars($_POST['p']));
-	$input_geometrical = mysqli_real_escape_string ($database,htmlspecialchars($_POST['g']));
-	$input_alphabeter = mysqli_real_escape_string ($database,htmlspecialchars($_POST['a']));
-	$input_specialchar = mysqli_real_escape_string ($database,htmlspecialchars($_POST['sch']));
+	$input_liner = htmlspecialchars($_POST['l']);
+	$input_curver = htmlspecialchars($_POST['c']);
+	$input_pointer = htmlspecialchars($_POST['p']);
+	$input_geometrical = htmlspecialchars($_POST['g']);
+	$input_alphabeter = htmlspecialchars($_POST['a']);
+	$input_specialchar = htmlspecialchars($_POST['sch']);
 	
 			///////////ECHO TEST PROMENNE
 			//$vypis='liner= '.$l.', curver= '.$c.', pointer= '.$p.', geometrical= '.$g.', alphabeter= '.$a.', specialchar= '.$sch.'';

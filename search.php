@@ -18,7 +18,7 @@ if (!isset($custom_Filter['search'])) {
 	  $searchedfor=$custom_Filter['search'];
 	}
 
-$search = mysqli_real_escape_string ($database,$searchedfor);
+$search = $searchedfor;
 ?>
 
 
