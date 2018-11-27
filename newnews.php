@@ -7,7 +7,7 @@
 
 <div id="obsah">
 <fieldset><legend><strong>Nová aktualita</strong></legend>
-	<form action="procnews.php" method="post" id="inputform">
+	<form action="index.php?newsadd=1" method="post" id="inputform">
 	<div id="info">
 		<h3><label for="nadpis">Nadpis:</label></h3>
 		<input type="text" name="nadpis" id="nadpis" />

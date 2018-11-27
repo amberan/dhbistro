@@ -10,7 +10,7 @@ define ('DB_PREFIX','nw_'); // prefix tabulek
 $config['dbpass'] = "/inc/important.php"; // soubor s heslem k databazi
 $config['page_prefix']=''; // uri cesta mezi domenou a adresarem bistra
 $config['page_free']=array('login.php','logout.php'); // stranky dostupne bez prihlaseni
-$config['version']='1.5.5';  // verze bistra
+$config['version']='1.5.6';  // verze bistra
 $config['folder_backup'] = "/files/backups/"; // adresar pro generovani zaloh
 $config['folder_portrait'] = "/files/portraits/"; // adresar s portrety
 $config['folder_symbol'] = "/files/symbols/"; // adresar se symboly
@@ -24,8 +24,10 @@ $config['mime-image'] = array("image/jpeg","image/pjpeg", "image/png");
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/session.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/audit_trail.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/image.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/unread.php');
 // *** PROCESSING
 	require_once($_SERVER['DOCUMENT_ROOT'].'/processing/settings.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/processing/news.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/processing/users.php');
 // *** GENERAL ALERT - overit, ze funguje s odlasovanim nahore - asi bude potreba prenaset message prez session destroy
 	if (isset($_SESSION['message']) and $_SESSION['message'] != null) { 
@@ -35,7 +37,7 @@ $config['mime-image'] = array("image/jpeg","image/pjpeg", "image/png");
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/footer.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/header.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/menu.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/unread.php');
+
 
 
 // ziskani autora zaznamu - audit, dashboard, edituser, index, readcase, readperson, readsymbol, tasks

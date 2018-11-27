@@ -1,13 +1,14 @@
 # BISTRO
 
 ### News and Updates
-- **1.5.6 HLIDKY 11/2018 IN PROGRESS**   
+- **1.5.6 HLIDKY 11/2018**   
 	nove nastylovani loginu, spravy uzivatelu  
 	moznost editace vsech typu prav  
 	mazani unread pro smazane uzivatele  
 	zobrazovani data vytvoreni a zmeny u jednotlivych objektu (osoby, vyhledavani, pripadu)  
 	zobrazovani priloh u hlaseni, osob, pripadu  
-	telefonni cisla jsou zobrazovany jako aktivni linky - volani mobilem primo z bistra
+	telefonni cisla jsou zobrazovany jako aktivni linky - volani mobilem primo z bistra  
+	mazani novinek  
 	BUGFIX: $_REQUEST,$_POST,$_GET vicerozmerne pole osetrejeni SQL injection  
 	BUGFIX: generovani hesel novych uzivatelu  
 	BUGFIX razeni reportu podle data/casu vyjezdu  
