@@ -97,7 +97,7 @@
 				}
 				echo $side; ?></p>
 			<div class="clear">&nbsp;</div>
-			<h3>Telefon: </h3><p><?php echo(StripSlashes($rec['phone'])); ?></p>
+			<h3>Telefon: </h3><p><a href ="tel:<?php echo $rec['phone']; ?>"><?php echo $rec['phone']; ?></a></p>
 			<div class="clear">&nbsp;</div>
 			<h3>Patří do skupin: </h3><p><?php
 				if ($usrinfo['right_power']) {
