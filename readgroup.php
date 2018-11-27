@@ -109,7 +109,7 @@
 		  echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 '.(($sportraits)?'<td><img src="getportrait.php?rid='.$rec['id'].'" alt="portrét chybí" /></td>':'').'
 	<td>'.(($rec['secret'])?'<span class="secret"><a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a></span>':'<a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a>').'</td>
-	<td><a href="tel:'.$rec['phone'].'">'.$rec['phone'].'</a></td>
+	<td><a href="tel:'.str_replace(' ', '',$rec['phone']).'">'.$rec['phone'].'</a></td>
 </tr>';
 			$even++;
 		}
