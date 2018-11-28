@@ -123,7 +123,7 @@ function escape_array($array) {
 	global $database;
 	foreach($array as $key=>$value) {
 	   if(is_array($value)) { escape_array($value); }
-	   else { $array[$key] = addslashes(mysqli_real_escape_string($database,$value)) ; }
+	   else { $array[$key] = mysqli_real_escape_string($database, addslashes( $value)) ; }
 	}
 	return $array;
  }
