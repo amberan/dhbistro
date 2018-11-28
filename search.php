@@ -18,11 +18,9 @@ if (!isset($custom_Filter['search'])) {
 	  $searchedfor=$custom_Filter['search'];
 	}
 
-$search = $searchedfor;
-?>
-
-
-<?php
+	$search = $searchedfor;
+	$uncz_search = StrTr ($searchedfor, "áäčďéěëíňóöřšťúůüýžÁÄČĎÉĚËÍŇÓÖŘŠŤÚŮÜÝŽ", "aacdeeeinoorstuuuyzAACDEEEINOORSTUUUYZ");
+		
 	function filter () {
 	  global $database,$usrinfo, $farchiv;
 	  echo '<div id="filter-wrapper"><form action="search.php" method="get" id="filter">
@@ -49,7 +47,9 @@ $search = $searchedfor;
     echo '<h2>Výraz "'.$searchedfor.'" je příliš krátký, zadejte výraz o délce alespoň 3 znaky.</h2>';
     
 } else {
-        
+
+	
+	
 ?>       
 
 
@@ -68,7 +68,7 @@ if ($usrinfo['right_power']) {
     $sql = "
         SELECT ".DB_PREFIX."cases.datum as date_changed, ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret'
         FROM ".DB_PREFIX."cases
-        WHERE MATCH(title, contents) AGAINST ('$search' IN BOOLEAN MODE)
+		WHERE (title LIKE '%".$uncz_search."%' or contents LIKE  '%".$uncz_search."%')
         AND ".DB_PREFIX."cases.deleted=0".$fsql_archiv."
         ORDER BY 5 * MATCH(title) AGAINST ('$search') + MATCH(contents) AGAINST ('$search') DESC
     ";
@@ -77,7 +77,7 @@ if ($usrinfo['right_power']) {
     $sql = "
         SELECT ".DB_PREFIX."cases.datum as date_changed, ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret'
         FROM ".DB_PREFIX."cases
-        WHERE MATCH(title, contents) AGAINST ('$search' IN BOOLEAN MODE)
+		WHERE (title LIKE '%".$uncz_search."%' or contents LIKE  '%".$uncz_search."%')
         AND ".DB_PREFIX."cases.deleted=0 AND ".DB_PREFIX."cases.secret=0".$fsql_archiv."
         ORDER BY 5 * MATCH(title) AGAINST ('$search') + MATCH(contents) AGAINST ('$search') DESC
     ";
@@ -119,7 +119,7 @@ if ($usrinfo['right_power']) {
     $res = mysqli_query ($database,"
         SELECT ".DB_PREFIX."reports.adatum as date_created, ".DB_PREFIX."reports.datum as date_changed,  ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."reports.status AS 'status', ".DB_PREFIX."reports.secret AS 'secret'
         FROM ".DB_PREFIX."reports
-        WHERE MATCH(label, task, summary, impacts, details) AGAINST ('$search' IN BOOLEAN MODE)
+		WHERE (label LIKE '%".$uncz_search."%' or task LIKE  '%".$uncz_search."%' or summary LIKE  '%".$uncz_search."%' or impacts LIKE  '%".$uncz_search."%' or details LIKE  '%".$uncz_search."%')
         AND ".DB_PREFIX."reports.deleted=0".$fsql_archiv."
         ORDER BY 5 * MATCH(label) AGAINST ('$search')
         + 3 * MATCH(summary) AGAINST ('$search')
@@ -131,7 +131,7 @@ if ($usrinfo['right_power']) {
     $res = mysqli_query ($database,"
         SELECT ".DB_PREFIX."reports.adatum as date_created, ".DB_PREFIX."reports.datum as date_changed,  ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."reports.status AS 'status', ".DB_PREFIX."reports.secret AS 'secret'
         FROM ".DB_PREFIX."reports
-        WHERE MATCH(label, task, summary, impacts, details) AGAINST ('$search' IN BOOLEAN MODE)
+		WHERE (label LIKE '%".$uncz_search."%' or task LIKE  '%".$uncz_search."%' or summary LIKE  '%".$uncz_search."%' or impacts LIKE  '%".$uncz_search."%' or details LIKE  '%".$uncz_search."%')
         AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0".$fsql_archiv."
         ORDER BY 5 * MATCH(label) AGAINST ('$search')
         + 3 * MATCH(summary) AGAINST ('$search')
@@ -194,23 +194,23 @@ if ($usrinfo['right_power']) {
     $res = mysqli_query ($database,"
         SELECT ".DB_PREFIX."persons.regdate as date_created, ".DB_PREFIX."persons.datum as date_changed, ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.archiv AS 'archiv', ".DB_PREFIX."persons.dead AS 'dead', ".DB_PREFIX."persons.secret AS 'secret'
         FROM ".DB_PREFIX."persons
-        WHERE MATCH(surname, name, contents) AGAINST ('$search' IN BOOLEAN MODE)
+		WHERE (surname LIKE '%".$uncz_search."%' or name LIKE  '%".$uncz_search."%' or contents LIKE  '%".$uncz_search."%')
         AND ".DB_PREFIX."persons.deleted=0".$fsql_archiv."
-        ORDER BY 5 * MATCH(surname) AGAINST ('$search')
+        ORDER BY 5 * MATCH(surname)   AGAINST ('+(>$search)' IN BOOLEAN MODE) 
         + 3 * MATCH(name) AGAINST ('$search')
         + MATCH(contents) AGAINST ('$search') DESC
-    ");
+    "); 
 } else {
     $res = mysqli_query ($database,"
         SELECT ".DB_PREFIX."persons.regdate as date_created, ".DB_PREFIX."persons.datum as date_changed, ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.archiv AS 'archiv', ".DB_PREFIX."persons.dead AS 'dead', ".DB_PREFIX."persons.secret AS 'secret'
         FROM ".DB_PREFIX."persons
-        WHERE MATCH(surname, name, contents) AGAINST ('$search' IN BOOLEAN MODE)
+		WHERE (surname LIKE '%".$uncz_search."%' or name LIKE  '%".$uncz_search."%' or contents LIKE  '%".$uncz_search."%' )
         AND ".DB_PREFIX."persons.deleted=0 AND ".DB_PREFIX."persons.secret=0".$fsql_archiv."
-        ORDER BY 5 * MATCH(surname) AGAINST ('$search')
+        ORDER BY 5 * MATCH(surname)   AGAINST ('+(>$search)' IN BOOLEAN MODE) 
         + 3 * MATCH(name) AGAINST ('$search')
         + MATCH(contents) AGAINST ('$search') DESC
     ");    
-}
+} 
 ?>
 <h3>Osoby</h3>
 <table>
@@ -249,7 +249,7 @@ if ($usrinfo['right_power']) {
     $res = mysqli_query ($database,"
         SELECT  ".DB_PREFIX."groups.datum as date_changed, ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.archived AS 'archived'
         FROM ".DB_PREFIX."groups
-        WHERE MATCH(title, contents) AGAINST ('$search' IN BOOLEAN MODE)
+		WHERE (title LIKE '%".$uncz_search."%' or contents LIKE  '%".$uncz_search."%')
         AND ".DB_PREFIX."groups.deleted=0".$fsql_archiv."
         ORDER BY 5 * MATCH(title) AGAINST ('$search')
         + MATCH(contents) AGAINST ('$search') DESC
@@ -258,7 +258,7 @@ if ($usrinfo['right_power']) {
     $res = mysqli_query ($database,"
         SELECT  ".DB_PREFIX."groups.datum as date_changed, ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.archived AS 'archived'
         FROM ".DB_PREFIX."groups
-        WHERE MATCH(title, contents) AGAINST ('$search' IN BOOLEAN MODE)
+		WHERE (title LIKE '%".$uncz_search."%' or contents LIKE  '%".$uncz_search."%')
         AND ".DB_PREFIX."groups.deleted=0 AND ".DB_PREFIX."groups.secret=0".$fsql_archiv."
         ORDER BY 5 * MATCH(title) AGAINST ('$search')
         + MATCH(contents) AGAINST ('$search') DESC
@@ -295,8 +295,8 @@ if ($usrinfo['right_power']) {
 if ($usrinfo['right_power']) {
     $res = mysqli_query ($database,"
         SELECT ".DB_PREFIX."symbols.created as date_created, ".DB_PREFIX."symbols.modified as date_changed,  ".DB_PREFIX."symbols.id AS 'id', ".DB_PREFIX."symbols.assigned AS 'assigned', ".DB_PREFIX."symbols.secret AS 'secret'
-        FROM ".DB_PREFIX."symbols
-        WHERE MATCH(`desc`) AGAINST ('$search' IN BOOLEAN MODE)
+		FROM ".DB_PREFIX."symbols
+		WHERE (".DB_PREFIX."symbols.desc LIKE '%".$uncz_search."%')
         AND ".DB_PREFIX."symbols.deleted=0
         ORDER BY 5 * MATCH(`desc`) AGAINST ('$search') DESC
     ");
@@ -304,11 +304,13 @@ if ($usrinfo['right_power']) {
     $res = mysqli_query ($database,"
         SELECT  ".DB_PREFIX."symbols.created as date_created, ".DB_PREFIX."symbols.modified as date_changed, ".DB_PREFIX."symbols.id AS 'id', ".DB_PREFIX."symbols.assigned AS 'assigned', ".DB_PREFIX."symbols.secret AS 'secret'
         FROM ".DB_PREFIX."symbols
-        WHERE MATCH(`desc`) AGAINST ('$search' IN BOOLEAN MODE)
+		WHERE (".DB_PREFIX."symbols.desc LIKE '%".$uncz_search."%')
         AND ".DB_PREFIX."symbols.deleted=0 AND ".DB_PREFIX."symbols.secret=0
         ORDER BY 5 * MATCH(`desc`) AGAINST ('$search') DESC
-    ");
+	");
+
 }
+	
 ?>
 <h3>Symboly</h3>
 <table>
@@ -342,16 +344,18 @@ if ($usrinfo['right_power']) {
 if ($usrinfo['right_power']) {
     $res = mysqli_query ($database,"
         SELECT ".DB_PREFIX."notes.datum as date_created, ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.id AS 'id', ".DB_PREFIX."notes.idtable AS 'idtable', ".DB_PREFIX."notes.iditem AS 'iditem', ".DB_PREFIX."notes.secret AS 'secret'
-        FROM ".DB_PREFIX."notes
-        WHERE MATCH(title, note) AGAINST ('$search' IN BOOLEAN MODE) AND ".DB_PREFIX."notes.secret<2
+		FROM ".DB_PREFIX."notes
+		WHERE (title LIKE '%".$uncz_search."%' or note LIKE '%".$uncz_search."%')		
+		AND ".DB_PREFIX."notes.secret<2
         ORDER BY 5 * MATCH(title) AGAINST ('$search')
         + MATCH(note) AGAINST ('$search') DESC
     ");
 } else {
     $res = mysqli_query ($database,"
         SELECT ".DB_PREFIX."notes.datum as date_created, ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.id AS 'id', ".DB_PREFIX."notes.idtable AS 'idtable', ".DB_PREFIX."notes.iditem AS 'iditem', ".DB_PREFIX."notes.secret AS 'secret'
-        FROM ".DB_PREFIX."notes
-        WHERE MATCH(title, note) AGAINST ('$search' IN BOOLEAN MODE) AND ".DB_PREFIX."notes.secret=0
+		FROM ".DB_PREFIX."notes
+		WHERE (title LIKE '%".$uncz_search."%' or note LIKE '%".$uncz_search."%')		
+		AND ".DB_PREFIX."notes.secret=0
         ORDER BY 5 * MATCH(title) AGAINST ('$search')
         + MATCH(note) AGAINST ('$search') DESC
     ");

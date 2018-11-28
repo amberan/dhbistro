@@ -1,8 +1,9 @@
 # BISTRO
 
 ### News and Updates
-- **1.5.7 IN PROGRESS**
-	BUGFIX injection vylepseni
+- **1.5.7 IN PROGRESS**  
+	rework vyhledavani - ignoruje diakritiku, mala/velka pismena, hleda casti slov
+	BUGFIX injection vylepseni  
 - **1.5.6 HLIDKY 11/2018**   
 	nove nastylovani loginu, spravy uzivatelu  
 	moznost editace vsech typu prav  
