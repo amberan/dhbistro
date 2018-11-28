@@ -123,14 +123,14 @@ function escape_array($array) {
 	global $database;
 	foreach($array as $key=>$value) {
 	   if(is_array($value)) { escape_array($value); }
-	   else { $array[$key] = mysqli_real_escape_string($database, $value); }
+	   else { $array[$key] = addslashes(mysqli_real_escape_string($database,$value)) ; }
 	}
 	return $array;
  }
 
- escape_array ($_REQUEST);
- escape_array ($_POST);
- escape_array ($_GET);
+ $_REQUEST = escape_array ($_REQUEST);
+ $_POST = escape_array ($_POST);
+ $_GET = escape_array ($_GET);
  
 
 ?>
