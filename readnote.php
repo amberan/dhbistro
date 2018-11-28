@@ -8,7 +8,8 @@
 				".DB_PREFIX."notes.secret AS 'secret',
 				".DB_PREFIX."notes.iduser AS 'iduser',
 				".DB_PREFIX."notes.deleted AS 'deleted',
-				".DB_PREFIX."users.login AS 'nuser'
+				".DB_PREFIX."notes.datum as date_created, 
+				".DB_PREFIX."users.login AS 'nuser' 	
 				 FROM ".DB_PREFIX."notes, ".DB_PREFIX."users
 				 WHERE ".DB_PREFIX."notes.id=".$_REQUEST['rid']." 
 				AND ".DB_PREFIX."notes.iduser=".DB_PREFIX."users.id");
@@ -30,7 +31,7 @@
 				}
 				sparklets ('<a href="./'.$sourceurl.'">'.$sourcename.'</a> &raquo; <strong>zobrazení poznámky</strong>',$editbutton);
 				echo '<h1>'.StripSlashes($rec['title']).'</h1>
-				<h3>'.StripSlashes($rec['nuser']).'</h3>';
+				<h3>'.StripSlashes($rec['nuser']).' ['.(Date ('d. m. Y',$rec['date_created'])).']'.'</h3>';
 				if ($rec['secret']==0) echo '<h4>veřejná</h4>';
 				if ($rec['secret']==1) echo '<h4>tajná</h4>';
 				if ($rec['secret']==2) echo '<h4>soukromá</h4>';
@@ -46,7 +47,7 @@
 		  pageStart ('Poznámka neexistuje');
 			mainMenu (0);
 			sparklets ('<strong>poznámka neexistuje</strong>');
-		  echo '<div id="obsah"><p>Osoba neexistuje.</p></div>';
+		  echo '<div id="obsah"><p>Poznámka neexistuje.</p></div>';
 		}
 	} else {
 	  echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
