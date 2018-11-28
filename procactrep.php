@@ -64,7 +64,6 @@
 	  if (mysqli_num_rows ($ures)) {
 	    echo '<div id="obsah"><p>Toto označení již existuje, změňte ho.</p></div>';
 	  } else {
-		  error_log( "UPDATE ".DB_PREFIX."reports SET label='".$_POST['label']."', task='".$_POST['task']."', summary='".$_POST['summary']."', impacts='".$_POST['impacts']."', details='".$_POST['details']."', secret='".$_POST['secret']."', status='".$_POST['status']."', adatum='".$adatum."', start='".$_POST['start']."', end='".$_POST['end']."', energy='".$_POST['energy']."', inputs='".$_POST['inputs']."' WHERE id=".$_POST['reportid']);
 			mysqli_query ($database,"UPDATE ".DB_PREFIX."reports SET label='".$_POST['label']."', task='".$_POST['task']."', summary='".$_POST['summary']."', impacts='".$_POST['impacts']."', details='".$_POST['details']."', secret='".$_POST['secret']."', status='".$_POST['status']."', adatum='".$adatum."', start='".$_POST['start']."', end='".$_POST['end']."', energy='".$_POST['energy']."', inputs='".$_POST['inputs']."' WHERE id=".$_POST['reportid']);
 			echo '<div id="obsah"><p>Hlášení upraveno.</p></div>';
 		}
