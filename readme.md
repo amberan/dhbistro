@@ -9,6 +9,7 @@
 	zobrazovani priloh u hlaseni, osob, pripadu  
 	telefonni cisla jsou zobrazovany jako aktivni linky - volani mobilem primo z bistra  
 	mazani novinek  
+	zobrazovani datumu u poznamek
 	BUGFIX: $_REQUEST,$_POST,$_GET vicerozmerne pole osetrejeni SQL injection  
 	BUGFIX: generovani hesel novych uzivatelu  
 	BUGFIX razeni reportu podle data/casu vyjezdu  
