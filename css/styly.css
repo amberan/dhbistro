@@ -22,12 +22,12 @@ a:active,a:focus{outline:none;text-decoration:none}
 strong{font-weight:700}
 em{font-style:italic}
 
-body, td, th, select, option, input, textarea, label {font-size: 0.9em; font-family: "Trebuchet MS", sans-serif;}
+body, td, th, select, option, input, textarea, label {font-size: 0.9rem; font-family: "Trebuchet MS", sans-serif;}
 
-h1 {margin: 1.2em 0; font-size: 1.2em;}
-h2 {margin: 1.1em 0; font-size: 1.1em;}
-h3 {margin: 1em 0; font-size: 1em;}
-h4 {margin: 0.9em 0; font-size: 0.9em;}
+h1 {margin: 1.2rem 0; font-size: 1.2rem;}
+h2 {margin: 1.1rem 0; font-size: 1.1rem;}
+h3 {margin: 1rem 0; font-size: 1rem;}
+h4 {margin: 0.9rem 0; font-size: 0.9rem;}
 
 a:link, a:visited { color: #476cb1;}
 a:hover { color: #0A246A; }
@@ -35,8 +35,8 @@ hr {
 	background-color: #808080;
 	border: 0px solid #808080;
 	color: #808080;
-	height: 0.1em;
-	margin: 1em 2em 1em 2em;
+	height: 0.1rem;
+	margin: 1rem 2rem 1rem 2rem;
 }
 .left { float:left;}
 .right {float:right;}
@@ -55,7 +55,7 @@ hr {
 /************ TLACITKA *************/
 #filterbutton, #submitbutton, a.button {
 	color: #fefefe;
-	padding: 0.25em;
+	padding: 0.25rem;
 	position: relative;
 	text-decoration: none;
 	text-transform: uppercase;
@@ -66,34 +66,34 @@ a:hover.button, input[type=submit]:hover {
 	}
 
 	/**********  FILTRY  ***********/
-#filtr { background-color: #ddd; padding: 0 10em 0 10em;  text-align: center; }
-#filtr select { border: 0.1em inset #ddd; background: #eee; }
+#filtr { background-color: #ddd; padding: 0 10rem 0 10rem;  text-align: center; }
+#filtr select { border: 0.1rem inset #ddd; background: #eee; }
 #filtr #filterbutton { background-color: #999; margin: 1em; }
 
 /********* DIV TABULKY *************/
 .table { display: table; margin: 0 auto; }
-.row { display: table-row; padding: 1em; }
-.cell { display: table-cell; padding: 0.7em;}
+.row { display: table-row; padding: 1rem; }
+.cell { display: table-cell; padding: 0.7rem;}
 .even {	background-color: #f8f8f8;}
 .odd { background-color: #f0f0f0; }
 .middle{  vertical-align: middle; }
 
 /*********** USERS*.PHP *************/
-#users input, #users select { border: 0.1em inset #ddd; background: #fefefe;}
-#users a.button { margin-right: 0.2em;}
+#users input, #users select { border: 0.1rem inset #ddd; background: #fefefe;}
+#users a.button { margin-right: 0.2rem;}
 #users a.button, #user #submitbutton {background-color: #476cb1 ; }
 #users a.button:hover, #user #submitbutton:hover {background-color: #0A246A ;}
-#users span.button, #user span.button {background-color: #99dd99 ; color: #fefefe; padding:0.25em; margin-right: 0.2em;}
-#users .cell div {  padding: 0.25em; }
-#users .name {font-size:1.1em; font-weight: bold;  margin: 0.6em -0.2em;}
+#users span.button, #user span.button {background-color: #99dd99 ; color: #fefefe; padding:0.25rem; margin-right: 0.2rem;}
+#users .cell div {  padding: 0.25rem; }
+#users .name {font-size:1.1em; font-weight: bold;  margin: 0.6rem -0.2rem;}
 #users .permissions { display:inline-block  ;}
-#user input, #user select { border: 0.1em inset #ddd; background: #fefefe; width: 10em; margin: 0 0.5em; float: right; }
-#user { padding: 1em;}
-#user form { display: grid;	padding-bottom: 1em;}
-#user div {	vertical-align: top; width: 30em; padding: 0.2em;}
-#user div:after { clear: both; margin-bottom: 10em; }
+#user input, #user select { border: 0.1rem inset #ddd; background: #fefefe; width: 10rem; margin: 0 0.5rem; float: right; }
+#user { padding: 1rem;}
+#user form { display: grid;	padding-bottom: 1rem;}
+#user div {	vertical-align: top; width: 30rem; padding: 0.2rem;}
+#user div:after { clear: both; margin-bottom: 10rem; }
 #user label,span { float: left; }
-#user a, #user p { padding: 0.3em;}
+#user a, #user p { padding: 0.3rem;}
 
 /**********  LOGIN.PHP  ***********/
 #logincontent {	height: 100%; width: 100%; position: absolute; }
@@ -103,7 +103,7 @@ a:hover.button, input[type=submit]:hover {
 #logincontent form div { position: relative; top: 60px; width: 100%; clear: both;}
 #logincontent form label { float: left; width: 30%; text-align: right; margin: 0 10px 0 10px;}
 #logincontent form input { width: 50%; border: 1px inset black; margin-bottom: 1px; }
-#logincontent form #logmein { text-align: center; margin-top: 1em;}
+#logincontent form #logmein { text-align: center; margin-top: 1rem;}
 
 
 fieldset {border: 1px black solid; padding: 0.5em; }

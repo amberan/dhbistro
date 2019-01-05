@@ -1,30 +1,16 @@
 <?php   
         filter();
 		// vypis aktualit
-		$check_sql=mysqli_query($database,"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."news' and column_name='deleted'");
-		if(mysqli_num_rows($check_sql)== 0) { //1.5.6>
-			$sql="SELECT
-			".DB_PREFIX."news.id AS 'id',
-			".DB_PREFIX."news.datum AS 'datum',
-			".DB_PREFIX."news.nadpis AS 'nadpis',
-			".DB_PREFIX."news.obsah AS 'obsah',
-			".DB_PREFIX."users.login AS 'autor',
-			".DB_PREFIX."news.kategorie AS 'kategorie'
-							FROM ".DB_PREFIX."news, ".DB_PREFIX."users
-							WHERE ".DB_PREFIX."news.iduser=".DB_PREFIX."users.id ".$fsql_cat."
-							ORDER BY ".$fsql_sort."LIMIT 10";
-		}else{ //1.5.6<
-			$sql="SELECT
-			".DB_PREFIX."news.id AS 'id',
-			".DB_PREFIX."news.datum AS 'datum',
-			".DB_PREFIX."news.nadpis AS 'nadpis',
-			".DB_PREFIX."news.obsah AS 'obsah',
-			".DB_PREFIX."users.login AS 'autor',
-			".DB_PREFIX."news.kategorie AS 'kategorie'
-							FROM ".DB_PREFIX."news, ".DB_PREFIX."users
-							WHERE ".DB_PREFIX."news.iduser=".DB_PREFIX."users.id ".$fsql_cat." AND ".DB_PREFIX."news.deleted = 0
-							ORDER BY ".$fsql_sort."LIMIT 10";
-		}
+		$sql="SELECT
+		".DB_PREFIX."news.id AS 'id',
+		".DB_PREFIX."news.datum AS 'datum',
+		".DB_PREFIX."news.nadpis AS 'nadpis',
+		".DB_PREFIX."news.obsah AS 'obsah',
+		".DB_PREFIX."users.login AS 'autor',
+		".DB_PREFIX."news.kategorie AS 'kategorie'
+						FROM ".DB_PREFIX."news, ".DB_PREFIX."users
+						WHERE ".DB_PREFIX."news.iduser=".DB_PREFIX."users.id ".$fsql_cat." AND ".DB_PREFIX."news.deleted = 0
+						ORDER BY ".$fsql_sort."LIMIT 10";
         $res=mysqli_query ($database,$sql);
         while ($rec=mysqli_fetch_assoc ($res)) {
           echo '<div class="news_div '.(($rec['kategorie']==1)?'game_news':'system_news').'">
