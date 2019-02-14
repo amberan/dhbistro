@@ -16,7 +16,7 @@
           echo '<div class="news_div '.(($rec['kategorie']==1)?'game_news':'system_news').'">
 		<div class="news_head"><h2>'.StripSlashes($rec['nadpis']).'</h2>
 		<p><span> ['.Date ('d. m. Y - H:i:s',$rec['datum']).']</span> <strong> '.$rec['autor'].' </strong>';
-		if ($usrinfo['right_power'] and mysqli_num_rows($check_sql) != 0) {
+		if ($usrinfo['right_power']) {
 			echo ' <a href="index.php?newsdelete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat aktualitu &quot;".StripSlashes($rec['nadpis'])."&quot;?');".'" title="smazat">smazat</a>';
 			}
 		echo '</p></div>
