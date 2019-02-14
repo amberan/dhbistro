@@ -5,7 +5,8 @@
 	rework vyhledavani - ignoruje diakritiku, mala/velka pismena, hleda casti slov
 	BUGFIX injection vylepseni  
 	odstraneni fallbacku - pokud existuje update script, udela se zaloha a pak hned update
-	TinyMCE 5.0
+	TinyMCE 5.0  
+	jQuery 3.3.1
 - **1.5.6 HLIDKY 11/2018**   
 	nove nastylovani loginu, spravy uzivatelu  
 	moznost editace vsech typu prav  
@@ -62,6 +63,10 @@ inc/menu.php            | generovani menu
 inc/header.php          | fnc header
 inc/session.php         | obsluha session uzivatele
 inc/unread.php          | obsluha neprectenych objektu
+js/tinymce5				| TinyMCE 5.0
+js/tinymce.init.js		| iniciace a konfigurace TinyMCE
+js/mrFixit.js			| nevim, vyzaduje jQuery
+js/jquery-3.3.1.min.js  | jQuery 3.3.1
 processing/users.php    | zpracovani uzivatele                      | uzivatele
 processing/settings.php	| zpracovani osobnich nastaveni
 addar2c.php             | uprava hlaseni - report 2 case            | report / pripad
