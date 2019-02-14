@@ -10,7 +10,7 @@ define ('DB_PREFIX','nw_'); // prefix tabulek
 $config['dbpass'] = "/inc/important.php"; // soubor s heslem k databazi
 $config['page_prefix']=''; // uri cesta mezi domenou a adresarem bistra
 $config['page_free']=array('login.php','logout.php'); // stranky dostupne bez prihlaseni
-$config['version']='1.5.6';  // verze bistra
+$config['version']='1.5.7';  // verze bistra
 $config['folder_backup'] = "/files/backups/"; // adresar pro generovani zaloh
 $config['folder_portrait'] = "/files/portraits/"; // adresar s portrety
 $config['folder_symbol'] = "/files/symbols/"; // adresar se symboly

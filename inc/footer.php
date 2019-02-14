@@ -2,13 +2,12 @@
 function pageEnd () {
         global $starttime,$time,$mem;
 ?>		</div>
-		<script src="http://code.jquery.com/jquery-1.12.2.min.js"></script>
 		<script src="./js/mrFixit.js"></script>
-		<script src="./js/tinymce/tinymce.min.js"></script>
+		<script src="./js/tinymce5/tinymce.min.js"></script>
+		<script src="./js/tinymce5/jquery.tinymce.min.js"></script>
 		<script>
 		tinymce.init({
 			selector: "textarea",
-			theme: "modern",
 			entity_encoding: "raw",
 			plugins: [
 				"advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
@@ -17,7 +16,7 @@ function pageEnd () {
 			],
 			toolbar: "undo redo | styleselect fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | forecolor backcolor table removeformat",
 			menubar: false,
-			toolbar_items_size: 'small',
+			toolbar_items_size: "small"
 		});
 		</script>
 <?php
