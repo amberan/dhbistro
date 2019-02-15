@@ -8,8 +8,4 @@ function pageEnd () {
 		<script src="./js/tinymce.init.js"></script>
 <?php
 echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
-debug(array(
-	'memory kB' => (memory_get_usage() - $mem) / 1024,
-	'seconds' => microtime(TRUE) - $time
-),"timer");
 echo "</body></html>"; } ?>

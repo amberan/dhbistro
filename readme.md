@@ -2,11 +2,15 @@
 
 ### News and Updates
 - **1.5.7 IN PROGRESS**  
-	rework vyhledavani - ignoruje diakritiku, mala/velka pismena, hleda casti slov
+	rework vyhledavani - ignoruje diakritiku, mala/velka pismena, hleda casti slov  
 	BUGFIX injection vylepseni  
-	odstraneni fallbacku - pokud existuje update script, udela se zaloha a pak hned update
+	odstraneni fallbacku - pokud existuje update script, udela se zaloha a pak hned update  
 	TinyMCE 5.0  
-	jQuery 3.3.1
+	jQuery 3.3.1  
+	Latte 2.4  
+	Tracy 2.5 - nahrazuje puvodni debug  
+	oddeleni db konektoru a konfigurace platformy  
+	nacitani custom textu  
 - **1.5.6 HLIDKY 11/2018**   
 	nove nastylovani loginu, spravy uzivatelu  
 	moznost editace vsech typu prav  
@@ -15,7 +19,7 @@
 	zobrazovani priloh u hlaseni, osob, pripadu  
 	telefonni cisla jsou zobrazovany jako aktivni linky - volani mobilem primo z bistra  
 	mazani novinek  
-	zobrazovani datumu u poznamek
+	zobrazovani datumu u poznamek  
 	BUGFIX: $_REQUEST,$_POST,$_GET vicerozmerne pole osetrejeni SQL injection  
 	BUGFIX: generovani hesel novych uzivatelu  
 	BUGFIX razeni reportu podle data/casu vyjezdu  
@@ -24,14 +28,14 @@
 	ukladaji se i poznamky bez nazvu    
 	reset hesla, zamknuti a odemknuti uzivatele  	
 - **1.5.4 MD5 PASSWORD**  
-	md5 hesla
+	md5 hesla  
 	odstraneni vsech GOTO  
 	html validni  
 	presunuti vsech css souboru do css adresare  
 	backup fallback na starou db  
 	odstraneni debug dat z priloh  
 	zaloha je komprimovana  
-	zpracovani nastaveni nove
+	zpracovani nastaveni nove  
 - **1.5.3 SESSION MANAGEMENT REWORK**  
 	prepsan session management (odpojena tabulka loggedin)  
     vsechny inputy $_REQUEST osetreny na injection  
@@ -53,22 +57,30 @@ soubor                  | obsah                                     | obsluhovan
 --- | --- | ---
 inc/audit_trail.php     | generovani auditni stopy + zamezeni pristupu
 inc/backup.php          | backup mechanism
-inc/database.php        | database connection mechanism
+inc/database.php        | database connection
 inc/debug.php			| debug messaging
 inc/footer.php          | fnc footer
 inc/func_main.php       | knihovna balastu
 inc/image.php			| manipulace s obrazky
 inc/important.php       | heslo databaze
 inc/menu.php            | generovani menu
+inc/platform.php		| platform configuration
 inc/header.php          | fnc header
 inc/session.php         | obsluha session uzivatele
 inc/unread.php          | obsluha neprectenych objektu
+--- | --- | ---
+custom/text-DH.php		| texty pro Denni Hlidku
+custom/text-enigma.php	| texty pro Enigma
+custom/text-NH.php		| texty pro Nocni Hlidku
+--- | --- | ---
 js/tinymce5				| TinyMCE 5.0
 js/tinymce.init.js		| iniciace a konfigurace TinyMCE
 js/mrFixit.js			| nevim, vyzaduje jQuery
 js/jquery-3.3.1.min.js  | jQuery 3.3.1
+--- | --- | ---
 processing/users.php    | zpracovani uzivatele                      | uzivatele
 processing/settings.php	| zpracovani osobnich nastaveni
+--- | --- | ---
 addar2c.php             | uprava hlaseni - report 2 case            | report / pripad
 addc2ar.php             | uprava hlaseni - case 2 report            | pripad / report
 addp2ar.php             | uprava hlaseni - person 2 report          | osoba / report

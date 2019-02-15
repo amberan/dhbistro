@@ -42,16 +42,6 @@ hr {
 .right {float:right;}
 .center {text-align:center;}
 
-/************* DEBUG ***************/
-@media screen and (min-device-width : 620px)  {
-	pre.session { position: fixed; width: 300px; height:250px; top: 150px; right:0; color: lightgreen; background-color: black; z-index:10; opacity:0.4; overflow: auto; } 
-	pre { position: fixed; width: 300px; height:200px; top: 400px; right:0; color: lightgreen; background-color: black; z-index:10; opacity:0.4; overflow: auto; }
-	pre.timer{ position: fixed; width: 300px; height:90px; top: 600px; right:0; color: lightgreen; background-color: black; z-index:10; opacity:0.4; overflow: auto; } 
-}
-@media screen and (max-device-width : 620px)  {
-	pre {display:none;}
-}
-
 /************ TLACITKA *************/
 #filterbutton, #submitbutton, a.button {
 	color: #fefefe;
@@ -98,8 +88,8 @@ a:hover.button, input[type=submit]:hover {
 /**********  LOGIN.PHP  ***********/
 #logincontent {	height: 100%; width: 100%; position: absolute; }
 #loginmiddle { 	position: absolute; top: 50%; left: 50%; width: 250px; height: 300px; transform: translate(-50%, -50%); border: 1px solid black; background: #e0e0e0;}
-#logincontent form#dh {	background: url('../gfx/dhlogo.gif') no-repeat 50% 20px; width: 100%; padding-top: 100px;}
-#logincontent form#other { background: url('../gfx/terra.gif') no-repeat 50% 20px; width: 100%; padding-top: 100px;}
+#logincontent form#dh {	background: url('../custom/dhlogo.gif') no-repeat 50% 20px; width: 100%; padding-top: 100px;}
+#logincontent form#other { background: url('../custom/terra.gif') no-repeat 50% 20px; width: 100%; padding-top: 100px;}
 #logincontent form div { position: relative; top: 60px; width: 100%; clear: both;}
 #logincontent form label { float: left; width: 30%; text-align: right; margin: 0 10px 0 10px;}
 #logincontent form input { width: 50%; border: 1px inset black; margin-bottom: 1px; }
@@ -564,7 +554,7 @@ div > .poznamka-edit-buttons {position:absolute;right:0px;top:0px;}
 #dashboard fieldset {
 	position: relative; 
 	margin:0;
-	background:url('../gfx/corkbg.png') repeat;
+	background:url('../custom/corkbg.png') repeat;
 	background-color: #fff9ae;
 	}
 	

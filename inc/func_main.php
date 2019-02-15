@@ -15,12 +15,23 @@ $config['folder_backup'] = "/files/backups/"; // adresar pro generovani zaloh
 $config['folder_portrait'] = "/files/portraits/"; // adresar s portrety
 $config['folder_symbol'] = "/files/symbols/"; // adresar se symboly
 $config['mime-image'] = array("image/jpeg","image/pjpeg", "image/png");
+$config['folder_logs'] = $_SERVER['DOCUMENT_ROOT'].'/log/';
+$config['folder_templates'] = $_SERVER['DOCUMENT_ROOT'].'/templates/';
+$config['folder_custom'] = $_SERVER['DOCUMENT_ROOT'].'/custom/';
+$config['folder_cache'] = $_SERVER['DOCUMENT_ROOT'].'/cache/';
+$config['text'] = 'text-DH.php'; // defaultni texty - pretizeno hodnotami nactenymi v ramci inc/database.php
 
 // *** TECHNICAL LIBRARIES
-	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/debug.php');  
+	require_once($_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php');
+		use Tracy\Debugger;
+		Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+		$latte = new Latte\Engine;
+		$latte->setTempDirectory($config['folder_cache']);
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/platform.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/database.php');
+	require_once($config['folder_custom'].$config['text']);
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/backup.php');
-	backupDB();
+		backupDB();
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/session.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/audit_trail.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/image.php');
@@ -37,7 +48,6 @@ $config['mime-image'] = array("image/jpeg","image/pjpeg", "image/png");
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/footer.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/header.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/menu.php');
-
 
 
 // ziskani autora zaznamu - audit, dashboard, edituser, index, readcase, readperson, readsymbol, tasks
@@ -132,6 +142,16 @@ function custom_Filter ($idtable, $idrecord = 0) {
 }
 
 if (substr(basename($_SERVER['REQUEST_URI']), 0, strpos(basename($_SERVER['REQUEST_URI']), '?')) != "getportrait.php" AND substr(basename($_SERVER['REQUEST_URI']), 0, strpos(basename($_SERVER['REQUEST_URI']), '?')) != "getfile.php") { 
-	debug ($_SESSION,"session");
+	Debugger::barDump($_SESSION,"session");
 }
+
+/* LATTE
+$parameters = [
+    'text' => $text,
+];
+
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'test.latte', $parameters);
+
+<h1>{$text[point]|capitalize}</h1>
+*/
 ?>
