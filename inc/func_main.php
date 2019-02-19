@@ -15,10 +15,10 @@ $config['folder_backup'] = "/files/backups/"; // adresar pro generovani zaloh
 $config['folder_portrait'] = "/files/portraits/"; // adresar s portrety
 $config['folder_symbol'] = "/files/symbols/"; // adresar se symboly
 $config['mime-image'] = array("image/jpeg","image/pjpeg", "image/png");
-$config['folder_logs'] = $_SERVER['DOCUMENT_ROOT'].'/log/';
-$config['folder_templates'] = $_SERVER['DOCUMENT_ROOT'].'/templates/';
-$config['folder_custom'] = $_SERVER['DOCUMENT_ROOT'].'/custom/';
-$config['folder_cache'] = $_SERVER['DOCUMENT_ROOT'].'/cache/';
+$config['folder_logs'] = $_SERVER['DOCUMENT_ROOT'].'/log/'; // adresar pro tracy logy
+$config['folder_custom'] = $_SERVER['DOCUMENT_ROOT'].'/custom/'; // adresar pro customizace (dh, nh, enigma....)
+$config['folder_templates'] = $_SERVER['DOCUMENT_ROOT'].'/templates/'; // adresar pro latte templaty
+$config['folder_cache'] = $_SERVER['DOCUMENT_ROOT'].'/cache/'; // adresar pro latte cache
 $config['text'] = 'text-DH.php'; // defaultni texty - pretizeno hodnotami nactenymi v ramci inc/database.php
 
 // *** TECHNICAL LIBRARIES

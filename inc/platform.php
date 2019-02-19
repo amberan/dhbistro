@@ -43,7 +43,7 @@ switch ($_SERVER["SERVER_NAME"]) {
 		$config['text'] = 'text-NH.php';
         break;
     case 'saga':
-        $config['dbuser']='root';
+        $config['dbuser']='bistro';
         $config['dbdatabase']='NHBistro';
         $config['verze']=2;
         $config['barva']='local';

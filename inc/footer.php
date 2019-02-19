@@ -1,4 +1,6 @@
 <?php
+
+
 function pageEnd () {
         global $starttime,$time,$mem;
 ?>		</div>
@@ -6,6 +8,7 @@ function pageEnd () {
 		<script src="./js/mrFixit.js"></script>
 		<script src="./js/tinymce5/tinymce.min.js"></script>
 		<script src="./js/tinymce.init.js"></script>
-<?php
+		<script src="./js/timeout.js.php"></script>
+<?php   //type="text/javascript"
 echo "\n<!-- Vygenerováno za ".(round(array_sum(explode(" ",microtime())),4) - round($starttime,4))." vteřin -->\n";
 echo "</body></html>"; } ?>
