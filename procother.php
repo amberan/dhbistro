@@ -8,7 +8,7 @@
 		pageStart ('Upravena nástěnka');
 		mainMenu (5);
 		sparklets ('<a href="dashboard.php">nástěnka</a> &raquo; <strong>nástěnka upravena</strong>');
-		$sql="INSERT INTO ".DB_PREFIX."dashboard VALUES('','".Time()."','".$usrinfo['id']."','".$_POST['contents']."')";
+		$sql="INSERT INTO ".DB_PREFIX."dashboard ( created, iduser, content) VALUES(".Time()."','".$usrinfo['id']."','".$_POST['contents']."')";
 		mysqli_query ($database,$sql);
 		unreadRecords (6,0);
 		echo '<div id="obsah"><p>Nástěnka upravena.</p></div>';
@@ -29,7 +29,7 @@
 			$sfile='';
 		}
 		$time=time();
-		$sql_p="INSERT INTO ".DB_PREFIX."symbols VALUES('', '".$sfile."', '".$_POST['contents']."', '0', '".$time."', '".$usrinfo['id']."', '".$time."', '".$usrinfo['id']."', '0', '0', '".$_POST['liner']."', '".$_POST['curver']."', '".$_POST['pointer']."', '".$_POST['geometrical']."', '".$_POST['alphabeter']."', '".$_POST['specialchar']."', 0)";
+		$sql_p="INSERT INTO ".DB_PREFIX."symbols (symbol, `desc`, deleted, created, created_by, modified, modified_by, archiv, assigned, search_lines, search_curves, search_points, search_geometricals, search_alphabets, search_specialchars, secret)  VALUES( '".$sfile."', '".$_POST['contents']."', '0', '".$time."', '".$usrinfo['id']."', '".$time."', '".$usrinfo['id']."', '0', '0', '".$_POST['liner']."', '".$_POST['curver']."', '".$_POST['pointer']."', '".$_POST['geometrical']."', '".$_POST['alphabeter']."', '".$_POST['specialchar']."', 0)";
                 mysqli_query ($database,$sql_p);
 		$sql_f="SELECT id FROM ".DB_PREFIX."symbols WHERE created='".$time."' AND created_by='".$usrinfo['id']."' AND modified='".$time."' AND modified_by='".$usrinfo['id']."'";
 		$pidarray=mysqli_fetch_assoc (mysqli_query ($database,$sql_f));

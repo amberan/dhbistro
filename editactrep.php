@@ -162,7 +162,25 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 	
 	<input type="hidden" name="reportid" value="<?php echo $rec_actr['id']; ?>" />
 	<input type="submit" name="editactrep" id="submitbutton" value="Uložit změny" />
-
+	<div id="js-popup" class="popup-bg">
+		<div class="popup">
+			<p class="warning">Vaše přihlašovací session vypršela.</p>
+			<p>
+				Pokud si přejete zahodit provedené změny, pokračujte bez uložení a budete odhlášeni.
+			</p>
+			<p>
+				Pokud nechcete své úpravy ztratit, přihlašte se v jiné záložce / okně a pokuste se změny uložit znovu.
+			</p>
+			<div>
+				<button class="close-button">
+					Vrátit se
+				</button>
+				<button class="close-button">
+					Pokračovat - neukládat 
+				</button>
+			</div>
+		</div>		
+	</div>
 </fieldset>
 </form>
 	

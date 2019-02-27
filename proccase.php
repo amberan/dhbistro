@@ -14,8 +14,8 @@
 	  	sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./newcase.php">nový případ</a> &raquo; <strong>duplicita jména</strong>');
 	    echo '<div id="obsah"><p>Případ již existuje, změňte jeho jméno.</p></div>';
 	  } else {
-	  		mysqli_query ($database,"INSERT INTO ".DB_PREFIX."cases VALUES('','".$_POST['title']."','".Time()."','".$usrinfo['id']."','".$_POST['contents']."','".$_POST['secret']."','0','".$_POST['status']."')");
-	  		$cidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."cases WHERE UCASE(title)=UCASE('".$_POST['title']."')"));
+			  mysqli_query ($database,"INSERT INTO ".DB_PREFIX."cases  (title, datum, iduser, contents, secret, deleted, status) VALUES('".$_POST['title']."','".Time()."','".$usrinfo['id']."','".$_POST['contents']."','".$_POST['secret']."','0','".$_POST['status']."')");
+			$cidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."cases WHERE UCASE(title)=UCASE('".$_POST['title']."')"));
 	  		$cid=$cidarray['id'];
 	  		auditTrail(3, 3, $cid);
 	  		if (!isset($_POST['notnew'])) {

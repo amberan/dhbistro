@@ -23,7 +23,7 @@
 	  if (mysqli_num_rows ($ures)) {
 	    echo '<div id="obsah"><p>Skupina již existuje, změňte její jméno.</p></div>';
 	  } else {
-			mysqli_query ($database,"INSERT INTO ".DB_PREFIX."groups VALUES('','".$_POST['title']."','".$_POST['contents']."','".Time()."','".$usrinfo['id']."','0','".$_POST['secret']."',0)");
+			mysqli_query ($database,"INSERT INTO ".DB_PREFIX."groups ( title, contents, datum, iduser, deleted, secret, archived) VALUES('".$_POST['title']."','".$_POST['contents']."','".Time()."','".$usrinfo['id']."','0','".$_POST['secret']."',0)");
 			$gidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".$_POST['title']."')"));
 			$gid=$gidarray['id'];
 			auditTrail(2, 3, $gid);

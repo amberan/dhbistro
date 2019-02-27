@@ -24,7 +24,7 @@
 			$sdst=resize_Image ('./files/'.$sfile.'tmp',100,130);
 			imagejpeg($sdst,'./files/symbols/'.$sfile);
 			unlink('./files/'.$sfile.'tmp');
-                        $sql_sy="INSERT INTO ".DB_PREFIX."symbols VALUES('', '".$sfile."', '', 0, '".Time()."', '".$usrinfo['id']."', '".Time()."', '".$usrinfo['id']."', 0, 1, 0, 0, 0, 0, 0, 0, 0)";
+                        $sql_sy="INSERT INTO ".DB_PREFIX."symbols  ( symbol, `desc`, deleted, created, created_by, modified, modified_by, archiv, assigned, search_lines, search_curves, search_points, search_geometricals, search_alphabets, search_specialchars, secret) VALUES( '".$sfile."', '', 0, '".Time()."', '".$usrinfo['id']."', '".Time()."', '".$usrinfo['id']."', 0, 1, 0, 0, 0, 0, 0, 0, 0)";
                         mysqli_query ($database,$sql_sy);
                         $syidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."symbols WHERE symbol = '".$sfile."'"));
                         $syid=$syidarray['id'];
@@ -32,7 +32,7 @@
 			$sfile='';
                         $syid='';
 		}
-		$sql_p="INSERT INTO ".DB_PREFIX."persons VALUES('','".$_POST['name']."','".$_POST['surname']."','".$_POST['phone']."','".Time()."','".$usrinfo['id']."','".$_POST['contents']."','".$_POST['secret']."','0','".$file."', '".$_POST['side']."', '".$_POST['power']."', '".$_POST['spec']."', '".$syid."','0','0','".Time()."','".$usrinfo['id']."')";
+		$sql_p="INSERT INTO ".DB_PREFIX."persons (name, surname, phone, datum, iduser, contents, secret, deleted, portrait, side, power, spec, symbol, dead, archiv, regdate, regid) VALUES('".$_POST['name']."','".$_POST['surname']."','".$_POST['phone']."','".Time()."','".$usrinfo['id']."','".$_POST['contents']."','".$_POST['secret']."','0','".$file."', '".$_POST['side']."', '".$_POST['power']."', '".$_POST['spec']."', '".$syid."','0','0','".Time()."','".$usrinfo['id']."')";
 		mysqli_query ($database,$sql_p);
 		$pidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."persons WHERE UCASE(surname)=UCASE('".$_POST['surname']."') AND UCASE(name)=UCASE('".$_POST['name']."') AND side='".$_POST['side']."'"));
 		$pid=$pidarray['id'];
@@ -85,7 +85,7 @@
 			$sdst=resize_Image ('./files/'.$sfile.'tmp',100,100);
 			imagejpeg($sdst,'./files/symbols/'.$sfile);
 			unlink('./files/'.$sfile.'tmp');
-                        $sql_sy="INSERT INTO ".DB_PREFIX."symbols VALUES('', '".$sfile."', '', 0, '".Time()."', '".$usrinfo['id']."', '".Time()."', '".$usrinfo['id']."', 0, 1, 0, 0, 0, 0, 0, 0, 0)";
+                        $sql_sy="INSERT INTO ".DB_PREFIX."symbols  ( symbol, `desc`, deleted, created, created_by, modified, modified_by, archiv, assigned, search_lines, search_curves, search_points, search_geometricals, search_alphabets, search_specialchars, secret) VALUES( '".$sfile."', '', 0, '".Time()."', '".$usrinfo['id']."', '".Time()."', '".$usrinfo['id']."', 0, 1, 0, 0, 0, 0, 0, 0, 0)";
                         mysqli_query ($database,$sql_sy);
                         $syidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."symbols WHERE symbol = '".$sfile."'"));
                         $syid=$syidarray['id'];

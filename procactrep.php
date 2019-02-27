@@ -23,8 +23,8 @@
 	    echo '<div id="obsah"><p>Toto označení hlášení již existuje, změňte ho.</p></div>';
 	  } else {
 		  	pageStart ('Hlášení uloženo');
-		  	mainMenu (4);
-		  	mysqli_query ($database,"INSERT INTO ".DB_PREFIX."reports VALUES('','".$_POST['label']."','".Time()."','".$usrinfo['id']."','".$_POST['task']."','".$_POST['summary']."','".$_POST['impact']."','".$_POST['details']."','".$_POST['secret']."','0','".$_POST['status']."','".$_POST['type']."','".$adatum."','".$_POST['start']."','".$_POST['end']."','".$_POST['energy']."','".$_POST['inputs']."')");
+			  mainMenu (4);
+			  mysqli_query ($database,"INSERT INTO ".DB_PREFIX."reports (label, datum, iduser, task, summary, impacts, details, secret, deleted, status, type, adatum, start, end, energy, inputs) VALUES('".$_POST['label']."','".Time()."','".$usrinfo['id']."','".$_POST['task']."','".$_POST['summary']."','".$_POST['impact']."','".$_POST['details']."','".$_POST['secret']."','0','".$_POST['status']."','".$_POST['type']."','".$adatum."','".$_POST['start']."','".$_POST['end']."','".$_POST['energy']."','".$_POST['inputs']."')");
 		  	$ridarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."reports WHERE UCASE(label)=UCASE('".$_POST['label']."')"));
 			$rid=$ridarray['id'];
 			auditTrail(4, 3, $rid);

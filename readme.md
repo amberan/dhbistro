@@ -1,7 +1,7 @@
 # BISTRO
 
 ### News and Updates
-- **1.5.7 IN PROGRESS**  
+- **1.5.7**  
 	rework vyhledavani - ignoruje diakritiku, mala/velka pismena, hleda casti slov  
 	BUGFIX injection vylepseni  
 	odstraneni fallbacku - pokud existuje update script, udela se zaloha a pak hned update  
@@ -11,6 +11,7 @@
 	Tracy 2.5 - nahrazuje puvodni debug  
 	oddeleni db konektoru a konfigurace platformy  
 	nacitani custom textu  
+	priprava MD v databazi (*_md)
 - **1.5.6 HLIDKY 11/2018**   
 	nove nastylovani loginu, spravy uzivatelu  
 	moznost editace vsech typu prav  

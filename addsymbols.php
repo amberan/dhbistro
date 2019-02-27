@@ -82,14 +82,14 @@
             $sql_d="SELECT `desc` FROM ".DB_PREFIX."symbols WHERE id=".$_POST['symbolid'];
             $res_d=mysqli_query ($database,$sql_d);
             $rec_d=mysqli_fetch_assoc ($res_d);
-            mysqli_query ($database,"INSERT INTO ".DB_PREFIX."notes VALUES('','".$rec_d['desc']."','Popis symbolu přiřazeného ".Date("j/m/Y H:i:s", Time())."','".Time()."','".$usrinfo['id']."','1','".$_POST['person']."','0','0')");
+            mysqli_query ($database,"INSERT INTO ".DB_PREFIX."notes ( note, title, datum, iduser, idtable, iditem, secret, deleted) VALUES(".$rec_d['desc']."','Popis symbolu přiřazeného ".Date("j/m/Y H:i:s", Time())."','".Time()."','".$usrinfo['id']."','1','".$_POST['person']."','0','0')");
             
             // Kopie poznamek k symbolu priradit k osobe
             $sql_n="SELECT * FROM ".DB_PREFIX."notes WHERE iditem=".$_POST['symbolid']." AND idtable=7 AND deleted=0";
             $res_n=mysqli_query ($database,$sql_n);
             while ($rec_n=mysqli_fetch_assoc ($res_n)) {
                 $note_text="Poznámka zkopírována při přiřazení symbolu ".Date("j/m/Y H:i:s", Time())." <br />".$rec_n['note'];
-                $sql_ni="INSERT INTO ".DB_PREFIX."notes VALUES ('','".$note_text."','".$rec_n['title']."','".Time()."',".$rec_n['iduser'].",1,".$_POST['person'].",".$rec_n['secret'].",0)";
+                $sql_ni="INSERT INTO ".DB_PREFIX."notes  ( note, title, datum, iduser, idtable, iditem, secret, deleted) VALUES ('".$note_text."','".$rec_n['title']."','".Time()."',".$rec_n['iduser'].",1,".$_POST['person'].",".$rec_n['secret'].",0)";
                 mysqli_query ($database,$sql_ni);
             }
             
