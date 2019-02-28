@@ -1,0 +1,94 @@
+body, td, th, select, option, input, textarea, label {    
+	font-size: 0.9em;
+    font-family: "Trebuchet MS", sans-serif;	
+}
+
+body {
+    min-height: 100vh;
+}
+
+html, body, div, span, applet, object, iframe, blockquote, button, pre, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, input, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    vertical-align: baseline;
+    -webkit-margin-before: 0;
+	margin-before: 0;
+	-webkit-margin-after: 0;
+	margin-after: 0;
+	-webkit-margin-start: 0;
+	margin-start: 0;
+	-webkit-margin-end: 0;
+	margin-end: 0;
+	-webkit-margin-block-start: 0;
+	margin-block-start: 0;
+	-webkit-margin-block-end: 0;
+	margin-block-end: 0;
+	-webkit-padding-start: 0;
+	padding-start: 0;
+	-webkit-padding-end: 0;
+	padding-end: 0;
+	-webkit-padding-inline-start: 0;
+	padding-inline-start: 0;
+	-webkit-padding-inline-end: 0;
+	padding-inline-end: 0;
+}
+
+
+*, *:before, *:after {
+    -webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+#logincontent {
+	height: 100%;
+	width: 100%;
+	position: absolute;
+}
+
+#loginmiddle {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 250px;
+	height: 300px;
+	transform: translate(-50%, -50%);
+	border: 1px solid black;
+	background: #e0e0e0;
+}
+
+#logincontent form#dh {
+	background: url('http://www.dhbistro.cz/gfx/dhlogo.gif') no-repeat 50% 20px;
+	width: 100%;
+	padding-top: 100px;
+}
+
+#logincontent form div {
+	position: relative;
+	top: 60px;
+	width: 100%;
+	clear: both;
+}
+
+#logincontent form #logmein {
+	text-align: center;
+	margin-top: 1em;
+}
+
+#logincontent form input {
+	width: 50%;
+	border: 1px inset black;
+	margin-bottom: 1px;
+}
+
+#logincontent form label {
+	float: left;
+	width: 30%;
+	text-align: right;
+	margin: 0 10px 0 10px;
+}
+
+input[type="submit"] {
+    cursor: pointer;
+}

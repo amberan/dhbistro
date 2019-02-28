@@ -6,11 +6,11 @@ session_start();
 	
 //global $database,$text;
 	
+$config['version']='1.5.8';  // verze bistra
 define ('DB_PREFIX','nw_'); // prefix tabulek
-$config['dbpass'] = "/inc/important.php"; // soubor s heslem k databazi
+$config['dbpass'] = "/inc/important.php"; // soubor s heslem k databazi - na druhem radku
 $config['page_prefix']=''; // uri cesta mezi domenou a adresarem bistra
 $config['page_free']=array('login.php','logout.php'); // stranky dostupne bez prihlaseni
-$config['version']='1.5.7';  // verze bistra
 $config['folder_backup'] = "/files/backups/"; // adresar pro generovani zaloh
 $config['folder_portrait'] = "/files/portraits/"; // adresar s portrety
 $config['folder_symbol'] = "/files/symbols/"; // adresar se symboly
@@ -19,19 +19,17 @@ $config['folder_logs'] = $_SERVER['DOCUMENT_ROOT'].'/log/'; // adresar pro tracy
 $config['folder_custom'] = $_SERVER['DOCUMENT_ROOT'].'/custom/'; // adresar pro customizace (dh, nh, enigma....)
 $config['folder_templates'] = $_SERVER['DOCUMENT_ROOT'].'/templates/'; // adresar pro latte templaty
 $config['folder_cache'] = $_SERVER['DOCUMENT_ROOT'].'/cache/'; // adresar pro latte cache
-$config['text'] = 'text-DH.php'; // defaultni texty - pretizeno hodnotami nactenymi v ramci inc/database.php
+require_once($config['folder_custom'].'text-DH.php'); // defaultni texty - nasledne pretizeno hodnotami nactenymi v ramci inc/database.php
 
 // *** TECHNICAL LIBRARIES
 	require_once($_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php');
 		use Tracy\Debugger;
-		Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+		Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
 		$latte = new Latte\Engine;
 		$latte->setTempDirectory($config['folder_cache']);
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/platform.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/database.php');
-	require_once($config['folder_custom'].$config['text']);
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/backup.php');
-		backupDB();
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/session.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/audit_trail.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/image.php');

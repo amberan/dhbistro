@@ -32,7 +32,11 @@ $add_fulltext['symbols'] = ['desc_md'];
 // ALTER TABLE `nw_unread` ADD INDEX(`iduser`)
 // ALTER TABLE "table_name" DROP "column_name";
 // ALTER TABLE table CHANGE oldcolumn newcolumn char(50); prejmenovani sloupce
-// ALTER TABLE Employees MODIFY COLUMN empName VARCHAR(50) AFTER department;  presunuti slopce po tabulce
+// ALTER TABLE Employees MODIFY COLUMN empName VARCHAR(50) AFTER department;  modifikace slopce
+
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+Debugger::log('DB UPDATE: '); 
 
 $alter = $alter_password = 0;
 
@@ -42,6 +46,7 @@ foreach(array_keys($add_column) as $table) {
 		$check_sql=mysqli_query($database,"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table' and column_name='$column'");
         if(mysqli_num_rows($check_sql)== 0) {
 			$alter_sql = "ALTER TABLE ".DB_PREFIX."$table ADD COLUMN `$column` ".$add_column[$table][$column];
+			Debugger::log($alter_sql);
 			mysqli_query($database,$alter_sql);
 			$alter++;
         }
@@ -54,6 +59,7 @@ foreach(array_keys($add_fulltext) as $table) {
 		$check_sql=mysqli_query($database,"SHOW INDEX FROM ".DB_PREFIX."$table WHERE index_type = 'FULLTEXT' and column_name='$value'");
 		if(mysqli_num_rows($check_sql)== 0) {
 			$alter_sql = "ALTER TABLE ".DB_PREFIX."$table ADD FULLTEXT (`$value`)";
+			Debugger::log($alter_sql);
 			mysqli_query($database,$alter_sql);
 			$alter++;
 		}

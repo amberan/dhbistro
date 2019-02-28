@@ -1,24 +1,20 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-	pageStart ('Přihlášení do systému');
-?>
-<div id="logincontent">
-	<div id="loginmiddle">
-		<form action="index.php" method="post" id="<?php echo (($config['verze']==0 || $config['verze']==1 || $config['verze']==3)?'dh':'other'); ?>">
-  		<div>
-  			<label for="loginname">Jméno:</label>
-			<input type="text" name="loginname" id="loginname" tabindex="1" />
-		</div>
-		<div>
-			<label for="loginpwd">Heslo:</label>
-			<input type="password" name="loginpwd" id="loginpwd" tabindex="2" />
-		</div>
-		<div id="logmein">
-			<input type="submit" name="logmein"  value="Přihlásit" tabindex="3" />
-		</div>
-		</form>
-	</div>
-</div>
-<?php
-	pageEnd ();
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+
+$parameters = [
+	'text' => $text, //textove pole ./custom/text-*.php
+	'config' => $config, //konfiguracni parametry ./inc/func_main.php
+	'title' => 'Přihlášení do systému' //page title
+];
+
+	require_once($_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php');
+		use Tracy\Debugger;
+		Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+		$latte = new Latte\Engine;
+		$latte->setTempDirectory($config['folder_cache']);
+
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $parameters);
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'login.latte', $parameters);
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $parameters);
+
 ?>
