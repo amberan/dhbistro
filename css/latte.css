@@ -59,7 +59,8 @@ html, body, div, span, applet, object, iframe, blockquote, button, pre, abbr, ac
 }
 
 #logincontent form#dh {
-	background: url('http://www.dhbistro.cz/gfx/dhlogo.gif') no-repeat 50% 20px;
+	background-repeat: no-repeat;
+	background-position: 50% 20px;
 	width: 100%;
 	padding-top: 100px;
 }

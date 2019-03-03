@@ -21,5 +21,4 @@ function escape_array($array) {
  $_POST = escape_array ($_POST);
  $_GET = escape_array ($_GET);
  
- require_once($config['folder_custom'].$config['text']);
 ?>
