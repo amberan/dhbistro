@@ -1,20 +1,9 @@
---
--- Struktura tabulky nw_ar2c
---
-
-
 CREATE TABLE `nw_ar2c`(
 `idreport` int(11) NOT NULL,
 `idcase` int(11) NOT NULL,
 `iduser` int(11) NOT NULL,
 PRIMARY KEY(`idreport`,`idcase`)
 ) ENGINE=MyISAM COLLATE=utf8_general_ci;
-
-
-
---
--- Struktura tabulky nw_ar2p
---
 
 
 CREATE TABLE `nw_ar2p`(
@@ -24,12 +13,6 @@ CREATE TABLE `nw_ar2p`(
 `role` int(11) NOT NULL,
 PRIMARY KEY(`idperson`,`idreport`)
 ) ENGINE=MyISAM COLLATE=utf8_general_ci;
-
-
-
---
--- Struktura tabulky nw_audit_trail
---
 
 
 CREATE TABLE `nw_audit_trail`(
@@ -45,12 +28,6 @@ PRIMARY KEY(`id`)
 ) ENGINE=InnoDB COLLATE=utf8_general_ci;
 
 
-
---
--- Struktura tabulky nw_backups
---
-
-
 CREATE TABLE `nw_backups`(
 `id` int(11) NOT NULL auto_increment,
 `time` int(11) NOT NULL,
@@ -58,12 +35,6 @@ CREATE TABLE `nw_backups`(
 `version` varchar(50) NOT NULL DEFAULT '1.5.2 =<',
 PRIMARY KEY(`id`)
 ) ENGINE=InnoDB COLLATE=utf8_general_ci;
-
-
-
---
--- Struktura tabulky nw_c2p
---
 
 
 CREATE TABLE `nw_c2p`(
@@ -74,24 +45,12 @@ PRIMARY KEY(`idperson`,`idcase`)
 ) ENGINE=MyISAM COLLATE=utf8_general_ci;
 
 
-
---
--- Struktura tabulky nw_c2s
---
-
-
 CREATE TABLE `nw_c2s`(
 `idsolver` int(11) NOT NULL,
 `idcase` int(11) NOT NULL,
 `iduser` int(11) NOT NULL,
 PRIMARY KEY(`idsolver`,`idcase`)
 ) ENGINE=MyISAM COLLATE=utf8_general_ci;
-
-
-
---
--- Struktura tabulky nw_cases
---
 
 
 CREATE TABLE `nw_cases`(
@@ -109,12 +68,6 @@ FULLTEXT (`title`), FULLTEXT (`contents`), FULLTEXT (`contents_md`)
 ) ENGINE=MyISAM COLLATE=utf8_general_ci;
 
 
-
---
--- Struktura tabulky nw_dashboard
---
-
-
 CREATE TABLE `nw_dashboard`(
 `id` int(11) NOT NULL auto_increment,
 `created` int(11) NOT NULL,
@@ -124,12 +77,6 @@ CREATE TABLE `nw_dashboard`(
 PRIMARY KEY(`id`),
 FULLTEXT (`content_md`)
 ) ENGINE=InnoDB COLLATE=utf8_general_ci;
-
-
-
---
--- Struktura tabulky nw_data
---
 
 
 CREATE TABLE `nw_data`(
@@ -147,12 +94,6 @@ PRIMARY KEY(`id`)
 ) ENGINE=MyISAM COLLATE=utf8_general_ci;
 
 
-
---
--- Struktura tabulky nw_doodle
---
-
-
 CREATE TABLE `nw_doodle`(
 `id` int(11) NOT NULL auto_increment,
 `datum` int(11) NOT NULL,
@@ -161,24 +102,12 @@ PRIMARY KEY(`id`)
 ) ENGINE=MyISAM COLLATE=utf8_general_ci;
 
 
-
---
--- Struktura tabulky nw_g2p
---
-
-
 CREATE TABLE `nw_g2p`(
 `idperson` int(11) NOT NULL,
 `idgroup` int(11) NOT NULL,
 `iduser` int(11) NOT NULL,
 PRIMARY KEY(`idperson`,`idgroup`)
 ) ENGINE=MyISAM COLLATE=utf8_general_ci;
-
-
-
---
--- Struktura tabulky nw_groups
---
 
 
 CREATE TABLE `nw_groups`(
@@ -196,12 +125,6 @@ FULLTEXT (`title`), FULLTEXT (`contents`), FULLTEXT (`contents_md`)
 ) ENGINE=MyISAM COLLATE=utf8_general_ci;
 
 
-
---
--- Struktura tabulky nw_loggedin
---
-
-
 CREATE TABLE `nw_loggedin`(
 `iduser` int(11) NOT NULL,
 `time` int(11) NOT NULL,
@@ -212,24 +135,12 @@ PRIMARY KEY(`iduser`)
 ) ENGINE=MyISAM COLLATE=utf8_general_ci;
 
 
-
---
--- Struktura tabulky nw_map
---
-
-
 CREATE TABLE `nw_map`(
 `id` int(11) NOT NULL auto_increment,
 `datum` int(11) NOT NULL,
 `link` varchar(255) NOT NULL,
 PRIMARY KEY(`id`)
 ) ENGINE=MyISAM COLLATE=utf8_general_ci;
-
-
-
---
--- Struktura tabulky nw_news
---
 
 
 CREATE TABLE `nw_news`(
@@ -244,12 +155,6 @@ CREATE TABLE `nw_news`(
 PRIMARY KEY(`id`),
 FULLTEXT (`obsah_md`)
 ) ENGINE=MyISAM COLLATE=utf8_general_ci;
-
-
-
---
--- Struktura tabulky nw_notes
---
 
 
 CREATE TABLE `nw_notes`(
@@ -268,23 +173,26 @@ FULLTEXT (`note`), FULLTEXT (`title`), FULLTEXT (`note_md`)
 ) ENGINE=MyISAM COLLATE=utf8_general_ci;
 
 
-
---
--- Struktura tabulky nw_operation_type
---
-
-
 CREATE TABLE `nw_operation_type`(
 `id` int(11) NOT NULL auto_increment,
 `name` varchar(70) NOT NULL,
 PRIMARY KEY(`id`)
 ) ENGINE=InnoDB COLLATE=utf8_general_ci;
 
-
-
---
--- Struktura tabulky nw_persons
---
+INSERT INTO `nw_operation_type` VALUES('1','čtení');
+INSERT INTO `nw_operation_type` VALUES('2','úprava');
+INSERT INTO `nw_operation_type` VALUES('3','nový');
+INSERT INTO `nw_operation_type` VALUES('4','přiložení souboru');
+INSERT INTO `nw_operation_type` VALUES('5','odstranění souboru');
+INSERT INTO `nw_operation_type` VALUES('6','provazba');
+INSERT INTO `nw_operation_type` VALUES('7','nová poznámka');
+INSERT INTO `nw_operation_type` VALUES('8','smazání poznámky');
+INSERT INTO `nw_operation_type` VALUES('9','úprava poznámy');
+INSERT INTO `nw_operation_type` VALUES('10','organizační zásah');
+INSERT INTO `nw_operation_type` VALUES('11','smazání záznamu');
+INSERT INTO `nw_operation_type` VALUES('12','pokus o neoprávněný přístup');
+INSERT INTO `nw_operation_type` VALUES('13','pokus o přístup ke smazanému záznamu');
+INSERT INTO `nw_operation_type` VALUES('14','vyhledávání');
 
 
 CREATE TABLE `nw_persons`(
@@ -312,23 +220,24 @@ FULLTEXT (`name`), FULLTEXT (`surname`), FULLTEXT (`contents`), FULLTEXT (`conte
 ) ENGINE=MyISAM COLLATE=utf8_general_ci;
 
 
-
---
--- Struktura tabulky nw_record_type
---
-
-
 CREATE TABLE `nw_record_type`(
 `id` int(11) NOT NULL auto_increment,
 `name` varchar(70) NOT NULL,
 PRIMARY KEY(`id`)
 ) ENGINE=InnoDB COLLATE=utf8_general_ci;
 
-
-
---
--- Struktura tabulky nw_reports
---
+INSERT INTO `nw_record_type` VALUES('1','osoba');
+INSERT INTO `nw_record_type` VALUES('2','skupina');
+INSERT INTO `nw_record_type` VALUES('3','případ');
+INSERT INTO `nw_record_type` VALUES('4','hlášení');
+INSERT INTO `nw_record_type` VALUES('5','novinky');
+INSERT INTO `nw_record_type` VALUES('6','nástěnka');
+INSERT INTO `nw_record_type` VALUES('7','symbol');
+INSERT INTO `nw_record_type` VALUES('8','uživatel');
+INSERT INTO `nw_record_type` VALUES('9','zlobody');
+INSERT INTO `nw_record_type` VALUES('10','úkoly');
+INSERT INTO `nw_record_type` VALUES('11','audit');
+INSERT INTO `nw_record_type` VALUES('12','jiné');
 
 
 CREATE TABLE `nw_reports`(
@@ -359,12 +268,6 @@ FULLTEXT (`label`), FULLTEXT (`task`), FULLTEXT (`summary`), FULLTEXT (`impacts`
 ) ENGINE=MyISAM COLLATE=utf8_general_ci;
 
 
-
---
--- Struktura tabulky nw_symbol2all
---
-
-
 CREATE TABLE `nw_symbol2all`(
 `idsymbol` int(11) NOT NULL,
 `idrecord` int(11) NOT NULL,
@@ -372,12 +275,6 @@ CREATE TABLE `nw_symbol2all`(
 `table` int(11) NOT NULL,
 PRIMARY KEY(`idsymbol`,`idrecord`,`table`)
 ) ENGINE=InnoDB COLLATE=utf8_general_ci;
-
-
-
---
--- Struktura tabulky nw_symbols
---
 
 
 CREATE TABLE `nw_symbols`(
@@ -404,12 +301,6 @@ FULLTEXT (`desc`), FULLTEXT (`desc_md`)
 ) ENGINE=MyISAM COLLATE=utf8_general_ci;
 
 
-
---
--- Struktura tabulky nw_tasks
---
-
-
 CREATE TABLE `nw_tasks`(
 `id` int(11) NOT NULL auto_increment,
 `task` text NOT NULL,
@@ -423,12 +314,6 @@ PRIMARY KEY(`id`)
 ) ENGINE=InnoDB COLLATE=utf8_general_ci;
 
 
-
---
--- Struktura tabulky nw_unread
---
-
-
 CREATE TABLE `nw_unread`(
 `id` int(11) NOT NULL auto_increment,
 `idtable` int(11) NULL,
@@ -436,12 +321,6 @@ CREATE TABLE `nw_unread`(
 `iduser` int(11) NULL,
 PRIMARY KEY(`id`)
 ) ENGINE=MyISAM COLLATE=utf8_general_ci;
-
-
-
---
--- Struktura tabulky nw_users
---
 
 
 CREATE TABLE `nw_users`(
@@ -467,3 +346,4 @@ CREATE TABLE `nw_users`(
 PRIMARY KEY(`id`)
 ) ENGINE=MyISAM COLLATE=utf8_general_ci;
 
+INSERT INTO `nw_users` VALUES('1','','admin','21232f297a57a5a743894a0e4a801fc3','0','1539028214','1','1','','','1','0','','0','600','0','0','0','');
