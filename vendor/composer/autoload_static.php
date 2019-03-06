@@ -10,6 +10,20 @@ class ComposerStaticInit6db1c36b45f379dc0212516dfd0b3bec
         '7745382c92b7799bf1294b1f43023ba2' => __DIR__ . '/..' . '/tracy/tracy/src/shortcuts.php',
     );
 
+    public static $prefixLengthsPsr4 = array (
+        'L' => 
+        array (
+            'League\\HTMLToMarkdown\\' => 22,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'League\\HTMLToMarkdown\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/html-to-markdown/src',
+        ),
+    );
+
     public static $classMap = array (
         'Latte\\CompileException' => __DIR__ . '/..' . '/latte/latte/src/Latte/exceptions.php',
         'Latte\\Compiler' => __DIR__ . '/..' . '/latte/latte/src/Latte/Compiler/Compiler.php',
@@ -62,6 +76,8 @@ class ComposerStaticInit6db1c36b45f379dc0212516dfd0b3bec
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6db1c36b45f379dc0212516dfd0b3bec::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6db1c36b45f379dc0212516dfd0b3bec::$prefixDirsPsr4;
             $loader->classMap = ComposerStaticInit6db1c36b45f379dc0212516dfd0b3bec::$classMap;
 
         }, null, ClassLoader::class);

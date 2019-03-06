@@ -3,6 +3,7 @@
 ### News and Updates
 - **1.5.8 IN PROGRESS**
 	latte template - login, header, footer
+	HTMLtoMD convertor
 - **1.5.7**  
 	rework vyhledavani - ignoruje diakritiku, mala/velka pismena, hleda casti slov  
 	BUGFIX injection vylepseni  

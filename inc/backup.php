@@ -1,6 +1,5 @@
 <?php
 //vytvoreni zalohy
-function backupDB () {
 	global $database,$config;
 	
 	function  zalohuj($soubor=""){
@@ -104,5 +103,4 @@ function backupDB () {
 			}
 		}
 	}
-}
 ?>

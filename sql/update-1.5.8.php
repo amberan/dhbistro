@@ -27,6 +27,19 @@ $add_fulltext['notes'] = ['note_md'];
 $add_fulltext['persons'] = ['contents_md'];
 $add_fulltext['reports'] = ['summary_md', 'impacts_md', 'details_md', 'energy_md', 'inputs_md'];
 $add_fulltext['symbols'] = ['desc_md'];
+// *** CONVERT TO MD
+//$to_MD[] = ['cases','id','contents','contents_md'];
+//$to_MD[] = ['dashboard','id','content','content_md'];
+//$to_MD[] = ['groups','id','contents','contents_md'];
+//$to_MD[] = ['news','id','obsah','obsah_md'];
+//$to_MD[] = ['notes','id','note','note_md'];
+//$to_MD[] = ['persons','id','contents','contents_md'];
+//$to_MD[] = ['reports','id','summary','summary_md'];
+//$to_MD[] = ['reports','id','impacts','impacts_md'];
+//$to_MD[] = ['reports','id','details','details_md'];
+//$to_MD[] = ['reports','id','energy','energy_md'];
+//$to_MD[] = ['reports','id','inputs','inputs_md'];
+//$to_MD[] = ['symbols','id','desc','desc_md'];
 // *** RENAME COLUMN
 // ALTER TABLE table CHANGE oldcolumn newcolumn char(50); prejmenovani sloupce
 /*$rename_column['audit_trail']['id'] = "auditid int(11) NOT NULL AUTO_INCREMENT FIRST";
@@ -120,7 +133,6 @@ foreach(array_keys($add_column) as $table) {
     }
 }
 
-
 // ADD FULLTEXT
 foreach(array_keys($add_fulltext) as $table) {
 	foreach($add_fulltext[$table] as $key => $value ) {
@@ -150,6 +162,22 @@ if($alter_password > 0) {
 		$alter++;
 	}
 }
+
+
+// CONVERT TO MARKDOWN
+use League\HTMLToMarkdown\HtmlConverter;
+$converter = new HtmlConverter(array('strip_tags' => true)); //https://github.com/thephpleague/html-to-markdown
+foreach($to_MD as $key  => $value) {
+	//echo "TABLE: ".$value[0]." ID: ".$value[1]." SOURCE: ".$value[2]." TARGET: ".$value[3]."<br>";
+		$preMD_sql = mysqli_query($database,"SELECT ".$value[1].", ".$value[2]." FROM ".DB_PREFIX.$value[0]." WHERE ".$value[3]." = ''");
+		while($preMD = mysqli_fetch_array($preMD_sql)) {
+			$MDcolumn = $converter->convert( str_replace('\'', '', $preMD[$value[2]]));
+			Debugger::log('Markdown conversion ['.DB_PREFIX.$value[0].'.'.$preMD[$value[1]].']: '.$preMD[$value[2]].' ##### TO ##### '.$MDcolumn);
+			mysqli_query($database,"UPDATE ".DB_PREFIX.$value[0]." SET ".$value[3]."='".$MDcolumn."' WHERE ".$value[1]."=".$preMD[$value[1]]);
+			$alter++;
+		}
+}
+
 
 //pokud zmeny probehly, prejmenovat tento soubor 
 if ($alter > 0) { 	
