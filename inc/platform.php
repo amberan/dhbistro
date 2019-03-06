@@ -62,6 +62,13 @@ switch ($_SERVER["SERVER_NAME"]) {
         $config['barva']='test';
 		$config['custom']='NH';
 		break;
+    case 'bistro':
+        $config['dbuser']='root';
+        $config['dbdatabase']='bistro';
+        $config['verze']=2;
+        $config['barva']='test';
+		$config['custom']='NH';
+		break;
     case 'dhtestbistro.talmahera.eu':
         $config['dbuser']=$config['dbdatabase']='dhtestbistro';
         $config['verze']=3;
