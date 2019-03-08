@@ -16,7 +16,7 @@ switch ($_SERVER["SERVER_NAME"]) {
         $config['dbuser']=$config['dbdatabase']='nhbistro';
         $config['verze']=2;
         $config['barva']='nh';
-		$config['custom']='DH';
+		$config['custom']='NH';
         break;
     case 'test.dhbistro.cz':
         $config['dbuser']=$config['dbdatabase']='testbistro';
