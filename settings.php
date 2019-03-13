@@ -25,7 +25,7 @@ function pwdcheck(form)
 	};
 	-->
 	</script>
-<form action="settings.php" method="post" name="inputform" id="inputform" onSubmit="return pwdcheck(this);">
+<form action="settings.php" method="post" name="edituser" id="inputform" onSubmit="return pwdcheck(this);">
 <fieldset id="ramecek"><legend><strong>Uživatel: <?php echo $usrinfo['login']; ?></strong></legend>
 	<fieldset><legend><strong>Základní&nbsp;nastavení</strong></legend>
 	<div id="info">

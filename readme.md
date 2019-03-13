@@ -2,8 +2,12 @@
 
 ### News and Updates
 - **1.5.8 IN PROGRESS**
-	latte template - login, header, footer
-	HTMLtoMD convertor
+	latte template - login, header, footer  
+	HTMLtoMD convertor  
+	update script - alter table funkcionalita  
+	BUGFIX vytvoreni noveho uzivatele  
+	sjednoceni zpracovani uzivatelu a sama sebe  
+	presmerovani vseho logovani do Tracy ./log/info.log
 - **1.5.7**  
 	rework vyhledavani - ignoruje diakritiku, mala/velka pismena, hleda casti slov  
 	BUGFIX injection vylepseni  
@@ -59,31 +63,52 @@
 ### OBSAH
 soubor                  | obsah                                     | obsluhovany objekt
 --- | --- | ---
-inc/audit_trail.php     | generovani auditni stopy + zamezeni pristupu
-inc/backup.php          | backup mechanism
-inc/database.php        | database connection
-inc/debug.php			| debug messaging
-inc/footer.php          | fnc footer
-inc/func_main.php       | knihovna balastu
-inc/image.php			| manipulace s obrazky
-inc/important.php       | heslo databaze
-inc/menu.php            | generovani menu
-inc/platform.php		| platform configuration
-inc/header.php          | fnc header
-inc/session.php         | obsluha session uzivatele
-inc/unread.php          | obsluha neprectenych objektu
+css						| **styly**
 --- | --- | ---
+customs					| **individualni texty a obrazky pro jednotlive instance**
 custom/text-DH.php		| texty pro Denni Hlidku
 custom/text-enigma.php	| texty pro Enigma
 custom/text-NH.php		| texty pro Nocni Hlidku
 --- | --- | ---
-js/tinymce5				| TinyMCE 5.0
-js/tinymce.init.js		| iniciace a konfigurace TinyMCE
-js/mrFixit.js			| nevim, vyzaduje jQuery
+files					| **prilohy**
+files/backups/*			| generovane zalohy SQL.GZ
+files/portraits/*		| portrety IMG
+files/symbols/*			| symboly IMG
+--- | --- | ---
+images					| **grafika pouzivana CSSky**
+--- | --- | ---
+inc/audit_trail.php     | generovani auditni stopy + zamezeni pristupu
+inc/backup.php          | generator zaloh
+inc/database.php        | pripojeni a nastaveni databaze
+inc/footer.php          | fnc footer
+inc/func_main.php       | knihovna balastu - pouzivane vsude
+inc/header.php          | fnc header
+inc/image.php			| manipulace s obrazky
+inc/important.php       | heslo databaze
+inc/menu.php            | generovani menu
+inc/platform.php		| konfiguracni udaje jednotlivych platforem
+inc/session.php         | obsluha session uzivatele
+inc/unread.php          | obsluha neprectenych objektu
+--- | --- | ---
+js/tinymce5/*			| TinyMCE 5.0
 js/jquery-3.3.1.min.js  | jQuery 3.3.1
+js/mrFixit.js			| nevim, vyzaduje jQuery
+js/timeout.js.php		| timeout pro ukladaci disketu
+js/tinymce.init.js		| iniciace a konfigurace TinyMCE
+--- | --- | ---
+log 					| **adresar pro logovani**
+log/error.log			| PHP Notice, Warning
+log/exception.log		| PHP kolapsy
+log/info.log			| vystup Tracy logovani
 --- | --- | ---
 processing/users.php    | zpracovani uzivatele                      | uzivatele
 processing/settings.php	| zpracovani osobnich nastaveni
+--- | --- | ---
+sql						| **SQL updates, defaults**
+--- | --- | ---
+templates				| **Latte templaty**
+--- | --- | ---
+vendor					| **pouzivane knihovny "composer"
 --- | --- | ---
 addar2c.php             | uprava hlaseni - report 2 case            | report / pripad
 addc2ar.php             | uprava hlaseni - case 2 report            | pripad / report

@@ -25,6 +25,7 @@ require_once($config['folder_custom'].'text-DH.php'); // defaultni texty - nasle
 	require_once($_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php');
 		use Tracy\Debugger;
 		Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+		//Debugger::log("alert: ".$_SESSION['message']);
 		$latte = new Latte\Engine;
 		$latte->setTempDirectory($config['folder_cache']);
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/platform.php');
@@ -35,12 +36,11 @@ require_once($config['folder_custom'].'text-DH.php'); // defaultni texty - nasle
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/image.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/unread.php');
 // *** PROCESSING
-	require_once($_SERVER['DOCUMENT_ROOT'].'/processing/settings.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/processing/news.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'/processing/users.php');
+	require_once($_SERVER['DOCUMENT_ROOT'].'/processing/users.php'); //zpracovani uzivatele, vcetne zmen sama sebe
 // *** GENERAL ALERT - overit, ze funguje s odlasovanim nahore - asi bude potreba prenaset message prez session destroy
 	if (isset($_SESSION['message']) and $_SESSION['message'] != null) { 
-		echo "\n<script>window.onload = function(){alert('".$_SESSION['message']."');}</script>\n";
+		echo "\n<script>window.onload = alert('".$_SESSION['message']."')</script>\n";
 		unset($_SESSION['message']);}
 // *** LIBRARIES FOR DISPLAYING DATA
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/footer.php');
@@ -143,13 +143,4 @@ if (substr(basename($_SERVER['REQUEST_URI']), 0, strpos(basename($_SERVER['REQUE
 	Debugger::barDump($_SESSION,"session");
 }
 
-/* LATTE
-$parameters = [
-    'text' => $text,
-];
-
-$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'test.latte', $parameters);
-
-<h1>{$text[point]|capitalize}</h1>
-*/
 ?>
