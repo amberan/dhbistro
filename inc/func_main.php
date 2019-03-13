@@ -6,7 +6,7 @@ session_start();
 	
 //global $database,$text;
 	
-$config['version']='1.5.7';  // verze bistra
+$config['version']='1.5.8';  // verze bistra
 define ('DB_PREFIX','nw_'); // prefix tabulek
 $config['dbpass'] = "/inc/important.php"; // soubor s heslem k databazi - na druhem radku
 $config['page_prefix']=''; // uri cesta mezi domenou a adresarem bistra

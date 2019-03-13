@@ -2,7 +2,7 @@
 // *** ADD COLUMN
 $add_column['backups']['version'] = "varchar(50) NOT NULL DEFAULT '".$config['version']." =<'";
 $add_column['users']['sid'] = "VARCHAR(32) NOT NULL AFTER `id`";
-$add_column['users']['user_agent'] = "VARCHAR(256) NOT NULL AFTER `ip`";
+$add_column['users']['user_agent'] = "VARCHAR(256) NULL AFTER `ip`";
 $add_column['users']['suspended'] = "INT NOT NULL DEFAULT '0' AFTER `deleted`";
 $add_column['news']['deleted'] = "INT(3) NOT NULL DEFAULT '0' AFTER `kategorie`";
 $add_column['cases']['contents_md'] = "TEXT NULL";
@@ -17,7 +17,7 @@ $add_column['reports']['details_md'] = "TEXT NULL";
 $add_column['reports']['energy_md'] = "TEXT NULL";
 $add_column['reports']['inputs_md'] = "TEXT NULL";
 $add_column['symbols']['desc_md'] = "TEXT NULL";
-//$add_column['data']['deleted'] = "int(3) NOT NULL DEFAULT '0'";
+
 // *** ADD FULLTEXT INDEX
 $add_fulltext['cases'] = ['contents_md'];
 $add_fulltext['dashboard'] = ['content_md'];
@@ -27,6 +27,24 @@ $add_fulltext['notes'] = ['note_md'];
 $add_fulltext['persons'] = ['contents_md'];
 $add_fulltext['reports'] = ['summary_md', 'impacts_md', 'details_md', 'energy_md', 'inputs_md'];
 $add_fulltext['symbols'] = ['desc_md'];
+
+// *** ALTER COLUMN
+$alter_column['users']['sid'] = " `sid` varchar(32) COLLATE 'utf8_general_ci' NULL AFTER `id`";
+$alter_column['users']['idperson'] = " `idperson` int(11) NULL AFTER `pwd`";
+$alter_column['users']['lastlogon'] = " `lastlogon` int(11) NULL AFTER `idperson`";
+$alter_column['users']['ip'] = " `ip` varchar(50) COLLATE 'utf8_general_ci' NULL AFTER `lastlogon`";
+$alter_column['users']['user_agent'] = " `user_agent` varchar(256) COLLATE 'utf8_general_ci' NULL AFTER `ip`";
+$alter_column['users']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
+$alter_column['users']['suspended'] = " `suspended` int(11) NOT NULL DEFAULT '0' AFTER `deleted`";
+$alter_column['users']['zlobody'] = " `zlobody` int(11) NOT NULL DEFAULT '0' AFTER `suspended`";
+$alter_column['users']['right_text'] = " `right_text` int(11) NOT NULL DEFAULT '0' AFTER `timeout`";
+$alter_column['users']['right_power'] = " `right_power` int(11) NOT NULL DEFAULT '0' AFTER `right_text`";
+$alter_column['users']['right_org'] = " `right_org` int(11) NOT NULL DEFAULT '0' AFTER `right_power`";
+$alter_column['users']['right_aud'] = " `right_aud` int(11) NOT NULL DEFAULT '0' AFTER `right_org`";
+$alter_column['users']['right_super'] = " `right_super` int(11) NOT NULL DEFAULT '0' AFTER `right_aud`";
+$alter_column['users']['filter'] = " `filter` text COLLATE 'utf8_general_ci' NULL AFTER `right_super`";
+$alter_column['users']['plan'] = " `plan` text COLLATE 'utf8_general_ci' NULL AFTER `right_super`";
+
 // *** CONVERT TO MD
 //$to_MD[] = ['cases','id','contents','contents_md'];
 //$to_MD[] = ['dashboard','id','content','content_md'];
@@ -40,60 +58,62 @@ $add_fulltext['symbols'] = ['desc_md'];
 //$to_MD[] = ['reports','id','energy','energy_md'];
 //$to_MD[] = ['reports','id','inputs','inputs_md'];
 //$to_MD[] = ['symbols','id','desc','desc_md'];
-// *** RENAME COLUMN
-// ALTER TABLE table CHANGE oldcolumn newcolumn char(50); prejmenovani sloupce
-/*$rename_column['audit_trail']['id'] = "auditid int(11) NOT NULL AUTO_INCREMENT FIRST";
-$rename_column['audit_trail']['time'] = "timestamp int(11) NOT NULL";
-$rename_column['backups']['id'] = "backupid int(11) NOT NULL AUTO_INCREMENT FIRST";
-$rename_column['backups']['time'] = "timestamp int(11) NOT NULL";
-$rename_column['cases']['id'] = "caseid int(11) NOT NULL AUTO_INCREMENT FIRST";
-$rename_column['cases']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
-$rename_column['cases']['time'] = "timestamp int(11) NOT NULL";
-$rename_column['cases']['contents_md'] = "content_md text NULL";
-$rename_column['dashboard']['id'] = "dashboardid int(11) NOT NULL AUTO_INCREMENT FIRST";
-$rename_column['dashboard']['created'] = "timestamp int(11) NOT NULL";
-$rename_column['data']['id'] = "fileid int(11) NOT NULL AUTO_INCREMENT FIRST";
-$rename_column['data']['datum'] = "timestamp int(11) NOT NULL";
-$rename_column['doodle']['id'] = "doodleid int(11) NOT NULL AUTO_INCREMENT FIRST";
-$rename_column['doodle']['datum'] = "timestamp int(11) NOT NULL";
-$rename_column['groups']['id'] = "groupid int(11) NOT NULL AUTO_INCREMENT FIRST";
-$rename_column['groups']['datum'] = "timestamp int(11) NOT NULL";
-$rename_column['groups']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
-$rename_column['cases']['contents_md'] = "content_md text NULL";
-$rename_column['news']['id'] = "newsid int(11) NOT NULL AUTO_INCREMENT FIRST";
-$rename_column['news']['datum'] = "timestamp int(11) NOT NULL";
-$rename_column['news']['kategorie'] = "category int(11) NOT NULL";
-$rename_column['news']['nadpis'] = "title varchar(255) NOT NULL";
-$rename_column['news']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
-$rename_column['news']['obsah_md'] = "content_md text NOT NULL";
-$rename_column['notes']['id'] = "noteid int(11) NOT NULL AUTO_INCREMENT FIRST";
-$rename_column['notes']['datum'] = "timestamp int(11) NOT NULL";
-$rename_column['notes']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
-$rename_column['operation_type']['id'] = "operationtypeid int(11) NOT NULL AUTO_INCREMENT FIRST";
-$rename_column['persons']['id'] = "personid int(11) NOT NULL AUTO_INCREMENT FIRST";
-$rename_column['persons']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
-$rename_column['persons']['datum'] = "timestamp int(11) NOT NULL";
-$rename_column['persons']['contents_md'] = "content_md text NULL";
-$rename_column['recordytype']['id'] = "recordtypeid int(11) NOT NULL AUTO_INCREMENT FIRST";
-$rename_column['reports']['id'] = "reportid int(11) NOT NULL AUTO_INCREMENT FIRST";
-$rename_column['reports']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
-$rename_column['reports']['datum'] = "timestamp int(11) NOT NULL";
-$rename_column['reports']['impacts_md'] = "impact_md text NULL";
-$rename_column['reports']['details_md'] = "detail_md text NULL";
-$rename_column['reports']['inputs_md'] = "input_md text NULL";
-$rename_column['symbols']['id'] = "symbolid int(11) NOT NULL AUTO_INCREMENT FIRST";
-$rename_column['symbols']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
-$rename_column['symbols']['desc'] = "description text NULL";
-$rename_column['symbols']['desc_md'] = "description_md text NULL";
-$rename_column['tasks']['id'] = "taskid int(11) NOT NULL AUTO_INCREMENT FIRST";
-$rename_column['unread']['id'] = "unreadid int(11) NOT NULL AUTO_INCREMENT FIRST";
-$rename_column['users']['id'] = "userid int(11) NOT NULL AUTO_INCREMENT FIRST";
-$rename_column['users']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
-$rename_column['users']['login'] = "username varchar(255) NOT NULL";
+
+//$add_column['data']['deleted'] = "int(3) NOT NULL DEFAULT '0'";
+//$alter_column['users']['id'] = "userid int(11) NOT NULL AUTO_INCREMENT FIRST";
+//$alter_column['users']['login'] = "username varchar(255) NOT NULL";
+
+/*$alter_column['audit_trail']['id'] = "auditid int(11) NOT NULL AUTO_INCREMENT FIRST";
+$alter_column['audit_trail']['time'] = "timestamp int(11) NOT NULL";
+$alter_column['backups']['id'] = "backupid int(11) NOT NULL AUTO_INCREMENT FIRST";
+$alter_column['backups']['time'] = "timestamp int(11) NOT NULL";
+$alter_column['cases']['id'] = "caseid int(11) NOT NULL AUTO_INCREMENT FIRST";
+$alter_column['cases']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
+$alter_column['cases']['time'] = "timestamp int(11) NOT NULL";
+$alter_column['cases']['contents_md'] = "content_md text NULL";
+$alter_column['dashboard']['id'] = "dashboardid int(11) NOT NULL AUTO_INCREMENT FIRST";
+$alter_column['dashboard']['created'] = "timestamp int(11) NOT NULL";
+$alter_column['data']['id'] = "fileid int(11) NOT NULL AUTO_INCREMENT FIRST";
+$alter_column['data']['datum'] = "timestamp int(11) NOT NULL";
+$alter_column['doodle']['id'] = "doodleid int(11) NOT NULL AUTO_INCREMENT FIRST";
+$alter_column['doodle']['datum'] = "timestamp int(11) NOT NULL";
+$alter_column['groups']['id'] = "groupid int(11) NOT NULL AUTO_INCREMENT FIRST";
+$alter_column['groups']['datum'] = "timestamp int(11) NOT NULL";
+$alter_column['groups']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
+$alter_column['cases']['contents_md'] = "content_md text NULL";
+$alter_column['news']['id'] = "newsid int(11) NOT NULL AUTO_INCREMENT FIRST";
+$alter_column['news']['datum'] = "timestamp int(11) NOT NULL";
+$alter_column['news']['kategorie'] = "category int(11) NOT NULL";
+$alter_column['news']['nadpis'] = "title varchar(255) NOT NULL";
+$alter_column['news']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
+$alter_column['news']['obsah_md'] = "content_md text NOT NULL";
+$alter_column['notes']['id'] = "noteid int(11) NOT NULL AUTO_INCREMENT FIRST";
+$alter_column['notes']['datum'] = "timestamp int(11) NOT NULL";
+$alter_column['notes']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
+$alter_column['operation_type']['id'] = "operationtypeid int(11) NOT NULL AUTO_INCREMENT FIRST";
+$alter_column['persons']['id'] = "personid int(11) NOT NULL AUTO_INCREMENT FIRST";
+$alter_column['persons']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
+$alter_column['persons']['datum'] = "timestamp int(11) NOT NULL";
+$alter_column['persons']['contents_md'] = "content_md text NULL";
+$alter_column['recordytype']['id'] = "recordtypeid int(11) NOT NULL AUTO_INCREMENT FIRST";
+$alter_column['reports']['id'] = "reportid int(11) NOT NULL AUTO_INCREMENT FIRST";
+$alter_column['reports']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
+$alter_column['reports']['datum'] = "timestamp int(11) NOT NULL";
+$alter_column['reports']['impacts_md'] = "impact_md text NULL";
+$alter_column['reports']['details_md'] = "detail_md text NULL";
+$alter_column['reports']['inputs_md'] = "input_md text NULL";
+$alter_column['symbols']['id'] = "symbolid int(11) NOT NULL AUTO_INCREMENT FIRST";
+$alter_column['symbols']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
+$alter_column['symbols']['desc'] = "description text NULL";
+$alter_column['symbols']['desc_md'] = "description_md text NULL";
+$alter_column['tasks']['id'] = "taskid int(11) NOT NULL AUTO_INCREMENT FIRST";
+$alter_column['unread']['id'] = "unreadid int(11) NOT NULL AUTO_INCREMENT FIRST";
+
 */
 
 // *** MOFIDY COLUMN
 // ALTER TABLE nw_backups MODIFY COLUMN `timestamp` timestamp INT NOT NULL DEFAULT UNIX_TIMESTAMP() AFTER `id`;  modifikace slopce
+
 
 // *** RENAME TABLE
 // IF EXISTS RENAME TABLE `NHBistro`.`nw_loggedin` TO `NHBistro`.`nw_loggedin_deleted`;   
@@ -144,6 +164,21 @@ foreach(array_keys($add_fulltext) as $table) {
 			$alter++;
 		}
 	}
+}
+
+// ALTER COLUMN  ALTER TABLE table CHANGE oldcolumn newcolumn char(50)
+foreach(array_keys($alter_column) as $table) {
+    foreach(array_keys($alter_column[$table]) as $column) {
+		//$check_sql=mysqli_query($database,"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table' and column_name='$column'");
+        //if(mysqli_num_rows($check_sql)== 0) {
+			$alter_sql = "ALTER TABLE ".DB_PREFIX."$table CHANGE `$column` ".$alter_column[$table][$column];
+			mysqli_query($database,$alter_sql);
+			if (mysqli_affected_rows($database) > 0) { 
+				Debugger::log('DB CHANGE: '.$alter_sql);
+				$alter++;
+			}
+        //}
+    }
 }
 
 //md5 passwords
