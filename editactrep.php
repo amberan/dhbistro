@@ -96,7 +96,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 	};
 	-->
 	</script>
-<form action="procactrep.php" method="post" id="inputform">
+<form action="procactrep.php" method="post" id="inputform"> <?php // TODO timeout ?>
 <fieldset id="ramecek"><legend><strong>Úprava hlášení<?php echo (($type==1)?' z výjezdu':(($type==2)?' z výslechu':''));?></strong></legend>
 	<fieldset><legend><strong>Základní údaje</strong></legend>
 		<div id="info">

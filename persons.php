@@ -197,7 +197,7 @@
 (($ssymbols)?'<th>Symbol</th>':'').'
 	  <th>Jméno</th>
 	  <th>Telefon</th>
-	  <th>Změněno</th>
+	  <th>Vytvořeno / Změněno</th>
       <th style="min-width:100px">Status</th>
 	  <th>Akce</th>
 	</tr>
@@ -212,7 +212,7 @@
                         '.(($ssymbols)?'<td><img src="getportrait.php?nrid='.$rec['symbol'].'" alt="symbol chybí" /></td>':'').'
                         <td>'.(($rec['secret'])?'<span class="secret"><a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a></span>':'<a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name']))).'</a>').'</td>
 						<td><a href="tel:'.str_replace(' ', '',$rec['phone']).'">'.$rec['phone'].'</a></td>
-						<td>'.(Date ('d. m. Y',$rec['date_changed'])).'</td>
+						<td>'.webdate($rec['date_created']).' / '.webdate($rec['date_changed']).'</td>
                         <td>'.(($rec['archiv']==1)?'Archivovaný':'').''.(($rec['dead']==1)?' Mrtvý':'').''.(($rec['secret']==1)?' Tajný':'').'</td>
                         '.(($usrinfo['right_text'])?'	<td><a href="editperson.php?rid='.$rec['id'].'">upravit</a> | <a href="procperson.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat osobu &quot;".implode(', ',Array(StripSlashes($rec['surname']),StripSlashes($rec['name'])))."&quot;?');".'">smazat</a></td>':'<td><a href="newnote.php?rid='.$rec['id'].'&idtable=5">přidat poznámku</a>').'
                         </tr>';

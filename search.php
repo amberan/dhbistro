@@ -101,7 +101,7 @@ if ($usrinfo['right_power']) {
                 while ($rec=mysqli_fetch_assoc ($res)) {
                 echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 	<td><a href="readcase.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a></td>
-	<td>'.(Date ('d. m. Y',$rec['date_changed'])).'</td>
+	<td>'.webdate($rec['date_changed']).'</td>
 	<td>'.(($rec['status']==0)?'Otevřený':'Uzavřený').''.(($rec['secret']==1)?', Tajný':'').'</td>
         </tr>';
                 $even++;
@@ -158,8 +158,8 @@ if ($usrinfo['right_power']) {
                 while ($rec=mysqli_fetch_assoc ($res)) {
                 echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 	<td><a href="readactrep.php?rid='.$rec['id'].'&amp;hidenotes=0&amp;truenames=0">'.StripSlashes($rec['label']).'</a></td>
-		<td>'.(Date ('d. m. Y',$rec['date_created'])).'</td>
-		<td>'.(Date ('d. m. Y',$rec['date_changed'])).'</td>
+		<td>'.webdate($rec['date_created']).'</td>
+		<td>'.webdate($rec['date_changed']).'</td>
         <td>';
         switch ($rec['status']) {
                 case 0:
@@ -229,8 +229,8 @@ if ($usrinfo['right_power']) {
                 while ($rec=mysqli_fetch_assoc ($res)) {
                 echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 	<td><a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['surname']).' '.StripSlashes($rec['name']).'</a></td>
-	<td>'.(Date ('d. m. Y',$rec['date_created'])).'</td>
-	<td>'.(Date ('d. m. Y',$rec['date_changed'])).'</td>
+	<td>'.webdate($rec['date_created']).'</td>
+	<td>'.webdate($rec['date_changed']).'</td>
 
 	<td>'.(($rec['archiv']==1)?'Archivovaný':'Aktivní').''.(($rec['dead']==1)?', Mrtvý':'').''.(($rec['secret']==1)?', Tajný':'').'</td>
         </tr>';
@@ -240,6 +240,7 @@ if ($usrinfo['right_power']) {
 </table>';          
 
 /* Skupiny */
+//TODO skupiny nemaji timestamp pro vytvoreni
 if ($farchiv==0) {
     $fsql_archiv=' AND '.DB_PREFIX.'groups.archived=0 ';
 } else {
@@ -281,7 +282,7 @@ if ($usrinfo['right_power']) {
                 while ($rec=mysqli_fetch_assoc ($res)) {
                 echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 	<td><a href="readgroup.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a></td>
-	<td>'.(Date ('d. m. Y',$rec['date_changed'])).'</td>
+	<td>'.webdate($rec['date_changed']).'</td>
 
 	<td>'.(($rec['secret']==1)?'Tajná':'').''.(($rec['archived']==1)?' Archivovaná':'').'</td>
         </tr>';
@@ -329,8 +330,8 @@ if ($usrinfo['right_power']) {
                 while ($rec=mysqli_fetch_assoc ($res)) {
                 echo '<tr class="'.(($even%2==0)?'even':'odd').'">
 	<td><a href="readsymbol.php?rid='.$rec['id'].'&amp;hidenotes=0">'.($rec['id']).'</a></td>
-	<td>'.(Date ('d. m. Y',$rec['date_created'])).'</td>
-	<td>'.(Date ('d. m. Y',$rec['date_changed'])).'</td>
+	<td>'.webdate($rec['date_created']).'</td>
+	<td>'.webdate($rec['date_changed']).'</td>
 
 	<td>'.(($rec['assigned']==1)?'Přiřazený':'Nepřiřazený').''.(($rec['secret']==1)?', Tajný':'').'</td>
         </tr>';
@@ -443,7 +444,7 @@ if ($usrinfo['right_power']) {
                 <td><a href="readnote.php?rid='.$rec['id'].'&idtable='.$rec['idtable'].'">'.StripSlashes($rec['title']).'</a></td>
                 <td><a href="'.$linktype.'">'.StripSlashes($notetitle).'</a></td>
 				<td>'.StripSlashes($type).'</td>
-				<td>'.(Date ('d. m. Y',$rec['date_created'])).'</td>
+				<td>'.webdate($rec['date_created']).'</td>
                 <td>'.(($rec['secret']==1)?'Tajná':'').'</td>
                 </tr>';
 		
@@ -454,7 +455,7 @@ if ($usrinfo['right_power']) {
                 <td><a href="readnote.php?rid='.$rec['id'].'&idtable='.$rec['idtable'].'">'.StripSlashes($rec['title']).'</a></td>
                 <td><a href="'.$linktype.'">'.StripSlashes($notetitle).'</a></td>
 				<td>'.StripSlashes($type).'</td>
-				<td>'.(Date ('d. m. Y',$rec['date_created'])).'</td>
+				<td>'.webdate($rec['date_created']).'</td>
                 <td>'.(($rec['secret']==1)?'Tajná':'').'</td>
                 </tr>';
 		

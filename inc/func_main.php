@@ -47,6 +47,24 @@ require_once($config['folder_custom'].'text-DH.php'); // defaultni texty - nasle
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/header.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/menu.php');
 
+// timestamp konvertovan do podoby pro web
+function webDate($date) {
+	if ($date < "1") { 
+		$value = "někdy dávno";
+	} else {
+		$value = Date ('d. m. Y',$date);
+	}
+	return $value;
+}	
+function webDateTime($date) {
+	if ($date < "1") { 
+		$value = "někdy dávno";
+	} else {
+		$value = Date ('d. m. Y - H:i:s',$date);
+	}
+	return $value;
+}	
+
 
 // ziskani autora zaznamu - audit, dashboard, edituser, index, readcase, readperson, readsymbol, tasks
 function getAuthor ($recid,$trn) {

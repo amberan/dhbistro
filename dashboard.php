@@ -71,7 +71,7 @@
 	if ($rec_d=mysqli_fetch_assoc ($res_d)) {
 		?>
 		<fieldset><legend>Veřejná nástěnka
-		<strong>Poslední změna:</strong> <?php echo(Date ('d. m. Y',$rec_d['created'])); ?>
+		<strong>Poslední změna:</strong> <?php echo webdate($rec_d['created']); ?>
 				<strong>Změnil:</strong> <?php 
 				$name=getAuthor($rec_d['iduser'],0);
 				echo $name; ?> 

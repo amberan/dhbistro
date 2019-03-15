@@ -94,7 +94,7 @@ if (mysqli_num_rows ($user_query)) {
 					<?php if ($user_record['right_org']) { echo '<span class="button">ORGANIZATOR</span>'; } ?>
 					<?php if ($user_record['right_aud']) { echo '<span class="button">AUDITOR</span>'; } ?>
 				</div>
-				<div>Naposledy: <?php  if ($user_record['lastlogon']) { echo Date ('d. m. Y (H:i:s)',$user_record['lastlogon']);} else { echo 'nikdy';}?> </div>
+				<div>Naposledy: <?php  if ($user_record['lastlogon']) { echo webdatetime($user_record['lastlogon']);} else { echo 'nikdy';}?> </div>
 			</div>
 			<div class="cell middle">
 				<a class="button" href="users.php?user_edit=<?php echo $user_record['id']?>">upravit</a>

@@ -57,31 +57,29 @@ elseif (isset($_REQUEST['user_reset']) && is_numeric($_REQUEST['user_reset'])) {
 }
 
 // vytvorit uzivatele
-// TODO sladit vytvareni uzivatele, aby se delalo jednim insertem, bez updatu; chybi kontrola, jestli radek vzniknul
 if (isset($_POST['insertuser']) && $usrinfo['right_power'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['login']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['heslo']) && is_numeric($_POST['power']) && is_numeric($_POST['texty'])) {
 	$ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."users WHERE UCASE(login)=UCASE('".$_POST['login']."')");
 	if (mysqli_num_rows ($ures)) {
 		$_SESSION['message']= "Uživatel již existuje, změňte jeho jméno.";
 	} else {
 		mysqli_query ($database,"INSERT INTO ".DB_PREFIX."users (login,pwd,right_power,right_text,timeout) VALUES('".$_POST['login']."',md5('".$_POST['heslo']."'),'".$_POST['power']."','".$_POST['texty']."','600')");
-		$uidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."users WHERE UCASE(login)=UCASE('".$_POST['login']."')"));
-		if ($usrinfo['right_aud'] > 0) {
-			mysqli_query ($database,"UPDATE ".DB_PREFIX."users set right_aud='".$_POST['auditor']."' WHERE id=".$uidarray['id']);
+		if (mysqli_affected_rows($database) > 0) { 
+			$uidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."users WHERE UCASE(login)=UCASE('".$_POST['login']."')"));
+			if ($usrinfo['right_aud'] > 0) {
+				mysqli_query ($database,"UPDATE ".DB_PREFIX."users set right_aud='".$_POST['auditor']."' WHERE id=".$uidarray['id']);
+			}
+			if ($usrinfo['right_org'] > 0) {
+				mysqli_query ($database,"UPDATE ".DB_PREFIX."users set right_org='".$_POST['organizator']."' WHERE id=".$uidarray['id']);
+			}
+			auditTrail(8, 3, $uidarray['id']);
+			$_SESSION['message']= "Uživatel ".$_POST['login']." vytvořen.";
+		} else {
+			$_SESSION['message']= "Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.";
 		}
-		if ($usrinfo['right_org'] > 0) {
-			mysqli_query ($database,"UPDATE ".DB_PREFIX."users set right_org='".$_POST['organizator']."' WHERE id=".$uidarray['id']);
-		}
-		auditTrail(8, 3, $uidarray['id']);
-		$_SESSION['message']= "Uživatel ".$_POST['login']." vytvořen.";
-	}
-} else {
-  	if (isset($_POST['insertuser'])) {
-$_SESSION['message']= "Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.";
 	}
 }
 
 // upravit uzivatele
-// TODO poresit aby zpracovavalo i upravu sebe sama (Settings)
 if (isset($_POST['userid']) && isset($_POST['edituser']) && $usrinfo['right_power'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['login']) && is_numeric($_POST['power']) && is_numeric($_POST['texty'])) {
 	auditTrail(8, 2, $_POST['userid']);
 	$ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."users WHERE UCASE(login)=UCASE('".$_POST['login']."') AND id<>".$_POST['userid']);

@@ -175,7 +175,7 @@ if ($hn!=1) { ?>
 		<hr /><?php
 			} ?>
 		<div class="poznamka">
-			<h4><?php echo(StripSlashes($rec_n['title'])).' - '.(StripSlashes($rec_n['user'])).' ['.(Date ('d. m. Y',$rec_n['date_created'])).']';?><?php
+			<h4><?php echo(StripSlashes($rec_n['title'])).' - '.(StripSlashes($rec_n['user'])).' ['.webdate($rec_n['date_created']).']';?><?php
 			if ($rec_n['secret']==0) echo ' (veřejná)';
 			if ($rec_n['secret']==1) echo ' (tajná)';
 			if ($rec_n['secret']==2) echo ' (soukromá)';

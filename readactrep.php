@@ -106,7 +106,7 @@
 	<div id="hlavicka" class="top">
 		<span>[ <strong>Hlášení<?php echo((($rec_ar['type']==1)?' z výjezdu':(($rec_ar['type']==2)?' z výslechu':' k akci')));?></strong> | </span>
 		<span><strong>Vyhotovil: </strong><?php echo(StripSlashes($author)); ?> | </span>
-		<span><strong>Dne: </strong><?php echo(Date ('d. m. Y',$rec_ar['datum'])); ?> ]</span>
+		<span><strong>Dne: </strong><?php echo webdate($rec_ar['datum']); ?> ]</span>
 		<br>
 	</div>
 	<fieldset><legend><strong>Obecné informace</strong></legend>
@@ -114,7 +114,7 @@
 		<?php if ($rec_ar['secret']==1) echo '<h2>TAJNÉ</h2>'?>
                 <?php if ($rec_ar['deleted']==1) echo '<h2>SMAZANÝ ZÁZNAM</h2>'?>
 		<h3>Datum<?php echo((($rec_ar['type']==1)?' výjezdu':(($rec_ar['type']==2)?' výslechu':' akce'))); ?>:</h3>
-		<p><?php echo(Date ('d.m.Y',$rec_ar['adatum'])); ?></p>
+		<p><?php echo webdate($rec_ar['adatum']); ?></p>
 		<div class="clear">&nbsp;</div>
 		<h3>Začátek<?php echo((($rec_ar['type']==1)?' výjezdu':(($rec_ar['type']==2)?' výslechu':' akce'))); ?>:</h3>
 		<p><?php echo(StripSlashes($rec_ar['start'])); ?></p>
@@ -308,7 +308,7 @@ if ($hn!=1) { ?>
 		<hr /><?php
 			} ?>
 		<div class="poznamka">
-			<h4><?php echo(StripSlashes($rec['title'])).' - '.(StripSlashes($rec['user'])).' ['.(Date ('d. m. Y',$rec['date_created'])).']';?><?php
+			<h4><?php echo(StripSlashes($rec['title'])).' - '.(StripSlashes($rec['user'])).' ['.webdate($rec['date_created']).']';?><?php
 			if ($rec['secret']==0) echo ' (veřejná)';
 			if ($rec['secret']==1) echo ' (tajná)';
 			if ($rec['secret']==2) echo ' (soukromá)';

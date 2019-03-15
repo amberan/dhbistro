@@ -89,13 +89,14 @@
 </thead>
 <tbody>
 ';
+//TODO case nema timestamp pro vytvoreni
 		$even=0;
 		while ($rec=mysqli_fetch_assoc ($res)) {
                     if ($f_new==0 || ($f_new==1 && searchRecord(3,$rec['id']))) {
                         echo '<tr class="'.((searchRecord(3,$rec['id']))?' unread_record':(($even%2==0)?'even':'odd')).(($rec['status'])?' solved':'').'">
                         <td>'.(($rec['secret'])?'<span class="secret"><a href="readcase.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a></span>':'<a href="readcase.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a>').'</td>
 						<td>'.(($rec['status'])?'uzavřený':'otevřený').'</td>
-						<td>'.(Date ('d. m. Y',$rec['date_changed'])).'</td>
+						<td>'.webdate($rec['date_changed']).'</td>
                         '.(($usrinfo['right_text'])?'	<td><a href="editcase.php?rid='.$rec['id'].'">upravit</a> | <a href="proccase.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat případ &quot;".StripSlashes($rec['title'])."&quot;?');".'">smazat</a></td>':'<td><a href="newnote.php?rid='.$rec['id'].'&idtable=7">přidat poznámku</a></td>').'
                         </tr>';
 			$even++;

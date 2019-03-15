@@ -70,12 +70,12 @@
 			<h3>Spec. znaky: </h3><p><?php echo(StripSlashes($rec['search_specialchars'])); ?></p>
 			<div class="clear">&nbsp;</div>        
 			 
-			<p><strong>Datum vytvoření:</strong> <?php echo (($rec['created']==0)?'asi dávno':(Date ('d. m. Y',$rec['created']))); ?>
+			<p><strong>Datum vytvoření:</strong> <?php echo webdate($rec['created']); ?>
 				<strong>Vytvořil:</strong> <?php 
 				$name=getAuthor($rec['created_by'],1);
 				echo (($rec['created_by']==0)?'asi Krauz':$name); ?> </p>
 			<div class="clear">&nbsp;</div>
-			<p><strong>Datum poslední změny:</strong> <?php echo(Date ('d. m. Y',$rec['modified'])); ?>
+			<p><strong>Datum poslední změny:</strong> <?php echo webdate($rec['modified']); ?>
 				<strong>Změnil:</strong> <?php 
 				$name=getAuthor($rec['modified_by'],1);
 				echo $name; ?> </p>

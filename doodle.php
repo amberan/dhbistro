@@ -49,7 +49,7 @@ if ($usrinfo['right_power']) { ?>
 		$even=0;
 		while ($rec=mysqli_fetch_assoc ($res)) {
 		  echo '<tr class="'.(($even%2==0)?'even':'odd').'">
-		<td>'.Date ('d. m. Y - H:i:s',$rec['datum']).'</td>
+		<td>'.webdatetime($rec['datum']).'</td>
 		<td><a href="'.($rec['link']).'">'.($rec['link']).'</a></td>
 		</tr>';
 			$even++;

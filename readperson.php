@@ -116,12 +116,12 @@
 					echo '&mdash;';
 				} ?></p>
 			<div class="clear">&nbsp;</div>
-			<p><strong>Datum vytvoření:</strong> <?php echo (($rec['regdate']==0)?'asi dávno':(Date ('d. m. Y',$rec['regdate']))); ?>
+			<p><strong>Datum vytvoření:</strong> <?php echo webdate($rec['regdate']); ?>
 				<strong>Vytvořil:</strong> <?php 
 				$name=getAuthor($rec['regid'],1);
 				echo (($rec['regid']==0)?'asi Krauz':$name); ?> </p>
 			<div class="clear">&nbsp;</div>
-			<p><strong>Datum poslední změny:</strong> <?php echo(Date ('d. m. Y',$rec['datum'])); ?>
+			<p><strong>Datum poslední změny:</strong> <?php echo(webdate($rec['datum'])); ?>
 				<strong>Změnil:</strong> <?php 
 				$name=getAuthor($rec['iduser'],1);
 				echo $name; ?> </p>
@@ -165,7 +165,7 @@
 				if (mysqli_num_rows ($res_r)) {
 					$reports=Array();
 					while ($rec_r=mysqli_fetch_assoc ($res_r)) {
-						$reports[]='<a href="./readactrep.php?rid='.$rec_r['id'].'&hidenotes=0&truenames=0">'.StripSlashes ($rec_r['label']).'</a> | vytvořeno: '.(Date ('d. m. Y',$rec_r['date_created'])).' | změněno: '.(Date ('d. m. Y',$rec_r['date_changed']));
+						$reports[]='<a href="./readactrep.php?rid='.$rec_r['id'].'&hidenotes=0&truenames=0">'.StripSlashes ($rec_r['label']).'</a> | vytvořeno: '.(webdate($rec_r['date_created'])).' | změněno: '.(webdate($rec_r['date_changed']));
 					}
 					echo implode ($reports,'<br />');
 				} else {
@@ -224,7 +224,7 @@ if ($hn!=1) { ?>
 		<hr /><?php
 			} ?>
 		<div class="poznamka">
-			<h4><?php echo(StripSlashes($rec['title'])).' - '.(StripSlashes($rec['user'])).' ['.(Date ('d. m. Y',$rec['date_created'])).']'; ?><?php
+			<h4><?php echo(StripSlashes($rec['title'])).' - '.(StripSlashes($rec['user'])).' ['.(webdate($rec['date_created'])).']'; ?><?php
 			if ($rec['secret']==0) echo ' (veřejná)';
 			if ($rec['secret']==1) echo ' (tajná)';
 			if ($rec['secret']==2) echo ' (soukromá)';

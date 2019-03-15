@@ -99,7 +99,7 @@ if (is_numeric($_REQUEST['rid'])) {
 						echo "<p><em>K případu není přiřazeno žádné hlášení.</em></p>";	} ?>
 				<div class="clear">&nbsp;</div>
 				<p>	
-					<strong>Datum poslední změny:</strong> <?php echo(Date ('d. m. Y',$rec['datum'])); ?>
+					<strong>Datum poslední změny:</strong> <?php echo webdate($rec['datum']); ?>
 					<strong>Změnil:</strong> 
 					<?php echo 	$name=getAuthor($rec['iduser'],1); ?> 
 				</p>
@@ -185,7 +185,7 @@ if (is_numeric($_REQUEST['rid'])) {
 		<div class="poznamka">
 			<h4>
 			<?php 
-				echo(StripSlashes($rec_n['title'])).' - '.(StripSlashes($rec_n['user'])).' ['.(Date ('d. m. Y',$rec_n['date_created'])).']';?><?php
+				echo(StripSlashes($rec_n['title'])).' - '.(StripSlashes($rec_n['user'])).' ['.webdate($rec_n['date_created']).']';?><?php
 				if ($rec_n['secret']==0) echo ' (veřejná)';
 				if ($rec_n['secret']==1) echo ' (tajná)';
 				if ($rec_n['secret']==2) echo ' (soukromá)';

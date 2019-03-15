@@ -31,7 +31,7 @@
 				}
 				sparklets ('<a href="./'.$sourceurl.'">'.$sourcename.'</a> &raquo; <strong>zobrazení poznámky</strong>',$editbutton);
 				echo '<h1>'.StripSlashes($rec['title']).'</h1>
-				<h3>'.StripSlashes($rec['nuser']).' ['.(Date ('d. m. Y',$rec['date_created'])).']'.'</h3>';
+				<h3>'.StripSlashes($rec['nuser']).' ['.webdate($rec['date_created']).']'.'</h3>';
 				if ($rec['secret']==0) echo '<h4>veřejná</h4>';
 				if ($rec['secret']==1) echo '<h4>tajná</h4>';
 				if ($rec['secret']==2) echo '<h4>soukromá</h4>';

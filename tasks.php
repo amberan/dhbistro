@@ -149,9 +149,9 @@
 	<td>'.StripSlashes($rec['task']).'</td>
 	<td>'.getAuthor($rec['iduser'],0).'</td>
 	<td>'.status($rec['status']).'</td>
-	<td>'.(($rec['created'])?Date ('d. m. Y (H:i:s)',$rec['created']):'nikdy').'</td>
+	<td>'.(($rec['created'])?webdate($rec['created']):'nikdy').'</td>
 	<td>'.getAuthor($rec['created_by'],0).'</td>
-	<td>'.(($rec['modified'])?Date ('d. m. Y (H:i:s)',$rec['modified']):'nikdy').'</td>
+	<td>'.(($rec['modified'])?webdatetime($rec['modified']):'nikdy').'</td>
 	<td>'.(($rec['modified_by'])?getAuthor($rec['modified_by'],0):'nikdo').'</td>
 	<td>'.(($rec['status']<>2)?'<a href="procother.php?acctask='.$rec['id'].'">uzavřít</a> ':'').(($rec['status']<>0)?'| <a href="procother.php?rtrntask='.$rec['id'].'">vrátit</a> ':'').(($rec['status']<>3)?'| <a href="procother.php?cncltask='.$rec['id'].'">zrušit</a>':'').'</td>
 </tr>';
