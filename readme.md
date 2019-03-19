@@ -9,6 +9,7 @@
 	sjednoceni zpracovani uzivatelu a sama sebe  
 	presmerovani vseho logovani do Tracy ./log/info.log
 	unifikované formátování datumů
+	BUGFIX nehleda ve smazanych poznamkach
 - **1.5.7**  
 	rework vyhledavani - ignoruje diakritiku, mala/velka pismena, hleda casti slov  
 	BUGFIX injection vylepseni  

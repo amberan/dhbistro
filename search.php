@@ -348,6 +348,7 @@ if ($usrinfo['right_power']) {
 		FROM ".DB_PREFIX."notes
 		WHERE (title LIKE '%".$uncz_search."%' or note LIKE '%".$uncz_search."%')		
 		AND ".DB_PREFIX."notes.secret<2
+		AND ".DB_PREFIX."notes.deleted=0
         ORDER BY 5 * MATCH(title) AGAINST ('$search')
         + MATCH(note) AGAINST ('$search') DESC
     ");
@@ -357,6 +358,7 @@ if ($usrinfo['right_power']) {
 		FROM ".DB_PREFIX."notes
 		WHERE (title LIKE '%".$uncz_search."%' or note LIKE '%".$uncz_search."%')		
 		AND ".DB_PREFIX."notes.secret=0
+		AND ".DB_PREFIX."notes.deleted=0
         ORDER BY 5 * MATCH(title) AGAINST ('$search')
         + MATCH(note) AGAINST ('$search') DESC
     ");
