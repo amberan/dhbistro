@@ -1,6 +1,9 @@
 # BISTRO
 
 ### News and Updates
+- **1.6 IN PROGRESS**
+	funkce pro nacita osob  
+
 - **1.5.8 HLIDKY 3/2019**
 	LATTE template - login, header, footer  
 	HTMLtoMD convertor  
@@ -185,9 +188,3 @@ http://nhtestbistro.talmahera.eu/
 ftp://www.talmahera.eu/nhtestbistro.talmahera.eu/error_log
 http://dhtestbistro.talmahera.eu/
 ftp://www.talmahera.eu/dhtestbistro.talmahera.eu/error_log
-
-
-### TODO
-- genericke cteci funkce na jednotlive tipy objektu + moznost vkladat podminky(where)
-- stejne tak pro seznam objektu - poznamky, osoby, pripady, symboly, skupiny, uzivatele, novinky
-- zkontrolovat system prav pro poznamky

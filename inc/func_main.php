@@ -6,7 +6,7 @@ session_start();
 	
 //global $database,$text;
 	
-$config['version']='1.5.8';  // verze bistra
+$config['version']='1.6';  // verze bistra
 define ('DB_PREFIX','nw_'); // prefix tabulek
 $config['dbpass'] = "/inc/important.php"; // soubor s heslem k databazi - na druhem radku
 $config['page_prefix']=''; // uri cesta mezi domenou a adresarem bistra
@@ -36,6 +36,7 @@ require_once($config['folder_custom'].'text-DH.php'); // defaultni texty - nasle
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/image.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/unread.php');
 // *** PROCESSING
+	require_once($_SERVER['DOCUMENT_ROOT'].'/processing/person.php'); //operace s objektem osoby
 	require_once($_SERVER['DOCUMENT_ROOT'].'/processing/news.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/processing/users.php'); //zpracovani uzivatele, vcetne zmen sama sebe
 // *** GENERAL ALERT - overit, ze funguje s odlasovanim nahore - asi bude potreba prenaset message prez session destroy
