@@ -1,5 +1,10 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+
 	if (is_numeric($_REQUEST['rid'])) {
 		$res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."persons WHERE id=".$_REQUEST['rid']);
 		if ($rec=mysqli_fetch_assoc ($res)) {
@@ -9,7 +14,11 @@
 			auditTrail(1, 1, $_REQUEST['rid']);
 			$sides=Array('','světlý','temný','člověk','neznámá');
 			$powers=Array('','neznámá','člověk','mimo kategorie','1. kategorie','2. kategorie','3. kategorie','4. kategorie');
-			pageStart (StripSlashes($rec['surname']).', '.StripSlashes($rec['name']));
+
+			
+$latteParameters['title'] = StripSlashes($rec['surname']).', '.StripSlashes($rec['name']);
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
 			mainMenu (5);
 			if (!isset($_REQUEST['hidenotes'])) {
 				$hn=0;
@@ -250,16 +259,12 @@ if ($hn!=1) { ?>
 
 <?php
 		} else {
-			pageStart ('Osoba neexistuje');
-			mainMenu (5);
-			sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>osoba neexistuje</strong>');
-		  echo '<div id="obsah"><p>Osoba neexistuje.</p></div>';
+			$_SESSION['message'] = "Osoba neexistuje!";
+			Header ('location: index.php');
 		}
 	} else {
-        pageStart ('Tohle nezkoušejte');
-        mainMenu (5);
-        sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>tohle nezkoušejte</strong>');    
-	echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
+		$_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+		Header ('location: index.php');
 	}
-        pageEnd ();
+        $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 ?>

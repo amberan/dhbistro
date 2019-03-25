@@ -1,6 +1,13 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-	pageStart ('Nový symbol');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+$latteParameters['title'] = 'Nový symbol';
+  
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
 	mainMenu (5);
 	sparklets ('<a href="persons.php">osoby</a> &raquo; <a href="symbols.php">nepřiřazené symboly</a> &raquo; <strong>nový symbol</strong>');
 ?>
@@ -54,5 +61,5 @@
 </div>
 <!-- end of #obsah -->
 <?php
-	pageEnd ();
+	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 ?>

@@ -1,11 +1,18 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-	if (isset($_POST['addpoints'])) {
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+$latteParameters['title'] = $text['point'].'y';
+  
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
+if (isset($_POST['addpoints'])) {
 		auditTrail(9, 2, 0);
 	} else {
 		auditTrail(9, 1, 0);
 	}
-	pageStart ($text['point'].'y');
 	mainMenu (2);
         $custom_Filter = custom_Filter(9);
 	sparklets ('<strong>'.$text['point'].'y</strong>',(($usrinfo['right_power'])?'aktuální stav':''));
@@ -90,5 +97,5 @@
 	}
 ?>
 <?php
-	pageEnd ();
+	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 ?>

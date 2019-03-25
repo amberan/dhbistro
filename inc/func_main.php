@@ -43,9 +43,11 @@ require_once($config['folder_custom'].'text-DH.php'); // defaultni texty - nasle
 		echo "\n<script>window.onload = alert('".$_SESSION['message']."')</script>\n";
 		unset($_SESSION['message']);}
 // *** LIBRARIES FOR DISPLAYING DATA
-	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/footer.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/header.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/menu.php');
+	$latteParameters = [ //pole promeny pro latte
+		'text' => $text, //textove pole ./custom/text-*.php
+		'config' => $config, //skupiny parametry ./inc/func_main.php
+	];
 
 // timestamp konvertovan do podoby pro web
 function webDate($date) {

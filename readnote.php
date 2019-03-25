@@ -1,5 +1,11 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+
+
 	if (is_numeric($_REQUEST['rid'])) {
 		$res=mysqli_query ($database,"SELECT 
 				".DB_PREFIX."notes.id AS 'id',
@@ -15,7 +21,11 @@
 				AND ".DB_PREFIX."notes.iduser=".DB_PREFIX."users.id");
 		if ($rec=mysqli_fetch_assoc ($res)) {
                         if ((($rec['secret']<=$usrinfo['right_power']) || $rec['iduser']==$usrinfo['id']) && !$rec['deleted']==1) {
-			  pageStart (StripSlashes($rec['title']));
+			  
+$latteParameters['title'] = StripSlashes($rec['title']);
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+				
+
 				mainMenu (0);
 				switch ($_REQUEST['idtable']) {
 					case 1: $sourceurl="persons.php"; $sourcename="osoby"; break;
@@ -37,20 +47,15 @@
 				if ($rec['secret']==2) echo '<h4>soukromá</h4>';
 				echo '<div id="obsah">'.StripSlashes($rec['note']).'</div>';
 			} else {
-				pageStart ('Nemáte práva');
-				mainMenu (0);
-				sparklets ('<strong>Nemáte práva</strong>');
-				echo '<h1>Nemáte práva</h1>
-				<div id="obsah">Nemáte práva číst tuto poznámku.</div>';
+				$_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+				Header ('location: index.php');
 			}
 		} else {
-		  pageStart ('Poznámka neexistuje');
-			mainMenu (0);
-			sparklets ('<strong>poznámka neexistuje</strong>');
-		  echo '<div id="obsah"><p>Poznámka neexistuje.</p></div>';
+		  $_SESSION['message'] = "Poznámka neexistuje!";
+		  Header ('location: index.php');
 		}
 	} else {
 	  echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
 	}
-	pageEnd ();
+	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 ?>

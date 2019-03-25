@@ -85,19 +85,6 @@ a:hover.button, input[type=submit]:hover {
 #user label,span { float: left; }
 #user a, #user p { padding: 0.3rem;}
 
-/**********  LOGIN.PHP  ***********/
-#logincontent {	height: 100%; width: 100%; position: absolute; }
-#loginmiddle { 	position: absolute; top: 50%; left: 50%; width: 250px; height: 300px; transform: translate(-50%, -50%); border: 1px solid black; background: #e0e0e0;}
-#logincontent form#dh {	background: url('../custom/dhlogo.gif') no-repeat 50% 20px; width: 100%; padding-top: 100px;}
-#logincontent form#other { background: url('../custom/terra.gif') no-repeat 50% 20px; width: 100%; padding-top: 100px;}
-#logincontent form div { position: relative; top: 60px; width: 100%; clear: both;}
-#logincontent form label { float: left; width: 30%; text-align: right; margin: 0 10px 0 10px;}
-#logincontent form input { width: 50%; border: 1px inset black; margin-bottom: 1px; }
-#logincontent form #logmein { text-align: center; margin-top: 1rem;}
-
-
-fieldset {border: 1px black solid; padding: 0.5em; }
-ul li, ul li ul li {list-style-type: disc; margin-left: 1em;}
 
 
 /************ TIMEOUT **************/
@@ -156,8 +143,9 @@ ul li, ul li ul li {list-style-type: disc; margin-left: 1em;}
 	align-items: flex-start;
   }
   
-
-
+  fieldset {border: 1px black solid; padding: 0.5em; }
+  ul li, ul li ul li {list-style-type: disc; margin-left: 1em;}
+  
 
 /***********************************/
 /*************  menu  **************/

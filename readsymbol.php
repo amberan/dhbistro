@@ -1,5 +1,16 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+
+$latteParameters['title'] = 'Zobrazení symbolu';
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
+
+
+
 	if (is_numeric($_REQUEST['rid'])) {
 		$res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."symbols WHERE id=".$_REQUEST['rid']);
 		if ($rec=mysqli_fetch_assoc ($res)) {
@@ -7,7 +18,6 @@
                         unauthorizedAccess(1, $rec['secret'], $rec['deleted'], $_REQUEST['rid']);
                     }
 			auditTrail(7, 1, $_REQUEST['rid']);
-            pageStart ('Zobrazení symbolu');
 			mainMenu (5);
 			if (!isset($_REQUEST['hidenotes'])) {
 				$hn=0;
@@ -194,16 +204,12 @@
 <!-- end of #obsah -->
 <?php
 		} else {
-			pageStart ('Symbol neexistuje');
-			mainMenu (5);
-			sparklets ('<a href="./symbols.php">symboly</a> &raquo; <strong>symbol neexistuje</strong>');
-		  echo '<div id="obsah"><p>Symbol neexistuje.</p></div>';
+			$_SESSION['message'] = "Symbol neexistuje!";
+			Header ('location: index.php');
 		}
 	} else {
-        pageStart ('Tohle nezkoušejte');
-        mainMenu (5);
-        sparklets ('<a href="./symbols.php">symboly</a> &raquo; <strong>tohle nezkoušejte</strong>');    
-	echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
+		$_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+		Header ('location: index.php');
 	}
-        pageEnd ();
+        $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 ?>

@@ -1,6 +1,14 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-	if (isset($_POST['reportid'])) {
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+
+$latteParameters['title'] = 'Zobrazení symbolu';
+
+
+if (isset($_POST['reportid'])) {
 		$autharray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT iduser FROM ".DB_PREFIX."reports WHERE id=".$_POST['reportid']));
 		$author=$autharray['iduser'];
 	}
@@ -11,18 +19,20 @@
 	  Header ('Location: reports.php');
 	}
 	if (isset($_POST['insertrep']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['label']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['task']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['summary']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['impact']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['details']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['start']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['end']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['energy']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['inputs']) && is_numeric($_POST['secret']) && is_numeric($_POST['status']) && is_numeric($_POST['type'])) {
-	  //pageStart ('Hlášení uloženo');
-	 // mainMenu (4);
-	// sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>hlášení nepřidáno</strong>');
 	  $adatum = mktime(0,0,0,$_POST['adatummonth'],$_POST['adatumday'],$_POST['adatumyear']);
 	  $ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."reports WHERE UCASE(label)=UCASE('".$_POST['label']."')");
 	  if (mysqli_num_rows ($ures)) {
-	  	pageStart ('Hlášení nepřidáno');
+		  $latteParameters['title'] = 'Hlášení nepřidáno';
+		  $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
 	  	mainMenu (4);
 	  	sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>hlášení nepřidáno</strong>');
 	    echo '<div id="obsah"><p>Toto označení hlášení již existuje, změňte ho.</p></div>';
 	  } else {
-		  	pageStart ('Hlášení uloženo');
+		  
+			  $latteParameters['title'] ='Hlášení uloženo';
+			  $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
 			  mainMenu (4);
 			  mysqli_query ($database,"INSERT INTO ".DB_PREFIX."reports (label, datum, iduser, task, summary, impacts, details, secret, deleted, status, type, adatum, start, end, energy, inputs) VALUES('".$_POST['label']."','".Time()."','".$usrinfo['id']."','".$_POST['task']."','".$_POST['summary']."','".$_POST['impact']."','".$_POST['details']."','".$_POST['secret']."','0','".$_POST['status']."','".$_POST['type']."','".$adatum."','".$_POST['start']."','".$_POST['end']."','".$_POST['energy']."','".$_POST['inputs']."')");
 		  	$ridarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."reports WHERE UCASE(label)=UCASE('".$_POST['label']."')"));
@@ -41,19 +51,23 @@
 			</div>
 			</form>';
 		}
-		pageEnd ();
+		$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 	} else {
 	  if (isset($_POST['insertrep'])) {
-		  pageStart ('Hlášení nepřidáno!!!');
+		  $latteParameters['title'] = 'Hlášení nepřidáno!!!';
+		  $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
 			mainMenu (4);
 			sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>hlášení nepřidáno</strong>');
 			echo '<div id="obsah"><p>Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva. Pamatujte, že všechna pole musí být vyplněná.</p></div>';
-			pageEnd ();
+			$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 		}
 	}
 	if (isset($_POST['reportid']) && isset($_POST['editactrep']) && ($usrinfo['right_text'] || $usrinfo['id']==$author) && !preg_match ('/^[[:blank:]]*$/i',$_POST['label']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['task']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['summary']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['impacts']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['details']) && is_numeric($_POST['secret']) && is_numeric($_POST['status'])) {
 	  auditTrail(4, 2, $_POST['reportid']);
-	  pageStart ('Uložení změn');
+	  $latteParameters['title'] = 'Uložení změn';
+	  $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
 	  mainMenu (4);
 	  if ($_POST['status']  <> 0) {
 	  	unreadRecords (4,$_POST['reportid']);
@@ -67,14 +81,16 @@
 			mysqli_query ($database,"UPDATE ".DB_PREFIX."reports SET label='".$_POST['label']."', task='".$_POST['task']."', summary='".$_POST['summary']."', impacts='".$_POST['impacts']."', details='".$_POST['details']."', secret='".$_POST['secret']."', status='".$_POST['status']."', adatum='".$adatum."', start='".$_POST['start']."', end='".$_POST['end']."', energy='".$_POST['energy']."', inputs='".$_POST['inputs']."' WHERE id=".$_POST['reportid']);
 			echo '<div id="obsah"><p>Hlášení upraveno.</p></div>';
 		}
-		pageEnd ();
+		$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 	} else {
 	  if (isset($_POST['editactrep'])) {
-		  pageStart ('Uložení změn');
+		  $latteParameters['title'] = 'Uložení změn';
+		  $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
 			mainMenu (4);
 			sparklets ('<a href="./cases.php">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>uložení změn neúspěšné</strong>');
 			echo '<div id="obsah"><p>Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva. Pamatujte, že žádné pole nesmí být prázdné.</p></div>';
-			pageEnd ();
+			$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 		}
 	}
 	if (isset($_POST['uploadfile']) && is_uploaded_file($_FILES['attachment']['tmp_name']) && is_numeric($_POST['reportid']) && is_numeric($_POST['secret'])) {
@@ -87,11 +103,13 @@
 		Header ('Location: '.$_POST['backurl']);
 	} else {
 	  if (isset($_POST['uploadfile'])) {
-		  pageStart ('Přiložení souboru');
+		  $latteParameters['title'] = 'Přiložení souboru';
+		  $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
 			mainMenu (4);
 			sparklets ('<a href="./cases.php">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>přiložení souboru</strong>');
 			echo '<div id="obsah"><p>Soubor nebyl přiložen, něco se nepodařilo. Možná nebyl zvolen přikládaný soubor.</p></div>';
-			pageEnd ();
+			$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 		}
 	}
 	if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {

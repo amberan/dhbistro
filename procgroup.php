@@ -1,5 +1,14 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+
+$latteParameters['title'] = 'Zobrazení symbolu';
+
+
+
 	if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete'])) {
 	  auditTrail(2, 11, $_REQUEST['delete']);
 	  mysqli_query ($database,"UPDATE ".DB_PREFIX."groups SET deleted=1 WHERE id=".$_REQUEST['delete']);
@@ -17,7 +26,8 @@
 	  Header ('Location: groups.php');
 	}
 	if (isset($_POST['insertgroup']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret'])) {
-	  pageStart ('Přidána skupina');
+	  $latteParameters['title'] = 'Přidána skupina';
+	  $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 	  mainMenu (3);
 	  $ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".$_POST['title']."')");
 	  if (mysqli_num_rows ($ures)) {
@@ -33,19 +43,21 @@
 			sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./newgroup.php">nová skupina</a> &raquo; <strong>přidána skupina</strong>','<a href="./readgroup.php?rid='.$gid.'">zobrazit vytvořené</a> &raquo; <a href="./editgroup.php?rid='.$gid.'">úprava skupiny</a>');
 			echo '<div id="obsah"><p>Skupina vytvořena.</p></div>';
 		}
-		pageEnd ();
+		$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 	} else {
 	  if (isset($_POST['insertgroup'])) {
-		  pageStart ('Přidána skupina');
-			mainMenu (3);
+		  $latteParameters['title'] = 'Přidána skupina';
+		  $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+		  			mainMenu (3);
 			sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./newgroup.php">nová skupina</a> &raquo; <strong>přidání skupiny neúspěšné</strong>');
 			echo '<div id="obsah"><p>Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
-			pageEnd ();
+			$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 		}
 	}
 	if (isset($_POST['groupid']) && isset($_POST['editgroup']) && $usrinfo['right_text'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match ('/i^[[:blank:]]*$/i',$_POST['contents'])) {
 	  auditTrail(2, 2, $_POST['groupid']);
-	  pageStart ('Uložení změn');
+	  $latteParameters['title'] = 'Uložení změn';
+	  $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 		mainMenu (3);
 	  $ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".$_POST['title']."') AND id<>".$_POST['groupid']);
 	  if (mysqli_num_rows ($ures)) {
@@ -59,14 +71,15 @@
 			sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./editgroup.php?rid='.$_POST['groupid'].'">úprava skupiny</a> &raquo; <strong>uložení změn</strong>','<a href="./readgroup.php?rid='.$_POST['groupid'].'">zobrazit upravené</a>');
 			echo '<div id="obsah"><p>Skupina upravena.</p></div>';
 		}
-		pageEnd ();
+		$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 	} else {
 	  if (isset($_POST['editgroup'])) {
-		  pageStart ('Uložení změn');
-			mainMenu (3);
+		  $latteParameters['title'] = 'Uložení změn';
+		  $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+		  			mainMenu (3);
 			sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./editgroup.php?rid='.$_POST['groupid'].'">úprava skupiny</a> &raquo; <strong>uložení změn neúspěšné</strong>');
 			echo '<div id="obsah"><p>Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
-			pageEnd ();
+			$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 		}
 	}
 	if (isset($_POST['setperson'])) {
@@ -88,11 +101,12 @@
 		Header ('Location: '.$_POST['backurl']);
 	} else {
 	  if (isset($_POST['uploadfile'])) {
-		  pageStart ('Přiložení souboru');
+		  $latteParameters['title'] = 'Přiložení souboru';
+		  $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 			mainMenu (3);
 			sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./editgroup.php?rid='.$_POST['groupid'].'">úprava skupiny</a> &raquo; <strong>přiložení souboru neúspěšné</strong>');
 			echo '<div id="obsah"><p>Soubor nebyl přiložen, něco se nepodařilo. Možná nebyl zvolen přikládaný soubor.</p></div>';
-			pageEnd ();
+			$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 		}
 	}
 	if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {

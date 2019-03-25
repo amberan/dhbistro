@@ -1,5 +1,12 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+$latteParameters['title'] = 'Úprava hlášení' ;
+  
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 
 if (isset($_POST['addtocase'])) {
 	auditTrail(3, 6, $_POST['caseid']);
@@ -28,7 +35,6 @@ if (isset($_POST['addtocase'])) {
 	if (isset($_POST['person'])) {
 		$person=$_POST['person'];
 	}
-	pageStart ('Uložení změn');
 	mainMenu (5);
 	sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>uložení změn</strong>','<a href="readcase.php?rid='.$_POST['caseid'].'&hidenotes=0">zobrazit upravené</a>');
 	echo '<div id="obsah"><p>Osoby k případu uloženy.</p></div>';
@@ -37,7 +43,7 @@ if (isset($_POST['addtocase'])) {
 		mysqli_query ($database,"INSERT INTO ".DB_PREFIX."c2p VALUES('".$person[$i]."','".$_POST['caseid']."','".$usrinfo['id']."')");
 		}
 	}
-	pageEnd ();
+	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 }
 
 if (isset($_POST['addtogroup'])) {
@@ -67,7 +73,6 @@ if (isset($_POST['addtogroup'])) {
 	if (isset($_POST['person'])) {
 		$person=$_POST['person'];
 	}
-	pageStart ('Uložení změn');
 	mainMenu (5);
 	sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./editgroup.php?rid='.$_POST['groupid'].'">úprava skupiny</a> &raquo; <strong>uložení změn</strong>','<a href="readgroup.php?rid='.$_POST['groupid'].'&hidenotes=0">zobrazit upravené</a>');
 	echo '<div id="obsah"><p>Osoby příslušné ke skupině uloženy.</p></div>';
@@ -76,7 +81,7 @@ if (isset($_POST['addtogroup'])) {
 			mysqli_query ($database,"INSERT INTO ".DB_PREFIX."g2p VALUES('".$person[$i]."','".$_POST['groupid']."','".$usrinfo['id']."')");
 		}
 	}
-	pageEnd ();
+	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 }
 
 if (isset($_POST['addtoareport'])) {
@@ -122,17 +127,15 @@ if (isset($_POST['addtoareport'])) {
 		}
 	}
 	// header('Location: ./editactrep.php?rid='.$_POST['reportid']); // přesměrování zpět na předchozí stránku
-	pageStart ('Uložení změn');
 	mainMenu (5);
 	sparklets ('<a href="./reports.php">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>uložení změn</strong>','<a href="readactrep.php?rid='.$_POST['reportid'].'&hidenotes=0&truenames=0">zobrazit upravené</a>');
 	echo '<div id="obsah"><p>Osoby příslušné k hlášení uloženy.</p></div>';
-	pageEnd ();
+	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 }
 
 if (isset($_POST['addsolver'])) {
 	auditTrail(3, 6, $_POST['caseid']);
 	mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."c2s as c, ".DB_PREFIX."users as p WHERE c.iduser=p.id AND c.idcase=".$_POST['caseid']);
-	pageStart ('Uložení změn');
 	mainMenu (5);
 	sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>uložení změn</strong>','<a href="readcase.php?rid='.$_POST['caseid'].'&hidenotes=0">zobrazit upravené</a>');
 	if (isset($_POST['solver'])) {
@@ -144,7 +147,7 @@ if (isset($_POST['addsolver'])) {
 			mysqli_query ($database,"INSERT INTO ".DB_PREFIX."c2s VALUES('".$solver[$i]."','".$_POST['caseid']."','".$usrinfo['id']."')");
 		}
 	}
-	pageEnd ();
+	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 }
 
 ?>

@@ -1,5 +1,10 @@
 <?php
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+
 if (is_numeric($_REQUEST['rid'])) {
 	$sql_a="SELECT * FROM ".DB_PREFIX."c2s WHERE ".DB_PREFIX."c2s.idsolver=".$usrinfo['id']." AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid'];
 	$res_a=mysqli_query ($database,$sql_a);
@@ -9,7 +14,11 @@ if (is_numeric($_REQUEST['rid'])) {
 		if ((($rec['secret']>$usrinfo['right_power']) && $usrinfo['id']<>$rec_a['idsolver']) || $rec['deleted']==1) {
 			unauthorizedAccess(3, $rec['secret'], $rec['deleted'], $_REQUEST['rid']); }
 		auditTrail(3, 1, $_REQUEST['rid']);
-		pageStart (StripSlashes($rec['title']));
+
+
+$latteParameters['title'] = StripSlashes($rec['title']);
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
 		mainMenu (4);
 		if (!isset($_REQUEST['hidenotes'])) {
 			$hn=0;
@@ -211,13 +220,12 @@ if (is_numeric($_REQUEST['rid'])) {
 <?php
 		}
 	} else {
-	  pageStart ('Případ neexistuje');
-		mainMenu (4);
-		sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>případ neexistuje</strong>');
-	  echo '<div id="obsah"><p>Případ neexistuje.</p></div>';
-	}
+	  $_SESSION['message'] = "Případ neexistuje!";
+	  Header ('location: index.php');
+  }
 } else {
-	echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
+  $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+  Header ('location: index.php');
 }
-pageEnd ();
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 ?>

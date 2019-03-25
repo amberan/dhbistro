@@ -1,6 +1,13 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-	pageStart ('Přiřazení symbolu osobě');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+$latteParameters['title'] = 'Přiřazení symbolu osobě';
+  
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
 	mainMenu (5);
         $custom_Filter = custom_Filter(20);
 	sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./symbols.php">nepřiřazené symboly</a>');
@@ -139,5 +146,5 @@ Přiřazení symbolu osobě, které patří.
 	} else {
 	  echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
 	}
-	pageEnd ();
+	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 ?>

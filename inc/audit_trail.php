@@ -1,4 +1,9 @@
 <?php
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+$latteParameters['title'] = 'Neautorizovaný přístup';
+  
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
 
 //auditni stopa
 function auditTrail ($record_type,$operation_type,$idrecord) {
@@ -45,14 +50,8 @@ function unauthorizedAccess ($record_type,$secret,$deleted,$idrecord) {
         } else {
             auditTrail($record_type, 12, $idrecord);
         }
-        //pageStart ('Neautorizovaný přístup');
-        //mainMenu (5);
-        //sparklets ($link.' &raquo; <strong>neautorizovaný přístup</strong>');
-//		echo '<div id="obsah"><p>Tady nemáš co dělat.</p></div>';
 		$_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
 		Header ('location: index.php');
-		//pageEnd ();
-		//exit();
 
 }
 

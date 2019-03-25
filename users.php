@@ -1,20 +1,33 @@
 <?php
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+
+$latteParameters['title'] = 'Úprava uživatele';
+
 if ($usrinfo['right_power']<1) {
 	unauthorizedAccess(8, 1, 0, 0);
 	$_SESSION['message'] = "";
 }
 if (isset($_REQUEST['user_edit']) AND is_numeric($_REQUEST['user_edit'])) {
-	pageStart ('Úprava uživatele');
+	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 	mainMenu (2);
 	sparklets ('<a href="./users.php">uživatelé</a> &raquo; <strong>úprava uživatele</strong>');
 } elseif (isset($_REQUEST['user_new']) AND $_REQUEST['user_new'] == true ) {
-	pageStart ('Nový uživatel');
+	
+$latteParameters['title'] = ('Nový uživatel');
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
 	mainMenu (2);
 	sparklets ('<a href="./users.php">uživatelé</a> &raquo; <strong>nový uživatel</strong>');
 } else {
 	auditTrail(8, 1, 0);
-	pageStart ('Uživatelé');
+
+$latteParameters['title'] = ('Uživatelé');
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
 	mainMenu (2);
 	$custom_Filter = custom_Filter(8);
 	sparklets ('<strong>uživatelé</strong>',(($usrinfo['right_power'])?'<a href="tasks.php">úkoly</a>; <a href="users.php?user_new=true">přidat uživatele</a>':'<a href="tasks.php">úkoly</a>'));
@@ -120,5 +133,5 @@ if (mysqli_num_rows ($user_query)) {
 } else {
   echo '<div id="obsah"><p>Žádní uživatelé neodpovídají výběru.</p></div>';
 }
-pageEnd ();
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 ?>

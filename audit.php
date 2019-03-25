@@ -1,5 +1,13 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+$latteParameters['title'] = 'Audit';
+  
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
         if (!$usrinfo['right_aud']) {
             unauthorizedAccess(11, 1, 0, 0);
         }
@@ -117,7 +125,6 @@
 	}
 	
 	auditTrail(11, 1, 0);
-	pageStart ('Audit');
 	mainMenu (2);
         $custom_Filter = custom_Filter(11);
 	sparklets ('<strong>audit</strong>');
@@ -311,5 +318,5 @@
 	}
 ?>
 <?php
-	pageEnd ();
+	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 ?>

@@ -1,6 +1,12 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-	pageStart ('Úprava hlášení');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+$latteParameters['title'] = 'Úprava hlášení' ;
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+	
 	mainMenu (5);
         $custom_Filter = custom_Filter(18);
 	sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení</strong>');
@@ -102,5 +108,6 @@ if (mysqli_num_rows ($res)) {
 	} else {
 	  echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
 	}
-	pageEnd ();
+	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+	
 ?>

@@ -58,8 +58,8 @@ How to render template? Just install Latte (see below) and run this code:
 ```php
 $latte = new Latte\Engine;
 $latte->setTempDirectory('/path/to/tempdir');
-$parameters['items'] = array('one', 'two', 'three');
-$latte->render('template.latte', $parameters);
+$latteParameters['items'] = array('one', 'two', 'three');
+$latte->render('template.latte', $latteParameters);
 ```
 
 

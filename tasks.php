@@ -1,5 +1,13 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+
+$latteParameters['title'] = 'Přidán úkol';
+
+
 	if ($usrinfo['right_text']) {
 	if (isset($_POST['inserttask'])) {
 		auditTrail(10, 2, 0);
@@ -9,7 +17,7 @@
 	
 	// vlozeni noveho ukolu
 	if (isset($_POST['inserttask']) && !empty($_POST['task'])) {
-		pageStart ('Přidán úkol');
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 		mainMenu (3);
                 $custom_Filter = custom_Filter(10);
 		$sql_t="INSERT INTO ".DB_PREFIX."tasks VALUES('','".$_POST['task']."','".$_POST['target']."','0','".Time()."','".$usrinfo['id']."','','')";
@@ -23,16 +31,21 @@
 		sparklets ('<a href="users.php">uživatelé</a> &raquo; <strong>úkoly</strong>');
 		echo '<div id="obsah"><p>Úkol přidán.</p></div>';
 	} else if (isset($_POST['inserttask'])) {
-			pageStart ('Přidání úkolu neúspěšné');
+
+$latteParameters['title'] ='Přidání úkolu neúspěšné';
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
 			mainMenu (3);
                         $custom_Filter = custom_Filter(10);
 			sparklets ('<a href="users.php">uživatelé</a> &raquo; <strong>úkoly</strong>');
 			echo '<div id="obsah"><p>Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
-			pageEnd ();
+			$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 		
 	} else {
 	
-	pageStart ('Úkoly');
+$latteParameters['title'] ='Úkoly';
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
 	mainMenu (2);
         $custom_Filter = custom_Filter(10);
 	sparklets ('<a href="users.php">uživatelé</a> &raquo; <strong>úkoly</strong>');
@@ -166,7 +179,7 @@
 	}
 	} else {
 		auditTrail(10, 1, 0);
-		pageStart ('Přidán úkol');
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 		mainMenu (3);
 		sparklets ('<strong>uživatelé</strong> &raquo; <strong>úkoly</strong>');
 		echo '<div id="obsah"><p>Jste si jistí, že máte správná oprávnění?</p></div>';
@@ -174,5 +187,5 @@
 	}
 ?>
 <?php
-	pageEnd ();
+	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 ?>

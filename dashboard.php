@@ -1,7 +1,14 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+$latteParameters['title'] = 'Nástěnka';
+  
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
 	auditTrail(6, 1, 0);
-	pageStart ('Nástěnka');
 	mainMenu (1);
 	deleteUnread (6,0);
 	sparklets ('<strong>nástěnka</strong>',(($usrinfo['right_power'])?'<a href="index.php">zobrazit aktuality</a>; <a href="editdashboard.php">upravit nástěnku</a>':'<a href="index.php">zobrazit aktuality</a>'));
@@ -95,5 +102,5 @@
 	<?php } ?>
 
 <?php
-	pageEnd ();
+	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 ?>

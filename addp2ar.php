@@ -7,9 +7,19 @@
 	$author=$reportarray['iduser']; // určuje autora hlášení
 	$label=((isset($reportarray['label']))?$reportarray['label']:''); // nadpis hlášení, ke kterému je přiřazováno
 	
-	// následuje generování hlavičky
-	pageStart ('Úprava hlášení'.(($label!='')?': '.$label.' ('.$typestring.')':'')); // specifikace TITLE
-	mainMenu (5);
+
+if ($label != '') {
+	$latteParameters['title'] .= $label.' ('.$typestring.')'; // specifikace TITLE
+}
+  
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+$latteParameters['title'] = 'Úprava hlášení';
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
+mainMenu (5);
         $custom_Filter = custom_Filter(17);
 	sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení</strong>'.(($label!='')?' - "'.$label.' ('.$typestring.')"':''));
 	// *** původní načítání autora ---
@@ -176,5 +186,5 @@ K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se t
 	} else {
 	  echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
 	}
-	pageEnd ();
+	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 ?>

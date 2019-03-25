@@ -1,5 +1,12 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+
+$latteParameters['title'] = 'Zobrazení symbolu';
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	  $res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."persons WHERE id=".$_REQUEST['rid']);
@@ -8,7 +15,8 @@
                     unauthorizedAccess(1, $rec_p['secret'], $rec_p['deleted'], $_REQUEST['rid']);
                     }
                     auditTrail(1, 1, $_REQUEST['rid']);
-                    pageStart ('Úprava osoby');
+					$latteParameters['title'] = 'Úprava osoby';
+					$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
                     mainMenu (5);
                     sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>úprava osoby</strong>');
 ?>
@@ -295,16 +303,12 @@
 <!-- end of #obsah -->
 <?php
 		} else {
-                    pageStart ('Osoba neexistuje');
-                    mainMenu (5);
-                    sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>osoba neexistuje</strong>');
-                    echo '<div id="obsah"><p>Osoba neexistuje.</p></div>';
+			$_SESSION['message'] = "Osoba neexistuje!";
+			Header ('location: index.php');
 		}
 	} else {
-            pageStart ('Tohle nezkoušejte');
-            mainMenu (5);
-            sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>tohle nezkoušejte</strong>');    
-            echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
+		$_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+		Header ('location: index.php');
 	}
-	pageEnd ();
+	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 ?>

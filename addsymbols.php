@@ -1,5 +1,12 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+$latteParameters['title'] = 'Uložení změn';
+  
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 	
 	if (isset($_POST['addsymbol2c'])) {
 		auditTrail(7, 6, $_POST['symbolid']);
@@ -13,7 +20,6 @@
 		if (isset($_POST['case'])) {
 			$case=$_POST['case'];
 		}
-		pageStart ('Uložení změn');
 		mainMenu (5);
 		sparklets ('<a href="./symbols.php">symboly</a> &raquo; <a href="./editsymbol.php?rid='.$_POST['symbolid'].'">úprava symbolu</a> &raquo; <strong>uložení změn</strong>');
 		echo '<div id="obsah"><p>Symbol přiřazen k příslušným případům.</p></div>';
@@ -23,7 +29,7 @@
 				mysqli_query ($database,$sql);
 			}
 		}
-		pageEnd ();
+		$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 	}
 	
 	if (isset($_POST['addsymbol2ar'])) {
@@ -38,7 +44,7 @@
 		if (isset($_POST['report'])) {
 			$report=$_POST['report'];
 		}
-		pageStart ('Uložení změn');
+
 		mainMenu (5);
 		sparklets ('<a href="./symbols.php">symboly</a> &raquo; <a href="./editsymbol.php?rid='.$_POST['symbolid'].'">úprava symbolu</a> &raquo; <strong>uložení změn</strong>');
 		echo '<div id="obsah"><p>Symbol přiřazen k příslušným hlášení.</p></div>';
@@ -47,14 +53,13 @@
 				mysqli_query ($database,"INSERT INTO ".DB_PREFIX."symbol2all VALUES('".$_POST['symbolid']."','".$report[$i]."','".$usrinfo['id']."','4')");
 			}
 		}
-		pageEnd ();
+		$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 	}
 	
         if (isset ($_POST['addsymb2pers'])) {
             auditTrail(7, 6, $_POST['symbolid']);
             mysqli_query ($database,"UPDATE ".DB_PREFIX."symbols SET assigned=1 WHERE id=".$_POST['symbolid']);
             mysqli_query ($database,"UPDATE ".DB_PREFIX."persons SET symbol=".$_POST['symbolid']." WHERE id=".$_POST['person']);
-            pageStart ('Uložení změn');
             mainMenu (5);
             sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./symbols.php">nepřiřazené symboly</a>');
             $sql_p="SELECT name, surname FROM ".DB_PREFIX."persons WHERE id=".$_POST['person'];
@@ -93,6 +98,6 @@
                 mysqli_query ($database,$sql_ni);
             }
             
-            pageEnd ();
+            $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
         }
 ?>

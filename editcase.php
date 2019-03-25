@@ -1,5 +1,12 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+
+$latteParameters['title'] =  'Úprava případu';
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 		
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
             $sql_a="SELECT * FROM ".DB_PREFIX."c2s WHERE ".DB_PREFIX."c2s.idsolver=".$usrinfo['id']." AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid'];
@@ -20,7 +27,6 @@
                     unauthorizedAccess(3, $rec_c['secret'], $rec_c['deleted'], $_REQUEST['rid']);
                     }
                     auditTrail(3, 1, $_REQUEST['rid']);
-                    pageStart ('Úprava případu');
                     mainMenu (3);
                     sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>úprava případu</strong>',$symbolbutton);
 ?>
@@ -223,16 +229,12 @@
 <?php
 	}
 		} else {
-                  pageStart ('Případ neexistuje');
-                  mainMenu (3);
-                  sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>případ neexistuje</strong>');
-		  echo '<div id="obsah"><p>Případ neexistuje.</p></div>';
+			$_SESSION['message'] = "Osoba neexistuje!";
+			Header ('location: index.php');
 		}
 	} else {
-          pageStart ('Tohle nezkoušejte');
-          mainMenu (3);
-          sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>tohle nezkoušejte</strong>');
-	  echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
+		$_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+		Header ('location: index.php');
 	}
-	pageEnd ();
+	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 ?>

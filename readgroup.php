@@ -1,5 +1,10 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+
 	if (is_numeric($_REQUEST['rid'])) {
 		$res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."groups WHERE id=".$_REQUEST['rid']);
 		if ($rec_g=mysqli_fetch_assoc ($res)) {
@@ -7,7 +12,10 @@
                     unauthorizedAccess(2, $rec_g['secret'], $rec_g['deleted'], $_REQUEST['rid']);
                     }
 		  auditTrail(2, 1, $_REQUEST['rid']);                  
-		  pageStart (StripSlashes($rec_g['title']));
+
+$latteParameters['title'] = StripSlashes($rec_g['title']);
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
 			mainMenu (3);
                         $custom_Filter = custom_Filter(14, $_REQUEST['rid']);
 			if (!isset($_REQUEST['hidenotes'])) {
@@ -200,13 +208,12 @@ if ($hn!=1) { ?>
 <!-- end of #obsah -->
 <?php
 		} else {
-		  pageStart ('Skupina neexistuje');
-			mainMenu (3);
-			sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>skupina neexistuje</strong>');
-		  echo '<div id="obsah"><p>Skupina neexistuje.</p></div>';
+			$_SESSION['message'] = "Skupina neexistuje!";
+			Header ('location: index.php');
 		}
 	} else {
-	  echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
+		$_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+		Header ('location: index.php');
 	}
-	pageEnd ();
+	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 ?>

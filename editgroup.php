@@ -1,5 +1,11 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+
+
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 		$res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."groups WHERE id=".$_REQUEST['rid']);
 		if ($rec_g=mysqli_fetch_assoc ($res)) {
@@ -7,7 +13,8 @@
                         unauthorizedAccess(2, $rec_g['secret'], $rec_g['deleted'], $_REQUEST['rid']);
                     }
                     auditTrail(2, 1, $_REQUEST['rid']);
-                    pageStart ('Úprava skupiny');
+					$latteParameters['title'] = 'Úprava skupiny';
+					$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
                     mainMenu (3);
                     sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>úprava skupiny</strong>');
 ?>
@@ -155,16 +162,12 @@
 <!-- end of #obsah -->
 <?php
 		} else {
-                    pageStart ('Skupina neexistuje');
-                    mainMenu (5);
-                    sparklets ('<a href="./groups.php">osoby</a> &raquo; <strong>skupina neexistuje</strong>');
-                    echo '<div id="obsah"><p>Skupina neexistuje.</p></div>';
-		}
-	} else {
-            pageStart ('Tohle nezkoušejte');
-            mainMenu (5);
-            sparklets ('<a href="./groups.php">osoby</a> &raquo; <strong>tohle nezkoušejte</strong>');
-            echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
+					$_SESSION['message'] = "Skupina neexistuje!";
+					Header ('location: index.php');
+				}
+			} else {
+				$_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+				Header ('location: index.php');
 	}
-	pageEnd ();
+	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 ?>

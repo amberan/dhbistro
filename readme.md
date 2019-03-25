@@ -1,15 +1,16 @@
 # BISTRO
 
 ### News and Updates
-- **1.5.8 IN PROGRESS**
-	latte template - login, header, footer  
+- **1.5.8 HLIDKY 3/2019**
+	LATTE template - login, header, footer  
 	HTMLtoMD convertor  
 	update script - alter table funkcionalita  
 	BUGFIX vytvoreni noveho uzivatele  
-	sjednoceni zpracovani uzivatelu a sama sebe  
-	presmerovani vseho logovani do Tracy ./log/info.log
-	unifikované formátování datumů
-	BUGFIX nehleda ve smazanych poznamkach
+	sjednoceni zpracovani uzivatelu a sama sebe    
+	presmerovani vseho logovani do Tracy ./log/info.log  
+	unifikované formátování datumů  
+	BUGFIX nehleda ve smazanych poznamkach  
+	LATTE nahrazeni funkci PageStart a PageEnd  
 - **1.5.7**  
 	rework vyhledavani - ignoruje diakritiku, mala/velka pismena, hleda casti slov  
 	BUGFIX injection vylepseni  
@@ -108,7 +109,7 @@ processing/settings.php	| zpracovani osobnich nastaveni
 --- | --- | ---
 sql						| **SQL updates, defaults**
 --- | --- | ---
-templates				| **Latte templaty**
+templates				| **LATTE templaty**
 --- | --- | ---
 vendor					| **pouzivane knihovny "composer"
 --- | --- | ---
@@ -186,3 +187,7 @@ http://dhtestbistro.talmahera.eu/
 ftp://www.talmahera.eu/dhtestbistro.talmahera.eu/error_log
 
 
+### TODO
+- genericke cteci funkce na jednotlive tipy objektu + moznost vkladat podminky(where)
+- stejne tak pro seznam objektu - poznamky, osoby, pripady, symboly, skupiny, uzivatele, novinky
+- zkontrolovat system prav pro poznamky

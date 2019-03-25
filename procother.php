@@ -1,23 +1,32 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
 
         
         // Úprava nástěnky
 	if (isset($_POST['editdashboard'])) {
 		auditTrail(6, 2, 0);
-		pageStart ('Upravena nástěnka');
+		$latteParameters['title'] = 'Upravena nástěnka';
+		$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 		mainMenu (5);
 		sparklets ('<a href="dashboard.php">nástěnka</a> &raquo; <strong>nástěnka upravena</strong>');
 		$sql="INSERT INTO ".DB_PREFIX."dashboard ( created, iduser, content) VALUES(".Time()."','".$usrinfo['id']."','".$_POST['contents']."')";
 		mysqli_query ($database,$sql);
 		unreadRecords (6,0);
 		echo '<div id="obsah"><p>Nástěnka upravena.</p></div>';
-		pageEnd ();
+		$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 	}
         
         // Přidání symbolu
 	if (isset($_POST['insertsymbol'])) {
-		pageStart ('Přidán symbol');
+		$latteParameters['title'] = 'Přidán symbol';
+		$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 		mainMenu (5);
 		if (is_uploaded_file($_FILES['symbol']['tmp_name'])) {
 			$sfile=Time().MD5(uniqid(Time().Rand()));
@@ -40,14 +49,15 @@
 		}
 		sparklets ('<a href="persons.php">osoby</a> &raquo; <a href="symbols.php">nepřiřazené symboly</a> &raquo; <strong>nový symbol</strong>','<a href="./editsymbol.php?rid='.$pid.'">úprava symbolu</a>');
 		echo '<div id="obsah"><p>Symbol vložen.</p></div>';
-		pageEnd ();
+		$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 	} else {
 		if (isset($_POST['insertperson'])) {
-			pageStart ('Nepřidán symbol');
+			$latteParameters['title'] = 'Nepřidán symbol';
+			$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 			mainMenu (5);
 			sparklets ('<a href="persons.php">osoby</a> &raquo; <a href="symbols.php">nepřiřazené symboly</a> &raquo; <strong>neúspěšné vložení symbolu</strong>');
 			echo '<div id="obsah"><p>Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
-			pageEnd ();
+			$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 		}
 	}
         // Vymazani symbolu
@@ -61,7 +71,8 @@
         // Uprava symbolu
 	if (isset($_POST['symbolid']) && isset($_POST['editsymbol']) && $usrinfo['right_text'] ) {
 		auditTrail(7, 2, $_POST['symbolid']);
-		pageStart ('Uložení změn');
+		$latteParameters['title'] = 'Uložení změn';
+		$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 		mainMenu (5);
 		if (!isset($_POST['notnew'])) {
 			unreadRecords (7,$_POST['symbolid']);
@@ -87,14 +98,15 @@
 			mysqli_query ($database,$sql);
 		}
 		echo '<div id="obsah"><p>Symbol upraven.</p></div>';
-		pageEnd ();
+		$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 	} else {
 		if (isset($_POST['editsymbol'])) {
-			pageStart ('Uložení změn');
+			$latteParameters['title'] = 'Uložení změn';
+			$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 			mainMenu (5);
 			sparklets ('<a href="./symbols.php">symboly</a> &raquo; <a href="./editsymbol.php?rid='.$_POST['symbolid'].'">úprava symbolu</a> &raquo; <strong>uložení změn neúspešné</strong>');
 			echo '<div id="obsah"><p>Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
-			pageEnd ();
+			$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 		}
 	}
         

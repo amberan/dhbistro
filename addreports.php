@@ -1,6 +1,13 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-	
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+$latteParameters['title'] = 'Úprava hlášení';
+  
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
 	if (isset($_POST['addtoareport'])) {
 		auditTrail(4, 6, $_POST['reportid']);
 		if ($usrinfo['right_power']==1) {
@@ -11,7 +18,6 @@
 		if (isset($_POST['case'])) {
 			$case=$_POST['case'];
 		}
-		pageStart ('Uložení změn');
 		mainMenu (5);
 		sparklets ('<a href="./reports.php">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>uložení změn</strong>','<a href="readactrep.php?rid='.$_POST['reportid'].'&hidenotes=0&truenames=0">zobrazit upravené</a>');
 		echo '<div id="obsah"><p>Hlášení přiřazeno k příslušným případům.</p></div>';
@@ -20,7 +26,7 @@
 				mysqli_query ($database,"INSERT INTO ".DB_PREFIX."ar2c VALUES('".$_POST['reportid']."','".$case[$i]."','".$usrinfo['id']."')");
 			}
 		}
-		pageEnd ();
+		$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 	}
 	
 	if (isset($_POST['addcasetoareport'])) {
@@ -33,7 +39,6 @@
 		if (isset($_POST['report'])) {
 			$report=$_POST['report'];
 		}
-		pageStart ('Uložení změn');
 		mainMenu (5);
 		sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>uložení změn</strong>','<a href="readcase.php?rid='.$_POST['caseid'].'&hidenotes=0">zobrazit upravené</a>');
 		echo '<div id="obsah"><p>Hlášení k případu přiložena či odebrána.</p></div>';
@@ -42,7 +47,7 @@
 				mysqli_query ($database,"INSERT INTO ".DB_PREFIX."ar2c VALUES('".$report[$i]."','".$_POST['caseid']."','".$usrinfo['id']."')");
 			}
 		}
-		pageEnd ();
+		$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 	}
 	
 ?>

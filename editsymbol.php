@@ -1,5 +1,13 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+$latteParameters['title'] =  'Úprava symbolu';
+  
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
 
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	  $res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."symbols WHERE id=".$_REQUEST['rid']);
@@ -8,7 +16,6 @@
                     unauthorizedAccess(7, $rec_s['secret'], $rec_s['deleted'], $_REQUEST['rid']);
                     }
                     auditTrail(7, 1, $_REQUEST['rid']);
-                    pageStart ('Úprava symbolu');
                     mainMenu (5);
                     sparklets ('<a href="./symbols.php">symboly</a> &raquo; <strong>úprava symbolu</strong>');
 ?>
@@ -191,5 +198,5 @@
 	} else {
 	  echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
 	}
-	pageEnd ();
+	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 ?>

@@ -1,7 +1,15 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+$latteParameters['title'] = 'Případy';
+  
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
+
 	auditTrail(3, 1, 0);
-	pageStart ('Případy');
 	mainMenu (4);
         $custom_Filter = custom_Filter(3);
 	sparklets ('<strong>případy</strong>','<a href="newcase.php">přidat případ</a>');
@@ -109,5 +117,5 @@
 	} else {
 	  echo '<div id="obsah"><p>Žádné případy neodpovídají výběru.</p></div>';
 	}
-	pageEnd ();
+	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 ?>

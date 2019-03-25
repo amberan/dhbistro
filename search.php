@@ -1,10 +1,28 @@
 <?php
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+$latteParameters['title'] = 'Vyhledávání';
+  
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+$latte = new Latte\Engine;
+$latte->setTempDirectory($config['folder_cache']);
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+
 auditTrail(12, 1, 0);
-pageStart ('Vyhledávání');
 mainMenu (3);
 $custom_Filter = custom_Filter(13);
 sparklets ('<strong>vyhledávání</strong>','<a href="symbol_search.php">vyhledat symbol</a>');
+
+// default SQL filters
+$searchSecret = " AND 'secret'=0 ";
+$searchDeleted = " AND 'deleted'=0 ";
+if ($usrinfo['right_power'] > 0) { //utajeni overload
+	$searchSecret = " AND 'secret'<=".$usrinfo['right_power']." ";
+}
+$searchContitions = $searchSecret.$searchDeleted;
+
+
+
 //Zpracování filtru
 if (!isset($custom_Filter['farchiv'])) {
 	$farchiv=0;
@@ -64,25 +82,13 @@ if ($farchiv==0) {
 } else {
     $fsql_archiv='';
 }
-if ($usrinfo['right_power']) {
-    $sql = "
-        SELECT ".DB_PREFIX."cases.datum as date_changed, ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret'
-        FROM ".DB_PREFIX."cases
-		WHERE (title LIKE '%".$uncz_search."%' or contents LIKE  '%".$uncz_search."%')
-        AND ".DB_PREFIX."cases.deleted=0".$fsql_archiv."
-        ORDER BY 5 * MATCH(title) AGAINST ('$search') + MATCH(contents) AGAINST ('$search') DESC
-    ";
+$sql = "
+	SELECT ".DB_PREFIX."cases.datum as date_changed, ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret'
+    FROM ".DB_PREFIX."cases
+	WHERE (title LIKE '%".$uncz_search."%' or contents LIKE  '%".$uncz_search."%')
+    ".$fsql_archiv.$searchContitions."
+	ORDER BY 5 * MATCH(title) AGAINST ('$search') + MATCH(contents) AGAINST ('$search') DESC";
     $res = mysqli_query ($database,$sql);
-} else {
-    $sql = "
-        SELECT ".DB_PREFIX."cases.datum as date_changed, ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret'
-        FROM ".DB_PREFIX."cases
-		WHERE (title LIKE '%".$uncz_search."%' or contents LIKE  '%".$uncz_search."%')
-        AND ".DB_PREFIX."cases.deleted=0 AND ".DB_PREFIX."cases.secret=0".$fsql_archiv."
-        ORDER BY 5 * MATCH(title) AGAINST ('$search') + MATCH(contents) AGAINST ('$search') DESC
-    ";
-    $res = mysqli_query ($database,$sql);
-}
 
 ?>
 <h3>Případy</h3>
@@ -115,31 +121,17 @@ if ($farchiv==0) {
 } else {
     $fsql_archiv='';
 }          
-if ($usrinfo['right_power']) {          
-    $res = mysqli_query ($database,"
-        SELECT ".DB_PREFIX."reports.adatum as date_created, ".DB_PREFIX."reports.datum as date_changed,  ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."reports.status AS 'status', ".DB_PREFIX."reports.secret AS 'secret'
-        FROM ".DB_PREFIX."reports
-		WHERE (label LIKE '%".$uncz_search."%' or task LIKE  '%".$uncz_search."%' or summary LIKE  '%".$uncz_search."%' or impacts LIKE  '%".$uncz_search."%' or details LIKE  '%".$uncz_search."%')
-        AND ".DB_PREFIX."reports.deleted=0".$fsql_archiv."
-        ORDER BY 5 * MATCH(label) AGAINST ('$search')
-        + 3 * MATCH(summary) AGAINST ('$search')
-        + 2 * MATCH(task) AGAINST ('$search')
-        + 2 * MATCH(impacts) AGAINST ('$search')
-        + MATCH(details) AGAINST ('$search') DESC
-    ");
-} else {
-    $res = mysqli_query ($database,"
-        SELECT ".DB_PREFIX."reports.adatum as date_created, ".DB_PREFIX."reports.datum as date_changed,  ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."reports.status AS 'status', ".DB_PREFIX."reports.secret AS 'secret'
-        FROM ".DB_PREFIX."reports
-		WHERE (label LIKE '%".$uncz_search."%' or task LIKE  '%".$uncz_search."%' or summary LIKE  '%".$uncz_search."%' or impacts LIKE  '%".$uncz_search."%' or details LIKE  '%".$uncz_search."%')
-        AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0".$fsql_archiv."
-        ORDER BY 5 * MATCH(label) AGAINST ('$search')
-        + 3 * MATCH(summary) AGAINST ('$search')
-        + 2 * MATCH(task) AGAINST ('$search')
-        + 2 * MATCH(impacts) AGAINST ('$search')
-        + MATCH(details) AGAINST ('$search') DESC
-    ");    
-}    
+$sql = "
+    SELECT ".DB_PREFIX."reports.adatum as date_created, ".DB_PREFIX."reports.datum as date_changed,  ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."reports.status AS 'status', ".DB_PREFIX."reports.secret AS 'secret'
+    FROM ".DB_PREFIX."reports
+	WHERE (label LIKE '%".$uncz_search."%' or task LIKE  '%".$uncz_search."%' or summary LIKE  '%".$uncz_search."%' or impacts LIKE  '%".$uncz_search."%' or details LIKE  '%".$uncz_search."%')".$searchContitions.$fsql_archiv."
+    ORDER BY 5 * MATCH(label) AGAINST ('$search')
+    + 3 * MATCH(summary) AGAINST ('$search')
+    + 2 * MATCH(task) AGAINST ('$search')
+    + 2 * MATCH(impacts) AGAINST ('$search')
+	+ MATCH(details) AGAINST ('$search') DESC";
+$res = mysqli_query ($database,$sql);
+
 ?>
 <h3>Hlášení</h3>
 <table>
@@ -190,27 +182,16 @@ if ($farchiv==0) {
 } else {
     $fsql_archiv='';
 } 
-if ($usrinfo['right_power']) {
-    $res = mysqli_query ($database,"
+    $sql ="
         SELECT ".DB_PREFIX."persons.regdate as date_created, ".DB_PREFIX."persons.datum as date_changed, ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.archiv AS 'archiv', ".DB_PREFIX."persons.dead AS 'dead', ".DB_PREFIX."persons.secret AS 'secret'
         FROM ".DB_PREFIX."persons
 		WHERE (surname LIKE '%".$uncz_search."%' or name LIKE  '%".$uncz_search."%' or contents LIKE  '%".$uncz_search."%')
-        AND ".DB_PREFIX."persons.deleted=0".$fsql_archiv."
+        ".$searchContitions.$fsql_archiv."
         ORDER BY 5 * MATCH(surname)   AGAINST ('+(>$search)' IN BOOLEAN MODE) 
         + 3 * MATCH(name) AGAINST ('$search')
         + MATCH(contents) AGAINST ('$search') DESC
-    "); 
-} else {
-    $res = mysqli_query ($database,"
-        SELECT ".DB_PREFIX."persons.regdate as date_created, ".DB_PREFIX."persons.datum as date_changed, ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.archiv AS 'archiv', ".DB_PREFIX."persons.dead AS 'dead', ".DB_PREFIX."persons.secret AS 'secret'
-        FROM ".DB_PREFIX."persons
-		WHERE (surname LIKE '%".$uncz_search."%' or name LIKE  '%".$uncz_search."%' or contents LIKE  '%".$uncz_search."%' )
-        AND ".DB_PREFIX."persons.deleted=0 AND ".DB_PREFIX."persons.secret=0".$fsql_archiv."
-        ORDER BY 5 * MATCH(surname)   AGAINST ('+(>$search)' IN BOOLEAN MODE) 
-        + 3 * MATCH(name) AGAINST ('$search')
-        + MATCH(contents) AGAINST ('$search') DESC
-    ");    
-} 
+	"; 
+	$res = mysqli_query ($database,$sql);
 ?>
 <h3>Osoby</h3>
 <table>
@@ -246,25 +227,16 @@ if ($farchiv==0) {
 } else {
     $fsql_archiv='';
 } 
-if ($usrinfo['right_power']) {
-    $res = mysqli_query ($database,"
-        SELECT  ".DB_PREFIX."groups.datum as date_changed, ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.archived AS 'archived'
-        FROM ".DB_PREFIX."groups
-		WHERE (title LIKE '%".$uncz_search."%' or contents LIKE  '%".$uncz_search."%')
-        AND ".DB_PREFIX."groups.deleted=0".$fsql_archiv."
-        ORDER BY 5 * MATCH(title) AGAINST ('$search')
-        + MATCH(contents) AGAINST ('$search') DESC
-    ");
-} else {
-    $res = mysqli_query ($database,"
-        SELECT  ".DB_PREFIX."groups.datum as date_changed, ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.archived AS 'archived'
-        FROM ".DB_PREFIX."groups
-		WHERE (title LIKE '%".$uncz_search."%' or contents LIKE  '%".$uncz_search."%')
-        AND ".DB_PREFIX."groups.deleted=0 AND ".DB_PREFIX."groups.secret=0".$fsql_archiv."
-        ORDER BY 5 * MATCH(title) AGAINST ('$search')
-        + MATCH(contents) AGAINST ('$search') DESC
-    ");
-}
+$sql = "
+    SELECT  ".DB_PREFIX."groups.datum as date_changed, ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.archived AS 'archived'
+    FROM ".DB_PREFIX."groups
+	WHERE (title LIKE '%".$uncz_search."%' or contents LIKE  '%".$uncz_search."%')
+    ".$searchContitions.$fsql_archiv."
+    ORDER BY 5 * MATCH(title) AGAINST ('$search')
+    + MATCH(contents) AGAINST ('$search') DESC
+    ";
+    $res = mysqli_query ($database,$sql);
+
 ?>
 <h3>Skupiny</h3>
 <table>
@@ -293,25 +265,13 @@ if ($usrinfo['right_power']) {
 
 /* Symboly */
 /* Není tu ošetřené, aby to nevyhazovalo symboly od tajných osob. Nutno v budoucnu ošetřit. */          
-if ($usrinfo['right_power']) {
-    $res = mysqli_query ($database,"
-        SELECT ".DB_PREFIX."symbols.created as date_created, ".DB_PREFIX."symbols.modified as date_changed,  ".DB_PREFIX."symbols.id AS 'id', ".DB_PREFIX."symbols.assigned AS 'assigned', ".DB_PREFIX."symbols.secret AS 'secret'
+$sql= "SELECT ".DB_PREFIX."symbols.created as date_created, ".DB_PREFIX."symbols.modified as date_changed,  ".DB_PREFIX."symbols.id AS 'id', ".DB_PREFIX."symbols.assigned AS 'assigned', ".DB_PREFIX."symbols.secret AS 'secret'
 		FROM ".DB_PREFIX."symbols
 		WHERE (".DB_PREFIX."symbols.desc LIKE '%".$uncz_search."%')
-        AND ".DB_PREFIX."symbols.deleted=0
+        ".$searchContitions."
         ORDER BY 5 * MATCH(`desc`) AGAINST ('$search') DESC
-    ");
-} else {
-    $res = mysqli_query ($database,"
-        SELECT  ".DB_PREFIX."symbols.created as date_created, ".DB_PREFIX."symbols.modified as date_changed, ".DB_PREFIX."symbols.id AS 'id', ".DB_PREFIX."symbols.assigned AS 'assigned', ".DB_PREFIX."symbols.secret AS 'secret'
-        FROM ".DB_PREFIX."symbols
-		WHERE (".DB_PREFIX."symbols.desc LIKE '%".$uncz_search."%')
-        AND ".DB_PREFIX."symbols.deleted=0 AND ".DB_PREFIX."symbols.secret=0
-        ORDER BY 5 * MATCH(`desc`) AGAINST ('$search') DESC
-	");
-
-}
-	
+    ";
+    $res = mysqli_query ($database,$sql);	
 ?>
 <h3>Symboly</h3>
 <table>
@@ -342,27 +302,16 @@ if ($usrinfo['right_power']) {
           
 /* Poznámky */
 /* POZOR, tady bude hrozny opich udelat ten join pro zobrazeni jen poznamek k nearchivovanym vecem */
-if ($usrinfo['right_power']) {
-    $res = mysqli_query ($database,"
-        SELECT ".DB_PREFIX."notes.datum as date_created, ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.id AS 'id', ".DB_PREFIX."notes.idtable AS 'idtable', ".DB_PREFIX."notes.iditem AS 'iditem', ".DB_PREFIX."notes.secret AS 'secret'
+$sql = "SELECT ".DB_PREFIX."notes.datum as date_created, ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.id AS 'id', ".DB_PREFIX."notes.idtable AS 'idtable', ".DB_PREFIX."notes.iditem AS 'iditem', ".DB_PREFIX."notes.secret AS 'secret'
 		FROM ".DB_PREFIX."notes
 		WHERE (title LIKE '%".$uncz_search."%' or note LIKE '%".$uncz_search."%')		
-		AND ".DB_PREFIX."notes.secret<2
-		AND ".DB_PREFIX."notes.deleted=0
-        ORDER BY 5 * MATCH(title) AGAINST ('$search')
+		".$searchContitions."
+		ORDER BY 5 * MATCH(title) AGAINST ('$search')
         + MATCH(note) AGAINST ('$search') DESC
-    ");
-} else {
-    $res = mysqli_query ($database,"
-        SELECT ".DB_PREFIX."notes.datum as date_created, ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.id AS 'id', ".DB_PREFIX."notes.idtable AS 'idtable', ".DB_PREFIX."notes.iditem AS 'iditem', ".DB_PREFIX."notes.secret AS 'secret'
-		FROM ".DB_PREFIX."notes
-		WHERE (title LIKE '%".$uncz_search."%' or note LIKE '%".$uncz_search."%')		
-		AND ".DB_PREFIX."notes.secret=0
-		AND ".DB_PREFIX."notes.deleted=0
-        ORDER BY 5 * MATCH(title) AGAINST ('$search')
-        + MATCH(note) AGAINST ('$search') DESC
-    ");
-}
+    ";
+
+$res = mysqli_query ($database,$sql);
+
 ?>
 <h3>Poznámky</h3>
 <table>
@@ -440,7 +389,7 @@ if ($usrinfo['right_power']) {
                                 $type = "Jiná";
                             break;
                     }
-                
+         //TODO chybi zobrazovani priznaku utajeni VSUDE krom poznamek       
         if ($usrinfo['right_power']) {        
                 echo '<tr class="'.(($even%2==0)?'even':'odd').'">
                 <td><a href="readnote.php?rid='.$rec['id'].'&idtable='.$rec['idtable'].'">'.StripSlashes($rec['title']).'</a></td>
@@ -469,5 +418,5 @@ if ($usrinfo['right_power']) {
 </table>'; 
 
 			}
-pageEnd();
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 ?>
