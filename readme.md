@@ -2,7 +2,7 @@
 
 ### News and Updates
 - **1.6 IN PROGRESS**
-	funkce pro nacita osob  
+	funkce pro nacitani osob  
 
 - **1.5.8 HLIDKY 3/2019**
 	LATTE template - login, header, footer  
