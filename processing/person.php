@@ -1,6 +1,6 @@
 <?php
 /* example usage:
-$searchPerson = personList(" name LIKE '%pepa%' OR surname LIKE '%pepa%' );
+$searchPerson = personList(" name LIKE '%pepa%' OR surname LIKE '%pepa%','datum DESC' );
 if (is_string($searchPerson)) {
 	$latteParameters['searchPersonMessage'] = $searchPerson; 
 } else {
