@@ -23,7 +23,7 @@ function personRead($personid) {
 	if (mysqli_num_rows($query) > 0) {
 		$person = mysqli_fetch_assoc();
 	} else {
-		$person = "Požadovaný záznam nebyl nalezen!"
+		$person = "Požadovaný záznam nebyl nalezen!";
 	}
 	return $person;
 }
