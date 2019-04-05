@@ -146,7 +146,7 @@ foreach(array_keys($add_column) as $table) {
 		$check_sql=mysqli_query($database,"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table' and column_name='$column'");
         if(mysqli_num_rows($check_sql)== 0) {
 			$alter_sql = "ALTER TABLE ".DB_PREFIX."$table ADD COLUMN `$column` ".$add_column[$table][$column];
-			Debugger::log('DB CHANGE: '.$alter_sql);
+			Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$alter_sql);
 			mysqli_query($database,$alter_sql);
 			$alter++;
         }
@@ -159,7 +159,7 @@ foreach(array_keys($add_fulltext) as $table) {
 		$check_sql=mysqli_query($database,"SHOW INDEX FROM ".DB_PREFIX."$table WHERE index_type = 'FULLTEXT' and column_name='$value'");
 		if(mysqli_num_rows($check_sql)== 0) {
 			$alter_sql = "ALTER TABLE ".DB_PREFIX."$table ADD FULLTEXT (`$value`)";
-			Debugger::log('DB CHANGE: '.$alter_sql);
+			Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$alter_sql);
 			mysqli_query($database,$alter_sql);
 			$alter++;
 		}
@@ -174,7 +174,7 @@ foreach(array_keys($alter_column) as $table) {
 			$alter_sql = "ALTER TABLE ".DB_PREFIX."$table CHANGE `$column` ".$alter_column[$table][$column];
 			mysqli_query($database,$alter_sql);
 			if (mysqli_affected_rows($database) > 0) { 
-				Debugger::log('DB CHANGE: '.$alter_sql);
+				Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$alter_sql);
 				$alter++;
 			}
         //}
@@ -193,7 +193,7 @@ if($alter_password > 0) {
 	$password_sql=mysqli_query($database,"SELECT pwd,id,'login' FROM ".DB_PREFIX."users");
 	while($password_data = mysqli_fetch_array($password_sql)) {
 		mysqli_query($database,"UPDATE ".DB_PREFIX."users set pwd=md5('".$password_data['pwd']."') where id=".$password_data['id']);
-		Debugger::log('Hashing password for userid: '.$password_data['login']);
+		Debugger::log('UPDATER '.$config['version'].' Hashing password for userid: '.$password_data['login']);
 		$alter++;
 	}
 }
@@ -207,7 +207,7 @@ foreach($to_MD as $key  => $value) {
 		$preMD_sql = mysqli_query($database,"SELECT ".$value[1].", ".$value[2]." FROM ".DB_PREFIX.$value[0]." WHERE ".$value[3]." = ''");
 		while($preMD = mysqli_fetch_array($preMD_sql)) {
 			$MDcolumn = $converter->convert( str_replace('\'', '', $preMD[$value[2]]));
-			Debugger::log('Markdown conversion ['.DB_PREFIX.$value[0].'.'.$preMD[$value[1]].']: '.$preMD[$value[2]].' ##### TO ##### '.$MDcolumn);
+			Debugger::log('UPDATER '.$config['version'].' Markdown conversion ['.DB_PREFIX.$value[0].'.'.$preMD[$value[1]].']: '.$preMD[$value[2]].' ##### TO ##### '.$MDcolumn);
 			mysqli_query($database,"UPDATE ".DB_PREFIX.$value[0]." SET ".$value[3]."='".$MDcolumn."' WHERE ".$value[1]."=".$preMD[$value[1]]);
 			$alter++;
 		}
