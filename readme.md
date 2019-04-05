@@ -3,7 +3,7 @@
 ### News and Updates
 - **1.6 IN PROGRESS**
 	funkce pro nacitani osob  
-
+	automaticky pull z gitlabu
 - **1.5.8 HLIDKY 3/2019**
 	LATTE template - login, header, footer  
 	HTMLtoMD convertor  
