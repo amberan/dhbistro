@@ -109,6 +109,7 @@ log/info.log			| vystup Tracy logovani
 --- | --- | ---
 processing/users.php    | zpracovani uzivatele                      | uzivatele
 processing/settings.php	| zpracovani osobnich nastaveni
+processing/person.php	| opeace s objekty osoby					| osoba
 --- | --- | ---
 sql						| **SQL updates, defaults**
 --- | --- | ---
@@ -164,6 +165,7 @@ procnews.php            | zpracovani novinek                        | novinky
 procnote.php            | zpracovani poznamek                       | poznamky
 procother.php           | zpracovani 
 procperson.php          | zpracovani osob                           | osoby
+pull.php				| GIT webhook
 readactrep.php          | DETAIL reportu                            | reporty
 readcase.php            | DETAIL pripadu                            | pripady
 readgroup.php           | DETAIL skupiny                            | skupiny
