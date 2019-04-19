@@ -13,6 +13,7 @@ if ( $_POST['payload'] ) {
 	Debugger::log('GIT PULL: '.$output);
 	echo "<pre>$output</pre>";
 } else {
+	Debugger::log('GIT WEBHOOK (false): '.$_POST);
 	Header ('location: login.php');
 }
 ?>
