@@ -160,6 +160,7 @@ function custom_Filter ($idtable, $idrecord = 0) {
 	return $filter;
 }
 
+//show debug bar unless it's a sending a file (picture) to the user
 if (substr(basename($_SERVER['REQUEST_URI']), 0, strpos(basename($_SERVER['REQUEST_URI']), '?')) != "getportrait.php" AND substr(basename($_SERVER['REQUEST_URI']), 0, strpos(basename($_SERVER['REQUEST_URI']), '?')) != "getfile.php") { 
 	Debugger::barDump($_SESSION,"session");
 }
