@@ -14,8 +14,8 @@ function mainMenu ($index) {
 	  '/*Docasne odstranena mapa agentu, stejne to nikdo nepouziva
 	  .(($usrinfo['right_power'])?'<li><a href="mapagents.php">Mapa agentů</a></li>':'')*/.'
 	  '.(($usrinfo['right_power']>0)?'<li><a href="doodle.php">Časová dostupnost</a></li>':'<li><a href="'.$dlink['link'].'" target="_blank">Časová dostupnost</a></li>').'
-	  '.(($config['verze']==2)?'<li><a href="http://www.prazskahlidka.cz/forums/index.php" target="_blank">Fórum</a></li>':'<li><a href="http://www.prazskahlidka.cz/forums/index.php" target="_blank">Fórum</a></li>').'
-	  '.(($config['verze']==2)?'<li><a href="evilpoints.php">Bludišťáky</a></li>':'<li><a href="evilpoints.php">Zlobody</a></li>').'
+	  <li><a href="http://www.prazskahlidka.cz/forums/index.php" target="_blank">Fórum</a></li>
+	  <li><a href="evilpoints.php">'.$text['menu-zlobody'].'</a></li>
 	  <li><a href="settings.php">Nastavení</a></li>
 			  <li><a href="search.php">Vyhledávání</a></li>
 	  '.(($usrinfo['right_power']>0)?'<li><a href="users.php">Uživatelé</a></li>':'').'

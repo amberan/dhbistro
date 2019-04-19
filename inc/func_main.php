@@ -22,13 +22,13 @@ $config['folder_cache'] = $_SERVER['DOCUMENT_ROOT'].'/cache/'; // adresar pro la
 require_once($config['folder_custom'].'text-DH.php'); // defaultni texty - nasledne pretizeno hodnotami nactenymi v ramci inc/database.php
 
 // *** TECHNICAL LIBRARIES
+	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/platform.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php');
 		use Tracy\Debugger;
 		Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
 		//Debugger::log("alert: ".$_SESSION['message']);
 		$latte = new Latte\Engine;
 		$latte->setTempDirectory($config['folder_cache']);
-	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/platform.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/database.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/backup.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/session.php');

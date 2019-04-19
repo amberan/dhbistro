@@ -1,5 +1,6 @@
 <?php
 $text['point']='zlobod';
+$text['menu-zlobody']='Zlobody';
 $text['hlaseniV']='Hlášení';
 $text['hlaseniM']='hlášení';
 $text['jmeno']='Jméno';
