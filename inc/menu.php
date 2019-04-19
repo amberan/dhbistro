@@ -7,10 +7,10 @@ function mainMenu ($index) {
 	echo '<div id="menu">
   <ul class="'.$config['barva'].'">
 	  <li '.((searchTable(5))?' class="unread"':((searchTable(6))?' class="unread"':'')).'><a href="index.php">Aktuality</a></li>
-	  <li '.((searchTable(4))?' class="unread"':'').'><a href="reports.php">'.$text['hlaseniV'].'</a></li>	
-	  <li '.((searchTable(1))?' class="unread"':((searchTable(7))?' class="unread"':'')).'><a href="persons.php">Osoby</a></li>
-	  <li '.((searchTable(3))?' class="unread"':'').'><a href="cases.php">Případy</a></li>
-	  <li '.((searchTable(2))?' class="unread"':'').'><a href="groups.php">Skupiny</a></li>
+	  <li '.((searchTable(4))? ' class="unread"':'').'><a href="reports.php">'.$text['hlaseniV'].searchTable(4).'</a></li>	
+	  <li '.((searchTable(1))?' class="unread"':((searchTable(7))?' class="unread"':'')).'><a href="persons.php">Osoby'.searchTable(1).'</a></li>
+	  <li '.((searchTable(3))?' class="unread"':'').'><a href="cases.php">Případy'.searchTable(3).'</a></li>
+	  <li '.((searchTable(2))?' class="unread"':'').'><a href="groups.php">Skupiny'.searchTable(2).'</a></li>
 	  '/*Docasne odstranena mapa agentu, stejne to nikdo nepouziva
 	  .(($usrinfo['right_power'])?'<li><a href="mapagents.php">Mapa agentů</a></li>':'')*/.'
 	  '.(($usrinfo['right_power']>0)?'<li><a href="doodle.php">Časová dostupnost</a></li>':'<li><a href="'.$dlink['link'].'" target="_blank">Časová dostupnost</a></li>').'
@@ -31,17 +31,6 @@ function mainMenu ($index) {
 </div>
 <!-- end of #menu -->';
   }
-
-// vyhledani tabulky v neprectenych zaznamech
-function searchTable ($tablenum) { 
-	global $database,$unread;
-	foreach ($unread as $record) {
-            if ($record['idtable'] == $tablenum) {
-            return true;
-        }
-    }
-    	return false;
-}
 
 function sparklets ($path,$actions='') {
 	echo '<div id="sparklets">Cesta: '.$path.(($actions!='')?' || Akce: '.$actions:'').'</div>';

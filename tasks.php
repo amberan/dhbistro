@@ -23,7 +23,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 		$sql_t="INSERT INTO ".DB_PREFIX."tasks VALUES('','".$_POST['task']."','".$_POST['target']."','0','".Time()."','".$usrinfo['id']."','','')";
 		mysqli_query ($database,$sql_t);
 // Ukládání do novinek zakomentováno, protože nevím, jestli se použije. Kdyžtak SMAZAT.
-//		$gidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".mysqli_real_escape_string ($database,safeInput($_POST['title']))."')"));
+//		$gidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".mysqli_real_escape_string ($database,$_POST['title'])."')"));
 //		$gid=$gidarray['id'];
 //		if (!isset($_POST['notnew'])) {
 //			unreadRecords (2,$gid);

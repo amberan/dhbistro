@@ -19,7 +19,7 @@ if (isset($_REQUEST['user_delete']) && is_numeric($_REQUEST['user_delete'])) {
 		unauthorizedAccess(8, 1, 0, 0);
 	} else {
 		auditTrail(8, 11, $_REQUEST['user_delete']);
-		Debugger::log("USER ".$_REQUEST['user_delete']." DELETED");
+		Debugger::log("USER DELETED");
 		mysqli_query ($database,"UPDATE ".DB_PREFIX."users SET deleted=1 WHERE id=".$_REQUEST['user_delete']);
 		$_SESSION['message'] = "Uživatelský účet odstraněn!";
 	}
@@ -29,7 +29,7 @@ elseif (isset($_REQUEST['user_lock']) && is_numeric($_REQUEST['user_lock'])) {
 		unauthorizedAccess(8, 2, 0, 0);
 	} else {
 		auditTrail(8, 11, $_REQUEST['user_lock']);
-		Debugger::log("USER ".$_REQUEST['user_lock']." LOCKED");
+		Debugger::log("USER LOCKED");
 		mysqli_query ($database,"UPDATE ".DB_PREFIX."users SET suspended=1 WHERE id=".$_REQUEST['user_lock']);
 		$_SESSION['message'] = "Uživatelský účet zablokován!";
 	}
@@ -39,7 +39,7 @@ elseif (isset($_REQUEST['user_unlock']) && is_numeric($_REQUEST['user_unlock']))
 		unauthorizedAccess(8, 2, 0, 0);
 	} else {
 		auditTrail(8, 11, $_REQUEST['user_unlock']);
-		Debugger::log("USER ".$_REQUEST['user_unlock']." UNLOCKED");
+		Debugger::log("USER UNLOCKED");
 		mysqli_query ($database,"UPDATE ".DB_PREFIX."users SET suspended=0 WHERE id=".$_REQUEST['user_unlock']);
 		$_SESSION['message'] = "Uživatelský účet odblokován!";
 	}
@@ -51,7 +51,7 @@ elseif (isset($_REQUEST['user_reset']) && is_numeric($_REQUEST['user_reset'])) {
 	} else {
 		$newpassword = randomPassword();
 		auditTrail(8, 11, $_REQUEST['user_reset']);
-		Debugger::log("USER ".$_REQUEST['user_reset']." PASSWORD RESET");
+		Debugger::log("USER PASSWORD RESET");
 		mysqli_query ($database,"UPDATE ".DB_PREFIX."users SET pwd=md5('".$newpassword."') WHERE id=".$_REQUEST['user_reset']);
 		$_SESSION['message'] = "Nové heslo nastaveno: ".$newpassword; 
 	}

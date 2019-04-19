@@ -99,13 +99,6 @@ function getAuthor ($recid,$trn) {
 	}
 }
 
-function safeInput ($input) {
-	$replaced=Array ('"');
-	$replacers=Array ('&quot;');
-	$output=str_replace ($replaced,$replacers,$input);
-	return $output;
-}
-
 // funkce pro ukládání fitru do databáza a načítání filtru z databáze        
 function custom_Filter ($idtable, $idrecord = 0) {
 	global $database,$usrinfo;

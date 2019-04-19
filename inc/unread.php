@@ -3,8 +3,16 @@
 if (isset($_REQUEST['delallnew'])) {
 	mysqli_query ($database,"DELETE FROM ".DB_PREFIX."unread WHERE iduser = ".$usrinfo['id']);
 	$_SESSION['message'] = "Označeno jako přečtené";
-  }
+}
 
+//UNREAD duplicity remove
+$duplicity = mysqli_query($database,"SELECT idtable,idrecord,iduser, COUNT(*) FROM ".DB_PREFIX."unread GROUP BY idtable,idrecord,iduser HAVING COUNT(*) > 1");
+foreach ($duplicity as $record) {
+	$duplicity_detail = mysqli_query($database,"SELECT * from ".DB_PREFIX."unread WHERE idtable=".$record['idtable']." AND idrecord=".$record['idrecord']." AND iduser=".$record['iduser']." limit 1,999;");
+		foreach ($duplicity_detail as $delete) {
+		mysqli_query($database,"DELETE FROM ".DB_PREFIX."unread WHERE id=".$delete['id']);
+	}
+}
 
 // zaznam do tabulek neprectenych
 function unreadRecords ($tablenum,$rid) {
@@ -58,21 +66,31 @@ function deleteAllUnread ($tablenum,$rid) {
 // natazeni tabulky neprectenych zaznamu do promenne
 if (isset($_SESSION['sid'])) {
 		$sql_r="SELECT * FROM ".DB_PREFIX."unread WHERE iduser=".$usrinfo['id'];
+		$sql_r="SELECT idtable, count(*) as count FROM ".DB_PREFIX."unread WHERE iduser=".$usrinfo['id']." GROUP BY idtable";
 		$res_r=mysqli_query ($database,$sql_r);
 		while ($unread[]=mysqli_fetch_array ($res_r));
 }
 
-
 // vyhledani zaznamu v neprectenych zaznamech - cases, groups, persons, reports, symbols,
 function searchRecord ($tablenum, $recordnum) {
-	global $database,$unread;
-	foreach ($unread as $record) {
-            if ($record['idtable'] == $tablenum && $record['idrecord'] == $recordnum) {
-            return true;
-        }
-    }
-	return false;
+	global $database,$unread,$usrinfo;
+	$sql_r="SELECT * FROM ".DB_PREFIX."unread WHERE iduser=".$usrinfo['id']." and idtable=".$tablenum." and idrecord=".$recordnum;
+	$res_r=mysqli_num_rows(mysqli_query ($database,$sql_r));
+	if ($res_r > 0) { 
+		return true;
+	} else {
+		return false;
+	}
 }
 
-
+// vyhledani tabulky v neprectenych zaznamech
+function searchTable ($tablenum) { 
+	global $database,$unread;
+	foreach ($unread as $record) {
+		if ($record['idtable'] == $tablenum) {
+			return " (".$record['count'].")";
+		}
+	}
+	return false;
+}
 ?>
