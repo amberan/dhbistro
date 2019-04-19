@@ -39,7 +39,7 @@ elseif (isset($_REQUEST['user_unlock']) && is_numeric($_REQUEST['user_unlock']))
 		unauthorizedAccess(8, 2, 0, 0);
 	} else {
 		auditTrail(8, 11, $_REQUEST['user_unlock']);
-		Debugger::log("USER ".$_REQUEST['user_lock']." UNLOCKED");
+		Debugger::log("USER ".$_REQUEST['user_unlock']." UNLOCKED");
 		mysqli_query ($database,"UPDATE ".DB_PREFIX."users SET suspended=0 WHERE id=".$_REQUEST['user_unlock']);
 		$_SESSION['message'] = "Uživatelský účet odblokován!";
 	}
