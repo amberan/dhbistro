@@ -388,7 +388,7 @@ a:hover.button, input[type=submit]:hover {
 	right: 10px;
 	width:48px;
 	height:48px;
-	background:url('../css/Save-Big.png') no-repeat scroll 0 0 transparent;
+	background:url('../images/Save-Big.png') no-repeat scroll 0 0 transparent;
 } 
 /***********************************/
 /******** dal��  formul��  *********/
@@ -417,13 +417,13 @@ div.otherform-wrap {width:475px;}
 	right:0px;
 	width:24px;
 	height:24px;
-	background:url('../css/Save-small.png') no-repeat scroll 0 0 transparent;
+	background:url('../images/Save-small.png') no-repeat scroll 0 0 transparent;
 }
 .otherform .editbutton {
 	display: inline-block;
     height: 16px;
     width: 16px;
-    background:url('../css/edit.png')  no-repeat scroll 0 0 transparent;
+    background:url('../images/edit.png')  no-repeat scroll 0 0 transparent;
 }
 #new-file .submitbutton, #change-groups .submitbutton {
 	bottom:0px;
@@ -521,16 +521,16 @@ ul#pripady {margin:0.1em 0; padding-left: 2em;}
 div > .poznamka-edit-buttons {position:absolute;right:0px;top:0px;}
 .poznamka-edit-buttons a {display:inline-block;width:16px;height:16px;margin:3px;overflow:hidden;vertical-align:bottom;}
 .poznamka-edit-buttons a span.button-text {display:none;}
-.poznamka-edit-buttons a.new {background-image:url('../css/document-new.png')}
-.poznamka-edit-buttons a.edit {background-image:url('../css/edit.png')}
-.poznamka-edit-buttons a.delete {background-image:url('../css/delete.png')}
-.poznamka-edit-buttons a.connect {background-image:url('../css/connect.png')}
+.poznamka-edit-buttons a.new {background-image:url('../images/document-new.png')}
+.poznamka-edit-buttons a.edit {background-image:url('../images/edit.png')}
+.poznamka-edit-buttons a.delete {background-image:url('../images/delete.png')}
+.poznamka-edit-buttons a.connect {background-image:url('../images/connect.png')}
 /* .connect je nesystematicky, ale pro napravu je treba procistit celou strukturu stylu ve vsech sablonach /**/
 
 .info-delete-symbol {position:absolute;right:13.3em;top:10.5em;}
 .info-delete-symbol a {display:inline-block;width:16px;height:16px;margin:3px;overflow:hidden;vertical-align:bottom;}
 .info-delete-symbol a span.button-text {display:none;}
-.info-delete-symbol a.delete {background-image:url('../css/delete.png')}
+.info-delete-symbol a.delete {background-image:url('../images/delete.png')}
 
 #portraitimg {
 	position: absolute;
@@ -544,7 +544,7 @@ div > .poznamka-edit-buttons {position:absolute;right:0px;top:0px;}
 #portraitimg.noname {
 	text-indent:-1000px;
 	overflow:hidden;
-	background:url('../css/noname.png') no-repeat scroll center transparent;
+	background:url('../images/noname.png') no-repeat scroll center transparent;
 }
 
 #symbolimg {
@@ -559,7 +559,7 @@ div > .poznamka-edit-buttons {position:absolute;right:0px;top:0px;}
 #symbolimg.noname {
 	text-indent:-1000px;
 	overflow:hidden;
-	background:url('../css/nosymbol.png') no-repeat scroll center transparent;
+	background:url('../images/nosymbol.png') no-repeat scroll center transparent;
 }
 
 #ssymbolimg {
@@ -574,7 +574,7 @@ div > .poznamka-edit-buttons {position:absolute;right:0px;top:0px;}
 #ssymbolimg.noname {
 	text-indent:-1000px;
 	overflow:hidden;
-	background:url('../css/nosymbol.png') no-repeat scroll center transparent;
+	background:url('../images/nosymbol.png') no-repeat scroll center transparent;
 }
 
 /***********************************/
@@ -602,7 +602,7 @@ div > .poznamka-edit-buttons {position:absolute;right:0px;top:0px;}
 #dashboard fieldset {
 	position: relative; 
 	margin:0;
-	background:url('../custom/corkbg.png') repeat;
+	background:url('../images/corkbg.png') repeat;
 	background-color: #fff9ae;
 	}
 	
