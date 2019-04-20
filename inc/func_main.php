@@ -1,10 +1,5 @@
 <?php 
-$time = $starttime = microtime(true);
-$mem = memory_get_usage();
 session_start();
-//$sid = session_id();
-	
-//global $database,$text;
 	
 $config['version']='1.6';  // verze bistra
 define ('DB_PREFIX','nw_'); // prefix tabulek

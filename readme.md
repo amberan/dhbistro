@@ -6,6 +6,7 @@
 	automaticky pull z gitlabu  
 	promazani duplicitnich zaznamu v tabulce neprectenych  
 	zobrazovani poctu neprectenych polozek v menu  
+	obrazky presunuty do adresare images
 - **1.5.8 HLIDKY 3/2019**
 	LATTE template - login, header, footer  
 	HTMLtoMD convertor  
