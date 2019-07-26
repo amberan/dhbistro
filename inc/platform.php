@@ -35,9 +35,9 @@ switch ($_SERVER["SERVER_NAME"]) {
 		$config['barva']='test';
 		$config['custom']='NH';;
         break;
-    case 'saga':
+    case 'bistro':
         $config['dbuser']='bistro';
-        $config['dbdatabase']='NHBistro';
+        $config['dbdatabase']='bistro';
         $config['barva']='local';
 		$config['custom']='NH';
 	    break;
@@ -49,12 +49,6 @@ switch ($_SERVER["SERVER_NAME"]) {
 		break;
     case 'nhtestbistro.talmahera.eu':
         $config['dbuser']=$config['dbdatabase']='nhtestbistro';
-        $config['barva']='test';
-		$config['custom']='NH';
-		break;
-    case 'bistro':
-        $config['dbuser']='root';
-        $config['dbdatabase']='bistro';
         $config['barva']='test';
 		$config['custom']='NH';
 		break;

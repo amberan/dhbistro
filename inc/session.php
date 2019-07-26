@@ -4,7 +4,7 @@ Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
 
 // zpracovani login formulare
 if (isset($_REQUEST['logmein'])) { 
-	$logres=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."users WHERE login='".$_REQUEST['loginname']."' AND pwd=md5('".$_POST['loginpwd']."') and deleted=0 and suspended=0 "); 
+    $logres=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."users WHERE login='".$_REQUEST['loginname']."' AND pwd=md5('".$_POST['loginpwd']."') and deleted=0 and suspended=0 "); 
 	if($logrec=mysqli_fetch_array ($logres)) {
 		$_SESSION['sid']=session_id(); 
 		mysqli_query ($database,"UPDATE ".DB_PREFIX."users set sid='' where sid='".$_SESSION['sid']."'");

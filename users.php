@@ -32,6 +32,8 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	$custom_Filter = custom_Filter(8);
 	sparklets ('<strong>uživatelé</strong>',(($usrinfo['right_power'])?'<a href="tasks.php">úkoly</a>; <a href="users.php?user_new=true">přidat uživatele</a>':'<a href="tasks.php">úkoly</a>'));
 }
+
+
 // *** zpracovani filtru
 if (!isset($custom_Filter['kategorie'])) {
 	$f_cat=0;
@@ -55,7 +57,7 @@ switch ($f_sort) {
 	default: $fsql_sort=' '.DB_PREFIX.'users.login ASC ';
 }
 function filter () {
-	global $database,$f_cat,$f_sort;
+    global $database,$f_cat,$f_sort;
 	echo 
 '<div id="filtr" class="table">
 	<form action="/users.php" method="get">
@@ -76,10 +78,11 @@ function filter () {
 </div>';
 }
 
+
+
 if (isset($_REQUEST['user_edit']) AND is_numeric($_REQUEST['user_edit'])) {
 	include ('usersedit.php');
 } elseif (isset($_REQUEST['user_new']) AND $_REQUEST['user_new'] == true ) {
-
 	include ('usersnew.php');
 }
 // *** vypis uživatelů

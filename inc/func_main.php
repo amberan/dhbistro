@@ -1,7 +1,7 @@
 <?php 
 session_start();
 	
-$config['version']='1.6';  // verze bistra
+$config['version']='1.6';  // verze bistra TODO hotfix pro vyvoj 1.6.0
 define ('DB_PREFIX','nw_'); // prefix tabulek
 $config['dbpass'] = "/inc/important.php"; // soubor s heslem k databazi - na druhem radku
 $config['page_prefix']=''; // uri cesta mezi domenou a adresarem bistra
@@ -108,14 +108,14 @@ function custom_Filter ($idtable, $idrecord = 0) {
 		case 11: $table="audit"; break;
 		case 13: $table="search"; break;
 		case 14: $table="group".$idrecord; break;
-		case 15: $table="p2c"; break;
-		case 16: $table="c2ar"; break;
-		case 17: $table="p2ar"; break;
-		case 18: $table="ar2c"; break;
-		case 19: $table="p2g"; break;
-		case 20: $table="sy2p"; break;
-		case 21: $table="sy2c"; break;
-		case 22: $table="sy2ar"; break;
+		case 15: $table="p2c"; break;   //person 2 case
+		case 16: $table="c2ar"; break;  //case 2 action report
+		case 17: $table="p2ar"; break;  //person 2 action report
+		case 18: $table="ar2c"; break;  //action report 2 case
+		case 19: $table="p2g"; break;   //person 2 group
+		case 20: $table="sy2p"; break;  //symbol 2 person
+		case 21: $table="sy2c"; break;  //symbol 2 case
+		case 22: $table="sy2ar"; break; //symbol 2 action report 
 	}
 	$sql_cf = "SELECT filter FROM ".DB_PREFIX."users WHERE id = ".$usrinfo['id'];
 	$res_cf=mysqli_query ($database,$sql_cf);
@@ -137,10 +137,11 @@ function custom_Filter ($idtable, $idrecord = 0) {
 	} else {
 		if ($res_cf) {
 			$rec_cf=mysqli_fetch_assoc ($res_cf);
-			$filters = unserialize($rec_cf['filter']);
+            $filters = unserialize($rec_cf['filter']);
 			if (!empty($filters)) {
 				if (array_key_exists($table, $filters)) {
-					$filter = $filters[$table];
+                    $filter = $filters[$table];
+                    print_r($filter);
 				}
 			}
 		}

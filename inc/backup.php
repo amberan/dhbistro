@@ -3,7 +3,7 @@
 global $database,$config;
 
 function  zalohuj($soubor=""){
-	global $database,$config;		 
+    global $database,$config;		 
 	function  keys($prefix,$array){
 		if (empty($array)) { $pocet=0; } else {	$pocet = count ($array); }
 		if (!isset($radky)) { $radky=''; }
@@ -21,7 +21,8 @@ function  zalohuj($soubor=""){
 			return  ",\n".$prefix."(".$radky.")";
 		}
 	}
-
+    //fast import
+    $text = 'SET autocommit=0; SET unique_checks=0; SET foreign_key_checks=0;';
 	$sql = mysqli_query ($database,"SHOW table status  FROM ".$config['dbdatabase']);
 	while ($data = mysqli_fetch_row ($sql)){
 		if (!isset($text)) { $text = '';}
@@ -58,7 +59,9 @@ function  zalohuj($soubor=""){
 				$text .= "\nINSERT INTO `".$data[0]."` VALUES(".$values.");";
 				unset ($values);
 		}
-		}
+        }
+        //fast import 
+        $text .= 'COMMIT; SET unique_checks=1; SET foreign_key_checks=1;';
 		if (!empty ($soubor)){
 			$gztext = gzencode($text, 9);
 			$fp = @fopen ($soubor,"w+");

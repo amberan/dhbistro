@@ -2,11 +2,12 @@
 
 ### News and Updates
 - **1.6 IN PROGRESS**
-	funkce pro nacitani osob  
+	funkce pro nacitani osob  (processing/person.php)
 	automaticky pull z gitlabu  
 	promazani duplicitnich zaznamu v tabulce neprectenych  
 	zobrazovani poctu neprectenych polozek v menu  
 	obrazky presunuty do adresare images
+    improved backup (fast restore)
 - **1.5.8 HLIDKY 3/2019**
 	LATTE template - login, header, footer  
 	HTMLtoMD convertor  
