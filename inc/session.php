@@ -41,9 +41,9 @@ function logout_forced($msg) {
 		if (isset($_SESSION['sid'])) {
 			mysqli_query ($database,"UPDATE ".DB_PREFIX."users set sid=null WHERE sid=".$_SESSION['sid']);
 		}
-	}
-	session_unset();
-	session_destroy(); 
+    }
+    session_regenerate_id();
+    session_destroy();
 	session_start();
 	if (isset($msg)) { 
 		$_SESSION['message'] .= $msg;

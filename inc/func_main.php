@@ -17,7 +17,10 @@ $config['folder_cache'] = $_SERVER['DOCUMENT_ROOT'].'/cache/'; // adresar pro la
 require_once($config['folder_custom'].'text-DH.php'); // defaultni texty - nasledne pretizeno hodnotami nactenymi v ramci inc/database.php
 
 // *** TECHNICAL LIBRARIES
-	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/platform.php');
+    require_once($_SERVER['DOCUMENT_ROOT'].'/inc/platform.php');
+    if ($config['custom'] != null) { //prepsani defaultnich textu
+        require_once($config['folder_custom'].'/text-'.$config['custom'].'.php');
+    }
 	require_once($_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php');
 		use Tracy\Debugger;
 		Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);

@@ -1,4 +1,8 @@
 # BISTRO
+ 
+### TODO ???
+- tabulka na user_filter [userid, object, filter]
+- API personWrite
 
 ### News and Updates
 - **1.6 IN PROGRESS**
@@ -6,8 +10,9 @@
 	automaticky pull z gitlabu  
 	promazani duplicitnich zaznamu v tabulce neprectenych  
 	zobrazovani poctu neprectenych polozek v menu  
-	obrazky presunuty do adresare images
-    improved backup (fast restore)
+	obrazky presunuty do adresare images  
+    improved backup (fast restore)  
+    API login, logout, personRead
 - **1.5.8 HLIDKY 3/2019**
 	LATTE template - login, header, footer  
 	HTMLtoMD convertor  
@@ -70,9 +75,22 @@
 - **1.5 PHP7**  
     PHP7 + MySQLi  
 
+
+### API
+/API/login.php?username=aaa&password=aaa
+/API/personread.php?sessionID=ev3pcioj5olqng8s865ukg5kbu
+/API/personread.php?sessionID=ev3pcioj5olqng8s865ukg5kbu&where=power%3D1
+/API/personread.php?sessionID=ev3pcioj5olqng8s865ukg5kbu&order=name%20asc
+/API/personread.php?sessionID=ev3pcioj5olqng8s865ukg5kbu&personID=206
+/API/logout.php?sessionID=jdli17sakho2g0cv0eesir026r
+
 ### OBSAH
 soubor                  | obsah                                     | obsluhovany objekt
 --- | --- | ---
+API/include.php         | API nacitani generik
+API/login.php           | API login
+API/logout.php          | API logout
+API/personread.php      | API personRead,personList                 | osoba
 css						| **styly**
 --- | --- | ---
 customs					| **individualni texty a obrazky pro jednotlive instance**

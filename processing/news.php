@@ -19,9 +19,10 @@
 	return $person;
 }
 
-function newsList() {
+function newsList($fsql_cat = 1, $fsql_sort = 1) {
 	//vraci seznam novinek
-	global $database, $usrinfo; 
+    global $database, $usrinfo; 
+    $sqlwhere = $fsql_cat;
 	if (isset($usrinfo['right_admin']) AND $usrinfo['right_admin'] > 0) {
 		$sqlwhere .= " AND deleted = 1";
 	} else {

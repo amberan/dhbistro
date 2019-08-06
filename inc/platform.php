@@ -58,8 +58,6 @@ switch ($_SERVER["SERVER_NAME"]) {
 		$config['custom']='DH';
 }
 
-if ($config['custom'] != null) { //prepsani defaultnich textu
-	require_once($config['folder_custom'].'/text-'.$config['custom'].'.php');
-}
+
 
 ?>
