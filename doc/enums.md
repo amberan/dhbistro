@@ -3,6 +3,7 @@
 ### auditTrail 
 
 record type                                | operation type        | idrecord
+--- | --- | --- 
 1, 'osoba'                                 | 	1, 'čtení' | 
 2, 'skupina'                               | 	2, 'úprava' | 
 3, 'případ'                                | 	3, 'nový' | 
@@ -20,6 +21,7 @@ record type                                | operation type        | idrecord
 
 ### unauthorizedAccess
 record type | secret | deleted
+--- | --- | --- 
 1, 'osoba' | | 
 2, 'skupina' | | 
 3, 'případ' | | 

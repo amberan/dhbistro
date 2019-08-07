@@ -1,7 +1,7 @@
 # BISTRO user rights
 
     | right_power | right_text | right_audit | right_org |right_super = nedělá nic
-    --- | --- | ---
+    --- | --- | --- | --- | --- | ---
 zobrazní auditu                                 | | | x | |
 editace hlavních textů = editace obecně objektů | | x | | |
 zobrazení auditní stopy jiných orgů             | | | | x |
