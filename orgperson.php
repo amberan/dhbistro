@@ -11,7 +11,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	mainMenu (5);
 	sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>úprava osoby</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
-	  $res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."persons WHERE id=".$_REQUEST['rid']);
+	  $res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."person WHERE id=".$_REQUEST['rid']);
 		if ($rec_p=mysqli_fetch_assoc ($res)) {
 
 	// kalendář
@@ -72,7 +72,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 				<h3><label for="regusr">Vytvořil:</label></h3>
 				<select name="regusr" id="regusr">
 				<?php
-					$sql="SELECT ".DB_PREFIX."users.login AS 'login', ".DB_PREFIX."users.id AS 'id' FROM ".DB_PREFIX."users WHERE ".DB_PREFIX."users.deleted=0 ORDER BY ".DB_PREFIX."users.login ASC";
+					$sql="SELECT ".DB_PREFIX."user.login AS 'login', ".DB_PREFIX."user.id AS 'id' FROM ".DB_PREFIX."user WHERE ".DB_PREFIX."user.deleted=0 ORDER BY ".DB_PREFIX."user.login ASC";
 					$res=mysqli_query ($database,$sql);
 					while ($rec=mysqli_fetch_assoc ($res)) {
 						echo '<div>

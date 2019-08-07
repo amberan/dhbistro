@@ -12,7 +12,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
         $custom_Filter = custom_Filter(22);
 	sparklets ('<a href="./symbols.php">symboly</a> &raquo; <strong>úprava symbolu</strong> &raquo; <strong>přidání k hlášení</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
-	  $res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."symbols WHERE id=".$_REQUEST['rid']);
+	  $res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."symbol WHERE id=".$_REQUEST['rid']);
 		if ($rec=mysqli_fetch_assoc ($res)) {
 ?>
 
@@ -47,24 +47,24 @@ K případu můžete přiřadit hlášení, která se ho týkají.
 	}
 	switch ($f_cat) {
 	  case 0: $fsql_cat=''; break;
-	  case 1: $fsql_cat=' AND '.DB_PREFIX.'reports.type=1 '; break;
-	  case 2: $fsql_cat=' AND '.DB_PREFIX.'reports.type=2 '; break;
+	  case 1: $fsql_cat=' AND '.DB_PREFIX.'report.type=1 '; break;
+	  case 2: $fsql_cat=' AND '.DB_PREFIX.'report.type=2 '; break;
 	  default: $fsql_cat='';
 	}
 	switch ($f_sort) {
-	  case 1: $fsql_sort=' '.DB_PREFIX.'reports.datum DESC '; break;
-	  case 2: $fsql_sort=' '.DB_PREFIX.'reports.datum ASC '; break;
-	  case 3: $fsql_sort=' '.DB_PREFIX.'users.login ASC '; break;
-	  case 4: $fsql_sort=' '.DB_PREFIX.'users.login DESC '; break;
-	  case 5: $fsql_sort=' '.DB_PREFIX.'reports.adatum ASC '; break;
-	  case 6: $fsql_sort=' '.DB_PREFIX.'reports.adatum DESC '; break;
-	  default: $fsql_sort=' '.DB_PREFIX.'reports.adatum DESC ';
+	  case 1: $fsql_sort=' '.DB_PREFIX.'report.datum DESC '; break;
+	  case 2: $fsql_sort=' '.DB_PREFIX.'report.datum ASC '; break;
+	  case 3: $fsql_sort=' '.DB_PREFIX.'user.login ASC '; break;
+	  case 4: $fsql_sort=' '.DB_PREFIX.'user.login DESC '; break;
+	  case 5: $fsql_sort=' '.DB_PREFIX.'report.adatum ASC '; break;
+	  case 6: $fsql_sort=' '.DB_PREFIX.'report.adatum DESC '; break;
+	  default: $fsql_sort=' '.DB_PREFIX.'report.adatum DESC ';
 	}
 	switch ($f_stat) {
 		case 0: $fsql_stat=''; break;
-		case 1: $fsql_stat=' AND '.DB_PREFIX.'reports.status=0 '; break;
-		case 2: $fsql_stat=' AND '.DB_PREFIX.'reports.status=1 '; break;
-		case 3: $fsql_stat=' AND '.DB_PREFIX.'reports.status=2 '; break;
+		case 1: $fsql_stat=' AND '.DB_PREFIX.'report.status=0 '; break;
+		case 2: $fsql_stat=' AND '.DB_PREFIX.'report.status=1 '; break;
+		case 3: $fsql_stat=' AND '.DB_PREFIX.'report.status=2 '; break;
 		default: $fsql_stat='';
 	}
 	//
@@ -103,30 +103,30 @@ seřadit je podle <select name="sort">
 	// vypis hlášení
 	if ($usrinfo['right_power']) {
 		$sql="SELECT
-			".DB_PREFIX."reports.id AS 'id',
-	        ".DB_PREFIX."reports.datum AS 'datum',
-	        ".DB_PREFIX."reports.label AS 'label',
-	        ".DB_PREFIX."reports.task AS 'task',
-	        ".DB_PREFIX."users.login AS 'autor',
-	        ".DB_PREFIX."reports.type AS 'type',
+			".DB_PREFIX."report.id AS 'id',
+	        ".DB_PREFIX."report.datum AS 'datum',
+	        ".DB_PREFIX."report.label AS 'label',
+	        ".DB_PREFIX."report.task AS 'task',
+	        ".DB_PREFIX."user.login AS 'autor',
+	        ".DB_PREFIX."report.type AS 'type',
 	        ".DB_PREFIX."symbol2all.iduser 
-	        	FROM ".DB_PREFIX."users, ".DB_PREFIX."reports LEFT JOIN ".DB_PREFIX."symbol2all 
-	        	ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."reports.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4
-				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0".$fsql_cat.$fsql_stat."
+	        	FROM ".DB_PREFIX."user, ".DB_PREFIX."report LEFT JOIN ".DB_PREFIX."symbol2all 
+	        	ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."report.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4
+				WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.id AND ".DB_PREFIX."report.deleted=0".$fsql_cat.$fsql_stat."
 				ORDER BY ".$fsql_sort;
 	} else {
 		$sql="SELECT
-			".DB_PREFIX."reports.id AS 'id',
-	        ".DB_PREFIX."reports.datum AS 'datum',
-	        ".DB_PREFIX."reports.label AS 'label',
-	        ".DB_PREFIX."reports.task AS 'task',
-	        ".DB_PREFIX."users.login AS 'autor',
-	        ".DB_PREFIX."reports.iduser AS 'iduser',
-	        ".DB_PREFIX."reports.type AS 'type',
+			".DB_PREFIX."report.id AS 'id',
+	        ".DB_PREFIX."report.datum AS 'datum',
+	        ".DB_PREFIX."report.label AS 'label',
+	        ".DB_PREFIX."report.task AS 'task',
+	        ".DB_PREFIX."user.login AS 'autor',
+	        ".DB_PREFIX."report.iduser AS 'iduser',
+	        ".DB_PREFIX."report.type AS 'type',
 	        ".DB_PREFIX."symbol2all.iduser 
-	        	FROM ".DB_PREFIX."users, ".DB_PREFIX."reports LEFT JOIN ".DB_PREFIX."symbol2all 
-	        	ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."reports.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4
-				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0".$fsql_cat.$fsql_stat."
+	        	FROM ".DB_PREFIX."user, ".DB_PREFIX."report LEFT JOIN ".DB_PREFIX."symbol2all 
+	        	ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."report.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4
+				WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.id AND ".DB_PREFIX."report.deleted=0 AND ".DB_PREFIX."report.secret=0".$fsql_cat.$fsql_stat."
 				ORDER BY ".$fsql_sort;
 	}
 	$res=mysqli_query ($database,$sql);

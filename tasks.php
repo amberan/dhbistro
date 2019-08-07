@@ -20,10 +20,10 @@ $latteParameters['title'] = 'Přidán úkol';
 $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 		mainMenu (3);
                 $custom_Filter = custom_Filter(10);
-		$sql_t="INSERT INTO ".DB_PREFIX."tasks VALUES('','".$_POST['task']."','".$_POST['target']."','0','".Time()."','".$usrinfo['id']."','','')";
+		$sql_t="INSERT INTO ".DB_PREFIX."task VALUES('','".$_POST['task']."','".$_POST['target']."','0','".Time()."','".$usrinfo['id']."','','')";
 		mysqli_query ($database,$sql_t);
 // Ukládání do novinek zakomentováno, protože nevím, jestli se použije. Kdyžtak SMAZAT.
-//		$gidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".mysqli_real_escape_string ($database,$_POST['title'])."')"));
+//		$gidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."group WHERE UCASE(title)=UCASE('".mysqli_real_escape_string ($database,$_POST['title'])."')"));
 //		$gid=$gidarray['id'];
 //		if (!isset($_POST['notnew'])) {
 //			unreadRecords (2,$gid);
@@ -79,16 +79,16 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	  $f_sort=$custom_Filter['sort'];
 	}
 	switch ($f_cat) {
-	  case 0: $fsql_cat=' WHERE '.DB_PREFIX.'tasks.status<3 '; break;
-	  case 1: $fsql_cat=' WHERE '.DB_PREFIX.'tasks.status<2 '; break;
-	  case 2: $fsql_cat=' WHERE '.DB_PREFIX.'tasks.status=1 '; break;
-	  case 3: $fsql_cat=' WHERE '.DB_PREFIX.'tasks.status<4 '; break;
-	  default: $fsql_cat=' WHERE '.DB_PREFIX.'tasks.status<2 ';
+	  case 0: $fsql_cat=' WHERE '.DB_PREFIX.'task.status<3 '; break;
+	  case 1: $fsql_cat=' WHERE '.DB_PREFIX.'task.status<2 '; break;
+	  case 2: $fsql_cat=' WHERE '.DB_PREFIX.'task.status=1 '; break;
+	  case 3: $fsql_cat=' WHERE '.DB_PREFIX.'task.status<4 '; break;
+	  default: $fsql_cat=' WHERE '.DB_PREFIX.'task.status<2 ';
 	}
 	switch ($f_sort) {
-	  case 1: $fsql_sort=' '.DB_PREFIX.'tasks.created ASC '; break;
-	  case 2: $fsql_sort=' '.DB_PREFIX.'tasks.created DESC '; break;
-	  default: $fsql_sort=' '.DB_PREFIX.'tasks.created ASC ';
+	  case 1: $fsql_sort=' '.DB_PREFIX.'task.created ASC '; break;
+	  case 2: $fsql_sort=' '.DB_PREFIX.'task.created DESC '; break;
+	  default: $fsql_sort=' '.DB_PREFIX.'task.created ASC ';
 	}
 ?>	
 	<!-- Přidání úkolu -->
@@ -98,7 +98,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	<p><label for="task">Zadání:</label>
 	<input type="text" name="task" id="task" />
 <?php 	
-	$sql="SELECT id, login FROM ".DB_PREFIX."users WHERE deleted=0 ORDER BY login ASC";
+	$sql="SELECT id, login FROM ".DB_PREFIX."user WHERE deleted=0 ORDER BY login ASC";
 		$res_n=mysqli_query ($database,$sql);
 		echo '<label for="target">Uživatel:</label>
 		<select name="target" id="target">';
@@ -135,7 +135,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	}
 	filter();
 	// vypis uživatelů
-	$sql="SELECT * FROM ".DB_PREFIX."tasks".$fsql_cat." ORDER BY ".$fsql_sort;
+	$sql="SELECT * FROM ".DB_PREFIX."task".$fsql_cat." ORDER BY ".$fsql_sort;
 	$res=mysqli_query ($database,$sql);
 	if (mysqli_num_rows ($res)) {
 	  echo '<div id="obsah">

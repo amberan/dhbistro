@@ -9,18 +9,18 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 
 
 if (isset($_POST['reportid'])) {
-		$autharray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT iduser FROM ".DB_PREFIX."reports WHERE id=".$_POST['reportid']));
+		$autharray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT iduser FROM ".DB_PREFIX."report WHERE id=".$_POST['reportid']));
 		$author=$autharray['iduser'];
 	}
 	if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete'])) {
 	  auditTrail(4, 11, $_REQUEST['delete']);
-	  mysqli_query ($database,"UPDATE ".DB_PREFIX."reports SET deleted=1 WHERE id=".$_REQUEST['delete']);
+	  mysqli_query ($database,"UPDATE ".DB_PREFIX."report SET deleted=1 WHERE id=".$_REQUEST['delete']);
 	  deleteAllUnread($_REQUEST['table'],$_REQUEST['delete']);
 	  Header ('Location: reports.php');
 	}
 	if (isset($_POST['insertrep']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['label']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['task']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['summary']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['impact']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['details']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['start']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['end']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['energy']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['inputs']) && is_numeric($_POST['secret']) && is_numeric($_POST['status']) && is_numeric($_POST['type'])) {
 	  $adatum = mktime(0,0,0,$_POST['adatummonth'],$_POST['adatumday'],$_POST['adatumyear']);
-	  $ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."reports WHERE UCASE(label)=UCASE('".$_POST['label']."')");
+	  $ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."report WHERE UCASE(label)=UCASE('".$_POST['label']."')");
 	  if (mysqli_num_rows ($ures)) {
 		  $latteParameters['title'] = 'Hlášení nepřidáno';
 		  $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
@@ -34,8 +34,8 @@ if (isset($_POST['reportid'])) {
 			  $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 
 			  mainMenu (4);
-			  mysqli_query ($database,"INSERT INTO ".DB_PREFIX."reports (label, datum, iduser, task, summary, impacts, details, secret, deleted, status, type, adatum, start, end, energy, inputs) VALUES('".$_POST['label']."','".Time()."','".$usrinfo['id']."','".$_POST['task']."','".$_POST['summary']."','".$_POST['impact']."','".$_POST['details']."','".$_POST['secret']."','0','".$_POST['status']."','".$_POST['type']."','".$adatum."','".$_POST['start']."','".$_POST['end']."','".$_POST['energy']."','".$_POST['inputs']."')");
-		  	$ridarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."reports WHERE UCASE(label)=UCASE('".$_POST['label']."')"));
+			  mysqli_query ($database,"INSERT INTO ".DB_PREFIX."report (label, datum, iduser, task, summary, impacts, details, secret, deleted, status, type, adatum, start, end, energy, inputs) VALUES('".$_POST['label']."','".Time()."','".$usrinfo['id']."','".$_POST['task']."','".$_POST['summary']."','".$_POST['impact']."','".$_POST['details']."','".$_POST['secret']."','0','".$_POST['status']."','".$_POST['type']."','".$adatum."','".$_POST['start']."','".$_POST['end']."','".$_POST['energy']."','".$_POST['inputs']."')");
+		  	$ridarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."report WHERE UCASE(label)=UCASE('".$_POST['label']."')"));
 			$rid=$ridarray['id'];
 			auditTrail(4, 3, $rid);
 			if ($_POST['status']  <> 0) {
@@ -74,11 +74,11 @@ if (isset($_POST['reportid'])) {
 	  }
 	  sparklets ('<a href="./reports.php">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>uložení změn</strong>','<a href="readactrep.php?rid='.$_POST['reportid'].'&hidenotes=0&truenames=0">zobrazit upravené</a>');
 	  $adatum = mktime(0,0,0,$_POST['adatummonth'],$_POST['adatumday'],$_POST['adatumyear']);
-	  $ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."reports WHERE UCASE(label)=UCASE('".$_POST['label']."') AND id<>".$_POST['reportid']);
+	  $ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."report WHERE UCASE(label)=UCASE('".$_POST['label']."') AND id<>".$_POST['reportid']);
 	  if (mysqli_num_rows ($ures)) {
 	    echo '<div id="obsah"><p>Toto označení již existuje, změňte ho.</p></div>';
 	  } else {
-			mysqli_query ($database,"UPDATE ".DB_PREFIX."reports SET label='".$_POST['label']."', task='".$_POST['task']."', summary='".$_POST['summary']."', impacts='".$_POST['impacts']."', details='".$_POST['details']."', secret='".$_POST['secret']."', status='".$_POST['status']."', adatum='".$adatum."', start='".$_POST['start']."', end='".$_POST['end']."', energy='".$_POST['energy']."', inputs='".$_POST['inputs']."' WHERE id=".$_POST['reportid']);
+			mysqli_query ($database,"UPDATE ".DB_PREFIX."report SET label='".$_POST['label']."', task='".$_POST['task']."', summary='".$_POST['summary']."', impacts='".$_POST['impacts']."', details='".$_POST['details']."', secret='".$_POST['secret']."', status='".$_POST['status']."', adatum='".$adatum."', start='".$_POST['start']."', end='".$_POST['end']."', energy='".$_POST['energy']."', inputs='".$_POST['inputs']."' WHERE id=".$_POST['reportid']);
 			echo '<div id="obsah"><p>Hlášení upraveno.</p></div>';
 		}
 		$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
@@ -97,7 +97,7 @@ if (isset($_POST['reportid'])) {
 		auditTrail(4, 4, $_POST['reportid']);
 		$newname=Time().MD5(uniqid(Time().Rand()));
 		move_uploaded_file ($_FILES['attachment']['tmp_name'],'./files/'.$newname);
-		$sql="INSERT INTO ".DB_PREFIX."data VALUES('','".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','4','".$_POST['reportid']."','".$_POST['secret']."')";
+		$sql="INSERT INTO ".DB_PREFIX."file VALUES('','".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','4','".$_POST['reportid']."','".$_POST['secret']."')";
 		mysqli_query ($database,$sql);
 		unreadRecords (4,$_POST['reportid']);
 		Header ('Location: '.$_POST['backurl']);
@@ -115,10 +115,10 @@ if (isset($_POST['reportid'])) {
 	if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {
 		auditTrail(4, 5, $_GET['reportid']);
 		if ($usrinfo['right_text']) {
-			$fres=mysqli_query ($database,"SELECT uniquename FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.id=".$_GET['deletefile']);
+			$fres=mysqli_query ($database,"SELECT uniquename FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
 			$frec=mysqli_fetch_assoc ($fres);
 			UnLink ('./files/'.$frec['uniquename']);
-			mysqli_query ($database,"DELETE FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.id=".$_GET['deletefile']);
+			mysqli_query ($database,"DELETE FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
 		}
 		Header ('Location: editactrep.php?rid='.$_GET['reportid']);
 	}

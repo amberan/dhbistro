@@ -64,59 +64,59 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 		$fpow=$custom_Filter['fpow'];
 	}
 	switch ($f_sort) {
-	  case 1: $fsql_sort=' '.DB_PREFIX.'persons.surname ASC, '.DB_PREFIX.'persons.name ASC '; break;
-	  case 2: $fsql_sort=' '.DB_PREFIX.'persons.surname DESC, '.DB_PREFIX.'persons.name DESC '; break;
-	  default: $fsql_sort=' '.DB_PREFIX.'persons.surname ASC, '.DB_PREFIX.'persons.name ASC ';
+	  case 1: $fsql_sort=' '.DB_PREFIX.'person.surname ASC, '.DB_PREFIX.'person.name ASC '; break;
+	  case 2: $fsql_sort=' '.DB_PREFIX.'person.surname DESC, '.DB_PREFIX.'person.name DESC '; break;
+	  default: $fsql_sort=' '.DB_PREFIX.'person.surname ASC, '.DB_PREFIX.'person.name ASC ';
 	}
 	switch ($f_sec) {
 		case 0: $fsql_sec=''; break;
-		case 1: $fsql_sec=' AND '.DB_PREFIX.'persons.secret=1 '; break;
+		case 1: $fsql_sec=' AND '.DB_PREFIX.'person.secret=1 '; break;
 		default: $fsql_sec='';
 	}
 	switch ($fdead) {
-		case 0: $fsql_dead=' AND '.DB_PREFIX.'persons.dead=0 '; break;
+		case 0: $fsql_dead=' AND '.DB_PREFIX.'person.dead=0 '; break;
 		case 1: $fsql_dead=''; break;
-		default: $fsql_dead=' AND '.DB_PREFIX.'persons.dead=0 ';
+		default: $fsql_dead=' AND '.DB_PREFIX.'person.dead=0 ';
 	}
 	switch ($farchiv) {
-		case 0: $fsql_archiv=' AND '.DB_PREFIX.'persons.archiv=0 '; break;
+		case 0: $fsql_archiv=' AND '.DB_PREFIX.'person.archiv=0 '; break;
 		case 1: $fsql_archiv=''; break;
-		default: $fsql_archiv=' AND '.DB_PREFIX.'persons.archiv=0 ';
+		default: $fsql_archiv=' AND '.DB_PREFIX.'person.archiv=0 ';
 	}
 		switch ($fspec) {
 		case 0: $fsql_fspec=''; break;
-		case 1: $fsql_fspec=' AND '.DB_PREFIX.'persons.spec=0 '; break;
-		case 2: $fsql_fspec=' AND '.DB_PREFIX.'persons.spec=1 '; break;
-		case 3: $fsql_fspec=' AND '.DB_PREFIX.'persons.spec=2 '; break;
-		case 4: $fsql_fspec=' AND '.DB_PREFIX.'persons.spec=3 '; break;
-		case 5: $fsql_fspec=' AND '.DB_PREFIX.'persons.spec=4 '; break;
-		case 6: $fsql_fspec=' AND '.DB_PREFIX.'persons.spec=5 '; break;
-		case 7: $fsql_fspec=' AND '.DB_PREFIX.'persons.spec=6 '; break;
-		case 8: $fsql_fspec=' AND '.DB_PREFIX.'persons.spec=7 '; break;
-		case 9: $fsql_fspec=' AND '.DB_PREFIX.'persons.spec=8 '; break;
-		case 10: $fsql_fspec=' AND '.DB_PREFIX.'persons.spec=9 '; break;
-		case 11: $fsql_fspec=' AND '.DB_PREFIX.'persons.spec=10 '; break;
+		case 1: $fsql_fspec=' AND '.DB_PREFIX.'person.spec=0 '; break;
+		case 2: $fsql_fspec=' AND '.DB_PREFIX.'person.spec=1 '; break;
+		case 3: $fsql_fspec=' AND '.DB_PREFIX.'person.spec=2 '; break;
+		case 4: $fsql_fspec=' AND '.DB_PREFIX.'person.spec=3 '; break;
+		case 5: $fsql_fspec=' AND '.DB_PREFIX.'person.spec=4 '; break;
+		case 6: $fsql_fspec=' AND '.DB_PREFIX.'person.spec=5 '; break;
+		case 7: $fsql_fspec=' AND '.DB_PREFIX.'person.spec=6 '; break;
+		case 8: $fsql_fspec=' AND '.DB_PREFIX.'person.spec=7 '; break;
+		case 9: $fsql_fspec=' AND '.DB_PREFIX.'person.spec=8 '; break;
+		case 10: $fsql_fspec=' AND '.DB_PREFIX.'person.spec=9 '; break;
+		case 11: $fsql_fspec=' AND '.DB_PREFIX.'person.spec=10 '; break;
 		default: $fsql_fspec='';
 	}
 	switch ($fside) {
 		case 0: $fsql_fside=''; break;
-		case 1: $fsql_fside=' AND '.DB_PREFIX.'persons.side=0 '; break;
-		case 2: $fsql_fside=' AND '.DB_PREFIX.'persons.side=1 '; break;
-		case 3: $fsql_fside=' AND '.DB_PREFIX.'persons.side=2 '; break;
-		case 4: $fsql_fside=' AND '.DB_PREFIX.'persons.side=3 '; break;
+		case 1: $fsql_fside=' AND '.DB_PREFIX.'person.side=0 '; break;
+		case 2: $fsql_fside=' AND '.DB_PREFIX.'person.side=1 '; break;
+		case 3: $fsql_fside=' AND '.DB_PREFIX.'person.side=2 '; break;
+		case 4: $fsql_fside=' AND '.DB_PREFIX.'person.side=3 '; break;
 		default: $fsql_fside='';
 	}
 	switch ($fpow) {
 		case 0: $fsql_fpow=''; break;
-		case 1: $fsql_fpow=' AND '.DB_PREFIX.'persons.power=0 '; break;
-		case 2: $fsql_fpow=' AND '.DB_PREFIX.'persons.power=1 '; break;
-		case 3: $fsql_fpow=' AND '.DB_PREFIX.'persons.power=2 '; break;
-		case 4: $fsql_fpow=' AND '.DB_PREFIX.'persons.power=3 '; break;
-		case 5: $fsql_fpow=' AND '.DB_PREFIX.'persons.power=4 '; break;
-		case 6: $fsql_fpow=' AND '.DB_PREFIX.'persons.power=5 '; break;
-		case 7: $fsql_fpow=' AND '.DB_PREFIX.'persons.power=6 '; break;
-		case 8: $fsql_fpow=' AND '.DB_PREFIX.'persons.power=7 '; break;
-		case 9: $fsql_fpow=' AND '.DB_PREFIX.'persons.power=8 '; break;
+		case 1: $fsql_fpow=' AND '.DB_PREFIX.'person.power=0 '; break;
+		case 2: $fsql_fpow=' AND '.DB_PREFIX.'person.power=1 '; break;
+		case 3: $fsql_fpow=' AND '.DB_PREFIX.'person.power=2 '; break;
+		case 4: $fsql_fpow=' AND '.DB_PREFIX.'person.power=3 '; break;
+		case 5: $fsql_fpow=' AND '.DB_PREFIX.'person.power=4 '; break;
+		case 6: $fsql_fpow=' AND '.DB_PREFIX.'person.power=5 '; break;
+		case 7: $fsql_fpow=' AND '.DB_PREFIX.'person.power=6 '; break;
+		case 8: $fsql_fpow=' AND '.DB_PREFIX.'person.power=7 '; break;
+		case 9: $fsql_fpow=' AND '.DB_PREFIX.'person.power=8 '; break;
 		default: $fsql_fpow='';
 	}
 	// formular filtru
@@ -188,12 +188,12 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	filter();
 	/* Stary vypis osob
 	if ($usrinfo['right_power']) {
-		$sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.archiv AS 'archiv', ".DB_PREFIX."persons.dead AS 'dead', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.symbol AS 'symbol' FROM ".DB_PREFIX."persons WHERE ".DB_PREFIX."persons.deleted=0".$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow." ORDER BY ".$fsql_sort;
+		$sql="SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.archiv AS 'archiv', ".DB_PREFIX."person.dead AS 'dead', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol' FROM ".DB_PREFIX."person WHERE ".DB_PREFIX."person.deleted=0".$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow." ORDER BY ".$fsql_sort;
 	} else {
-	  $sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.archiv AS 'archiv', ".DB_PREFIX."persons.dead AS 'dead', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.symbol AS 'symbol' FROM ".DB_PREFIX."persons WHERE ".DB_PREFIX."persons.deleted=0 AND ".DB_PREFIX."persons.secret=0".$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow." ORDER BY ".$fsql_sort;
+	  $sql="SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.archiv AS 'archiv', ".DB_PREFIX."person.dead AS 'dead', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol' FROM ".DB_PREFIX."person WHERE ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret=0".$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow." ORDER BY ".$fsql_sort;
 	}
 	Alternativni vypis osob zahrnujici vice stupnu tajne.*/
-    $sql="SELECT  ".DB_PREFIX."persons.regdate as date_created, ".DB_PREFIX."persons.datum as date_changed, ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.archiv AS 'archiv', ".DB_PREFIX."persons.dead AS 'dead', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.symbol AS 'symbol' FROM ".DB_PREFIX."persons WHERE ".DB_PREFIX."persons.deleted=0 AND ".DB_PREFIX."persons.secret<=".$usrinfo['right_power'].$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow." ORDER BY ".$fsql_sort;
+    $sql="SELECT  ".DB_PREFIX."person.regdate as date_created, ".DB_PREFIX."person.datum as date_changed, ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.archiv AS 'archiv', ".DB_PREFIX."person.dead AS 'dead', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol' FROM ".DB_PREFIX."person WHERE ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret<=".$usrinfo['right_power'].$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow." ORDER BY ".$fsql_sort;
 	$res=mysqli_query ($database,$sql);
 	if (mysqli_num_rows ($res)) {
 	  echo '<div id="obsah">

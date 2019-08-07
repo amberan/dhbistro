@@ -8,17 +8,17 @@ $latte->setTempDirectory($config['folder_cache']);
 
 	if (is_numeric($_REQUEST['rid'])) {
 		$res=mysqli_query ($database,"SELECT 
-				".DB_PREFIX."notes.id AS 'id',
-				".DB_PREFIX."notes.title AS 'title',
-				".DB_PREFIX."notes.note AS 'note',
-				".DB_PREFIX."notes.secret AS 'secret',
-				".DB_PREFIX."notes.iduser AS 'iduser',
-				".DB_PREFIX."notes.deleted AS 'deleted',
-				".DB_PREFIX."notes.datum as date_created, 
-				".DB_PREFIX."users.login AS 'nuser' 	
-				 FROM ".DB_PREFIX."notes, ".DB_PREFIX."users
-				 WHERE ".DB_PREFIX."notes.id=".$_REQUEST['rid']." 
-				AND ".DB_PREFIX."notes.iduser=".DB_PREFIX."users.id");
+				".DB_PREFIX."note.id AS 'id',
+				".DB_PREFIX."note.title AS 'title',
+				".DB_PREFIX."note.note AS 'note',
+				".DB_PREFIX."note.secret AS 'secret',
+				".DB_PREFIX."note.iduser AS 'iduser',
+				".DB_PREFIX."note.deleted AS 'deleted',
+				".DB_PREFIX."note.datum as date_created, 
+				".DB_PREFIX."user.login AS 'nuser' 	
+				 FROM ".DB_PREFIX."note, ".DB_PREFIX."user
+				 WHERE ".DB_PREFIX."note.id=".$_REQUEST['rid']." 
+				AND ".DB_PREFIX."note.iduser=".DB_PREFIX."user.id");
 		if ($rec=mysqli_fetch_assoc ($res)) {
                         if ((($rec['secret']<=$usrinfo['right_power']) || $rec['iduser']==$usrinfo['id']) && !$rec['deleted']==1) {
 			  

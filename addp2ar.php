@@ -1,7 +1,7 @@
 <?php
 	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 	// následuje načtení dat reportu a jejich uložení do vybranných proměných 
-	$reportarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid'])); // načte data z DB
+	$reportarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid'])); // načte data z DB
 	$type=intval($reportarray['type']); // určuje typ hlášení
 		$typestring=(($type==1)?'výjezd':(($type==2)?'výslech':'?')); //odvozuje slovní typ hlášení
 	$author=$reportarray['iduser']; // určuje autora hlášení
@@ -23,11 +23,11 @@ mainMenu (5);
         $custom_Filter = custom_Filter(17);
 	sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení</strong>'.(($label!='')?' - "'.$label.' ('.$typestring.')"':''));
 	// *** původní načítání autora ---
-	//$autharray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT iduser FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid']));
+	//$autharray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT iduser FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']));
 	//$author=$autharray['iduser'];
 	// --- původní načítání autora ***
 	if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || $usrinfo['id']==$author)) {
-	  $res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid']);
+	  $res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']);
 		if ($rec=mysqli_fetch_assoc ($res)) {
 ?>
 
@@ -71,19 +71,19 @@ K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se t
 		$farchiv=1;
 	}
 	switch ($f_sort) {
-	  case 1: $fsql_sort=' '.DB_PREFIX.'persons.surname, '.DB_PREFIX.'persons.name ASC '; break;
-	  case 2: $fsql_sort=' '.DB_PREFIX.'persons.surname, '.DB_PREFIX.'persons.name DESC '; break;
-	  default: $fsql_sort=' '.DB_PREFIX.'persons.surname, '.DB_PREFIX.'persons.name ASC ';
+	  case 1: $fsql_sort=' '.DB_PREFIX.'person.surname, '.DB_PREFIX.'person.name ASC '; break;
+	  case 2: $fsql_sort=' '.DB_PREFIX.'person.surname, '.DB_PREFIX.'person.name DESC '; break;
+	  default: $fsql_sort=' '.DB_PREFIX.'person.surname, '.DB_PREFIX.'person.name ASC ';
 	}
 	switch ($fdead) {
-		case 0: $fsql_dead=' AND '.DB_PREFIX.'persons.dead=0 '; break;
+		case 0: $fsql_dead=' AND '.DB_PREFIX.'person.dead=0 '; break;
 		case 1: $fsql_dead=''; break;
-		default: $fsql_dead=' AND '.DB_PREFIX.'persons.dead=0 ';
+		default: $fsql_dead=' AND '.DB_PREFIX.'person.dead=0 ';
 	}
 	switch ($farchiv) {
-		case 0: $fsql_archiv=' AND '.DB_PREFIX.'persons.archiv=0 '; break;
+		case 0: $fsql_archiv=' AND '.DB_PREFIX.'person.archiv=0 '; break;
 		case 1: $fsql_archiv=''; break;
-		default: $fsql_archiv=' AND '.DB_PREFIX.'persons.archiv=0 ';
+		default: $fsql_archiv=' AND '.DB_PREFIX.'person.archiv=0 ';
 	}
 	// formular filtru
 	function filter () {
@@ -111,9 +111,9 @@ K hlášení můžete přiřadit osoby, kterých se týká nebo kterých by se t
 	filter();
 	// vypis osob
 	if ($usrinfo['right_power']) {
-		$sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.symbol AS 'symbol', ".DB_PREFIX."ar2p.role AS 'role', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."persons LEFT JOIN ".DB_PREFIX."ar2p ON ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."persons.deleted=0 ".$fsql_dead.$fsql_archiv." ORDER BY ".$fsql_sort;
+		$sql="SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol', ".DB_PREFIX."ar2p.role AS 'role', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."person LEFT JOIN ".DB_PREFIX."ar2p ON ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."person.deleted=0 ".$fsql_dead.$fsql_archiv." ORDER BY ".$fsql_sort;
 	} else {
-	  $sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.symbol AS 'symbol', ".DB_PREFIX."ar2p.role AS 'role', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."persons LEFT JOIN ".DB_PREFIX."ar2p ON ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."persons.deleted=0 ".$fsql_dead.$fsql_archiv." AND ".DB_PREFIX."persons.secret=0 ORDER BY ".$fsql_sort;
+	  $sql="SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol', ".DB_PREFIX."ar2p.role AS 'role', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."person LEFT JOIN ".DB_PREFIX."ar2p ON ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."person.deleted=0 ".$fsql_dead.$fsql_archiv." AND ".DB_PREFIX."person.secret=0 ORDER BY ".$fsql_sort;
 	}
 	$res=mysqli_query ($database,$sql);
 ?>

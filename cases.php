@@ -35,21 +35,21 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 		$f_new=1;
 	}
 	switch ($f_sort) {
-	  case 1: $fsql_sort=' '.DB_PREFIX.'cases.title ASC '; break;
-	  case 2: $fsql_sort=' '.DB_PREFIX.'cases.title DESC '; break;
-	  case 3: $fsql_sort=' '.DB_PREFIX.'cases.datum ASC '; break;
-	  case 4: $fsql_sort=' '.DB_PREFIX.'cases.datum DESC '; break;
-	  default: $fsql_sort=' '.DB_PREFIX.'cases.datum DESC ';
+	  case 1: $fsql_sort=' '.DB_PREFIX.'case.title ASC '; break;
+	  case 2: $fsql_sort=' '.DB_PREFIX.'case.title DESC '; break;
+	  case 3: $fsql_sort=' '.DB_PREFIX.'case.datum ASC '; break;
+	  case 4: $fsql_sort=' '.DB_PREFIX.'case.datum DESC '; break;
+	  default: $fsql_sort=' '.DB_PREFIX.'case.datum DESC ';
 	}
 	switch ($f_sec) {
 		case 0: $fsql_sec=''; break;
-		case 1: $fsql_sec=' AND '.DB_PREFIX.'cases.secret=1 '; break;
+		case 1: $fsql_sec=' AND '.DB_PREFIX.'case.secret=1 '; break;
 		default: $fsql_sec='';
 	}	
 	switch ($f_stat) {
-		case 0: $fsql_stat=' AND '.DB_PREFIX.'cases.status=0 '; break;
+		case 0: $fsql_stat=' AND '.DB_PREFIX.'case.status=0 '; break;
 		case 1: $fsql_stat=''; break;
-		default: $fsql_stat=' AND '.DB_PREFIX.'cases.status=0 ';
+		default: $fsql_stat=' AND '.DB_PREFIX.'case.status=0 ';
 	}
 	//
 	function filter () {
@@ -78,11 +78,11 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	filter();
 	/* stary vypis pripadu
 	if ($usrinfo['right_power']) {
-		$sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.datum AS 'datum' FROM ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.deleted=0".$fsql_sec.$fsql_stat." ORDER BY ".$fsql_sort;
+		$sql="SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.datum AS 'datum' FROM ".DB_PREFIX."case WHERE ".DB_PREFIX."case.deleted=0".$fsql_sec.$fsql_stat." ORDER BY ".$fsql_sort;
 	} else {
-	  $sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.datum AS 'datum' FROM ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.deleted=0".$fsql_sec.$fsql_stat." AND ".DB_PREFIX."cases.secret=0 ORDER BY ".$fsql_sort;
+	  $sql="SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.datum AS 'datum' FROM ".DB_PREFIX."case WHERE ".DB_PREFIX."case.deleted=0".$fsql_sec.$fsql_stat." AND ".DB_PREFIX."case.secret=0 ORDER BY ".$fsql_sort;
 	} Alternativni vypis osob*/
-    $sql="SELECT ".DB_PREFIX."cases.datum as date_changed, ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.datum AS 'datum' FROM ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.deleted=0".$fsql_sec.$fsql_stat." AND ".DB_PREFIX."cases.secret<=".$usrinfo['right_power']." ORDER BY ".$fsql_sort;
+    $sql="SELECT ".DB_PREFIX."case.datum as date_changed, ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.datum AS 'datum' FROM ".DB_PREFIX."case WHERE ".DB_PREFIX."case.deleted=0".$fsql_sec.$fsql_stat." AND ".DB_PREFIX."case.secret<=".$usrinfo['right_power']." ORDER BY ".$fsql_sort;
 	$res=mysqli_query ($database,$sql);
 	if (mysqli_num_rows ($res)) {
 	  echo '<div id="obsah">

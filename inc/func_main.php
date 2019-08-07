@@ -1,7 +1,7 @@
 <?php 
 session_start();
 	
-$config['version']='1.6';  // verze bistra TODO hotfix pro vyvoj 1.6.0
+$config['version']='1.6.0';  // verze bistra TODO hotfix pro vyvoj 1.6.0
 define ('DB_PREFIX','nw_'); // prefix tabulek
 $config['dbpass'] = "/inc/important.php"; // soubor s heslem k databazi - na druhem radku
 $config['page_prefix']=''; // uri cesta mezi domenou a adresarem bistra
@@ -71,7 +71,7 @@ function webDateTime($date) {
 function getAuthor ($recid,$trn) {
 	global $database;
 	if ($trn==1) {
-		$sql_ga="SELECT ".DB_PREFIX."persons.name as 'name', ".DB_PREFIX."persons.surname as 'surname', ".DB_PREFIX."users.login as 'nick' FROM ".DB_PREFIX."persons, ".DB_PREFIX."users WHERE ".DB_PREFIX."users.id=".$recid." AND ".DB_PREFIX."persons.id=".DB_PREFIX."users.idperson";
+		$sql_ga="SELECT ".DB_PREFIX."person.name as 'name', ".DB_PREFIX."person.surname as 'surname', ".DB_PREFIX."user.login as 'nick' FROM ".DB_PREFIX."person, ".DB_PREFIX."user WHERE ".DB_PREFIX."user.id=".$recid." AND ".DB_PREFIX."person.id=".DB_PREFIX."user.idperson";
 		$res_ga=mysqli_query ($database,$sql_ga);
 		if (mysqli_num_rows ($res_ga)) {
 			while ($rec_ga=mysqli_fetch_assoc ($res_ga)) {
@@ -83,7 +83,7 @@ function getAuthor ($recid,$trn) {
 			return $name;
 		}
 	} else {
-		$sql_ga="SELECT ".DB_PREFIX."users.login as 'nick' FROM ".DB_PREFIX."users WHERE ".DB_PREFIX."users.id=".$recid;
+		$sql_ga="SELECT ".DB_PREFIX."user.login as 'nick' FROM ".DB_PREFIX."user WHERE ".DB_PREFIX."user.id=".$recid;
 		$res_ga=mysqli_query ($database,$sql_ga);
 		if (mysqli_num_rows ($res_ga)) {
 			while ($rec_ga=mysqli_fetch_assoc ($res_ga)) {
@@ -101,13 +101,13 @@ function getAuthor ($recid,$trn) {
 function custom_Filter ($idtable, $idrecord = 0) {
 	global $database,$usrinfo;
 	switch ($idtable) {
-		case 1: $table="persons"; break;
-		case 2: $table="groups"; break;
-		case 3: $table="cases"; break;
-		case 4: $table="reports"; break;
-		case 8: $table="users"; break;
+		case 1: $table="person"; break;
+		case 2: $table="group"; break;
+		case 3: $table="case"; break;
+		case 4: $table="report"; break;
+		case 8: $table="user"; break;
 		case 9: $table="evilpts"; break;
-		case 10: $table="tasks"; break;
+		case 10: $table="task"; break;
 		case 11: $table="audit"; break;
 		case 13: $table="search"; break;
 		case 14: $table="group".$idrecord; break;
@@ -120,7 +120,7 @@ function custom_Filter ($idtable, $idrecord = 0) {
 		case 21: $table="sy2c"; break;  //symbol 2 case
 		case 22: $table="sy2ar"; break; //symbol 2 action report 
 	}
-	$sql_cf = "SELECT filter FROM ".DB_PREFIX."users WHERE id = ".$usrinfo['id'];
+	$sql_cf = "SELECT filter FROM ".DB_PREFIX."user WHERE id = ".$usrinfo['id'];
 	$res_cf=mysqli_query ($database,$sql_cf);
 	$filter = $_REQUEST;
 	// pokud přichází nový filtr a nejedná se o zadání úkolu či přidání zlobodů, případně pokud se jedná o konkrétní záznam a je nově filtrovaný,
@@ -134,7 +134,7 @@ function custom_Filter ($idtable, $idrecord = 0) {
 			$filters[$table] = $filter;
 		}
 		$sfilters = serialize($filters);
-		$sql_scf = "UPDATE ".DB_PREFIX."users SET filter='".$sfilters."' WHERE id=".$usrinfo['id'];
+		$sql_scf = "UPDATE ".DB_PREFIX."user SET filter='".$sfilters."' WHERE id=".$usrinfo['id'];
 		mysqli_query ($database,$sql_scf);
 	// v opačném případě zkontroluj, zda existuje odpovídající filtr v databázi, a pokud ano, načti jej    
 	} else {
@@ -144,7 +144,7 @@ function custom_Filter ($idtable, $idrecord = 0) {
 			if (!empty($filters)) {
 				if (array_key_exists($table, $filters)) {
                     $filter = $filters[$table];
-                    print_r($filter);
+                    //print_r($filter);
 				}
 			}
 		}

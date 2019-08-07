@@ -6,10 +6,10 @@
 		".DB_PREFIX."news.datum AS 'datum',
 		".DB_PREFIX."news.nadpis AS 'nadpis',
 		".DB_PREFIX."news.obsah AS 'obsah',
-		".DB_PREFIX."users.login AS 'autor',
+		".DB_PREFIX."user.login AS 'autor',
 		".DB_PREFIX."news.kategorie AS 'kategorie'
-						FROM ".DB_PREFIX."news, ".DB_PREFIX."users
-						WHERE ".DB_PREFIX."news.iduser=".DB_PREFIX."users.id ".$fsql_cat." AND ".DB_PREFIX."news.deleted = 0
+						FROM ".DB_PREFIX."news, ".DB_PREFIX."user
+						WHERE ".DB_PREFIX."news.iduser=".DB_PREFIX."user.id ".$fsql_cat." AND ".DB_PREFIX."news.deleted = 0
 						ORDER BY ".$fsql_sort."LIMIT 10";
         $res=mysqli_query ($database,$sql);
         while ($rec=mysqli_fetch_assoc ($res)) {

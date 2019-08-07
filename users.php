@@ -47,14 +47,14 @@ if (!isset($custom_Filter['sort'])) {
 }
 switch ($f_cat) {
 	case 0: $fsql_cat=''; break;
-	case 1: $fsql_cat=' AND '.DB_PREFIX.'users.right_power=1 '; break;
-	case 2: $fsql_cat=' AND '.DB_PREFIX.'users.right_text=1 '; break;
+	case 1: $fsql_cat=' AND '.DB_PREFIX.'user.right_power=1 '; break;
+	case 2: $fsql_cat=' AND '.DB_PREFIX.'user.right_text=1 '; break;
 	default: $fsql_cat='';
 }
 switch ($f_sort) {
-	case 1: $fsql_sort=' '.DB_PREFIX.'users.login ASC '; break;
-	case 2: $fsql_sort=' '.DB_PREFIX.'users.login DESC '; break;
-	default: $fsql_sort=' '.DB_PREFIX.'users.login ASC ';
+	case 1: $fsql_sort=' '.DB_PREFIX.'user.login ASC '; break;
+	case 2: $fsql_sort=' '.DB_PREFIX.'user.login DESC '; break;
+	default: $fsql_sort=' '.DB_PREFIX.'user.login ASC ';
 }
 function filter () {
     global $database,$f_cat,$f_sort;
@@ -89,9 +89,9 @@ if (isset($_REQUEST['user_edit']) AND is_numeric($_REQUEST['user_edit'])) {
 echo '<h1 class="center">Výpis uživatelů</h1>';
 filter();
 if ($usrinfo['right_org']) {
-	$user_sql="SELECT nw_users.*,nw_persons.name,nw_persons.surname FROM ".DB_PREFIX."users left outer join `nw_persons` on nw_users.idperson=nw_persons.id WHERE ".DB_PREFIX."users.deleted=0 ".$fsql_cat." ORDER BY ".$fsql_sort;
+	$user_sql="SELECT ".DB_PREFIX."user.*,".DB_PREFIX."person.name,".DB_PREFIX."person.surname FROM ".DB_PREFIX."user left outer join `".DB_PREFIX."person` on ".DB_PREFIX."user.idperson=".DB_PREFIX."person.id WHERE ".DB_PREFIX."user.deleted=0 ".$fsql_cat." ORDER BY ".$fsql_sort;
 } else {
-	$user_sql="SELECT nw_users.*,nw_persons.name,nw_persons.surname FROM ".DB_PREFIX."users left outer join `nw_persons` on nw_users.idperson=nw_persons.id WHERE ".DB_PREFIX."users.deleted=0 AND ".DB_PREFIX."users.right_org=0 ".$fsql_cat." ORDER BY ".$fsql_sort;
+	$user_sql="SELECT ".DB_PREFIX."user.*,".DB_PREFIX."person.name,".DB_PREFIX."person.surname FROM ".DB_PREFIX."user left outer join `".DB_PREFIX."person` on ".DB_PREFIX."user.idperson=".DB_PREFIX."person.id WHERE ".DB_PREFIX."user.deleted=0 AND ".DB_PREFIX."user.right_org=0 ".$fsql_cat." ORDER BY ".$fsql_sort;
 }
 $user_query = mysqli_query ($database,$user_sql);
 if (mysqli_num_rows ($user_query)) {

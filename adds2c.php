@@ -11,7 +11,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	mainMenu (5);
 	sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>úprava případu</strong> &raquo; <strong>přiřazení řešitelům</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
-	  $res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."cases WHERE id=".$_REQUEST['rid']);
+	  $res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."case WHERE id=".$_REQUEST['rid']);
 		if ($rec=mysqli_fetch_assoc ($res)) {
 ?>
 
@@ -31,7 +31,7 @@ K případu můžete přiřadit řešitele.
 <?php
 
 	// vypis osob
-	$sql="SELECT ".DB_PREFIX."users.id AS 'id', ".DB_PREFIX."users.login AS 'login', ".DB_PREFIX."c2s.iduser FROM ".DB_PREFIX."users LEFT JOIN ".DB_PREFIX."c2s ON ".DB_PREFIX."c2s.idsolver=".DB_PREFIX."users.id AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid']." WHERE ".DB_PREFIX."users.deleted=0 ORDER BY ".DB_PREFIX."users.login ASC";
+	$sql="SELECT ".DB_PREFIX."user.id AS 'id', ".DB_PREFIX."user.login AS 'login', ".DB_PREFIX."c2s.iduser FROM ".DB_PREFIX."user LEFT JOIN ".DB_PREFIX."c2s ON ".DB_PREFIX."c2s.idsolver=".DB_PREFIX."user.id AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid']." WHERE ".DB_PREFIX."user.deleted=0 ORDER BY ".DB_PREFIX."user.login ASC";
 	$res=mysqli_query ($database,$sql);
 ?>
 <div id="in-form-table">

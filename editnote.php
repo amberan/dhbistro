@@ -19,7 +19,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	}
 	sparklets ('<a href="./'.$sourceurl.'">'.$sourcename.'</a> &raquo; <strong>úprava poznámky</strong>');
 	if (is_numeric($_REQUEST['rid'])) {
-		$res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."notes WHERE id=".$_REQUEST['rid']);
+		$res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."note WHERE id=".$_REQUEST['rid']);
 		if ($rec=mysqli_fetch_assoc ($res)) {
                     if ((($rec['secret']<=$usrinfo['right_power']) || $rec['iduser']==$usrinfo['id']) && !$rec['deleted']==1) {
 ?>
@@ -39,7 +39,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	</div>
 	<?php 
 	if ($usrinfo['right_power']) {
-		$sql="SELECT id, login FROM ".DB_PREFIX."users WHERE deleted=0 ORDER BY login ASC";
+		$sql="SELECT id, login FROM ".DB_PREFIX."user WHERE deleted=0 ORDER BY login ASC";
 		$res_n=mysqli_query ($database,$sql);
 		echo '<div>
 		<label for="nowner">Vlastník:</label>

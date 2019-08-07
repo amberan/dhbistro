@@ -14,7 +14,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 			$sql="DELETE FROM ".DB_PREFIX."symbol2all WHERE ".DB_PREFIX."symbol2all.idsymbol=".$_POST['symbolid']." AND ".DB_PREFIX."symbol2all.table=3";
 			mysqli_query ($database,$sql);
 		} else {
-			$sql="DELETE c FROM ".DB_PREFIX."symbol2all as c, ".DB_PREFIX."cases as p WHERE c.idsymbol=p.id AND p.secret=0 AND c.idsymbol=".$_POST['symbolid']." AND ".DB_PREFIX."c.table=3";
+			$sql="DELETE c FROM ".DB_PREFIX."symbol2all as c, ".DB_PREFIX."case as p WHERE c.idsymbol=p.id AND p.secret=0 AND c.idsymbol=".$_POST['symbolid']." AND ".DB_PREFIX."c.table=3";
 			mysqli_query ($database,$sql);
 		}
 		if (isset($_POST['case'])) {
@@ -38,7 +38,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 			$sql="DELETE FROM ".DB_PREFIX."symbol2all WHERE ".DB_PREFIX."symbol2all.idsymbol=".$_POST['symbolid']." AND ".DB_PREFIX."symbol2all.table=4";
 			mysqli_query ($database,$sql);
 		} else {
-			$sql="DELETE c FROM ".DB_PREFIX."symbol2all as c, ".DB_PREFIX."cases as p WHERE c.idsymbol=p.id AND p.secret=0 AND c.idsymbol=".$_POST['symbolid']." AND ".DB_PREFIX."c.table=4";
+			$sql="DELETE c FROM ".DB_PREFIX."symbol2all as c, ".DB_PREFIX."case as p WHERE c.idsymbol=p.id AND p.secret=0 AND c.idsymbol=".$_POST['symbolid']." AND ".DB_PREFIX."c.table=4";
 			mysqli_query ($database,$sql);
 		}
 		if (isset($_POST['report'])) {
@@ -58,11 +58,11 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	
         if (isset ($_POST['addsymb2pers'])) {
             auditTrail(7, 6, $_POST['symbolid']);
-            mysqli_query ($database,"UPDATE ".DB_PREFIX."symbols SET assigned=1 WHERE id=".$_POST['symbolid']);
-            mysqli_query ($database,"UPDATE ".DB_PREFIX."persons SET symbol=".$_POST['symbolid']." WHERE id=".$_POST['person']);
+            mysqli_query ($database,"UPDATE ".DB_PREFIX."symbol SET assigned=1 WHERE id=".$_POST['symbolid']);
+            mysqli_query ($database,"UPDATE ".DB_PREFIX."person SET symbol=".$_POST['symbolid']." WHERE id=".$_POST['person']);
             mainMenu (5);
             sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./symbols.php">nepřiřazené symboly</a>');
-            $sql_p="SELECT name, surname FROM ".DB_PREFIX."persons WHERE id=".$_POST['person'];
+            $sql_p="SELECT name, surname FROM ".DB_PREFIX."person WHERE id=".$_POST['person'];
             $res_p=mysqli_query ($database,$sql_p);
             $rec_p=mysqli_fetch_assoc ($res_p);
             echo '<div id="obsah"><p>Symbol přiřazen osobě <a href="readperson.php?rid='.$_POST['person'].'&amp;hidenotes=0">'.implode(', ',Array(StripSlashes($rec_p['surname']),StripSlashes($rec_p['name']))).'</a></p>';
@@ -84,17 +84,17 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
                 mysqli_query ($database,$sql_i);
             }
             // Preneseni popisu symbolu do poznamky k osobe
-            $sql_d="SELECT `desc` FROM ".DB_PREFIX."symbols WHERE id=".$_POST['symbolid'];
+            $sql_d="SELECT `desc` FROM ".DB_PREFIX."symbol WHERE id=".$_POST['symbolid'];
             $res_d=mysqli_query ($database,$sql_d);
             $rec_d=mysqli_fetch_assoc ($res_d);
-            mysqli_query ($database,"INSERT INTO ".DB_PREFIX."notes ( note, title, datum, iduser, idtable, iditem, secret, deleted) VALUES(".$rec_d['desc']."','Popis symbolu přiřazeného ".Date("j/m/Y H:i:s", Time())."','".Time()."','".$usrinfo['id']."','1','".$_POST['person']."','0','0')");
+            mysqli_query ($database,"INSERT INTO ".DB_PREFIX."note ( note, title, datum, iduser, idtable, iditem, secret, deleted) VALUES(".$rec_d['desc']."','Popis symbolu přiřazeného ".Date("j/m/Y H:i:s", Time())."','".Time()."','".$usrinfo['id']."','1','".$_POST['person']."','0','0')");
             
             // Kopie poznamek k symbolu priradit k osobe
-            $sql_n="SELECT * FROM ".DB_PREFIX."notes WHERE iditem=".$_POST['symbolid']." AND idtable=7 AND deleted=0";
+            $sql_n="SELECT * FROM ".DB_PREFIX."note WHERE iditem=".$_POST['symbolid']." AND idtable=7 AND deleted=0";
             $res_n=mysqli_query ($database,$sql_n);
             while ($rec_n=mysqli_fetch_assoc ($res_n)) {
                 $note_text="Poznámka zkopírována při přiřazení symbolu ".Date("j/m/Y H:i:s", Time())." <br />".$rec_n['note'];
-                $sql_ni="INSERT INTO ".DB_PREFIX."notes  ( note, title, datum, iduser, idtable, iditem, secret, deleted) VALUES ('".$note_text."','".$rec_n['title']."','".Time()."',".$rec_n['iduser'].",1,".$_POST['person'].",".$rec_n['secret'].",0)";
+                $sql_ni="INSERT INTO ".DB_PREFIX."note  ( note, title, datum, iduser, idtable, iditem, secret, deleted) VALUES ('".$note_text."','".$rec_n['title']."','".Time()."',".$rec_n['iduser'].",1,".$_POST['person'].",".$rec_n['secret'].",0)";
                 mysqli_query ($database,$sql_ni);
             }
             

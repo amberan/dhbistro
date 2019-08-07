@@ -4,7 +4,7 @@
 if (!$usrinfo['right_power']) {
 	unauthorizedAccess(8, 1, 0, 0);
 } elseif (is_numeric($_REQUEST['user_edit'])) {
-	$res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."users WHERE id=".$_REQUEST['user_edit']);
+	$res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."user WHERE id=".$_REQUEST['user_edit']);
 	if ($rec=mysqli_fetch_assoc ($res)) {
 ?>
 	<form action="users.php" method="post" >
@@ -55,7 +55,7 @@ if (!$usrinfo['right_power']) {
 		</div>
 	</form>
 	<div><b>Rozpracovaná nedokončená hlášení: <?php
-	$hlaseni_sql=mysqli_query ($database,"SELECT ".DB_PREFIX."reports.secret AS 'secret', ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id' FROM ".DB_PREFIX."reports WHERE ".DB_PREFIX."reports.iduser=".$rec['id']." AND ".DB_PREFIX."reports.status=0 AND ".DB_PREFIX."reports.deleted=0 ORDER BY ".DB_PREFIX."reports.label ASC");
+	$hlaseni_sql=mysqli_query ($database,"SELECT ".DB_PREFIX."report.secret AS 'secret', ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.id AS 'id' FROM ".DB_PREFIX."report WHERE ".DB_PREFIX."report.iduser=".$rec['id']." AND ".DB_PREFIX."report.status=0 AND ".DB_PREFIX."report.deleted=0 ORDER BY ".DB_PREFIX."report.label ASC");
 	echo mysqli_num_rows ($hlaseni_sql);
 	?></b></div>
 		<ul>
@@ -69,7 +69,7 @@ if (!$usrinfo['right_power']) {
 		echo '<p>Uživatel nemá žádná nedokončená hlášení.</p>';
 	} ?>
 	<div><b>Přiřazené neuzavřené případy: <?php
-	$pripady_sql=mysqli_query ($database,"SELECT ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.title AS 'title' FROM ".DB_PREFIX."c2s, ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.id=".DB_PREFIX."c2s.idcase AND ".DB_PREFIX."c2s.idsolver=".$rec['id']." ORDER BY ".DB_PREFIX."cases.title ASC");
+	$pripady_sql=mysqli_query ($database,"SELECT ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.title AS 'title' FROM ".DB_PREFIX."c2s, ".DB_PREFIX."case WHERE ".DB_PREFIX."case.id=".DB_PREFIX."c2s.idcase AND ".DB_PREFIX."c2s.idsolver=".$rec['id']." ORDER BY ".DB_PREFIX."case.title ASC");
 	echo mysqli_num_rows ($pripady_sql);
 	?></b></div>
 		<ul>
@@ -84,7 +84,7 @@ if (!$usrinfo['right_power']) {
 	} ?>
 
 	<div><b>Nedokončené úkoly: <?php
-	$ukoly_sql=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."tasks WHERE ".DB_PREFIX."tasks.iduser=".$rec['id']." AND ".DB_PREFIX."tasks.status=0 ORDER BY ".DB_PREFIX."tasks.created ASC");
+	$ukoly_sql=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."task WHERE ".DB_PREFIX."task.iduser=".$rec['id']." AND ".DB_PREFIX."task.status=0 ORDER BY ".DB_PREFIX."task.created ASC");
 	echo mysqli_num_rows ($ukoly_sql);
 	?></b></div>
 		<ul>

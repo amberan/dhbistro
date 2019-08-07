@@ -59,43 +59,43 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	}
 	switch ($f_cat) {
 	  case 0: $fsql_cat=''; break;
-	  case 1: $fsql_cat=' AND '.DB_PREFIX.'reports.type=1 '; break;
-	  case 2: $fsql_cat=' AND '.DB_PREFIX.'reports.type=2 '; break;
+	  case 1: $fsql_cat=' AND '.DB_PREFIX.'report.type=1 '; break;
+	  case 2: $fsql_cat=' AND '.DB_PREFIX.'report.type=2 '; break;
 	  default: $fsql_cat='';
 	}
 	switch ($f_sort) {
-	  case 1: $fsql_sort=' '.DB_PREFIX.'reports.datum DESC '; break;
-	  case 2: $fsql_sort=' '.DB_PREFIX.'reports.datum ASC '; break;
-	  case 3: $fsql_sort=' '.DB_PREFIX.'users.login ASC '; break;
-	  case 4: $fsql_sort=' '.DB_PREFIX.'users.login DESC '; break;
-	  case 5: $fsql_sort=' '.DB_PREFIX.'reports.adatum ASC, '.DB_PREFIX.'reports.start ASC '; break;
-	  case 6: $fsql_sort=' '.DB_PREFIX.'reports.adatum DESC, '.DB_PREFIX.'reports.start DESC '; break;
-	  default: $fsql_sort=' '.DB_PREFIX.'reports.adatum DESC ';
+	  case 1: $fsql_sort=' '.DB_PREFIX.'report.datum DESC '; break;
+	  case 2: $fsql_sort=' '.DB_PREFIX.'report.datum ASC '; break;
+	  case 3: $fsql_sort=' '.DB_PREFIX.'user.login ASC '; break;
+	  case 4: $fsql_sort=' '.DB_PREFIX.'user.login DESC '; break;
+	  case 5: $fsql_sort=' '.DB_PREFIX.'report.adatum ASC, '.DB_PREFIX.'report.start ASC '; break;
+	  case 6: $fsql_sort=' '.DB_PREFIX.'report.adatum DESC, '.DB_PREFIX.'report.start DESC '; break;
+	  default: $fsql_sort=' '.DB_PREFIX.'report.adatum DESC ';
 	}
 	switch ($f_stat) {
 		case 0: $fsql_stat=''; break;
-		case 1: $fsql_stat=' AND '.DB_PREFIX.'reports.status=0 '; break;
-		case 2: $fsql_stat=' AND '.DB_PREFIX.'reports.status=1 '; break;
-		case 3: $fsql_stat=' AND '.DB_PREFIX.'reports.status=2 '; break;
-		default: $fsql_stat=' AND '.DB_PREFIX.'reports.status=1 ';
+		case 1: $fsql_stat=' AND '.DB_PREFIX.'report.status=0 '; break;
+		case 2: $fsql_stat=' AND '.DB_PREFIX.'report.status=1 '; break;
+		case 3: $fsql_stat=' AND '.DB_PREFIX.'report.status=2 '; break;
+		default: $fsql_stat=' AND '.DB_PREFIX.'report.status=1 ';
 	}
 	switch ($f_my) {
 		case 0: $fsql_my=''; break;
-		case 1: $fsql_my=' AND '.DB_PREFIX.'reports.iduser='.$usrinfo['id'].' '; break;
+		case 1: $fsql_my=' AND '.DB_PREFIX.'report.iduser='.$usrinfo['id'].' '; break;
 		default: $fsql_my='';
 	}
 	switch ($f_conn) {
 		case 0: $fsql_conn=''; $fsql_conn2=''; break;
-		case 1: $fsql_conn=' AND '.DB_PREFIX.'ar2c.idreport IS NULL '; $fsql_conn2=' LEFT JOIN '.DB_PREFIX.'ar2c ON '.DB_PREFIX.'reports.id='.DB_PREFIX.'ar2c.idreport '; break;
+		case 1: $fsql_conn=' AND '.DB_PREFIX.'ar2c.idreport IS NULL '; $fsql_conn2=' LEFT JOIN '.DB_PREFIX.'ar2c ON '.DB_PREFIX.'report.id='.DB_PREFIX.'ar2c.idreport '; break;
 		default: $fsql_conn=''; $fsql_conn2='';
 	}
 	switch ($f_sec) {
 		case 0: $fsql_sec=''; break;
-		case 1: $fsql_sec=' AND '.DB_PREFIX.'reports.secret=1 '; break;
+		case 1: $fsql_sec=' AND '.DB_PREFIX.'report.secret=1 '; break;
 		default: $fsql_sec='';
 	}
         switch ($f_archiv) {
-		case 0: $fsql_archiv=' AND '.DB_PREFIX.'reports.status<>3 '; break;
+		case 0: $fsql_archiv=' AND '.DB_PREFIX.'report.status<>3 '; break;
 		case 1: $fsql_archiv=''; break;
 		default: $fsql_archiv='';
 	}
@@ -143,46 +143,46 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	/* Stary vypis hlášení
 	if ($usrinfo['right_power']) {
 		$sql="SELECT
-			".DB_PREFIX."reports.id AS 'id',
-	        ".DB_PREFIX."reports.datum AS 'datum',
-	        ".DB_PREFIX."reports.adatum AS 'adatum',
-	        ".DB_PREFIX."reports.label AS 'label',
-	        ".DB_PREFIX."reports.task AS 'task',
-	        ".DB_PREFIX."users.login AS 'autor',
-	        ".DB_PREFIX."reports.type AS 'type',
-	        ".DB_PREFIX."reports.status AS 'status' 
-	        	FROM ".DB_PREFIX."users, ".DB_PREFIX."reports".$fsql_conn2."
-				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0".$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn.$fsql_sec.$fsql_archiv."
+			".DB_PREFIX."report.id AS 'id',
+	        ".DB_PREFIX."report.datum AS 'datum',
+	        ".DB_PREFIX."report.adatum AS 'adatum',
+	        ".DB_PREFIX."report.label AS 'label',
+	        ".DB_PREFIX."report.task AS 'task',
+	        ".DB_PREFIX."user.login AS 'autor',
+	        ".DB_PREFIX."report.type AS 'type',
+	        ".DB_PREFIX."report.status AS 'status' 
+	        	FROM ".DB_PREFIX."user, ".DB_PREFIX."report".$fsql_conn2."
+				WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.id AND ".DB_PREFIX."report.deleted=0".$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn.$fsql_sec.$fsql_archiv."
 				ORDER BY ".$fsql_sort;
 	} else {
 		$sql="SELECT
-			".DB_PREFIX."reports.id AS 'id',
-	        ".DB_PREFIX."reports.datum AS 'datum',
-	        ".DB_PREFIX."reports.adatum AS 'adatum',
-	        ".DB_PREFIX."reports.label AS 'label',
-	        ".DB_PREFIX."reports.task AS 'task',
-	        ".DB_PREFIX."reports.status AS 'status',
-	        ".DB_PREFIX."users.login AS 'autor',
-	        ".DB_PREFIX."reports.iduser AS 'riduser',
-	        ".DB_PREFIX."reports.type AS 'type' 
-	        	FROM ".DB_PREFIX."users, ".DB_PREFIX."reports".$fsql_conn2." 
-				WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret=0".$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn.$fsql_archiv."
+			".DB_PREFIX."report.id AS 'id',
+	        ".DB_PREFIX."report.datum AS 'datum',
+	        ".DB_PREFIX."report.adatum AS 'adatum',
+	        ".DB_PREFIX."report.label AS 'label',
+	        ".DB_PREFIX."report.task AS 'task',
+	        ".DB_PREFIX."report.status AS 'status',
+	        ".DB_PREFIX."user.login AS 'autor',
+	        ".DB_PREFIX."report.iduser AS 'riduser',
+	        ".DB_PREFIX."report.type AS 'type' 
+	        	FROM ".DB_PREFIX."user, ".DB_PREFIX."report".$fsql_conn2." 
+				WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.id AND ".DB_PREFIX."report.deleted=0 AND ".DB_PREFIX."report.secret=0".$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn.$fsql_archiv."
 				ORDER BY ".$fsql_sort;
 	} Alternativni vypis hlaseni */
     $sql="SELECT
-                ".DB_PREFIX."reports.id AS 'id',
-                ".DB_PREFIX."reports.datum AS 'datum',
-                ".DB_PREFIX."reports.adatum AS 'adatum',
-                ".DB_PREFIX."reports.label AS 'label',
-                ".DB_PREFIX."reports.task AS 'task',
-                ".DB_PREFIX."reports.status AS 'status',
-                ".DB_PREFIX."users.login AS 'autor',
-                ".DB_PREFIX."reports.iduser AS 'riduser',
-				".DB_PREFIX."reports.type AS 'type' ,
-				".DB_PREFIX."reports.start AS 'start',
-				".DB_PREFIX."reports.end AS 'end'  
-                    FROM ".DB_PREFIX."users, ".DB_PREFIX."reports".$fsql_conn2." 
-                    WHERE ".DB_PREFIX."reports.iduser=".DB_PREFIX."users.id AND ".DB_PREFIX."reports.deleted=0 AND ".DB_PREFIX."reports.secret<=".$usrinfo['right_power'].$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn.$fsql_archiv."
+                ".DB_PREFIX."report.id AS 'id',
+                ".DB_PREFIX."report.datum AS 'datum',
+                ".DB_PREFIX."report.adatum AS 'adatum',
+                ".DB_PREFIX."report.label AS 'label',
+                ".DB_PREFIX."report.task AS 'task',
+                ".DB_PREFIX."report.status AS 'status',
+                ".DB_PREFIX."user.login AS 'autor',
+                ".DB_PREFIX."report.iduser AS 'riduser',
+				".DB_PREFIX."report.type AS 'type' ,
+				".DB_PREFIX."report.start AS 'start',
+				".DB_PREFIX."report.end AS 'end'  
+                    FROM ".DB_PREFIX."user, ".DB_PREFIX."report".$fsql_conn2." 
+                    WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.id AND ".DB_PREFIX."report.deleted=0 AND ".DB_PREFIX."report.secret<=".$usrinfo['right_power'].$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn.$fsql_archiv."
 					ORDER BY ".$fsql_sort;
 
 	$res=mysqli_query ($database,$sql);

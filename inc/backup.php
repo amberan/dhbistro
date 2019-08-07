@@ -74,21 +74,21 @@ function  zalohuj($soubor=""){
 	return  $text;
 	}
 
-	$sql_check="SELECT time FROM ".DB_PREFIX."backups ORDER BY time DESC LIMIT 1";
+	$sql_check="SELECT time FROM ".DB_PREFIX."backup ORDER BY time DESC LIMIT 1";
 	$fetch_check=mysqli_fetch_assoc (mysqli_query ($database,$sql_check));
 	$last_backup=$fetch_check['time'];
 	$update_file = $_SERVER['DOCUMENT_ROOT']."/sql/update-".$config['version'].".php";
 	if (round($last_backup,-5)<round(time(),-5) or file_exists($update_file)) {
 		$backup_file=$_SERVER['DOCUMENT_ROOT'].$config['folder_backup']."backup".time().".sql.gz";
         zalohuj($backup_file);
-        Debugger::log("BACKUP GENERATED: ".$backup_file."[".(filesize($backup_file)/1024)."kB]");
+        Debugger::log("BACKUP GENERATED: ".$backup_file." [".round((filesize($backup_file)/1024))." kB]");
 		//pouze pokud je zaloha vetsi 4kB
 		if (filesize($backup_file) > 4096) {
-			$check_sql=mysqli_query($database,"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."users' and column_name='sid'");
+			$check_sql=mysqli_query($database,"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."user' and column_name='sid'");
 			if(mysqli_num_rows($check_sql)== 0) { //old backup 1.5.2>
-				$sql_bck="INSERT INTO ".DB_PREFIX."backups (time, file) VALUES(".Time().",'".$backup_file."')";  
+				$sql_bck="INSERT INTO ".DB_PREFIX."backup (time, file) VALUES(".Time().",'".$backup_file."')";  
 			} else { //new backup 1.5.2<
-				$sql_bck="INSERT INTO ".DB_PREFIX."backups (time, file, version) VALUES(".Time().",'".$backup_file."','".$config['version']."')";  
+				$sql_bck="INSERT INTO ".DB_PREFIX."backup (time, file, version) VALUES(".Time().",'".$backup_file."','".$config['version']."')";  
 			}
 			mysqli_query ($database,$sql_bck);
 			//optimizace tabulek
@@ -101,7 +101,7 @@ function  zalohuj($soubor=""){
 				require_once($update_file);
 			}
 			//odmazani UNREAD pro smazane uzivatele
-			$deletedusers_sql = mysqli_query($database,"select id from ".DB_PREFIX."users where deleted=1");
+			$deletedusers_sql = mysqli_query($database,"select id from ".DB_PREFIX."user where deleted=1");
 			while ($deletedusers = mysqli_fetch_row($deletedusers_sql)) {
 				mysqli_query ($database,"DELETE FROM ".DB_PREFIX."unread WHERE iduser = ".$deletedusers[0]);
 			}

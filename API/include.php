@@ -20,7 +20,7 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/processing/person.php'); //person
 function session_validation($sessionID) {
 	global $database;
 	$usersql = "SELECT *
-	FROM ".DB_PREFIX."users 
+	FROM ".DB_PREFIX."user 
 	WHERE deleted=0 AND suspended=0 AND sid ='".$sessionID."' AND user_agent='".$_SERVER['HTTP_USER_AGENT']."'";
     $userresult=mysqli_fetch_assoc(mysqli_query($database,$usersql));
     # TODO doresit TTL ? updatovat session nebo db na posledni akci

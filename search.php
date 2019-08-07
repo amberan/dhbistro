@@ -78,13 +78,13 @@ if (!isset($custom_Filter['search'])) {
 
 /* Případy */
 if ($farchiv==0) {
-    $fsql_archiv=' AND '.DB_PREFIX.'cases.status=0 ';
+    $fsql_archiv=' AND '.DB_PREFIX.'case.status=0 ';
 } else {
     $fsql_archiv='';
 }
 $sql = "
-	SELECT ".DB_PREFIX."cases.datum as date_changed, ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret'
-    FROM ".DB_PREFIX."cases
+	SELECT ".DB_PREFIX."case.datum as date_changed, ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret'
+    FROM ".DB_PREFIX."case
 	WHERE (title LIKE '%".$uncz_search."%' or contents LIKE  '%".$uncz_search."%')
     ".$fsql_archiv.$searchContitions."
 	ORDER BY 5 * MATCH(title) AGAINST ('$search') + MATCH(contents) AGAINST ('$search') DESC";
@@ -117,13 +117,13 @@ $sql = "
           
 /* Hlášení */
 if ($farchiv==0) {
-    $fsql_archiv=' AND '.DB_PREFIX.'reports.status<>3 ';
+    $fsql_archiv=' AND '.DB_PREFIX.'report.status<>3 ';
 } else {
     $fsql_archiv='';
 }          
 $sql = "
-    SELECT ".DB_PREFIX."reports.adatum as date_created, ".DB_PREFIX."reports.datum as date_changed,  ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."reports.status AS 'status', ".DB_PREFIX."reports.secret AS 'secret'
-    FROM ".DB_PREFIX."reports
+    SELECT ".DB_PREFIX."report.adatum as date_created, ".DB_PREFIX."report.datum as date_changed,  ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.status AS 'status', ".DB_PREFIX."report.secret AS 'secret'
+    FROM ".DB_PREFIX."report
 	WHERE (label LIKE '%".$uncz_search."%' or task LIKE  '%".$uncz_search."%' or summary LIKE  '%".$uncz_search."%' or impacts LIKE  '%".$uncz_search."%' or details LIKE  '%".$uncz_search."%')".$searchContitions.$fsql_archiv."
     ORDER BY 5 * MATCH(label) AGAINST ('$search')
     + 3 * MATCH(summary) AGAINST ('$search')
@@ -178,13 +178,13 @@ $res = mysqli_query ($database,$sql);
           
 /* Osoby */
 if ($farchiv==0) {
-    $fsql_archiv=' AND '.DB_PREFIX.'persons.archiv=0  AND '.DB_PREFIX.'persons.dead=0';
+    $fsql_archiv=' AND '.DB_PREFIX.'person.archiv=0  AND '.DB_PREFIX.'person.dead=0';
 } else {
     $fsql_archiv='';
 } 
     $sql ="
-        SELECT ".DB_PREFIX."persons.regdate as date_created, ".DB_PREFIX."persons.datum as date_changed, ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.archiv AS 'archiv', ".DB_PREFIX."persons.dead AS 'dead', ".DB_PREFIX."persons.secret AS 'secret'
-        FROM ".DB_PREFIX."persons
+        SELECT ".DB_PREFIX."person.regdate as date_created, ".DB_PREFIX."person.datum as date_changed, ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.archiv AS 'archiv', ".DB_PREFIX."person.dead AS 'dead', ".DB_PREFIX."person.secret AS 'secret'
+        FROM ".DB_PREFIX."person
 		WHERE (surname LIKE '%".$uncz_search."%' or name LIKE  '%".$uncz_search."%' or contents LIKE  '%".$uncz_search."%')
         ".$searchContitions.$fsql_archiv."
         ORDER BY 5 * MATCH(surname)   AGAINST ('+(>$search)' IN BOOLEAN MODE) 
@@ -223,13 +223,13 @@ if ($farchiv==0) {
 /* Skupiny */
 //TODO skupiny nemaji timestamp pro vytvoreni
 if ($farchiv==0) {
-    $fsql_archiv=' AND '.DB_PREFIX.'groups.archived=0 ';
+    $fsql_archiv=' AND '.DB_PREFIX.'group.archived=0 ';
 } else {
     $fsql_archiv='';
 } 
 $sql = "
-    SELECT  ".DB_PREFIX."groups.datum as date_changed, ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.archived AS 'archived'
-    FROM ".DB_PREFIX."groups
+    SELECT  ".DB_PREFIX."group.datum as date_changed, ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.archived AS 'archived'
+    FROM ".DB_PREFIX."group
 	WHERE (title LIKE '%".$uncz_search."%' or contents LIKE  '%".$uncz_search."%')
     ".$searchContitions.$fsql_archiv."
     ORDER BY 5 * MATCH(title) AGAINST ('$search')
@@ -265,9 +265,9 @@ $sql = "
 
 /* Symboly */
 /* Není tu ošetřené, aby to nevyhazovalo symboly od tajných osob. Nutno v budoucnu ošetřit. */          
-$sql= "SELECT ".DB_PREFIX."symbols.created as date_created, ".DB_PREFIX."symbols.modified as date_changed,  ".DB_PREFIX."symbols.id AS 'id', ".DB_PREFIX."symbols.assigned AS 'assigned', ".DB_PREFIX."symbols.secret AS 'secret'
-		FROM ".DB_PREFIX."symbols
-		WHERE (".DB_PREFIX."symbols.desc LIKE '%".$uncz_search."%')
+$sql= "SELECT ".DB_PREFIX."symbol.created as date_created, ".DB_PREFIX."symbol.modified as date_changed,  ".DB_PREFIX."symbol.id AS 'id', ".DB_PREFIX."symbol.assigned AS 'assigned', ".DB_PREFIX."symbol.secret AS 'secret'
+		FROM ".DB_PREFIX."symbol
+		WHERE (".DB_PREFIX."symbol.desc LIKE '%".$uncz_search."%')
         ".$searchContitions."
         ORDER BY 5 * MATCH(`desc`) AGAINST ('$search') DESC
     ";
@@ -302,8 +302,8 @@ $sql= "SELECT ".DB_PREFIX."symbols.created as date_created, ".DB_PREFIX."symbols
           
 /* Poznámky */
 /* POZOR, tady bude hrozny opich udelat ten join pro zobrazeni jen poznamek k nearchivovanym vecem */
-$sql = "SELECT ".DB_PREFIX."notes.datum as date_created, ".DB_PREFIX."notes.title AS 'title', ".DB_PREFIX."notes.id AS 'id', ".DB_PREFIX."notes.idtable AS 'idtable', ".DB_PREFIX."notes.iditem AS 'iditem', ".DB_PREFIX."notes.secret AS 'secret'
-		FROM ".DB_PREFIX."notes
+$sql = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.id AS 'id', ".DB_PREFIX."note.idtable AS 'idtable', ".DB_PREFIX."note.iditem AS 'iditem', ".DB_PREFIX."note.secret AS 'secret'
+		FROM ".DB_PREFIX."note
 		WHERE (title LIKE '%".$uncz_search."%' or note LIKE '%".$uncz_search."%')		
 		".$searchContitions."
 		ORDER BY 5 * MATCH(title) AGAINST ('$search')
@@ -333,8 +333,8 @@ $res = mysqli_query ($database,$sql);
                     switch ($rec['idtable']) {
                         case 1:
                             $res_note = mysqli_query ($database,"
-                                SELECT ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.secret AS 'secret'
-                                FROM ".DB_PREFIX."persons
+                                SELECT ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.secret AS 'secret'
+                                FROM ".DB_PREFIX."person
                                 WHERE id = ".$rec['iditem']);
                             while ($rec_note=mysqli_fetch_assoc ($res_note)) {
                                 $noteid = $rec_note['id'];
@@ -346,8 +346,8 @@ $res = mysqli_query ($database,$sql);
                             break;
                         case 2:
                             $res_note = mysqli_query ($database,"
-                                SELECT ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.secret AS 'secret'
-                                FROM ".DB_PREFIX."groups
+                                SELECT ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.secret AS 'secret'
+                                FROM ".DB_PREFIX."group
                                 WHERE id = ".$rec['iditem']);
                             while ($rec_note=mysqli_fetch_assoc ($res_note)) {
                                 $noteid = $rec_note['id'];
@@ -359,8 +359,8 @@ $res = mysqli_query ($database,$sql);
                             break;
                         case 3:
                             $res_note = mysqli_query ($database,"
-                                SELECT ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."cases.secret AS 'secret'
-                                FROM ".DB_PREFIX."cases
+                                SELECT ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.secret AS 'secret'
+                                FROM ".DB_PREFIX."case
                                 WHERE id = ".$rec['iditem']);
                             while ($rec_note=mysqli_fetch_assoc ($res_note)) {
                                 $noteid = $rec_note['id'];
@@ -372,8 +372,8 @@ $res = mysqli_query ($database,$sql);
                             break;
                         case 4:
                             $res_note = mysqli_query ($database,"
-                                SELECT ".DB_PREFIX."reports.label AS 'label', ".DB_PREFIX."reports.id AS 'id', ".DB_PREFIX."reports.secret AS 'secret'
-                                FROM ".DB_PREFIX."reports
+                                SELECT ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.secret AS 'secret'
+                                FROM ".DB_PREFIX."report
                                 WHERE id = ".$rec['iditem']);
                             while ($rec_note=mysqli_fetch_assoc ($res_note)) {
                                 $noteid = $rec_note['id'];

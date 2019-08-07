@@ -20,7 +20,7 @@ if (isset($_POST['addpoints'])) {
 	if (isset($_POST['addpoints'])) {
 		if (is_numeric($_POST['plus'])) {
 			$ep_result=$_POST['oldpoints']+$_POST['plus'];
-			mysqli_query ($database,"UPDATE ".DB_PREFIX."users SET zlobody=".$ep_result." WHERE id=".$_POST['usrid']."");
+			mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET zlobody=".$ep_result." WHERE id=".$_POST['usrid']."");
 			echo '<div id="obsah"><p>Zlobody přidány.</p></div>';
 		} else {
 			echo '<div id="obsah"><p>Přidané '.$text['point'].'y musí být číselné.</p></div>';
@@ -34,11 +34,11 @@ if (isset($_POST['addpoints'])) {
 	  $f_sort=$custom_Filter['sort'];
 	}
 	switch ($f_sort) {
-	  case 1: $fsql_sort=' '.DB_PREFIX.'users.login ASC '; break;
-	  case 2: $fsql_sort=' '.DB_PREFIX.'users.login DESC '; break;
-	  case 3: $fsql_sort=' '.DB_PREFIX.'users.zlobody ASC '; break;
-	  case 4: $fsql_sort=' '.DB_PREFIX.'users.zlobody DESC '; break;
-	  default: $fsql_sort=' '.DB_PREFIX.'users.login ASC ';
+	  case 1: $fsql_sort=' '.DB_PREFIX.'user.login ASC '; break;
+	  case 2: $fsql_sort=' '.DB_PREFIX.'user.login DESC '; break;
+	  case 3: $fsql_sort=' '.DB_PREFIX.'user.zlobody ASC '; break;
+	  case 4: $fsql_sort=' '.DB_PREFIX.'user.zlobody DESC '; break;
+	  default: $fsql_sort=' '.DB_PREFIX.'user.login ASC ';
 	}
 	// Filtr
 	function filter () {
@@ -58,7 +58,7 @@ if (isset($_POST['addpoints'])) {
 	}
 	filter();
 	// vypis uživatelů
-	$sql="SELECT * FROM ".DB_PREFIX."users WHERE ".DB_PREFIX."users.deleted=0 ORDER BY ".$fsql_sort;
+	$sql="SELECT * FROM ".DB_PREFIX."user WHERE ".DB_PREFIX."user.deleted=0 ORDER BY ".$fsql_sort;
 	$res=mysqli_query ($database,$sql);
 	if (mysqli_num_rows ($res)) {
 	  echo '<div id="obsah">

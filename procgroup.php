@@ -11,30 +11,30 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 
 	if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete'])) {
 	  auditTrail(2, 11, $_REQUEST['delete']);
-	  mysqli_query ($database,"UPDATE ".DB_PREFIX."groups SET deleted=1 WHERE id=".$_REQUEST['delete']);
+	  mysqli_query ($database,"UPDATE ".DB_PREFIX."group SET deleted=1 WHERE id=".$_REQUEST['delete']);
 	  deleteAllUnread (2,$_REQUEST['delete']);
 	  Header ('Location: groups.php');
 	}
         if (isset($_REQUEST['archive']) && is_numeric($_REQUEST['archive'])) {
 	  auditTrail(2, 2, $_REQUEST['archive']);
-	  mysqli_query ($database,"UPDATE ".DB_PREFIX."groups SET archived=1 WHERE id=".$_REQUEST['archive']);
+	  mysqli_query ($database,"UPDATE ".DB_PREFIX."group SET archived=1 WHERE id=".$_REQUEST['archive']);
 	  Header ('Location: groups.php');
 	}
         if (isset($_REQUEST['dearchive']) && is_numeric($_REQUEST['dearchive'])) {
 	  auditTrail(2, 2, $_REQUEST['dearchive']);
-	  mysqli_query ($database,"UPDATE ".DB_PREFIX."groups SET archived=0 WHERE id=".$_REQUEST['dearchive']);
+	  mysqli_query ($database,"UPDATE ".DB_PREFIX."group SET archived=0 WHERE id=".$_REQUEST['dearchive']);
 	  Header ('Location: groups.php');
 	}
 	if (isset($_POST['insertgroup']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret'])) {
 	  $latteParameters['title'] = 'Přidána skupina';
 	  $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 	  mainMenu (3);
-	  $ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".$_POST['title']."')");
+	  $ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."group WHERE UCASE(title)=UCASE('".$_POST['title']."')");
 	  if (mysqli_num_rows ($ures)) {
 	    echo '<div id="obsah"><p>Skupina již existuje, změňte její jméno.</p></div>';
 	  } else {
-			mysqli_query ($database,"INSERT INTO ".DB_PREFIX."groups ( title, contents, datum, iduser, deleted, secret, archived) VALUES('".$_POST['title']."','".$_POST['contents']."','".Time()."','".$usrinfo['id']."','0','".$_POST['secret']."',0)");
-			$gidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".$_POST['title']."')"));
+			mysqli_query ($database,"INSERT INTO ".DB_PREFIX."group ( title, contents, datum, iduser, deleted, secret, archived) VALUES('".$_POST['title']."','".$_POST['contents']."','".Time()."','".$usrinfo['id']."','0','".$_POST['secret']."',0)");
+			$gidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."group WHERE UCASE(title)=UCASE('".$_POST['title']."')"));
 			$gid=$gidarray['id'];
 			auditTrail(2, 3, $gid);
 			if (!isset($_POST['notnew'])) {
@@ -59,12 +59,12 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	  $latteParameters['title'] = 'Uložení změn';
 	  $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 		mainMenu (3);
-	  $ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."groups WHERE UCASE(title)=UCASE('".$_POST['title']."') AND id<>".$_POST['groupid']);
+	  $ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."group WHERE UCASE(title)=UCASE('".$_POST['title']."') AND id<>".$_POST['groupid']);
 	  if (mysqli_num_rows ($ures)) {
 	  	sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./editgroup.php?rid='.$_POST['groupid'].'">úprava skupiny</a> &raquo; <strong>uložení změn neúspěšné</strong>');
 	    echo '<div id="obsah"><p>Skupina již existuje, změňte její jméno.</p></div>';
 	  } else {
-			mysqli_query ($database,"UPDATE ".DB_PREFIX."groups SET title='".$_POST['title']."', contents='".$_POST['contents']."', archived='".(isset($_POST['archived'])?'1':'0')."', secret='".(isset($_POST['secret'])?'1':'0')."' WHERE id=".$_POST['groupid']);
+			mysqli_query ($database,"UPDATE ".DB_PREFIX."group SET title='".$_POST['title']."', contents='".$_POST['contents']."', archived='".(isset($_POST['archived'])?'1':'0')."', secret='".(isset($_POST['secret'])?'1':'0')."' WHERE id=".$_POST['groupid']);
 			if (!isset($_POST['notnew'])) {
 				unreadRecords (2,$_POST['groupid']);
 			}
@@ -93,7 +93,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 		auditTrail(2, 4, $_POST['groupid']);
 		$newname=Time().MD5(uniqid(Time().Rand()));
 		move_uploaded_file ($_FILES['attachment']['tmp_name'],'./files/'.$newname);
-		$sql="INSERT INTO ".DB_PREFIX."data VALUES('','".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','2','".$_POST['groupid']."','".$_POST['secret']."')";
+		$sql="INSERT INTO ".DB_PREFIX."file VALUES('','".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','2','".$_POST['groupid']."','".$_POST['secret']."')";
 		mysqli_query ($database,$sql);
 		if (!isset($_POST['fnotnew'])) {
 			unreadRecords (2,$_POST['groupid']);
@@ -112,10 +112,10 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {
 		auditTrail(2, 5, $_GET['groupid']);
 		if ($usrinfo['right_text']) {
-			$fres=mysqli_query ($database,"SELECT uniquename FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.id=".$_GET['deletefile']);
+			$fres=mysqli_query ($database,"SELECT uniquename FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
 			$frec=mysqli_fetch_assoc ($fres);
 			UnLink ('./files/'.$frec['uniquename']);
-			mysqli_query ($database,"DELETE FROM ".DB_PREFIX."data WHERE ".DB_PREFIX."data.id=".$_GET['deletefile']);
+			mysqli_query ($database,"DELETE FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
 		}
 		Header ('Location: editgroup.php?rid='.$_GET['groupid']);
 	}

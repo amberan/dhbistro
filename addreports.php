@@ -13,7 +13,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 		if ($usrinfo['right_power']==1) {
 			mysqli_query ($database,"DELETE FROM ".DB_PREFIX."ar2c WHERE ".DB_PREFIX."ar2c.idreport=".$_POST['reportid']);
 		} else {
-			mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2c as c, ".DB_PREFIX."cases as p WHERE c.idcase=p.id AND p.secret=0 AND c.idreport=".$_POST['reportid']);
+			mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2c as c, ".DB_PREFIX."case as p WHERE c.idcase=p.id AND p.secret=0 AND c.idreport=".$_POST['reportid']);
 		}
 		if (isset($_POST['case'])) {
 			$case=$_POST['case'];
@@ -34,7 +34,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 		if ($usrinfo['right_power']==1) {
 			mysqli_query ($database,"DELETE FROM ".DB_PREFIX."ar2c WHERE ".DB_PREFIX."ar2c.idcase=".$_POST['caseid']);
 		} else {
-			mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2c as c, ".DB_PREFIX."reports as p WHERE c.idreport=p.id AND p.secret=0 AND c.idcase=".$_POST['caseid']);
+			mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2c as c, ".DB_PREFIX."report as p WHERE c.idreport=p.id AND p.secret=0 AND c.idcase=".$_POST['caseid']);
 		}
 		if (isset($_POST['report'])) {
 			$report=$_POST['report'];

@@ -34,19 +34,19 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 		$f_arch=1;
 	}
 	switch ($f_sort) {
-	  case 1: $fsql_sort=' '.DB_PREFIX.'groups.title ASC '; break;
-	  case 2: $fsql_sort=' '.DB_PREFIX.'groups.title DESC '; break;
-	  default: $fsql_sort=' '.DB_PREFIX.'groups.title ASC ';
+	  case 1: $fsql_sort=' '.DB_PREFIX.'group.title ASC '; break;
+	  case 2: $fsql_sort=' '.DB_PREFIX.'group.title DESC '; break;
+	  default: $fsql_sort=' '.DB_PREFIX.'group.title ASC ';
 	}
 	switch ($f_sec) {
 		case 0: $fsql_sec=''; break;
-		case 1: $fsql_sec=' AND '.DB_PREFIX.'groups.secret=1 '; break;
+		case 1: $fsql_sec=' AND '.DB_PREFIX.'group.secret=1 '; break;
 		default: $fsql_sec='';
 	}
         switch ($f_arch) {
-		case 0: $fsql_arch=' AND '.DB_PREFIX.'groups.archived=0 '; break;
+		case 0: $fsql_arch=' AND '.DB_PREFIX.'group.archived=0 '; break;
 		case 1: $fsql_arch=''; break;
-		default: $fsql_arch=' AND '.DB_PREFIX.'groups.archived=0 ';
+		default: $fsql_arch=' AND '.DB_PREFIX.'group.archived=0 ';
 	}
 	//
 	function filter () {
@@ -73,11 +73,11 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	filter();
 	/* Stary vypis skupin
 	if ($usrinfo['right_power']) {
-		$sql="SELECT ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.archived AS 'archived' FROM ".DB_PREFIX."groups WHERE ".DB_PREFIX."groups.deleted=0".$fsql_sec.$fsql_arch." ORDER BY ".$fsql_sort;
+		$sql="SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.archived AS 'archived' FROM ".DB_PREFIX."group WHERE ".DB_PREFIX."group.deleted=0".$fsql_sec.$fsql_arch." ORDER BY ".$fsql_sort;
 	} else {
-	  $sql="SELECT ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.archived AS 'archived' FROM ".DB_PREFIX."groups WHERE ".DB_PREFIX."groups.deleted=0".$fsql_sec.$fsql_arch." AND ".DB_PREFIX."groups.secret=0 ORDER BY ".$fsql_sort;
+	  $sql="SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.archived AS 'archived' FROM ".DB_PREFIX."group WHERE ".DB_PREFIX."group.deleted=0".$fsql_sec.$fsql_arch." AND ".DB_PREFIX."group.secret=0 ORDER BY ".$fsql_sort;
 	} Alternativni vypis skupin*/
-    $sql="SELECT ".DB_PREFIX."groups.secret AS 'secret', ".DB_PREFIX."groups.title AS 'title', ".DB_PREFIX."groups.id AS 'id', ".DB_PREFIX."groups.archived AS 'archived' FROM ".DB_PREFIX."groups WHERE ".DB_PREFIX."groups.deleted=0".$fsql_sec.$fsql_arch." AND ".DB_PREFIX."groups.secret<=".$usrinfo['right_power']." ORDER BY ".$fsql_sort;
+    $sql="SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.archived AS 'archived' FROM ".DB_PREFIX."group WHERE ".DB_PREFIX."group.deleted=0".$fsql_sec.$fsql_arch." AND ".DB_PREFIX."group.secret<=".$usrinfo['right_power']." ORDER BY ".$fsql_sort;
 	$res=mysqli_query ($database,$sql);
 	if (mysqli_num_rows ($res)) {
 	  echo '<div id="obsah">

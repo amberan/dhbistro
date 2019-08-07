@@ -9,7 +9,7 @@
 	} else {
 		$sqlwhere .= " AND deleted = 0";
 	}
-	$sql = "SELECT * FROM ".DB_PREFIX."persons WHERE $sqlwhere";
+	$sql = "SELECT * FROM ".DB_PREFIX."person WHERE $sqlwhere";
 	$query = mysqli_query($database,$sql);
 	if (mysqli_num_rows($query) > 0) {
 		$person = mysqli_fetch_assoc();
@@ -35,9 +35,9 @@ function newsList($fsql_cat = 1, $fsql_sort = 1) {
     ".DB_PREFIX."news.obsah AS 'obsah',
     ".DB_PREFIX."news.deleted AS 'deleted',
     ".DB_PREFIX."news.kategorie AS 'kategorie',
-    ".DB_PREFIX."users.login AS 'autor'
-        FROM ".DB_PREFIX."news, ".DB_PREFIX."users
-        WHERE ".DB_PREFIX."news.iduser=".DB_PREFIX."users.id $sql_where $fsql_cat
+    ".DB_PREFIX."user.login AS 'autor'
+        FROM ".DB_PREFIX."news, ".DB_PREFIX."user
+        WHERE ".DB_PREFIX."news.iduser=".DB_PREFIX."user.id $sql_where $fsql_cat
         ORDER BY $fsql_sort LIMIT 10";
 	$query = mysqli_query($database,$sql);
 	if (mysqli_num_rows($query)> 0) {

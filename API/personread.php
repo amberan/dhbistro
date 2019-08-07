@@ -15,6 +15,7 @@ if ($usrinfo == null) { //invalid user
     if (isset($_GET[personID])) {
         $output = personRead($_GET['personID']);
     } else {
+        //TODO strankovani
         $output = personList($_GET['where'],$_GET['order']);
     }
     http_response_code(200);

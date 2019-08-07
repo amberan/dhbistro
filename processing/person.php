@@ -9,7 +9,7 @@ function personRead($personid) {
 	} else {
 		$sqlwhere .= " AND deleted = 0";
 	}
-	$sql = "SELECT * FROM ".DB_PREFIX."persons WHERE $sqlwhere";
+	$sql = "SELECT * FROM ".DB_PREFIX."person WHERE $sqlwhere";
 	$query = mysqli_query($database,$sql);
 	if (mysqli_num_rows($query) > 0) {
        $person = mysqli_fetch_assoc($query);
@@ -21,7 +21,8 @@ function personRead($personid) {
 }
 
 function personList($where = 1, $order = 1) {
-	//person list array, filtere by $where, sorted by $order
+    //person list array, filtere by $where, sorted by $order
+    //TODO strankovani
     global $database, $usrinfo, $text;
     if (strlen($where) < 1) { $where = 1;}
     if (strlen($order) < 1) { $order = 1;}
@@ -31,7 +32,7 @@ function personList($where = 1, $order = 1) {
 	} else {
 		$sqlwhere .= " AND deleted = 0";
 	}
-	$sql = "SELECT * FROM ".DB_PREFIX."persons WHERE $sqlwhere ORDER BY $order";
+	$sql = "SELECT * FROM ".DB_PREFIX."person WHERE $sqlwhere ORDER BY $order";
 	$query = mysqli_query($database,$sql);
 	if (mysqli_num_rows($query)> 0) {
 		while ($person = mysqli_fetch_assoc ($query)) {

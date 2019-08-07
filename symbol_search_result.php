@@ -111,8 +111,8 @@ if (isset($_POST['searchit'])) {
 	 					ELSE p.name END AS name,
 					CASE WHEN ISNULL(p.surname) THEN \"symbol\"
      					ELSE p.surname END AS surname
-				FROM ".DB_PREFIX."symbols AS s
-				LEFT JOIN ".DB_PREFIX."persons AS p
+				FROM ".DB_PREFIX."symbol AS s
+				LEFT JOIN ".DB_PREFIX."person AS p
 				ON s.id = p.symbol				
 				) AS searchsymbol
 				WHERE deleted=0

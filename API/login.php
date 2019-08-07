@@ -7,12 +7,12 @@ Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
 
 if (isset($_GET['username']) and isset($_GET['password'])) { 
     # TODO pridat kontrolu na pravo API
-    $usersql=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."users WHERE login='".$_GET['username']."' AND pwd=md5('".$_GET['password']."') and deleted=0 and suspended=0 "); 
+    $usersql=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."user WHERE login='".$_GET['username']."' AND pwd=md5('".$_GET['password']."') and deleted=0 and suspended=0 "); 
 	if($userresult=mysqli_fetch_array ($usersql)) {
         session_regenerate_id();
         session_destroy();
         session_start();
-		mysqli_query ($database,"UPDATE ".DB_PREFIX."users SET sid='".session_id()."', lastlogon=".Time().", ip='".$_SERVER['REMOTE_ADDR']."', user_agent='".$_SERVER['HTTP_USER_AGENT']."' WHERE id=".$userresult['id']);
+		mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET sid='".session_id()."', lastlogon=".Time().", ip='".$_SERVER['REMOTE_ADDR']."', user_agent='".$_SERVER['HTTP_USER_AGENT']."' WHERE id=".$userresult['id']);
         Debugger::log("API-LOGIN SUCCESS: ".$_GET['username']);
         http_response_code(202);
         header('Content-Type: application/json');

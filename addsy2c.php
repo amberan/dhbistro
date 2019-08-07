@@ -12,11 +12,11 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	mainMenu (5);
         $custom_Filter = custom_Filter(21);
 	sparklets ('<a href="./symbols.php">nepřiřazené symboly</a> &raquo; <strong>přiřazení symbolu k případu</strong>');
-	$sql="SELECT created_by FROM ".DB_PREFIX."symbols WHERE id=".$_REQUEST['rid'];
+	$sql="SELECT created_by FROM ".DB_PREFIX."symbol WHERE id=".$_REQUEST['rid'];
 	$autharray=mysqli_fetch_assoc (mysqli_query ($database,$sql));
 	$author=$autharray['created_by'];
 	if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || $usrinfo['id']==$author)) {
-	  $res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."reports WHERE id=".$_REQUEST['rid']);
+	  $res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']);
 		if ($rec=mysqli_fetch_assoc ($res)) {
 ?>
 
@@ -40,9 +40,9 @@ if (!isset($custom_Filter['sort'])) {
 	$f_sort=$custom_Filter['sort'];
 }
 switch ($f_sort) {
-	case 1: $fsql_sort=' '.DB_PREFIX.'cases.title ASC '; break;
-	case 2: $fsql_sort=' '.DB_PREFIX.'cases.title DESC '; break;
-	default: $fsql_sort=' '.DB_PREFIX.'cases.title ASC ';
+	case 1: $fsql_sort=' '.DB_PREFIX.'case.title ASC '; break;
+	case 2: $fsql_sort=' '.DB_PREFIX.'case.title DESC '; break;
+	default: $fsql_sort=' '.DB_PREFIX.'case.title ASC ';
 }
 //
 function filter () {
@@ -63,9 +63,9 @@ filter(); ?>
 <form action="addsymbols.php" method="post" class="otherform">
 <?php // vypis pripadu
 if ($usrinfo['right_power']) {
-	$sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."symbol2all.iduser FROM ".DB_PREFIX."cases LEFT JOIN ".DB_PREFIX."symbol2all ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."cases.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." WHERE ".DB_PREFIX."cases.deleted=0 ORDER BY ".$fsql_sort;
+	$sql="SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."symbol2all.iduser FROM ".DB_PREFIX."case LEFT JOIN ".DB_PREFIX."symbol2all ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."case.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." WHERE ".DB_PREFIX."case.deleted=0 ORDER BY ".$fsql_sort;
 } else {
-	$sql="SELECT ".DB_PREFIX."cases.status AS 'status', ".DB_PREFIX."cases.secret AS 'secret', ".DB_PREFIX."cases.title AS 'title', ".DB_PREFIX."cases.id AS 'id', ".DB_PREFIX."symbol2all.iduser FROM ".DB_PREFIX."cases LEFT JOIN ".DB_PREFIX."symbol2all ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."cases.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." WHERE ".DB_PREFIX."cases.deleted=0 AND ".DB_PREFIX."cases.secret=0 ORDER BY ".$fsql_sort;
+	$sql="SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."symbol2all.iduser FROM ".DB_PREFIX."case LEFT JOIN ".DB_PREFIX."symbol2all ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."case.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." WHERE ".DB_PREFIX."case.deleted=0 AND ".DB_PREFIX."case.secret=0 ORDER BY ".$fsql_sort;
 }
 $res=mysqli_query ($database,$sql);
 ?>

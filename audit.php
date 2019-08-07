@@ -49,7 +49,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 		global $database;
 		if ($idrecord>0) {
 			switch ($type) {
-				case 1: $sql_type="SELECT ".DB_PREFIX."persons.name as 'name', ".DB_PREFIX."persons.surname as 'surname' FROM ".DB_PREFIX."persons WHERE ".DB_PREFIX."persons.id='".$idrecord."'";
+				case 1: $sql_type="SELECT ".DB_PREFIX."person.name as 'name', ".DB_PREFIX."person.surname as 'surname' FROM ".DB_PREFIX."person WHERE ".DB_PREFIX."person.id='".$idrecord."'";
 						$res_type=mysqli_query ($database,$sql_type);
 						if (mysqli_num_rows ($res_type)) {
 							while ($rec_type=mysqli_fetch_assoc ($res_type)) {
@@ -59,7 +59,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 							$name='neznámý';
 						}
 						break;
-				case 2: $sql_type="SELECT ".DB_PREFIX."groups.title as 'name' FROM ".DB_PREFIX."groups WHERE ".DB_PREFIX."groups.id='".$idrecord."'";
+				case 2: $sql_type="SELECT ".DB_PREFIX."group.title as 'name' FROM ".DB_PREFIX."group WHERE ".DB_PREFIX."group.id='".$idrecord."'";
 						$res_type=mysqli_query ($database,$sql_type);
 						if (mysqli_num_rows ($res_type)) {
 							while ($rec_type=mysqli_fetch_assoc ($res_type)) {
@@ -69,7 +69,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 							$name='neznámý';
 						}
 						break;
-				case 3: $sql_type="SELECT ".DB_PREFIX."cases.title as 'name' FROM ".DB_PREFIX."cases WHERE ".DB_PREFIX."cases.id='".$idrecord."'";
+				case 3: $sql_type="SELECT ".DB_PREFIX."case.title as 'name' FROM ".DB_PREFIX."case WHERE ".DB_PREFIX."case.id='".$idrecord."'";
 						$res_type=mysqli_query ($database,$sql_type);
 						if (mysqli_num_rows ($res_type)) {
 							while ($rec_type=mysqli_fetch_assoc ($res_type)) {
@@ -79,7 +79,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 							$name='neznámý';
 						}
 						break;
-				case 4: $sql_type="SELECT ".DB_PREFIX."reports.label as 'name' FROM ".DB_PREFIX."reports WHERE ".DB_PREFIX."reports.id='".$idrecord."'";
+				case 4: $sql_type="SELECT ".DB_PREFIX."report.label as 'name' FROM ".DB_PREFIX."report WHERE ".DB_PREFIX."report.id='".$idrecord."'";
 						$res_type=mysqli_query ($database,$sql_type);
 						if (mysqli_num_rows ($res_type)) {
 							while ($rec_type=mysqli_fetch_assoc ($res_type)) {
@@ -90,7 +90,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 						}
 						break;
 				case 7: $name=$idrecord; break;
-				case 8: $sql_type="SELECT ".DB_PREFIX."users.login as 'name' FROM ".DB_PREFIX."users WHERE ".DB_PREFIX."users.id='".$idrecord."'";
+				case 8: $sql_type="SELECT ".DB_PREFIX."user.login as 'name' FROM ".DB_PREFIX."user WHERE ".DB_PREFIX."user.id='".$idrecord."'";
 						$res_type=mysqli_query ($database,$sql_type);
 						if (mysqli_num_rows ($res_type)) {
 							while ($rec_type=mysqli_fetch_assoc ($res_type)) {
@@ -243,7 +243,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 		<select name="user" id="user">
 	  	<option value=0 '.(($f_user==0)?' selected="selected"':'').'>všemi</option>';
  	
-		$sql_u="SELECT id, login FROM ".DB_PREFIX."users WHERE deleted=0 ORDER BY login ASC";
+		$sql_u="SELECT id, login FROM ".DB_PREFIX."user WHERE deleted=0 ORDER BY login ASC";
 		$res_u=mysqli_query ($database,$sql_u);
 		while ($rec_u=mysqli_fetch_assoc ($res_u)) {
 			echo '<option value="'.$rec_u['id'].'"'.(($rec_u['id']==$f_user)?' selected="selected"':'').'>'.$rec_u['login'].'</option>';

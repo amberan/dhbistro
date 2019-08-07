@@ -11,7 +11,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
         $custom_Filter = custom_Filter(19);
 	sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>úprava skupiny</strong> &raquo; <strong>přidání osob</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
-	  $res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."groups WHERE id=".$_REQUEST['rid']);
+	  $res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."group WHERE id=".$_REQUEST['rid']);
 		if ($rec=mysqli_fetch_assoc ($res)) {
 ?>
 
@@ -55,19 +55,19 @@ Do skupiny můžete přiřadit osoby, které jsou jejími členy.
 		$farchiv=1;
 	}
 	switch ($f_sort) {
-	  case 1: $fsql_sort=' '.DB_PREFIX.'persons.surname ASC, '.DB_PREFIX.'persons.name ASC '; break;
-	  case 2: $fsql_sort=' '.DB_PREFIX.'persons.surname DESC, '.DB_PREFIX.'persons.name DESC '; break;
-	  default: $fsql_sort=' '.DB_PREFIX.'persons.surname ASC, '.DB_PREFIX.'persons.name ASC ';
+	  case 1: $fsql_sort=' '.DB_PREFIX.'person.surname ASC, '.DB_PREFIX.'person.name ASC '; break;
+	  case 2: $fsql_sort=' '.DB_PREFIX.'person.surname DESC, '.DB_PREFIX.'person.name DESC '; break;
+	  default: $fsql_sort=' '.DB_PREFIX.'person.surname ASC, '.DB_PREFIX.'person.name ASC ';
 	}
 	switch ($fdead) {
-		case 0: $fsql_dead=' AND '.DB_PREFIX.'persons.dead=0 '; break;
+		case 0: $fsql_dead=' AND '.DB_PREFIX.'person.dead=0 '; break;
 		case 1: $fsql_dead=''; break;
-		default: $fsql_dead=' AND '.DB_PREFIX.'persons.dead=0 ';
+		default: $fsql_dead=' AND '.DB_PREFIX.'person.dead=0 ';
 	}
 	switch ($farchiv) {
-		case 0: $fsql_archiv=' AND '.DB_PREFIX.'persons.archiv=0 '; break;
+		case 0: $fsql_archiv=' AND '.DB_PREFIX.'person.archiv=0 '; break;
 		case 1: $fsql_archiv=''; break;
-		default: $fsql_archiv=' AND '.DB_PREFIX.'persons.archiv=0 ';
+		default: $fsql_archiv=' AND '.DB_PREFIX.'person.archiv=0 ';
 	}
 	// formular filtru
 	function filter () {
@@ -95,9 +95,9 @@ Do skupiny můžete přiřadit osoby, které jsou jejími členy.
 	filter();
 	// vypis osob
 	if ($usrinfo['right_power']) {
-		$sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.symbol AS 'symbol', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."persons LEFT JOIN ".DB_PREFIX."g2p ON ".DB_PREFIX."g2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." WHERE ".DB_PREFIX."persons.deleted=0 ".$fsql_dead.$fsql_archiv." ORDER BY ".$fsql_sort;
+		$sql="SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."person LEFT JOIN ".DB_PREFIX."g2p ON ".DB_PREFIX."g2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." WHERE ".DB_PREFIX."person.deleted=0 ".$fsql_dead.$fsql_archiv." ORDER BY ".$fsql_sort;
 	} else {
-	  $sql="SELECT ".DB_PREFIX."persons.phone AS 'phone', ".DB_PREFIX."persons.secret AS 'secret', ".DB_PREFIX."persons.name AS 'name', ".DB_PREFIX."persons.surname AS 'surname', ".DB_PREFIX."persons.id AS 'id', ".DB_PREFIX."persons.symbol AS 'symbol', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."persons LEFT JOIN ".DB_PREFIX."g2p ON ".DB_PREFIX."g2p.idperson=".DB_PREFIX."persons.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." WHERE ".DB_PREFIX."persons.deleted=0 ".$fsql_dead.$fsql_archiv." AND ".DB_PREFIX."persons.secret=0 ORDER BY ".$fsql_sort;
+	  $sql="SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."person LEFT JOIN ".DB_PREFIX."g2p ON ".DB_PREFIX."g2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." WHERE ".DB_PREFIX."person.deleted=0 ".$fsql_dead.$fsql_archiv." AND ".DB_PREFIX."person.secret=0 ORDER BY ".$fsql_sort;
 	}
 	$res=mysqli_query ($database,$sql);
 ?>
