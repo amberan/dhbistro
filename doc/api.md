@@ -14,12 +14,13 @@
 "sessionID": "ev3pcioj5olqng8s865ukg5kbu",
 "TTL": 1565204942
 }
+```
+**ERROR RESPONSE**  
 ```json
 {
 "error": "You are unauthorized to make this request!"
 }
 ```
-**ERROR RESPONSE**  
 **SAMPLE CALL**  
 /API/login.php?username=aaa&password=aaa
 
