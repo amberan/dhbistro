@@ -25,6 +25,10 @@ Jedná se o systém používany organizacemi (Denní Hlídka, Noční Hlídka) v
 
 ### [API](doc/api.md)
 
+### [uzivatelska prava](doc/rights.md)
+
+### [ciselniky](doc/enums.md)
+
 ### TEST PLATFORMS
 http://nhtestbistro.talmahera.eu/  
 ftp://www.talmahera.eu/nhtestbistro.talmahera.eu/error_log  
