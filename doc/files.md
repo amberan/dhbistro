@@ -1,16 +1,20 @@
-### OBSAH
+# BISTRO files
+
 soubor                  | obsah                                     | obsluhovany objekt
 --- | --- | ---
 API/include.php         | API nacitani generik
 API/login.php           | API login
 API/logout.php          | API logout
 API/personread.php      | API personRead,personList                 | osoba
+--- | --- | ---
 css						| **styly**
 --- | --- | ---
 customs					| **individualni texty a obrazky pro jednotlive instance**
 custom/text-DH.php		| texty pro Denni Hlidku
 custom/text-enigma.php	| texty pro Enigma
 custom/text-NH.php		| texty pro Nocni Hlidku
+--- | --- | ---
+doc                     | **dokumentace**
 --- | --- | ---
 files					| **prilohy**
 files/backups/*			| generovane zalohy SQL.GZ
@@ -38,20 +42,17 @@ js/mrFixit.js			| nevim, vyzaduje jQuery
 js/timeout.js.php		| timeout pro ukladaci disketu
 js/tinymce.init.js		| iniciace a konfigurace TinyMCE
 --- | --- | ---
-log 					| **adresar pro logovani**
-log/error.log			| PHP Notice, Warning
-log/exception.log		| PHP kolapsy
-log/info.log			| vystup Tracy logovani
+log 					| **vystupy z logovani**
 --- | --- | ---
 processing/users.php    | zpracovani uzivatele                      | uzivatele
 processing/settings.php	| zpracovani osobnich nastaveni
 processing/person.php	| opeace s objekty osoby					| osoba
 --- | --- | ---
-sql						| **SQL updates, defaults**
+sql						| **SQL updaty, prazdna DB**
 --- | --- | ---
 templates				| **LATTE templaty**
 --- | --- | ---
-vendor					| **pouzivane knihovny "composer"
+vendor					| **pouzivane knihovny "composer"**
 --- | --- | ---
 addar2c.php             | uprava hlaseni - report 2 case            | report / pripad
 addc2ar.php             | uprava hlaseni - case 2 report            | pripad / report
