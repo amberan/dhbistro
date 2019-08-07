@@ -1,10 +1,4 @@
 <?php
 $text['point']='bludišťák';
 $text['menu-zlobody']='Bludišťáky';
-$text['hlaseniV']='Hlášení';
-$text['hlaseniM']='hlášení';
-$text['jmeno']='Jméno';
-$text['heslo']='Heslo';
-$text['prihlasit']='Přihlásit';
-$text['bistro']='BIStro';
 ?>

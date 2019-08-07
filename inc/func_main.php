@@ -14,7 +14,7 @@ $config['folder_logs'] = $_SERVER['DOCUMENT_ROOT'].'/log/'; // adresar pro tracy
 $config['folder_custom'] = $_SERVER['DOCUMENT_ROOT'].'/custom/'; // adresar pro customizace (dh, nh, enigma....)
 $config['folder_templates'] = $_SERVER['DOCUMENT_ROOT'].'/templates/'; // adresar pro latte templaty
 $config['folder_cache'] = $_SERVER['DOCUMENT_ROOT'].'/cache/'; // adresar pro latte cache
-require_once($config['folder_custom'].'text-DH.php'); // defaultni texty - nasledne pretizeno hodnotami nactenymi v ramci inc/database.php
+require_once($config['folder_custom'].'text.php'); // defaultni texty - nasledne pretizeno hodnotami nactenymi v ramci inc/database.php
 
 // *** TECHNICAL LIBRARIES
     require_once($_SERVER['DOCUMENT_ROOT'].'/inc/platform.php');

@@ -1,17 +1,8 @@
 <?php
-/* example usage:
-$searchPerson = personList(" name LIKE '%pepa%' OR surname LIKE '%pepa%','datum DESC' );
-if (is_string($searchPerson)) {
-	$latteParameters['searchPersonMessage'] = $searchPerson; 
-} else {
-	$latteParameters['searchPersonList'] = $searchPerson;
-}
-*/
-
 
 function personRead($personid) {
-	//vraci jednu osobu; aplikuje prava podle uzivatele
-	global $database, $usrinfo; 
+	//one person array
+	global $database, $usrinfo, $text; 
 	$sqlwhere = " id = $personid AND secret <=".$usrinfo['right_power'];
 	if (isset($usrinfo['right_admin']) AND $usrinfo['right_admin'] > 0) {
 		$sqlwhere .= " AND deleted = 1";
@@ -22,15 +13,16 @@ function personRead($personid) {
 	$query = mysqli_query($database,$sql);
 	if (mysqli_num_rows($query) > 0) {
        $person = mysqli_fetch_assoc($query);
+       unset ($person['deleted']);
 	} else {
-		$person = "Požadovaný záznam nebyl nalezen!";
+		$person[] = $text['zaznamnenalezen'];
     }
 	return $person;
 }
 
 function personList($where = 1, $order = 1) {
-	//vraci seznam osob; aplikuje SQL WHERE podle $where a prava podle uzivatele; radi podle $order
-    global $database, $usrinfo; 
+	//person list array, filtere by $where, sorted by $order
+    global $database, $usrinfo, $text;
     if (strlen($where) < 1) { $where = 1;}
     if (strlen($order) < 1) { $order = 1;}
 	$sqlwhere = " $where AND secret <=".$usrinfo['right_power'];
@@ -39,14 +31,15 @@ function personList($where = 1, $order = 1) {
 	} else {
 		$sqlwhere .= " AND deleted = 0";
 	}
-	echo $sql = "SELECT * FROM ".DB_PREFIX."persons WHERE $sqlwhere ORDER BY $order";
+	$sql = "SELECT * FROM ".DB_PREFIX."persons WHERE $sqlwhere ORDER BY $order";
 	$query = mysqli_query($database,$sql);
 	if (mysqli_num_rows($query)> 0) {
 		while ($person = mysqli_fetch_assoc ($query)) {
+            unset ($person['deleted']);
 			$personList[] = $person;
 		}
 	} else {
-		$personList = "Výpis neobsahuje žádné položky!";
+		$personList[] = $text['prazdnyvypis'];
 	}
 	return $personList;
 }

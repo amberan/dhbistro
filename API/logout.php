@@ -11,7 +11,7 @@ if (isset($_GET['sessionID'])) {
         Debugger::log("API-LOGOUT SUCCESS: ".$_GET['sessionID']);
         http_response_code(202);
         header('Content-Type: application/json');
-        echo json_encode(array( 'message' => 'LOGOUT SUCCESSFULL '.$_GET['sessionID']));
+        echo json_encode(array( 'message' => $text['odhlaseniuspesne']));
     } 
 }
 ?>

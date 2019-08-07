@@ -1,4 +1,7 @@
 <?php
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+
 //vytvoreni zalohy
 global $database,$config;
 
@@ -77,7 +80,8 @@ function  zalohuj($soubor=""){
 	$update_file = $_SERVER['DOCUMENT_ROOT']."/sql/update-".$config['version'].".php";
 	if (round($last_backup,-5)<round(time(),-5) or file_exists($update_file)) {
 		$backup_file=$_SERVER['DOCUMENT_ROOT'].$config['folder_backup']."backup".time().".sql.gz";
-		zalohuj($backup_file);
+        zalohuj($backup_file);
+        Debugger::log("BACKUP GENERATED: ".$backup_file."[".(filesize($backup_file)/1024)."kB]");
 		//pouze pokud je zaloha vetsi 4kB
 		if (filesize($backup_file) > 4096) {
 			$check_sql=mysqli_query($database,"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."users' and column_name='sid'");
