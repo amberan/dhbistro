@@ -1,5 +1,16 @@
 # BISTRO changelog 
 
+- **1.6.0**
+	funkce pro nacitani osob  (processing/person.php)
+	automaticky pull z gitlabu  
+	promazani duplicitnich zaznamu v tabulce neprectenych  
+	zobrazovani poctu neprectenych polozek v menu  
+	obrazky presunuty do adresare images  
+    improved backup (fast restore)  
+    API login, logout, personRead  
+    rozepsani dokumentace  
+    SoapUI testsuite pro API  
+    updater - table rename - loggedin, map, backups, cases, data, groups, notes, persons, reports, tasks, symbols, users
 - **1.5.8 HLIDKY 3/2019**
 	LATTE template - login, header, footer  
 	HTMLtoMD convertor  

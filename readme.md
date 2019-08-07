@@ -10,17 +10,8 @@ Jedná se o systém používany organizacemi (Denní Hlídka, Noční Hlídka) v
 - zpracovani osob + API - strankovani
 - upravit system prav: pridat pravo na API, utajeni na ruzne stupne, ?prejmenovani?
 
-### Work in progress: 1.6.0  
-	funkce pro nacitani osob  (processing/person.php)
-	automaticky pull z gitlabu  
-	promazani duplicitnich zaznamu v tabulce neprectenych  
-	zobrazovani poctu neprectenych polozek v menu  
-	obrazky presunuty do adresare images  
-    improved backup (fast restore)  
-    API login, logout, personRead  
-    rozepsani dokumentace  
-    SoapUI testsuite pro API  
-    updater - table rename - loggedin, map, backups, cases, data, groups, notes, persons, reports, tasks, symbols, users
+### Work in progress: 1.6.1
+	
 
 ### [changelog](doc/changelog.md)
 

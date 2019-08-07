@@ -1,7 +1,7 @@
 <?php 
 session_start();
 	
-$config['version']='1.6.0';  // verze bistra TODO hotfix pro vyvoj 1.6.0
+$config['version']='1.6.1';  // verze bistra
 define ('DB_PREFIX','nw_'); // prefix tabulek
 $config['dbpass'] = "/inc/important.php"; // soubor s heslem k databazi - na druhem radku
 $config['page_prefix']=''; // uri cesta mezi domenou a adresarem bistra
