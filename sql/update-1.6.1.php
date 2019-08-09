@@ -133,6 +133,27 @@ Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
 
 $alter = $alter_password = 0;
 
+// RENAME TABLE - ALTER TABLE `database`.`oldtable` RENAME TO `database`.`newtable';
+foreach($rename_table as $old => $new) {
+    $check_new_sql="SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$new'";
+    $check_old_sql="SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$old'";
+    $check_new=mysqli_query($database,$check_new_sql);
+    $check_old=mysqli_query($database,$check_old_sql);
+    if((mysqli_num_rows($check_new)== 0) AND (mysqli_num_rows($check_old) != 0)) {
+        $rename_sql = " ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$old RENAME TO ".$config['dbdatabase'].".".DB_PREFIX."$new";
+        mysqli_query($database,$rename_sql);
+        unset ($check_new);
+        unset ($check_old);
+        $check_new=mysqli_query($database,$check_new_sql);
+        $check_old=mysqli_query($database,$check_old_sql);
+            if ((mysqli_num_rows($check_new)!= 0) AND (mysqli_num_rows($check_old) == 0)) { 
+            Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$rename_sql);
+            $alter++;
+        }
+    }
+}
+
+
 // ADD COLUMN
 foreach(array_keys($add_column) as $table) {
     foreach(array_keys($add_column[$table]) as $column) {
@@ -177,27 +198,6 @@ foreach(array_keys($alter_column) as $table) {
     }
 }
 
-// RENAME TABLE - ALTER TABLE `database`.`oldtable` RENAME TO `database`.`newtable';
-foreach($rename_table as $old => $new) {
-    $check_new_sql="SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$new'";
-    $check_old_sql="SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$old'";
-    $check_new=mysqli_query($database,$check_new_sql);
-    $check_old=mysqli_query($database,$check_old_sql);
-    if((mysqli_num_rows($check_new)== 0) AND (mysqli_num_rows($check_old) != 0)) {
-        $rename_sql = " ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$old RENAME TO ".$config['dbdatabase'].".".DB_PREFIX."$new";
-        mysqli_query($database,$rename_sql);
-        unset ($check_new);
-        unset ($check_old);
-        $check_new=mysqli_query($database,$check_new_sql);
-        $check_old=mysqli_query($database,$check_old_sql);
-            if ((mysqli_num_rows($check_new)!= 0) AND (mysqli_num_rows($check_old) == 0)) { 
-            Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$rename_sql);
-            $alter++;
-        }
-    }
-}
-
-
 //md5 passwords
 $password_sql=mysqli_query($database,"SELECT pwd FROM ".DB_PREFIX."user");
 while($password_data = mysqli_fetch_array($password_sql)) {
@@ -215,14 +215,11 @@ if($alter_password > 0) {
 	}
 }
 
-
 // CONVERT TO MARKDOWN
 use League\HTMLToMarkdown\HtmlConverter;
 $converter = new HtmlConverter(array('strip_tags' => true)); //https://github.com/thephpleague/html-to-markdown
 foreach($to_MD as $key  => $value) {
         $preMD_sql = mysqli_query($database,"SELECT ".$value[1].", ".$value[2]." FROM ".DB_PREFIX.$value[0]." WHERE ".$value[3]." is null");
-        echo "SELECT ".$value[1].", ".$value[2]." FROM ".DB_PREFIX.$value[0]." WHERE ".$value[3]." = ''";
-        var_dump($preMD_sql);
 		while($preMD = mysqli_fetch_array($preMD_sql)) {
 			$MDcolumn = $converter->convert( str_replace('\'', '', $preMD[$value[2]]));
 			Debugger::log('UPDATER '.$config['version'].' Markdown conversion ['.DB_PREFIX.$value[0].'.'.$preMD[$value[1]].']: '.$preMD[$value[2]].' ##### TO ##### '.$MDcolumn);
