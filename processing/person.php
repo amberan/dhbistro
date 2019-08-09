@@ -1,5 +1,8 @@
 <?php
 
+//TODO funkce pro prevod id fotek s symbolu na odkazy
+
+
 function personRead($personid) {
 	//one person array
 	global $database, $usrinfo, $text; 
@@ -26,7 +29,7 @@ function personList($where = 1, $order = 1) {
     global $database, $usrinfo, $text;
     if (strlen($where) < 1) { $where = 1;}
     if (strlen($order) < 1) { $order = 1;}
-	$sqlwhere = " $where AND secret <=".$usrinfo['right_power'];
+	$sqlwhere = " ($where) AND secret <=".$usrinfo['right_power'];
 	if (isset($usrinfo['right_admin']) AND $usrinfo['right_admin'] > 0) {
 		$sqlwhere .= " AND deleted = 1";
 	} else {

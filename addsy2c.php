@@ -21,13 +21,6 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 ?>
 
 <div id="obsah">
-	<script type="text/javascript">
-	<!--
-	window.onload=function(){
-		FixitRight('button-floating-uloz', 'in-form-table');
-	};
-	-->
-	</script>
 <p>
 Symbol můžete přiřadit k případu (či případům), u kterých se vyskytoval.
 </p>

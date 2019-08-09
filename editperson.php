@@ -21,13 +21,6 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
                     sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>úprava osoby</strong>');
 ?>
 <div id="obsah">
-	<script type="text/javascript">
-	<!--
-	window.onload=function(){
-		//FixitRight('submitbutton', 'ramecek');
-	};
-	-->
-	</script>
 <fieldset id="ramecek"><legend><strong>Úprava osoby: <?php echo(StripSlashes($rec_p['surname']).', '.StripSlashes($rec_p['name'])); ?></strong></legend>
 	<p id="top-text">Portréty nahrávejte pokud možno ve velikosti 100x130 bodů, symboly ve velikosti 100x100 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen portréty, o rozmazané postavy nebude nouze v přílohách. Symboly rovněž nahrávejte jasně rozeznatelné.</p>
 	<form action="procperson.php" method="post" id="inputform" enctype="multipart/form-data">

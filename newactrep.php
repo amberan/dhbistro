@@ -59,13 +59,6 @@ function date_picker($name, $startyear=NULL, $endyear=NULL)
 }
 ?>
 <div id="obsah">
-	<script type="text/javascript">
-	<!--
-	window.onload=function(){
-		//FixitRight('submitbutton', 'ramecek');
-	};
-	-->
-	</script>
 <form action="procactrep.php" method="post" id="inputform">
 <fieldset id="ramecek"><legend><strong>Nové hlášení z <?php echo (($type==1)?'výjezdu':(($type==2)?'výslechu':'#&*'));?></strong></legend>
 	<fieldset><legend><strong>Základní údaje</strong></legend>

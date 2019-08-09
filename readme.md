@@ -1,6 +1,6 @@
 # BISTRO
 
-Tento software byl vyvynut pro potřeby LARPu [Pražská Hlídka](http://www.prazskahlidka.cz/).  
+Tato webovka byla vyvynuta pro potřeby LARPu [Pražská Hlídka](http://www.prazskahlidka.cz/).  
 Jedná se o systém používany organizacemi (Denní Hlídka, Noční Hlídka) ve hře. Který pomáhá udržovat informace o jednotlivých osobách, skupinách, akcích atp.
 
 ### TODO ???
@@ -11,7 +11,9 @@ Jedná se o systém používany organizacemi (Denní Hlídka, Noční Hlídka) v
 - upravit system prav: pridat pravo na API, utajeni na ruzne stupne, ?prejmenovani?
 
 ### Work in progress: 1.6.1
-	
+- [TUI.editor](https://github.com/nhn/tui.editor) CDN verze  
+- Latte - Nastaveni 
+- [html-to-markdown](https://github.com/thephpleague/html-to-markdown) DB_PREFIX."users".plan > DB_PREFIX."users".plan_md
 
 ### [changelog](doc/changelog.md)
 

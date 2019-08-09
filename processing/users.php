@@ -107,13 +107,13 @@ else if ((isset($_POST['userid']) AND isset($_POST['edituser']) AND !is_numeric(
 	} elseif (isset($_REQUEST['editsettings']) && isset($_REQUEST['soucheslo']) && $_REQUEST['soucheslo']<>'') {
 		$currentpwd=mysqli_fetch_assoc (mysqli_query ($database,"SELECT pwd FROM ".DB_PREFIX."user WHERE sid='".$_SESSION['sid']."'"));
 		if ($currentpwd['pwd'] == md5($_REQUEST['soucheslo'])) {
-			mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET pwd=md5('".$_POST['heslo']."'), plan='".$_REQUEST['plan']."', timeout='".$_REQUEST['timeout']."' WHERE sid='".$_SESSION['sid']."'");
+			mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET pwd=md5('".$_POST['heslo']."'), plan_md='".$_REQUEST['plan']."', timeout='".$_REQUEST['timeout']."' WHERE sid='".$_SESSION['sid']."'");
 			$_SESSION['message'] = "Nastavení s novým heslem uloženo.";
 		} else {
 			$_SESSION['message'] = "Nesouhlasí staré heslo, nastavení nebylo uloženo.";
 		}
 	} elseif (isset($_REQUEST['editsettings'])) {
-		mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET plan='".$_REQUEST['plan']."', timeout='".$_REQUEST['timeout']."' WHERE sid='".$_SESSION['sid']."'");
+		mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET plan_md='".$_REQUEST['plan']."', timeout='".$_REQUEST['timeout']."' WHERE sid='".$_SESSION['sid']."'");
 		$_SESSION['message'] = "Nastavení uloženo.";
 		read_user();
 } 

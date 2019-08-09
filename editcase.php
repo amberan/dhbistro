@@ -35,13 +35,6 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	} else {
 	?>
 <div id="obsah">
-	<script type="text/javascript">
-	<!--
-	window.onload=function(){
-		//FixitRight('submitbutton', 'ramecek');
-	};
-	-->
-	</script>
 	<fieldset id="ramecek"><legend><strong>Úprava případu: <?php echo(StripSlashes($rec_c['title'])); ?></strong></legend>
 		<form action="proccase.php" method="post" id="inputform">
 			<div id="info">

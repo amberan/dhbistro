@@ -45,7 +45,8 @@ require_once($config['folder_custom'].'text.php'); // defaultni texty - nasledne
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/menu.php');
 	$latteParameters = [ //pole promeny pro latte
 		'text' => $text, //textove pole ./custom/text-*.php
-		'config' => $config, //skupiny parametry ./inc/func_main.php
+        'config' => $config, //skupiny parametry ./inc/func_main.php
+        'username' => $usrinfo['login'], 
 	];
 
 // timestamp konvertovan do podoby pro web

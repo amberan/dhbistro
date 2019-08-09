@@ -16,13 +16,6 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 ?>
 
 <div id="obsah">
-	<script type="text/javascript">
-	<!--
-	window.onload=function(){
-		FixitRight('button-floating-uloz', 'in-form-table');
-	};
-	-->
-	</script>
 <p>
 Do skupiny můžete přiřadit osoby, které jsou jejími členy.
 </p>

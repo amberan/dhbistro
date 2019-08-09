@@ -98,13 +98,6 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id']==
 	$ayear=(Date ('Y',$rec_actr['adatum']));
 	?>
 <div id="obsah">
-	<script type="text/javascript">
-	<!--
-	window.onload=function(){
-		//FixitRight('submitbutton', 'ramecek');
-	};
-	-->
-	</script>
 <form action="procactrep.php" method="post" id="inputform"> <?php // TODO timeout ?>
 <fieldset id="ramecek"><legend><strong>Úprava hlášení<?php echo (($type==1)?' z výjezdu':(($type==2)?' z výslechu':''));?></strong></legend>
 	<fieldset><legend><strong>Základní údaje</strong></legend>

@@ -16,14 +16,6 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 ?>
 
 <div id="obsah">
-    <script type="text/javascript">
-    <!--
-    window.onload=function(){
-            FixitRight('button-floating-uloz', 'in-form-table');
-    };
-    -->
-    </script>
-    
 <p>
 K případu můžete přiřadit osoby, kterých se týká nebo kterých by se týkat mohl.
 </p>

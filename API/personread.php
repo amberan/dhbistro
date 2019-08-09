@@ -14,9 +14,11 @@ if ($usrinfo == null) { //invalid user
 } else { //valid user
     if (isset($_GET[personID])) {
         $output = personRead($_GET['personID']);
+        //TODO prevadet id fotek s symbolu na odkazy
     } else {
         //TODO strankovani
         $output = personList($_GET['where'],$_GET['order']);
+        //TODO prevadet id fotek s symbolu na odkazy
     }
     http_response_code(200);
     echo json_encode($output);
