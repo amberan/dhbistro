@@ -31,7 +31,9 @@ if (!isset($custom_Filter['farchiv'])) {
 }
 /* Prevzit vyhledavane */
 if (!isset($custom_Filter['search'])) {
-	  $searchedfor=NULL;
+      $searchedfor=NULL;
+    } elseif ($_POST['search']) {
+        $searchedfor = $_POST['search'];
 	} else {
 	  $searchedfor=$custom_Filter['search'];
 	}
@@ -40,12 +42,12 @@ if (!isset($custom_Filter['search'])) {
 	$uncz_search = StrTr ($searchedfor, "áäčďéěëíňóöřšťúůüýžÁÄČĎÉĚËÍŇÓÖŘŠŤÚŮÜÝŽ", "aacdeeeinoorstuuuyzAACDEEEINOORSTUUUYZ");
 		
 	function filter () {
-	  global $database,$usrinfo, $farchiv;
+	  global $database,$usrinfo, $farchiv,$searchedfor;
 	  echo '<div id="filter-wrapper"><form action="search.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Vyhledávání</legend>
 	  <p>Zadejte vyhledávaný výraz.<br />
-<input type="text" name="search" value="" />';
+<input type="text" name="search" value="'.$searchedfor.'" />';
 	echo '
           <table class="filter">
           <td class="filter"><input type="checkbox" name="farchiv" value="1"'.(($farchiv==1)?' checked="checked"':'').'> Zobrazit i archiv (uzavřené případy, archivovaná hlášení, mrtvé a archivované osoby).</td>
@@ -68,13 +70,13 @@ if (!isset($custom_Filter['search'])) {
 
 	
 	
-?>       
+?>
 
 
 <div id="obsah">
-<h2>Výsledky hledání výrazu "<?php echo $searchedfor; ?>"</h2>
+    <h2>Výsledky hledání výrazu "<?php echo $searchedfor; ?>"</h2>
 
-<?php
+    <?php
 
 /* Případy */
 if ($farchiv==0) {
@@ -91,18 +93,18 @@ $sql = "
     $res = mysqli_query ($database,$sql);
 
 ?>
-<h3>Případy</h3>
-<table>
-<thead>
-	<tr>
-	  <th width="50%">Název</th>
-	  <th width="15%">Změněno</th>
-	  <th width="15%">Status</th>
-	</tr>
-</thead>
-<tbody>
+    <h3>Případy</h3>
+    <table>
+        <thead>
+            <tr>
+                <th width="50%">Název</th>
+                <th width="15%">Změněno</th>
+                <th width="15%">Status</th>
+            </tr>
+        </thead>
+        <tbody>
 
-<?php
+            <?php
 		$even=0;
                 while ($rec=mysqli_fetch_assoc ($res)) {
                 echo '<tr class="'.(($even%2==0)?'even':'odd').'">
@@ -133,19 +135,19 @@ $sql = "
 $res = mysqli_query ($database,$sql);
 
 ?>
-<h3>Hlášení</h3>
-<table>
-<thead>
-	<tr>
-	  <th width="50%">Název</th>
-	  <th width="15%">Vytvořeno</th>
-	  <th width="15%">Změněno</th>
-	  <th width="15%">Status</th>
-	</tr>
-</thead>
-<tbody>
+            <h3>Hlášení</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th width="50%">Název</th>
+                        <th width="15%">Vytvořeno</th>
+                        <th width="15%">Změněno</th>
+                        <th width="15%">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-<?php
+                    <?php
 		$even=0;
                 while ($rec=mysqli_fetch_assoc ($res)) {
                 echo '<tr class="'.(($even%2==0)?'even':'odd').'">
@@ -193,19 +195,19 @@ if ($farchiv==0) {
 	"; 
 	$res = mysqli_query ($database,$sql);
 ?>
-<h3>Osoby</h3>
-<table>
-<thead>
-	<tr>
-	  <th width="50%">Jméno</th>
-	  <th width="15%">Vytvořeno</th>
-	  <th width="15%">Změněno</th>
-	  <th width="15%">Status</th>
-	</tr>
-</thead>
-<tbody>
+                    <h3>Osoby</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="50%">Jméno</th>
+                                <th width="15%">Vytvořeno</th>
+                                <th width="15%">Změněno</th>
+                                <th width="15%">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-<?php
+                            <?php
                 $even=0;
                 while ($rec=mysqli_fetch_assoc ($res)) {
                 echo '<tr class="'.(($even%2==0)?'even':'odd').'">
@@ -238,18 +240,18 @@ $sql = "
     $res = mysqli_query ($database,$sql);
 
 ?>
-<h3>Skupiny</h3>
-<table>
-<thead>
-	<tr>
-	  <th width="50%">Název</th>
-	  <th width="15%">Změněno</th>
-	  <th width="15%">Status</th>
-	</tr>
-</thead>
-<tbody>
+                            <h3>Skupiny</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th width="50%">Název</th>
+                                        <th width="15%">Změněno</th>
+                                        <th width="15%">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
-<?php
+                                    <?php
 		$even=0;
                 while ($rec=mysqli_fetch_assoc ($res)) {
                 echo '<tr class="'.(($even%2==0)?'even':'odd').'">
@@ -273,19 +275,19 @@ $sql= "SELECT ".DB_PREFIX."symbol.created as date_created, ".DB_PREFIX."symbol.m
     ";
     $res = mysqli_query ($database,$sql);	
 ?>
-<h3>Symboly</h3>
-<table>
-<thead>
-	<tr>
-	  <th width="50%">ID</th>
-	  <th width="15%">Vytvořeno</th>
-	  <th width="15%">Změněno</th>
-	  <th width="15%">Status</th>
-	</tr>
-</thead>
-<tbody>
+                                    <h3>Symboly</h3>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th width="50%">ID</th>
+                                                <th width="15%">Vytvořeno</th>
+                                                <th width="15%">Změněno</th>
+                                                <th width="15%">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-<?php
+                                            <?php
 		$even=0;
                 while ($rec=mysqli_fetch_assoc ($res)) {
                 echo '<tr class="'.(($even%2==0)?'even':'odd').'">
@@ -313,20 +315,20 @@ $sql = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.title 
 $res = mysqli_query ($database,$sql);
 
 ?>
-<h3>Poznámky</h3>
-<table>
-<thead>
-	<tr>
-	  <th width="30%">Název poznámky</th>
-          <th width="30%">Komentuje</th>
-          <th width="15%">Typ</th>
-		  <th width="15%">Vytvořeno</th>
-          <th width="15%">Status</th>
-	</tr>
-</thead>
-<tbody>
+                                            <h3>Poznámky</h3>
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th width="30%">Název poznámky</th>
+                                                        <th width="30%">Komentuje</th>
+                                                        <th width="15%">Typ</th>
+                                                        <th width="15%">Vytvořeno</th>
+                                                        <th width="15%">Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
 
-<?php
+                                                    <?php
 		
                     $even=0;
                     while ($rec=mysqli_fetch_assoc ($res)) {

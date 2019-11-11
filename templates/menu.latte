@@ -13,6 +13,12 @@
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item mr-2">
+                        <form id="search_menu" action="search.php" method="get">
+                            <input type="text" name="search" />
+                            <input type="submit" value="Hledat" />
+                        </form>
+                    </li>
+                    <li class="nav-item mr-2">
                         <a class="nav-link" href="{$current_location}?delallnew=true"
                             onclick="return confirm('Opravdu označit vše jako přečtené?');">
                             Přečíst vše
@@ -30,10 +36,6 @@
                         </div>
                     </li>
                 </ul>
-                <!-- form id="search_menu">
-                    <input type="text" name="query" />
-                    <input type="submit" value="Hledat" />
-                </form -->
             </div><!-- end of #menu -->
         </nav>
 
