@@ -1,19 +1,19 @@
 # BISTRO
 
 Tato webovka byla vyvynuta pro potřeby LARPu [Pražská Hlídka](http://www.prazskahlidka.cz/).  
-Jedná se o systém používany organizacemi (Denní Hlídka, Noční Hlídka) ve hře. Který pomáhá udržovat informace o jednotlivých osobách, skupinách, akcích atp.
+Jedná se o systém používany organizacemi (Denní Hlídka, Noční Hlídka) ve hře. Který pomáhá udržovat informace o jednotlivých osobách, skupinách, akcích atp.  
 
 ### TODO ???
 - [tickets](https://dhbistro.leankit.com/board/24275378)  
-- tabulka na user_filter [userid, object, filter] ???
+- tabulka na user_filter [userid, object, filter] ???  
 - API personWrite  
-- zpracovani osob + API - strankovani
-- upravit system prav: pridat pravo na API, utajeni na ruzne stupne, ?prejmenovani?
+- zpracovani osob + API - strankovani  
+- upravit system prav: pridat pravo na API, utajeni na ruzne stupne, ?prejmenovani?  
 
 ### Work in progress: 1.6.1
 - [TUI.editor](https://github.com/nhn/tui.editor) CDN verze  
-- Latte - Nastaveni 
-- [html-to-markdown](https://github.com/thephpleague/html-to-markdown) DB_PREFIX."users".plan > DB_PREFIX."users".plan_md
+- Latte - Nastaveni  
+- [html-to-markdown](https://github.com/thephpleague/html-to-markdown) DB_PREFIX."users".plan > DB_PREFIX."users".plan_md  
 
 ### [changelog](doc/changelog.md)
 
