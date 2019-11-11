@@ -88,7 +88,7 @@ function searchTable ($tablenum) {
 	global $database,$unread;
 	foreach ($unread as $record) {
 		if ($record['idtable'] == $tablenum) {
-			return " (".$record['count'].")";
+			return $record['count'];
 		}
 	}
 	return false;
