@@ -1,50 +1,72 @@
-<form action="settings.php" method="post" name="edituser" id="inputform" onSubmit="return pwdcheck(this);">
-    {$text[uzivatel]}: {$username}
-        {$text[timeout]}:<input type="text" name="timeout" value="{$settings_timeout}" />{$text[vevterinach]}.
-        {$text[puvodniheslo]}:<input type="password" name="soucheslo" />
-        {$text[noveheslo]}:<input type="password" name="heslo" id="heslo" />
-       {$text[noveheslokontrola]}:<input type="password" name="heslo2" id="heslo2" />
-
-    {$text[aktualniplan]}:<input name="plan" id="plan" type="hidden" />
-    <div id="editSection"></div>
-    <script type="text/javascript">
-
-    </script>
-
-<input type="submit" name="editsettings" id="submitbutton" value="{$text[ulozit]}" />
+<div class="container-fluid">
+    <form action="settings.php" method="post" name="edituser" id="inputform" onSubmit="return pwdcheck(this);">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="mt-3"> {$text[uzivatel]}:</label>
+                    <p><strong> {$username}</strong></p>
+                </div>
+                <div class="col-md-4">
+                    <label class="mt-3" for="timeout">{$text[timeout]}:</label>
+                    <input class="form-control" type="text" name="timeout"  value="{$settings_timeout}" />
+                    <small class="form-text text-muted">{$text[vevterinach]}.</small>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="mt-3" for="soucheslo">{$text[puvodniheslo]}:</label>
+                    <input class="form-control" type="password" name="soucheslo" />
+                </div>
+                <div class="col-md-4">
+                    <label class="mt-3" for="heslo">{$text[noveheslo]}:</label>
+                    <input class="form-control" type="password" name="heslo" id="heslo" />
+                </div>
+                <div class="col-md-4">
+                    <label class="mt-3" for="heslo2">{$text[noveheslokontrola]}:</label>
+                    <input class="form-control"  type="password" name="heslo2" id="heslo2" />
+                </div>
+            </div>
+            <label class="mt-3" for="plan">{$text[aktualniplan]}:</label>
+            <input class="form-control"  name="plan" id="plan" type="hidden" />
+            <div id="editSection" class="writable-section"></div>
+            <script type="text/javascript">
+            </script>
+            <input class="btn btn-primary mt-2" type="submit" name="editsettings" id="submitbutton" value="Uložit">
+            </div>
     </form>
+</div>
 
 <script>
-var editor = new tui.Editor({
-    el: document.querySelector('#editSection'),
-    previewStyle: 'vertical',
-    height: '400px',
-    initialEditType: 'markdown',
-    initialValue: {$settings_plan},
-    useCommandShortcut: true,
-    exts: [{
-            name: 'chart',
-            minWidth: 100,
-            maxWidth: 600,
-            minHeight: 100,
-            maxHeight: 300
-        },
-        'scrollSync',
-        'colorSyntax',
-        'uml',
-        'mark',
-        'table'
-    ]
-});
+    var editor = new tui.Editor({
+        el: document.querySelector('#editSection'),
+        previewStyle: 'vertical',
+        height: '400px',
+        initialEditType: 'wysiwyg',
+        initialValue: {$settings_plan},
+        useCommandShortcut: true,
+        exts: [{
+                name: 'chart',
+                minWidth: 100,
+                maxWidth: 600,
+                minHeight: 100,
+                maxHeight: 300
+            },
+            'scrollSync',
+            'colorSyntax',
+            'uml',
+            'mark',
+            'table'
+        ]
+    });
 
-setInterval(function() {
-    document.getElementById("plan").value = editor.getValue();
-}, 5);
+    setInterval(function() {
+        document.getElementById("plan").value = editor.getValue();
+    }, 5);
 
-function pwdcheck(form) {
-    if (form.heslo.value != form.heslo2.value) {
-        alert({$text[heslanesouhlasi]});
-        return false
-    } else return true;
-}
+    function pwdcheck(form) {
+        if (form.heslo.value != form.heslo2.value) {
+            alert({$text[heslanesouhlasi]});
+            return false
+        } else return true;
+    }
 </script>

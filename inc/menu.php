@@ -20,7 +20,7 @@ function mainMenu ($index) {
 	  <li><a href="settings.php">Nastavení</a></li>
 			  <li><a href="search.php">Vyhledávání</a></li>
 	  '.(($usrinfo['right_power']>0)?'<li><a href="users.php">Uživatelé</a></li>':'').'
-			  '.(($usrinfo['right_power']<1 && $usrinfo['right_text'])?'<li><a href="tasks.php">Úkoly</a></li>':'').'
+	  '.(($usrinfo['right_power']<1 && $usrinfo['right_text'])?'<li><a href="tasks.php">Úkoly</a></li>':'').'
 	  '.(($usrinfo['right_aud'])?'<li><a href="audit.php">Audit</a></li>':'').'
 	  <li class="float-right"><a href="logout.php">Odhlásit</a></li>
 	  <li class="float-right"><a href="'.$currentfile.'?delallnew=true" onclick="'."return confirm('Opravdu označit vše jako přečtené?');".'">Přečíst vše</a></li>
@@ -36,5 +36,29 @@ function mainMenu ($index) {
 function sparklets ($path,$actions='') {
 	echo '<div id="sparklets">Cesta: '.$path.(($actions!='')?' || Akce: '.$actions:'').'</div>';
 }
+
+
+
+//LATTE
+$menu[] = array("Aktuality","index.php",searchTable(5)+searchTable(6));
+$menu[] = array($text['hlaseniV'],"reports.php",searchTable(4));
+$menu[] = array("Osoby","persons.php",searchTable(1)+searchTable(7));
+$menu[] = array("Případy","cases.php",searchTable(3));
+$menu[] = array("Skupiny","groups.php",searchTable(2));
+$menu2[] = array("Fórum","http://www.prazskahlidka.cz/forums/",0);
+$menu2[] = array($text['menu-zlobody'],"evilpoints.php",0);
+if (($usrinfo['right_power'] < 1 and $usrinfo['right_text'] > 0) or ($usrinfo['right_power'] > 0)) {
+    $menu[] = array("Úkoly","tasks.php",0);
+}
+if ($usrinfo['right_power'] > 0) {
+    $menu2[] = array("Časová dostupnost",mysqli_fetch_assoc (mysqli_query ($database,"SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1")),0);
+    $menu2[] = array("Uživatelé","users.php",0);
+}
+if ($usrinfo['right_aud'] > 0) {
+    $menu2[] = array("Audit","audit.php",0);
+}
+$menu2[] = array("Nastavení","settings.php",0);
+$menu[] = array("Vyhledávání","search.php",0);
+$menu2[] = array("Odhlásit","logout.php",0);
 
   ?>

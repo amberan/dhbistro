@@ -93,3 +93,20 @@ html, body, div, span, applet, object, iframe, blockquote, button, pre, abbr, ac
 input[type="submit"] {
     cursor: pointer;
 }
+
+.unread span.unread-number {
+    color: lightcoral;
+}
+
+.writable-section {
+	display: block;
+	width: 100%;
+	background-clip: padding-box;
+	border: 1px solid #ced4da;
+	border-radius: .25rem;
+	transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.tui-editor-defaultUI {
+	border: none !important;
+}
