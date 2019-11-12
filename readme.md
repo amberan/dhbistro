@@ -9,11 +9,13 @@ Jedná se o systém používany organizacemi (Denní Hlídka, Noční Hlídka) v
 - API personWrite  
 - zpracovani osob + API - strankovani  
 - upravit system prav: pridat pravo na API, utajeni na ruzne stupne, ?prejmenovani?  
+- audit nejen podle lidi, ale na objektech  
 
 ### Work in progress: 1.6.1
 - [TUI.editor](https://github.com/nhn/tui.editor) CDN verze  
 - Latte - Nastaveni  
 - [html-to-markdown](https://github.com/thephpleague/html-to-markdown) DB_PREFIX."users".plan > DB_PREFIX."users".plan_md  
+- vyhledavani v top menu  
 
 ### [changelog](doc/changelog.md)
 

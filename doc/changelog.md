@@ -1,9 +1,5 @@
 # BISTRO changelog 
 
-**1.6.1**
-- nastaveni na novem designu  
-- obsah nastaveni-plan preveden do markdownu  
-
 **1.6.0**
 - funkce pro nacitani osob  (processing/person.php)
 - automaticky pull z gitlabu  
