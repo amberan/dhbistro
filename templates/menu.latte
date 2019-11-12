@@ -15,19 +15,19 @@
                     <li class="nav-item mr-2">
                         <form id="search_menu" action="search.php" method="get">
                             <input type="text" name="search" />
-                            <input type="submit" value="Hledat" />
+                            <input type="submit" value="{$text[hledat]}" />
                         </form>
                     </li>
                     <li class="nav-item mr-2">
                         <a class="nav-link" href="{$current_location}?delallnew=true"
-                            onclick="return confirm('Opravdu označit vše jako přečtené?');">
-                            Přečíst vše
+                            onclick="return confirm('{$text[opravduprecist]}');">
+                            {$text[precistvse]}
                         </a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
-                            User Menu
+                            {$text[dalsi]}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 {foreach $menu2 as $menu2Item}
