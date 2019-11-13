@@ -59,6 +59,9 @@ if ($usrinfo['right_aud'] > 0) {
 }
 $menu2[] = array("Nastavení","settings.php",0);
 //$menu[] = array("Vyhledávání","search.php",0);
+/*if ($usrinfo['right_super'] > 0) {
+    $menu2[] = array("Zálohovat",$_SERVER["PHP_SELF"],0);
+}*/
 $menu2[] = array("Odhlásit","logout.php",0);
 
   ?>

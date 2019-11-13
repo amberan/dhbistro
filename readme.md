@@ -16,6 +16,7 @@ Jedná se o systém používany organizacemi (Denní Hlídka, Noční Hlídka) v
 - Latte - Nastaveni  
 - [html-to-markdown](https://github.com/thephpleague/html-to-markdown) DB_PREFIX."users".plan > DB_PREFIX."users".plan_md  
 - vyhledavani v top menu  
+- skupiny zobrazuji prilozene obrazky  
 
 ### [changelog](doc/changelog.md)
 
