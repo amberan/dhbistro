@@ -1,9 +1,9 @@
 	    <nav id="wrapper" class="navbar navbar-expand-lg  navbar-dark bg-dark">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu"
+            aria-controls="Toggle Menu" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div id="menu" class="collapse navbar-collapse d-flex justify-content-between" >
+            <div id="menu" class="collapse navbar-collapse" >
                 <ul class="navbar-nav mr-auto">
 {foreach $menu as $menuItem}
                     <li class="nav-item mr-2{if $menuItem[2]>0} unread{/if}">
@@ -14,8 +14,12 @@
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item mr-2">
                         <form id="search_menu" action="search.php" method="get">
-                            <input type="text" name="search" />
-                            <input type="submit" value="{$text[hledat]}" />
+                            <div class="input-group">
+                                <input type="text" name="search" class="form-control"/>
+                                <div class="input-group-append">
+                                    <input class="btn btn-secondary" type="submit" value="{$text[hledat]}" />
+                                </div>
+                            </div>
                         </form>
                     </li>
                     <li class="nav-item mr-2">
