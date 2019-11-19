@@ -1,5 +1,12 @@
 # BISTRO changelog 
 
+**1.6.1**
+- [TUI.editor](https://github.com/nhn/tui.editor) CDN verze  
+- Latte - Nastaveni  
+- [html-to-markdown](https://github.com/thephpleague/html-to-markdown) DB_PREFIX."users".plan > DB_PREFIX."users".plan_md  
+- vyhledavani v top menu  
+- skupiny zobrazuji prilozene obrazky  
+
 **1.6.0**
 - funkce pro nacitani osob  (processing/person.php)
 - automaticky pull z gitlabu  
