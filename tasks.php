@@ -28,7 +28,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 //		if (!isset($_POST['notnew'])) {
 //			unreadRecords (2,$gid);
 //		}
-		sparklets ('<a href="users.php">uživatelé</a> &raquo; <strong>úkoly</strong>');
+		sparklets ('<a href="/users">uživatelé</a> &raquo; <strong>úkoly</strong>');
 		echo '<div id="obsah"><p>Úkol přidán.</p></div>';
 	} else if (isset($_POST['inserttask'])) {
 
@@ -37,7 +37,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 
 			mainMenu (3);
                         $custom_Filter = custom_Filter(10);
-			sparklets ('<a href="users.php">uživatelé</a> &raquo; <strong>úkoly</strong>');
+			sparklets ('<a href="/users">uživatelé</a> &raquo; <strong>úkoly</strong>');
 			echo '<div id="obsah"><p>Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
 			$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 		
@@ -48,7 +48,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 
 	mainMenu (2);
         $custom_Filter = custom_Filter(10);
-	sparklets ('<a href="users.php">uživatelé</a> &raquo; <strong>úkoly</strong>');
+	sparklets ('<a href="/users">uživatelé</a> &raquo; <strong>úkoly</strong>');
 	
 	}
 
@@ -90,14 +90,15 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	  case 2: $fsql_sort=' '.DB_PREFIX.'task.created DESC '; break;
 	  default: $fsql_sort=' '.DB_PREFIX.'task.created ASC ';
 	}
-?>	
-	<!-- Přidání úkolu -->
-	<div id="filter-wrapper"><form action="tasks.php" method="post" id="filter">
-	<fieldset>
-	<legend>Přidej úkol</legend>
-	<p><label for="task">Zadání:</label>
-	<input type="text" name="task" id="task" />
-<?php 	
+?>
+<!-- Přidání úkolu -->
+<div id="filter-wrapper">
+    <form action="tasks.php" method="post" id="filter">
+        <fieldset>
+            <legend>Přidej úkol</legend>
+            <p><label for="task">Zadání:</label>
+                <input type="text" name="task" id="task" />
+                <?php 	
 	$sql="SELECT id, login FROM ".DB_PREFIX."user WHERE deleted=0 ORDER BY login ASC";
 		$res_n=mysqli_query ($database,$sql);
 		echo '<label for="target">Uživatel:</label>
@@ -107,12 +108,13 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 		};
 		echo '</select>';
 
-?>		
-	</p>
-	<div id="filtersubmit"><input type="submit" name="inserttask" value="Zadat" /></div>
-	</fieldset>
-	</form></div><!-- end of #filter-wrapper -->
-	
+?>
+            </p>
+            <div id="filtersubmit"><input type="submit" name="inserttask" value="Zadat" /></div>
+        </fieldset>
+    </form>
+</div><!-- end of #filter-wrapper -->
+
 <?php 
 	// filtr
 	function filter () {

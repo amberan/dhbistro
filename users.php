@@ -1,39 +1,93 @@
 <?php
-require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
-Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
-$latte = new Latte\Engine;
-$latte->setTempDirectory($config['folder_cache']);
+Debugger::enable(Debugger::DEVELOPMENT,$config['folder_logs']);
 
-$latteParameters['title'] = 'Úprava uživatele';
-
-if ($usrinfo['right_power']<1) {
-	unauthorizedAccess(8, 1, 0, 0);
-	$_SESSION['message'] = "";
+function randomPassword() {
+	$alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+	$pass = array(); 
+	$alphaLength = strlen($alphabet) - 1; 
+	for ($i = 0; $i < 8; $i++) {
+		$n = rand(0, $alphaLength);
+		$pass[] = $alphabet[$n];
+	}
+	return implode($pass); 
 }
-if (isset($_REQUEST['user_edit']) AND is_numeric($_REQUEST['user_edit'])) {
-	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
-	mainMenu (2);
-	sparklets ('<a href="./users.php">uživatelé</a> &raquo; <strong>úprava uživatele</strong>');
-} elseif (isset($_REQUEST['user_new']) AND $_REQUEST['user_new'] == true ) {
-	
-$latteParameters['title'] = ('Nový uživatel');
-$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 
-	mainMenu (2);
-	sparklets ('<a href="./users.php">uživatelé</a> &raquo; <strong>nový uživatel</strong>');
-} else {
-	auditTrail(8, 1, 0);
+// smazat uzivatele
+if (isset($_REQUEST['user_delete']) && is_numeric($_REQUEST['user_delete'])) {
+	if (!$usrinfo['right_power']) {
+		unauthorizedAccess(8, 1, 0, 0);
+	} else {
+		auditTrail(8, 11, $_REQUEST['user_delete']);
+		Debugger::log("USER DELETED");
+		mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET deleted=1 WHERE id=".$_REQUEST['user_delete']);
+		$_SESSION['message'] = "Uživatelský účet odstraněn!";
+	}
+}// zamknout uzivatele
+elseif (isset($_REQUEST['user_lock']) && is_numeric($_REQUEST['user_lock'])) {
+	if (!$usrinfo['right_power']) {
+		unauthorizedAccess(8, 2, 0, 0);
+	} else {
+		auditTrail(8, 11, $_REQUEST['user_lock']);
+		Debugger::log("USER LOCKED");
+		mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET suspended=1 WHERE id=".$_REQUEST['user_lock']);
+		$_SESSION['message'] = "Uživatelský účet zablokován!";
+	}
+}// odemknout uzivatele
+elseif (isset($_REQUEST['user_unlock']) && is_numeric($_REQUEST['user_unlock'])) {
+	if (!$usrinfo['right_power']) {
+		unauthorizedAccess(8, 2, 0, 0);
+	} else {
+		auditTrail(8, 11, $_REQUEST['user_unlock']);
+		Debugger::log("USER UNLOCKED");
+		mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET suspended=0 WHERE id=".$_REQUEST['user_unlock']);
+		$_SESSION['message'] = "Uživatelský účet odblokován!";
+	}
+}// reset hesla uzivatele
+elseif (isset($_REQUEST['user_reset']) && is_numeric($_REQUEST['user_reset'])) {
+	if (!$usrinfo['right_power']) {
+		unauthorizedAccess(8, 2, 0, 0);
+		$_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+	} else {
+		$newpassword = randomPassword();
+		auditTrail(8, 11, $_REQUEST['user_reset']);
+		Debugger::log("USER PASSWORD RESET");
+		mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET pwd=md5('".$newpassword."') WHERE id=".$_REQUEST['user_reset']);
+		$_SESSION['message'] = "Nové heslo nastaveno: ".$newpassword; 
+	}
+}
 
-$latteParameters['title'] = ('Uživatelé');
-$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 
-	mainMenu (2);
+// vytvorit uzivatele
+if (isset($_POST['insertuser']) && $usrinfo['right_power'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['login']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['heslo']) && is_numeric($_POST['power']) && is_numeric($_POST['texty'])) {
+	$ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."user WHERE UCASE(login)=UCASE('".$_POST['login']."')");
+	if (mysqli_num_rows ($ures)) {
+		$_SESSION['message']= "Uživatel již existuje, změňte jeho jméno.";
+	} else {
+		mysqli_query ($database,"INSERT INTO ".DB_PREFIX."user (login,pwd,right_power,right_text,timeout) VALUES('".$_POST['login']."',md5('".$_POST['heslo']."'),'".$_POST['power']."','".$_POST['texty']."','600')");
+		if (mysqli_affected_rows($database) > 0) { 
+			$uidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."user WHERE UCASE(login)=UCASE('".$_POST['login']."')"));
+			if ($usrinfo['right_aud'] > 0) {
+				mysqli_query ($database,"UPDATE ".DB_PREFIX."user set right_aud='".$_POST['auditor']."' WHERE id=".$uidarray['id']);
+			}
+			if ($usrinfo['right_org'] > 0) {
+				mysqli_query ($database,"UPDATE ".DB_PREFIX."user set right_org='".$_POST['organizator']."' WHERE id=".$uidarray['id']);
+			}
+			auditTrail(8, 3, $uidarray['id']);
+			Debugger::log("USER ".$_POST['login']."[".$uidarray['id']."] CREATED");
+			$_SESSION['message']= "Uživatel ".$_POST['login']." vytvořen.";
+		} else {
+			$_SESSION['message']= "Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.";
+		}
+	}
+}
+
+
+
+    $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'headerMD.latte', $latteParameters);
+    $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'menu.latte', $latteParameters);    
 	$custom_Filter = custom_Filter(8);
-	sparklets ('<strong>uživatelé</strong>',(($usrinfo['right_power'])?'<a href="tasks.php">úkoly</a>; <a href="users.php?user_new=true">přidat uživatele</a>':'<a href="tasks.php">úkoly</a>'));
-}
-
-
+    $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'users.latte', $latteParameters);
 // *** zpracovani filtru
 if (!isset($custom_Filter['kategorie'])) {
 	$f_cat=0;
@@ -60,7 +114,7 @@ function filter () {
     global $database,$f_cat,$f_sort;
 	echo 
 '<div id="filtr" class="table">
-	<form action="/users.php" method="get">
+	<form action="/users" method="get">
 		<p>Vypsat
 			<select name="kategorie">
 				<option value="0"'.(($f_cat==0)?' selected="selected"':'').'>všechny uživatele</option>
@@ -80,11 +134,7 @@ function filter () {
 
 
 
-if (isset($_REQUEST['user_edit']) AND is_numeric($_REQUEST['user_edit'])) {
-	include ('usersedit.php');
-} elseif (isset($_REQUEST['user_new']) AND $_REQUEST['user_new'] == true ) {
-	include ('usersnew.php');
-}
+
 // *** vypis uživatelů
 echo '<h1 class="center">Výpis uživatelů</h1>';
 filter();
@@ -98,37 +148,37 @@ if (mysqli_num_rows ($user_query)) {
 	echo '<div class="table" id="users">';
 	$even = 0;
 	while ($user_record=mysqli_fetch_assoc($user_query)) { 	?>
-		<div class="row <?php if ($even%2==0) { echo 'even';} else { echo'odd';} ?>"> 
-			<div class="cell">
-				<div class="name">&nbsp;<?php echo $user_record['name']." ".$user_record['surname'];?></div>
-				<div><?php echo $user_record['login'];?></div>
-			</div>
-			<div class="cell">
-				<div class="permissions"> &nbsp;
-					<?php if ($user_record['right_power']) { echo '<span class="button">POWER USER</span>'; } ?>
-					<?php if ($user_record['right_text']) { echo '<span class="button">EDITOR</span>'; } ?>
-					<?php if ($user_record['right_org']) { echo '<span class="button">ORGANIZATOR</span>'; } ?>
-					<?php if ($user_record['right_aud']) { echo '<span class="button">AUDITOR</span>'; } ?>
-				</div>
-				<div>Naposledy: <?php  if ($user_record['lastlogon']) { echo webdatetime($user_record['lastlogon']);} else { echo 'nikdy';}?> </div>
-			</div>
-			<div class="cell middle">
-				<a class="button" href="users.php?user_edit=<?php echo $user_record['id']?>">upravit</a>
-	<?php	
+<div class="row <?php if ($even%2==0) { echo 'even';} else { echo'odd';} ?>">
+    <div class="cell">
+        <div class="name">&nbsp;<?php echo $user_record['name']." ".$user_record['surname'];?></div>
+        <div><?php echo $user_record['login'];?></div>
+    </div>
+    <div class="cell">
+        <div class="permissions"> &nbsp;
+            <?php if ($user_record['right_power']) { echo '<span class="button">POWER USER</span>'; } ?>
+            <?php if ($user_record['right_text']) { echo '<span class="button">EDITOR</span>'; } ?>
+            <?php if ($user_record['right_org']) { echo '<span class="button">ORGANIZATOR</span>'; } ?>
+            <?php if ($user_record['right_aud']) { echo '<span class="button">AUDITOR</span>'; } ?>
+        </div>
+        <div>Naposledy: <?php  if ($user_record['lastlogon']) { echo webdatetime($user_record['lastlogon']);} else { echo 'nikdy';}?> </div>
+    </div>
+    <div class="cell middle">
+        <a class="button" href="/users/edit/<?php echo $user_record['id']?>">upravit</a>
+        <?php	
 		if ($user_record['id'] != $usrinfo['id']) {
-				echo '<a class="button" href="users.php?user_reset='.$user_record['id'].'" onclick="'."return confirm('Opravdu vygenerovat nové heslo pro uživatele &quot;".$user_record['login']."&quot;?');".'">nové heslo</a>';
+				echo '<a class="button" href="/users/reset/'.$user_record['id'].'" onclick="'."return confirm('Opravdu vygenerovat nové heslo pro uživatele &quot;".$user_record['login']."&quot;?');".'">nové heslo</a>';
 			if ($user_record['suspended'] == "1") {
-				echo '<a class="button" href="users.php?user_unlock='.$user_record['id'].'" onclick="'."return confirm('Opravdu odemknout uživatele &quot;".$user_record['login']."&quot;?');".'">odemknout</a>';
+				echo '<a class="button" href="/users/user/unlock/'.$user_record['id'].'" onclick="'."return confirm('Opravdu odemknout uživatele &quot;".$user_record['login']."&quot;?');".'">odemknout</a>';
 			} else {
-				echo '<a class="button" href="users.php?user_lock='.$user_record['id'].'" onclick="'."return confirm('Opravdu zamknout uživatele &quot;".$user_record['login']."&quot;?');".'">zamknout</a>';
+				echo '<a class="button" href="/users/lock/'.$user_record['id'].'" onclick="'."return confirm('Opravdu zamknout uživatele &quot;".$user_record['login']."&quot;?');".'">zamknout</a>';
 			}
-			echo '<a class="button" href="users.php?user_delete='.$user_record['id'].'" onclick="'."return confirm('Opravdu smazat uživatele &quot;".$user_record['login']."&quot;?');".'">smazat</a>';
+			echo '<a class="button" href="/users/delete/'.$user_record['id'].'" onclick="'."return confirm('Opravdu smazat uživatele &quot;".$user_record['login']."&quot;?');".'">smazat</a>';
 		}	
 			?>
-			</div>
-		</div>
-		
-	<?php
+    </div>
+</div>
+
+<?php
 			$even++;
 		}
 	echo '</div>';

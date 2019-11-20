@@ -1,7 +1,7 @@
 <?php 
 session_start();
 	
-$config['version']='1.6.1';  // verze bistra
+$config['version']='1.6.2';  // verze bistra
 define ('DB_PREFIX','nw_'); // prefix tabulek
 $config['dbpass'] = "/inc/important.php"; // soubor s heslem k databazi - na druhem radku
 $config['page_prefix']=''; // uri cesta mezi domenou a adresarem bistra
@@ -15,6 +15,8 @@ $config['folder_custom'] = $_SERVER['DOCUMENT_ROOT'].'/custom/'; // adresar pro 
 $config['folder_templates'] = $_SERVER['DOCUMENT_ROOT'].'/templates/'; // adresar pro latte templaty
 $config['folder_cache'] = $_SERVER['DOCUMENT_ROOT'].'/cache/'; // adresar pro latte cache
 require_once($config['folder_custom'].'text.php'); // defaultni texty - nasledne pretizeno hodnotami nactenymi v ramci inc/database.php
+$URL = explode( "/", $_SERVER['REQUEST_URI']);
+
 
 // *** TECHNICAL LIBRARIES
     require_once($_SERVER['DOCUMENT_ROOT'].'/inc/platform.php');
@@ -27,16 +29,15 @@ require_once($config['folder_custom'].'text.php'); // defaultni texty - nasledne
 		//Debugger::log("alert: ".$_SESSION['message']);
 		$latte = new Latte\Engine;
 		$latte->setTempDirectory($config['folder_cache']);
-	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/database.php');
+    require_once($_SERVER['DOCUMENT_ROOT'].'/inc/database.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/backup.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/session.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/audit_trail.php');
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/image.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/unread.php');
+    require_once($_SERVER['DOCUMENT_ROOT'].'/inc/unread.php');
 // *** PROCESSING
 	require_once($_SERVER['DOCUMENT_ROOT'].'/processing/person.php'); //operace s objektem osoby
 	require_once($_SERVER['DOCUMENT_ROOT'].'/processing/news.php');
-	require_once($_SERVER['DOCUMENT_ROOT'].'/processing/users.php'); //zpracovani uzivatele, vcetne zmen sama sebe
 // *** GENERAL ALERT - overit, ze funguje s odlasovanim nahore - asi bude potreba prenaset message prez session destroy
 	if (isset($_SESSION['message']) and $_SESSION['message'] != null) { 
 		echo "\n<script>window.onload = alert('".$_SESSION['message']."')</script>\n";
@@ -152,6 +153,36 @@ function custom_Filter ($idtable, $idrecord = 0) {
 	}
 	return $filter;
 }
+
+function nocs($pol){
+  $table = array(
+        'Š'=>'S', 'š'=>'s', 'Đ'=>'Dj', 'đ'=>'dj', 'Ž'=>'Z', 'ž'=>'z', 'Č'=>'C', 'č'=>'c', 'Ć'=>'C', 'ć'=>'c',
+        'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
+        'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O',
+        'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U', 'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss',
+        'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c', 'è'=>'e', 'é'=>'e',
+        'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o',
+        'ô'=>'o', 'õ'=>'o', 'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'ý'=>'y', 'þ'=>'b',
+        'ÿ'=>'y', 'Ŕ'=>'R', 'ŕ'=>'r', 'ď'=>'d', 'ě'=>'e', 'ň'=>'n', 'ř'=>'r', 'ť'=>'t', 'ů'=>'u', 'ü'=>'u',
+        'Ď'=>'D', 'Ě'=>'E', 'Ň'=>'N', 'Ř'=>'R', 'Ť'=>'T', 'Ů'=>'U', 
+    );
+    return strtr($pol, $table);
+}
+
+function check_mail($addr) {
+    if(!strpos($addr,'@')){
+     	    return false;
+    }else{
+            list($local, $domain) = explode("@", $addr);
+            $pattern_local = '^([0-9a-z]+([-|_]?[0-9a-z]+)*)(([-|_]?)\.([-|_]?)[0-9a-z]*([-|_]?[0-9a-z]+)+)*([-|_]?)$';
+        $pattern_domain = '^([0-9a-z]+([-]?[0-9a-z]+)*)(([-]?)\.([-]?)[0-9a-z]*([-]?[0-9a-z]+)+)*\.[a-z]{2,4}$';
+            $match_local = eregi($pattern_local, $local);
+            $match_domain = eregi($pattern_domain, $domain);
+            return $match_local && $match_domain ? true : false;
+        //	if (!eregi('^[+]?[a-z0-9]+([-_.]?[a-z0-9]*)*@[a-z0-9]+([-_.]?[a-z0-9])*\.[a-z]{2,4}$',$addr)){
+    }
+}
+
 
 //show debug bar unless it's a sending a file (picture) to the user
 if (substr(basename($_SERVER['REQUEST_URI']), 0, strpos(basename($_SERVER['REQUEST_URI']), '?')) != "getportrait.php" AND substr(basename($_SERVER['REQUEST_URI']), 0, strpos(basename($_SERVER['REQUEST_URI']), '?')) != "getfile.php") { 

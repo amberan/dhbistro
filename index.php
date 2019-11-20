@@ -1,14 +1,43 @@
 <?php
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-$latteParameters['title'] = 'Aktuality';
-  
 use Tracy\Debugger;
-Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+Debugger::enable(Debugger::DEVELOPMENT,$config['folder_logs']);
 $latte = new Latte\Engine;
 $latte->setTempDirectory($config['folder_cache']);
-$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+$latteParameters['current_location'] = $_SERVER["PHP_SELF"];;
+$latteParameters['menu'] = $menu;
+$latteParameters['menu2'] = $menu2;
 
-        if (isset($_SESSION['sid'])) {
+//echo "<xmp>"; print_r ($URL); echo "</xmp>";
+if ( strpos($URL[1],'.php') == null) { //THE LOOP 
+    if ($URL[1] == 'settings') {
+        include('settings.php');
+    } elseif ($URL[1] == 'users') {
+        if ($usrinfo['right_power']<1) {
+            unauthorizedAccess(8, 1, 0, 0);
+        } else {
+            $latteParameters['title'] = $text['spravauzivatelu'];
+            auditTrail(8, 1, 0);
+            $latteParameters['actions'][] = array("users/new",$text['vytvorituzivatele']);
+            if ($URL[2] == 'new') {
+                $latteParameters['subtitle'] = $text['vytvorituzivatele']; 
+                include('user_new.php');
+            } elseif ($URL[2] == 'edit') {
+                $latteParameters['subtitle'] = $text['upravituzivatele'];
+                include('user_edit.php');
+            } else {
+                include('users.php');
+            }
+        }
+    }
+
+
+
+    $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footerMD.latte', $latteParameters);
+} else { // stare jadro
+    $latteParameters['title'] = 'Aktuality';
+    $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+    if (isset($_SESSION['sid'])) {
                 auditTrail(5, 1, 0);
         }
         mainMenu (1);
@@ -63,16 +92,20 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 // dashboard
 ?>
 <div id="dashboard">
-<fieldset><legend><strong>Osobní nástěnka</strong></legend>
-        <table><tr><td>
-        <h3>Rozpracovaná nedokončená hlášení: <?php
+    <fieldset>
+        <legend><strong>Osobní nástěnka</strong></legend>
+        <table>
+            <tr>
+                <td>
+                    <h3>Rozpracovaná nedokončená hlášení: <?php
                                 $sql_r="SELECT ".DB_PREFIX."report.secret AS 'secret', ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.id AS 'id' FROM ".DB_PREFIX."report WHERE ".DB_PREFIX."report.iduser=".$usrinfo['id']." AND ".DB_PREFIX."report.status=0 AND ".DB_PREFIX."report.deleted=0 ORDER BY ".DB_PREFIX."report.label ASC";
                                 $res_r=mysqli_query ($database,$sql_r);
                                 $rec_count = mysqli_num_rows ($res_r);
                                 echo $rec_count
                                 ?>
-                                </h3><p>
-                                <?php
+                    </h3>
+                    <p>
+                        <?php
                                 if (mysqli_num_rows ($res_r)) {
                                         $reports=Array();
                                         while ($rec_r=mysqli_fetch_assoc ($res_r)) {
@@ -82,14 +115,15 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
                                 } else {
                                         echo 'Nemáte žádná nedokončená hlášení.';
                                 } ?></p>
-        <div class="clear">&nbsp;</div>
-                                <h3>Přiřazené neuzavřené případy: <?php
+                    <div class="clear">&nbsp;</div>
+                    <h3>Přiřazené neuzavřené případy: <?php
                         $sql="SELECT ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.title AS 'title' FROM ".DB_PREFIX."c2s, ".DB_PREFIX."case WHERE ".DB_PREFIX."case.id=".DB_PREFIX."c2s.idcase AND ".DB_PREFIX."c2s.idsolver=".$usrinfo['id']." AND ".DB_PREFIX."case.status<>1 AND ".DB_PREFIX."case.deleted=0 ORDER BY ".DB_PREFIX."case.title ASC";
                         $pers=mysqli_query ($database,$sql);
                         $rec_count = mysqli_num_rows ($pers);
                         echo $rec_count
-                        ?> 
-                        </h3><p>
+                        ?>
+                    </h3>
+                    <p>
                         <?php
                         $cases=Array();
                         while ($perc=mysqli_fetch_assoc ($pers)) {
@@ -97,15 +131,16 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
                         }
                         echo ((implode($cases, '<br />')<>"")?implode($cases, '<br />'):'<em>Nemáte žádný přiřazený neuzavřený případ.</em>');
                         ?></p>
-        </td>
-        <td>
-        <h3>Nedokončené úkoly: <?php
+                </td>
+                <td>
+                    <h3>Nedokončené úkoly: <?php
                         $sql_r="SELECT * FROM ".DB_PREFIX."task WHERE ".DB_PREFIX."task.iduser=".$usrinfo['id']." AND ".DB_PREFIX."task.status=0 ORDER BY ".DB_PREFIX."task.created ASC";
                         $res_r=mysqli_query ($database,$sql_r);
                         $rec_count = mysqli_num_rows ($res_r);
                         echo $rec_count
                         ?>
-                        </h3><p>
+                    </h3>
+                    <p>
                         <?php
                         if (mysqli_num_rows ($res_r)) {
                                 $tasks=Array();
@@ -116,14 +151,14 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
                         } else {
                                 echo 'Nemáte žádné nedokončené úkoly.';
                         } ?></p>
-        </td>
-        </tr></table>
+                </td>
+            </tr>
+        </table>
         <div class="clear">&nbsp;</div>
-</fieldset>
+    </fieldset>
 </div>
-
-
 <?php
 include ($_SERVER['DOCUMENT_ROOT'].'/news.php');
 $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+}
 ?>

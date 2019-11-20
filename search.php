@@ -38,8 +38,7 @@ if (!isset($custom_Filter['search'])) {
 	  $searchedfor=$custom_Filter['search'];
 	}
 
-	$search = $searchedfor;
-	$uncz_search = StrTr ($searchedfor, "áäčďéěëíňóöřšťúůüýžÁÄČĎÉĚËÍŇÓÖŘŠŤÚŮÜÝŽ", "aacdeeeinoorstuuuyzAACDEEEINOORSTUUUYZ");
+	//$search = $searchedfor;
 		
 	function filter () {
 	  global $database,$usrinfo, $farchiv,$searchedfor;
@@ -49,7 +48,7 @@ if (!isset($custom_Filter['search'])) {
 	  <p>Zadejte vyhledávaný výraz.<br />
 <input type="text" name="search" value="'.$searchedfor.'" />';
 	echo '
-          <table class="filter">
+          <table class="filter"><tr>
           <td class="filter"><input type="checkbox" name="farchiv" value="1"'.(($farchiv==1)?' checked="checked"':'').'> Zobrazit i archiv (uzavřené případy, archivovaná hlášení, mrtvé a archivované osoby).</td>
           </table>
 	  <div id="filtersubmit"><input type="submit" name="filter" value="Vyhledat" /></div>
@@ -78,6 +77,9 @@ if (!isset($custom_Filter['search'])) {
 
     <?php
 
+$searchedfor = nocs($searchedfor);
+
+
 /* Případy */
 if ($farchiv==0) {
     $fsql_archiv=' AND '.DB_PREFIX.'case.status=0 ';
@@ -87,9 +89,9 @@ if ($farchiv==0) {
 $sql = "
 	SELECT ".DB_PREFIX."case.datum as date_changed, ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret'
     FROM ".DB_PREFIX."case
-	WHERE (title LIKE '%".$uncz_search."%' or contents LIKE  '%".$uncz_search."%')
+	WHERE (title LIKE '%$searchedfor%' or contents LIKE  '%$searchedfor%')
     ".$fsql_archiv.$searchContitions."
-	ORDER BY 5 * MATCH(title) AGAINST ('$search') + MATCH(contents) AGAINST ('$search') DESC";
+	ORDER BY 5 * MATCH(title) AGAINST ('$searchedfor') + MATCH(contents) AGAINST ('$searchedfor') DESC";
     $res = mysqli_query ($database,$sql);
 
 ?>
@@ -126,12 +128,12 @@ if ($farchiv==0) {
 $sql = "
     SELECT ".DB_PREFIX."report.adatum as date_created, ".DB_PREFIX."report.datum as date_changed,  ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.status AS 'status', ".DB_PREFIX."report.secret AS 'secret'
     FROM ".DB_PREFIX."report
-	WHERE (label LIKE '%".$uncz_search."%' or task LIKE  '%".$uncz_search."%' or summary LIKE  '%".$uncz_search."%' or impacts LIKE  '%".$uncz_search."%' or details LIKE  '%".$uncz_search."%')".$searchContitions.$fsql_archiv."
-    ORDER BY 5 * MATCH(label) AGAINST ('$search')
-    + 3 * MATCH(summary) AGAINST ('$search')
-    + 2 * MATCH(task) AGAINST ('$search')
-    + 2 * MATCH(impacts) AGAINST ('$search')
-	+ MATCH(details) AGAINST ('$search') DESC";
+	WHERE (label LIKE '%$searchedfor%' or task LIKE  '%$searchedfor%' or summary LIKE  '%$searchedfor%' or impacts LIKE  '%$searchedfor%' or details LIKE  '%$searchedfor%')".$searchContitions.$fsql_archiv."
+    ORDER BY 5 * MATCH(label) AGAINST ('$searchedfor')
+    + 3 * MATCH(summary) AGAINST ('$searchedfor')
+    + 2 * MATCH(task) AGAINST ('$searchedfor')
+    + 2 * MATCH(impacts) AGAINST ('$searchedfor')
+	+ MATCH(details) AGAINST ('$searchedfor') DESC";
 $res = mysqli_query ($database,$sql);
 
 ?>
@@ -187,11 +189,11 @@ if ($farchiv==0) {
     $sql ="
         SELECT ".DB_PREFIX."person.regdate as date_created, ".DB_PREFIX."person.datum as date_changed, ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.archiv AS 'archiv', ".DB_PREFIX."person.dead AS 'dead', ".DB_PREFIX."person.secret AS 'secret'
         FROM ".DB_PREFIX."person
-		WHERE (surname LIKE '%".$uncz_search."%' or name LIKE  '%".$uncz_search."%' or contents LIKE  '%".$uncz_search."%')
+		WHERE (surname LIKE '%$searchedfor%' or name LIKE  '%$searchedfor%' or contents LIKE  '%$searchedfor%')
         ".$searchContitions.$fsql_archiv."
-        ORDER BY 5 * MATCH(surname)   AGAINST ('+(>$search)' IN BOOLEAN MODE) 
-        + 3 * MATCH(name) AGAINST ('$search')
-        + MATCH(contents) AGAINST ('$search') DESC
+        ORDER BY 5 * MATCH(surname)   AGAINST ('+(>$searchedfor)' IN BOOLEAN MODE) 
+        + 3 * MATCH(name) AGAINST ('$searchedfor')
+        + MATCH(contents) AGAINST ('$searchedfor') DESC
 	"; 
 	$res = mysqli_query ($database,$sql);
 ?>
@@ -232,10 +234,10 @@ if ($farchiv==0) {
 $sql = "
     SELECT  ".DB_PREFIX."group.datum as date_changed, ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.archived AS 'archived'
     FROM ".DB_PREFIX."group
-	WHERE (title LIKE '%".$uncz_search."%' or contents LIKE  '%".$uncz_search."%')
+	WHERE (title LIKE '%$searchedfor%' or contents LIKE  '%$searchedfor%')
     ".$searchContitions.$fsql_archiv."
-    ORDER BY 5 * MATCH(title) AGAINST ('$search')
-    + MATCH(contents) AGAINST ('$search') DESC
+    ORDER BY 5 * MATCH(title) AGAINST ('$searchedfor')
+    + MATCH(contents) AGAINST ('$searchedfor') DESC
     ";
     $res = mysqli_query ($database,$sql);
 
@@ -269,9 +271,9 @@ $sql = "
 /* Není tu ošetřené, aby to nevyhazovalo symboly od tajných osob. Nutno v budoucnu ošetřit. */          
 $sql= "SELECT ".DB_PREFIX."symbol.created as date_created, ".DB_PREFIX."symbol.modified as date_changed,  ".DB_PREFIX."symbol.id AS 'id', ".DB_PREFIX."symbol.assigned AS 'assigned', ".DB_PREFIX."symbol.secret AS 'secret'
 		FROM ".DB_PREFIX."symbol
-		WHERE (".DB_PREFIX."symbol.desc LIKE '%".$uncz_search."%')
+		WHERE (".DB_PREFIX."symbol.desc LIKE '%$searchedfor%')
         ".$searchContitions."
-        ORDER BY 5 * MATCH(`desc`) AGAINST ('$search') DESC
+        ORDER BY 5 * MATCH(`desc`) AGAINST ('$searchedfor') DESC
     ";
     $res = mysqli_query ($database,$sql);	
 ?>
@@ -306,10 +308,10 @@ $sql= "SELECT ".DB_PREFIX."symbol.created as date_created, ".DB_PREFIX."symbol.m
 /* POZOR, tady bude hrozny opich udelat ten join pro zobrazeni jen poznamek k nearchivovanym vecem */
 $sql = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.id AS 'id', ".DB_PREFIX."note.idtable AS 'idtable', ".DB_PREFIX."note.iditem AS 'iditem', ".DB_PREFIX."note.secret AS 'secret'
 		FROM ".DB_PREFIX."note
-		WHERE (title LIKE '%".$uncz_search."%' or note LIKE '%".$uncz_search."%')		
+		WHERE (title LIKE '%$searchedfor%' or note LIKE '%$searchedfor%')		
 		".$searchContitions."
-		ORDER BY 5 * MATCH(title) AGAINST ('$search')
-        + MATCH(note) AGAINST ('$search') DESC
+		ORDER BY 5 * MATCH(title) AGAINST ('$searchedfor')
+        + MATCH(note) AGAINST ('$searchedfor') DESC
     ";
 
 $res = mysqli_query ($database,$sql);

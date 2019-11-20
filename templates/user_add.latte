@@ -1,0 +1,35 @@
+    {$text['vytvorituzivatele']}
+    <form action="users.php" method="post">
+    {$text['uzivatelskejmeno']}:
+            <input type="text" name="login" id="login" />
+            $text['heslo']:
+            <input type="text" name="heslo" id="heslo" />
+            {$text['cisloosoby']}:
+            <input type="text" name="idperson" id="idperson" />
+            {$text['prava']}
+            POWER USER
+            <select name="power" id="power">
+                <option value="0">{$text['ne']}</option>
+                <option value="1">{$text['ano']}</option>
+            </select>
+            EDITOR
+            <select name="texty" id="texty">
+                <option value="0">{$text['ne']}</option>
+                <option value="1">{$text['ano']}</option>
+            </select>
+        {if $usrinfo['right_aud'] > 0 }
+            AUDITOR
+            <select name="auditor" id="auditor">
+                <option value="0">{$text['ne']}</option>
+                <option value="1">{$text['ano']}</option>
+            </select>
+        {/if}
+        {if $usrinfo['right_org'] > 0 }
+            ORGANIZATOR
+            <select name="organizator" id="organizator">
+                <option value="0">{$text['ne']}</option>
+                <option value="1">{$text['ano']}</option>
+            </select>
+        {/if}
+            <input type="submit" name="insertuser" id="submitbutton" value="Uložit" />
+    </form>

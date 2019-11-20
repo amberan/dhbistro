@@ -42,4 +42,11 @@
                 </ul>
             </div>
         </nav>
-        <div class="mt-4" id="sparklets">Cesta: <strong>{$title}</strong></div>
+        <div class="mt-4" id="sparklets">Cesta: <strong>{$title}{if $subtitle} - {$subtitle}{/if}</strong>
+        {if $actions} 
+            Akce: 
+            {foreach $actions as $action}
+                <a href="{$action[0]}">{$action[1]}</a> 
+            {/foreach}      
+        {/if}
+        </div>

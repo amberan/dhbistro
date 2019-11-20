@@ -13,7 +13,10 @@ Jedná se o systém používany organizacemi (Denní Hlídka, Noční Hlídka) v
 - rework uzivatelu a prav musi prijit pred OSOBY/SKUPINY/HLASENI/PRIPADY protoze vice urovni utajeni
 
 ### Work in progress: 1.6.2
-- rework UKOLY design + markdown 
+- uprava vyhledavani (odstraneni diakritiky z klice)  
+- .htaccess + THE LOOP (settings)
+- rework sprava uzivatelu design + markdown  
+
 
 ### [changelog](doc/changelog.md)
 
