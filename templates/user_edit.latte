@@ -6,8 +6,13 @@
         
                 {$text['uzivatelskejmeno']}:
                 <input type="text" name="login" id="login" value="{$user['login']}" />
-        {$text['cisloosoby']}:
-                <input type="text" name="idperson" id="idperson" value="{$user['idperson']}" />
+        {$text['cisloosoby']}:            
+        <select name="idperson" id="idperson">
+                <option value="0"> ??? </option>
+                {foreach $person as $person}
+                    <option value="{$person[0]}"{if $person[0] == $user['idperson']} selected="selected"{/if}>{$person[1]}, {$person[2]}</option>
+                {/foreach}
+            </select>
             {$text['prava']}
             POWER USER
                 <select name="power" id="poweruser">

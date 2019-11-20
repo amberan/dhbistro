@@ -1,11 +1,16 @@
     {$text['vytvorituzivatele']}
-    <form action="users.php" method="post">
+    <form action="/users" method="post">
     {$text['uzivatelskejmeno']}:
             <input type="text" name="login" id="login" />
-            $text['heslo']:
+            {$text['heslo']}:
             <input type="text" name="heslo" id="heslo" value="{$new_password}" />
             {$text['cisloosoby']}:
-            <input type="text" name="idperson" id="idperson" />
+            <select name="idperson" id="idperson">
+                <option value=""> ??? </option>
+                {foreach $person as $person}
+                    <option value="{$person[0]}">{$person[1]}, {$person[2]}</option>
+                {/foreach}
+            </select>
             {$text['prava']}
             POWER USER
             <select name="power" id="power">

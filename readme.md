@@ -5,18 +5,21 @@ Jedná se o systém používany organizacemi (Denní Hlídka, Noční Hlídka) v
 
 ### TODO ???
 - [tickets](https://dhbistro.leankit.com/board/24275378)  
+- pridat uzivalum emaily
 - tabulka na user_filter [userid, object, filter] ???  
+- upravit system prav: pridat pravo na API, utajeni na ruzne stupne, ?prejmenovani?  
+- rework uzivatelu a prav musi prijit pred OSOBY/SKUPINY/HLASENI/PRIPADY protoze vice urovni utajeni
 - API personWrite  
 - zpracovani osob + API - strankovani  
-- upravit system prav: pridat pravo na API, utajeni na ruzne stupne, ?prejmenovani?  
 - audit nejen podle lidi, ale na objektech  
-- rework uzivatelu a prav musi prijit pred OSOBY/SKUPINY/HLASENI/PRIPADY protoze vice urovni utajeni
 
 ### Work in progress: 1.6.2
 - uprava vyhledavani (odstraneni diakritiky z klice)  
 - .htaccess
-- THE LOOP: nastaveni, uzivatele
+- THE LOOP: nastaveni, uzivatele, zalohovani
 - LATTE sprava uzivatelu 
+- manualni zalohovani
+- editace uzivatelu nabizi jmeny seznam osob k napojeni
 
 
 ### [changelog](doc/changelog.md)

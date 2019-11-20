@@ -50,7 +50,7 @@ elseif (isset($_POST['insertuser']) && $usrinfo['right_power'] && !preg_match ('
 	if (mysqli_num_rows ($ures)) {
 		$latteParameters['message']= $text['uzivatelexistuje'];
 	} else {
-		mysqli_query ($database,"INSERT INTO ".DB_PREFIX."user (login,pwd,right_power,right_text,timeout) VALUES('".$_POST['login']."',md5('".$_POST['heslo']."'),'".$_POST['power']."','".$_POST['texty']."','600')");
+		mysqli_query ($database,"INSERT INTO ".DB_PREFIX."user (login,pwd,right_power,right_text,timeout,idperson) VALUES('".$_POST['login']."',md5('".$_POST['heslo']."'),'".$_POST['power']."','".$_POST['texty']."','600','".$_POST['idperson']."')");
 		if (mysqli_affected_rows($database) > 0) { 
 			$uidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."user WHERE UCASE(login)=UCASE('".$_POST['login']."')"));
 			if ($usrinfo['right_aud'] > 0) {
