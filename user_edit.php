@@ -7,7 +7,7 @@ if (isset($_POST['userid']) && isset($_POST['edituser']) && $usrinfo['right_powe
 	auditTrail(8, 2, $_POST['userid']);
 	$ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."user WHERE UCASE(login)=UCASE('".$_POST['login']."') AND id<>".$_POST['userid']);
 	if (mysqli_num_rows ($ures)) {
-		$_SESSION['message']= "Uživatel již existuje, změňte jeho jméno.";
+		$latteParameters['message']= "Uživatel již existuje, změňte jeho jméno.";
 	} else {
 		mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET login='".$_POST['login']."', right_power='".$_POST['power']."', right_text='".$_POST['texty']."', idperson='".$_POST['idperson']."' WHERE id=".$_POST['userid']);
 		if ($usrinfo['right_aud'] > 0) {
@@ -16,26 +16,26 @@ if (isset($_POST['userid']) && isset($_POST['edituser']) && $usrinfo['right_powe
 		}
 		if ($usrinfo['right_org'] > 0) {
 			mysqli_query ($database,"UPDATE ".DB_PREFIX."user set right_org='".$_POST['organizator']."' WHERE id=".$_POST['userid']);
-			Debugger::log('USERID: '.$_POST['userid'].' ORF='.$_POST['organizator']);
+			Debugger::log('USERID: '.$_POST['userid'].' ORG='.$_POST['organizator']);
 		}
-		$_SESSION['message']= "Uživatel ".$_POST['login']." upraven.";
+		$latteParameters['message']= "Uživatel ".$_POST['login']." upraven.";
 	}
 } // zmeny sam sebe
 else if ((isset($_POST['userid']) AND isset($_POST['edituser']) AND !is_numeric($_REQUEST['timeout'])) AND ($usrinfo['id'] == $_POST['userid'] )) {
-		$_SESSION['message'] = "Timeout není číslo, nastavení nebylo uloženo.";
+		$latteParameters['message'] = "Timeout není číslo, nastavení nebylo uloženo.";
 	} else if (isset($_REQUEST['editsettings']) && ($_REQUEST['timeout'] > 1800 || $_REQUEST['timeout'] < 30)) {
-		$_SESSION['message'] = "Timeout nesouhlasí, je buď příliš malý nebo příliš velký.";
+		$latteParameters['message'] = "Timeout nesouhlasí, je buď příliš malý nebo příliš velký.";
 	} elseif (isset($_REQUEST['editsettings']) && isset($_REQUEST['soucheslo']) && $_REQUEST['soucheslo']<>'') {
 		$currentpwd=mysqli_fetch_assoc (mysqli_query ($database,"SELECT pwd FROM ".DB_PREFIX."user WHERE sid='".$_SESSION['sid']."'"));
 		if ($currentpwd['pwd'] == md5($_REQUEST['soucheslo'])) {
 			mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET pwd=md5('".$_POST['heslo']."'), plan_md='".$_REQUEST['plan']."', timeout='".$_REQUEST['timeout']."' WHERE sid='".$_SESSION['sid']."'");
-			$_SESSION['message'] = "Nastavení s novým heslem uloženo.";
+			$latteParameters['message'] = "Nastavení s novým heslem uloženo.";
 		} else {
-			$_SESSION['message'] = "Nesouhlasí staré heslo, nastavení nebylo uloženo.";
+			$latteParameters['message'] = "Nesouhlasí staré heslo, nastavení nebylo uloženo.";
 		}
 	} elseif (isset($_REQUEST['editsettings'])) {
 		mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET plan_md='".$_REQUEST['plan']."', timeout='".$_REQUEST['timeout']."' WHERE sid='".$_SESSION['sid']."'");
-		$_SESSION['message'] = "Nastavení uloženo.";
+		$latteParameters['message'] = "Nastavení uloženo.";
 		read_user();
 } 
 
@@ -65,7 +65,7 @@ else if ((isset($_POST['userid']) AND isset($_POST['edituser']) AND !is_numeric(
         }
         $latteParameters['user']['ukoly'] = $ukoly_array;
     } else {
-        $latteParameters['warning'] = $text['uzivatelneexistuje'];
+        $latteParameters['warning'] = $text['zaznamnenalezen'];
     }
     $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'user_edit.latte', $latteParameters);
 ?>

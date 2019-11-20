@@ -25,7 +25,7 @@ $URL = explode( "/", $_SERVER['REQUEST_URI']);
     }
 	require_once($_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php');
 		use Tracy\Debugger;
-		Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+		Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 		//Debugger::log("alert: ".$_SESSION['message']);
 		$latte = new Latte\Engine;
 		$latte->setTempDirectory($config['folder_cache']);
@@ -44,11 +44,11 @@ $URL = explode( "/", $_SERVER['REQUEST_URI']);
 		unset($_SESSION['message']);}
 // *** LIBRARIES FOR DISPLAYING DATA
 	require_once($_SERVER['DOCUMENT_ROOT'].'/inc/menu.php');
-	$latteParameters = [ //pole promeny pro latte
-		'text' => $text, //textove pole ./custom/text-*.php
-        'config' => $config, //skupiny parametry ./inc/func_main.php
-        'username' => $usrinfo['login'], 
-	];
+    $latteParameters['text'] =  $text;
+    $latteParameters['config'] = $config;
+    if (isset($usrinfo)) { 
+        $latteParameters['usrinfo'] = $usrinfo; 
+    }
 
 // timestamp konvertovan do podoby pro web
 function webDate($date) {
@@ -169,6 +169,17 @@ function nocs($pol){
     return strtr($pol, $table);
 }
 
+function randomPassword() {
+	$alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+	$pass = array(); 
+	$alphaLength = strlen($alphabet) - 1; 
+	for ($i = 0; $i < 8; $i++) {
+		$n = rand(0, $alphaLength);
+		$pass[] = $alphabet[$n];
+	}
+	return implode($pass); 
+}
+
 function check_mail($addr) {
     if(!strpos($addr,'@')){
      	    return false;
@@ -186,7 +197,7 @@ function check_mail($addr) {
 
 //show debug bar unless it's a sending a file (picture) to the user
 if (substr(basename($_SERVER['REQUEST_URI']), 0, strpos(basename($_SERVER['REQUEST_URI']), '?')) != "getportrait.php" AND substr(basename($_SERVER['REQUEST_URI']), 0, strpos(basename($_SERVER['REQUEST_URI']), '?')) != "getfile.php") { 
-	Debugger::barDump($_SESSION,"session");
+    Debugger::barDump($_SESSION,"session");
 }
 
 ?>

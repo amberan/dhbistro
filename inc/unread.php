@@ -85,8 +85,9 @@ function searchRecord ($tablenum, $recordnum) {
 
 // vyhledani tabulky v neprectenych zaznamech
 function searchTable ($tablenum) { 
-	global $database,$unread;
-	foreach ($unread as $record) {
+    global $database,$unread;
+    
+	foreach ((array) $unread as $record) {
 		if ($record['idtable'] == $tablenum) {
 			return $record['count'];
 		}

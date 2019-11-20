@@ -47,21 +47,21 @@ $menu[] = array("Případy","/cases.php",searchTable(3));
 $menu[] = array("Skupiny","/groups.php",searchTable(2));
 $menu2[] = array("Fórum","http://www.prazskahlidka.cz/forums/",0);
 $menu2[] = array($text['menu-zlobody'],"/evilpoints.php",0);
-if (($usrinfo['right_power'] < 1 and $usrinfo['right_text'] > 0) or ($usrinfo['right_power'] > 0)) {
+if (isset($usrinfo) and (($usrinfo['right_power'] < 1 and $usrinfo['right_text'] > 0) or ($usrinfo['right_power'] > 0))) {
     $menu2[] = array("Úkoly","/tasks.php",0);
 }
-if ($usrinfo['right_power'] > 0) {
+if (isset($usrinfo) and $usrinfo['right_power'] > 0) {
     $menu2[] = array("Časová dostupnost",mysqli_fetch_assoc (mysqli_query ($database,"SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1")),0);
     $menu2[] = array("Uživatelé","/users",0);
 }
-if ($usrinfo['right_aud'] > 0) {
+if (isset($usrinfo) and $usrinfo['right_aud'] > 0) {
     $menu2[] = array("Audit","/audit.php",0);
 }
 $menu2[] = array("Nastavení","/settings",0);
 //$menu[] = array("Vyhledávání","search.php",0);
-/*if ($usrinfo['right_super'] > 0) {
-    $menu2[] = array("Zálohovat",$_SERVER["PHP_SELF"],0);
-}*/
+if (isset($usrinfo) and $usrinfo['right_super'] > 0) {
+    $menu2[] = array("Zálohovat",'/backup',0);
+}
 $menu2[] = array("Odhlásit","/logout.php",0);
 
   ?>

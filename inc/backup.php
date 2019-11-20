@@ -5,7 +5,7 @@ Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
 //vytvoreni zalohy
 global $database,$config;
 
-function  zalohuj($soubor=""){
+function  backup_data($soubor=""){
     global $database,$config;		 
 	function  keys($prefix,$array){
 		if (empty($array)) { $pocet=0; } else {	$pocet = count ($array); }
@@ -74,13 +74,9 @@ function  zalohuj($soubor=""){
 	return  $text;
 	}
 
-	$sql_check="SELECT time FROM ".DB_PREFIX."backup ORDER BY time DESC LIMIT 1";
-	$fetch_check=mysqli_fetch_assoc (mysqli_query ($database,$sql_check));
-	$last_backup=$fetch_check['time'];
-	$update_file = $_SERVER['DOCUMENT_ROOT']."/sql/update-".$config['version'].".php";
-	if (round($last_backup,-5)<round(time(),-5) or file_exists($update_file)) {
-		$backup_file=$_SERVER['DOCUMENT_ROOT'].$config['folder_backup']."backup".time().".sql.gz";
-        zalohuj($backup_file);
+function backup_process() {
+    global $_SERVER, $database;
+        backup_data($_SERVER['DOCUMENT_ROOT'].$config['folder_backup']."backup".time().".sql.gz");
         Debugger::log("BACKUP GENERATED: ".$backup_file." [".round((filesize($backup_file)/1024))." kB]");
 		//pouze pokud je zaloha vetsi 4kB
 		if (filesize($backup_file) > 4096) {
@@ -106,5 +102,14 @@ function  zalohuj($soubor=""){
 				mysqli_query ($database,"DELETE FROM ".DB_PREFIX."unread WHERE iduser = ".$deletedusers[0]);
 			}
 		}
+
+}
+
+	$sql_check="SELECT time FROM ".DB_PREFIX."backup ORDER BY time DESC LIMIT 1";
+	$fetch_check=mysqli_fetch_assoc (mysqli_query ($database,$sql_check));
+	$last_backup=$fetch_check['time'];
+	$update_file = $_SERVER['DOCUMENT_ROOT']."/sql/update-".$config['version'].".php";
+	if (round($last_backup,-5)<round(time(),-5) or file_exists($update_file)) {
+        backup_process();
 	}
 ?>

@@ -2,16 +2,6 @@
 use Tracy\Debugger;
 Debugger::enable(Debugger::DEVELOPMENT,$config['folder_logs']);
 
-function randomPassword() {
-	$alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-	$pass = array(); 
-	$alphaLength = strlen($alphabet) - 1; 
-	for ($i = 0; $i < 8; $i++) {
-		$n = rand(0, $alphaLength);
-		$pass[] = $alphabet[$n];
-	}
-	return implode($pass); 
-}
 
 // smazat uzivatele
 if (is_numeric($URL[3]) and $URL[2] == 'delete') {
@@ -21,7 +11,7 @@ if (is_numeric($URL[3]) and $URL[2] == 'delete') {
 		auditTrail(8, 11, $_REQUEST['user_delete']);
 		Debugger::log("USER $URL[3] DELETED");
 		mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET deleted=1 WHERE id=".$URL[3]);
-		$_SESSION['message'] = "Uživatelský účet odstraněn!";
+		$latteParameters['message'] = $text['uzivatelodstranen'];
 	}
 }// zamknout uzivatele
 elseif (is_numeric($URL[3]) and $URL[2] == 'lock') {
@@ -31,7 +21,7 @@ elseif (is_numeric($URL[3]) and $URL[2] == 'lock') {
 		auditTrail(8, 11, $URL[3]);
 		Debugger::log("USER $URL[3] LOCKED");
 		mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET suspended=1 WHERE id=".$URL[3]);
-		$_SESSION['message'] = "Uživatelský účet zablokován!";
+		$latteParameters['message'] = $text['uzivatelzablokovan'];
 	}
 }// odemknout uzivatele
 elseif (is_numeric($URL[3]) and $URL[2] == 'unlock') {
@@ -41,7 +31,7 @@ elseif (is_numeric($URL[3]) and $URL[2] == 'unlock') {
 		auditTrail(8, 11, $URL[3]);
 		Debugger::log("USER $URL[3] UNLOCKED");
 		mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET suspended=0 WHERE id=".$URL[3]);
-		$_SESSION['message'] = "Uživatelský účet odblokován!";
+		$latteParameters['message'] = $text['uzivatelodblokovan'];
 	}
 }// reset hesla uzivatele
 elseif (is_numeric($URL[3]) and $URL[2] = 'reset') {
@@ -52,13 +42,13 @@ elseif (is_numeric($URL[3]) and $URL[2] = 'reset') {
         auditTrail(8, 11, $_REQUEST['user_reset']);
         Debugger::log("USER $URL[3] PASSWORD RESET");
         mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET pwd=md5('".$newpassword."') WHERE id=".$URL[3]);
-        $_SESSION['message'] = "Nové heslo nastaveno: ".$newpassword; 
+        $latteParameters['message'] = $text['heslonastaveno'].$newpassword; 
     }
 }  // vytvorit uzivatele
 elseif (isset($_POST['insertuser']) && $usrinfo['right_power'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['login']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['heslo']) && is_numeric($_POST['power']) && is_numeric($_POST['texty'])) {
 	$ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."user WHERE UCASE(login)=UCASE('".$_POST['login']."')");
 	if (mysqli_num_rows ($ures)) {
-		$_SESSION['message']= "Uživatel již existuje, změňte jeho jméno.";
+		$latteParameters['message']= $text['uzivatelexistuje'];
 	} else {
 		mysqli_query ($database,"INSERT INTO ".DB_PREFIX."user (login,pwd,right_power,right_text,timeout) VALUES('".$_POST['login']."',md5('".$_POST['heslo']."'),'".$_POST['power']."','".$_POST['texty']."','600')");
 		if (mysqli_affected_rows($database) > 0) { 
@@ -71,9 +61,9 @@ elseif (isset($_POST['insertuser']) && $usrinfo['right_power'] && !preg_match ('
 			}
 			auditTrail(8, 3, $uidarray['id']);
 			Debugger::log("USER ".$_POST['login']."[".$uidarray['id']."] CREATED");
-			$_SESSION['message']= "Uživatel ".$_POST['login']." vytvořen.";
+			$latteParameters['message']= $text['uzivatelvytvoren'].$_POST['login'];
 		} else {
-			$_SESSION['message']= "Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.";
+			$latteParameters['message']= $text['neytvoreno'];
 		}
 	}
 }
@@ -147,12 +137,9 @@ if (mysqli_num_rows ($user_query)) {
     }
     $latteParameters['user_record'] = $user_array;
 } else {
-$latteParameters['warning'] = 'Žádní uživatelé neodpovídají výběru.';
+$latteParameters['warning'] = $text['prazdnyvypis'];
 }
 $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'users.latte', $latteParameters);
 $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 
-	if (isset($_SESSION['message']) and $_SESSION['message'] != null) { 
-		echo "\n<script>window.onload = alert('".$_SESSION['message']."')</script>\n";
-	unset($_SESSION['message']);}
 ?>

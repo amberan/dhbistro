@@ -11,29 +11,38 @@ $latteParameters['menu2'] = $menu2;
 //echo "<xmp>"; print_r ($URL); echo "</xmp>";
 if ( strpos($URL[1],'.php') == null) { //THE LOOP 
     if ($URL[1] == 'settings') {
-        include('settings.php');
+        include($_SERVER['DOCUMENT_ROOT'].'/settings.php');
+    } elseif ($usrinfo['right_super'] > 0 and $URL[1] == 'backup') { //BACKUP
+        $latteParameters['title'] = $text['zalohovani'];
+         include($_SERVER['DOCUMENT_ROOT'].'/backup.php');
     } elseif ($URL[1] == 'users') {
         if ($usrinfo['right_power']<1) {
             unauthorizedAccess(8, 1, 0, 0);
-        } else {
+        } else { //USER MANAGEMENT
             $latteParameters['title'] = $text['spravauzivatelu'];
             auditTrail(8, 1, 0);
             $latteParameters['actions'][] = array("/users/new",$text['vytvorituzivatele']);
-            if ($URL[2] == 'new') {
+            if ($URL[2] == 'new') { //ADD USER
                 $latteParameters['subtitle'] = $text['vytvorituzivatele']; 
-                include('user_new.php');
-            } elseif ($URL[2] == 'edit') {
+                include($_SERVER['DOCUMENT_ROOT'].'/user_new.php');
+            } elseif ($URL[2] == 'edit') { //EDIT USER
                 $latteParameters['subtitle'] = $text['upravituzivatele'];
-                include('user_edit.php');
-            } else {
-                include('users.php');
+                include($_SERVER['DOCUMENT_ROOT'].'/user_edit.php');
+            } else { //LIST USERS
+                include($_SERVER['DOCUMENT_ROOT'].'/users.php');
             }
         }
+    } else { //spatny odkaz
+        $latteParameters['title'] = $text['http401'];
+        $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'headerMD.latte', $latteParameters);
+        $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'menu.latte', $latteParameters);    
+        echo "<h1>".$text['http401']."</h1>";
     }
-
-
-
     $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footerMD.latte', $latteParameters);
+
+
+
+
 } else { // stare jadro
     $latteParameters['title'] = 'Aktuality';
     $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);

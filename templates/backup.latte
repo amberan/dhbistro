@@ -1,0 +1,6 @@
+<a href="/backup/now">{$text['zalohovatrucne']}</a>
+
+{$text['existujicizalohy']} - odkazy nejsou platne, chybi handler
+{foreach $backup as $backup}
+        <a href="{$backup['file']}"> {$text['bistro']} v.{$backup['version']} {$backup['datetime']} {$backup['filesize']}</a> 
+{/foreach}
