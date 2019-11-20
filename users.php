@@ -14,52 +14,48 @@ function randomPassword() {
 }
 
 // smazat uzivatele
-if (isset($_REQUEST['user_delete']) && is_numeric($_REQUEST['user_delete'])) {
+if (is_numeric($URL[3]) and $URL[2] == 'delete') {
 	if (!$usrinfo['right_power']) {
 		unauthorizedAccess(8, 1, 0, 0);
 	} else {
 		auditTrail(8, 11, $_REQUEST['user_delete']);
-		Debugger::log("USER DELETED");
-		mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET deleted=1 WHERE id=".$_REQUEST['user_delete']);
+		Debugger::log("USER $URL[3] DELETED");
+		mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET deleted=1 WHERE id=".$URL[3]);
 		$_SESSION['message'] = "Uživatelský účet odstraněn!";
 	}
 }// zamknout uzivatele
-elseif (isset($_REQUEST['user_lock']) && is_numeric($_REQUEST['user_lock'])) {
+elseif (is_numeric($URL[3]) and $URL[2] == 'lock') {
 	if (!$usrinfo['right_power']) {
 		unauthorizedAccess(8, 2, 0, 0);
 	} else {
-		auditTrail(8, 11, $_REQUEST['user_lock']);
-		Debugger::log("USER LOCKED");
-		mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET suspended=1 WHERE id=".$_REQUEST['user_lock']);
+		auditTrail(8, 11, $URL[3]);
+		Debugger::log("USER $URL[3] LOCKED");
+		mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET suspended=1 WHERE id=".$URL[3]);
 		$_SESSION['message'] = "Uživatelský účet zablokován!";
 	}
 }// odemknout uzivatele
-elseif (isset($_REQUEST['user_unlock']) && is_numeric($_REQUEST['user_unlock'])) {
+elseif (is_numeric($URL[3]) and $URL[2] == 'unlock') {
 	if (!$usrinfo['right_power']) {
 		unauthorizedAccess(8, 2, 0, 0);
 	} else {
-		auditTrail(8, 11, $_REQUEST['user_unlock']);
-		Debugger::log("USER UNLOCKED");
-		mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET suspended=0 WHERE id=".$_REQUEST['user_unlock']);
+		auditTrail(8, 11, $URL[3]);
+		Debugger::log("USER $URL[3] UNLOCKED");
+		mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET suspended=0 WHERE id=".$URL[3]);
 		$_SESSION['message'] = "Uživatelský účet odblokován!";
 	}
 }// reset hesla uzivatele
-elseif (isset($_REQUEST['user_reset']) && is_numeric($_REQUEST['user_reset'])) {
+elseif (is_numeric($URL[3]) and $URL[2] = 'reset') {
 	if (!$usrinfo['right_power']) {
-		unauthorizedAccess(8, 2, 0, 0);
-		$_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
-	} else {
-		$newpassword = randomPassword();
-		auditTrail(8, 11, $_REQUEST['user_reset']);
-		Debugger::log("USER PASSWORD RESET");
-		mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET pwd=md5('".$newpassword."') WHERE id=".$_REQUEST['user_reset']);
-		$_SESSION['message'] = "Nové heslo nastaveno: ".$newpassword; 
-	}
-}
-
-
-// vytvorit uzivatele
-if (isset($_POST['insertuser']) && $usrinfo['right_power'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['login']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['heslo']) && is_numeric($_POST['power']) && is_numeric($_POST['texty'])) {
+		unauthorizedAccess(8, 11, 0, 0);
+	} else {    
+        $newpassword = randomPassword();
+        auditTrail(8, 11, $_REQUEST['user_reset']);
+        Debugger::log("USER $URL[3] PASSWORD RESET");
+        mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET pwd=md5('".$newpassword."') WHERE id=".$URL[3]);
+        $_SESSION['message'] = "Nové heslo nastaveno: ".$newpassword; 
+    }
+}  // vytvorit uzivatele
+elseif (isset($_POST['insertuser']) && $usrinfo['right_power'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['login']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['heslo']) && is_numeric($_POST['power']) && is_numeric($_POST['texty'])) {
 	$ures=mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."user WHERE UCASE(login)=UCASE('".$_POST['login']."')");
 	if (mysqli_num_rows ($ures)) {
 		$_SESSION['message']= "Uživatel již existuje, změňte jeho jméno.";
@@ -87,7 +83,7 @@ if (isset($_POST['insertuser']) && $usrinfo['right_power'] && !preg_match ('/^[[
     $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'headerMD.latte', $latteParameters);
     $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'menu.latte', $latteParameters);    
 	$custom_Filter = custom_Filter(8);
-    $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'users.latte', $latteParameters);
+
 // *** zpracovani filtru
 if (!isset($custom_Filter['kategorie'])) {
 	$f_cat=0;
@@ -136,7 +132,7 @@ function filter () {
 
 
 // *** vypis uživatelů
-echo '<h1 class="center">Výpis uživatelů</h1>';
+
 filter();
 if ($usrinfo['right_org']) {
 	$user_sql="SELECT ".DB_PREFIX."user.*,".DB_PREFIX."person.name,".DB_PREFIX."person.surname FROM ".DB_PREFIX."user left outer join `".DB_PREFIX."person` on ".DB_PREFIX."user.idperson=".DB_PREFIX."person.id WHERE ".DB_PREFIX."user.deleted=0 ".$fsql_cat." ORDER BY ".$fsql_sort;
@@ -145,46 +141,18 @@ if ($usrinfo['right_org']) {
 }
 $user_query = mysqli_query ($database,$user_sql);
 if (mysqli_num_rows ($user_query)) {
-	echo '<div class="table" id="users">';
-	$even = 0;
-	while ($user_record=mysqli_fetch_assoc($user_query)) { 	?>
-<div class="row <?php if ($even%2==0) { echo 'even';} else { echo'odd';} ?>">
-    <div class="cell">
-        <div class="name">&nbsp;<?php echo $user_record['name']." ".$user_record['surname'];?></div>
-        <div><?php echo $user_record['login'];?></div>
-    </div>
-    <div class="cell">
-        <div class="permissions"> &nbsp;
-            <?php if ($user_record['right_power']) { echo '<span class="button">POWER USER</span>'; } ?>
-            <?php if ($user_record['right_text']) { echo '<span class="button">EDITOR</span>'; } ?>
-            <?php if ($user_record['right_org']) { echo '<span class="button">ORGANIZATOR</span>'; } ?>
-            <?php if ($user_record['right_aud']) { echo '<span class="button">AUDITOR</span>'; } ?>
-        </div>
-        <div>Naposledy: <?php  if ($user_record['lastlogon']) { echo webdatetime($user_record['lastlogon']);} else { echo 'nikdy';}?> </div>
-    </div>
-    <div class="cell middle">
-        <a class="button" href="/users/edit/<?php echo $user_record['id']?>">upravit</a>
-        <?php	
-		if ($user_record['id'] != $usrinfo['id']) {
-				echo '<a class="button" href="/users/reset/'.$user_record['id'].'" onclick="'."return confirm('Opravdu vygenerovat nové heslo pro uživatele &quot;".$user_record['login']."&quot;?');".'">nové heslo</a>';
-			if ($user_record['suspended'] == "1") {
-				echo '<a class="button" href="/users/user/unlock/'.$user_record['id'].'" onclick="'."return confirm('Opravdu odemknout uživatele &quot;".$user_record['login']."&quot;?');".'">odemknout</a>';
-			} else {
-				echo '<a class="button" href="/users/lock/'.$user_record['id'].'" onclick="'."return confirm('Opravdu zamknout uživatele &quot;".$user_record['login']."&quot;?');".'">zamknout</a>';
-			}
-			echo '<a class="button" href="/users/delete/'.$user_record['id'].'" onclick="'."return confirm('Opravdu smazat uživatele &quot;".$user_record['login']."&quot;?');".'">smazat</a>';
-		}	
-			?>
-    </div>
-</div>
-
-<?php
-			$even++;
-		}
-	echo '</div>';
-	
+	while ($user_record=mysqli_fetch_assoc($user_query)) { 	
+        $user_record['lastlogon'] = webdatetime($user_record['lastlogon']);
+        $user_array[] = $user_record;
+    }
+    $latteParameters['user_record'] = $user_array;
 } else {
-  echo '<div id="obsah"><p>Žádní uživatelé neodpovídají výběru.</p></div>';
+$latteParameters['warning'] = 'Žádní uživatelé neodpovídají výběru.';
 }
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'users.latte', $latteParameters);
 $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+
+	if (isset($_SESSION['message']) and $_SESSION['message'] != null) { 
+		echo "\n<script>window.onload = alert('".$_SESSION['message']."')</script>\n";
+	unset($_SESSION['message']);}
 ?>

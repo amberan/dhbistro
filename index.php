@@ -18,7 +18,7 @@ if ( strpos($URL[1],'.php') == null) { //THE LOOP
         } else {
             $latteParameters['title'] = $text['spravauzivatelu'];
             auditTrail(8, 1, 0);
-            $latteParameters['actions'][] = array("users/new",$text['vytvorituzivatele']);
+            $latteParameters['actions'][] = array("/users/new",$text['vytvorituzivatele']);
             if ($URL[2] == 'new') {
                 $latteParameters['subtitle'] = $text['vytvorituzivatele']; 
                 include('user_new.php');

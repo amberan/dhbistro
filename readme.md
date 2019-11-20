@@ -14,8 +14,9 @@ Jedná se o systém používany organizacemi (Denní Hlídka, Noční Hlídka) v
 
 ### Work in progress: 1.6.2
 - uprava vyhledavani (odstraneni diakritiky z klice)  
-- .htaccess + THE LOOP (settings)
-- rework sprava uzivatelu design + markdown  
+- .htaccess
+- THE LOOP: nastaveni, uzivatele
+- LATTE sprava uzivatelu 
 
 
 ### [changelog](doc/changelog.md)

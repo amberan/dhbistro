@@ -1,0 +1,35 @@
+<h1 class="center">Výpis uživatelů</h1>
+{if $warning}
+    {$warning}
+{else}
+    {foreach $user_record as $user_record}
+
+        {$user_record['name']} {$user_record['surname']}
+        {$user_record['login']}
+
+        {if $user_record['right_power']} POWER USER {/if}
+        {if $user_record['right_text']} EDITOR {/if}
+        {if $user_record['right_org']} ORGANIZATOR {/if}
+        {if $user_record['right_aud']} AUDITOR {/if}
+            
+        Naposledy: 
+        {if $user_record['lastlogon']}
+            {$user_record['lastlogon']}
+        {else}
+            nikdy
+        {/if}
+
+        <a href="/users/edit/{$user_record['id']}">upravit</a>
+
+        {if $user_record['id'] != $usrinfo['id']}
+            <a class="button" href="/users/reset/{$user_record['id']}" onclick="return confirm('Opravdu vygenerovat nové heslo pro uživatele {$user_record['login']}?')">nové heslo</a>
+            {if $user_record['suspended'] == "1"}
+                <a class="button" href="/users/unlock/{$user_record['id']}" onclick="return confirm('Opravdu odemknout uživatele {$user_record['login']}?')">odemknout</a>
+            {else}
+                <a class="button" href="/users/lock/{$user_record['id']}" onclick="return confirm('Opravdu zamknout uživatele {$user_record['login']}?')">zamknout</a>
+            {/if}
+            <a class="button" href="/users/delete/{$user_record['id']}" onclick="return confirm('Opravdu smazat uživatele {$user_record['login']}?')">smazat</a>
+        {/if}	
+                
+    {/foreach}
+{/if}
