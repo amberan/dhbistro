@@ -323,4 +323,4 @@ INSERT INTO `nw_record_type` VALUES('10','úkoly');
 INSERT INTO `nw_record_type` VALUES('11','audit');
 INSERT INTO `nw_record_type` VALUES('12','jiné');
 
-INSERT INTO `nw_users` VALUES('1','','admin','21232f297a57a5a743894a0e4a801fc3','0','1539028214','1','1','','','1','0','','0','600','0','0','0','');
+INSERT INTO `nw_users` VALUES('1','','admin','21232f297a57a5a743894a0e4a801fc3','0','1539028214','1','1','0','0','1','600','1','1','1','1','1','','');

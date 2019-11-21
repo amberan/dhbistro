@@ -6,7 +6,7 @@ Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
 global $database,$config;
 
 function  backup_data($soubor=""){
-    global $database,$config;		 
+    global $database,$config;
 	function  keys($prefix,$array){
 		if (empty($array)) { $pocet=0; } else {	$pocet = count ($array); }
 		if (!isset($radky)) { $radky=''; }
@@ -75,28 +75,29 @@ function  backup_data($soubor=""){
 	}
 
 function backup_process() {
-    global $_SERVER, $database, $config;
+    global $_SERVER, $database, $config, $update_file;
         $backup_file = $_SERVER['DOCUMENT_ROOT'].$config['folder_backup']."backup".time().".sql.gz";
         backup_data($backup_file);
-        Debugger::log("BACKUP GENERATED: ".$backup_file." [".round((filesize($backup_file)/1024))." kB]");
-		//pouze pokud je zaloha vetsi 4kB
-		if (filesize($backup_file) > 4096) {
-			$check_sql=mysqli_query($database,"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."user' and column_name='sid'");
-			if(mysqli_num_rows($check_sql)== 0) { //old backup 1.5.2>
-				$sql_bck="INSERT INTO ".DB_PREFIX."backup (time, file) VALUES(".Time().",'".$backup_file."')";  
-			} else { //new backup 1.5.2<
-				$sql_bck="INSERT INTO ".DB_PREFIX."backup (time, file, version) VALUES(".Time().",'".$backup_file."','".$config['version']."')";  
-			}
-			mysqli_query ($database,$sql_bck);
-			//optimizace tabulek
-			$tablelist_sql = mysqli_query($database,"SHOW table status FROM ".$config['dbdatabase']);
-			while ($tablelist = mysqli_fetch_row($tablelist_sql)){
-				mysqli_query($database,"OPTIMIZE TABLE ".$tablelist[0]);
-			}
-			// pokud existuje update soubor - spustit a prejmenovat
-			if (file_exists($update_file)) { 
-				require_once($update_file);
-			}
+	//pouze pokud je zaloha vetsi 2kB
+	if (filesize($backup_file) > 1024) {
+		Debugger::log("BACKUP GENERATED: ".$backup_file." [".round((filesize($backup_file)/1024))." kB]");
+		$check_sql=mysqli_query($database,"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."user' and column_name='sid'");
+		if(mysqli_num_rows($check_sql)== 0) { //old backup 1.5.2>
+			$sql_bck="INSERT INTO ".DB_PREFIX."backup (time, file) VALUES(".Time().",'".$backup_file."')";  
+		} else { //new backup 1.5.2<
+			$sql_bck="INSERT INTO ".DB_PREFIX."backup (time, file, version) VALUES(".Time().",'".$backup_file."','".$config['version']."')";  
+		}
+		mysqli_query ($database,$sql_bck);
+		//optimizace tabulek
+		$tablelist_sql = mysqli_query($database,"SHOW table status FROM ".$config['dbdatabase']);
+		while ($tablelist = mysqli_fetch_row($tablelist_sql)){
+			mysqli_query($database,"OPTIMIZE TABLE ".$tablelist[0]);
+		}
+		// pokud existuje update soubor - spustit a prejmenovat
+		if (file_exists($update_file)) { 
+Debugger::log("update: ".$update_file);
+			require_once($update_file);
+		}
 			//odmazani UNREAD pro smazane uzivatele
 			$deletedusers_sql = mysqli_query($database,"select id from ".DB_PREFIX."user where deleted=1");
 			while ($deletedusers = mysqli_fetch_row($deletedusers_sql)) {
