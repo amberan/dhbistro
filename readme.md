@@ -17,8 +17,8 @@ Jedná se o systém používany organizacemi (Denní Hlídka, Noční Hlídka) v
 - uprava vyhledavani (odstraneni diakritiky z klice)  
 - .htaccess
 - THE LOOP: nastaveni, uzivatele, zalohovani
+- LATTE manualni zalohovani
 - LATTE sprava uzivatelu 
-- manualni zalohovani
 - editace uzivatelu nabizi jmeny seznam osob k napojeni
 
 

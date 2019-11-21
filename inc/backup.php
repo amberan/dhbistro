@@ -75,7 +75,7 @@ function  backup_data($soubor=""){
 	}
 
 function backup_process() {
-    global $_SERVER, $database;
+    global $_SERVER, $database, $config;
         backup_data($_SERVER['DOCUMENT_ROOT'].$config['folder_backup']."backup".time().".sql.gz");
         Debugger::log("BACKUP GENERATED: ".$backup_file." [".round((filesize($backup_file)/1024))." kB]");
 		//pouze pokud je zaloha vetsi 4kB
