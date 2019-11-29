@@ -14,9 +14,19 @@ přidělování bludišťáků                          | x | | | |
 úkoly                                           | | X | | |
 přidávání aktualit                              | x | | | |
 úprava nástěnky                                 | x | | | |
+zálohování                                      | | | | | X
 | | POWER USER | EDITOR | AUDITOR | ORGANIZATOR |
 
-## TODO
-- pridat pravo pro API  
-- prejmenovat prava aby odpovidala realne funkcionalite
-- vyresit vice urovnove utajeni
+## KONCEPT PRAV 2.0
+ROOT - zalohovani  
+ORGANIZATOR - není nové, antidatace  
+SUPERUSER - správa uživatelů  
+POWERUSER - aktuality, nástěnka, bludišťáci, casove moznosti
+
+TASKS - úkoly  
+SECRET n - utajení úrovně N  
+AUDIT - audit  
+API - api  
+EDITOR skupin  
+EDITOR osob  
+EDITOR pripadu  
