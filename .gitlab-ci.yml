@@ -1,3 +1,4 @@
+#https://gitlab.com/frakman1/codeclimate-test/blob/master/.gitlab-ci.yml
 code_quality:
   stage: test
   image: docker:stable
@@ -15,20 +16,19 @@ code_quality:
           export DOCKER_HOST='tcp://localhost:2375'
         fi
       fi
-    - docker pull --quiet "$CODE_QUALITY_IMAGE"
     - docker run
-        --env SOURCE_CODE="$PWD"
-        --volume "$PWD":/code
-        --volume /var/run/docker.sock:/var/run/docker.sock
-        "$CODE_QUALITY_IMAGE" /code
+      --env CODECLIMATE_DEBUG=1 
+      --env CODECLIMATE_CODE="$PWD" 
+      --volume "$PWD":/code
+      --volume /var/run/docker.sock:/var/run/docker.sock
+      --volume /tmp/cc:/tmp/cc 
+      codeclimate/codeclimate:0.85.5 analyze -f html > report.html
   artifacts:
-    reports:
-      codequality: gl-code-quality-report.json
-    expire_in: 1 week
+    paths: [report.html]
+    expire_in: 10 weeks
   dependencies: []
-  only:
-    - merge_requests
+#  only:
+#    - merge_requests
   except:
     variables:
       - $CODE_QUALITY_DISABLED
-
