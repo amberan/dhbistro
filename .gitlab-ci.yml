@@ -1,4 +1,41 @@
 #https://gitlab.com/frakman1/codeclimate-test/blob/master/.gitlab-ci.yml
+
+code_quality-html:
+  stage: test
+  image: docker:stable
+  allow_failure: true
+  services:
+    - docker:stable-dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+    CODE_QUALITY_IMAGE: "registry.gitlab.com/gitlab-org/security-products/codequality:0.85.6"
+  script:
+    - |
+      if ! docker info &>/dev/null; then
+        if [ -z "$DOCKER_HOST" -a "$KUBERNETES_PORT" ]; then
+          export DOCKER_HOST='tcp://localhost:2375'
+        fi
+      fi
+    - docker run
+        --env CODECLIMATE_DEBUG=1 
+        --env CODECLIMATE_CODE="$PWD" 
+        --volume "$PWD":/code
+        --volume /var/run/docker.sock:/var/run/docker.sock
+        --volume /tmp/cc:/tmp/cc 
+       codeclimate/codeclimate:0.85.6 analyze -f html > report.html
+  artifacts:
+    paths: [report.html]
+    expire_in: 10 weeks
+  dependencies: []
+  only:
+    - merge_requests
+  except:
+    variables:
+      - $CODE_QUALITY_DISABLED
+
+
+
 code_quality:
   stage: test
   image: docker:stable
@@ -8,7 +45,7 @@ code_quality:
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
-    CODE_QUALITY_IMAGE: "registry.gitlab.com/gitlab-org/security-products/codequality:0.85.5"
+    CODE_QUALITY_IMAGE: "registry.gitlab.com/gitlab-org/security-products/codequality:0.85.6"
   script:
     - |
       if ! docker info &>/dev/null; then
@@ -32,3 +69,12 @@ code_quality:
   except:
     variables:
       - $CODE_QUALITY_DISABLED
+
+
+#static_analysis:
+#  stage: test
+#  image: php:7.2-fpm
+#  before_script:
+#    - wget https://github.com/phpstan/phpstan/releases/download/0.11.19/phpstan.phar -O bin/phpstan.phar
+#  script:
+#    - php bin/phpstan.phar --error-format gitlab  analyse src --level=1

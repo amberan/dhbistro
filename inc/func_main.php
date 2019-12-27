@@ -1,9 +1,5 @@
 <?php
 
-/*
- * This file is part of Bistro.
- */
-
 session_start();
 
 $config['version'] = '1.6.2';  // verze bistra
@@ -209,15 +205,92 @@ break; //symbol 2 action report
 function nocs($pol)
 {
     $table = [
-        'Š' => 'S', 'š' => 's', 'Đ' => 'Dj', 'đ' => 'dj', 'Ž' => 'Z', 'ž' => 'z', 'Č' => 'C', 'č' => 'c', 'Ć' => 'C', 'ć' => 'c',
-        'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A', 'Å' => 'A', 'Æ' => 'A', 'Ç' => 'C', 'È' => 'E', 'É' => 'E',
-        'Ê' => 'E', 'Ë' => 'E', 'Ì' => 'I', 'Í' => 'I', 'Î' => 'I', 'Ï' => 'I', 'Ñ' => 'N', 'Ò' => 'O', 'Ó' => 'O', 'Ô' => 'O',
-        'Õ' => 'O', 'Ö' => 'O', 'Ø' => 'O', 'Ù' => 'U', 'Ú' => 'U', 'Û' => 'U', 'Ü' => 'U', 'Ý' => 'Y', 'Þ' => 'B', 'ß' => 'Ss',
-        'à' => 'a', 'á' => 'a', 'â' => 'a', 'ã' => 'a', 'ä' => 'a', 'å' => 'a', 'æ' => 'a', 'ç' => 'c', 'è' => 'e', 'é' => 'e',
-        'ê' => 'e', 'ë' => 'e', 'ì' => 'i', 'í' => 'i', 'î' => 'i', 'ï' => 'i', 'ð' => 'o', 'ñ' => 'n', 'ò' => 'o', 'ó' => 'o',
-        'ô' => 'o', 'õ' => 'o', 'ö' => 'o', 'ø' => 'o', 'ù' => 'u', 'ú' => 'u', 'û' => 'u', 'ý' => 'y', 'ý' => 'y', 'þ' => 'b',
-        'ÿ' => 'y', 'Ŕ' => 'R', 'ŕ' => 'r', 'ď' => 'd', 'ě' => 'e', 'ň' => 'n', 'ř' => 'r', 'ť' => 't', 'ů' => 'u', 'ü' => 'u',
-        'Ď' => 'D', 'Ě' => 'E', 'Ň' => 'N', 'Ř' => 'R', 'Ť' => 'T', 'Ů' => 'U',
+        'Š' => 'S',
+        'š' => 's',
+        'Đ' => 'Dj',
+        'đ' => 'dj',
+        'Ž' => 'Z',
+        'ž' => 'z',
+        'Č' => 'C',
+        'č' => 'c',
+        'Ć' => 'C',
+        'ć' => 'c',
+        'À' => 'A',
+        'Á' => 'A',
+        'Â' => 'A',
+        'Ã' => 'A',
+        'Ä' => 'A',
+        'Å' => 'A',
+        'Æ' => 'A',
+        'Ç' => 'C',
+        'È' => 'E',
+        'É' => 'E',
+        'Ê' => 'E',
+        'Ë' => 'E',
+        'Ì' => 'I',
+        'Í' => 'I',
+        'Î' => 'I',
+        'Ï' => 'I',
+        'Ñ' => 'N',
+        'Ò' => 'O',
+        'Ó' => 'O',
+        'Ô' => 'O',
+        'Õ' => 'O',
+        'Ö' => 'O',
+        'Ø' => 'O',
+        'Ù' => 'U',
+        'Ú' => 'U',
+        'Û' => 'U',
+        'Ü' => 'U',
+        'Ý' => 'Y',
+        'Þ' => 'B',
+        'ß' => 'Ss',
+        'à' => 'a',
+        'á' => 'a',
+        'â' => 'a',
+        'ã' => 'a',
+        'ä' => 'a',
+        'å' => 'a',
+        'æ' => 'a',
+        'ç' => 'c',
+        'è' => 'e',
+        'é' => 'e',
+        'ê' => 'e',
+        'ë' => 'e',
+        'ì' => 'i',
+        'í' => 'i',
+        'î' => 'i',
+        'ï' => 'i',
+        'ð' => 'o',
+        'ñ' => 'n',
+        'ò' => 'o',
+        'ó' => 'o',
+        'ô' => 'o',
+        'õ' => 'o',
+        'ö' => 'o',
+        'ø' => 'o',
+        'ù' => 'u',
+        'ú' => 'u',
+        'û' => 'u',
+        'ý' => 'y',
+        'ý' => 'y',
+        'þ' => 'b',
+        'ÿ' => 'y',
+        'Ŕ' => 'R',
+        'ŕ' => 'r',
+        'ď' => 'd',
+        'ě' => 'e',
+        'ň' => 'n',
+        'ř' => 'r',
+        'ť' => 't',
+        'ů' => 'u',
+        'ü' => 'u',
+        'Ď' => 'D',
+        'Ě' => 'E',
+        'Ň' => 'N',
+        'Ř' => 'R',
+        'Ť' => 'T',
+        'Ů' => 'U',
     ];
 
     return strtr($pol, $table);
@@ -227,7 +300,7 @@ function randomPassword()
 {
     $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
     $pass = [];
-    $alphaLength = strlen($alphabet) - 1;
+    $alphaLength = mb_strlen($alphabet) - 1;
     for ($i = 0; $i < 8; ++$i) {
         $n = rand(0, $alphaLength);
         $pass[] = $alphabet[$n];
@@ -238,7 +311,7 @@ function randomPassword()
 
 function check_mail($addr)
 {
-    if (!strpos($addr, '@')) {
+    if (!mb_strpos($addr, '@')) {
         return false;
     }
     list($local, $domain) = explode('@', $addr);
@@ -252,6 +325,6 @@ function check_mail($addr)
 }
 
 //show debug bar unless it's a sending a file (picture) to the user
-if ('getportrait.php' !== substr(basename($_SERVER['REQUEST_URI']), 0, strpos(basename($_SERVER['REQUEST_URI']), '?')) && 'getfile.php' !== substr(basename($_SERVER['REQUEST_URI']), 0, strpos(basename($_SERVER['REQUEST_URI']), '?'))) {
+if ('getportrait.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?')) && 'getfile.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?'))) {
     Debugger::barDump($_SESSION, 'session');
 }
