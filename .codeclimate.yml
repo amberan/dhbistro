@@ -47,7 +47,7 @@ plugins:
  eslint:
   enabled: true
  csslint:
-    enabled: true  
+    enabled: false  
       
 exclude_patterns:
   - vendor/
