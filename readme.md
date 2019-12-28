@@ -13,16 +13,8 @@ Jedná se o systém používany organizacemi (Denní Hlídka, Noční Hlídka) v
 - zpracovani osob + API - strankovani  
 - audit nejen podle lidi, ale na objektech  
 
-### Work in progress: 1.6.2
-- uprava vyhledavani (odstraneni diakritiky z klice)  
-- .htaccess
-- THE LOOP: nastaveni, uzivatele, zalohovani
-- LATTE manualni zalohovani
-- LATTE sprava uzivatelu 
-- editace uzivatelu nabizi jmeny seznam osob k napojeni
-- konfigurace pro easy coding starndard
-- konfigurace pro gitlab ci
-- aktualizace knihoven prez composer
+### Work in progress: 1.6.3
+-  
 
 
 

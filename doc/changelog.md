@@ -1,5 +1,18 @@
 # BISTRO changelog 
 
+**1.6.2**  
+- uprava vyhledavani (odstraneni diakritiky z klice)  
+- .htaccess
+- THE LOOP: nastaveni, uzivatele, zalohovani
+- LATTE manualni zalohovani
+- LATTE sprava uzivatelu 
+- editace uzivatelu nabizi jmeny seznam osob k napojeni
+- konfigurace pro easy coding standard
+- konfigurace pro gitlab ci
+- aktualizace knihoven prez composer
+- update databaze preveden na funkce
+- mazani starych tabulek
+
 **1.6.1**
 - [TUI.editor](https://github.com/nhn/tui.editor) CDN verze  
 - Latte - Nastaveni  
