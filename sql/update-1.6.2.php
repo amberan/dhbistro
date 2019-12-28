@@ -129,6 +129,11 @@ $to_MD[] = ['user', 'id', 'plan', 'plan_md'];
 // *** ADD INDEX
 // ALTER TABLE `nw_unread` ADD INDEX(`iduser`)
 
+
+// *** DROP TABLE
+$drop_table[] = 'loggedin_deleted';
+$drop_table[] = 'map_deleted';
+
 use Tracy\Debugger;
 Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
 require_once('update-function.php');
@@ -139,10 +144,10 @@ $counterColumnAdd = bistroDBColumnAdd($add_column);
 $counterPasswordEncrypt = bistroDBPasswordEncrypt();
 $counterColumnMarkdown = bistroDBColumnMarkdown($to_MD);
 $counterFulltextAdd = bistroDBFulltextAdd($add_fulltext);
-
+$counterTableDrop = bistroDBTableDrop($drop_table);
 
 //pokud zmeny probehly, prejmenovat tento soubor
-if ($counterColumnAdd + $counterColumnAlter + $counterColumnMarkdown + $counterFulltextAdd + $counterPasswordEncrypt + $counterTableRename > 0) {
+if ($counterColumnAdd + $counterColumnAlter + $counterColumnMarkdown + $counterFulltextAdd + $counterPasswordEncrypt + $counterTableRename + $counterTableDrop > 0) {
     rename(__FILE__,__FILE__.".old");
 }
 
