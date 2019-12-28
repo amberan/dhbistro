@@ -1,29 +1,31 @@
 [
     {
         "name": "latte/latte",
-        "version": "v2.4.8",
-        "version_normalized": "2.4.8.0",
+        "version": "v2.5.4",
+        "version_normalized": "2.5.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/nette/latte.git",
-            "reference": "95ca6bab6caaa3efa3b5d7d4537f9a45cb89ed90"
+            "reference": "211bec057917e1d771aa09fc334cde1229738860"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/nette/latte/zipball/95ca6bab6caaa3efa3b5d7d4537f9a45cb89ed90",
-            "reference": "95ca6bab6caaa3efa3b5d7d4537f9a45cb89ed90",
+            "url": "https://api.github.com/repos/nette/latte/zipball/211bec057917e1d771aa09fc334cde1229738860",
+            "reference": "211bec057917e1d771aa09fc334cde1229738860",
             "shasum": ""
         },
         "require": {
             "ext-json": "*",
             "ext-tokenizer": "*",
-            "php": ">=5.4.4"
+            "php": ">=7.1"
         },
         "conflict": {
             "nette/application": "<2.4.1"
         },
         "require-dev": {
-            "nette/tester": "~1.7",
+            "nette/tester": "~2.0",
+            "nette/utils": "^3.0",
+            "phpstan/phpstan": "^0.12",
             "tracy/tracy": "^2.3"
         },
         "suggest": {
@@ -31,11 +33,11 @@
             "ext-mbstring": "to use filters like lower, upper, capitalize, ...",
             "nette/utils": "to use filter |webalize"
         },
-        "time": "2018-06-03T17:34:15+00:00",
+        "time": "2019-12-11T19:48:05+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "2.4-dev"
+                "dev-master": "2.5-dev"
             }
         },
         "installation-source": "dist",
@@ -75,17 +77,17 @@
     },
     {
         "name": "league/html-to-markdown",
-        "version": "4.8.1",
-        "version_normalized": "4.8.1.0",
+        "version": "4.9.1",
+        "version_normalized": "4.9.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/thephpleague/html-to-markdown.git",
-            "reference": "250d1bf45f80d15594fb6b316df777d6d4c97ad1"
+            "reference": "1dcd0f85de786f46a7f224a27cc3d709ddd2a68c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/thephpleague/html-to-markdown/zipball/250d1bf45f80d15594fb6b316df777d6d4c97ad1",
-            "reference": "250d1bf45f80d15594fb6b316df777d6d4c97ad1",
+            "url": "https://api.github.com/repos/thephpleague/html-to-markdown/zipball/1dcd0f85de786f46a7f224a27cc3d709ddd2a68c",
+            "reference": "1dcd0f85de786f46a7f224a27cc3d709ddd2a68c",
             "shasum": ""
         },
         "require": {
@@ -95,17 +97,17 @@
         },
         "require-dev": {
             "mikehaertl/php-shellcommand": "~1.1.0",
-            "phpunit/phpunit": "4.*",
+            "phpunit/phpunit": "^4.8|^5.7",
             "scrutinizer/ocular": "~1.1"
         },
-        "time": "2018-12-24T17:21:44+00:00",
+        "time": "2019-12-28T01:32:28+00:00",
         "bin": [
             "bin/html-to-markdown"
         ],
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "4.9-dev"
+                "dev-master": "4.10-dev"
             }
         },
         "installation-source": "dist",
@@ -120,16 +122,16 @@
         ],
         "authors": [
             {
-                "name": "Nick Cernis",
-                "email": "nick@cern.is",
-                "homepage": "http://modernnerd.net",
-                "role": "Original Author"
-            },
-            {
                 "name": "Colin O'Dell",
                 "email": "colinodell@gmail.com",
                 "homepage": "https://www.colinodell.com",
                 "role": "Lead Developer"
+            },
+            {
+                "name": "Nick Cernis",
+                "email": "nick@cern.is",
+                "homepage": "http://modernnerd.net",
+                "role": "Original Author"
             }
         ],
         "description": "An HTML-to-markdown conversion helper for PHP",
@@ -141,37 +143,42 @@
     },
     {
         "name": "tracy/tracy",
-        "version": "v2.5.5",
-        "version_normalized": "2.5.5.0",
+        "version": "v2.7.2",
+        "version_normalized": "2.7.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/nette/tracy.git",
-            "reference": "35fa649b483b28e16f61de07110ea0585fc8d6ea"
+            "reference": "d28ebdf7ab8d88f231310aef1e8cce965ea0b2ca"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/nette/tracy/zipball/35fa649b483b28e16f61de07110ea0585fc8d6ea",
-            "reference": "35fa649b483b28e16f61de07110ea0585fc8d6ea",
+            "url": "https://api.github.com/repos/nette/tracy/zipball/d28ebdf7ab8d88f231310aef1e8cce965ea0b2ca",
+            "reference": "d28ebdf7ab8d88f231310aef1e8cce965ea0b2ca",
             "shasum": ""
         },
         "require": {
             "ext-json": "*",
             "ext-session": "*",
-            "php": ">=5.4.4"
+            "php": ">=7.1"
+        },
+        "conflict": {
+            "nette/di": "<3.0"
         },
         "require-dev": {
-            "nette/di": "~2.3",
-            "nette/tester": "~1.7",
-            "nette/utils": "~2.3"
+            "nette/di": "^3.0",
+            "nette/tester": "^2.2",
+            "nette/utils": "^3.0",
+            "phpstan/phpstan": "^0.12",
+            "psr/log": "^1.0"
         },
         "suggest": {
             "https://nette.org/donate": "Please support Tracy via a donation"
         },
-        "time": "2018-11-05T15:10:59+00:00",
+        "time": "2019-12-15T22:48:05+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "2.5-dev"
+                "dev-master": "2.7-dev"
             }
         },
         "installation-source": "dist",
@@ -180,7 +187,7 @@
                 "src"
             ],
             "files": [
-                "src/shortcuts.php"
+                "src/Tracy/shortcuts.php"
             ]
         },
         "notification-url": "https://packagist.org/downloads/",
