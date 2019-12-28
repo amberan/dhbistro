@@ -30,6 +30,7 @@ code_quality-html:
   dependencies: []
   only:
     - merge_requests
+    - web
   except:
     variables:
       - $CODE_QUALITY_DISABLED
