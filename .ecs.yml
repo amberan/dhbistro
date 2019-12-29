@@ -31,7 +31,7 @@ services:
 
     # Debug
     Symplify\CodingStandard\Sniffs\Debug\DebugFunctionCallSniff: ~
-    Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff: ~
+    #KK Symplify\CodingStandard\Sniffs\Debug\CommentedOutCodeSniff: ~
 
     # final classes
     PhpCsFixer\Fixer\ClassNotation\FinalInternalClassFixer: ~
@@ -90,7 +90,7 @@ services:
     PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer: ~
 
     # arguable checkers, feel free to remove them
-    Symplify\CodingStandard\Sniffs\ControlStructure\SprintfOverContactSniff: ~
+    #KK Symplify\CodingStandard\Sniffs\ControlStructure\SprintfOverContactSniff: ~
     PhpCsFixer\Fixer\ClassNotation\OrderedClassElementsFixer:
         order:
             - 'use_trait'
