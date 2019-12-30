@@ -38,39 +38,24 @@ code_quality-html:
 
 
 code_quality:
-  stage: test
   image: docker:stable
+  variables:
+    DOCKER_DRIVER: overlay2
   allow_failure: true
   services:
     - docker:stable-dind
-  variables:
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ""
-    CODE_QUALITY_IMAGE: "registry.gitlab.com/gitlab-org/security-products/codequality:0.85.6"
   script:
-    - |
-      if ! docker info &>/dev/null; then
-        if [ -z "$DOCKER_HOST" -a "$KUBERNETES_PORT" ]; then
-          export DOCKER_HOST='tcp://localhost:2375'
-        fi
-      fi
+    - export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
     - docker run
-      --env CODECLIMATE_DEBUG=1 
-      --env CODECLIMATE_CODE="$PWD" 
-      --volume "$PWD":/code
-      --volume /var/run/docker.sock:/var/run/docker.sock
-      --volume /tmp/cc:/tmp/cc 
-      codeclimate/codeclimate:0.85.5 analyze -f html > report.html
+        --env SOURCE_CODE="$PWD"
+        --volume "$PWD":/code
+        --volume /var/run/docker.sock:/var/run/docker.sock
+        "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
   artifacts:
-    paths: [report.html]
-    expire_in: 10 weeks
-  dependencies: []
+    reports:
+      codequality: gl-code-quality-report.json
   only:
     - merge_requests
-  except:
-    variables:
-      - $CODE_QUALITY_DISABLED
-
 
 #static_analysis:
 #  stage: test
