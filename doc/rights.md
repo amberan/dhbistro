@@ -14,19 +14,36 @@ přidělování bludišťáků                          | x | | | |
 úkoly                                           | | X | | |
 přidávání aktualit                              | x | | | |
 úprava nástěnky                                 | x | | | |
-zálohování                                      | | | | | X
+zálohování                                      | | | | | | X
 | | POWER USER | EDITOR | AUDITOR | ORGANIZATOR |
 
 ## KONCEPT PRAV 2020
-acl_root ROOT - 0/1 - zalohovani 
-acl_gm ORGANIZATOR - 0/1 - není nové, antidatace  
-acl_super SUPERUSER - 0/1 - správa uživatelů  
-acl_power POWERUSER - 0/1 - aktuality, nástěnka, bludišťáci, casove moznosti
 
-acl_task TASKS - cist (0) / psat (1)
-acl_secret SECRET n - utajení úrovně 1/2/3/...../x  
-acl_audit AUDIT - off (0) / cist (1)
-acl_power API - off (0) / cist (1) / psat (2)
-acl_group EDITOR skupin - cist (0) /psat (1)/mazat (2)
-acl_person EDITOR osob - cist (0) /psat (1)/mazat (2)
-acl_case EDITOR pripadu - cist (0) /psat (1)/mazat (2)
+|ROOT|ORGANIZATOR|SUPERUSER|POWERUSER|UKOLY|UTAJENI|AUDIT|API|SKUPINY|OSOBY|PRIPADY
+--- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | ---
+aktivita|acl_root|acl_gm|acl_super|acl_power|acl_task|acl_secret|acl_audit|acl_api|acl_group|acl_person|acl_case
+|0/1|0/1|0/1|0/1|r/w|n|0/1|0/r/w|r/w|r/w|r/w
+zobrazní auditu                                 |||||||X||||
+editace skupin                                  |||||||||||X
+editace osob                                    ||||||||||X|
+editace pripadu                                 |||||||||X||
+zobrazení auditní stopy jiných orgů             ||X|||||||||
+antidatace                                      ||X|||||||||
+"není nové"                                     ||X|||||||||
+uživatelé - editace, zobrazení etc.             |||X||||||||
+tajné věci                                      ||||||X|||||
+editace časovných možností                      ||||X|||||||
+přidělování bludišťáků                          ||||X|||||||
+úkoly                                           |||||X||||||
+přidávání aktualit                              ||||X|||||||
+úprava nástěnky                                 ||||X|||||||
+zálohování                                      |X|||||||||| 
+pristup k API                                   ||||||||X||| 
+
+
+#### konverze
+right_power > acl_super
+right_text > acl_task + acl_group + acl_person + acl_case
+right_audit > acl_audit
+right_org > acl_gm
+right_super > acl_root
