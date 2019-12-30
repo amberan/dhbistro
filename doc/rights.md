@@ -17,16 +17,16 @@ přidávání aktualit                              | x | | | |
 zálohování                                      | | | | | X
 | | POWER USER | EDITOR | AUDITOR | ORGANIZATOR |
 
-## KONCEPT PRAV 2.0
-ROOT - 0/1 - zalohovani 
-ORGANIZATOR - 0/1 - není nové, antidatace  
-SUPERUSER - 0/1 - správa uživatelů  
-POWERUSER - 0/1 - aktuality, nástěnka, bludišťáci, casove moznosti
+## KONCEPT PRAV 2020
+acl_root ROOT - 0/1 - zalohovani 
+acl_gm ORGANIZATOR - 0/1 - není nové, antidatace  
+acl_super SUPERUSER - 0/1 - správa uživatelů  
+acl_power POWERUSER - 0/1 - aktuality, nástěnka, bludišťáci, casove moznosti
 
-TASKS - cist (0) / psat (1)
-SECRET n - utajení úrovně 1/2/3/...../x  
-AUDIT - off (0) / cist (1)
-API - off (0) / cist (1) / psat (2)
-EDITOR skupin - cist (0) /psat (1)/mazat (2)
-EDITOR osob - cist (0) /psat (1)/mazat (2)
-EDITOR pripadu - cist (0) /psat (1)/mazat (2)
+acl_task TASKS - cist (0) / psat (1)
+acl_secret SECRET n - utajení úrovně 1/2/3/...../x  
+acl_audit AUDIT - off (0) / cist (1)
+acl_power API - off (0) / cist (1) / psat (2)
+acl_group EDITOR skupin - cist (0) /psat (1)/mazat (2)
+acl_person EDITOR osob - cist (0) /psat (1)/mazat (2)
+acl_case EDITOR pripadu - cist (0) /psat (1)/mazat (2)
