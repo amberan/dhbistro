@@ -55,6 +55,16 @@ plugins:
     config:
       ignore_warnings: true
       encoding: utf-8"
+  sonar-php:
+    enabled: true
+    config:
+      minimum_severity: critical
+  fixme:
+    enabled: true
+    config:
+      strings:
+      - FIXME
+      - TODO
       
 exclude_patterns:
   - vendor/
