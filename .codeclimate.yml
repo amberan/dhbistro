@@ -43,7 +43,7 @@ checks:
 
 plugins:
   rubocop:
-    enabled: true
+    enabled: false
   eslint:
     enabled: true
   csslint:
@@ -51,7 +51,7 @@ plugins:
   phpmd:
     enabled: true
   phpcodesniffer:
-    enabled: true
+    enabled: false
     config:
       ignore_warnings: true
       encoding: utf-8"
