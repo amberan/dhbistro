@@ -42,12 +42,19 @@ checks:
       threshold: 28
 
 plugins:
- rubocop:
-  enabled: true
- eslint:
-  enabled: true
- csslint:
+  rubocop:
+    enabled: true
+  eslint:
+    enabled: true
+  csslint:
     enabled: false  
+  phpmd:
+    enabled: true
+  phpcodesniffer:
+    enabled: true
+    config:
+      ignore_warnings: true
+      encoding: utf-8"
       
 exclude_patterns:
   - vendor/
