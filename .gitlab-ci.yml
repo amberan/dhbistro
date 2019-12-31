@@ -20,11 +20,11 @@ code_quality-html:
     - docker run
         --env CONTAINER_TIMEOUT_SECONDS=1800
         --env CODECLIMATE_CODE="$PWD" 
+        --env CODECLIMATE_DEBUG=0
         --volume "$PWD":/code
         --volume /var/run/docker.sock:/var/run/docker.sock
         --volume /tmp/cc:/tmp/cc 
        codeclimate/codeclimate:0.85.6 analyze -f html > report.html
-#  --env CODECLIMATE_DEBUG=1 
   artifacts:
     paths: [report.html]
     expire_in: 10 weeks
@@ -50,6 +50,7 @@ code_quality:
     - export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
     - docker run
         --env SOURCE_CODE="$PWD"
+        --env CODECLIMATE_DEBUG=0
         --volume "$PWD":/code
         --volume /var/run/docker.sock:/var/run/docker.sock
         "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
