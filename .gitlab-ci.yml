@@ -56,6 +56,7 @@ code_quality:
         "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
   only:
     - merge_requests
+    - web
   artifacts:
     reports:
       codequality: gl-code-quality-report.json
