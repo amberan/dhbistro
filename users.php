@@ -140,6 +140,5 @@ if (mysqli_num_rows ($user_query)) {
 $latteParameters['warning'] = $text['prazdnyvypis'];
 }
 $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'users.latte', $latteParameters);
-$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 
 ?>

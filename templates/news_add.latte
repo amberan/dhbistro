@@ -1,0 +1,46 @@
+{$text['novaaktualita']}
+<form action="/news" method="post" id="inputform">
+    {$text['nadpis']}:
+    <input type="text" name="nadpis" id="nadpis" />
+    {$text['kategorie']}:
+    <select name="kategorie" id="kategorie">
+        <option value="1" selected="selected">{$text['kategorieherni']}</option>
+        <option value="2">{$text['kategoriesystemova']}</option>
+    </select>
+    {$text['obsah'] }
+    <input class="form-control"  name="news_new" id="news_new" type="hidden" />
+    <div id="editSection" class="writable-section"></div>
+        <script type="text/javascript">
+        </script>
+    </div>
+<input class="btn btn-primary mt-2" type="submit" name="insertnews" id="submitbutton" value={$text[ulozit]}>
+</form>
+
+<script>
+    var editor = new tui.Editor({
+        el: document.querySelector('#editSection'),
+        previewStyle: 'vertical',
+        height: '400px',
+        initialEditType: 'wysiwyg',
+        initialValue: null,
+        useCommandShortcut: true,
+        exts: [{
+                name: 'chart',
+                minWidth: 100,
+                maxWidth: 600,
+                minHeight: 100,
+                maxHeight: 300
+            },
+            'scrollSync',
+            'colorSyntax',
+            'uml',
+            'mark',
+            'table'
+        ]
+    });
+
+    setInterval(function() {
+        document.getElementById("news_new").value = editor.getValue();
+    }, 5);
+
+</script>

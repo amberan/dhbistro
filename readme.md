@@ -14,7 +14,8 @@ Jedná se o systém používany organizacemi (Denní Hlídka, Noční Hlídka) v
 - audit nejen podle lidi, ale na objektech  
 
 ### Work in progress: 1.6.3
--  
+-  aktuality > MD (potrebuje dostylovat)
+-  novinky > MD (potrebuje dostylovat)
 
 
 

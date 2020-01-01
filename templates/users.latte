@@ -1,4 +1,4 @@
-<h1 class="center">Výpis uživatelů</h1>
+<h1 class="center">{$text[vypisuzivatelu]}</h1>
 {if $warning}
     {$warning}
 {else}
@@ -12,23 +12,23 @@
         {if $user_record['right_org']} ORGANIZATOR {/if}
         {if $user_record['right_aud']} AUDITOR {/if}
             
-        Naposledy: 
+        {$text['naposledy']}: 
         {if $user_record['lastlogon']}
             {$user_record['lastlogon']}
         {else}
-            nikdy
+            {$text[nikdy]}
         {/if}
 
-        <a href="/users/edit/{$user_record['id']}">upravit</a>
+        <a href="/users/edit/{$user_record['id']}">{$text[upravit]}</a>
 
         {if $user_record['id'] != $usrinfo['id']}
-            <a class="button" href="/users/reset/{$user_record['id']}" onclick="return confirm('Opravdu vygenerovat nové heslo pro uživatele {$user_record['login']}?')">nové heslo</a>
+            <a class="button" href="/users/reset/{$user_record['id']}" onclick="return confirm('Opravdu vygenerovat nové heslo pro uživatele {$user_record['login']}?')">{$text[noveheslo]}</a>
             {if $user_record['suspended'] == "1"}
-                <a class="button" href="/users/unlock/{$user_record['id']}" onclick="return confirm('Opravdu odemknout uživatele {$user_record['login']}?')">odemknout</a>
+                <a class="button" href="/users/unlock/{$user_record['id']}" onclick="return confirm('Opravdu odemknout uživatele {$user_record['login']}?')">{$text[odemknout]}</a>
             {else}
-                <a class="button" href="/users/lock/{$user_record['id']}" onclick="return confirm('Opravdu zamknout uživatele {$user_record['login']}?')">zamknout</a>
+                <a class="button" href="/users/lock/{$user_record['id']}" onclick="return confirm('Opravdu zamknout uživatele {$user_record['login']}?')">{$text[zamknout]}</a>
             {/if}
-            <a class="button" href="/users/delete/{$user_record['id']}" onclick="return confirm('Opravdu smazat uživatele {$user_record['login']}?')">smazat</a>
+            <a class="button" href="/users/delete/{$user_record['id']}" onclick="return confirm('Opravdu smazat uživatele {$user_record['login']}?')">{$text[smazat]}</a>
         {/if}	
                 
     {/foreach}

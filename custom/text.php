@@ -3,6 +3,13 @@
 $text['ulozit'] = 'Uložit';
 $text['ano'] = 'ano';
 $text['ne'] = 'ne';
+$text['poslednizmena'] = 'Poslední změna';
+$text['zmenil'] = 'Změnil';
+$text['upravit'] = 'Upravit';
+$text['smazat'] = 'smazat';
+$text['nadpis'] = 'Nadpis';
+$text['kategorie'] = 'Kategorie';
+$text['obsah'] = 'Obsah';
 
 // LOGIN 
 $text['jmeno'] = 'Jméno';
@@ -41,6 +48,7 @@ $text['osoby'] = 'Osoby';
 $text['aktuality'] = 'Aktuality';
 $text['cesta'] = 'Cesta';
 $text['akce'] = 'Akce';
+$text['nastenka'] = 'Nástěnka';
 
 // NASTAVENI
 $text['uzivatel'] = 'Uživatel';
@@ -73,9 +81,39 @@ $text['nemaneuzavrenepripady'] = 'Uživatel nemá žádný přiřazený neuzavř
 $text['neuzavrenepripady'] = 'Přiřazené neuzavřené případy';
 $text['nemanedokonceneukoly'] = 'Uživatel nemá žádné nedokončené úkoly.';
 $text['nedokonceneukoly'] = 'Nedokončené úkoly';
+$text['vypisuzivatelu'] = 'Výpis uživatelů';
+$text['naposledy'] = 'Naposledy';
+$text['nikdy'] = 'Nikdy';
+$text['noveheslo'] = 'nové heslo';
+$text['odemknout'] = 'odemknout';
+$text['zamknout'] = 'zamknout';
+
 
 // BACKUP
 $text['existujicizalohy'] = 'Existující zálohy';
 $text['zalohovatrucne'] = 'Vytvořit zálohu ručně';
 $text['zalohavytvorena'] = 'Záloha vytvořena!';
+
+// NASTENKA / AKTUALITY
+$text['obsahnastenky'] = 'Obsah nástěnky';
+$text['upravitnastenku'] = 'Upravit nástěnku';
+$text['osobninastenka'] = 'Osobní nástěnka';
+$text['zobrazitnastenku'] = 'Zobrazit nástěnku';
+$text['zadnanedokoncenahlaseni'] = 'Nemáte žádná nedokončená hlášení';
+$text['zadnenadokoncenepripady'] = 'Nemáte žádný přiřazený neuzavřený případ';
+$text['zadnenedokonceneukoly'] = 'Nemáte žádné nedokončené úkoly';
+$text['nanedokoncenahlaseni'] = 'Rozpracovaná nedokončená hlášení';
+$text['neuzavrenepripady'] = 'Přiřazené neuzavřené případy';
+$text['nedokonceneukoly'] = 'Nedokončené úkoly';
+$text['nastenkaprazdna'] = 'Veřejná nástěnka nemá žádný obsah';
+$text['nastenkaupravena'] = 'Nástěnka upravena';
+$text['zobrazitaktuality'] = 'Zobrazit aktuality';
+$text['pridataktualitu'] = 'přidat aktualitu';
+$text['aktualitaodebrana'] = 'Aktualita odebrána';
+$text['aktualitaneodebrana'] = 'Aktualitu se nepodařilo odebrat';
+$text['aktualitavlozena'] = 'Aktualita vložena';
+$text['aktualitanevlozena'] = 'Aktualitu se nepodařilo vložit';
+$text['novaaktualita'] = 'Nová aktualita';
+$text['kategorieherni'] = 'herní';
+$text['kategoriesystemova'] = 'systémová';
 ?>

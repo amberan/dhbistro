@@ -1,5 +1,7 @@
 <?php
-$latteParameters['title'] = $text['nastaveni'];
+use Tracy\Debugger;
+Debugger::enable(Debugger::DEVELOPMENT,$config['folder_logs']);
+
 
 if ((isset($_POST['userid']) AND isset($_POST['edituser']) AND !is_numeric($_REQUEST['timeout'])) AND ($usrinfo['id'] == $_POST['userid'] )) {
 		$latteParameters['message'] = $text['timeoutnenicislo'];

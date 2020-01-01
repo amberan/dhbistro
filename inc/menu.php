@@ -7,7 +7,7 @@ function mainMenu ($index) {
 	$dlink=mysqli_fetch_assoc (mysqli_query ($database,"SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1"));
 	echo '<div id="menu">
   <ul class="'.$config['barva'].'">
-	  <li '.((searchTable(5))?' class="unread"':((searchTable(6))?' class="unread"':'')).'><a href="index.php">Aktuality</a></li>
+	  <li '.((searchTable(5))?' class="unread"':((searchTable(6))?' class="unread"':'')).'><a href="/">Aktuality</a></li>
 	  <li '.((searchTable(4))? ' class="unread"':'').'><a href="reports.php">'.$text['hlaseniV'].' '.searchTable(4).'</a></li>	
 	  <li '.((searchTable(1))?' class="unread"':((searchTable(7))?' class="unread"':'')).'><a href="persons.php">Osoby '.searchTable(1).'</a></li>
 	  <li '.((searchTable(3))?' class="unread"':'').'><a href="cases.php">Případy '.searchTable(3).'</a></li>
@@ -40,7 +40,7 @@ function sparklets ($path,$actions='') {
 
 
 //LATTE
-$menu[] = array($text['aktuality'],"/index.php",searchTable(5)+searchTable(6));
+$menu[] = array($text['aktuality'],"",searchTable(5)+searchTable(6));
 $menu[] = array($text['hlaseniV'],"/reports.php",searchTable(4));
 $menu[] = array($text['osoby'],"/persons.php",searchTable(1)+searchTable(7));
 $menu[] = array($text['pripady'],"/cases.php",searchTable(3));
