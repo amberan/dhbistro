@@ -10,14 +10,14 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 
         
         // Úprava nástěnky
-	if (isset($_POST['editdashboard'])) {
+	if (isset($_POST['editdashboard'])) { 
 		auditTrail(6, 2, 0);
 		$latteParameters['title'] = 'Upravena nástěnka';
 		$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 		mainMenu (5);
 		sparklets ('<a href="dashboard.php">nástěnka</a> &raquo; <strong>nástěnka upravena</strong>');
-		$sql="INSERT INTO ".DB_PREFIX."dashboard ( created, iduser, content) VALUES(".Time()."','".$usrinfo['id']."','".$_POST['contents']."')";
-		mysqli_query ($database,$sql);
+		$sql="INSERT INTO ".DB_PREFIX."dashboard ( created, iduser, content) VALUES('".Time()."','".$usrinfo['id']."','".$_POST['contents']."')";
+        mysqli_query ($database,$sql);
 		unreadRecords (6,0);
 		echo '<div id="obsah"><p>Nástěnka upravena.</p></div>';
 		$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
