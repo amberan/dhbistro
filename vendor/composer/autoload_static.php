@@ -14,6 +14,7 @@ class ComposerStaticInit6db1c36b45f379dc0212516dfd0b3bec
         'L' => 
         array (
             'League\\HTMLToMarkdown\\' => 22,
+            'League\\CommonMark\\' => 18,
         ),
     );
 
@@ -21,6 +22,10 @@ class ComposerStaticInit6db1c36b45f379dc0212516dfd0b3bec
         'League\\HTMLToMarkdown\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/html-to-markdown/src',
+        ),
+        'League\\CommonMark\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/commonmark/src',
         ),
     );
 
