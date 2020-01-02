@@ -4,7 +4,6 @@ use Tracy\Debugger;
 Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
 
 //vytvoreni zalohy
-global $database,$config;
 
 function  backup_data($soubor = "")
 {

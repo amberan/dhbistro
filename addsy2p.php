@@ -19,11 +19,11 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 
 <div id="obsah">
 
-<p>
-Přiřazení symbolu osobě, které patří.
-</p>
+    <p>
+        Přiřazení symbolu osobě, které patří.
+    </p>
 
-<?php
+    <?php
 	// zpracovani filtru
 	if (!isset($custom_Filter['sort'])) {
 	  $f_sort=1;
@@ -67,7 +67,7 @@ Přiřazení symbolu osobě, které patří.
 	}
 	// formular filtru
 	function filter () {
-		global $database,$f_sort, $sportraits, $ssymbols, $farchiv, $fdead;
+		global $f_sort, $sportraits, $ssymbols, $farchiv, $fdead;
 	  echo '<form action="addsy2p.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -98,8 +98,8 @@ Přiřazení symbolu osobě, které patří.
 	}
 	$res=mysqli_query ($database,$sql);
 ?>
-<div id="in-form-table">
-<?php 
+    <div id="in-form-table">
+        <?php 
 	if (mysqli_num_rows ($res)) {
 	  echo '<table>
 <thead>
@@ -123,13 +123,13 @@ Přiřazení symbolu osobě, které patří.
 </table>';
 	}
 ?>
-<input type="hidden" name="fdead" value="<?php echo $fdead; ?>" />
-<input type="hidden" name="farchiv" value="<?php echo $farchiv; ?>" />
-<input type="hidden" name="symbolid" value="<?php echo $_REQUEST['rid']; ?>" />
-<input id="button-floating-uloz" type="submit" value="Uložit změny" name="addsymb2pers" class="submitbutton" title="Uložit změny"/>
-</div>
-<!-- end of #obsah -->
-</form>
+        <input type="hidden" name="fdead" value="<?php echo $fdead; ?>" />
+        <input type="hidden" name="farchiv" value="<?php echo $farchiv; ?>" />
+        <input type="hidden" name="symbolid" value="<?php echo $_REQUEST['rid']; ?>" />
+        <input id="button-floating-uloz" type="submit" value="Uložit změny" name="addsymb2pers" class="submitbutton" title="Uložit změny" />
+    </div>
+    <!-- end of #obsah -->
+    </form>
 
 </div>
 <!-- end of #obsah -->

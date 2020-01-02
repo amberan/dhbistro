@@ -53,7 +53,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	}
 	//
 	function filter () {
-	  global $database,$f_sort, $f_sec, $f_stat, $f_new, $usrinfo;
+	  global $f_sort, $f_sec, $f_stat, $f_new, $usrinfo;
 	  echo '<div id="filter-wrapper"><form action="cases.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>

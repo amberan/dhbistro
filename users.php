@@ -99,7 +99,7 @@ switch ($f_sort) {
 }
 function filter ()
 {
-    global $database,$f_cat,$f_sort;
+    global $f_cat,$f_sort;
     echo
 '<div id="filtr" class="table">
 	<form action="/users" method="get">

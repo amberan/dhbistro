@@ -18,11 +18,11 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 ?>
 
 <div id="obsah">
-<p>
-Hlášení můžete přiřadit k případu (či případům), kterého se týká.
-</p>
+    <p>
+        Hlášení můžete přiřadit k případu (či případům), kterého se týká.
+    </p>
 
-<?php
+    <?php
 // zpracovani filtru
 if (!isset($custom_Filter['sort'])) {
 	$f_sort=1;
@@ -36,7 +36,7 @@ switch ($f_sort) {
 }
 //
 function filter () {
-	global $database,$f_sort;
+	global $f_sort;
 	echo '<form action="addar2c.php" method="post" id="filter">
 	<fieldset>
 	<legend>Filtr</legend>
@@ -50,8 +50,8 @@ function filter () {
 	</form>';
 }
 filter(); ?>
-<form action="addreports.php" method="post" class="otherform">
-<?php // vypis pripadu
+    <form action="addreports.php" method="post" class="otherform">
+        <?php // vypis pripadu
 if ($usrinfo['right_power']) {
 	$sql="SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."ar2c.iduser FROM ".DB_PREFIX."case LEFT JOIN ".DB_PREFIX."ar2c ON ".DB_PREFIX."ar2c.idcase=".DB_PREFIX."case.id AND ".DB_PREFIX."ar2c.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."case.deleted=0 ORDER BY ".$fsql_sort;
 } else {
@@ -59,8 +59,8 @@ if ($usrinfo['right_power']) {
 }
 $res=mysqli_query ($database,$sql);
 ?>
-<div id="in-form-table">
-<?php 
+        <div id="in-form-table">
+            <?php 
 if (mysqli_num_rows ($res)) {
 	echo '	<table>
 	<thead>
@@ -86,11 +86,11 @@ if (mysqli_num_rows ($res)) {
 	echo '<p>Žádné případy neodpovídají výběru.</p>';
 }
 ?>
-	<input type="hidden" name="reportid" value="<?php echo $_REQUEST['rid']; ?>" />
-	<input id="button-floating-uloz" type="submit" value="Uložit změny" name="addtoareport" class="submitbutton" title="Uložit změny"/>
-</div>
-<!-- end of #in-form-table -->
-</form>
+            <input type="hidden" name="reportid" value="<?php echo $_REQUEST['rid']; ?>" />
+            <input id="button-floating-uloz" type="submit" value="Uložit změny" name="addtoareport" class="submitbutton" title="Uložit změny" />
+        </div>
+        <!-- end of #in-form-table -->
+    </form>
 
 </div>
 <!-- end of #obsah -->

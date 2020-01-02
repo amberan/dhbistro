@@ -16,11 +16,11 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 ?>
 
 <div id="obsah">
-<p>
-K případu můžete přiřadit osoby, kterých se týká nebo kterých by se týkat mohl.
-</p>
+    <p>
+        K případu můžete přiřadit osoby, kterých se týká nebo kterých by se týkat mohl.
+    </p>
 
-<?php
+    <?php
 	// zpracovani filtru
 	if (!isset($custom_Filter['sort'])) {
 	  $f_sort=1;
@@ -64,7 +64,7 @@ K případu můžete přiřadit osoby, kterých se týká nebo kterých by se t�
 	}
 	// formular filtru
 	function filter () {
-		global $database,$f_sort, $sportraits, $ssymbols, $farchiv, $fdead;
+		global $f_sort, $sportraits, $ssymbols, $farchiv, $fdead;
 	  echo '<form action="addp2c.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -95,9 +95,9 @@ K případu můžete přiřadit osoby, kterých se týká nebo kterých by se t�
 	$res=mysqli_query ($database,$sql);
 ?>
 
-<div style="padding-top: 0px; padding-bottom: 0px;"id="in-form-table">
-    
-<?php 
+    <div style="padding-top: 0px; padding-bottom: 0px;" id="in-form-table">
+
+        <?php 
 	if (mysqli_num_rows ($res)) {
 	  echo '<table>
 <thead>
@@ -121,14 +121,14 @@ K případu můžete přiřadit osoby, kterých se týká nebo kterých by se t�
 </table>';
 	}
 ?>
-<input type="hidden" name="fdead" value="<?php echo $fdead; ?>" />
-<input type="hidden" name="farchiv" value="<?php echo $farchiv; ?>" />
-<input type="hidden" name="caseid" value="<?php echo $_REQUEST['rid']; ?>" />
+        <input type="hidden" name="fdead" value="<?php echo $fdead; ?>" />
+        <input type="hidden" name="farchiv" value="<?php echo $farchiv; ?>" />
+        <input type="hidden" name="caseid" value="<?php echo $_REQUEST['rid']; ?>" />
 
-<input id="button-floating-uloz" type="submit" value="Uložit změny" name="addtocase" class="submitbutton" title="Uložit změny"/>
-</div>
-<!-- end of #obsah -->
-</form>
+        <input id="button-floating-uloz" type="submit" value="Uložit změny" name="addtocase" class="submitbutton" title="Uložit změny" />
+    </div>
+    <!-- end of #obsah -->
+    </form>
 
 </div>
 <!-- end of #obsah -->

@@ -16,11 +16,11 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 ?>
 
 <div id="obsah">
-<p>
-K případu můžete přiřadit hlášení, která se ho týkají.
-</p>
+    <p>
+        K případu můžete přiřadit hlášení, která se ho týkají.
+    </p>
 
-<?php
+    <?php
 		// zpracovani filtru
 	if (!isset($custom_Filter['type'])) {
 	  $f_cat=0;
@@ -71,7 +71,7 @@ K případu můžete přiřadit hlášení, která se ho týkají.
 	}
 	// filtr samotny
 	function filter () {
-	  global $database,$f_cat,$f_sort,$f_stat, $f_archiv;
+	  global $f_cat,$f_sort,$f_stat, $f_archiv;
 	  echo '<form action="addc2ar.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -135,8 +135,8 @@ seřadit je podle <select name="sort">
 	}
 	$res=mysqli_query ($database,$sql);
 ?>
-<div style="padding-left: 0px; padding-right: 0px; padding-top: 0px; padding-bottom: 0px;" id="in-form-table">
-<?php 
+    <div style="padding-left: 0px; padding-right: 0px; padding-top: 0px; padding-bottom: 0px;" id="in-form-table">
+        <?php 
 	while ($rec=mysqli_fetch_assoc ($res)) {
 	  echo '<div class="news_div '.(($rec['type']==1)?'game_news':'system_news').'">
 	<div class="news_head"><input type="checkbox" name="report[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser'])?' checked="checked"':'').' /><strong><a href="readactrep.php?rid='.$rec['id'].'">'.StripSlashes($rec['label']).'</a></strong></span>';
@@ -147,15 +147,15 @@ seřadit je podle <select name="sort">
 	}
 ?>
 
-<div>
-<input type="hidden" name="caseid" value="<?php echo $_REQUEST['rid']; ?>" />
-<input id="button-floating-uloz" type="submit" value="Uložit změny" name="addcasetoareport" class="submitbutton" title="Uložit změny" />
-</div>
-</form>
+        <div>
+            <input type="hidden" name="caseid" value="<?php echo $_REQUEST['rid']; ?>" />
+            <input id="button-floating-uloz" type="submit" value="Uložit změny" name="addcasetoareport" class="submitbutton" title="Uložit změny" />
+        </div>
+        </form>
 
-</div>
-<!-- end of #obsah -->
-<?php
+    </div>
+    <!-- end of #obsah -->
+    <?php
 		} else {
 		  echo '<div id="obsah"><p>Hlášení neexistuje. Rid='.$_REQUEST['rid'].'</p></div>';
 		}

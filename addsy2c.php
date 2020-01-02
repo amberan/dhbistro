@@ -21,11 +21,11 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 ?>
 
 <div id="obsah">
-<p>
-Symbol můžete přiřadit k případu (či případům), u kterých se vyskytoval.
-</p>
+    <p>
+        Symbol můžete přiřadit k případu (či případům), u kterých se vyskytoval.
+    </p>
 
-<?php
+    <?php
 // zpracovani filtru
 if (!isset($custom_Filter['sort'])) {
 	$f_sort=1;
@@ -39,7 +39,7 @@ switch ($f_sort) {
 }
 //
 function filter () {
-	global $database,$f_sort;
+	global $f_sort;
 	echo '<form action="addsy2c.php" method="post" id="filter">
 	<fieldset>
 	<legend>Filtr</legend>
@@ -53,8 +53,8 @@ function filter () {
 	</form>';
 }
 filter(); ?>
-<form action="addsymbols.php" method="post" class="otherform">
-<?php // vypis pripadu
+    <form action="addsymbols.php" method="post" class="otherform">
+        <?php // vypis pripadu
 if ($usrinfo['right_power']) {
 	$sql="SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."symbol2all.iduser FROM ".DB_PREFIX."case LEFT JOIN ".DB_PREFIX."symbol2all ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."case.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." WHERE ".DB_PREFIX."case.deleted=0 ORDER BY ".$fsql_sort;
 } else {
@@ -62,8 +62,8 @@ if ($usrinfo['right_power']) {
 }
 $res=mysqli_query ($database,$sql);
 ?>
-<div id="in-form-table">
-<?php
+        <div id="in-form-table">
+            <?php
 if (mysqli_num_rows ($res)) {
 	echo '<div id="">
 	<table>
@@ -93,10 +93,10 @@ if (mysqli_num_rows ($res)) {
 }
 ?>
 
-<input type="hidden" name="symbolid" value="<?php echo $_REQUEST['rid']; ?>" />
-<input id="button-floating-uloz" type="submit" value="Uložit změny" name="addsymbol2c" class="submitbutton" title="Uložit změny" />
-</div>
-</form>
+            <input type="hidden" name="symbolid" value="<?php echo $_REQUEST['rid']; ?>" />
+            <input id="button-floating-uloz" type="submit" value="Uložit změny" name="addsymbol2c" class="submitbutton" title="Uložit změny" />
+        </div>
+    </form>
 
 </div>
 <!-- end of #obsah -->

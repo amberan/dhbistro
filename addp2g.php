@@ -16,11 +16,11 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 ?>
 
 <div id="obsah">
-<p>
-Do skupiny můžete přiřadit osoby, které jsou jejími členy.
-</p>
+    <p>
+        Do skupiny můžete přiřadit osoby, které jsou jejími členy.
+    </p>
 
-<?php
+    <?php
 	// zpracovani filtru
 	if (!isset($custom_Filter['sort'])) {
 	  $f_sort=1;
@@ -64,7 +64,7 @@ Do skupiny můžete přiřadit osoby, které jsou jejími členy.
 	}
 	// formular filtru
 	function filter () {
-		global $database,$f_sort, $sportraits, $ssymbols, $farchiv, $fdead;
+		global $f_sort, $sportraits, $ssymbols, $farchiv, $fdead;
 	  echo '<form action="addp2g.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -94,8 +94,8 @@ Do skupiny můžete přiřadit osoby, které jsou jejími členy.
 	}
 	$res=mysqli_query ($database,$sql);
 ?>
-<div id="in-form-table">
-<?php 
+    <div id="in-form-table">
+        <?php 
 	if (mysqli_num_rows ($res)) {
 	  echo '<table>
 <thead>
@@ -119,13 +119,13 @@ Do skupiny můžete přiřadit osoby, které jsou jejími členy.
 </table>';
 	}
 ?>
-<input type="hidden" name="fdead" value="<?php echo $fdead; ?>" />
-<input type="hidden" name="farchiv" value="<?php echo $farchiv; ?>" />
-<input type="hidden" name="groupid" value="<?php echo $_REQUEST['rid']; ?>" />
-<input id="button-floating-uloz" type="submit" value="Uložit změny" name="addtogroup" class="submitbutton" title="Uložit změny"/>
-</div>
-<!-- end of #obsah -->
-</form>
+        <input type="hidden" name="fdead" value="<?php echo $fdead; ?>" />
+        <input type="hidden" name="farchiv" value="<?php echo $farchiv; ?>" />
+        <input type="hidden" name="groupid" value="<?php echo $_REQUEST['rid']; ?>" />
+        <input id="button-floating-uloz" type="submit" value="Uložit změny" name="addtogroup" class="submitbutton" title="Uložit změny" />
+    </div>
+    <!-- end of #obsah -->
+    </form>
 
 </div>
 <!-- end of #obsah -->

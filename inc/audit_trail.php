@@ -24,7 +24,7 @@ function auditTrail ($record_type,$operation_type,$idrecord) {
 
 //pokus o pristup k tajnemu, soukromemu nebo smazanemu zaznamu
 function unauthorizedAccess ($record_type,$secret,$deleted,$idrecord) {
-	global $database,$usrinfo;
+	global $usrinfo;
         switch ($record_type) {
             case 1:
                 $link='<a href="./persons.php">osoby</a>';

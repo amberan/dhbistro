@@ -118,7 +118,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 <?php 
 	// filtr
 	function filter () {
-	  global $database,$f_cat,$f_sort;
+	  global $f_cat,$f_sort;
 	  echo '<div id="filter-wrapper"><form action="tasks.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
