@@ -1,7 +1,7 @@
 <?php
 
 use Tracy\Debugger;
-Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
 //vytvoreni zalohy
 

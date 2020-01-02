@@ -3,8 +3,8 @@ require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 $latteParameters['title'] = 'Symboly';
   
 use Tracy\Debugger;
-Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
-$latte = new Latte\Engine;
+Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+$latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 

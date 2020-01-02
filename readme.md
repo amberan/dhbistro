@@ -13,10 +13,8 @@ Jedná se o systém používany organizacemi (Denní Hlídka, Noční Hlídka) v
 - zpracovani osob + API - strankovani  
 - audit nejen podle lidi, ale na objektech  
 
-### Work in progress: 1.6.3
--  aktuality > MD (potrebuje dostylovat)
--  novinky > MD (potrebuje dostylovat)
--  [thephpleague/commonmark] (https://github.com/thephpleague/commonmark) markdown2html convertor
+### Work in progress: 1.6.4
+-  
 
 
 ### [changelog](doc/changelog.md)

@@ -3,8 +3,8 @@ require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 $latteParameters['title'] = 'Nový případ';
   
 use Tracy\Debugger;
-Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
-$latte = new Latte\Engine;
+Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+$latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 
@@ -28,12 +28,12 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 		<option value="1">uzavřený</option>
 		</select>
 		<div class="clear">&nbsp;</div>
-<?php 			if ($usrinfo['right_power'] == 1)	{
-				echo '					
+<?php 			if ($usrinfo['right_power'] == 1) {
+    echo '					
 				<h3><label for="notnew">Není&nbsp;nové</label><h3>
 					<input type="checkbox" name="notnew"/>
 				<div class="clear">&nbsp;</div>';
-				}
+}
 ?>
 	</div>
 	<!-- end of #info -->

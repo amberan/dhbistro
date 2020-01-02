@@ -135,7 +135,7 @@ $drop_table[] = 'loggedin_deleted';
 $drop_table[] = 'map_deleted';
 
 use Tracy\Debugger;
-Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 require_once('update-function.php');
 
 $counterTableRename = bistroDBTableRename($rename_table);

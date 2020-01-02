@@ -3,8 +3,8 @@ require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 $latteParameters['title'] = 'Vyhledané symboly';
   
 use Tracy\Debugger;
-Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
-$latte = new Latte\Engine;
+Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+$latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 
@@ -14,31 +14,31 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="newperson.php">přidat osobu</a>; <a href="symbols.php">nepřiřazené symboly</a>; <a href="symbol_search.php">vyhledat symbol</a>');
  
 if (isset($_POST['searchit'])) {
-	// ############################################## Určení vyhledavaneho znaku #
-	// test input
-	//		$input_liner=1;
-	//		$input_curver=2;
-	//		$input_pointer=3;
-	//		$input_geometrical=1;
-	//		$input_alphabeter=2;
-	//		$input_specialchar=3;
+    // ############################################## Určení vyhledavaneho znaku #
+    // test input
+    //		$input_liner=1;
+    //		$input_curver=2;
+    //		$input_pointer=3;
+    //		$input_geometrical=1;
+    //		$input_alphabeter=2;
+    //		$input_specialchar=3;
 	
-	// real input
-	$input_liner = htmlspecialchars($_POST['l']);
-	$input_curver = htmlspecialchars($_POST['c']);
-	$input_pointer = htmlspecialchars($_POST['p']);
-	$input_geometrical = htmlspecialchars($_POST['g']);
-	$input_alphabeter = htmlspecialchars($_POST['a']);
-	$input_specialchar = htmlspecialchars($_POST['sch']);
+    // real input
+    $input_liner = htmlspecialchars($_POST['l']);
+    $input_curver = htmlspecialchars($_POST['c']);
+    $input_pointer = htmlspecialchars($_POST['p']);
+    $input_geometrical = htmlspecialchars($_POST['g']);
+    $input_alphabeter = htmlspecialchars($_POST['a']);
+    $input_specialchar = htmlspecialchars($_POST['sch']);
 	
-			///////////ECHO TEST PROMENNE
-			//$vypis='liner= '.$l.', curver= '.$c.', pointer= '.$p.', geometrical= '.$g.', alphabeter= '.$a.', specialchar= '.$sch.'';
-			//echo $vypis;
-			//////////
+    ///////////ECHO TEST PROMENNE
+    //$vypis='liner= '.$l.', curver= '.$c.', pointer= '.$p.', geometrical= '.$g.', alphabeter= '.$a.', specialchar= '.$sch.'';
+    //echo $vypis;
+    //////////
 			
-	// ############################################## Vyhledavani a rovnani znaku #
-	//QUERY
-	$symbol_query_sql=("
+    // ############################################## Vyhledavani a rovnani znaku #
+    //QUERY
+    $symbol_query_sql = ("
 			SELECT id,
 				   assigned,
 				   symbol,
@@ -118,52 +118,58 @@ if (isset($_POST['searchit'])) {
 				WHERE deleted=0
 				ORDER BY averangepercent DESC
 			");
-			//RESULT
-	mysqli_query ($database,'SET NAMES utf8');
-	// Kontrola SQL dotazy ////////////////////////
-	//echo $symbol_query_sql;
-	///////////////////////////////////////////////
-		$symbol_result=mysqli_query ($database,$symbol_query_sql) or die ("Vyhledávání a srovnání symbolů neprošlo! SQL: $symbol_query_sql");
+    //RESULT
+    mysqli_query ($database,'SET NAMES utf8');
+    // Kontrola SQL dotazy ////////////////////////
+    //echo $symbol_query_sql;
+    ///////////////////////////////////////////////
+    $symbol_result = mysqli_query ($database,$symbol_query_sql) or die ("Vyhledávání a srovnání symbolů neprošlo! SQL: $symbol_query_sql");
 	
-///////////////////////// FUNCTIONS /////////////////////////////
+    ///////////////////////// FUNCTIONS /////////////////////////////
 	
-	// funkce pro změnu barvy ve výsledku vyhledávání
+    // funkce pro změnu barvy ve výsledku vyhledávání
 		
-	function colorSwitch($input_sql_column)
-	{
-		$segment_color;
+    function colorSwitch($input_sql_column)
+    {
+        $segment_color;
 	
-		if($input_sql_column == '100'){$segment_color="grey";}
-			elseif(('100'>$input_sql_column) && ($input_sql_column>='75'))$segment_color="blue";
-			elseif(('75'>$input_sql_column) && ($input_sql_column>='50'))$segment_color="green";
-			elseif(('50'>$input_sql_column) && ($input_sql_column>='25'))$segment_color="yellow";
-			elseif(('25'>$input_sql_column) && ($input_sql_column>'0'))$segment_color="orange";
-			elseif(('0'>$input_sql_column) && ($input_sql_column != ''))$segment_color="red";
-			elseif($input_sql_column == '0')$segment_color="brown";
-			elseif($input_sql_column == '')$segment_color="white";
+        if ($input_sql_column == '100') {
+            $segment_color = "grey";
+        } elseif (('100' > $input_sql_column) && ($input_sql_column >= '75')) {
+            $segment_color = "blue";
+        } elseif (('75' > $input_sql_column) && ($input_sql_column >= '50')) {
+            $segment_color = "green";
+        } elseif (('50' > $input_sql_column) && ($input_sql_column >= '25')) {
+            $segment_color = "yellow";
+        } elseif (('25' > $input_sql_column) && ($input_sql_column > '0')) {
+            $segment_color = "orange";
+        } elseif (('0' > $input_sql_column) && ($input_sql_column != '')) {
+            $segment_color = "red";
+        } elseif ($input_sql_column == '0') {
+            $segment_color = "brown";
+        } elseif ($input_sql_column == '') {
+            $segment_color = "white";
+        }
 	
-			return $segment_color;
-	}
+        return $segment_color;
+    }
 	
-	// funkce pro string dotazu na osobu
+    // funkce pro string dotazu na osobu
 	
-	function ownerString($person_id,$symbol_id)
-	{
-		$segment_output;
+    function ownerString($person_id,$symbol_id)
+    {
+        $segment_output;
 	
-		if($person_id === ''){
-			$segment_output="<a class=\"redirection\" href=\"readsymbol.php?rid=".$symbol_id."&hidenotes=0\">Zobrazit info k symbolu</a>";
-		}
-		else {
-			$segment_output="<a class=\"redirection\" href=\"readperson.php?rid=".$person_id."&hidenotes=0\">Zobrazit info k vlastníkovi</a>";
-		}
+        if ($person_id === '') {
+            $segment_output = "<a class=\"redirection\" href=\"readsymbol.php?rid=".$symbol_id."&hidenotes=0\">Zobrazit info k symbolu</a>";
+        } else {
+            $segment_output = "<a class=\"redirection\" href=\"readperson.php?rid=".$person_id."&hidenotes=0\">Zobrazit info k vlastníkovi</a>";
+        }
 	
-		return $segment_output;
-	}
+        return $segment_output;
+    }
 	
-//////////////////////////////////////////////////////////////////
-		
-	?>
+    ////////////////////////////////////////////////////////////////// ?>
 		<link href="css/symbolstyle.css" rel="stylesheet" type="text/css" />		
 	    <div class="top_margin"></div>
 	    <div class="message_frame">
@@ -193,18 +199,18 @@ if (isset($_POST['searchit'])) {
 	    	//echo $symbol_record = mysqli_fetch_array ($symbol_result);
 	    		    
 			$result = '
-	    <div class="central_result_frame">'; while($symbol_record = mysqli_fetch_assoc ($symbol_result)){
-	    if($usrinfo['right_power']){
+	    <div class="central_result_frame">';
+    while ($symbol_record = mysqli_fetch_assoc ($symbol_result)) {
+        if ($usrinfo['right_power']) {
+            $color_l = colorSwitch((string)$symbol_record['lining']);
+            $color_c = colorSwitch((string)$symbol_record['curving']);
+            $color_p = colorSwitch((string)$symbol_record['pointing']);
+            $color_g = colorSwitch((string)$symbol_record['geometricaling']);
+            $color_a = colorSwitch((string)$symbol_record['alphabeting']);
+            $color_sch = colorSwitch((string)$symbol_record['specialing']);
+            $ownerhttp = ownerString((string)$symbol_record['pid'],(string)$symbol_record['id']);
 				
-				$color_l = colorSwitch((string)$symbol_record['lining']);
-				$color_c = colorSwitch((string)$symbol_record['curving']);
-				$color_p = colorSwitch((string)$symbol_record['pointing']);
-				$color_g = colorSwitch((string)$symbol_record['geometricaling']);
-				$color_a = colorSwitch((string)$symbol_record['alphabeting']);
-				$color_sch = colorSwitch((string)$symbol_record['specialing']);
-				$ownerhttp = ownerString((string)$symbol_record['pid'],(string)$symbol_record['id']);
-				
-			$result.='
+            $result .= '
 			<div class="result">
 	        	<div class="result_symbol_image">
 	            	<img src="getportrait.php?nrid='.$symbol_record['id'].'" height="75" width="75" />
@@ -232,18 +238,17 @@ if (isset($_POST['searchit'])) {
 	                </div>
 	            </div>
 	        </div>';
-			} else {
-                           if ($symbol_record['ssecret']==0 && $symbol_record['psecret']==0) { 
-                            
-                            $color_l = colorSwitch((string)$symbol_record['lining']);
-                            $color_c = colorSwitch((string)$symbol_record['curving']);
-                            $color_p = colorSwitch((string)$symbol_record['pointing']);
-                            $color_g = colorSwitch((string)$symbol_record['geometricaling']);
-                            $color_a = colorSwitch((string)$symbol_record['alphabeting']);
-                            $color_sch = colorSwitch((string)$symbol_record['specialing']);
-                            $ownerhttp = ownerString((string)$symbol_record['pid'],(string)$symbol_record['id']);
+        } else {
+            if ($symbol_record['ssecret'] == 0 && $symbol_record['psecret'] == 0) {
+                $color_l = colorSwitch((string)$symbol_record['lining']);
+                $color_c = colorSwitch((string)$symbol_record['curving']);
+                $color_p = colorSwitch((string)$symbol_record['pointing']);
+                $color_g = colorSwitch((string)$symbol_record['geometricaling']);
+                $color_a = colorSwitch((string)$symbol_record['alphabeting']);
+                $color_sch = colorSwitch((string)$symbol_record['specialing']);
+                $ownerhttp = ownerString((string)$symbol_record['pid'],(string)$symbol_record['id']);
 
-			$result.='
+                $result .= '
 			<div class="result">
 	        	<div class="result_symbol_image">
 	            	<img src="getportrait.php?nrid='.$symbol_record['id'].'" height="75" width="75" />
@@ -271,13 +276,13 @@ if (isset($_POST['searchit'])) {
 	                </div>
 	            </div>
 	        </div>';
-                           };
-                    };
-		}
-	    $result.='</div>';
+            };
+        };
+    }
+    $result .= '</div>';
 		
-		echo $result;
+    echo $result;
 } else {
-	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+    $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 }
 ?>
