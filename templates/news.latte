@@ -6,6 +6,6 @@
         <a href='/news/delete/{$news_array[id]}' onclick='return confirm("Opravdu smazat aktualitu &quot;{$news_array[nadpis]}&quot;?")' title={$text[smazat]}>{$text[smazat]}</a>
     {/if}
     <br/>
-    <div id="news{$news_array[id]}">{$news_array[obsah_md]}</div>
+    {$news_array[obsah_md]|noescape}
 {/foreach}
 

@@ -1,7 +1,14 @@
 <?php
   
-use Tracy\Debugger;
+use League\CommonMark\CommonMarkConverter;
 Debugger::enable(Debugger::DEVELOPMENT,$config['folder_logs']);
+
+use Tracy\Debugger;
+$converter = new CommonMarkConverter([
+    'html_input' => 'strip',
+    'allow_unsafe_links' => false,
+]);
+
 
 
 if (($URL['1']) == "news" AND ($usrinfo['right_power'] > 0 AND ($URL['2'] == "delete")) AND isset($URL['3']) ) { // DELETE
@@ -44,7 +51,7 @@ if (mysqli_num_rows ($news_query)) {
         $news_record['datum'] = webdatetime($news_record['datum']);
         $news_record['id'] = $news_record['id'];
         $news_record['nadpis'] = $news_record['nadpis'];
-        $news_record['obsah_md'] = $news_record['obsah_md'];
+        $news_record['obsah_md'] = $converter->convertToHtml($news_record['obsah_md']);
         $news_record['category'] = $news_record['kategorie'];
         $news_record['author'] = $news_record['author'];
         $news_array[] = $news_record;
