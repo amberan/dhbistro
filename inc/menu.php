@@ -41,7 +41,7 @@ function sparklets ($path,$actions = '')
 
 
 //LATTE
-$menu[] = array($text['aktuality'], "", searchTable(5) + searchTable(6));
+$menu[] = array($text['aktuality'], "/", searchTable(5) + searchTable(6));
 $menu[] = array($text['hlaseniV'], "/reports.php", searchTable(4));
 $menu[] = array($text['osoby'], "/persons.php", searchTable(1) + searchTable(7));
 $menu[] = array($text['pripady'], "/cases.php", searchTable(3));
