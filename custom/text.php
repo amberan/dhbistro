@@ -64,6 +64,7 @@ $text['nastaveniulozeno'] = 'Nastavení uloženo.';
 $text['timeoutnenicislo'] = 'Timeout není číslo, nastavení nebylo uloženo.';
 $text['timeoutspatne'] = 'Timeout nesouhlasí, je buď příliš malý nebo příliš velký.';
 $text['puvodniheslospatne'] = 'Nesouhlasí staré heslo, nastavení nebylo uloženo';
+$text['email'] = 'E-mail';
 
 // UZIVATELE
 $text['uzivatelskejmeno'] = 'Uživatelské jméno';

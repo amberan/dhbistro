@@ -18,14 +18,14 @@ if ((isset($_POST['userid']) AND isset($_POST['edituser']) AND !is_numeric($_REQ
             $latteParameters['message'] = $text['puvodniheslospatne'];
         }
     } elseif (isset($_REQUEST['editsettings'])) {
-        mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET plan_md='".$_REQUEST['plan']."', timeout='".$_REQUEST['timeout']."' WHERE sid='".$_SESSION['sid']."'");
+        mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET email='".$_POST['email']."', plan_md='".$_REQUEST['plan']."', timeout='".$_REQUEST['timeout']."' WHERE sid='".$_SESSION['sid']."'");
         $latteParameters['message'] = $text['nastaveniulozeno'];
         read_user();
     }
 }
 
 
-
+$latteParameters['settings_email'] = $usrinfo['email'];
 $latteParameters['settings_timeout'] = $usrinfo['timeout'];
 $latteParameters['settings_plan'] = stripslashes($usrinfo['plan_md']);
 

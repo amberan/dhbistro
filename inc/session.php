@@ -20,7 +20,7 @@ if (isset($_REQUEST['logmein'])) {
 function read_user()
 {
     global $database, $_SESSION, $usrinfo;
-    $usersql = "SELECT id, login, pwd, idperson, lastlogon as 'lastaction', right_power, right_text, right_org, right_aud, right_super, timeout, ip as 'currip', plan_md, sid
+    $usersql = "SELECT id, login, pwd, idperson, email, lastlogon as 'lastaction', right_power, right_text, right_org, right_aud, right_super, timeout, ip as 'currip', plan_md, sid
 	FROM ".DB_PREFIX."user 
 	WHERE deleted=0 AND suspended=0 AND ".DB_PREFIX."user.sid ='".$_SESSION['sid']."' AND user_agent='".$_SERVER['HTTP_USER_AGENT']."'";
     if ($usrinfo = mysqli_fetch_assoc (mysqli_query ($database,$usersql))) {
