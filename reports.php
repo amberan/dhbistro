@@ -101,7 +101,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	}
 	// filtr samotny
 	function filter () {
-	  global $f_cat, $f_sort, $f_stat, $f_my, $f_conn, $fsql_conn2, $f_sec, $f_new, $f_archiv, $usrinfo, $text;
+	  global $f_cat, $f_sort, $f_stat, $f_my, $f_conn, $f_sec, $f_new, $f_archiv, $usrinfo, $text;
           echo '<div id="filter-wrapper"><form action="reports.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -140,35 +140,6 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 </form></div><!-- end of #filter-wrapper -->';
 	}
 	filter();
-	/* Stary vypis hlášení
-	if ($usrinfo['right_power']) {
-		$sql="SELECT
-			".DB_PREFIX."report.id AS 'id',
-	        ".DB_PREFIX."report.datum AS 'datum',
-	        ".DB_PREFIX."report.adatum AS 'adatum',
-	        ".DB_PREFIX."report.label AS 'label',
-	        ".DB_PREFIX."report.task AS 'task',
-	        ".DB_PREFIX."user.login AS 'autor',
-	        ".DB_PREFIX."report.type AS 'type',
-	        ".DB_PREFIX."report.status AS 'status' 
-	        	FROM ".DB_PREFIX."user, ".DB_PREFIX."report".$fsql_conn2."
-				WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.id AND ".DB_PREFIX."report.deleted=0".$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn.$fsql_sec.$fsql_archiv."
-				ORDER BY ".$fsql_sort;
-	} else {
-		$sql="SELECT
-			".DB_PREFIX."report.id AS 'id',
-	        ".DB_PREFIX."report.datum AS 'datum',
-	        ".DB_PREFIX."report.adatum AS 'adatum',
-	        ".DB_PREFIX."report.label AS 'label',
-	        ".DB_PREFIX."report.task AS 'task',
-	        ".DB_PREFIX."report.status AS 'status',
-	        ".DB_PREFIX."user.login AS 'autor',
-	        ".DB_PREFIX."report.iduser AS 'riduser',
-	        ".DB_PREFIX."report.type AS 'type' 
-	        	FROM ".DB_PREFIX."user, ".DB_PREFIX."report".$fsql_conn2." 
-				WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.id AND ".DB_PREFIX."report.deleted=0 AND ".DB_PREFIX."report.secret=0".$fsql_cat.$fsql_stat.$fsql_my.$fsql_conn.$fsql_archiv."
-				ORDER BY ".$fsql_sort;
-	} Alternativni vypis hlaseni */
     $sql="SELECT
                 ".DB_PREFIX."report.id AS 'id',
                 ".DB_PREFIX."report.datum AS 'datum',

@@ -66,7 +66,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	}
 	//
 	function filter () {
-		global $f_sort, $sportraits, $f_sec, $usrinfo;
+		global $f_sort, $sportraits;
 	  echo '<div id="filter-wrapper"><form action="readgroup.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>

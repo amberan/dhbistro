@@ -67,7 +67,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	}
 	// formular filtru
 	function filter () {
-		global $f_sort, $sportraits, $ssymbols, $farchiv, $fdead;
+		global $f_sort, $sportraits, $farchiv, $fdead;
 	  echo '<form action="addsy2p.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>

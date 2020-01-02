@@ -1,9 +1,9 @@
 <?php
 
 use League\CommonMark\CommonMarkConverter;
+use Tracy\Debugger;
 Debugger::enable(Debugger::DEVELOPMENT,$config['folder_logs']);
 
-use Tracy\Debugger;
 $converter = new CommonMarkConverter([
     'html_input' => 'strip',
     'allow_unsafe_links' => false,

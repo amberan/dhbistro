@@ -73,7 +73,7 @@ if (isset($_SESSION['sid'])) {
 
 // vyhledani zaznamu v neprectenych zaznamech - cases, groups, persons, reports, symbols,
 function searchRecord ($tablenum, $recordnum) {
-	global $database,$unread,$usrinfo;
+	global $database,$usrinfo;
 	$sql_r="SELECT * FROM ".DB_PREFIX."unread WHERE iduser=".$usrinfo['id']." and idtable=".$tablenum." and idrecord=".$recordnum;
 	$res_r=mysqli_num_rows(mysqli_query ($database,$sql_r));
 	if ($res_r > 0) { 
@@ -85,7 +85,7 @@ function searchRecord ($tablenum, $recordnum) {
 
 // vyhledani tabulky v neprectenych zaznamech
 function searchTable ($tablenum) { 
-    global $database,$unread;
+    global $unread;
     
 	foreach ((array) $unread as $record) {
 		if ($record['idtable'] == $tablenum) {

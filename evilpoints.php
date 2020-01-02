@@ -42,7 +42,7 @@ if (isset($_POST['addpoints'])) {
 	}
 	// Filtr
 	function filter () {
-	  global $f_cat,$text,$f_sort;
+	  global $text,$f_sort;
 	  echo '<div id="filter-wrapper"><form action="evilpoints.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>

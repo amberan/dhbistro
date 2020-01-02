@@ -4,7 +4,7 @@ Tato webovka byla vyvynuta pro potřeby LARPu [Pražská Hlídka](http://www.pra
 Jedná se o systém používany organizacemi (Denní Hlídka, Noční Hlídka) ve hře. Který pomáhá udržovat informace o jednotlivých osobách, skupinách, akcích atp.  
 
 ### TODO ???
-- [tickets](https://dhbistro.leankit.com/board/24275378)  
+- [tickets](https://gitlab.alembiq.net/charles/bistro/-/boards)  
 - pridat uzivalum emaily
 - tabulka na user_filter [userid, object, filter] ???  
 - upravit system prav: pridat pravo na API, utajeni na ruzne stupne, ?prejmenovani?  

@@ -1,6 +1,5 @@
 <?php
 
-//TODO adminovi pridat button na manual backup
 function mainMenu ($index)
 {
     global $database,$usrinfo,$config,$text;

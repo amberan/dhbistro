@@ -41,7 +41,7 @@ if (!isset($custom_Filter['search'])) {
 	//$search = $searchedfor;
 		
 	function filter () {
-	  global $usrinfo, $farchiv,$searchedfor;
+	  global $farchiv,$searchedfor;
 	  echo '<div id="filter-wrapper"><form action="search.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Vyhledávání</legend>
