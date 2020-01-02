@@ -127,7 +127,7 @@ $alter_column['user']['plan'] = " `plan` text COLLATE 'utf8_general_ci' NULL AFT
 // ALTER TABLE `nw_unread` ADD INDEX(`iduser`)
 
 use Tracy\Debugger;
-Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 require_once('update-function.php');
 
 $counterTableRename = bistroDBTableRename($rename_table);

@@ -3,78 +3,89 @@ require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 $latteParameters['title'] = 'Nové hlášení';
   
 use Tracy\Debugger;
-Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
-$latte = new Latte\Engine;
+Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+$latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 
 
 	mainMenu (4);
-	$type=$_GET['type']; // nacitani typu hlaseni z prikazove radky prohlizece (zakladni ochrana proti SQL injection)
-	if($type==='1'){sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>nové hlášení z výjezdu</strong>');}
-	else if($type==='2'){sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>nové hlášení z výslechu</strong>');}
-	else { ?>
+	$type = $_GET['type']; // nacitani typu hlaseni z prikazove radky prohlizece (zakladni ochrana proti SQL injection)
+	if ($type === '1') {
+	    sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>nové hlášení z výjezdu</strong>');
+	} else {
+	    if ($type === '2') {
+	        sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>nové hlášení z výslechu</strong>');
+	    } else { ?>
 <h1>Požadovaný typ hlášení neexistuje - vraťte se prosím <a href="./reports.php" title="">zpět &raquo;</a></h1>
-<?php $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);exit; }; 
+<?php $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);exit; }
+	};
 // kalendář
-function date_picker($name, $startyear=NULL, $endyear=NULL)
+function date_picker($name, $startyear = NULL, $endyear = NULL)
 {
-    if($startyear==NULL) $startyear = date("Y")-10;
-    if($endyear==NULL) $endyear=date("Y")+5; 
+    if ($startyear == NULL) {
+        $startyear = date("Y") - 10;
+    }
+    if ($endyear == NULL) {
+        $endyear = date("Y") + 5;
+    }
     
     $cday = StrFTime("%d", Time());
     $cmonth = StrFTime("%m", Time());
     $cyear = StrFTime("%Y", Time());
 
-    $months=array('','Leden','Únor','Březen','Duben','Květen',
-    'Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec');
+    $months = array('', 'Leden', 'Únor', 'Březen', 'Duben', 'Květen',
+    'Červen', 'Červenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec');
 
     // roletka dnů
-    $html="<select class=\"day\" name=\"".$name."day\">";
-    for($i=1;$i<=31;$i++)
-    {
-    	$html.="<option value='$i'".(($i==$cday)?'selected="selected"':'').">$i</option>";
+    $html = "<select class=\"day\" name=\"".$name."day\">";
+    for ($i = 1;$i <= 31;$i++) {
+        $html .= "<option value='$i'".(($i == $cday) ? 'selected="selected"' : '').">$i</option>";
     }
-    $html.="</select> ";
+    $html .= "</select> ";
     
     // roletka měsíců
-    $html.="<select class=\"month\" name=\"".$name."month\">";
+    $html .= "<select class=\"month\" name=\"".$name."month\">";
 
-    for($i=1;$i<=12;$i++)
-    {
-       $html.="<option value='$i'".(($i==$cmonth)?'selected="selected"':'').">$months[$i]</option>";
+    for ($i = 1;$i <= 12;$i++) {
+        $html .= "<option value='$i'".(($i == $cmonth) ? 'selected="selected"' : '').">$months[$i]</option>";
     }
-    $html.="</select> ";
+    $html .= "</select> ";
 
     // roletka let
-    $html.="<select class=\"year\" name=\"".$name."year\">";
+    $html .= "<select class=\"year\" name=\"".$name."year\">";
 
-    for($i=$startyear;$i<=$endyear;$i++)
-    {      
-      $html.="<option value='$i'".(($i==$cyear)?'selected="selected"':'').">$i</option>";
+    for ($i = $startyear;$i <= $endyear;$i++) {
+        $html .= "<option value='$i'".(($i == $cyear) ? 'selected="selected"' : '').">$i</option>";
     }
-    $html.="</select> ";
+    $html .= "</select> ";
 
     return $html;
 }
 ?>
 <div id="obsah">
 <form action="procactrep.php" method="post" id="inputform">
-<fieldset id="ramecek"><legend><strong>Nové hlášení z <?php echo (($type==1)?'výjezdu':(($type==2)?'výslechu':'#&*'));?></strong></legend>
+<fieldset id="ramecek"><legend><strong>Nové hlášení z <?php echo (($type == 1) ? 'výjezdu' : (($type == 2) ? 'výslechu' : '#&*'));?></strong></legend>
 	<fieldset><legend><strong>Základní údaje</strong></legend>
 		<div id="info"><?php
-	switch ($type){		
+	switch ($type) {
 		// default situace by nemela nikdy nastat, zadne nove hlaseni by nemelo mit typ 0 (nula);
 		case 1: ?><input type="hidden" name="type" value="1" /><?php break; // výjezd
 		case 2: ?><input type="hidden" name="type" value="2" /><?php break; // výslech
 		default:?><input type="hidden" name="type" value="0" /><?php  break; }; // tato moznost je zahrnuta pouze jako pojistka  ?>
-			<h3><label for="label">Označení <?php if($type==='1'){ ?>výjezdu<?php }else if($type==='2'){ ?>výslechu<?php }; ?>:</label></h3>
+			<h3><label for="label">Označení <?php if ($type === '1') { ?>výjezdu<?php } else {
+		    if ($type === '2') { ?>výslechu<?php }
+		}; ?>:</label></h3>
 	  		<input type="text" size="80" name="label" id="label" />
 	  		<div class="clear">&nbsp;</div>
-			<h3><label for="task"><?php if($type==='1'){ ?>Úkol<?php }else if($type==='2'){ ?>Předmět výslechu<?php }; ?>:</label></h3>
+			<h3><label for="task"><?php if ($type === '1') { ?>Úkol<?php } else {
+		    if ($type === '2') { ?>Předmět výslechu<?php }
+		}; ?>:</label></h3>
 	  		<input type="text" size="80" name="task" id="task" />
 	  		<div class="clear">&nbsp;</div>
-			<h3><label for="adatum"><?php if($type==='1'){ ?>Datum akce<?php }else if($type==='2'){ ?>Datum výslechu<?php }; ?>:</label></h3>
+			<h3><label for="adatum"><?php if ($type === '1') { ?>Datum akce<?php } else {
+		    if ($type === '2') { ?>Datum výslechu<?php }
+		}; ?>:</label></h3>
 	  		<?php echo date_picker("adatum")?>
 	  		<div class="clear">&nbsp;</div>
 			<h3><label for="start">Začátek:</label></h3>

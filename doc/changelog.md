@@ -1,5 +1,10 @@
 # BISTRO changelog 
 
+**1.6.3**
+-  aktuality > MD (potrebuje dostylovat)
+-  novinky > MD (potrebuje dostylovat)
+-  [thephpleague/commonmark] (https://github.com/thephpleague/commonmark) markdown2html convertor
+
 **1.6.2**  
 - uprava vyhledavani (odstraneni diakritiky z klice)  
 - .htaccess

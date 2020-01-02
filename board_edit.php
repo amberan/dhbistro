@@ -1,7 +1,7 @@
 <?php
 
 use Tracy\Debugger;
-Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 $latteParameters['title'] = $text['nastenka'];
 
 $sql_dashboard = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."dashboard ORDER BY id DESC LIMIT 1");

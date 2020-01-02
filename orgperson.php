@@ -3,60 +3,59 @@ require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 $latteParameters['title'] = 'Úprava osoby';
   
 use Tracy\Debugger;
-Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
-$latte = new Latte\Engine;
+Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+$latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
 
 	mainMenu (5);
 	sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>úprava osoby</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
-	  $res=mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."person WHERE id=".$_REQUEST['rid']);
-		if ($rec_p=mysqli_fetch_assoc ($res)) {
+	    $res = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."person WHERE id=".$_REQUEST['rid']);
+	    if ($rec_p = mysqli_fetch_assoc ($res)) {
 
 	// kalendář
-	function date_picker($name, $rdate, $startyear=NULL, $endyear=NULL)
-	{
-	if($startyear==NULL) $startyear = date("Y")-10;
-	if($endyear==NULL) $endyear=date("Y")+5;
+	        function date_picker($name, $rdate, $startyear = NULL, $endyear = NULL)
+	        {
+	            if ($startyear == NULL) {
+	                $startyear = date("Y") - 10;
+	            }
+	            if ($endyear == NULL) {
+	                $endyear = date("Y") + 5;
+	            }
 
-	$cday = StrFTime("%d", $rdate);
-	$cmonth = StrFTime("%m", $rdate);
-	$cyear = StrFTime("%Y", $rdate);
+	            $cday = StrFTime("%d", $rdate);
+	            $cmonth = StrFTime("%m", $rdate);
+	            $cyear = StrFTime("%Y", $rdate);
 
-	$months=array('','Leden','Únor','Březen','Duben','Květen',
-		'Červen','Červenec','Srpen','Září','Říjen','Listopad','Prosinec');
+	            $months = array('', 'Leden', 'Únor', 'Březen', 'Duben', 'Květen',
+		'Červen', 'Červenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec');
 
-	// roletka dnů
-	$html="<select class=\"day\" name=\"".$name."day\">";
-	for($i=1;$i<=31;$i++)
-	{
-		$html.="<option value='$i'".(($i==$cday)?'selected="selected"':'').">$i</option>";
-	}
-	$html.="</select> ";
+	            // roletka dnů
+	            $html = "<select class=\"day\" name=\"".$name."day\">";
+	            for ($i = 1;$i <= 31;$i++) {
+	                $html .= "<option value='$i'".(($i == $cday) ? 'selected="selected"' : '').">$i</option>";
+	            }
+	            $html .= "</select> ";
 	
-	// roletka měsíců
-	$html.="<select class=\"month\" name=\"".$name."month\">";
+	            // roletka měsíců
+	            $html .= "<select class=\"month\" name=\"".$name."month\">";
 	
-	for($i=1;$i<=12;$i++)
-	{
-		$html.="<option value='$i'".(($i==$cmonth)?'selected="selected"':'').">$months[$i]</option>";
-	}
-	$html.="</select> ";
+	            for ($i = 1;$i <= 12;$i++) {
+	                $html .= "<option value='$i'".(($i == $cmonth) ? 'selected="selected"' : '').">$months[$i]</option>";
+	            }
+	            $html .= "</select> ";
 	
-	// roletka let
-	$html.="<select class=\"year\" name=\"".$name."year\">";
+	            // roletka let
+	            $html .= "<select class=\"year\" name=\"".$name."year\">";
 	
-	for($i=$startyear;$i<=$endyear;$i++)
-	{
-		$html.="<option value='$i'".(($i==$cyear)?'selected="selected"':'').">$i</option>";
-	}
-	$html.="</select> ";
+	            for ($i = $startyear;$i <= $endyear;$i++) {
+	                $html .= "<option value='$i'".(($i == $cyear) ? 'selected="selected"' : '').">$i</option>";
+	            }
+	            $html .= "</select> ";
 
-	return $html;
-	}
-			
-?>
+	            return $html;
+	        } ?>
 <div id="obsah">
 <fieldset><legend><strong>Organizační úprava osoby: <?php echo(StripSlashes($rec_p['surname']).', '.StripSlashes($rec_p['name'])); ?></strong></legend>
 	<form action="procperson.php" method="post" id="inputform" enctype="multipart/form-data">
@@ -72,14 +71,13 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 				<h3><label for="regusr">Vytvořil:</label></h3>
 				<select name="regusr" id="regusr">
 				<?php
-					$sql="SELECT ".DB_PREFIX."user.login AS 'login', ".DB_PREFIX."user.id AS 'id' FROM ".DB_PREFIX."user WHERE ".DB_PREFIX."user.deleted=0 ORDER BY ".DB_PREFIX."user.login ASC";
-					$res=mysqli_query ($database,$sql);
-					while ($rec=mysqli_fetch_assoc ($res)) {
-						echo '<div>
-						<option value="'.$rec['id'].'" "'.(($rec['id']==$rec_p['iduser'])?' checked="checked"':'').'>'.StripSlashes ($rec['login']).'</option>
+					$sql = "SELECT ".DB_PREFIX."user.login AS 'login', ".DB_PREFIX."user.id AS 'id' FROM ".DB_PREFIX."user WHERE ".DB_PREFIX."user.deleted=0 ORDER BY ".DB_PREFIX."user.login ASC";
+	        $res = mysqli_query ($database,$sql);
+	        while ($rec = mysqli_fetch_assoc ($res)) {
+	            echo '<div>
+						<option value="'.$rec['id'].'" "'.(($rec['id'] == $rec_p['iduser']) ? ' checked="checked"' : '').'>'.StripSlashes ($rec['login']).'</option>
 						</div>';
-					}
-				?>
+	        } ?>
 				</select>
 				</div>
 				<div class="clear">&nbsp;</div>
@@ -94,11 +92,11 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 </div>
 <!-- end of #obsah -->
 <?php
-		} else {
-		  echo '<div id="obsah"><p>Osoba neexistuje.</p></div>';
-		}
+	    } else {
+	        echo '<div id="obsah"><p>Osoba neexistuje.</p></div>';
+	    }
 	} else {
-	  echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
+	    echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
 	}
 	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
 ?>

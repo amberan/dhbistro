@@ -2,8 +2,9 @@
 
 session_start();
 
-$config['version'] = '1.6.3';  // verze bistra
+$config['version'] = '1.6.4';  // verze bistra
 define('DB_PREFIX', 'nw_'); // prefix tabulek
+define('SERVER_ROOT', $_SERVER['DOCUMENT_ROOT']);
 $config['dbpass'] = '/inc/important.php'; // soubor s heslem k databazi - na druhem radku
 $config['page_prefix'] = ''; // uri cesta mezi domenou a adresarem bistra
 $config['page_free'] = ['login.php', 'logout.php']; // stranky dostupne bez prihlaseni
@@ -11,41 +12,41 @@ $config['folder_backup'] = '/files/backups/'; // adresar pro generovani zaloh
 $config['folder_portrait'] = '/files/portraits/'; // adresar s portrety
 $config['folder_symbol'] = '/files/symbols/'; // adresar se symboly
 $config['mime-image'] = ['image/jpeg', 'image/pjpeg', 'image/png'];
-$config['folder_logs'] = $_SERVER['DOCUMENT_ROOT'].'/log/'; // adresar pro tracy logy
-$config['folder_custom'] = $_SERVER['DOCUMENT_ROOT'].'/custom/'; // adresar pro customizace (dh, nh, enigma....)
-$config['folder_templates'] = $_SERVER['DOCUMENT_ROOT'].'/templates/'; // adresar pro latte templaty
-$config['folder_cache'] = $_SERVER['DOCUMENT_ROOT'].'/cache/'; // adresar pro latte cache
+$config['folder_logs'] = SERVER_ROOT.'/log/'; // adresar pro tracy logy
+$config['folder_custom'] = SERVER_ROOT.'/custom/'; // adresar pro customizace (dh, nh, enigma....)
+$config['folder_templates'] = SERVER_ROOT.'/templates/'; // adresar pro latte templaty
+$config['folder_cache'] = SERVER_ROOT.'/cache/'; // adresar pro latte cache
 require_once $config['folder_custom'].'text.php'; // defaultni texty - nasledne pretizeno hodnotami nactenymi v ramci inc/database.php
 $URL = explode('/', $_SERVER['REQUEST_URI']);
 
 // *** TECHNICAL LIBRARIES
-    require_once $_SERVER['DOCUMENT_ROOT'].'/inc/platform.php';
+    require_once SERVER_ROOT.'/inc/platform.php';
     if (null !== $config['custom']) { //prepsani defaultnich textu
         require_once $config['folder_custom'].'/text-'.$config['custom'].'.php';
     }
-    require_once $_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php';
+    require_once SERVER_ROOT.'/vendor/autoload.php';
         use Tracy\Debugger;
 
         Debugger::enable(Debugger::DETECT, $config['folder_logs']);
         //Debugger::log("alert: ".$_SESSION['message']);
         $latte = new Latte\Engine();
         $latte->setTempDirectory($config['folder_cache']);
-    require_once $_SERVER['DOCUMENT_ROOT'].'/inc/database.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/inc/backup.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/inc/session.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/inc/audit_trail.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/inc/image.php';
-    require_once $_SERVER['DOCUMENT_ROOT'].'/inc/unread.php';
+    require_once SERVER_ROOT.'/inc/database.php';
+    require_once SERVER_ROOT.'/inc/backup.php';
+    require_once SERVER_ROOT.'/inc/session.php';
+    require_once SERVER_ROOT.'/inc/audit_trail.php';
+    require_once SERVER_ROOT.'/inc/image.php';
+    require_once SERVER_ROOT.'/inc/unread.php';
 // *** PROCESSING
-    require_once $_SERVER['DOCUMENT_ROOT'].'/processing/person.php'; //operace s objektem osoby
-    require_once $_SERVER['DOCUMENT_ROOT'].'/processing/news.php';
+    require_once SERVER_ROOT.'/processing/person.php'; //operace s objektem osoby
+    require_once SERVER_ROOT.'/processing/news.php';
 // *** GENERAL ALERT - overit, ze funguje s odlasovanim nahore - asi bude potreba prenaset message prez session destroy
     if (isset($_SESSION['message']) && null !== $_SESSION['message']) {
         echo "\n<script>window.onload = alert('".$_SESSION['message']."')</script>\n";
         unset($_SESSION['message']);
     }
 // *** LIBRARIES FOR DISPLAYING DATA
-    require_once $_SERVER['DOCUMENT_ROOT'].'/inc/menu.php';
+    require_once SERVER_ROOT.'/inc/menu.php';
     $latteParameters['text'] = $text;
     $latteParameters['config'] = $config;
     if (isset($usrinfo)) {

@@ -2,7 +2,7 @@
 
     use League\HTMLToMarkdown\HtmlConverter;
     use Tracy\Debugger;
-    Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+    Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
 /** 
 * ALTER TABLE `database`.`oldtable` RENAME TO `database`.`newtable';

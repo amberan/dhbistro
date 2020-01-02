@@ -130,7 +130,7 @@ $to_MD[] = ['user', 'id', 'plan', 'plan_md'];
 // ALTER TABLE `nw_unread` ADD INDEX(`iduser`)
 
 use Tracy\Debugger;
-Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 require_once('update-function.php');
 
 $counterTableRename = bistroDBTableRename($rename_table);
