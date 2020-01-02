@@ -1,4 +1,5 @@
 <?php
+
 // GENERIC
 $text['ulozit'] = 'Uložit';
 $text['ano'] = 'ano';
@@ -11,7 +12,7 @@ $text['nadpis'] = 'Nadpis';
 $text['kategorie'] = 'Kategorie';
 $text['obsah'] = 'Obsah';
 
-// LOGIN 
+// LOGIN
 $text['jmeno'] = 'Jméno';
 $text['heslo'] = 'Heslo';
 $text['prihlasit'] = 'Přihlásit';
