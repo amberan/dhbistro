@@ -1,0 +1,11 @@
+{foreach $news_array as $news_array}
+<div class='news_{$news[category]}'> {* 1=herni, 2=systemova *}
+    <h3>{$news_array[nadpis]}</h3>
+    {$news_array[datum]} - {$news_array[author]} 
+    {if $usrinfo[right_power] > 0}
+        <a href='/news/delete/{$news_array[id]}' onclick='return confirm("Opravdu smazat aktualitu &quot;{$news_array[nadpis]}&quot;?")' title={$text[smazat]}>{$text[smazat]}</a>
+    {/if}
+    <br/>
+    {$news_array[obsah_md]|noescape}
+{/foreach}
+

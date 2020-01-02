@@ -19,20 +19,20 @@
                     <option value="0" {if $user['right_power'] == 0} selected="selected"{/if}>{$text['ne']}</option>
                     <option value="1" {if $user['right_power'] == 1} selected="selected"{/if}>{$text['ano']}</option>
                 </select>
-        EDITOR
+            EDITOR
                 <select name="texty" id="texty">
                     <option value="0" {if $user['right_text'] == 0 } selected="selected"{/if}>{$text['ne']}</option>
                     <option value="1" {if $user['right_text'] == 1} selected="selected"{/if}>{$text['ano']}</option>
                 </select>
     {if $usrinfo['right_aud']}
-        AUDITOR
+            AUDITOR
                 <select name="auditor" id="auditor">
                     <option value="0" {if $user['right_aud'] == 0} selected="selected"{/if}>{$text['ne']}</option>
                     <option value="1" {if $user['right_aud'] == 1} selected="selected"{/if}>{$text['ano']}</option>
                 </select>
     {/if}
     {if $usrinfo['right_org']}
-        ORGANIZATOR
+            ORGANIZATOR
                 <select name="organizator" id="organizator">
                     <option value="0" {if $user['right_org'] == 0} selected="selected"{/if}>{$text['ne']}</option>
                     <option value="1" {if $user['right_org'] == 1} selected="selected"{/if}>{$text['ano']}</option>

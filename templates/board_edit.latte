@@ -1,0 +1,41 @@
+<div class="container-fluid">
+{$text[obsahnastenky]}
+	<form action="/board" method="post" name="editdashboard" id="inputform">
+        <div class="form-group">
+           <input class="form-control"  name="dashboard" id="dashboard" type="hidden" />
+            <div id="editSection" class="writable-section"></div>
+                <script type="text/javascript">
+                </script>
+                <input class="btn btn-primary mt-2" type="submit" name="editdashboard" id="submitbutton" value={$text[ulozit]}>
+        </div>
+	</form>
+</div>
+<script>
+    var editor = new tui.Editor({
+        el: document.querySelector('#editSection'),
+        previewStyle: 'vertical',
+        height: '400px',
+        initialEditType: 'wysiwyg',
+        initialValue: {$dashboard},
+        useCommandShortcut: true,
+        exts: [{
+                name: 'chart',
+                minWidth: 100,
+                maxWidth: 600,
+                minHeight: 100,
+                maxHeight: 300
+            },
+            'scrollSync',
+            'colorSyntax',
+            'uml',
+            'mark',
+            'table'
+        ]
+    });
+
+    setInterval(function() {
+        document.getElementById("dashboard").value = editor.getValue();
+    }, 5);
+
+
+</script>

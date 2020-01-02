@@ -31,8 +31,7 @@
             <div id="editSection" class="writable-section"></div>
             <script type="text/javascript">
             </script>
-            <input class="btn btn-primary mt-2" type="submit" name="editsettings" id="submitbutton" value="Uložit">
-            </div>
+            <input class="btn btn-primary mt-2" type="submit" name="editsettings" id="submitbutton" value={$text[ulozit]}>
     </form>
 </div>
 
@@ -63,10 +62,4 @@
         document.getElementById("plan").value = editor.getValue();
     }, 5);
 
-    function pwdcheck(form) {
-        if (form.heslo.value != form.heslo2.value) {
-            alert({$text[heslanesouhlasi]});
-            return false
-        } else return true;
-    }
 </script>

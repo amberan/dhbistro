@@ -1,26 +1,70 @@
-<?php   
-        filter();
-		// vypis aktualit
-		$sql="SELECT
-		".DB_PREFIX."news.id AS 'id',
-		".DB_PREFIX."news.datum AS 'datum',
-		".DB_PREFIX."news.nadpis AS 'nadpis',
-		".DB_PREFIX."news.obsah AS 'obsah',
-		".DB_PREFIX."user.login AS 'autor',
-		".DB_PREFIX."news.kategorie AS 'kategorie'
-						FROM ".DB_PREFIX."news, ".DB_PREFIX."user
-						WHERE ".DB_PREFIX."news.iduser=".DB_PREFIX."user.id ".$fsql_cat." AND ".DB_PREFIX."news.deleted = 0
-						ORDER BY ".$fsql_sort."LIMIT 10";
-        $res=mysqli_query ($database,$sql);
-        while ($rec=mysqli_fetch_assoc ($res)) {
-          echo '<div class="news_div '.(($rec['kategorie']==1)?'game_news':'system_news').'">
-		<div class="news_head"><h2>'.StripSlashes($rec['nadpis']).'</h2>
-		<p><span> ['.webdatetime($rec['datum']).']</span> <strong> '.$rec['autor'].' </strong>';
-		if ($usrinfo['right_power']) {
-			echo ' <a href="index.php?newsdelete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat aktualitu &quot;".StripSlashes($rec['nadpis'])."&quot;?');".'" title="smazat">smazat</a>';
-			}
-		echo '</p></div>
-        <div>'.StripSlashes($rec['obsah']).'<br></div>
-</div>';
+<?php
+  
+use League\CommonMark\CommonMarkConverter;
+Debugger::enable(Debugger::DEVELOPMENT,$config['folder_logs']);
+
+use Tracy\Debugger;
+$converter = new CommonMarkConverter([
+    'html_input' => 'strip',
+    'allow_unsafe_links' => false,
+]);
+
+
+
+if (($URL['1']) == "news" AND ($usrinfo['right_power'] > 0 AND ($URL['2'] == "delete")) AND isset($URL['3']) ) { // DELETE
+    mysqli_query ($database,"UPDATE ".DB_PREFIX."news set deleted=1 where id='".$URL['3']."'");
+    if (mysqli_affected_rows($database) == 1) {
+        auditTrail(5, 11, $URL['3']);
+        Debugger::log("NEWS DELETED");
+        $latteParameters['message'] = $text['aktualitaodebrana'];
+    } else {
+        $latteParameters['message'] = $text['aktualitaneodebrana'];
+    }
+} elseif (isset($_GET['newsdelete'])) {
+    $latteParameters['message'] = $text['http401'];
+    unauthorizedAccess(5, 0, 0, $URL[3]);
+}
+
+if ($URL['1'] == "news" AND $usrinfo['right_power'] > 0 AND isset($_POST['news_new'])) { // ADD
+    if ($_POST['insertnews'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['nadpis']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['news_new']) && is_numeric($_POST['kategorie'])) {
+        mysqli_query ($database,"INSERT INTO ".DB_PREFIX."news ( datum, iduser, kategorie, nadpis, obsah, obsah_md, deleted) VALUES('".Time()."','".$usrinfo['id']."','".$_POST['kategorie']."','".$_POST['nadpis']."','','".$_POST['news_new']."',0)");
+        if (mysqli_affected_rows($database) == 1) {
+            auditTrail(5, 3, 0);
+            Debugger::log("NEWS INSERTED");
+            $latteParameters['message'] = $text['aktualitavlozena'];
+            unreadRecords (5,0);
+        } else {
+            $latteParameters['message'] = $text['aktualitanevlozena'];
         }
+    } else {
+        $latteParameters['message'] = $text['neytvoreno'];
+    }
+}
+
+deleteUnread (5,0);
+$sql_news = "SELECT ".DB_PREFIX."news.* , ".DB_PREFIX."user.login AS 'author'
+FROM ".DB_PREFIX."news JOIN ".DB_PREFIX."user ON ".DB_PREFIX."news.iduser = ".DB_PREFIX."user.id
+WHERE ".DB_PREFIX."news.deleted = 0 ORDER BY ".DB_PREFIX."news.datum DESC LIMIT 10";
+$news_query = mysqli_query ($database,$sql_news);
+if (mysqli_num_rows ($news_query)) {
+    while ($news_record = mysqli_fetch_assoc($news_query)) {
+        $news_record['datum'] = webdatetime($news_record['datum']);
+        $news_record['id'] = $news_record['id'];
+        $news_record['nadpis'] = $news_record['nadpis'];
+        $news_record['obsah_md'] = $converter->convertToHtml($news_record['obsah_md']);
+        $news_record['category'] = $news_record['kategorie'];
+        $news_record['author'] = $news_record['author'];
+        $news_array[] = $news_record;
+    }
+    $latteParameters['news_array'] = $news_array;
+} else {
+    $latteParameters['warning'] = $text['prazdnyvypis'];
+}
+
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'headerMD.latte', $latteParameters);
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'menu.latte', $latteParameters);
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'dashboard.latte', $latteParameters);
+$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'news.latte', $latteParameters);
+
+
 ?>
