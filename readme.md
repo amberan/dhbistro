@@ -14,7 +14,8 @@ Jedná se o systém používany organizacemi (Denní Hlídka, Noční Hlídka) v
 - audit nejen podle lidi, ale na objektech  
 
 ### Work in progress: 1.6.4
--  
+- #8 oprava zobrazovani Tracy
+- email uzivatele
 
 
 ### [changelog](doc/changelog.md)
