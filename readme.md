@@ -1,4 +1,4 @@
-# BISTRO
+# [BISTRO](https://github.com/amberan/dhbistro)
 
 Tato webovka byla vyvynuta pro potřeby LARPu [Pražská Hlídka](http://www.prazskahlidka.cz/).  
 Jedná se o systém používany organizacemi (Denní Hlídka, Noční Hlídka) ve hře. 
