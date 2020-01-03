@@ -22,18 +22,18 @@ This is a very old project, currently beeing reworked to more maintanable state.
 - /js/ 
 - /processing/ - libraries
 - /sql/ - database update scripts and empty database templates
-- /templates/ - (Latte templates)[https://latte.nette.org/]
+- /templates/ - [Latte templates](https://latte.nette.org/)
 - /testsuite/ - SoapUI test suite for REST API
 - /vendor/ - external libraries
-  - (latte/latte)[https://latte.nette.org/]
-  - (league/commonmark)[https://github.com/thephpleague/commonmark]
-  - (league/html-to-markdown)[https://github.com/thephpleague/html-to-markdown]
-  - (tracy/tracy)[https://tracy.nette.org/]
+  - [latte/latte](https://latte.nette.org/)
+  - [league/commonmark](https://github.com/thephpleague/commonmark)
+  - [league/html-to-markdown](https://github.com/thephpleague/html-to-markdown)
+  - [tracy/tracy](https://tracy.nette.org/)
 
 ## Running your own Bistro
 
 To run your own Bistro is recommended a LAMP server. You need a MySQL/MariaDB 
-database (to be configured in (inc/platform.php)[https://gitlab.alembiq.net/larp/bistro/raw/master/inc/platform.php]), password for database
+database (to be configured in [inc/platform.php](https://gitlab.alembiq.net/larp/bistro/raw/master/inc/platform.php), password for database
 needs to be put into /inc/important.php (whole of the second line of the file is
 used as a password).
 At this point Bistro isn't able to populate an empty database, but you can use 
