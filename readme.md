@@ -1,24 +1,18 @@
 # BISTRO
 
 Tato webovka byla vyvynuta pro potřeby LARPu [Pražská Hlídka](http://www.prazskahlidka.cz/).  
-Jedná se o systém používany organizacemi (Denní Hlídka, Noční Hlídka) ve hře. Který pomáhá udržovat informace o jednotlivých osobách, skupinách, akcích atp.  
+Jedná se o systém používany organizacemi (Denní Hlídka, Noční Hlídka) ve hře. 
+Který pomáhá udržovat informace o jednotlivých osobách, skupinách, akcích atp.  
 
-### TODO ???
-- [tickets](https://gitlab.alembiq.net/charles/bistro/-/boards)  
-- pridat uzivalum emaily
-- tabulka na user_filter [userid, object, filter] ???  
-- upravit system prav: pridat pravo na API, utajeni na ruzne stupne, ?prejmenovani?  
-- rework uzivatelu a prav musi prijit pred OSOBY/SKUPINY/HLASENI/PRIPADY protoze vice urovni utajeni
-- API personWrite  
-- zpracovani osob + API - strankovani  
-- audit nejen podle lidi, ale na objektech  
+## Disclaimer
 
-### Work in progress: 1.6.4
-- #8 oprava zobrazovani Tracy
-- email uzivatele
+This is a very old project, currently beeing reworked to more maintanable state.
 
+## Folder structure
 
-### [changelog](doc/changelog.md)
+## Used libraries
+
+## Running your own Bistro
 
 ### [files description](doc/files.md)
 
