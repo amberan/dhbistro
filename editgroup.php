@@ -14,7 +14,7 @@ $latte->setTempDirectory($config['folder_cache']);
 	        }
 	        auditTrail(2, 1, $_REQUEST['rid']);
 	        $latteParameters['title'] = 'Úprava skupiny';
-	        $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	        mainMenu (3);
 	        sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>úprava skupiny</strong>'); ?>
 <div id="obsah">
@@ -170,5 +170,5 @@ $latte->setTempDirectory($config['folder_cache']);
 	    $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
 	    Header ('location: index.php');
 	}
-	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
 ?>

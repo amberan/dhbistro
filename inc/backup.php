@@ -112,7 +112,7 @@ function  backup_data($soubor = "")
 function backup_process()
 {
     global $_SERVER, $database, $config, $update_file;
-    $backup_file = $_SERVER['DOCUMENT_ROOT'].$config['folder_backup']."backup".time().".sql.gz";
+    $backup_file = $config['folder_backup']."backup".time().".sql.gz";
     backup_data($backup_file);
     //pouze pokud je zaloha vetsi 2kB
     if (filesize($backup_file) > 1024) {

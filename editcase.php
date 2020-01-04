@@ -6,7 +6,7 @@ $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 
 $latteParameters['title'] = 'Úprava případu';
-$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+$latte->render($config['folder_templates'].'header.latte', $latteParameters);
 		
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	    $sql_a = "SELECT * FROM ".DB_PREFIX."c2s WHERE ".DB_PREFIX."c2s.idsolver=".$usrinfo['id']." AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid'];
@@ -232,5 +232,5 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	    $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
 	    Header ('location: index.php');
 	}
-	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
 ?>

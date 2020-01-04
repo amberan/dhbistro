@@ -17,7 +17,7 @@ $latte->setTempDirectory($config['folder_cache']);
 
 			
 	        $latteParameters['title'] = StripSlashes($rec['surname']).', '.StripSlashes($rec['name']);
-	        $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
 	        mainMenu (5);
 	        if (!isset($_REQUEST['hidenotes'])) {
@@ -291,5 +291,5 @@ if ($hn != 1) { ?>
 	    $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
 	    Header ('location: index.php');
 	}
-        $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+        $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
 ?>
