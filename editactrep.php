@@ -91,7 +91,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id'] =
         $latteParameters['title'] = ('Úprava hlášení'.(($type == 1) ? ' z výjezdu' : (($type == 2) ? ' z výslechu' : '')));
         $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
-        mainMenu (3);
+        mainMenu ();
         sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení'.(($type == 1) ? ' z výjezdu' : (($type == 2) ? ' z výslechu' : '')).'</strong>','<a href="symbols.php">přiřadit symboly</a>');
 
         $aday = (Date ('j',$rec_actr['adatum']));

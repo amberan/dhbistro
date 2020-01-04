@@ -10,7 +10,7 @@ $latte->setTempDirectory($config['folder_cache']);
 $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
 	auditTrail(1, 1, 0);
-	mainMenu (5);
+	mainMenu ();
         $custom_Filter = custom_Filter(1);
 	sparklets ('<strong>osoby</strong>','<a href="newperson.php">přidat osobu</a>; <a href="symbols.php" '.((searchTable(7)) ? ' class="unread"' : '').'>nepřiřazené symboly</a>; <a href="symbol_search.php">vyhledat symbol</a>');
 	// zpracovani filtru

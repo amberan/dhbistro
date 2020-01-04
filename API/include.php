@@ -5,15 +5,15 @@ define ('DB_PREFIX','nw_'); // table prefix
 
 require_once SERVER_ROOT."/config.php";
 
-require_once $_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php';
-require_once $_SERVER['DOCUMENT_ROOT'].'/inc/platform.php'; // server identification/configuration
-require_once $_SERVER['DOCUMENT_ROOT'].'/inc/database.php'; //db connector, injection mitigation
+require_once SERVER_ROOT.'/vendor/autoload.php';
+require_once SERVER_ROOT.'/inc/platform.php'; // server identification/configuration
+require_once SERVER_ROOT.'/inc/database.php'; //db connector, injection mitigation
 
 require_once $config['folder_custom'].'text.php';
 if ($config['custom'] != null) {
-    require_once($config['folder_custom'].'/text-'.$config['custom'].'.php');
+    require_once ( $config['folder_custom'].'/text-'.$config['custom'].'.php');
 }
-require_once($_SERVER['DOCUMENT_ROOT'].'/processing/_person.php');
+require_once SERVER_ROOT.'/processing/_person.php';
 
 function session_validation($sessionID)
 {

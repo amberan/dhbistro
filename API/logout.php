@@ -1,5 +1,5 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT'].'/API/include.php');
+require_once ( $_SERVER['DOCUMENT_ROOT'].'/API/include.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 header('Content-Type: application/json');

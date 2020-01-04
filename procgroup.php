@@ -29,7 +29,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	if (isset($_POST['insertgroup']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret'])) {
 	    $latteParameters['title'] = 'Přidána skupina';
 	    $latte->render($config['folder_templates'].'header.latte', $latteParameters);
-	    mainMenu (3);
+	    mainMenu ();
 	    $ures = mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."group WHERE UCASE(title)=UCASE('".$_POST['title']."')");
 	    if (mysqli_num_rows ($ures)) {
 	        echo '<div id="obsah"><p>Skupina již existuje, změňte její jméno.</p></div>';
@@ -49,7 +49,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	    if (isset($_POST['insertgroup'])) {
 	        $latteParameters['title'] = 'Přidána skupina';
 	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
-	        mainMenu (3);
+	        mainMenu ();
 	        sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./newgroup.php">nová skupina</a> &raquo; <strong>přidání skupiny neúspěšné</strong>');
 	        echo '<div id="obsah"><p>Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
 	        $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
@@ -59,7 +59,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	    auditTrail(2, 2, $_POST['groupid']);
 	    $latteParameters['title'] = 'Uložení změn';
 	    $latte->render($config['folder_templates'].'header.latte', $latteParameters);
-	    mainMenu (3);
+	    mainMenu ();
 	    $ures = mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."group WHERE UCASE(title)=UCASE('".$_POST['title']."') AND id<>".$_POST['groupid']);
 	    if (mysqli_num_rows ($ures)) {
 	        sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./editgroup.php?rid='.$_POST['groupid'].'">úprava skupiny</a> &raquo; <strong>uložení změn neúspěšné</strong>');
@@ -77,7 +77,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	    if (isset($_POST['editgroup'])) {
 	        $latteParameters['title'] = 'Uložení změn';
 	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
-	        mainMenu (3);
+	        mainMenu ();
 	        sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./editgroup.php?rid='.$_POST['groupid'].'">úprava skupiny</a> &raquo; <strong>uložení změn neúspěšné</strong>');
 	        echo '<div id="obsah"><p>Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
 	        $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
@@ -103,7 +103,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	    if (isset($_POST['uploadfile'])) {
 	        $latteParameters['title'] = 'Přiložení souboru';
 	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
-	        mainMenu (3);
+	        mainMenu ();
 	        sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./editgroup.php?rid='.$_POST['groupid'].'">úprava skupiny</a> &raquo; <strong>přiložení souboru neúspěšné</strong>');
 	        echo '<div id="obsah"><p>Soubor nebyl přiložen, něco se nepodařilo. Možná nebyl zvolen přikládaný soubor.</p></div>';
 	        $latte->render($config['folder_templates'].'footer.latte', $latteParameters);

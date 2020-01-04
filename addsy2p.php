@@ -8,7 +8,7 @@ $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
-	mainMenu (5);
+	mainMenu ();
         $custom_Filter = custom_Filter(20);
 	sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./symbols.php">nepřiřazené symboly</a>');
 // Overeni, zda dany symbol existuje, a uzivatel ma dostatecna prava na jeho upravu

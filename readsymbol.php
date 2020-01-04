@@ -18,7 +18,7 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	            unauthorizedAccess(1, $rec['secret'], $rec['deleted'], $_REQUEST['rid']);
 	        }
 	        auditTrail(7, 1, $_REQUEST['rid']);
-	        mainMenu (5);
+	        mainMenu ();
 	        if (!isset($_REQUEST['hidenotes'])) {
 	            $hn = 0;
 	        } else {

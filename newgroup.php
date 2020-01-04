@@ -9,7 +9,7 @@ $latte->setTempDirectory($config['folder_cache']);
 $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
 
-	mainMenu (3);
+	mainMenu ();
 	sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>nová skupina</strong>');
 ?>
 <div id="obsah">

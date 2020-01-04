@@ -10,7 +10,7 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
 	auditTrail(7, 1, 0);
 
-	mainMenu (5);
+	mainMenu ();
 	sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="newperson.php">přidat osobu</a>; <a href="symbols.php">nepřiřazené symboly</a>; <a href="symbol_search.php">vyhledat symbol</a>');
  
 if (isset($_POST['searchit'])) {

@@ -9,7 +9,7 @@ $latte->setTempDirectory($config['folder_cache']);
 $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
 auditTrail(12, 1, 0);
-mainMenu (3);
+mainMenu ();
 $custom_Filter = custom_Filter(13);
 sparklets ('<strong>vyhledávání</strong>','<a href="symbol_search.php">vyhledat symbol</a>');
 

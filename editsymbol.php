@@ -16,7 +16,7 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	            unauthorizedAccess(7, $rec_s['secret'], $rec_s['deleted'], $_REQUEST['rid']);
 	        }
 	        auditTrail(7, 1, $_REQUEST['rid']);
-	        mainMenu (5);
+	        mainMenu ();
 	        sparklets ('<a href="./symbols.php">symboly</a> &raquo; <strong>úprava symbolu</strong>'); ?>
 <div id="obsah">
 <fieldset><legend><strong>Úprava symbolu:</strong></legend>

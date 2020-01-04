@@ -10,7 +10,7 @@ $latte->setTempDirectory($config['folder_cache']);
 $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
 	auditTrail(4, 1, 0);
-	mainMenu (5);
+	mainMenu ();
         $custom_Filter = custom_Filter(4);
         if ($_SERVER["SERVER_NAME"] == 'enigma.dhbistro.cz') {
             sparklets ('<strong>'.$text['hlaseniM'].'</strong>','<a href="newactrep.php?type=1">nová zakázka na amulet</a>; <a href="newactrep.php?type=2">nová zakázka na informace</a>');

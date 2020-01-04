@@ -15,7 +15,7 @@ $latte->setTempDirectory($config['folder_cache']);
 	        auditTrail(2, 1, $_REQUEST['rid']);
 	        $latteParameters['title'] = 'Úprava skupiny';
 	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
-	        mainMenu (3);
+	        mainMenu ();
 	        sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>úprava skupiny</strong>'); ?>
 <div id="obsah">
 <fieldset><legend><strong>Úprava skupiny: <?php echo StripSlashes($rec_g['title']); ?></strong></legend>

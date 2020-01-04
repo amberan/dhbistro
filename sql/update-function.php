@@ -176,7 +176,7 @@ function bistroDBTableDrop($data): int
     $alter = 0;
     foreach ($data as $key => $value) {
         $drop_sql = "DROP TABLE ".$config['dbdatabase'].".".DB_PREFIX.$value;
-        $drop = mysqli_query($database,$drop_sql);
+        mysqli_query($database,$drop_sql);
         $check_table = mysqli_query($database,"SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX.$value."'");
         if (mysqli_num_rows($check_table) == 0) {
             Debugger::log('UPDATER '.$config['version'].' DB CHANGE: DELETE TABLE '.DB_PREFIX.$value);

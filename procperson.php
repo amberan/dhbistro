@@ -18,7 +18,7 @@ $latte->setTempDirectory($config['folder_cache']);
 	if (isset($_POST['insertperson']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['name']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret']) && is_numeric($_POST['side']) && is_numeric($_POST['power']) && is_numeric($_POST['spec'])) {
 	    $latteParameters['title'] = 'Přidána osoba';
 	    $latte->render($config['folder_templates'].'header.latte', $latteParameters);
-	    mainMenu (5);
+	    mainMenu ();
 	    if (is_uploaded_file($_FILES['portrait']['tmp_name'])) {
 	        $file = Time().MD5(uniqid(Time().Rand()));
 	        move_uploaded_file ($_FILES['portrait']['tmp_name'],'./files/'.$file.'tmp');
@@ -57,7 +57,7 @@ $latte->setTempDirectory($config['folder_cache']);
 	    if (isset($_POST['insertperson'])) {
 	        $latteParameters['title'] = 'Přidána osoba';
 	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
-	        mainMenu (5);
+	        mainMenu ();
 	        sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./newperson.php">nová osoba</a> &raquo; <strong>neúspěšné přidání osoby</strong>');
 	        echo '<div id="obsah"><p>Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
 	        $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
@@ -69,7 +69,7 @@ $latte->setTempDirectory($config['folder_cache']);
 	    $latteParameters['title'] = 'Uložení změn';
 	    $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
-	    mainMenu (5);
+	    mainMenu ();
 	    if (!isset($_POST['notnew'])) {
 	        unreadRecords (1,$_POST['personid']);
 	    }
@@ -117,7 +117,7 @@ $latte->setTempDirectory($config['folder_cache']);
 	        $latteParameters['title'] = 'Uložení změn';
 	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
   
-	        mainMenu (5);
+	        mainMenu ();
 	        sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./editperson.php?rid='.$_POST['personid'].'">úprava osoby</a> &raquo; <strong>uložení změn neúspešné</strong>');
 	        echo '<div id="obsah"><p>Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
 	        $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
@@ -129,7 +129,7 @@ $latte->setTempDirectory($config['folder_cache']);
 	    $latteParameters['title'] = 'Organizační uložení změn';
 	    $latte->render($config['folder_templates'].'header.latte', $latteParameters);
   
-	    mainMenu (5);
+	    mainMenu ();
 	    sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./editperson.php?rid='.$_POST['personid'].'">úprava osoby</a> &raquo; <strong>uložení změn</strong>','<a href="./readperson.php?rid='.$_POST['personid'].'">zobrazit upravené</a>');
 	    $rdatum = mktime(0,0,0,$_POST['rdatummonth'],$_POST['rdatumday'],$_POST['rdatumyear']);
 	    mysqli_query ($database,"UPDATE ".DB_PREFIX."person SET regdate='".$rdatum."', regid='".$_POST['regusr']."' WHERE id=".$_POST['personid']);
@@ -140,7 +140,7 @@ $latte->setTempDirectory($config['folder_cache']);
 	        $latteParameters['title'] = 'Uložení změn';
 	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	  
-	        mainMenu (5);
+	        mainMenu ();
 	        sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./editperson.php?rid='.$_POST['personid'].'">úprava osoby</a> &raquo; <strong>uložení změn neúspešné</strong>');
 	        echo '<div id="obsah"><p>Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
 	        $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
@@ -153,7 +153,7 @@ $latte->setTempDirectory($config['folder_cache']);
 	    $latteParameters['title'] = 'Uložení změn';
 	    $latte->render($config['folder_templates'].'header.latte', $latteParameters);
   
-	    mainMenu (5);
+	    mainMenu ();
 	    sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./editperson.php?rid='.$_POST['personid'].'">úprava osoby</a> &raquo; <strong>uložení změn</strong>','<a href="./readperson.php?rid='.$_POST['personid'].'">zobrazit upravené</a>');
 	    echo '<div id="obsah"><p>Skupiny pro uživatele uloženy.</p></div>';
 	    for ($i = 0;$i < Count($group);$i++) {
@@ -175,7 +175,7 @@ $latte->setTempDirectory($config['folder_cache']);
 	    if (isset($_POST['uploadfile'])) {
 	        $latteParameters['title'] = 'Přiložení souboru';
 	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
-	        mainMenu (5);
+	        mainMenu ();
 	        sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./editperson.php?rid='.$_POST['personid'].'">úprava osoby</a> &raquo; <strong>přiložení souboru neúspěšné</strong>');
 	        echo '<div id="obsah"><p>Soubor nebyl přiložen, něco se nepodařilo. Možná nebyl zvolen přikládaný soubor.</p></div>';
 	        $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
