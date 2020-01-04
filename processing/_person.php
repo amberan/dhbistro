@@ -2,11 +2,15 @@
 
 //TODO funkce pro prevod id fotek s symbolu na odkazy
 
-function personRead($personid)
+/** 
+* one person array
+* @param string personId
+* @return array nw_person row
+*/
+function personRead($personId)
 {
-    //one person array
     global $database, $usrinfo, $text;
-    $sqlwhere = " id = $personid AND secret <=".$usrinfo['right_power'];
+    $sqlwhere = " id = $personId AND secret <=".$usrinfo['right_power'];
     if (isset($usrinfo['right_admin']) AND $usrinfo['right_admin'] > 0) {
         $sqlwhere .= " AND deleted = 1";
     } else {
@@ -24,10 +28,15 @@ function personRead($personid)
     return $person;
 }
 
+/** 
+* person list array
+* @param string where where clause for SQL
+* @param string order order by clause for SQL
+* @return array nw_person array
+* TODO strankovani
+*/
 function personList($where = 1, $order = 1)
 {
-    //person list array, filtere by $where, sorted by $order
-    //TODO strankovani
     global $database, $usrinfo, $text;
     if (mb_strlen($where) < 1) {
         $where = 1;

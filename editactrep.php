@@ -89,7 +89,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id'] =
         auditTrail(4, 1, $_REQUEST['rid']);
         // následuje generování hlavičky
         $latteParameters['title'] = ('Úprava hlášení'.(($type == 1) ? ' z výjezdu' : (($type == 2) ? ' z výslechu' : '')));
-        $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
         mainMenu (3);
         sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení'.(($type == 1) ? ' z výjezdu' : (($type == 2) ? ' z výslechu' : '')).'</strong>','<a href="symbols.php">přiřadit symboly</a>');
@@ -428,5 +428,5 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id'] =
     $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
     Header ('location: index.php');
 }
-$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
 ?>

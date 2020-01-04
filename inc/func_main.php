@@ -2,59 +2,48 @@
 
 session_start();
 
-$config['version'] = '1.6.4';  // verze bistra
 define('DB_PREFIX', 'nw_'); // prefix tabulek
 define('SERVER_ROOT', $_SERVER['DOCUMENT_ROOT']);
-$config['dbpass'] = '/inc/important.php'; // soubor s heslem k databazi - na druhem radku
-$config['page_prefix'] = ''; // uri cesta mezi domenou a adresarem bistra
-$config['page_free'] = ['login.php', 'logout.php']; // stranky dostupne bez prihlaseni
-$config['folder_backup'] = '/files/backups/'; // adresar pro generovani zaloh
-$config['folder_portrait'] = '/files/portraits/'; // adresar s portrety
-$config['folder_symbol'] = '/files/symbols/'; // adresar se symboly
-$config['mime-image'] = ['image/jpeg', 'image/pjpeg', 'image/png'];
-$config['folder_logs'] = SERVER_ROOT.'/log/'; // adresar pro tracy logy
-$config['folder_custom'] = SERVER_ROOT.'/custom/'; // adresar pro customizace (dh, nh, enigma....)
-$config['folder_templates'] = SERVER_ROOT.'/templates/'; // adresar pro latte templaty
-$config['folder_cache'] = SERVER_ROOT.'/cache/'; // adresar pro latte cache
-require_once $config['folder_custom'].'text.php'; // defaultni texty - nasledne pretizeno hodnotami nactenymi v ramci inc/database.php
-$URL = explode('/', $_SERVER['REQUEST_URI']);
 
-// *** TECHNICAL LIBRARIES
-    require_once SERVER_ROOT.'/inc/platform.php';
-    if (null !== $config['custom']) { //prepsani defaultnich textu
-        require_once $config['folder_custom'].'/text-'.$config['custom'].'.php';
-    }
-    require_once SERVER_ROOT.'/vendor/autoload.php';
-        use Tracy\Debugger;
+require_once SERVER_ROOT."/config.php";
+$URL = explode('/', $_SERVER['REQUEST_URI']); // for THE LOOP
+require_once $config['folder_custom'].'text.php'; // defaultni text might be overloaded from inc/platform.php
+require_once SERVER_ROOT.'/inc/platform.php';  //platform setup based on server/link
+if (null !== $config['custom']) {
+    require_once $config['folder_custom'].'/text-'.$config['custom'].'.php';
+}
+require_once SERVER_ROOT.'/vendor/autoload.php';
+use Tracy\Debugger;
+Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+$latte = new Latte\Engine();
+$latte->setTempDirectory($config['folder_cache']);
+require_once SERVER_ROOT.'/inc/database.php';
+require_once SERVER_ROOT.'/inc/backup.php';
+require_once SERVER_ROOT.'/inc/session.php';
+require_once SERVER_ROOT.'/inc/audit_trail.php';
+require_once SERVER_ROOT.'/inc/image.php';
+require_once SERVER_ROOT.'/inc/unread.php';
+// *** FUNCTIONS for objects
+require_once SERVER_ROOT.'/processing/_person.php';
+require_once SERVER_ROOT.'/processing/_news.php';
+// *** GENERAL ALERT - to be removed
+if (isset($_SESSION['message']) && null !== $_SESSION['message']) {
+    echo "\n<script>window.onload = alert('".$_SESSION['message']."')</script>\n";
+    unset($_SESSION['message']);
+}
+require_once SERVER_ROOT.'/inc/menu.php';
+$latteParameters['text'] = $text;
+$latteParameters['config'] = $config;
+if (isset($usrinfo)) {
+    $latteParameters['usrinfo'] = $usrinfo;
+}
 
-        Debugger::enable(Debugger::DETECT, $config['folder_logs']);
-        //Debugger::log("alert: ".$_SESSION['message']);
-        $latte = new Latte\Engine();
-        $latte->setTempDirectory($config['folder_cache']);
-    require_once SERVER_ROOT.'/inc/database.php';
-    require_once SERVER_ROOT.'/inc/backup.php';
-    require_once SERVER_ROOT.'/inc/session.php';
-    require_once SERVER_ROOT.'/inc/audit_trail.php';
-    require_once SERVER_ROOT.'/inc/image.php';
-    require_once SERVER_ROOT.'/inc/unread.php';
-// *** PROCESSING
-    require_once SERVER_ROOT.'/processing/person.php'; //operace s objektem osoby
-    require_once SERVER_ROOT.'/processing/news.php';
-// *** GENERAL ALERT - overit, ze funguje s odlasovanim nahore - asi bude potreba prenaset message prez session destroy
-    if (isset($_SESSION['message']) && null !== $_SESSION['message']) {
-        echo "\n<script>window.onload = alert('".$_SESSION['message']."')</script>\n";
-        unset($_SESSION['message']);
-    }
-// *** LIBRARIES FOR DISPLAYING DATA
-    require_once SERVER_ROOT.'/inc/menu.php';
-    $latteParameters['text'] = $text;
-    $latteParameters['config'] = $config;
-    if (isset($usrinfo)) {
-        $latteParameters['usrinfo'] = $usrinfo;
-    }
-
-// timestamp konvertovan do podoby pro web
-function webDate($date)
+/**
+* timestamp to date
+* @param int date timestamp
+* @return string d. m. Y
+*/
+function webDate($date): string
 {
     if ($date < '1') {
         $value = 'někdy dávno';
@@ -64,7 +53,13 @@ function webDate($date)
 
     return $value;
 }
-function webDateTime($date)
+
+/**
+* timestamp to date and time
+* @param int date timestamp
+* @return string d. m. Y - H:i:s
+*/
+function webDateTime($date): string
 {
     if ($date < '1') {
         $value = 'někdy dávno';
@@ -79,7 +74,7 @@ function webDateTime($date)
 function getAuthor($recid, $trn)
 {
     global $database;
-    if (1 === $trn) {
+    if (1 === $trn) { //person
         $sql_ga = 'SELECT '.DB_PREFIX."person.name as 'name', ".DB_PREFIX."person.surname as 'surname', ".DB_PREFIX."user.login as 'nick' FROM ".DB_PREFIX.'person, '.DB_PREFIX.'user WHERE '.DB_PREFIX.'user.id='.$recid.' AND '.DB_PREFIX.'person.id='.DB_PREFIX.'user.idperson';
         $res_ga = mysqli_query($database, $sql_ga);
         if (mysqli_num_rows($res_ga)) {
@@ -93,7 +88,7 @@ function getAuthor($recid, $trn)
 
             return $name;
         }
-    } else {
+    } else { //user
         $sql_ga = 'SELECT '.DB_PREFIX."user.login as 'nick' FROM ".DB_PREFIX.'user WHERE '.DB_PREFIX.'user.id='.$recid;
         $res_ga = mysqli_query($database, $sql_ga);
         if (mysqli_num_rows($res_ga)) {
@@ -203,7 +198,13 @@ break; //symbol 2 action report
     return $filter;
 }
 
-function nocs($pol)
+
+/**
+* remove diacritics for search purposes
+* @param string string
+* @return string string without diacritics
+*/
+function nocs($string): string
 {
     $table = [
         'Š' => 'S',
@@ -294,15 +295,19 @@ function nocs($pol)
         'Ů' => 'U',
     ];
 
-    return strtr($pol, $table);
+    return strtr($string, $table);
 }
-
-function randomPassword()
+/**
+* password generator [A-Za-z0-9]
+* @param integer lenght lenght of password, default 8
+* @return string randomized string 
+*/
+function randomPassword($lenght = 8): string
 {
     $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
     $pass = [];
     $alphaLength = mb_strlen($alphabet) - 1;
-    for ($i = 0; $i < 8; ++$i) {
+    for ($i = 0; $i < $lenght; ++$i) {
         $n = rand(0, $alphaLength);
         $pass[] = $alphabet[$n];
     }
@@ -310,7 +315,12 @@ function randomPassword()
     return implode('', $pass);
 }
 
-function check_mail($addr)
+/**
+* validate email
+* @param string addr email to verify
+* @return bool is it a valid email
+*/
+function validate_mail($addr): bool
 {
     if (!mb_strpos($addr, '@')) {
         return false;
@@ -325,7 +335,7 @@ function check_mail($addr)
     //	if (!eregi('^[+]?[a-z0-9]+([-_.]?[a-z0-9]*)*@[a-z0-9]+([-_.]?[a-z0-9])*\.[a-z]{2,4}$',$addr)){
 }
 
-//show debug bar unless it's a sending a file (picture) to the user
+//show tracy bar unless it's a sending a file (picture) to the user
 if ('getportrait.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?')) && 'getfile.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?'))) {
     Debugger::barDump($_SESSION, 'session');
 }

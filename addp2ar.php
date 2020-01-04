@@ -17,7 +17,7 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 $latteParameters['title'] = 'Úprava hlášení';
-$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+$latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
 mainMenu (5);
         $custom_Filter = custom_Filter(17);
@@ -178,5 +178,5 @@ mainMenu (5);
 	} else {
 	    echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
 	}
-	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
 ?>

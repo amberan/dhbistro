@@ -6,7 +6,7 @@ $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 
 $latteParameters['title'] = 'Zobrazení symbolu';
-$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+$latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
 
 
@@ -229,5 +229,5 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	    $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
 	    Header ('location: index.php');
 	}
-        $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+        $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
 ?>
