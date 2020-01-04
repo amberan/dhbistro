@@ -13,8 +13,8 @@ if ($dashboard = mysqli_fetch_assoc ($sql_dashboard)) {
     }
 }
 
-$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'headerMD.latte', $latteParameters);
-$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'menu.latte', $latteParameters);
-$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'board_edit.latte', $latteParameters);
+$latte->render($config['folder_templates'].'headerMD.latte', $latteParameters);
+$latte->render($config['folder_templates'].'menu.latte', $latteParameters);
+$latte->render($config['folder_templates'].'board_edit.latte', $latteParameters);
 
 ?>

@@ -7,7 +7,7 @@ use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
-$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+$latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	
 	if (isset($_POST['addsymbol2c'])) {
 	    auditTrail(7, 6, $_POST['symbolid']);
@@ -30,7 +30,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	            mysqli_query ($database,$sql);
 	        }
 	    }
-	    $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+	    $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
 	}
 	
 	if (isset($_POST['addsymbol2ar'])) {
@@ -54,7 +54,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	            mysqli_query ($database,"INSERT INTO ".DB_PREFIX."symbol2all VALUES('".$_POST['symbolid']."','".$report[$i]."','".$usrinfo['id']."','4')");
 	        }
 	    }
-	    $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+	    $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
 	}
 	
         if (isset ($_POST['addsymb2pers'])) {
@@ -99,6 +99,6 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
                 mysqli_query ($database,$sql_ni);
             }
             
-            $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+            $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
         }
 ?>

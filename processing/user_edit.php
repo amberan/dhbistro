@@ -1,7 +1,7 @@
 <?php
 
 use Tracy\Debugger;
-Debugger::enable(Debugger::DEVELOPMENT,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
 // upravit uzivatele
 if (isset($_POST['userid'], $_POST['edituser']) && $usrinfo['right_power'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['login']) && is_numeric($_POST['power']) && is_numeric($_POST['texty'])) {
@@ -23,8 +23,8 @@ if (isset($_POST['userid'], $_POST['edituser']) && $usrinfo['right_power'] && !p
     }
 }
 
-    $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'headerMD.latte', $latteParameters);
-    $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'menu.latte', $latteParameters);
+    $latte->render($config['folder_templates'].'headerMD.latte', $latteParameters);
+    $latte->render($config['folder_templates'].'menu.latte', $latteParameters);
 	$custom_Filter = custom_Filter(8);
 
     $personList = personList('deleted=0 and archiv=0 and dead=0','surname');
@@ -58,5 +58,5 @@ if (isset($_POST['userid'], $_POST['edituser']) && $usrinfo['right_power'] && !p
 	} else {
 	    $latteParameters['warning'] = $text['zaznamnenalezen'];
 	}
-    $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'user_edit.latte', $latteParameters);
+    $latte->render($config['folder_templates'].'user_edit.latte', $latteParameters);
 ?>

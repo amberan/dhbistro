@@ -6,7 +6,7 @@ $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 
 $latteParameters['title'] = 'Zobrazení symbolu';
-$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+$latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	    $res = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."person WHERE id=".$_REQUEST['rid']);
@@ -16,7 +16,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	        }
 	        auditTrail(1, 1, $_REQUEST['rid']);
 	        $latteParameters['title'] = 'Úprava osoby';
-	        $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	        mainMenu (5);
 	        sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>úprava osoby</strong>'); ?>
 <div id="obsah">
@@ -362,5 +362,5 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	    $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
 	    Header ('location: index.php');
 	}
-	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
 ?>

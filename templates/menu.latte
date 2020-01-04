@@ -42,8 +42,8 @@
                 </ul>
             </div>
         </nav>
-        <div class="mt-4" id="sparklets">{$text['cesta']}: <strong>{$title}{if $subtitle} - {$subtitle}{/if}</strong>
-        {if $actions} 
+        <div class="mt-4" id="sparklets">{$text['cesta']}: <strong>{$title}{if @$subtitle} - {$subtitle}{/if}</strong>
+        {if @$actions} 
             {$text['akce']}: 
             {foreach $actions as $action}
                 <a href="{$action[0]}">{$action[1]}</a> 

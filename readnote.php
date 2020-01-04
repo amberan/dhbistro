@@ -23,7 +23,7 @@ $latte->setTempDirectory($config['folder_cache']);
 	    if ($rec = mysqli_fetch_assoc ($res)) {
 	        if ((($rec['secret'] <= $usrinfo['right_power']) || $rec['iduser'] == $usrinfo['id']) && !$rec['deleted'] == 1) {
 	            $latteParameters['title'] = StripSlashes($rec['title']);
-	            $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+	            $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 				
 
 	            mainMenu (0);
@@ -63,5 +63,5 @@ $latte->setTempDirectory($config['folder_cache']);
 	} else {
 	    echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
 	}
-	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
 ?>
