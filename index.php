@@ -16,10 +16,10 @@ $latteParameters['menu2'] = $menu2;
  * */
 if ($URL[1] == 'settings') { // SETTINGS
     $latteParameters['title'] = $text['nastaveni'];
-    require_once($_SERVER['DOCUMENT_ROOT'].'/processing/settings.php');
+    require_once ( SERVER_ROOT.'/processing/settings.php');
 } elseif ($usrinfo['right_super'] > 0 and $URL[1] == 'backup') { // BACKUP
     $latteParameters['title'] = $text['zalohovani'];
-    require_once($_SERVER['DOCUMENT_ROOT'].'/processing/backup.php');
+    require_once ( SERVER_ROOT.'/processing/backup.php');
 } elseif ($URL[1] == 'users') { // USER MANAGEMENT
     if ($usrinfo['right_power'] < 1) {
         unauthorizedAccess(8, 1, 0, 0);
@@ -29,12 +29,12 @@ if ($URL[1] == 'settings') { // SETTINGS
         $latteParameters['actions'][] = array("/users/new", $text['vytvorituzivatele']);
         if (isset($URL[2]) AND $URL[2] == 'new') { // USER MANAGEMENT > ADD USER
             $latteParameters['subtitle'] = $text['vytvorituzivatele'];
-            require_once($_SERVER['DOCUMENT_ROOT'].'/processing/user_add.php');
+            require_once ( SERVER_ROOT.'/processing/user_add.php');
         } elseif (isset($URL[2]) AND $URL[2] == 'edit') { // USER MANAGEMENT >EDIT USER
             $latteParameters['subtitle'] = $text['upravituzivatele'];
-            require_once($_SERVER['DOCUMENT_ROOT'].'/processing/user_edit.php');
+            require_once ( SERVER_ROOT.'/processing/user_edit.php');
         } else { // USER MANAGEMENT > LIST USERS
-            require_once($_SERVER['DOCUMENT_ROOT'].'/processing/users.php');
+            require_once ( SERVER_ROOT.'/processing/users.php');
         }
     }
 } elseif ($URL[1] == 'board') { // BOARD (nastenka)
@@ -49,10 +49,10 @@ if ($URL[1] == 'settings') { // SETTINGS
         unauthorizedAccess(6, 2, 0, 0);
     } elseif (isset($URL[2]) AND $URL[2] == 'edit' AND $usrinfo['right_power'] > 0) { // BOARD > EDIT
         $latteParameters['subtitle'] = $text['upravitnastenku'];
-        require_once($_SERVER['DOCUMENT_ROOT'].'/processing/board_edit.php');
+        require_once ( SERVER_ROOT.'/processing/board_edit.php');
     } else { // BOARD > SHOW
-        require_once($_SERVER['DOCUMENT_ROOT'].'/processing/dashboard.php');
-        require_once($_SERVER['DOCUMENT_ROOT'].'/processing/board.php');
+        require_once ( SERVER_ROOT.'/processing/dashboard.php');
+        require_once ( SERVER_ROOT.'/processing/board.php');
     }
 } else { // NEWS - DEFAULT
     auditTrail(5, 1, 0);
@@ -64,10 +64,10 @@ if ($URL[1] == 'settings') { // SETTINGS
     }
     if (isset($URL[2]) AND $URL[2] == 'new' AND $usrinfo['right_power'] > 0 AND $URL[1] == 'news') { // NEWS > NEW
         $latteParameters['subtitle'] = $text['pridataktualitu'];
-        require_once ($_SERVER['DOCUMENT_ROOT'].'/processing/news_add.php');
+        require_once (SERVER_ROOT.'/processing/news_add.php');
     } else { // NEWS > SHOW
-        require_once ($_SERVER['DOCUMENT_ROOT'].'/processing/dashboard.php');
-        require_once ($_SERVER['DOCUMENT_ROOT'].'/processing/news.php');
+        require_once (SERVER_ROOT.'/processing/dashboard.php');
+        require_once (SERVER_ROOT.'/processing/news.php');
     }
 }
 

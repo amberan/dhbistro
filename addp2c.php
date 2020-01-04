@@ -7,7 +7,7 @@ $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	
-	mainMenu (5);
+	mainMenu ();
         $custom_Filter = custom_Filter(15);
 	sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>úprava případu</strong> &raquo; <strong>přidání osob</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {

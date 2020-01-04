@@ -9,7 +9,7 @@ $latte->setTempDirectory($config['folder_cache']);
 $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
 
-		mainMenu (4);
+		mainMenu ();
 		sparklets ('<a href="./doode.php">Časová dostupnost</a>');
 if ($usrinfo['right_power']) { ?>
 <div id="obsah">

@@ -21,7 +21,7 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	    if (isset($_POST['case'])) {
 	        $case = $_POST['case'];
 	    }
-	    mainMenu (5);
+	    mainMenu ();
 	    sparklets ('<a href="./symbols.php">symboly</a> &raquo; <a href="./editsymbol.php?rid='.$_POST['symbolid'].'">úprava symbolu</a> &raquo; <strong>uložení změn</strong>');
 	    echo '<div id="obsah"><p>Symbol přiřazen k příslušným případům.</p></div>';
 	    if (isset($_POST['case'])) {
@@ -46,7 +46,7 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	        $report = $_POST['report'];
 	    }
 
-	    mainMenu (5);
+	    mainMenu ();
 	    sparklets ('<a href="./symbols.php">symboly</a> &raquo; <a href="./editsymbol.php?rid='.$_POST['symbolid'].'">úprava symbolu</a> &raquo; <strong>uložení změn</strong>');
 	    echo '<div id="obsah"><p>Symbol přiřazen k příslušným hlášení.</p></div>';
 	    if (isset($_POST['report'])) {
@@ -61,7 +61,7 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
             auditTrail(7, 6, $_POST['symbolid']);
             mysqli_query ($database,"UPDATE ".DB_PREFIX."symbol SET assigned=1 WHERE id=".$_POST['symbolid']);
             mysqli_query ($database,"UPDATE ".DB_PREFIX."person SET symbol=".$_POST['symbolid']." WHERE id=".$_POST['person']);
-            mainMenu (5);
+            mainMenu ();
             sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./symbols.php">nepřiřazené symboly</a>');
             $sql_p = "SELECT name, surname FROM ".DB_PREFIX."person WHERE id=".$_POST['person'];
             $res_p = mysqli_query ($database,$sql_p);

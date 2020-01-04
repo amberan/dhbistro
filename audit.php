@@ -135,7 +135,7 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	}
 	
 	auditTrail(11, 1, 0);
-	mainMenu (2);
+	mainMenu ();
         $custom_Filter = custom_Filter(11);
 	sparklets ('<strong>audit</strong>');
 	
@@ -232,7 +232,7 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	// filtr
 	function filter ()
 	{
-	    global $f_cat,$f_sort,$f_user,$f_type,$usrinfo,$f_org,$f_my,$f_glob,$f_count;
+	    global $database,$f_cat,$f_sort,$f_user,$f_type,$usrinfo,$f_org,$f_my,$f_glob,$f_count;
 	    echo '<div id="filter-wrapper"><form action="audit.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>

@@ -1,6 +1,6 @@
 <?php
 
-function mainMenu ($index)
+function mainMenu ()
 {
     global $database,$usrinfo,$config,$text;
     $currentfile = $_SERVER["PHP_SELF"];
@@ -53,7 +53,7 @@ if (isset($usrinfo) and (($usrinfo['right_power'] < 1 and $usrinfo['right_text']
 }
 if (isset($usrinfo) and $usrinfo['right_power'] > 0) {
     $doodle = mysqli_fetch_assoc (mysqli_query ($database,"SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1"));
-    $menu2[] = array($text['casovadostupnost'], $doodle['link'] , 0);
+    $menu2[] = array($text['casovadostupnost'], $doodle['link'], 0);
     $menu2[] = array($text['spravauzivatelu'], "/users", 0);
 }
 if (isset($usrinfo) and $usrinfo['right_aud'] > 0) {

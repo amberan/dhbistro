@@ -27,7 +27,7 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	            unauthorizedAccess(3, $rec_c['secret'], $rec_c['deleted'], $_REQUEST['rid']);
 	        }
 	        auditTrail(3, 1, $_REQUEST['rid']);
-	        mainMenu (3);
+	        mainMenu ();
 	        sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>úprava případu</strong>',$symbolbutton); ?>
 <?php if (($rec['secret'] == 1) && (!$usrinfo['right_power']) && (!$rec_a['iduser'])) {
 	            echo '<div id="obsah"><p>Hezký pokus.</p></div>';

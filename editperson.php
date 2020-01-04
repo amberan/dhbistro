@@ -17,7 +17,7 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	        auditTrail(1, 1, $_REQUEST['rid']);
 	        $latteParameters['title'] = 'Úprava osoby';
 	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
-	        mainMenu (5);
+	        mainMenu ();
 	        sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>úprava osoby</strong>'); ?>
 <div id="obsah">
 <fieldset id="ramecek"><legend><strong>Úprava osoby: <?php echo(StripSlashes($rec_p['surname']).', '.StripSlashes($rec_p['name'])); ?></strong></legend>

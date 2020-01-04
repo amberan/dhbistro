@@ -19,7 +19,7 @@ $latte->setTempDirectory($config['folder_cache']);
 	        $latteParameters['title'] = StripSlashes($rec['surname']).', '.StripSlashes($rec['name']);
 	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
-	        mainMenu (5);
+	        mainMenu ();
 	        if (!isset($_REQUEST['hidenotes'])) {
 	            $hn = 0;
 	        } else {

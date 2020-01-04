@@ -51,7 +51,7 @@ $latte->setTempDirectory($config['folder_cache']);
 	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
 
-	        mainMenu (4);
+	        mainMenu ();
 	        if (!isset($_REQUEST['hidenotes'])) {
 	            $hn = 0;
 	        } else {

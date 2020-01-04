@@ -8,7 +8,7 @@ $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
-	mainMenu (4);
+	mainMenu ();
 	sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>nový případ</strong>');
 ?>
 <div id="obsah">	

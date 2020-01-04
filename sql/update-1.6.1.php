@@ -131,7 +131,7 @@ $to_MD[] = ['user', 'id', 'plan', 'plan_md'];
 
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-require_once('update-function.php');
+require_once ( 'update-function.php');
 
 $counterTableRename = bistroDBTableRename($rename_table);
 $counterColumnAlter = bistroDBColumnAlter($alter_column);

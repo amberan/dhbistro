@@ -16,7 +16,7 @@ $latte->setTempDirectory($config['folder_cache']);
 	        $latteParameters['title'] = StripSlashes($rec_g['title']);
 	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
-	        mainMenu (3);
+	        mainMenu ();
 	        $custom_Filter = custom_Filter(14, $_REQUEST['rid']);
 	        if (!isset($_REQUEST['hidenotes'])) {
 	            $hn = 0;

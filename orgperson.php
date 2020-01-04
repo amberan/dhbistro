@@ -8,7 +8,7 @@ $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
-	mainMenu (5);
+	mainMenu ();
 	sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>úprava osoby</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	    $res = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."person WHERE id=".$_REQUEST['rid']);

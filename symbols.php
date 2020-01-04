@@ -9,7 +9,7 @@ $latte->setTempDirectory($config['folder_cache']);
 $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
 	auditTrail(7, 1, 0);
-	mainMenu (5);
+	mainMenu ();
 	deleteUnread (7,'none');
 	sparklets ('<a href="persons.php">osoby</a> &raquo; <strong>nepřiřazené symboly</strong>','<a href="newsymbol.php">nový symbol</a>; <a href="symbol_search.php">vyhledat symbol</a>');
 	
