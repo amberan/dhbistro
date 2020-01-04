@@ -16,7 +16,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	}
 	if (isset($_POST['insertcase']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret']) && is_numeric($_POST['status'])) {
 	    $latteParameters['title'] = 'Přidán případ';
-	    $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+	    $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	    mainMenu (4);
 	    $ures = mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."case WHERE UCASE(title)=UCASE('".$_POST['title']."')");
 	    if (mysqli_num_rows ($ures)) {
@@ -33,21 +33,21 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	        sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./newcase.php">nový případ</a> &raquo; <strong>přidán případ</strong>','<a href="./readcase.php?rid='.$cid.'">zobrazit vytvořené</a> &raquo; <a href="./editcase.php?rid='.$cid.'">úprava případu</a>');
 	        echo '<div id="obsah"><p>Případ vytvořen.</p></div>';
 	    }
-	    $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+	    $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
 	} else {
 	    if (isset($_POST['insertcase'])) {
 	        $latteParameters['title'] = 'Přidán případ';
-	        $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	        mainMenu (4);
 	        sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./newcase.php">nový případ</a> &raquo; <strong>přidání případu neúspěšné</strong>');
 	        echo '<div id="obsah"><p>Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
-	        $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+	        $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
 	    }
 	}
 	if (isset($_POST['caseid'], $_POST['editcase']) && $usrinfo['right_text'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret']) && is_numeric($_POST['status'])) {
 	    auditTrail(3, 2, $_POST['caseid']);
 	    $latteParameters['title'] = 'Uložení změn';
-	    $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+	    $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	    mainMenu (4);
 	    if (!isset($_POST['notnew'])) {
 	        unreadRecords (3,$_POST['caseid']);
@@ -65,15 +65,15 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	        sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>uložení změn</strong>','<a href="./readcase.php?rid='.$_POST['caseid'].'">zobrazit upravené</a>');
 	        echo '<div id="obsah"><p>Případ upraven.</p></div>';
 	    }
-	    $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+	    $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
 	} else {
 	    if (isset($_POST['editcase'])) {
 	        $latteParameters['title'] = 'Uložení změn';
-	        $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	        mainMenu (4);
 	        sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>uložení změn neúspěšné</strong>');
 	        echo '<div id="obsah"><p>Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
-	        $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+	        $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
 	    }
 	}
 	if (isset($_POST['uploadfile']) && is_uploaded_file($_FILES['attachment']['tmp_name']) && is_numeric($_POST['caseid']) && is_numeric($_POST['secret'])) {
@@ -89,11 +89,11 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	} else {
 	    if (isset($_POST['uploadfile'])) {
 	        $latteParameters['title'] = 'Přiložení souboru';
-	        $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	        mainMenu (4);
 	        sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>přiložení souboru neúspěšné</strong>');
 	        echo '<div id="obsah"><p>Soubor nebyl přiložen, něco se nepodařilo. Možná nebyl zvolen přikládaný soubor.</p></div>';
-	        $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+	        $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
 	    }
 	}
 	if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {

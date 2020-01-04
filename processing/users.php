@@ -1,11 +1,11 @@
 <?php
 
 use Tracy\Debugger;
-Debugger::enable(Debugger::DEVELOPMENT,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
 
 // smazat uzivatele
-if (is_numeric($URL[3]) and $URL[2] == 'delete') {
+if (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] == 'delete') {
     if (!$usrinfo['right_power']) {
         unauthorizedAccess(8, 1, 0, 0);
     } else {
@@ -15,7 +15,7 @@ if (is_numeric($URL[3]) and $URL[2] == 'delete') {
         $latteParameters['message'] = $text['uzivatelodstranen'];
     }
 }// zamknout uzivatele
-elseif (is_numeric($URL[3]) and $URL[2] == 'lock') {
+elseif (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] == 'lock') {
     if (!$usrinfo['right_power']) {
         unauthorizedAccess(8, 2, 0, 0);
     } else {
@@ -25,7 +25,7 @@ elseif (is_numeric($URL[3]) and $URL[2] == 'lock') {
         $latteParameters['message'] = $text['uzivatelzablokovan'];
     }
 }// odemknout uzivatele
-elseif (is_numeric($URL[3]) and $URL[2] == 'unlock') {
+elseif (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] == 'unlock') {
     if (!$usrinfo['right_power']) {
         unauthorizedAccess(8, 2, 0, 0);
     } else {
@@ -35,7 +35,7 @@ elseif (is_numeric($URL[3]) and $URL[2] == 'unlock') {
         $latteParameters['message'] = $text['uzivatelodblokovan'];
     }
 }// reset hesla uzivatele
-elseif (is_numeric($URL[3]) and $URL[2] = 'reset') {
+elseif (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] = 'reset') {
     if (!$usrinfo['right_power']) {
         unauthorizedAccess(8, 11, 0, 0);
     } else {
@@ -51,6 +51,7 @@ elseif (isset($_POST['insertuser']) && $usrinfo['right_power'] && !preg_match ('
     if (mysqli_num_rows ($ures)) {
         $latteParameters['message'] = $text['uzivatelexistuje'];
     } else {
+        //TODO add validate_email
         mysqli_query ($database,"INSERT INTO ".DB_PREFIX."user (login,pwd,email,right_power,right_text,timeout,idperson) VALUES('".$_POST['login']."',md5('".$_POST['heslo']."'),'".$_POST['email']."','".$_POST['power']."','".$_POST['texty']."','600','".$_POST['idperson']."')");
         if (mysqli_affected_rows($database) > 0) {
             $uidarray = mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."user WHERE UCASE(login)=UCASE('".$_POST['login']."')"));
@@ -71,8 +72,8 @@ elseif (isset($_POST['insertuser']) && $usrinfo['right_power'] && !preg_match ('
 
 
 
-    $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'headerMD.latte', $latteParameters);
-    $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'menu.latte', $latteParameters);
+    $latte->render($config['folder_templates'].'headerMD.latte', $latteParameters);
+    $latte->render($config['folder_templates'].'menu.latte', $latteParameters);
 	$custom_Filter = custom_Filter(8);
 
 // *** zpracovani filtru
@@ -141,6 +142,6 @@ if (mysqli_num_rows ($user_query)) {
 } else {
     $latteParameters['warning'] = $text['prazdnyvypis'];
 }
-$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'users.latte', $latteParameters);
+$latte->render($config['folder_templates'].'users.latte', $latteParameters);
 
 ?>

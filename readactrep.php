@@ -48,7 +48,7 @@ $latte->setTempDirectory($config['folder_cache']);
 	        }
 	        $typestring = (($rec_ar['type'] == 1) ? 'výjezd' : (($rec_ar['type'] == 2) ? 'výslech' : '?')); //odvozuje slovní typ hlášení
 	        $latteParameters['title'] = (StripSlashes('Hlášení'.(($rec_ar['type'] == 1) ? ' z výjezdu' : (($rec_ar['type'] == 2) ? ' z výslechu' : '')).': '.$rec_ar['label']));
-	        $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
 
 	        mainMenu (4);
@@ -376,5 +376,5 @@ if ($hn != 1) { ?>
 	    $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
 	    Header ('location: index.php');
 	}
-	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
 ?>
