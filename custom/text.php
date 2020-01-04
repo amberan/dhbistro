@@ -100,6 +100,7 @@ $text['zalohavytvorena'] = 'Záloha vytvořena!';
 $text['obsahnastenky'] = 'Obsah nástěnky';
 $text['upravitnastenku'] = 'Upravit nástěnku';
 $text['osobninastenka'] = 'Osobní nástěnka';
+$text['verejnanastenka'] = 'Veřejná nástěnka';
 $text['zobrazitnastenku'] = 'Zobrazit nástěnku';
 $text['zadnanedokoncenahlaseni'] = 'Nemáte žádná nedokončená hlášení';
 $text['zadnenadokoncenepripady'] = 'Nemáte žádný přiřazený neuzavřený případ';

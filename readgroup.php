@@ -14,7 +14,7 @@ $latte->setTempDirectory($config['folder_cache']);
 	        auditTrail(2, 1, $_REQUEST['rid']);
 
 	        $latteParameters['title'] = StripSlashes($rec_g['title']);
-	        $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
 	        mainMenu (3);
 	        $custom_Filter = custom_Filter(14, $_REQUEST['rid']);
@@ -233,5 +233,5 @@ if ($hn != 1) { ?>
 	    $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
 	    Header ('location: index.php');
 	}
-	$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
 ?>

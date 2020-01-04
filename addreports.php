@@ -7,7 +7,7 @@ use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
-$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $latteParameters);
+$latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
 	if (isset($_POST['addtoareport'])) {
 	    auditTrail(4, 6, $_POST['reportid']);
@@ -27,7 +27,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	            mysqli_query ($database,"INSERT INTO ".DB_PREFIX."ar2c VALUES('".$_POST['reportid']."','".$case[$i]."','".$usrinfo['id']."')");
 	        }
 	    }
-	    $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+	    $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
 	}
 	
 	if (isset($_POST['addcasetoareport'])) {
@@ -48,7 +48,7 @@ $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'header.latte', $lattePar
 	            mysqli_query ($database,"INSERT INTO ".DB_PREFIX."ar2c VALUES('".$report[$i]."','".$_POST['caseid']."','".$usrinfo['id']."')");
 	        }
 	    }
-	    $latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'footer.latte', $latteParameters);
+	    $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
 	}
 	
 ?>

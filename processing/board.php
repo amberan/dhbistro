@@ -2,7 +2,7 @@
 
 use League\CommonMark\CommonMarkConverter;
 use Tracy\Debugger;
-Debugger::enable(Debugger::DEVELOPMENT,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
 $converter = new CommonMarkConverter([
     'html_input' => 'strip',
@@ -35,10 +35,10 @@ if (isset($dashboard['content'])) {
     $latteParameters['board'] = $text['nastenkaprazdna'];
 }
 
-$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'headerMD.latte', $latteParameters);
-$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'menu.latte', $latteParameters);
-$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'dashboard.latte', $latteParameters);
-$latte->render($_SERVER['DOCUMENT_ROOT'].'/templates/'.'board.latte', $latteParameters);
+$latte->render($config['folder_templates'].'headerMD.latte', $latteParameters);
+$latte->render($config['folder_templates'].'menu.latte', $latteParameters);
+$latte->render($config['folder_templates'].'dashboard.latte', $latteParameters);
+$latte->render($config['folder_templates'].'board.latte', $latteParameters);
 
 
 ?>
