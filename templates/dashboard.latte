@@ -1,31 +1,32 @@
 {$text[osobninastenka]} 
 <hr />
-{$text[nedokoncenahlaseni]}: {$unfinishedreports}
-{if $reportsnone} 
+
+{if @$reportsnone} 
     {$reportsnone}
 {else}
-    {foreach $reports as $reports}
-        <a href="./readactrep.php?rid={$reports[0]}&hidenotes=0&truenames=0">{$reports[1]}</a><br />
+    {$text[nedokoncenahlaseni]}:
+    {foreach $reports as $report}
+        <a href="./readactrep.php?rid={$report[0]}&hidenotes=0&truenames=0">{$report[1]}</a><br />
     {/foreach}
 {/if}
 <hr />
 
-{$text[neuzavrenepripady]}:  {$unfinishedcases}
-{if $casesnone} 
+{if @$casesnone} 
     {$casesnone}
 {else}
-    {foreach $cases as $cases}
-        <a href="./readcase.php?rid={$cases[0]}&hidenotes=0">{$cases[1]}</a><br />
+    {$text[neuzavrenepripady]}:
+    {foreach $cases as $case}
+        <a href="./readcase.php?rid={$case[0]}&hidenotes=0">{$case[1]}</a><br />
     {/foreach}
 {/if}
 <hr />
 
-{$text[nedokonceneukoly]}: {$unfinishedtasks}
-{if $tasksnone} 
+{if @$tasksnone} 
     {$tasksnone}
 {else}
-    {foreach $tasks as $tasks}
-        <a href="./procother.php?fnshtask={$cases[0]}">{$tasks[1]} {$tasks[2]}</a><br />
+    {$text[nedokonceneukoly]}:
+    {foreach $tasks as $task}
+        <a href="./procother.php?fnshtask={$task[0]}">{$task[1]} {$task[2]}</a><br />
     {/foreach}
 {/if}
 <hr />
