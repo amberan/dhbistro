@@ -18,7 +18,7 @@ $latteParameters['title'] = 'Přidán úkol';
 	    // vlozeni noveho ukolu
 	    if (isset($_POST['inserttask']) && !empty($_POST['task'])) {
 	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
-	        mainMenu (3);
+	        mainMenu ();
 	        $custom_Filter = custom_Filter(10);
 	        $sql_t = "INSERT INTO ".DB_PREFIX."task VALUES('','".$_POST['task']."','".$_POST['target']."','0','".Time()."','".$usrinfo['id']."','','')";
 	        mysqli_query ($database,$sql_t);
@@ -35,7 +35,7 @@ $latteParameters['title'] = 'Přidán úkol';
 	            $latteParameters['title'] = 'Přidání úkolu neúspěšné';
 	            $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
-	            mainMenu (3);
+	            mainMenu ();
 	            $custom_Filter = custom_Filter(10);
 	            sparklets ('<a href="/users">uživatelé</a> &raquo; <strong>úkoly</strong>');
 	            echo '<div id="obsah"><p>Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
@@ -44,7 +44,7 @@ $latteParameters['title'] = 'Přidán úkol';
 	            $latteParameters['title'] = 'Úkoly';
 	            $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
-	            mainMenu (2);
+	            mainMenu ();
 	            $custom_Filter = custom_Filter(10);
 	            sparklets ('<a href="/users">uživatelé</a> &raquo; <strong>úkoly</strong>');
 	        }
@@ -178,7 +178,7 @@ $latteParameters['title'] = 'Přidán úkol';
 	} else {
 	    auditTrail(10, 1, 0);
 	    $latte->render($config['folder_templates'].'header.latte', $latteParameters);
-	    mainMenu (3);
+	    mainMenu ();
 	    sparklets ('<strong>uživatelé</strong> &raquo; <strong>úkoly</strong>');
 	    echo '<div id="obsah"><p>Jste si jistí, že máte správná oprávnění?</p></div>';
 	}

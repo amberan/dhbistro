@@ -19,7 +19,7 @@ $latte->setTempDirectory($config['folder_cache']);
 $latteParameters['title'] = 'Úprava hlášení';
 $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
-mainMenu (5);
+mainMenu ();
         $custom_Filter = custom_Filter(17);
 	sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení</strong>'.(($label != '') ? ' - "'.$label.' ('.$typestring.')"' : ''));
 	// *** původní načítání autora ---

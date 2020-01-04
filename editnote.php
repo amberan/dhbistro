@@ -8,7 +8,7 @@ $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
-	mainMenu (2);
+	mainMenu ();
 	switch ($_REQUEST['idtable']) {
 		case 1: $sourceurl = "persons.php"; $sourcename = "osoby"; break;
 		case 2: $sourceurl = "groups.php"; $sourcename = "skupiny"; break;

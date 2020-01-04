@@ -9,7 +9,7 @@ $latte->setTempDirectory($config['folder_cache']);
 $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
 
-	mainMenu (4);
+	mainMenu ();
 	$type = $_GET['type']; // nacitani typu hlaseni z prikazove radky prohlizece (zakladni ochrana proti SQL injection)
 	if ($type === '1') {
 	    sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>nové hlášení z výjezdu</strong>');

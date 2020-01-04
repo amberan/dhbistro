@@ -9,7 +9,7 @@ $latte->setTempDirectory($config['folder_cache']);
 $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
 
-	mainMenu (5);
+	mainMenu ();
         $custom_Filter = custom_Filter(21);
 	sparklets ('<a href="./symbols.php">nepřiřazené symboly</a> &raquo; <strong>přiřazení symbolu k případu</strong>');
 	$sql = "SELECT created_by FROM ".DB_PREFIX."symbol WHERE id=".$_REQUEST['rid'];

@@ -7,7 +7,7 @@ $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
-	mainMenu (5);
+	mainMenu ();
         $custom_Filter = custom_Filter(19);
 	sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>úprava skupiny</strong> &raquo; <strong>přidání osob</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {

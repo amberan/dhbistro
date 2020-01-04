@@ -11,7 +11,7 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
 
 	auditTrail(3, 1, 0);
-	mainMenu (4);
+	mainMenu ();
         $custom_Filter = custom_Filter(3);
 	sparklets ('<strong>případy</strong>','<a href="newcase.php">přidat případ</a>');
 	// zpracovani filtru

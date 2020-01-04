@@ -102,7 +102,7 @@ function  backup_data($soubor = "")
     if (!empty ($soubor)) {
         $gztext = gzencode($text, 9);
         $fp = @fopen ($soubor,"w+");
-        $fw = @fwrite ($fp,$gztext);
+        @fwrite ($fp,$gztext);
         @fclose ($fp);
     }
 
@@ -132,7 +132,7 @@ function backup_process()
         // pokud existuje update soubor - spustit a prejmenovat
         if (file_exists($update_file)) {
             Debugger::log("RUNNING UPDATE SCRIPT: /sql/".basename($update_file));
-            require_once($update_file);
+            require_once ( $update_file);
         }
         //odmazani UNREAD pro smazane uzivatele
         $deletedusers_sql = mysqli_query($database,"select id from ".DB_PREFIX."user where deleted=1");

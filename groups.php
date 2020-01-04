@@ -10,7 +10,7 @@ $latte->setTempDirectory($config['folder_cache']);
 $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
 	auditTrail(3, 1, 0);
-	mainMenu (3);
+	mainMenu ();
         $custom_Filter = custom_Filter(2);
 	sparklets ('<strong>skupiny</strong>','<a href="newgroup.php">přidat skupinu</a>');
 	// zpracovani filtru

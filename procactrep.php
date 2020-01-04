@@ -26,14 +26,14 @@ if (isset($_POST['reportid'])) {
 	        $latteParameters['title'] = 'Hlášení nepřidáno';
 	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
-	        mainMenu (4);
+	        mainMenu ();
 	        sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>hlášení nepřidáno</strong>');
 	        echo '<div id="obsah"><p>Toto označení hlášení již existuje, změňte ho.</p></div>';
 	    } else {
 	        $latteParameters['title'] = 'Hlášení uloženo';
 	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
-	        mainMenu (4);
+	        mainMenu ();
 	        mysqli_query ($database,"INSERT INTO ".DB_PREFIX."report (label, datum, iduser, task, summary, impacts, details, secret, deleted, status, type, adatum, start, end, energy, inputs) VALUES('".$_POST['label']."','".Time()."','".$usrinfo['id']."','".$_POST['task']."','".$_POST['summary']."','".$_POST['impact']."','".$_POST['details']."','".$_POST['secret']."','0','".$_POST['status']."','".$_POST['type']."','".$adatum."','".$_POST['start']."','".$_POST['end']."','".$_POST['energy']."','".$_POST['inputs']."')");
 	        $ridarray = mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."report WHERE UCASE(label)=UCASE('".$_POST['label']."')"));
 	        $rid = $ridarray['id'];
@@ -57,7 +57,7 @@ if (isset($_POST['reportid'])) {
 	        $latteParameters['title'] = 'Hlášení nepřidáno!!!';
 	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
-	        mainMenu (4);
+	        mainMenu ();
 	        sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>hlášení nepřidáno</strong>');
 	        echo '<div id="obsah"><p>Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva. Pamatujte, že všechna pole musí být vyplněná.</p></div>';
 	        $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
@@ -68,7 +68,7 @@ if (isset($_POST['reportid'])) {
 	    $latteParameters['title'] = 'Uložení změn';
 	    $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
-	    mainMenu (4);
+	    mainMenu ();
 	    if ($_POST['status'] <> 0) {
 	        unreadRecords (4,$_POST['reportid']);
 	    }
@@ -87,7 +87,7 @@ if (isset($_POST['reportid'])) {
 	        $latteParameters['title'] = 'Uložení změn';
 	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
-	        mainMenu (4);
+	        mainMenu ();
 	        sparklets ('<a href="./cases.php">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>uložení změn neúspěšné</strong>');
 	        echo '<div id="obsah"><p>Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva. Pamatujte, že žádné pole nesmí být prázdné.</p></div>';
 	        $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
@@ -106,7 +106,7 @@ if (isset($_POST['reportid'])) {
 	        $latteParameters['title'] = 'Přiložení souboru';
 	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
-	        mainMenu (4);
+	        mainMenu ();
 	        sparklets ('<a href="./cases.php">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>přiložení souboru</strong>');
 	        echo '<div id="obsah"><p>Soubor nebyl přiložen, něco se nepodařilo. Možná nebyl zvolen přikládaný soubor.</p></div>';
 	        $latte->render($config['folder_templates'].'footer.latte', $latteParameters);

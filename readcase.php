@@ -20,7 +20,7 @@ if (is_numeric($_REQUEST['rid'])) {
         $latteParameters['title'] = StripSlashes($rec['title']);
         $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
-        mainMenu (4);
+        mainMenu ();
         if (!isset($_REQUEST['hidenotes'])) {
             $hn = 0;
         } else {

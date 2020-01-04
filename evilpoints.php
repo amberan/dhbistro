@@ -13,7 +13,7 @@ if (isset($_POST['addpoints'])) {
 } else {
     auditTrail(9, 1, 0);
 }
-	mainMenu (2);
+	mainMenu ();
         $custom_Filter = custom_Filter(9);
 	sparklets ('<strong>'.$text['point'].'y</strong>',(($usrinfo['right_power']) ? 'aktuální stav' : ''));
 	//Přidání zlobodů

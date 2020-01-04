@@ -12,7 +12,7 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	// úprava poznámky
 	if (isset($_POST['noteid'], $_POST['editnote']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['note']) && is_numeric($_POST['nsecret'])) {
 	    auditTrail($_POST['idtable'], 9, $_POST['itemid']);
-	    mainMenu (5);
+	    mainMenu ();
 	    switch ($_POST['idtable']) {
 			case 1: $sourceurl = "persons.php"; $sourcename = "osoby"; break;
 			case 2: $sourceurl = "groups.php"; $sourcename = "skupiny"; break;
@@ -29,7 +29,7 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	    $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
 	} else {
 	    if (isset($_POST['editnote'])) {
-	        mainMenu (5);
+	        mainMenu ();
 	        switch ($_REQUEST['idtable']) {
 			case 1: $sourceurl = "persons.php"; $sourcename = "osoby"; break;
 			case 2: $sourceurl = "groups.php"; $sourcename = "skupiny"; break;

@@ -36,7 +36,7 @@ if (isset($_POST['addtocase'])) {
     if (isset($_POST['person'])) {
         $person = $_POST['person'];
     }
-    mainMenu (5);
+    mainMenu ();
     sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>uložení změn</strong>','<a href="readcase.php?rid='.$_POST['caseid'].'&hidenotes=0">zobrazit upravené</a>');
     echo '<div id="obsah"><p>Osoby k případu uloženy.</p></div>';
     if (isset($_POST['person'])) {
@@ -74,7 +74,7 @@ if (isset($_POST['addtogroup'])) {
     if (isset($_POST['person'])) {
         $person = $_POST['person'];
     }
-    mainMenu (5);
+    mainMenu ();
     sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./editgroup.php?rid='.$_POST['groupid'].'">úprava skupiny</a> &raquo; <strong>uložení změn</strong>','<a href="readgroup.php?rid='.$_POST['groupid'].'&hidenotes=0">zobrazit upravené</a>');
     echo '<div id="obsah"><p>Osoby příslušné ke skupině uloženy.</p></div>';
     if (isset($_POST['person'])) {
@@ -128,7 +128,7 @@ if (isset($_POST['addtoareport'])) {
         }
     }
     // header('Location: ./editactrep.php?rid='.$_POST['reportid']); // přesměrování zpět na předchozí stránku
-    mainMenu (5);
+    mainMenu ();
     sparklets ('<a href="./reports.php">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>uložení změn</strong>','<a href="readactrep.php?rid='.$_POST['reportid'].'&hidenotes=0&truenames=0">zobrazit upravené</a>');
     echo '<div id="obsah"><p>Osoby příslušné k hlášení uloženy.</p></div>';
     $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
@@ -137,7 +137,7 @@ if (isset($_POST['addtoareport'])) {
 if (isset($_POST['addsolver'])) {
     auditTrail(3, 6, $_POST['caseid']);
     mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."c2s as c, ".DB_PREFIX."user as p WHERE c.iduser=p.id AND c.idcase=".$_POST['caseid']);
-    mainMenu (5);
+    mainMenu ();
     sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>uložení změn</strong>','<a href="readcase.php?rid='.$_POST['caseid'].'&hidenotes=0">zobrazit upravené</a>');
     if (isset($_POST['solver'])) {
         $solver = $_POST['solver'];

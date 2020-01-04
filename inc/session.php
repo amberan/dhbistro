@@ -53,7 +53,7 @@ function logout_forced($msg)
     }
     $_SESSION['timestamp'] = time();
     Header ('location: login.php');
-    exit();
+    exit(111);
 }
 
 $config['page_free'] = array_map(function($val) {

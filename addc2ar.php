@@ -7,7 +7,7 @@ $latte->setTempDirectory($config['folder_cache']);
 $latteParameters['title'] = 'Úprava hlášení';
 $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	
-	mainMenu (5);
+	mainMenu ();
         $custom_Filter = custom_Filter(16);
 	sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>úprava případu</strong> &raquo; <strong>přidání hlášení</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {

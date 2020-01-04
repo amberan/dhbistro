@@ -8,7 +8,7 @@ $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
-	mainMenu (5);
+	mainMenu ();
 	sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>nová osoba</strong>');
 ?>
 <div id="obsah">
