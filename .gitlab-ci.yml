@@ -60,7 +60,8 @@ code_quality:
   artifacts:
     reports:
       codequality: gl-code-quality-report.json
-
+    paths: [gl-code-quality-report.json]
+    expire_in: 10 weeks
 
 #static_analysis:
 #  stage: test
