@@ -87,10 +87,10 @@ deploy_staging:
     - chmod 644 ~/.ssh/known_hosts
   script:
     - echo "Deploy to staging"
-    - export
     - chmod 600 $SSH_KEY
     - cat $SSH_KEY | tr -d '\r' | ssh-add -
-    - ssh root@$CI_ENVIRONMENT_URL "cd /srv/bistro.alembiq.net/htdocs && git checkout master && git pull origin master && exit"
+    - export
+    - ssh gitlab-bistro@$CI_ENVIRONMENT_URL "cd /srv/bistro.alembiq.net/htdocs && git checkout master && git pull origin master && exit"
 #  - ssh -p22 server_user@server_host "mkdir htdocs/wp-content/themes/_tmp"
 # ssh-add <(echo "$STAGING_PRIVATE_KEY")
 # ssh gitlab@alembiq.net
