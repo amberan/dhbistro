@@ -88,7 +88,8 @@ deploy_staging:
   script:
     - echo "Deploy to staging"
     - export
-    - echo $SSH_KEY | tr -d '\r' | ssh-add -
+    - ssh-add -i $SSH_KEY
+#    - echo $SSH_KEY | tr -d '\r' | ssh-add -
     - ssh root@$CI_ENVIRONMENT_URL "cd /srv/bistro.alembiq.net/htdocs && git checkout master && git pull origin master && exit"
 #  - ssh -p22 server_user@server_host "mkdir htdocs/wp-content/themes/_tmp"
 # ssh-add <(echo "$STAGING_PRIVATE_KEY")
