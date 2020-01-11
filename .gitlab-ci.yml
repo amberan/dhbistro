@@ -77,12 +77,24 @@ code_quality:
 
 deploy_staging:
   stage: deploy
+  before_script: 
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - echo "$CI_ENVIRONMENT_URL" > ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
   script:
     - echo "Deploy to staging"
+    - ssh root@$CI_ENVIRONMENT_URL "cd /srv/bistro.alembiq.net/htdocs && git checkout master && git pull origin master && exit"
     - export 
+#  - ssh -p22 server_user@server_host "mkdir htdocs/wp-content/themes/_tmp"
+# ssh-add <(echo "$STAGING_PRIVATE_KEY")
+# ssh gitlab@alembiq.net
+# git remote add  -f $CI_COMMIT_SHA $CI_REPOSITORY_URL
+# git pull $CI_COMMIT_SHA $CI_COMMIT_BRANCH
   environment:
     name: staging
-    url: http://bistro.alembiq.net
+    url: alembiq.net
   only: 
     - merge_requsets
     - web
