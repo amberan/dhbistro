@@ -1,5 +1,8 @@
-#https://gitlab.com/frakman1/codeclimate-test/blob/master/.gitlab-ci.yml
+stages:
+  - test 
+  - deploy
 
+#https://gitlab.com/frakman1/codeclimate-test/blob/master/.gitlab-ci.yml
 code_quality-html:
   stage: test
   image: docker:stable
@@ -70,3 +73,18 @@ code_quality:
 #    - wget https://github.com/phpstan/phpstan/releases/download/0.11.19/phpstan.phar -O bin/phpstan.phar
 #  script:
 #    - php bin/phpstan.phar --error-format gitlab  analyse src --level=1
+
+
+deploy_staging:
+  stage: deploy
+  script:
+    - echo "Deploy to staging"
+    - export 
+  environment:
+    name: staging
+    url: http://bistro.alembiq.net
+  only: 
+    - merge_requsets
+    - web
+#    - master
+
