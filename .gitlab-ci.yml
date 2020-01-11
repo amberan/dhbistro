@@ -79,9 +79,11 @@ deploy_staging:
   image: debian:latest
   stage: deploy
   before_script: 
+    - DEBIAN_FRONTEND="noninteractive"
     - 'which ssh-agent || ( apt update -y && apt install openssh-client -y )'
     - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - export
+    - cat "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - echo "$CI_ENVIRONMENT_URL" > ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
