@@ -83,7 +83,7 @@ deploy_staging:
     - 'which ssh-agent || ( apt update -y && apt install openssh-client -y )'
     - eval $(ssh-agent -s)
     - export
-    - cat "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - cat $SSH_PRIVATE_KEY | ssh-add -
     - echo "$CI_ENVIRONMENT_URL" > ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
