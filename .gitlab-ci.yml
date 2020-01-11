@@ -76,6 +76,7 @@ code_quality:
 
 
 deploy_staging:
+  image: alpine:latest
   stage: deploy
   before_script: 
     - 'which ssh-agent || ( apt update -y && apt install openssh-client -y )'
