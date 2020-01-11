@@ -78,7 +78,7 @@ code_quality:
 deploy_staging:
   stage: deploy
   before_script: 
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - 'which ssh-agent || ( apt update -y && apt install openssh-client -y )'
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - echo "$CI_ENVIRONMENT_URL" > ~/.ssh/known_hosts
