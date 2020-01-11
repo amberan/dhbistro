@@ -83,7 +83,7 @@ deploy_staging:
     - 'which ssh-agent || ( apt update -y && apt install openssh-client -y )'
     - eval $(ssh-agent -s)
     - mkdir ~/.ssh
-    - echo "$CI_ENVIRONMENT_URL" > ~/.ssh/known_hosts
+    - ssh-keyscan eir.alembiq.net > ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
     - echo "Deploy to staging"
