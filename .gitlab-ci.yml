@@ -86,11 +86,12 @@ deploy_staging:
     - ssh-keyscan $CI_ENVIRONMENT_URL >> ~/.ssh/known_hosts
     - chmod 600 ~/.ssh/known_hosts
   script:
-    - echo "Deploy to staging"
+    - echo "Deploy to staging $URL"
     - chmod 600 $SSH_KEY
     - cat $SSH_KEY | tr -d '\r' | ssh-add -
     - export
-    - ssh gitlab-bistro@$CI_ENVIRONMENT_URL "cd /srv/net.alembiq.bistro/htdocs && git checkout master && git pull origin master && exit"
+#    - ssh gitlab-bistro@$CI_ENVIRONMENT_URL "cd /srv/net.alembiq.bistro/htdocs && git checkout master && git pull origin master && exit"
+     - ssh gitlab-bistro@$CI_ENVIRONMENT_URL "cd /srv/net.alembiq.bistro/htdocs && git remote add  -f $CI_COMMIT_SHA $CI_REPOSITORY_URL && git pull $CI_COMMIT_SHA $CI_COMMIT_BRANCH && exit"
 # git remote add  -f $CI_COMMIT_SHA $CI_REPOSITORY_URL
 # git pull $CI_COMMIT_SHA $CI_COMMIT_BRANCH
   environment:
