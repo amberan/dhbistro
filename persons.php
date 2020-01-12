@@ -196,6 +196,7 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	}
 	Alternativni vypis osob zahrnujici vice stupnu tajne.*/
     $sql = "SELECT  ".DB_PREFIX."person.regdate as date_created, ".DB_PREFIX."person.datum as date_changed, ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.archiv AS 'archiv', ".DB_PREFIX."person.dead AS 'dead', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol' FROM ".DB_PREFIX."person WHERE ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret<=".$usrinfo['right_power'].$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow." ORDER BY ".$fsql_sort;
+    //Debugger::log('DEBUG: '.$sql);
 	$res = mysqli_query ($database,$sql);
 	if (mysqli_num_rows ($res)) {
 	    echo '<div id="obsah">
@@ -217,8 +218,8 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	    while ($rec = mysqli_fetch_assoc ($res)) {
 	        if ($f_new == 0 || ($f_new == 1 && searchRecord(1,$rec['id']))) {
 	            echo '<tr class="'.((searchRecord(1,$rec['id'])) ? ' unread_record' : (($even % 2 == 0) ? 'even' : 'odd')).'">
-                        '.(($sportraits) ? '<td><img src="getportrait.php?rid='.$rec['id'].'" alt="portrét chybí" /></td>' : '').'
-                        '.(($ssymbols) ? '<td><img src="getportrait.php?nrid='.$rec['symbol'].'" alt="symbol chybí" /></td>' : '').'
+                        '.(($sportraits) ? '<td><img src="getportrait.php?rid='.$rec['id'].'" alt="" /></td>' : '').'
+                        '.(($ssymbols) ? '<td><img src="getportrait.php?nrid='.$rec['symbol'].'" alt="" /></td>' : '').'
                         <td>'.(($rec['secret']) ? '<span class="secret"><a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ',Array(StripSlashes($rec['surname']), StripSlashes($rec['name']))).'</a></span>' : '<a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ',Array(StripSlashes($rec['surname']), StripSlashes($rec['name']))).'</a>').'</td>
 						<td><a href="tel:'.str_replace(' ', '',$rec['phone']).'">'.$rec['phone'].'</a></td>
 						<td>'.webdate($rec['date_created']).' / '.webdate($rec['date_changed']).'</td>
