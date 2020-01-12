@@ -328,14 +328,16 @@ function validate_mail($addr): bool
     list($local, $domain) = explode('@', $addr);
     $pattern_local = '^([0-9a-z]+([-|_]?[0-9a-z]+)*)(([-|_]?)\.([-|_]?)[0-9a-z]*([-|_]?[0-9a-z]+)+)*([-|_]?)$';
     $pattern_domain = '^([0-9a-z]+([-]?[0-9a-z]+)*)(([-]?)\.([-]?)[0-9a-z]*([-]?[0-9a-z]+)+)*\.[a-z]{2,4}$';
-    $match_local = eregi($pattern_local, $local);
-    $match_domain = eregi($pattern_domain, $domain);
+    $match_local = mb_ereg($pattern_local, $local);
+    $match_domain = mb_ereg($pattern_domain, $domain);
 
     return $match_local && $match_domain ? true : false;
     //	if (!eregi('^[+]?[a-z0-9]+([-_.]?[a-z0-9]*)*@[a-z0-9]+([-_.]?[a-z0-9])*\.[a-z]{2,4}$',$addr)){
 }
 
 //show tracy bar unless it's a sending a file (picture) to the user
-if ('getportrait.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?')) && 'getfile.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?'))) {
+if ('getportrait.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?')) &&
+    'getfile.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?')) &&
+    'file.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?'))) {
     Debugger::barDump($_SESSION, 'session');
 }
