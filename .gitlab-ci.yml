@@ -1,6 +1,9 @@
-#https://gitlab.com/frakman1/codeclimate-test/blob/master/.gitlab-ci.yml
+stages:
+  - test 
+  - staging
 
 code_quality-html:
+  #https://gitlab.com/frakman1/codeclimate-test/blob/master/.gitlab-ci.yml
   stage: test
   image: docker:stable
   allow_failure: true
@@ -36,8 +39,6 @@ code_quality-html:
     variables:
       - $CODE_QUALITY_DISABLED
 
-
-
 code_quality:
   image: docker:stable
   variables:
@@ -60,7 +61,8 @@ code_quality:
   artifacts:
     reports:
       codequality: gl-code-quality-report.json
-
+#    paths: [gl-code-quality-report.json]
+    expire_in: 10 weeks
 
 #static_analysis:
 #  stage: test
@@ -69,3 +71,29 @@ code_quality:
 #    - wget https://github.com/phpstan/phpstan/releases/download/0.11.19/phpstan.phar -O bin/phpstan.phar
 #  script:
 #    - php bin/phpstan.phar --error-format gitlab  analyse src --level=1
+
+
+deploy to bistro.alembiq.net:
+  image: debian:latest
+  stage: staging
+  before_script: 
+    - DEBIAN_FRONTEND="noninteractive"
+    - 'which ssh-agent || ( apt update -y && apt install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - mkdir ~/.ssh
+    - ssh-keyscan $CI_ENVIRONMENT_URL >> ~/.ssh/known_hosts
+    - chmod 600 ~/.ssh/known_hosts
+  script:
+    - echo "Deploy to staging $URL"
+    - chmod 600 $SSH_KEY
+    - cat $SSH_KEY | tr -d '\r' | ssh-add -
+    - export
+    - ssh gitlab-ci@$CI_ENVIRONMENT_URL "cd /srv/net.alembiq.bistro/htdocs && git remote add  -f $CI_COMMIT_SHA $CI_REPOSITORY_URL && git pull $CI_COMMIT_SHA $CI_COMMIT_BRANCH && exit"
+  environment:
+    name: staging
+    url: bistro.alembiq.net
+  only: 
+    - merge_requests
+    - web
+    - master
+
