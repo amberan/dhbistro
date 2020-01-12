@@ -2,8 +2,8 @@ stages:
   - test 
   - staging
 
-#https://gitlab.com/frakman1/codeclimate-test/blob/master/.gitlab-ci.yml
 code_quality-html:
+  #https://gitlab.com/frakman1/codeclimate-test/blob/master/.gitlab-ci.yml
   stage: test
   image: docker:stable
   allow_failure: true
@@ -40,31 +40,33 @@ code_quality-html:
       - $CODE_QUALITY_DISABLED
 
 
+include:
+  - template: Jobs/Code-Quality.gitlab-ci.yml  # https://gitlab.com/gitlab-org/gitlab-foss/blob/master/lib/gitlab/ci/templates/Jobs/Code-Quality.gitlab-ci.yml
 
-code_quality:
-  image: docker:stable
-  variables:
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: "/certs"
-  allow_failure: true
-  services:
-    - docker:stable-dind
-  script:
-    - export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
-    - docker run
-        --env SOURCE_CODE="$PWD"
-        --env CODECLIMATE_DEBUG=0
-        --volume "$PWD":/code
-        --volume /var/run/docker.sock:/var/run/docker.sock
-        "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
-  only:
-    - merge_requests
+#code_quality:
+#  image: docker:stable
+#  variables:
+#    DOCKER_DRIVER: overlay2
+#    DOCKER_TLS_CERTDIR: "/certs"
+#  allow_failure: true
+#  services:
+#    - docker:stable-dind
+#  script:
+#    - export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
+#    - docker run
+#        --env SOURCE_CODE="$PWD"
+#        --env CODECLIMATE_DEBUG=0
+#        --volume "$PWD":/code
+#        --volume /var/run/docker.sock:/var/run/docker.sock
+#        "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
+#  only:
+#    - merge_requests
 #    - web
-  artifacts:
-    reports:
-      codequality: gl-code-quality-report.json
-    paths: [gl-code-quality-report.json]
-    expire_in: 10 weeks
+#  artifacts:
+#    reports:
+#      codequality: gl-code-quality-report.json
+#    paths: [gl-code-quality-report.json]
+#    expire_in: 10 weeks
 
 #static_analysis:
 #  stage: test
@@ -97,5 +99,5 @@ deploy to bistro.alembiq.net:
   only: 
     - merge_requests
     - web
-#    - master
+    - master
 
