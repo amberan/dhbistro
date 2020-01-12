@@ -1,6 +1,6 @@
 stages:
   - test 
-  - deploy
+  - staging
 
 #https://gitlab.com/frakman1/codeclimate-test/blob/master/.gitlab-ci.yml
 code_quality-html:
@@ -75,9 +75,9 @@ code_quality:
 #    - php bin/phpstan.phar --error-format gitlab  analyse src --level=1
 
 
-deploy_staging:
+deploy to bistro.alembiq.net:
   image: debian:latest
-  stage: deploy
+  stage: staging
   before_script: 
     - DEBIAN_FRONTEND="noninteractive"
     - 'which ssh-agent || ( apt update -y && apt install openssh-client -y )'
