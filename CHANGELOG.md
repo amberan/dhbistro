@@ -1,9 +1,13 @@
 # BISTRO changelog 
 
+**1.6.4**
+- #8 oprava zobrazovani Tracy
+- #44 email uzivatele
+
 **1.6.3**
--  aktuality > MD (potrebuje dostylovat)
--  novinky > MD (potrebuje dostylovat)
--  [thephpleague/commonmark] (https://github.com/thephpleague/commonmark) markdown2html convertor
+- aktuality > MD (potrebuje dostylovat)
+- novinky > MD (potrebuje dostylovat)
+- [thephpleague/commonmark] (https://github.com/thephpleague/commonmark) markdown2html convertor
 
 **1.6.2**  
 - uprava vyhledavani (odstraneni diakritiky z klice)  
