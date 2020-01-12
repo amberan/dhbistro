@@ -65,6 +65,7 @@ $text['timeoutnenicislo'] = 'Timeout není číslo, nastavení nebylo uloženo.'
 $text['timeoutspatne'] = 'Timeout nesouhlasí, je buď příliš malý nebo příliš velký.';
 $text['puvodniheslospatne'] = 'Nesouhlasí staré heslo, nastavení nebylo uloženo';
 $text['email'] = 'E-mail';
+$text['neplatnyemail'] = 'Neplatná e-mailová adresa.';
 
 // UZIVATELE
 $text['uzivatelskejmeno'] = 'Uživatelské jméno';
@@ -89,7 +90,10 @@ $text['nikdy'] = 'Nikdy';
 $text['noveheslo'] = 'nové heslo';
 $text['odemknout'] = 'odemknout';
 $text['zamknout'] = 'zamknout';
-
+$text['opravdugenerovatheslo'] = 'Opravdu vygenerovat nové heslo pro uživatele';
+$text['opravduodemnkout'] = 'Opravdu odemknout uživatele';
+$text['opravduzamknout'] = 'Opravdu zamknout uživatele';
+$text['opravdusmazat'] = 'Opravdu smazat uživatele';
 
 // BACKUP
 $text['existujicizalohy'] = 'Existující zálohy';

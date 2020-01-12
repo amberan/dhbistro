@@ -4,12 +4,17 @@
             <div class="row">
                 <div class="col-md-4">
                     <label class="mt-3"> {$text[uzivatel]}:</label>
-                    <p><strong> {$username}</strong></p>
+                    <p><strong> {$usrinfo['login']}</strong></p>
+                    <p><a href="readperson.php?rid={$person['id']}">{$person['name']} {$person['surname']}</a></p>
                 </div>
                 <div class="col-md-4">
                     <label class="mt-3" for="timeout">{$text[timeout]}:</label>
                     <input class="form-control" type="text" name="timeout"  value="{$settings_timeout}" />
                     <small class="form-text text-muted">{$text[vevterinach]}.</small>
+                </div>
+                <div class="col-md-4">
+                    <label class="mt-3" for="soucheslo">{$text[email]}:</label>
+                    <input class="form-control" type="text" name="email" value="{$settings_email}" />
                 </div>
             </div>
             <div class="row">
@@ -27,10 +32,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
-                    <label class="mt-3" for="soucheslo">{$text[email]}:</label>
-                    <input class="form-control" type="text" name="email" value="{$settings_email}" />
-                </div>
+
             </div>
             <label class="mt-3" for="plan">{$text[aktualniplan]}:</label>
             <input class="form-control"  name="plan" id="plan" type="hidden" />

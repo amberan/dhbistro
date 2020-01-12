@@ -42,19 +42,25 @@ if (isset($_POST['userid'], $_POST['edituser']) && $usrinfo['right_power'] && !p
 	    while ($hlaseni = mysqli_fetch_assoc ($hlaseni_sql)) {
 	        $hlaseni_array[] = array ($hlaseni['id'], $hlaseni['label']);
 	    }
-	    $latteParameters['user']['hlaseni'] = $hlaseni_array;
+	    if ($hlaseni_array) {
+	        $latteParameters['user']['hlaseni'] = $hlaseni_array;
+	    }
 
 	    $pripady_sql = mysqli_query ($database,"SELECT ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.title AS 'title' FROM ".DB_PREFIX."c2s, ".DB_PREFIX."case WHERE ".DB_PREFIX."case.id=".DB_PREFIX."c2s.idcase AND ".DB_PREFIX."c2s.idsolver=".$rec['id']." ORDER BY ".DB_PREFIX."case.title ASC");
 	    while ($pripady = mysqli_fetch_assoc ($pripady_sql)) {
 	        $pripady_array[] = array ($pripady['id'], $pripady['title']);
 	    }
-	    $latteParameters['user']['pripady'] = $pripady_array;
+	    if ($pripady_array) {
+	        $latteParameters['user']['pripady'] = $pripady_array;
+	    }
         
 	    $ukoly_sql = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."task WHERE ".DB_PREFIX."task.iduser=".$rec['id']." AND ".DB_PREFIX."task.status=0 ORDER BY ".DB_PREFIX."task.created ASC");
 	    while ($ukoly = mysqli_fetch_assoc ($ukoly_sql)) {
 	        $ukoly_array[] = array ($ukoly['id'], $ukoly['task']);
 	    }
-	    $latteParameters['user']['ukoly'] = $ukoly_array;
+	    if ($ukoly_array) {
+	        $latteParameters['user']['ukoly'] = $ukoly_array;
+	    }
 	} else {
 	    $latteParameters['warning'] = $text['zaznamnenalezen'];
 	}
