@@ -95,7 +95,7 @@ deploy_staging:
     name: staging
     url: alembiq.net
   only: 
-    - merge_requsets
+    - merge_requests
     - web
 #    - master
 
