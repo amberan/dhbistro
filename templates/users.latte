@@ -1,34 +1,34 @@
 <h1 class="center">{$text[vypisuzivatelu]}</h1>
-{if $warning}
+{if @$warning}
     {$warning}
 {else}
-    {foreach $user_record as $user_record}
+    {foreach $user_record as $user}
 
-        {$user_record['name']} {$user_record['surname']}
-        {$user_record['login']}
+        {$user['name']} {$user['surname']}
+        {$user['login']}
 
-        {if $user_record['right_power']} POWER USER {/if}
-        {if $user_record['right_text']} EDITOR {/if}
-        {if $user_record['right_org']} ORGANIZATOR {/if}
-        {if $user_record['right_aud']} AUDITOR {/if}
+        {if $user['right_power']} POWER USER {/if}
+        {if $user['right_text']} EDITOR {/if}
+        {if $user['right_org']} ORGANIZATOR {/if}
+        {if $user['right_aud']} AUDITOR {/if}
             
         {$text['naposledy']}: 
-        {if $user_record['lastlogon']}
-            {$user_record['lastlogon']}
+        {if $user['lastlogon']}
+            {$user['lastlogon']}
         {else}
             {$text[nikdy]}
         {/if}
 
-        <a href="/users/edit/{$user_record['id']}">{$text[upravit]}</a>
+        <a href="/users/edit/{$user['id']}">{$text[upravit]}</a>
 
-        {if $user_record['id'] != $usrinfo['id']}
-            <a class="button" href="/users/reset/{$user_record['id']}" onclick="return confirm('Opravdu vygenerovat nové heslo pro uživatele {$user_record['login']}?')">{$text[noveheslo]}</a>
-            {if $user_record['suspended'] == "1"}
-                <a class="button" href="/users/unlock/{$user_record['id']}" onclick="return confirm('Opravdu odemknout uživatele {$user_record['login']}?')">{$text[odemknout]}</a>
+        {if $user['id'] != $usrinfo['id']}
+            <a class="button" href="/users/reset/{$user['id']}" onclick="return confirm('{$text['opravdugenerovatheslo']} {$user['login']}?')">{$text[noveheslo]}</a>
+            {if $user['suspended'] == "1"}
+                <a class="button" href="/users/unlock/{$user['id']}" onclick="return confirm('{$text['opravduodemnkout']} {$user['login']}?')">{$text[odemknout]}</a>
             {else}
-                <a class="button" href="/users/lock/{$user_record['id']}" onclick="return confirm('Opravdu zamknout uživatele {$user_record['login']}?')">{$text[zamknout]}</a>
+                <a class="button" href="/users/lock/{$user['id']}" onclick="return confirm('{$text['opravduzamknout']} {$user['login']}?')">{$text[zamknout]}</a>
             {/if}
-            <a class="button" href="/users/delete/{$user_record['id']}" onclick="return confirm('Opravdu smazat uživatele {$user_record['login']}?')">{$text[smazat]}</a>
+            <a class="button" href="/users/delete/{$user['id']}" onclick="return confirm('{$text['opravdusmazat']} {$user['login']}?')">{$text[smazat]}</a>
         {/if}	
                 
     {/foreach}
