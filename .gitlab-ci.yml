@@ -91,9 +91,9 @@ deploy to bistro.alembiq.net:
     - cat $SSH_KEY | tr -d '\r' | ssh-add -
     - export
     - ssh gitlab-ci@$CI_ENVIRONMENT_URL "cd /srv/net.alembiq.bistro/htdocs && git remote add  -f $CI_COMMIT_SHA $CI_REPOSITORY_URL && git pull $CI_COMMIT_SHA $CI_COMMIT_BRANCH && exit"
-#  environment:
-#    name: staging
-#    url: alembiq.net
+  environment:
+    name: staging
+    url: alembiq.net
   only: 
     - merge_requests
     - web
