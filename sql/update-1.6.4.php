@@ -115,9 +115,9 @@ $alter_column['user']['plan'] = " `plan` text COLLATE 'utf8_general_ci' NULL AFT
 // *** CONVERT TO MD
 $to_MD[] = ['user', 'id', 'plan', 'plan_md'];
 //$to_MD[] = ['case','id','contents','contents_md'];
-$to_MD[] = ['dashboard','id','content','content_md'];
+$to_MD[] = ['dashboard', 'id', 'content', 'content_md'];
 //$to_MD[] = ['group','id','contents','contents_md'];
-$to_MD[] = ['news','id','obsah','obsah_md'];
+$to_MD[] = ['news', 'id', 'obsah', 'obsah_md'];
 //$to_MD[] = ['note','id','note','note_md'];
 //$to_MD[] = ['person','id','contents','contents_md'];
 //$to_MD[] = ['report','id','summary','summary_md'];
