@@ -88,17 +88,13 @@ test to bistro.alembiq.net:
     - echo "Deploy to staging $URL"
     - chmod 600 $SSH_KEY
     - cat $SSH_KEY | tr -d '\r' | ssh-add -
-    - ssh gitlab-ci@$CI_ENVIRONMENT_URL "cd /srv/net.alembiq.bistro/htdocs && git remote rm $CI_COMMIT_SHA && git remote add  -f $CI_COMMIT_SHA $CI_REPOSITORY_URL && git pull $CI_COMMIT_SHA $CI_COMMIT_BRANCH && exit"
+    - ssh gitlab-ci@$CI_ENVIRONMENT_URL "cd /srv/net.alembiq.bistro/htdocs && git remote set-url gitlab $CI_REPOSITORY_URL && git pull gitlab $CI_COMMIT_BRANCH && exit"
   environment:
     name: staging
     url: bistro.alembiq.net
   only: 
     - merge_requests
     - web
-    - master
-
-
-
 
 deploy to bistro.alembiq.net:
   image: debian:latest
@@ -115,7 +111,7 @@ deploy to bistro.alembiq.net:
     - chmod 600 $SSH_KEY
     - cat $SSH_KEY | tr -d '\r' | ssh-add -
     - export
-    - ssh gitlab-ci@$CI_ENVIRONMENT_URL "cd /srv/net.alembiq.bistro/htdocs && git pull origin $CI_MERGE_REQUEST_TARGET_BRANCH_NAME && exit"
+    - ssh gitlab-ci@$CI_ENVIRONMENT_URL "cd /srv/net.alembiq.bistro/htdocs && git remote set-url origin $CI_MERGE_REQUEST_PROJECT_URL && git pull origin $CI_MERGE_REQUEST_TARGET_BRANCH_NAME && exit"
   environment:
     name: staging
     url: bistro.alembiq.net
@@ -123,5 +119,4 @@ deploy to bistro.alembiq.net:
   only: 
     - merge_requests
     - web
-    - master
 
