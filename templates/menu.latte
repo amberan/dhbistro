@@ -42,7 +42,7 @@
                 </ul>
             </div>
         </nav>
-        <div class="mt-1 ml-2 mr-2 mb-3" id="sparklets">{$text['cesta']}: <strong>{$title}{if @$subtitle} - {$subtitle}{/if}</strong>
+        <div class="mt-1 ml-2 mr-2 mb-3" id="sparklets">{$text['cesta']}: <strong class="mr-3">{$title}{if @$subtitle} - {$subtitle}{/if}</strong>
         {if @$actions}
             {$text['akce']}:
             {foreach $actions as $action}
