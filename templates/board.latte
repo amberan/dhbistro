@@ -1,4 +1,16 @@
-{$text['verejnanastenka']}
-{$text['poslednizmena']}: {$board_created}
-{$text['zmenil']}: {$board_author}
-{$board|noescape}
+<div class="container-fluid mt-3 mb-3 mr-2 w-100">
+    <div class="row mb-1">
+		<div class="col-6 text-left">
+			<h5>{$text['verejnanastenka']}</h5>
+		</div>
+		<div class="col-6 text-right">
+			{$text['poslednizmena']}: {$board_created},
+			{$text['zmenil']}: {$board_author}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			{$board|noescape}
+		</div>
+	</div>
+</div>
