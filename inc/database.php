@@ -30,4 +30,6 @@ function escape_array($array): array
  $_POST = escape_array ($_POST);
  $_GET = escape_array ($_GET);
  
+require_once SERVER_ROOT.'/inc/installer.php';
+ 
 ?>

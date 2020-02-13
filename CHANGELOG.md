@@ -2,6 +2,12 @@
 
 **1.6.5**
 - v nastaveni link na sebe [#46](https://gitlab.alembiq.net/larp/bistro/issues/46)
+- installer [#70] (https://gitlab.alembiq.net/larp/bistro/issues/70)
+- BUGFIX pretikajici menu [#9](https://gitlab.alembiq.net/larp/bistro/issues/9)
+- LATTE aktuality [#56](https://gitlab.alembiq.net/larp/bistro/issues/56)
+- LATTE nastenka [#55](https://gitlab.alembiq.net/larp/bistro/issues/55)
+- osobni nastaveni - odkaz na svoji kartu [#46](https://gitlab.alembiq.net/larp/bistro/issues/46)  
+- osobni nastaveni - email [#57](https://gitlab.alembiq.net/larp/bistro/issues/57)
 
 **1.6.4**
 - oprava zobrazovani Tracy [#8](https://gitlab.alembiq.net/larp/bistro/issues/8)
@@ -11,6 +17,7 @@
 - aktuality > MD (potrebuje dostylovat)
 - novinky > MD (potrebuje dostylovat)
 - [thephpleague/commonmark] (https://github.com/thephpleague/commonmark) markdown2html convertor
+- ukladani nastenky [#13](https://gitlab.alembiq.net/larp/bistro/issues/13)
 
 **1.6.2**  
 - uprava vyhledavani (odstraneni diakritiky z klice)  
