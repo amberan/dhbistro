@@ -1,20 +1,57 @@
-{$text['novaaktualita']}
-<form action="/news" method="post" id="inputform">
-    {$text['nadpis']}:
-    <input type="text" name="nadpis" id="nadpis" />
-    {$text['kategorie']}:
-    <select name="kategorie" id="kategorie">
-        <option value="1" selected="selected">{$text['kategorieherni']}</option>
-        <option value="2">{$text['kategoriesystemova']}</option>
-    </select>
-    {$text['obsah'] }
-    <input class="form-control"  name="news_new" id="news_new" type="hidden" />
-    <div id="editSection" class="writable-section"></div>
-        <script type="text/javascript">
-        </script>
+<div class="container-fluid mt-3 mb-3">
+    <div class="row">
+        <div class="col-12 mb-2">
+            <h4>
+                {$text['novaaktualita']}
+            </h4>
+        </div>
     </div>
-<input class="btn btn-primary mt-2" type="submit" name="insertnews" id="submitbutton" value={$text[ulozit]}>
-</form>
+    <form action="/news" method="post" id="inputform">
+        <div class="row">
+            <div class="col-md-8 col-sm-12">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">{$text['nadpis']}</span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" name="nadpis" id="nadpis">
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">{$text['kategorie']}</span>
+                    </div>
+                    <div class="input-group-append" style="flex-grow: 1;">
+                        <select name="kategorie" id="kategorie" class="w-100">
+                            <option value="1" selected="selected">{$text['kategorieherni']}</option>
+                            <option value="2">{$text['kategoriesystemova']}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 mt-3">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                {$text['obsah'] }</span>
+                    </div>
+                    <input class="form-control"  name="news_new" id="news_new" type="hidden" />
+                    <div id="editSection" class="form-control writable-section"></div>
+                        <script type="text/javascript">
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 text-right">
+                <input class="btn btn-primary mt-2 ml-1 mr-3 col-md-2 col-sm-12" type="submit" name="insertnews" id="submitbutton" value={$text[ulozit]}>
+            </div>
+        </div>
+    </form>
+</div>
 
 <script>
     var editor = new tui.Editor({

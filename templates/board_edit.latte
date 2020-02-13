@@ -1,12 +1,31 @@
-<div class="container-fluid">
-{$text[obsahnastenky]}
+<div class="container-fluid mt-3 mb-3">
+    <div class="row">
+        <div class="col-12 mb-2">
+            <h4>
+                {$text[obsahnastenky]}
+            </h4>
+        </div>
+    </div>
 	<form action="/board" method="post" name="editdashboard" id="inputform">
-        <div class="form-group">
-           <input class="form-control"  name="dashboard" id="dashboard" type="hidden" />
-            <div id="editSection" class="writable-section"></div>
-                <script type="text/javascript">
-                </script>
-                <input class="btn btn-primary mt-2" type="submit" name="editdashboard" id="submitbutton" value={$text[ulozit]}>
+        <div class="row">
+            <div class="col-12 mt-3">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                        </span>
+                    </div>
+                    <input class="form-control"  name="dashboard" id="dashboard" type="hidden" />
+                    <div id="editSection" class="form-control writable-section"></div>
+                        <script type="text/javascript">
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 text-right">
+                <input class="btn btn-primary mt-2 ml-1 mr-3 col-md-2 col-sm-12" type="submit" name="editdashboard" id="submitbutton" value={$text[ulozit]}>
+            </div>
         </div>
 	</form>
 </div>
