@@ -41,31 +41,31 @@ if ($URL[1] == 'settings') { // SETTINGS
     auditTrail(6, 1, 0);
     $latteParameters['title'] = $text['nastenka'];
     $latteParameters['actions'][] = array("/news", $text['zobrazitaktuality']);
-    $latteParameters['actions'][] = array("/board", $text['zobrazitnastenku']);
-    if ($usrinfo['right_power'] > 0) {
-        $latteParameters['actions'][] = array("/board/edit", $text['upravitnastenku']);
-    }
     if (isset($URL[2]) AND $URL[2] == 'edit' AND $usrinfo['right_power'] < 0) {
         unauthorizedAccess(6, 2, 0, 0);
     } elseif (isset($URL[2]) AND $URL[2] == 'edit' AND $usrinfo['right_power'] > 0) { // BOARD > EDIT
         $latteParameters['subtitle'] = $text['upravitnastenku'];
+        $latteParameters['actions'][] = array("/board", $text['zobrazitnastenku']);
         require_once ( SERVER_ROOT.'/processing/board_edit.php');
     } else { // BOARD > SHOW
+        if ($usrinfo['right_power'] > 0) {
+            $latteParameters['actions'][] = array("/board/edit", $text['upravitnastenku']);
+        }
         require_once ( SERVER_ROOT.'/processing/dashboard.php');
         require_once ( SERVER_ROOT.'/processing/board.php');
     }
 } else { // NEWS - DEFAULT
     auditTrail(5, 1, 0);
     $latteParameters['title'] = 'Aktuality';
-    $latteParameters['actions'][] = array("/news", $text['zobrazitaktuality']);
     $latteParameters['actions'][] = array("/board", $text['zobrazitnastenku']);
-    if ($usrinfo['right_power'] > 0) {
-        $latteParameters['actions'][] = array("/news/new", $text['pridataktualitu']);
-    }
     if (isset($URL[2]) AND $URL[2] == 'new' AND $usrinfo['right_power'] > 0 AND $URL[1] == 'news') { // NEWS > NEW
         $latteParameters['subtitle'] = $text['pridataktualitu'];
+        $latteParameters['actions'][] = array("/news", $text['zobrazitaktuality']);
         require_once (SERVER_ROOT.'/processing/news_add.php');
     } else { // NEWS > SHOW
+        if ($usrinfo['right_power'] > 0) {
+           $latteParameters['actions'][] = array("/news/new", $text['pridataktualitu']);
+        }
         require_once (SERVER_ROOT.'/processing/dashboard.php');
         require_once (SERVER_ROOT.'/processing/news.php');
     }
