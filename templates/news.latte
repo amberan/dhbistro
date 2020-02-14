@@ -1,11 +1,25 @@
-{foreach $news_array as $news}
-<div class='news_{$news[category]}'> {* 1=herni, 2=systemova *}
-    <h3>{$news[nadpis]}</h3>
-    {$news[datum]} - {$news[author]} 
-    {if $usrinfo[right_power] > 0}
-        <a href='/news/delete/{$news[id]}' onclick='return confirm("Opravdu smazat aktualitu &quot;{$news[nadpis]}&quot;?")' title={$text[smazat]}>{$text[smazat]}</a>
-    {/if}
-    <br/>
-    {$news[obsah_md]|noescape}
-{/foreach}
-
+<div class="container-fluid mt-3 mb-3">
+    <div class="row">
+        {foreach $news_array as $news} {* 1=herni, 2=systemova *}
+            <div class="alert {if $news[category] == 1}alert-info{/if}{if $news[category] == 2}alert-warning{/if} mb-1 ml-2 mr-2 w-100">
+                <h5>{$news[nadpis]}</h5>
+                <div class="row">
+                    <div class="col-12">
+                        {$news[obsah_md]|noescape}
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6 col-sm-12 text-left">
+                        {$news[datum]}, {$news[author]}
+                    </div>
+                    <div class="col-md-6 col-sm-12 text-right">
+                        {if $usrinfo[right_power] > 0}
+                            <a href='/news/delete/{$news[id]}' onclick='return confirm("Opravdu smazat aktualitu &quot;{$news[nadpis]}&quot;?")' title={$text[smazat]}>{$text[smazat]}</a>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+        {/foreach}
+	</div>
+</div>

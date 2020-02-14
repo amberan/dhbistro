@@ -33,7 +33,7 @@
                         aria-expanded="false">
                             {$text[dalsi]}
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
 {foreach $menu2 as $menu2Item}
                         <a class="dropdown-item" href="{$menu2Item[1]}">{$menu2Item[0]}</a>
 {/foreach}
@@ -42,11 +42,12 @@
                 </ul>
             </div>
         </nav>
-        <div class="mt-4" id="sparklets">{$text['cesta']}: <strong>{$title}{if @$subtitle} - {$subtitle}{/if}</strong>
-        {if @$actions} 
-            {$text['akce']}: 
-            {foreach $actions as $action}
-                <a href="{$action[0]}">{$action[1]}</a> 
-            {/foreach}      
-        {/if}
+        <div class="mt-1 ml-2 mr-2 mb-3" id="sparklets">{$text['cesta']}:
+            <strong class="mr-3">{$title}{if @$subtitle} - {$subtitle}{/if}</strong>
+            {if @$actions}
+                {$text['akce']}:
+                {foreach $actions as $action}
+                    <a class="menu-action mr-1 ml-1" href="{$action[0]}">{$action[1]}</a>|
+                {/foreach}
+            {/if}
         </div>

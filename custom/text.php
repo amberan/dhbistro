@@ -25,6 +25,8 @@ $text['prazdnyvypis'] = 'Výpis neobsahuje žádné položky!';
 $text['http401'] = 'You are unauthorized to make this request!';
 $text['neytvoreno'] = 'Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.';
 $text['uzivatelexistuje'] = 'Uživatel již existuje, použijte jiné přihlašovací jméno!';
+$text['databazenenalezena'] = 'Databáze nenalezena, vytvářím novou: ';
+$text['vytvorenadmin'] = ', vytvořen uživatel admin s heslem: ';
 
 // MENU
 $text['point'] = 'zlobod';
