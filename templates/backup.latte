@@ -2,14 +2,14 @@
 <div class="container-fluid mt-3 mb-3 mr-2 w-100">
     <div class="row mb-1">
 	<div class="col-6 text-left">
-	<h4>
-                {$text['existujicizalohy']}
-        </h4>
-        <h5>
-                <span class="small">
-                        *odkazy nejsou platne, chybi handler
-                </span>
-        </h5>
+                <h4>
+                        {$text['existujicizalohy']}
+                </h4>
+                <h5>
+                        <span class="small">
+                                *odkazy nejsou platne, chybi handler
+                        </span>
+                </h5>
 	</div>
         <div class="col-6 text-right">
                 <a class="btn btn-info mt-2 ml-1 col-md-4 col-sm-12" href="/backup/now">{$text['zalohovatrucne']}</a>
@@ -53,7 +53,7 @@
                                                         {$backupFile['filesize']}
                                                 </td>
                                                 <td>
-                                                        <a class="btn btn-sm  btn-primary " href="{$backupFile['file']}">
+                                                        <a class="btn btn-sm {if @$backupFile['filesize']}  btn-primary{else} disabled btn-secondary {/if}" href="{$backupFile['file']}">
                                         {include '../images/icons/download-solid.svg'}</a>
                                                 </td>
                                         </tr>

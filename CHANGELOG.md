@@ -1,5 +1,8 @@
 # BISTRO changelog 
 
+**1.6.6**
+- BUGFIX databaze
+
 **1.6.5**
 - v nastaveni link na sebe [#46](https://gitlab.alembiq.net/larp/bistro/issues/46)
 - installer [#70] (https://gitlab.alembiq.net/larp/bistro/issues/70)
@@ -8,6 +11,7 @@
 - LATTE nastenka [#55](https://gitlab.alembiq.net/larp/bistro/issues/55)
 - osobni nastaveni - odkaz na svoji kartu [#46](https://gitlab.alembiq.net/larp/bistro/issues/46)  
 - osobni nastaveni - email [#57](https://gitlab.alembiq.net/larp/bistro/issues/57)
+- LATTE zalohovani [#58](https://gitlab.alembiq.net/larp/bistro/issues/58)
 
 **1.6.4**
 - oprava zobrazovani Tracy [#8](https://gitlab.alembiq.net/larp/bistro/issues/8)

@@ -99,7 +99,7 @@ function bistroDBColumnAlter($data): int
         foreach (array_keys($data[$table]) as $column) {
             $check_sql = mysqli_query($database,"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table' and column_name='$column'");
             $check_table = mysqli_query($database,"SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table'");
-            if ((mysqli_num_rows($check_table) != 0) and (mysqli_num_rows($check_sql) == 0)) {
+            if ((mysqli_num_rows($check_table) != 0) and (mysqli_num_rows($check_sql) != 0)) {  //existuje > updatnout
                 $alter_sql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table CHANGE `$column` ".$data[$table][$column];
                 mysqli_query($database,$alter_sql);
                 if (mysqli_affected_rows($database) > 0) {

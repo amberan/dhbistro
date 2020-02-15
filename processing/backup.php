@@ -19,6 +19,7 @@ if (isset($URL[2]) AND ($usrinfo['right_super'] > 1) AND $URL[2] == 'now') {
 $backups_sql = "SELECT ".DB_PREFIX."backup.* FROM ".DB_PREFIX."backup ORDER BY id DESC";
 $backups_query = mysqli_query ($database,$backups_sql);
 while ($backup_record = mysqli_fetch_assoc($backups_query)) {
+    unset ($backup);
     $explode = explode( "/",$backup_record['file']);
     $backup['file'] = $file = end($explode);
     $backup['datetime'] = webDateTime($backup_record['time']);
