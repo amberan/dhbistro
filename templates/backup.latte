@@ -50,10 +50,10 @@
                                                         {$backupFile['datetime']}
                                                 </td>
                                                 <td>
-                                                        {$backupFile['filesize']}
+                                                        {@$backupFile['filesize']}
                                                 </td>
                                                 <td>
-                                                        <a class="btn btn-sm  btn-primary " href="{$backupFile['file']}">download</a>
+                                                        <a class="btn btn-sm  btn-primary {if @$backupFile['filesize']}{else} disabled {/if}" href="{$backupFile['file']}">download</a>
                                                 </td>
                                         </tr>
                                 {/foreach}
