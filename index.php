@@ -5,6 +5,7 @@ use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
+$latteParameters['website_link'] = $_SERVER['DOCUMENT_ROOT'];
 
 $latteParameters['current_location'] = $_SERVER["PHP_SELF"];;
 $latteParameters['menu'] = $menu;
@@ -26,14 +27,16 @@ if ($URL[1] == 'settings') { // SETTINGS
     } else {
         $latteParameters['title'] = $text['spravauzivatelu'];
         auditTrail(8, 1, 0);
-        $latteParameters['actions'][] = array("/users/new", $text['vytvorituzivatele']);
         if (isset($URL[2]) AND $URL[2] == 'new') { // USER MANAGEMENT > ADD USER
+            $latteParameters['actions'][] = array("/users", $text['spravauzivatelu']);
             $latteParameters['subtitle'] = $text['vytvorituzivatele'];
             require_once ( SERVER_ROOT.'/processing/user_add.php');
         } elseif (isset($URL[2]) AND $URL[2] == 'edit') { // USER MANAGEMENT >EDIT USER
+            $latteParameters['actions'][] = array("/users/new", $text['vytvorituzivatele']);
             $latteParameters['subtitle'] = $text['upravituzivatele'];
             require_once ( SERVER_ROOT.'/processing/user_edit.php');
         } else { // USER MANAGEMENT > LIST USERS
+            $latteParameters['actions'][] = array("/users/new", $text['vytvorituzivatele']);
             require_once ( SERVER_ROOT.'/processing/users.php');
         }
     }
@@ -72,3 +75,4 @@ if ($URL[1] == 'settings') { // SETTINGS
 }
 
 $latte->render($config['folder_templates'].'footerMD.latte', $latteParameters);
+?>
