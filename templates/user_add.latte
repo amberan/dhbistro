@@ -1,42 +1,118 @@
-    {$text['vytvorituzivatele']}
+<div class="container-fluid mt-3 mb-3 mr-2 w-100">
+    <div class="row mb-1">
+        <div class="col-6 text-left">
+            <h4>
+                {$text['vytvorituzivatele']}
+            </h4>
+        </div>
+        <div class="col-6 text-right">
+        </div>
+    </div>
     <form action="/users" method="post">
-    {$text['uzivatelskejmeno']}:
-            <input type="text" name="login" id="login" />
-            {$text['heslo']}:
-            <input type="text" name="heslo" id="heslo" value="{$new_password}" />
-            {$text['email']}:
-            <input type="text" name="email" id="email" />
-            {$text['cisloosoby']}:
-            <select name="idperson" id="idperson">
-                <option value=""> ??? </option>
-                {foreach $person as $persona}
-                    <option value="{$persona[0]}">{$persona[1]}, {$persona[2]}</option>
-                {/foreach}
-            </select>
-            {$text['prava']}
-            POWER USER
-            <select name="power" id="power">
-                <option value="0">{$text['ne']}</option>
-                <option value="1">{$text['ano']}</option>
-            </select>
-            EDITOR
-            <select name="texty" id="texty">
-                <option value="0">{$text['ne']}</option>
-                <option value="1">{$text['ano']}</option>
-            </select>
-        {if $usrinfo['right_aud'] > 0 }
-            AUDITOR
-            <select name="auditor" id="auditor">
-                <option value="0">{$text['ne']}</option>
-                <option value="1">{$text['ano']}</option>
-            </select>
-        {/if}
-        {if $usrinfo['right_org'] > 0 }
-            ORGANIZATOR
-            <select name="organizator" id="organizator">
-                <option value="0">{$text['ne']}</option>
-                <option value="1">{$text['ano']}</option>
-            </select>
-        {/if}
-            <input type="submit" name="insertuser" id="submitbutton" value="Uložit" />
+        <div class="row mb-2">
+            <div class="col-12 col-md-3">
+                <label class="mt-3" for="login">
+                    {$text['uzivatelskejmeno']}:
+                </label>
+                <input class="form-control" type="text" name="login" id="login" />
+            </div>
+            <div class="col-12 col-md-3">
+                <label class="mt-3" for="heslo">
+                    {$text['heslo']}:
+                </label>
+                <input class="form-control" type="text" name="heslo" id="heslo" value="{$new_password}" />
+            </div>
+            <div class="col-12 col-md-3">
+                <label class="mt-3" for="email">
+                    {$text['email']}:
+                </label>
+                <input class="form-control" type="text" name="email" id="email" />
+            </div>
+            <div class="col-12 col-md-3">
+                <label class="mt-3" for="login">
+                    {$text['cisloosoby']}:
+                </label>
+                <select class="form-control" name="idperson" id="idperson">
+                    <option value=""> ??? </option>
+                    {foreach $person as $persona}
+                        <option value="{$persona[0]}">{$persona[1]}, {$persona[2]}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-12">
+                {$text['prava']}
+            </div>
+            <div class="col-3">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            POWER USER
+                        </span>
+                    </div>
+                    <div class="input-group-append" style="flex-grow: 1;">
+                        <select class="w-100" name="power" id="power">
+                            <option value="0">{$text['ne']}</option>
+                            <option value="1">{$text['ano']}</option>
+                        </select>
+                        </div>
+                    </div>
+                </div>
+            <div class="col-3">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            EDITOR
+                        </span>
+                    </div>
+                    <div class="input-group-append" style="flex-grow: 1;">
+                        <select class="w-100" name="texty" id="texty">
+                            <option value="0">{$text['ne']}</option>
+                            <option value="1">{$text['ano']}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            {if $usrinfo['right_aud'] > 0 }
+                <div class="col-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                AUDITOR
+                            </span>
+                        </div>
+                        <div class="input-group-append" style="flex-grow: 1;">
+                            <select class="w-100" name="auditor" id="auditor">
+                                <option value="0">{$text['ne']}</option>
+                                <option value="1">{$text['ano']}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            {/if}
+            {if $usrinfo['right_org'] > 0 }
+                <div class="col-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                ORGANIZATOR
+                            </span>
+                        </div>
+                        <div class="input-group-append" style="flex-grow: 1;">
+                            <select class="w-100" name="organizator" id="organizator">
+                                <option value="0">{$text['ne']}</option>
+                                <option value="1">{$text['ano']}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            {/if}
+        </div>
+        <div class="row mb-2">
+            <div class="col-12 text-right">
+                <input class="btn btn-primary mt-2 col-12 col-md-2" type="submit" name="insertuser" id="submitbutton" value="Uložit" />
+            </div>
+        </div>
     </form>
+</div>
