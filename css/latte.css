@@ -192,3 +192,8 @@ input[type='submit'] {
 .tui-editor-defaultUI {
   border: none !important;
 }
+
+.btn > svg {
+  width: 14px;
+  height: 14px;
+}
