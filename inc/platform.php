@@ -1,6 +1,17 @@
 <?php
+// default
+$config['theme_bg'] = 'dark';
+$config['theme_navbar'] = 'dark';
 
 switch ($_SERVER["SERVER_NAME"]) {
+    case 'bistro':
+        $config['dbuser'] = 'bistro';
+        $config['dbdatabase'] = 'bistro';
+        $config['barva'] = 'local';
+        $config['custom'] = 'NH';
+        $config['theme_bg'] = 'light';
+        $config['theme_navbar'] = 'light';
+        break;
     case 'localhost':
         $config['dbuser'] = $config['dbdatabase'] = 'dhbistrocz';
         $config['custom'] = 'DH';
@@ -35,12 +46,6 @@ switch ($_SERVER["SERVER_NAME"]) {
         $config['dbuser'] = $config['dbdatabase'] = 'nhtestbistro';
         $config['barva'] = 'test';
         $config['custom'] = 'NH';;
-        break;
-    case 'bistro':
-        $config['dbuser'] = 'bistro';
-        $config['dbdatabase'] = 'bistro';
-        $config['barva'] = 'local';
-        $config['custom'] = 'NH';
         break;
     case 'bistro.alembiq.net':
         $config['dbuser'] = 'alembiq_bistro';
