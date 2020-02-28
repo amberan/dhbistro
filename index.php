@@ -18,14 +18,21 @@ use Tracy\Debugger;
 $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 
-$latteParameters['website_link'] = $_SERVER['HTTP_HOST'];
+function siteURL()
+{
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+    $domainName = $_SERVER['HTTP_HOST'].'/';
+    return $protocol.$domainName;
+}
+
+$latteParameters['website_link'] = siteURL();
 $latteParameters['current_location'] = $_SERVER["SCRIPT_URI"];
 $latteParameters['menu'] = $menu;
 $latteParameters['menu2'] = $menu2;
 
 $latte->render($config['folder_templates'].'headerMD.latte', $latteParameters);
 $latte->render($config['folder_templates'].'menu.latte', $latteParameters);
-echo "<xmp>"; print_r ($_SERVER); echo "</xmp>";
+//echo "<xmp>"; print_r ($_SERVER); echo "</xmp>";
 /**
  * THE LOOP 
  * */
