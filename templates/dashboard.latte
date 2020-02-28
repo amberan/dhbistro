@@ -11,7 +11,7 @@
                             <p class="card-text">{$text[nedokoncenahlaseni]}:</p>
                             {foreach $reports as $report}
                                 <p>
-                                    <a href="{$current_location}/readactrep.php?rid={$report[0]}&hidenotes=0&truenames=0">{$report[1]}</a>
+                                    <a href="{$website_link}/readactrep.php?rid={$report[0]}&hidenotes=0&truenames=0">{$report[1]}</a>
                                 </p>
                             {/foreach}
                         {/if}
@@ -23,7 +23,7 @@
                             <p class="card-text">{$text[neuzavrenepripady]}:</p>
                             {foreach $cases as $case}
                                 <p>
-                                    <a href="{$current_location}/readcase.php?rid={$case[0]}&hidenotes=0">{$case[1]}</a>
+                                    <a href="{$website_link}/readcase.php?rid={$case[0]}&hidenotes=0">{$case[1]}</a>
                                 </p>
                             {/foreach}
                         {/if}
@@ -35,7 +35,7 @@
                             <p class="card-text">{$text[nedokonceneukoly]}:</p>
                             {foreach $tasks as $task}
                                 <p>
-                                    <a href="{$current_location}/procother.php?fnshtask={$task[0]}">{$task[1]} {$task[2]}</a>
+                                    <a href="{$website_link}/procother.php?fnshtask={$task[0]}">{$task[1]} {$task[2]}</a>
                                 </p>
                             {/foreach}
                         {/if}
