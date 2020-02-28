@@ -1,7 +1,7 @@
 <?php
-
 use Tracy\Debugger;
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+    Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+
 $latteParameters['title'] = $text['nastenka'];
 
 $sql_dashboard = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."dashboard ORDER BY id DESC LIMIT 1");
@@ -12,9 +12,7 @@ if ($dashboard = mysqli_fetch_assoc ($sql_dashboard)) {
         $latteParameters['dashboard'] = '';
     }
 }
-
-$latte->render($config['folder_templates'].'headerMD.latte', $latteParameters);
-$latte->render($config['folder_templates'].'menu.latte', $latteParameters);
+$latte->render($config['folder_templates'].'sparklet.latte', $latteParameters);
 $latte->render($config['folder_templates'].'board_edit.latte', $latteParameters);
 
 ?>

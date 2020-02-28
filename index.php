@@ -1,16 +1,30 @@
 <?php
-
+/**
+ * INITialisatin
+ * parts commented out until removal od func_main.php
+ */
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+//session_start();
+//define('SERVER_ROOT', $_SERVER['DOCUMENT_ROOT']);
+//require_once SERVER_ROOT."/config.php";
+//require_once SERVER_ROOT.'/vendor/autoload.php';
+use League\CommonMark\CommonMarkConverter;
+    $converter = new CommonMarkConverter([
+        'html_input' => 'strip',
+        'allow_unsafe_links' => false,
+    ]);
 use Tracy\Debugger;
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+    Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
-$latteParameters['website_link'] = $_SERVER['DOCUMENT_ROOT'];
 
+$latteParameters['website_link'] = $_SERVER['DOCUMENT_ROOT'];
 $latteParameters['current_location'] = $_SERVER["PHP_SELF"];;
 $latteParameters['menu'] = $menu;
 $latteParameters['menu2'] = $menu2;
 
+$latte->render($config['folder_templates'].'headerMD.latte', $latteParameters);
+$latte->render($config['folder_templates'].'menu.latte', $latteParameters);
 //echo "<xmp>"; print_r ($URL); echo "</xmp>";
 /**
  * THE LOOP 

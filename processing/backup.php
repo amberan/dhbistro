@@ -1,7 +1,6 @@
 <?php
-
-$latte->render($config['folder_templates'].'headerMD.latte', $latteParameters);
-$latte->render($config['folder_templates'].'menu.latte', $latteParameters);
+use Tracy\Debugger;
+    Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
 function human_filesize($bytes, $decimals = 2)
 {
@@ -26,10 +25,13 @@ while ($backup_record = mysqli_fetch_assoc($backups_query)) {
     $backup['version'] = $backup_record['version'];
     if (file_exists($config['folder_backup'].$file)) {
         $backup['filesize'] = human_filesize(filesize($config['folder_backup'].$file))."B";
+    } else { 
+        $backup['filesize'] = $text['soubornenalezen'];
     }
     $backup_array[] = $backup;
 }
 $latteParameters['backup'] = $backup_array;
+$latte->render($config['folder_templates'].'sparklet.latte', $latteParameters);
 $latte->render($config['folder_templates'].'backup.latte', $latteParameters);
     
 ?>

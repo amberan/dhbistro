@@ -1,4 +1,7 @@
 <?php
+use Tracy\Debugger;
+    Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+
 
 //TODO funkce pro prevod id fotek s symbolu na odkazy
 

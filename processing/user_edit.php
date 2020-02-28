@@ -1,7 +1,7 @@
 <?php
-
 use Tracy\Debugger;
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+    Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+    
 
 // upravit uzivatele
 if (isset($_POST['userid'], $_POST['edituser']) && $usrinfo['right_power'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['login']) && is_numeric($_POST['power']) && is_numeric($_POST['texty'])) {
@@ -23,15 +23,13 @@ if (isset($_POST['userid'], $_POST['edituser']) && $usrinfo['right_power'] && !p
     }
 }
 
-    $latte->render($config['folder_templates'].'headerMD.latte', $latteParameters);
-    $latte->render($config['folder_templates'].'menu.latte', $latteParameters);
 	$custom_Filter = custom_Filter(8);
 
     $personList = personList('deleted=0 and archiv=0 and dead=0','surname');
     foreach ($personList as $personList) {
-        $person[] = array ($personList['id'], $personList['surname'], $personList['name']);
+        $persons[] = array ($personList['id'], $personList['surname'], $personList['name']);
     }
-    $latteParameters['person'] = $person;
+    $latteParameters['persons'] = $persons;
 
 
     $res = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."user WHERE id=".$URL[3]);
@@ -42,7 +40,7 @@ if (isset($_POST['userid'], $_POST['edituser']) && $usrinfo['right_power'] && !p
 	    while ($hlaseni = mysqli_fetch_assoc ($hlaseni_sql)) {
 	        $hlaseni_array[] = array ($hlaseni['id'], $hlaseni['label']);
 	    }
-	    if ($hlaseni_array) {
+	    if (isset($hlaseni_array)) {
 	        $latteParameters['user']['hlaseni'] = $hlaseni_array;
 	    }
 
@@ -50,7 +48,7 @@ if (isset($_POST['userid'], $_POST['edituser']) && $usrinfo['right_power'] && !p
 	    while ($pripady = mysqli_fetch_assoc ($pripady_sql)) {
 	        $pripady_array[] = array ($pripady['id'], $pripady['title']);
 	    }
-	    if ($pripady_array) {
+	    if (isset($pripady_array)) {
 	        $latteParameters['user']['pripady'] = $pripady_array;
 	    }
         
@@ -58,11 +56,12 @@ if (isset($_POST['userid'], $_POST['edituser']) && $usrinfo['right_power'] && !p
 	    while ($ukoly = mysqli_fetch_assoc ($ukoly_sql)) {
 	        $ukoly_array[] = array ($ukoly['id'], $ukoly['task']);
 	    }
-	    if ($ukoly_array) {
+	    if (isset($ukoly_array)) {
 	        $latteParameters['user']['ukoly'] = $ukoly_array;
 	    }
 	} else {
 	    $latteParameters['warning'] = $text['zaznamnenalezen'];
-	}
+    }
+    $latte->render($config['folder_templates'].'sparklet.latte', $latteParameters);
     $latte->render($config['folder_templates'].'user_edit.latte', $latteParameters);
 ?>

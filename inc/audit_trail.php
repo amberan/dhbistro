@@ -1,7 +1,7 @@
 <?php
 
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-$latteParameters['title'] = 'Neautorizovaný přístup';
+
   
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
@@ -27,6 +27,7 @@ function auditTrail ($record_type,$operation_type,$idrecord)
 //pokus o pristup k tajnemu, soukromemu nebo smazanemu zaznamu
 function unauthorizedAccess ($record_type,$secret,$deleted,$idrecord)
 {
+$latteParameters['title'] = 'Neautorizovaný přístup';
     switch ($record_type) {
             case 1:
                 $link = '<a href="./persons.php">osoby</a>';

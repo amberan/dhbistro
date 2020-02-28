@@ -1,7 +1,7 @@
 <?php
-
 use Tracy\Debugger;
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+    Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+$latteParameters['title'] = $text['nastaveni'];
 
 
 if ((isset($_POST['userid']) AND isset($_POST['edituser']) AND !is_numeric($_REQUEST['timeout'])) AND ($usrinfo['id'] == $_POST['userid'] )) {
@@ -38,7 +38,6 @@ $latteParameters['settings_email'] = $usrinfo['email'];
 $latteParameters['settings_timeout'] = $usrinfo['timeout'];
 $latteParameters['settings_plan'] = stripslashes($usrinfo['plan_md']);
 
-$latte->render($config['folder_templates'].'headerMD.latte', $latteParameters);
-$latte->render($config['folder_templates'].'menu.latte', $latteParameters);
+$latte->render($config['folder_templates'].'sparklet.latte', $latteParameters);
 $latte->render($config['folder_templates'].'settings.latte', $latteParameters);
 ?>

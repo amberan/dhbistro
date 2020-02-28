@@ -1,4 +1,7 @@
 <?php
+use Tracy\Debugger;
+    Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+
 
 /* function newsRead($newsid) {
 	//vraci jednu osobu; aplikuje prava podle uzivatele

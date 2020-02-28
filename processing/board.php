@@ -1,16 +1,8 @@
 <?php
-
-use League\CommonMark\CommonMarkConverter;
 use Tracy\Debugger;
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-
-$converter = new CommonMarkConverter([
-    'html_input' => 'strip',
-    'allow_unsafe_links' => false,
-]);
+    Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
 $latteParameters['title'] = $text['nastenka'];
-
 auditTrail(6, 1, 0);
 deleteUnread (6,0);
 
@@ -35,8 +27,7 @@ if (isset($dashboard['content'])) {
     $latteParameters['board'] = $text['nastenkaprazdna'];
 }
 
-$latte->render($config['folder_templates'].'headerMD.latte', $latteParameters);
-$latte->render($config['folder_templates'].'menu.latte', $latteParameters);
+$latte->render($config['folder_templates'].'sparklet.latte', $latteParameters);
 $latte->render($config['folder_templates'].'dashboard.latte', $latteParameters);
 $latte->render($config['folder_templates'].'board.latte', $latteParameters);
 

@@ -1,12 +1,6 @@
 <?php
-
-use League\CommonMark\CommonMarkConverter;
 use Tracy\Debugger;
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$converter = new CommonMarkConverter([
-    'html_input' => 'strip',
-    'allow_unsafe_links' => false,
-]);
+    Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
 if (isset($URL['3']) AND ($URL['1']) == "news" AND ($usrinfo['right_power'] > 0 AND ($URL['2'] == "delete"))  ) { // DELETE
     mysqli_query ($database,"UPDATE ".DB_PREFIX."news set deleted=1 where id='".$URL['3']."'");
@@ -58,8 +52,7 @@ if (mysqli_num_rows ($news_query)) {
     $latteParameters['warning'] = $text['prazdnyvypis'];
 }
 
-$latte->render($config['folder_templates'].'headerMD.latte', $latteParameters);
-$latte->render($config['folder_templates'].'menu.latte', $latteParameters);
+$latte->render($config['folder_templates'].'sparklet.latte', $latteParameters);
 $latte->render($config['folder_templates'].'dashboard.latte', $latteParameters);
 $latte->render($config['folder_templates'].'news.latte', $latteParameters);
 
