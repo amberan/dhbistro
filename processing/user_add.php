@@ -1,4 +1,8 @@
 <?php
+use Tracy\Debugger;
+    Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+
+
 
     $latteParameters['new_password'] = randomPassword();
 
@@ -19,7 +23,6 @@
     }
     $latteParameters['person'] = $person;
 
-    $latte->render($config['folder_templates'].'headerMD.latte', $latteParameters);
-    $latte->render($config['folder_templates'].'menu.latte', $latteParameters);
+    $latte->render($config['folder_templates'].'sparklet.latte', $latteParameters);
     $latte->render($config['folder_templates'].'user_add.latte', $latteParameters);
 ?>

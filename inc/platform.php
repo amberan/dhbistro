@@ -1,7 +1,9 @@
 <?php
 // default
+define('DB_PREFIX', 'nw_'); // prefix tabulek
 $config['theme_bg'] = 'dark';
 $config['theme_navbar'] = 'dark';
+
 
 switch ($_SERVER["SERVER_NAME"]) {
     case 'bistro':

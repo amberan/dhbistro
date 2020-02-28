@@ -1,4 +1,7 @@
 <?php
+use Tracy\Debugger;
+    Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+
 
 // REPORTS
 $sql_unfinishedreports = "SELECT ".DB_PREFIX."report.secret AS 'secret', ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.id AS 'id' FROM ".DB_PREFIX."report WHERE ".DB_PREFIX."report.iduser=".$usrinfo['id']." AND ".DB_PREFIX."report.status=0 AND ".DB_PREFIX."report.deleted=0 ORDER BY ".DB_PREFIX."report.label ASC";

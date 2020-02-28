@@ -1,5 +1,5 @@
 <div class="container-fluid mt-3 mb-3 mr-2 w-100">
-    {if $warning}
+    {if @$warning}
         <div class="row mb-1">
             <div>
                 {$warning}
@@ -29,7 +29,7 @@
                     </label>
                     <select class="form-control" name="idperson" id="idperson">
                         <option value="0"> ??? </option>
-                        {foreach $person as $person}
+                        {foreach $persons as $person}
                             <option value="{$person[0]}"{if $person[0] == $user['idperson']} selected="selected"{/if}>{$person[1]}, {$person[2]}</option>
                         {/foreach}
                     </select>
@@ -126,7 +126,7 @@
                 <p class="h6">
                     {$text['nedokoncenahlaseni']}:
                 </p>
-                {if $user['hlaseni'][0][0]}
+                {if @$user['hlaseni'][0][0]}
                     {foreach $user['hlaseni'] as $hlaseni}
                         <p class="h6">
                             <a href="/readactrep.php?rid={$hlaseni[0]}&hidenotes=0&truenames=0">{$hlaseni[1]}</a>
@@ -142,7 +142,7 @@
                 <p class="h6">
                     {$text['neuzavrenepripady']}:
                 </p>
-                {if $user['pripady'][0][0]}
+                {if @$user['pripady'][0][0]}
                     {foreach $user['pripady'] as $pripady}
                         <p class="h6">
                             <a href="/readcase.php?rid={$pripady[0]}&hidenotes=0">{$pripady[1]}</a>
@@ -158,7 +158,7 @@
                 <p class="h6">
                     {$text['nedokonceneukoly']}:
                 </p>
-                {if $user['ukoly'][0][0]}
+                {if @$user['ukoly'][0][0]}
                     {foreach $user['ukoly'] as $ukoly}
                         <p class="h6">
                             <a href="/readcase.php?rid={$ukoly[0]}&hidenotes=0">{$ukoly[1]}</a>

@@ -27,6 +27,7 @@ $text['neytvoreno'] = 'Chyba při vytváření, ujistěte se, že jste vše prov
 $text['uzivatelexistuje'] = 'Uživatel již existuje, použijte jiné přihlašovací jméno!';
 $text['databazenenalezena'] = 'Databáze nenalezena, vytvářím novou: ';
 $text['vytvorenadmin'] = ', vytvořen uživatel admin s heslem: ';
+$text['soubornenalezen'] = 'Soubor nenalezen!';
 
 // MENU
 $text['point'] = 'zlobod';

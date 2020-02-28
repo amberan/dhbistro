@@ -1,7 +1,6 @@
 <?php
-
 use Tracy\Debugger;
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+    Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
 
 // smazat uzivatele
@@ -71,9 +70,6 @@ elseif (isset($_POST['insertuser']) && $usrinfo['right_power'] && !preg_match ('
 }
 
 
-
-    $latte->render($config['folder_templates'].'headerMD.latte', $latteParameters);
-    $latte->render($config['folder_templates'].'menu.latte', $latteParameters);
 	$custom_Filter = custom_Filter(8);
 
 // *** zpracovani filtru
@@ -126,7 +122,7 @@ function filter ()
 
 // *** vypis uživatelů
 
-filter();
+
 if ($usrinfo['right_org']) {
     $user_sql = "SELECT ".DB_PREFIX."user.*,".DB_PREFIX."person.name,".DB_PREFIX."person.surname FROM ".DB_PREFIX."user left outer join `".DB_PREFIX."person` on ".DB_PREFIX."user.idperson=".DB_PREFIX."person.id WHERE ".DB_PREFIX."user.deleted=0 ".$fsql_cat." ORDER BY ".$fsql_sort;
 } else {
@@ -142,6 +138,8 @@ if (mysqli_num_rows ($user_query)) {
 } else {
     $latteParameters['warning'] = $text['prazdnyvypis'];
 }
+$latte->render($config['folder_templates'].'sparklet.latte', $latteParameters);
+filter();
 $latte->render($config['folder_templates'].'users.latte', $latteParameters);
 
 ?>

@@ -1,22 +1,21 @@
 <?php
 
+
 session_start();
-
-define('DB_PREFIX', 'nw_'); // prefix tabulek
 define('SERVER_ROOT', $_SERVER['DOCUMENT_ROOT']);
-
 require_once SERVER_ROOT."/config.php";
+require_once SERVER_ROOT.'/vendor/autoload.php';
+
+
 $URL = explode('/', $_SERVER['REQUEST_URI']); // for THE LOOP
 require_once $config['folder_custom'].'text.php'; // defaultni text might be overloaded from inc/platform.php
 require_once SERVER_ROOT.'/inc/platform.php';  //platform setup based on server/link
 if (null !== $config['custom']) {
     require_once $config['folder_custom'].'/text-'.$config['custom'].'.php';
 }
-require_once SERVER_ROOT.'/vendor/autoload.php';
+
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT, $config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
 require_once SERVER_ROOT.'/inc/database.php';
 require_once SERVER_ROOT.'/inc/backup.php';
 require_once SERVER_ROOT.'/inc/session.php';
