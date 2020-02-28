@@ -18,14 +18,14 @@ use Tracy\Debugger;
 $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 
-$latteParameters['website_link'] = $_SERVER['DOCUMENT_ROOT'];
-$latteParameters['current_location'] = $_SERVER["PHP_SELF"];;
+$latteParameters['website_link'] = $_SERVER['HTTP_HOST'];
+$latteParameters['current_location'] = $_SERVER["SCRIPT_URI"];
 $latteParameters['menu'] = $menu;
 $latteParameters['menu2'] = $menu2;
 
 $latte->render($config['folder_templates'].'headerMD.latte', $latteParameters);
 $latte->render($config['folder_templates'].'menu.latte', $latteParameters);
-//echo "<xmp>"; print_r ($URL); echo "</xmp>";
+echo "<xmp>"; print_r ($_SERVER); echo "</xmp>";
 /**
  * THE LOOP 
  * */
