@@ -60,20 +60,20 @@
                                 </td>
                                 <td>
                                     <a class="btn btn-sm  btn-info" href="/users/edit/{$user['id']}">
-                                        {include $website_link.'/images/icons/edit-solid.svg'}
+                                        {php  echo file_get_contents($website_link."images/icons/edit-solid.svg")}
                                     </a>
 
                                     {if $user['id'] != $usrinfo['id']}
                                         <a class="btn btn-sm  btn-info" href="/users/reset/{$user['id']}" onclick="return confirm('{$text['opravdugenerovatheslo']} {$user['login']}?')">{$text[noveheslo]}</a>
                                         {if $user['suspended'] == "1"}
                                             <a class="btn btn-sm  btn-success" href="/users/unlock/{$user['id']}" onclick="return confirm('{$text['opravduodemnkout']} {$user['login']}?')">
-                                        {include $website_link.'/images/icons/lock-open-solid.svg'}</a>
+                                            {php  echo file_get_contents($website_link."images/icons/lock-open-solid.svg")}
                                         {else}
                                             <a class="btn btn-sm  btn-warning" href="/users/lock/{$user['id']}" onclick="return confirm('{$text['opravduzamknout']} {$user['login']}?')">
-                                        {include $website_link.'/images/icons/lock-solid.svg'}</a>
+                                            {php  echo file_get_contents($website_link."images/icons/lock-solid.svg")}
                                         {/if}
                                         <a class="btn btn-sm  btn-danger" href="/users/delete/{$user['id']}" onclick="return confirm('{$text['opravdusmazat']} {$user['login']}?')">
-                                        {include $website_link.'/images/icons/trash-solid.svg'}</a>
+                                        {php  echo file_get_contents($website_link."images/icons/trash-solid.svg")}
                                     {/if}
                                 </td>
                             </tr>
