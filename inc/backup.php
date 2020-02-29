@@ -48,10 +48,10 @@ function  backupData($soubor = "")
         $text .= (empty ($text) ? "" : "\n\n")."--\n-- Struktura tabulky ".$data[0]."\n--\n\n\n";
         $text .= "CREATE TABLE `".$data[0]."`(\n";
         $sqll = mysqli_query ($database,"SHOW columns  FROM ".$data[0]);
-        $e = true;
+        $endline = true;
         while ($dataa = mysqli_fetch_row ($sqll)) {
-            if ($e) {
-                $e = false;
+            if ($endline) {
+                $endline = false;
             } else {
                 $text .= ",\n";
             }
@@ -61,37 +61,37 @@ function  backupData($soubor = "")
                 $default = " DEFAULT CURRENT_TIMESTAMP";
             }
             if ($dataa[3] == "PRI") {
-                $PRI[] = $dataa[0];
+                $primary[] = $dataa[0];
             }
             if ($dataa[3] == "UNI") {
-                $UNI[] = $dataa[0];
+                $unique[] = $dataa[0];
             }
             if ($dataa[3] == "MUL") {
-                $MUL[] = $dataa[0];
+                $fulltext[] = $dataa[0];
             }
             $extra = !empty ($dataa[5]) ? " ".$dataa[5] : "";
             $text .= "`$dataa[0]` $dataa[1] $null$default$extra";
         }
-        if (!isset($UNI)) {
-            $UNI = '';
+        if (!isset($unique)) {
+            $unique = '';
         }
-        if (!isset($PRI)) {
-            $PRI = '';
+        if (!isset($primary)) {
+            $primary = '';
         }
-        if (!isset($MUL)) {
-            $MUL = '';
+        if (!isset($fulltext)) {
+            $fulltext = '';
         }
-        $primary = keys("PRIMARY KEY",$PRI);
-        $unique = keys("UNIQUE KEY",$UNI);
-        $mul = keys("FULLTEXT",$MUL);
-        $text .= $primary.$unique.$mul."\n) ENGINE=".$data[1]." COLLATE=".$data[14].";\n\n";
-        unset ($PRI,$UNI,$MUL);
+        $primarymary = keys("PRIMARY KEY",$primary);
+        $uniqueque = keys("UNIQUE KEY",$unique);
+        $fulltext = keys("FULLTEXT",$fulltext);
+        $text .= $primarymary.$uniqueque.$fulltext."\n) ENGINE=".$data[1]." COLLATE=".$data[14].";\n\n";
+        unset ($primary,$unique,$fulltext);
         $text .= "--\n-- Data tabulky ".$data[0]."\n--\n\n";
         $query = mysqli_query ($database,"SELECT  * FROM ".$data[0]."");
         while ($fetch = mysqli_fetch_row ($query)) {
-            $pocet_sloupcu = count ($fetch);
-            for ($i = 0;$i < $pocet_sloupcu;$i++) {
-                @$values .= "'".mysqli_escape_string ($database,$fetch[$i])."'".($i < $pocet_sloupcu - 1 ? "," : "");
+            $columnCount = count ($fetch);
+            for ($i = 0;$i < $columnCount;$i++) {
+                @$values .= "'".mysqli_escape_string ($database,$fetch[$i])."'".($i < $columnCount - 1 ? "," : "");
             }
             $text .= "\nINSERT INTO `".$data[0]."` VALUES(".$values.");";
             unset ($values);
@@ -101,9 +101,9 @@ function  backupData($soubor = "")
     $text .= 'COMMIT; SET unique_checks=1; SET foreign_key_checks=1;';
     if (!empty ($soubor)) {
         $gztext = gzencode($text, 9);
-        $fp = @fopen ($soubor,"w+");
-        @fwrite ($fp,$gztext);
-        @fclose ($fp);
+        $filePointer = @fopen ($soubor,"w+");
+        @fwrite ($filePointer,$gztext);
+        @fclose ($filePointer);
     }
 
     return  $text;

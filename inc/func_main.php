@@ -147,11 +147,11 @@ function getAuthor($recid, $trn)
 {
     global $database;
     if (1 === $trn) { //person
-        $sql_ga = 'SELECT '.DB_PREFIX."person.name as 'name', ".DB_PREFIX."person.surname as 'surname', ".DB_PREFIX."user.login as 'nick' FROM ".DB_PREFIX.'person, '.DB_PREFIX.'user WHERE '.DB_PREFIX.'user.id='.$recid.' AND '.DB_PREFIX.'person.id='.DB_PREFIX.'user.idperson';
-        $res_ga = mysqli_query($database, $sql_ga);
-        if (mysqli_num_rows($res_ga)) {
-            while ($rec_ga = mysqli_fetch_assoc($res_ga)) {
-                $name = stripslashes($rec_ga['surname']).', '.stripslashes($rec_ga['name']);
+        $getAuthorSql = 'SELECT '.DB_PREFIX."person.name as 'name', ".DB_PREFIX."person.surname as 'surname', ".DB_PREFIX."user.login as 'nick' FROM ".DB_PREFIX.'person, '.DB_PREFIX.'user WHERE '.DB_PREFIX.'user.id='.$recid.' AND '.DB_PREFIX.'person.id='.DB_PREFIX.'user.idperson';
+        $getAuthorQuery = mysqli_query($database, $getAuthorSql);
+        if (mysqli_num_rows($getAuthorQuery)) {
+            while ($getAuthorResult = mysqli_fetch_assoc($getAuthorQuery)) {
+                $name = stripslashes($getAuthorResult['surname']).', '.stripslashes($getAuthorResult['name']);
 
                 return $name;
             }
@@ -161,11 +161,11 @@ function getAuthor($recid, $trn)
             return $name;
         }
     } else { //user
-        $sql_ga = 'SELECT '.DB_PREFIX."user.login as 'nick' FROM ".DB_PREFIX.'user WHERE '.DB_PREFIX.'user.id='.$recid;
-        $res_ga = mysqli_query($database, $sql_ga);
-        if (mysqli_num_rows($res_ga)) {
-            while ($rec_ga = mysqli_fetch_assoc($res_ga)) {
-                $name = stripslashes($rec_ga['nick']);
+        $getAuthorSql = 'SELECT '.DB_PREFIX."user.login as 'nick' FROM ".DB_PREFIX.'user WHERE '.DB_PREFIX.'user.id='.$recid;
+        $getAuthorQuery = mysqli_query($database, $getAuthorSql);
+        if (mysqli_num_rows($getAuthorQuery)) {
+            while ($getAuthorResult = mysqli_fetch_assoc($getAuthorQuery)) {
+                $name = stripslashes($getAuthorResult['nick']);
 
                 return $name;
             }
@@ -379,9 +379,9 @@ function randomPassword($lenght = 8): string
     $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
     $pass = [];
     $alphaLength = mb_strlen($alphabet) - 1;
-    for ($i = 0; $i < $lenght; ++$i) {
-        $n = rand(0, $alphaLength);
-        $pass[] = $alphabet[$n];
+    for ($lenghtTarget = 0; $lenghtTarget < $lenght; ++$lenghtTarget) {
+        $randomCharacter = rand(0, $alphaLength);
+        $pass[] = $alphabet[$randomCharacter];
     }
 
     return implode('', $pass);
@@ -397,13 +397,13 @@ function validate_mail($addr): bool
     if (!mb_strpos($addr, '@')) {
         return false;
     }
-    list($local, $domain) = explode('@', $addr);
-    $pattern_local = '^([0-9a-z]+([-|_]?[0-9a-z]+)*)(([-|_]?)\.([-|_]?)[0-9a-z]*([-|_]?[0-9a-z]+)+)*([-|_]?)$';
-    $pattern_domain = '^([0-9a-z]+([-]?[0-9a-z]+)*)(([-]?)\.([-]?)[0-9a-z]*([-]?[0-9a-z]+)+)*\.[a-z]{2,4}$';
-    $match_local = mb_ereg($pattern_local, $local);
-    $match_domain = mb_ereg($pattern_domain, $domain);
+    list($username, $domain) = explode('@', $addr);
+    $patternUsername = '^([0-9a-z]+([-|_]?[0-9a-z]+)*)(([-|_]?)\.([-|_]?)[0-9a-z]*([-|_]?[0-9a-z]+)+)*([-|_]?)$';
+    $patternDomain = '^([0-9a-z]+([-]?[0-9a-z]+)*)(([-]?)\.([-]?)[0-9a-z]*([-]?[0-9a-z]+)+)*\.[a-z]{2,4}$';
+    $matchUsername = mb_ereg($patternUsername, $username);
+    $matchDomain = mb_ereg($patternDomain, $domain);
 
-    return $match_local && $match_domain ? true : false;
+    return $matchUsername && $matchDomain ? true : false;
     //	if (!eregi('^[+]?[a-z0-9]+([-_.]?[a-z0-9]*)*@[a-z0-9]+([-_.]?[a-z0-9])*\.[a-z]{2,4}$',$addr)){
 }
 

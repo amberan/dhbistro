@@ -14,19 +14,19 @@ function bistroDBTableRename ($data): int
     global $database,$config;
     $alter = 0;
     foreach ($data as $old => $new) {
-        $check_new_sql = "SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$new'";
-        $check_old_sql = "SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$old'";
-        $check_new = mysqli_query($database,$check_new_sql);
-        $check_old = mysqli_query($database,$check_old_sql);
-        if ((mysqli_num_rows($check_new) == 0) AND (mysqli_num_rows($check_old) != 0)) {
-            $rename_sql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$old RENAME TO ".$config['dbdatabase'].".".DB_PREFIX."$new";
-            mysqli_query($database,$rename_sql);
-            unset ($check_new, $check_old);
+        $checkNewSql = "SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$new'";
+        $checkOldSql = "SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$old'";
+        $checkNew = mysqli_query($database,$checkNewSql);
+        $checkOld = mysqli_query($database,$checkOldSql);
+        if ((mysqli_num_rows($checkNew) == 0) AND (mysqli_num_rows($checkOld) != 0)) {
+            $renameSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$old RENAME TO ".$config['dbdatabase'].".".DB_PREFIX."$new";
+            mysqli_query($database,$renameSql);
+            unset ($checkNew, $checkOld);
              
-            $check_new = mysqli_query($database,$check_new_sql);
-            $check_old = mysqli_query($database,$check_old_sql);
-            if ((mysqli_num_rows($check_new) != 0) AND (mysqli_num_rows($check_old) == 0)) {
-                Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$rename_sql);
+            $checkNew = mysqli_query($database,$checkNewSql);
+            $checkOld = mysqli_query($database,$checkOldSql);
+            if ((mysqli_num_rows($checkNew) != 0) AND (mysqli_num_rows($checkOld) == 0)) {
+                Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$renameSql);
                 $alter++;
             }
         }
@@ -46,12 +46,12 @@ function bistroDBColumnAdd($data): int
     $alter = 0;
     foreach (array_keys($data) as $table) {
         foreach (array_keys($data[$table]) as $column) {
-            $check_sql = mysqli_query($database,"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table' and column_name='$column'");
-            $check_table = mysqli_query($database,"SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table'");
-            if ((mysqli_num_rows($check_table) != 0) and (mysqli_num_rows($check_sql) == 0)) {
-                $alter_sql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table ADD COLUMN `$column` ".$data[$table][$column];
-                Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$alter_sql);
-                mysqli_query($database,$alter_sql);
+            $checkSql = mysqli_query($database,"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table' and column_name='$column'");
+            $checkTable = mysqli_query($database,"SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table'");
+            if ((mysqli_num_rows($checkTable) != 0) and (mysqli_num_rows($checkSql) == 0)) {
+                $alterSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table ADD COLUMN `$column` ".$data[$table][$column];
+                Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$alterSql);
+                mysqli_query($database,$A);
                 $alter++;
             }
         }
@@ -70,13 +70,13 @@ function bistroDBFulltextAdd($data): int
     global $database,$config;
     $alter = 0;
     foreach (array_keys($data) as $table) {
-        foreach ($data[$table] as $key => $value ) {
-            $check_sql = mysqli_query($database,"SHOW INDEX FROM ".$config['dbdatabase'].".".DB_PREFIX."$table WHERE index_type = 'FULLTEXT' and column_name='$value'");
-            $check_table = mysqli_query($database,"SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table'");
-            if ((mysqli_num_rows($check_table) != 0) and (mysqli_num_rows($check_sql) == 0)) {
-                $alter_sql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table ADD FULLTEXT (`$value`)";
-                Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$alter_sql);
-                mysqli_query($database,$alter_sql);
+        foreach ($data[$table] as $value ) { // =>
+            $checkSql = mysqli_query($database,"SHOW INDEX FROM ".$config['dbdatabase'].".".DB_PREFIX."$table WHERE index_type = 'FULLTEXT' and column_name='$value'");
+            $checkTable = mysqli_query($database,"SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table'");
+            if ((mysqli_num_rows($checkTable) != 0) and (mysqli_num_rows($checkSql) == 0)) {
+                $alterSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table ADD FULLTEXT (`$value`)";
+                Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$alterSql);
+                mysqli_query($database,$alterSql);
                 $alter++;
             }
         }
@@ -97,13 +97,13 @@ function bistroDBColumnAlter($data): int
     $alter = 0;
     foreach (array_keys($data) as $table) {
         foreach (array_keys($data[$table]) as $column) {
-            $check_sql = mysqli_query($database,"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table' and column_name='$column'");
-            $check_table = mysqli_query($database,"SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table'");
-            if ((mysqli_num_rows($check_table) != 0) and (mysqli_num_rows($check_sql) != 0)) {  //existuje > updatnout
-                $alter_sql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table CHANGE `$column` ".$data[$table][$column];
-                mysqli_query($database,$alter_sql);
+            $checkSql = mysqli_query($database,"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table' and column_name='$column'");
+            $checkTable = mysqli_query($database,"SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table'");
+            if ((mysqli_num_rows($checkTable) != 0) and (mysqli_num_rows($checkSql) != 0)) {  //existuje > updatnout
+                $alterSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table CHANGE `$column` ".$data[$table][$column];
+                mysqli_query($database,$alterSql);
                 if (mysqli_affected_rows($database) > 0) {
-                    Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$alter_sql);
+                    Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$alterSql);
                     $alter++;
                 }
             }
@@ -122,18 +122,18 @@ function bistroDBPasswordEncrypt(): int
 {
     global $database,$config;
     $alter_password = $alter = 0;
-    $password_sql = mysqli_query($database,"SELECT pwd FROM ".$config['dbdatabase'].".".DB_PREFIX."user");
-    while ($password_data = mysqli_fetch_array($password_sql)) {
-        if (mb_strlen($password_data['pwd']) != 32) {
+    $passwordSql = mysqli_query($database,"SELECT pwd FROM ".$config['dbdatabase'].".".DB_PREFIX."user");
+    while ($passwordData = mysqli_fetch_array($passwordSql)) {
+        if (mb_strlen($passwordData['pwd']) != 32) {
             $alter_password++;
         }
     }
-    unset ($password_sql);
+    unset ($passwordSql);
     if ($alter_password > 0) {
-        $password_sql = mysqli_query($database,"SELECT pwd,id,login FROM ".$config['dbdatabase'].".".DB_PREFIX."user");
-        while ($password_data = mysqli_fetch_array($password_sql)) {
-            mysqli_query($database,"UPDATE ".$config['dbdatabase'].".".DB_PREFIX."user set pwd=md5('".$password_data['pwd']."') where id=".$password_data['id']);
-            Debugger::log('UPDATER '.$config['version'].' Hashing password for userid: '.$password_data['login']);
+        $passwordSql = mysqli_query($database,"SELECT pwd,id,login FROM ".$config['dbdatabase'].".".DB_PREFIX."user");
+        while ($passwordData = mysqli_fetch_array($passwordSql)) {
+            mysqli_query($database,"UPDATE ".$config['dbdatabase'].".".DB_PREFIX."user set pwd=md5('".$passwordData['pwd']."') where id=".$passwordData['id']);
+            Debugger::log('UPDATER '.$config['version'].' Hashing password for userid: '.$passwordData['login']);
             $alter++;
         }
     }
@@ -152,12 +152,12 @@ function bistroDBColumnMarkdown($data): int
     global $database,$config;
     $alter = 0;
     $converter = new HtmlConverter(array('strip_tags' => true)); //https://github.com/thephpleague/html-to-markdown
-    foreach ($data as $key => $value) {
-        $preMD_sql = mysqli_query($database,"SELECT ".$value[1].", ".$value[2]." FROM ".$config['dbdatabase'].".".DB_PREFIX.$value[0]." WHERE ".$value[3]." is null");
-        while ($preMD = mysqli_fetch_array($preMD_sql)) {
-            $MDcolumn = $converter->convert( str_replace('\'', '', $preMD[$value[2]]));
-            Debugger::log('UPDATER '.$config['version'].' Markdown conversion ['.DB_PREFIX.$value[0].'.'.$preMD[$value[1]].']: '.$preMD[$value[2]].' ##### TO ##### '.$MDcolumn);
-            mysqli_query($database,"UPDATE ".DB_PREFIX.$value[0]." SET ".$value[3]."='".$MDcolumn."' WHERE ".$value[1]."=".$preMD[$value[1]]);
+    foreach ($data as $value) { //$data as $key => $value
+        $preMarkdownSql = mysqli_query($database,"SELECT ".$value[1].", ".$value[2]." FROM ".$config['dbdatabase'].".".DB_PREFIX.$value[0]." WHERE ".$value[3]." is null");
+        while ($preMarkdown = mysqli_fetch_array($preMarkdownSql)) {
+            $markdownColumn = $converter->convert( str_replace('\'', '', $preMarkdown[$value[2]]));
+            Debugger::log('UPDATER '.$config['version'].' Markdown conversion ['.DB_PREFIX.$value[0].'.'.$preMarkdown[$value[1]].']: '.$preMarkdown[$value[2]].' ##### TO ##### '.$markdownColumn);
+            mysqli_query($database,"UPDATE ".DB_PREFIX.$value[0]." SET ".$value[3]."='".$markdownColumn."' WHERE ".$value[1]."=".$preMarkdown[$value[1]]);
             $alter++;
         }
     }
@@ -174,11 +174,11 @@ function bistroDBTableDrop($data): int
 {
     global $database,$config;
     $alter = 0;
-    foreach ($data as $key => $value) {
-        $drop_sql = "DROP TABLE ".$config['dbdatabase'].".".DB_PREFIX.$value;
-        mysqli_query($database,$drop_sql);
-        $check_table = mysqli_query($database,"SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX.$value."'");
-        if (mysqli_num_rows($check_table) == 0) {
+    foreach ($data as $value) { //$data as $key => $value
+        $dropSql = "DROP TABLE ".$config['dbdatabase'].".".DB_PREFIX.$value;
+        mysqli_query($database,$dropSql);
+        $checkTable = mysqli_query($database,"SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX.$value."'");
+        if (mysqli_num_rows($checkTable) == 0) {
             Debugger::log('UPDATER '.$config['version'].' DB CHANGE: DELETE TABLE '.DB_PREFIX.$value);
             $alter++;
         }
