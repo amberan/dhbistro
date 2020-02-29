@@ -32,9 +32,9 @@ code_quality-html:
     paths: [report.html]
     expire_in: 10 weeks
   dependencies: []
-  only:
-    - merge_requests
-    - web
+  #only:
+  #  - merge_requests
+  #  - web
   except:
     variables:
       - $CODE_QUALITY_DISABLED
