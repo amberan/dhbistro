@@ -1,14 +1,12 @@
 <?php
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-$latteParameters['title'] = 'Úprava poznámky';
-  
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
-$latte->render($config['folder_templates'].'header.latte', $latteParameters);
+latteHeader($latteParameters);
 
-	mainMenu ();
+$latteParameters['title'] = 'Úprava poznámky';
+
+mainMenu ();
 	switch ($_REQUEST['idtable']) {
 		case 1: $sourceurl = "persons.php"; $sourcename = "osoby"; break;
 		case 2: $sourceurl = "groups.php"; $sourcename = "skupiny"; break;
@@ -90,5 +88,5 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	} else {
 	    echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
 	}
-	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+	latteFooter($latteParameters);
 ?>

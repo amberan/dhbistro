@@ -3,9 +3,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
-
+latteHeader($latteParameters);
 
 	if (is_numeric($_REQUEST['rid'])) {
 	    $res = mysqli_query ($database,"SELECT 
@@ -23,9 +21,6 @@ $latte->setTempDirectory($config['folder_cache']);
 	    if ($rec = mysqli_fetch_assoc ($res)) {
 	        if ((($rec['secret'] <= $usrinfo['right_power']) || $rec['iduser'] == $usrinfo['id']) && !$rec['deleted'] == 1) {
 	            $latteParameters['title'] = StripSlashes($rec['title']);
-	            $latte->render($config['folder_templates'].'header.latte', $latteParameters);
-				
-
 	            mainMenu (0);
 	            switch ($_REQUEST['idtable']) {
 					case 1: $sourceurl = "persons.php"; $sourcename = "osoby"; break;
@@ -63,5 +58,5 @@ $latte->setTempDirectory($config['folder_cache']);
 	} else {
 	    echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
 	}
-	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+	latteFooter($latteParameters);
 ?>

@@ -1,5 +1,10 @@
 <?php
-	require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+use Tracy\Debugger;
+Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+latteHeader($latteParameters);
+
+
 	// následuje načtení dat reportu a jejich uložení do vybranných proměných
 	$reportarray = mysqli_fetch_assoc (mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid'])); // načte data z DB
 	$type = intval($reportarray['type']); // určuje typ hlášení
@@ -12,13 +17,7 @@ if ($label != '') {
     $latteParameters['title'] .= $label.' ('.$typestring.')'; // specifikace TITLE
 }
   
-use Tracy\Debugger;
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
 $latteParameters['title'] = 'Úprava hlášení';
-$latte->render($config['folder_templates'].'header.latte', $latteParameters);
-
 mainMenu ();
         $custom_Filter = custom_Filter(17);
 	sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení</strong>'.(($label != '') ? ' - "'.$label.' ('.$typestring.')"' : ''));
@@ -178,5 +177,5 @@ mainMenu ();
 	} else {
 	    echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
 	}
-	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+	latteFooter($latteParameters);
 ?>

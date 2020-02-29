@@ -1,13 +1,10 @@
 <?php
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-$latteParameters['title'] = 'Nové hlášení';
-  
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
-$latte->render($config['folder_templates'].'header.latte', $latteParameters);
+latteHeader($latteParameters);
 
+$latteParameters['title'] = 'Nové hlášení';
 
 	mainMenu ();
 	$type = $_GET['type']; // nacitani typu hlaseni z prikazove radky prohlizece (zakladni ochrana proti SQL injection)
@@ -18,50 +15,9 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	        sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>nové hlášení z výslechu</strong>');
 	    } else { ?>
 <h1>Požadovaný typ hlášení neexistuje - vraťte se prosím <a href="./reports.php" title="">zpět &raquo;</a></h1>
-<?php $latte->render($config['folder_templates'].'footer.latte', $latteParameters);exit; }
+<?php latteFooter($latteParameters);exit; }
 	};
-// kalendář
-function date_picker($name, $startyear = NULL, $endyear = NULL)
-{
-    if ($startyear == NULL) {
-        $startyear = date("Y") - 10;
-    }
-    if ($endyear == NULL) {
-        $endyear = date("Y") + 5;
-    }
-    
-    $cday = StrFTime("%d", Time());
-    $cmonth = StrFTime("%m", Time());
-    $cyear = StrFTime("%Y", Time());
 
-    $months = array('', 'Leden', 'Únor', 'Březen', 'Duben', 'Květen',
-    'Červen', 'Červenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec');
-
-    // roletka dnů
-    $html = "<select class=\"day\" name=\"".$name."day\">";
-    for ($i = 1;$i <= 31;$i++) {
-        $html .= "<option value='$i'".(($i == $cday) ? 'selected="selected"' : '').">$i</option>";
-    }
-    $html .= "</select> ";
-    
-    // roletka měsíců
-    $html .= "<select class=\"month\" name=\"".$name."month\">";
-
-    for ($i = 1;$i <= 12;$i++) {
-        $html .= "<option value='$i'".(($i == $cmonth) ? 'selected="selected"' : '').">$months[$i]</option>";
-    }
-    $html .= "</select> ";
-
-    // roletka let
-    $html .= "<select class=\"year\" name=\"".$name."year\">";
-
-    for ($i = $startyear;$i <= $endyear;$i++) {
-        $html .= "<option value='$i'".(($i == $cyear) ? 'selected="selected"' : '').">$i</option>";
-    }
-    $html .= "</select> ";
-
-    return $html;
-}
 ?>
 <div id="obsah">
 <form action="procactrep.php" method="post" id="inputform">
@@ -137,5 +93,5 @@ function date_picker($name, $startyear = NULL, $endyear = NULL)
 </div>
 <!-- end of #obsah -->
 <?php
-	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+	latteFooter($latteParameters);
 ?>

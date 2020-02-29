@@ -2,8 +2,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
+latteHeader($latteParameters);
 
 	if (is_numeric($_REQUEST['rid'])) {
 	    $check = mysqli_fetch_assoc (mysqli_query ($database,"SELECT ".DB_PREFIX."user.idperson AS 'aid'
@@ -48,7 +47,7 @@ $latte->setTempDirectory($config['folder_cache']);
 	        }
 	        $typestring = (($rec_ar['type'] == 1) ? 'výjezd' : (($rec_ar['type'] == 2) ? 'výslech' : '?')); //odvozuje slovní typ hlášení
 	        $latteParameters['title'] = (StripSlashes('Hlášení'.(($rec_ar['type'] == 1) ? ' z výjezdu' : (($rec_ar['type'] == 2) ? ' z výslechu' : '')).': '.$rec_ar['label']));
-	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
+
 
 
 	        mainMenu ();
@@ -122,10 +121,10 @@ $latte->setTempDirectory($config['folder_cache']);
 	        deleteUnread (4,$_REQUEST['rid']);
 	        sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>'.StripSlashes($rec_ar['label']).' ('.$typestring.')</strong>',$spaction.$editbutton); ?>
 <div id="obsah">
-	<h1><?php echo(StripSlashes($rec_ar['label'])); ?></h1>
+	<h1><?php echo StripSlashes($rec_ar['label']); ?></h1>
 	<div id="hlavicka" class="top">
 		<span>[ <strong>Hlášení<?php echo((($rec_ar['type'] == 1) ? ' z výjezdu' : (($rec_ar['type'] == 2) ? ' z výslechu' : ' k akci'))); ?></strong> | </span>
-		<span><strong>Vyhotovil: </strong><?php echo(StripSlashes($author)); ?> | </span>
+		<span><strong>Vyhotovil: </strong><?php echo StripSlashes($author); ?> | </span>
 		<span><strong>Dne: </strong><?php echo webdate($rec_ar['datum']); ?> ]</span>
 		<br>
 	</div>
@@ -141,13 +140,13 @@ $latte->setTempDirectory($config['folder_cache']);
 		<p><?php echo webdate($rec_ar['adatum']); ?></p>
 		<div class="clear">&nbsp;</div>
 		<h3>Začátek<?php echo((($rec_ar['type'] == 1) ? ' výjezdu' : (($rec_ar['type'] == 2) ? ' výslechu' : ' akce'))); ?>:</h3>
-		<p><?php echo(StripSlashes($rec_ar['start'])); ?></p>
+		<p><?php echo StripSlashes($rec_ar['start']); ?></p>
 		<div class="clear">&nbsp;</div>
 		<h3>Konec<?php echo((($rec_ar['type'] == 1) ? ' výjezdu' : (($rec_ar['type'] == 2) ? ' výslechu' : ' akce'))); ?>:</h3>
-		<p><?php echo(StripSlashes($rec_ar['end'])); ?></p>
+		<p><?php echo StripSlashes($rec_ar['end']); ?></p>
 		<div class="clear">&nbsp;</div>
 		<h3><?php echo((($rec_ar['type'] == 1) ? 'Úkol' : (($rec_ar['type'] == 2) ? 'Předmět výslechu' : 'Úkol'))); ?>:</h3>
-		<p><?php echo(StripSlashes($rec_ar['task'])); ?></p>
+		<p><?php echo StripSlashes($rec_ar['task']); ?></p>
 		<div class="clear">&nbsp;</div>
 		<h3><?php echo((($rec_ar['type'] == 1) ? 'Velitel zásahu' : (($rec_ar['type'] == 2) ? 'Vyslýchající' : 'Velitel akce'))); ?>: </h3>
 		<p><?php
@@ -217,7 +216,7 @@ $latte->setTempDirectory($config['folder_cache']);
 	            if ($i == 1) {?>
 		<ul id="pripady"><?php
 				} ?>
-			<li><a href="readcase.php?rid=<?php echo($perc['id']); ?>" title=""><?php echo($perc['title']); ?></a></li>
+			<li><a href="readcase.php?rid=<?php echo $perc['id']; ?>" title=""><?php echo $perc['title']; ?></a></li>
 		<?php
 	        }
 	        if ($i <> 0) { ?>
@@ -233,23 +232,23 @@ $latte->setTempDirectory($config['folder_cache']);
 	
 	<fieldset>
 		<legend><strong>Shrnutí</strong></legend>
-		<div class="field-text"><?php echo(StripSlashes($rec_ar['summary'])); ?></div>
+		<div class="field-text"><?php echo StripSlashes($rec_ar['summary']); ?></div>
 	</fieldset>
 	<fieldset>
 		<legend><strong>Možné dopady</strong></legend>
-		<div class="field-text"><?php echo(StripSlashes($rec_ar['impacts'])); ?></div>
+		<div class="field-text"><?php echo StripSlashes($rec_ar['impacts']); ?></div>
 	</fieldset>
 	<fieldset>
 		<legend><strong>Podrobný průběh</strong></legend>
-		<div class="field-text"><?php echo(StripSlashes($rec_ar['details'])); ?></div>
+		<div class="field-text"><?php echo StripSlashes($rec_ar['details']); ?></div>
 	</fieldset>
 	<fieldset>
 	<legend><strong>Energetická náročnost</strong></legend>
-		<div class="field-text"><?php echo(StripSlashes($rec_ar['energy'])); ?></div>
+		<div class="field-text"><?php echo StripSlashes($rec_ar['energy']); ?></div>
 	</fieldset>
 	<fieldset>
 		<legend><strong>Počáteční vstupy<strong></legend>
-		<div class="field-text"><?php echo(StripSlashes($rec_ar['inputs'])); ?></div>
+		<div class="field-text"><?php echo StripSlashes($rec_ar['inputs']); ?></div>
 	</fieldset>
 
 	
@@ -301,9 +300,9 @@ $latte->setTempDirectory($config['folder_cache']);
 	<ul id="prilozenadata">
 			<?php }
 	            if (in_array($rec['mime'],$config['mime-image'])) { ?>
-				<li><a href="getfile.php?idfile=<?php echo($rec['id']); ?>"><img  width="300px" alt="<?php echo(StripSlashes($rec['title'])); ?>" src="getfile.php?idfile=<?php echo($rec['id']); ?>"></a></li>
+				<li><a href="getfile.php?idfile=<?php echo $rec['id']; ?>"><img  width="300px" alt="<?php echo StripSlashes($rec['title']); ?>" src="getfile.php?idfile=<?php echo $rec['id']; ?>"></a></li>
 <?php		} else { ?>
-				<li><a href="getfile.php?idfile=<?php echo($rec['id']); ?>"><?php echo(StripSlashes($rec['title'])); ?></a></li>
+				<li><a href="getfile.php?idfile=<?php echo $rec['id']; ?>"><?php echo StripSlashes($rec['title']); ?></a></li>
 	<?php
 		}
 	        }
@@ -335,7 +334,7 @@ if ($hn != 1) { ?>
 		<hr /><?php
 			} ?>
 		<div class="poznamka">
-			<h4><?php echo(StripSlashes($rec['title'])).' - '.(StripSlashes($rec['user'])).' ['.webdate($rec['date_created']).']'; ?><?php
+			<h4><?php echo StripSlashes($rec['title']).' - '.StripSlashes($rec['user']).' ['.webdate($rec['date_created']).']'; ?><?php
 			if ($rec['secret'] == 0) {
 			    echo ' (veřejná)';
 			}
@@ -345,7 +344,7 @@ if ($hn != 1) { ?>
 		    if ($rec['secret'] == 2) {
 		        echo ' (soukromá)';
 		    } ?></h4>
-			<div><?php echo(StripSlashes($rec['note'])); ?></div>
+			<div><?php echo StripSlashes($rec['note']); ?></div>
 			<span class="poznamka-edit-buttons"><?php
 			if (($rec['iduser'] == $usrinfo['id']) || ($usrinfo['right_text'])) {
 			    echo '<a class="edit" href="editnote.php?rid='.$rec['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;idtable=4" title="upravit"><span class="button-text">upravit</span></a> ';
@@ -376,5 +375,5 @@ if ($hn != 1) { ?>
 	    $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
 	    Header ('location: index.php');
 	}
-	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+	latteFooter($latteParameters);
 ?>

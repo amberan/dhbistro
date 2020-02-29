@@ -1,4 +1,5 @@
 <?php
+
 use Tracy\Debugger;
     Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
@@ -52,8 +53,7 @@ if (mysqli_num_rows ($news_query)) {
     $latteParameters['warning'] = $text['prazdnyvypis'];
 }
 
-$latte->render($config['folder_templates'].'sparklet.latte', $latteParameters);
-$latte->render($config['folder_templates'].'dashboard.latte', $latteParameters);
-$latte->render($config['folder_templates'].'news.latte', $latteParameters);
-
+latteDrawTemplate('sparklet');
+latteDrawTemplate('dashboard');
+latteDrawTemplate('news');
 ?>

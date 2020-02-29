@@ -1,12 +1,10 @@
 <?php
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-$latteParameters['title'] = 'Nová poznámka';
-  
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
-$latte->render($config['folder_templates'].'header.latte', $latteParameters);
+latteHeader($latteParameters);
+
+$latteParameters['title'] = 'Nová poznámka';
 
 mainMenu ();
 switch ($_REQUEST['idtable']) {
@@ -66,5 +64,5 @@ if (is_numeric($_REQUEST['rid'])) {
 } else {
         echo '<div id="obsah"><p>Tohle nezkoušejte.';
     }
-$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+latteFooter($latteParameters);
 ?>

@@ -2,9 +2,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
-
+latteHeader($latteParameters);
 
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	    $res = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."group WHERE id=".$_REQUEST['rid']);
@@ -14,7 +12,6 @@ $latte->setTempDirectory($config['folder_cache']);
 	        }
 	        auditTrail(2, 1, $_REQUEST['rid']);
 	        $latteParameters['title'] = 'Úprava skupiny';
-	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	        mainMenu ();
 	        sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>úprava skupiny</strong>'); ?>
 <div id="obsah">
@@ -22,8 +19,8 @@ $latte->setTempDirectory($config['folder_cache']);
 <form action="procgroup.php" method="post" id="inputform">
 	<div id="info"><?php
 		if ($rec_g['secret'] == 1) { ?>
-	 	<h2>TAJNÉ</h2><?php } ?><?php
-		if ($rec_g['archived'] == 1) { ?>
+	 	<h2>TAJNÉ</h2><?php }
+	        if ($rec_g['archived'] == 1) { ?>
 	 	<h2>ARCHIV</h2><?php } ?>	
 		<h3><label for="title">Název:</label></h3>
 		<input type="text" name="title" id="title" value="<?php echo StripSlashes($rec_g['title']); ?>" />
@@ -37,11 +34,11 @@ $latte->setTempDirectory($config['folder_cache']);
 			<input type="checkbox" name="secret" value=1 <?php if ($rec_g['secret'] == 1) { ?>checked="checked"<?php } ?>/><br/>
 		<div class="clear">&nbsp;</div>
 <?php if ($usrinfo['right_org'] == 1) {
-		    echo '					
+	            echo '					
 				<h3><label for="notnew">Není nové</label></h3>
 					<input type="checkbox" name="notnew"/><br/>
 				<div class="clear">&nbsp;</div>';
-		} ?>			
+	        } ?>			
 	</div>
 	<!-- end of #info -->
 	<fieldset><legend><strong>Popis:</strong></legend>
@@ -87,7 +84,7 @@ $latte->setTempDirectory($config['folder_cache']);
 	            if ($i == 1) { ?>
 		<ul id="prilozenadata">
 				<?php } ?>
-			<li class="soubor"><a href="getfile.php?idfile=<?php echo($rec_f['id']); ?>" title=""><?php echo(StripSlashes($rec_f['title'])); ?></a><?php if ($rec_f['secret'] == 1) { ?> (TAJNÝ)<?php }; ?><span class="poznamka-edit-buttons"><?php
+			<li class="soubor"><a href="getfile.php?idfile=<?php echo $rec_f['id']; ?>" title=""><?php echo StripSlashes($rec_f['title']); ?></a><?php if ($rec_f['secret'] == 1) { ?> (TAJNÝ)<?php }; ?><span class="poznamka-edit-buttons"><?php
 				if (($rec_f['iduser'] == $usrinfo['id']) || ($usrinfo['right_power'])) {
 				    echo '<a class="delete" title="smazat" href="procgroup.php?deletefile='.$rec_f['id'].'&amp;groupid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('editgroup.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat soubor &quot;'.StripSlashes($rec_f['title']).'&quot; náležící ke skupině?\')"><span class="button-text">smazat soubor</span></a>';
 				} ?>
@@ -170,5 +167,5 @@ $latte->setTempDirectory($config['folder_cache']);
 	    $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
 	    Header ('location: index.php');
 	}
-	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+	latteFooter($latteParameters);
 ?>

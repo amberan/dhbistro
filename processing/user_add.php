@@ -1,4 +1,5 @@
 <?php
+
 use Tracy\Debugger;
     Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
@@ -23,6 +24,6 @@ use Tracy\Debugger;
     }
     $latteParameters['person'] = $person;
 
-    $latte->render($config['folder_templates'].'sparklet.latte', $latteParameters);
-    $latte->render($config['folder_templates'].'user_add.latte', $latteParameters);
+latteDrawTemplate('sparklet');
+latteDrawTemplate('user_add');
 ?>

@@ -1,13 +1,10 @@
 <?php
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-$latteParameters['title'] = 'Vyhledávání';
-  
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
-$latte->render($config['folder_templates'].'header.latte', $latteParameters);
+latteHeader($latteParameters);
 
+$latteParameters['title'] = 'Vyhledávání';
 auditTrail(12, 1, 0);
 mainMenu ();
 $custom_Filter = custom_Filter(13);
@@ -408,5 +405,5 @@ $searchedfor = nocs($searchedfor);
             echo '</tbody>
 </table>';
         }
-$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+latteFooter($latteParameters);
 ?>

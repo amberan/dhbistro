@@ -47,7 +47,7 @@ switch ($_SERVER["SERVER_NAME"]) {
     case 'nhtest.dhbistro.cz':
         $config['dbuser'] = $config['dbdatabase'] = 'nhtestbistro';
         $config['barva'] = 'test';
-        $config['custom'] = 'NH';;
+        $config['custom'] = 'NH';
         break;
     case 'bistro.alembiq.net':
         $config['dbuser'] = 'alembiq_bistro';

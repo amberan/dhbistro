@@ -1,4 +1,5 @@
 <?php
+
 use Tracy\Debugger;
     Debugger::enable(Debugger::DETECT,$config['folder_logs']);
     
@@ -61,7 +62,7 @@ if (isset($_POST['userid'], $_POST['edituser']) && $usrinfo['right_power'] && !p
 	    }
 	} else {
 	    $latteParameters['warning'] = $text['zaznamnenalezen'];
-    }
-    $latte->render($config['folder_templates'].'sparklet.latte', $latteParameters);
-    $latte->render($config['folder_templates'].'user_edit.latte', $latteParameters);
+	}
+latteDrawTemplate('sparklet');
+latteDrawTemplate('user_edit');
 ?>

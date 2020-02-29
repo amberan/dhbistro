@@ -8,6 +8,9 @@ require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 //define('SERVER_ROOT', $_SERVER['DOCUMENT_ROOT']);
 //require_once SERVER_ROOT."/config.php";
 //require_once SERVER_ROOT.'/vendor/autoload.php';
+require_once SERVER_ROOT."/lib/gui.php";
+require_once SERVER_ROOT."/lib/image.php";
+//require_once SERVER_ROOT."/lib/security.php";
 use League\CommonMark\CommonMarkConverter;
     $converter = new CommonMarkConverter([
         'html_input' => 'strip',
@@ -15,23 +18,17 @@ use League\CommonMark\CommonMarkConverter;
     ]);
 use Tracy\Debugger;
     Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
+//$latte = new Latte\Engine();
+//$latte->setTempDirectory($config['folder_cache']);
 
-function siteURL()
-{
-    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-    $domainName = $_SERVER['HTTP_HOST'].'/';
-    return $protocol.$domainName;
-}
 
-$latteParameters['website_link'] = siteURL();
 $latteParameters['current_location'] = $_SERVER["SCRIPT_URI"];
 $latteParameters['menu'] = $menu;
 $latteParameters['menu2'] = $menu2;
 
-$latte->render($config['folder_templates'].'headerMD.latte', $latteParameters);
-$latte->render($config['folder_templates'].'menu.latte', $latteParameters);
+
+latteDrawTemplate('headerMD');
+latteDrawTemplate('menu');
 //echo "<xmp>"; print_r ($_SERVER); echo "</xmp>";
 /**
  * THE LOOP 
@@ -88,12 +85,12 @@ if ($URL[1] == 'settings') { // SETTINGS
         require_once (SERVER_ROOT.'/processing/news_add.php');
     } else { // NEWS > SHOW
         if ($usrinfo['right_power'] > 0) {
-           $latteParameters['actions'][] = array("/news/new", $text['pridataktualitu']);
+            $latteParameters['actions'][] = array("/news/new", $text['pridataktualitu']);
         }
         require_once (SERVER_ROOT.'/processing/dashboard.php');
         require_once (SERVER_ROOT.'/processing/news.php');
     }
 }
 
-$latte->render($config['folder_templates'].'footerMD.latte', $latteParameters);
+latteDrawTemplate('footerMD');
 ?>

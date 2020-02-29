@@ -1,18 +1,17 @@
 <?php
 
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-$latteParameters['title'] = 'Skupiny';
-  
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
-$latte->render($config['folder_templates'].'header.latte', $latteParameters);
+latteHeader($latteParameters);
 
-	auditTrail(3, 1, 0);
-	mainMenu ();
-        $custom_Filter = custom_Filter(2);
-	sparklets ('<strong>skupiny</strong>','<a href="newgroup.php">přidat skupinu</a>');
+$latteParameters['title'] = 'Skupiny';
+  
+auditTrail(3, 1, 0);
+mainMenu ();
+
+$custom_Filter = custom_Filter(2);
+sparklets ('<strong>skupiny</strong>','<a href="newgroup.php">přidat skupinu</a>');
 	// zpracovani filtru
 	if (!isset($custom_Filter['sort'])) {
 	    $f_sort = 1;
@@ -109,5 +108,5 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	} else {
 	    echo '<div id="obsah"><p>Žádné skupiny neodpovídají výběru.</p></div>';
 	}
-	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+latteFooter($latteParameters);
 ?>

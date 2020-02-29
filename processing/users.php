@@ -1,4 +1,5 @@
 <?php
+
 use Tracy\Debugger;
     Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
@@ -138,8 +139,8 @@ if (mysqli_num_rows ($user_query)) {
 } else {
     $latteParameters['warning'] = $text['prazdnyvypis'];
 }
-$latte->render($config['folder_templates'].'sparklet.latte', $latteParameters);
+latteDrawTemplate('sparklet');
 filter();
-$latte->render($config['folder_templates'].'users.latte', $latteParameters);
+latteDrawTemplate('users');
 
 ?>

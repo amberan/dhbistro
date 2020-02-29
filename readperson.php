@@ -2,8 +2,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
+latteHeader($latteParameters);
 
 	if (is_numeric($_REQUEST['rid'])) {
 	    $res = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."person WHERE id=".$_REQUEST['rid']);
@@ -17,8 +16,6 @@ $latte->setTempDirectory($config['folder_cache']);
 
 			
 	        $latteParameters['title'] = StripSlashes($rec['surname']).', '.StripSlashes($rec['name']);
-	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
-
 	        mainMenu ();
 	        if (!isset($_REQUEST['hidenotes'])) {
 	            $hn = 0;
@@ -48,13 +45,13 @@ $latte->setTempDirectory($config['folder_cache']);
 	        deleteUnread (1,$_REQUEST['rid']);
 	        sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>'.StripSlashes($rec['surname']).', '.StripSlashes($rec['name']).'</strong>','<a href="readperson.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton); ?>			
 <div id="obsah">
-	<h1><?php echo(StripSlashes($rec['surname']).', '.StripSlashes($rec['name'])); ?></h1>
+	<h1><?php echo StripSlashes($rec['surname']).', '.StripSlashes($rec['name']); ?></h1>
 	<fieldset><legend><strong>Základní údaje</strong></legend>
 		<?php if ($rec['portrait'] == NULL) { ?><img src="#" alt="portrét chybí" title="portrét chybí" id="portraitimg" class="noname"/>
-		<?php } else { ?><img src="getportrait.php?rid=<?php echo($_REQUEST['rid']); ?>" alt="<?php echo(StripSlashes($rec['name']).' '.StripSlashes($rec['surname'])); ?>" id="portraitimg" />
+		<?php } else { ?><img src="getportrait.php?rid=<?php echo $_REQUEST['rid']; ?>" alt="<?php echo StripSlashes($rec['name']).' '.StripSlashes($rec['surname']); ?>" id="portraitimg" />
 		<?php } ?>
 		<?php if ($rec['symbol'] == NULL) { ?><img src="#" alt="symbol chybí" title="symbol chybí" id="symbolimg" class="noname"/>
-		<?php } else { ?><a href="readsymbol.php?rid=<?php echo($rec['symbol']); ?>"><img src="getportrait.php?nrid=<?php echo($rec['symbol']); ?>" alt="<?php echo(StripSlashes($rec['name']).' '.StripSlashes($rec['surname'])); ?>" id="symbolimg" /></a>
+		<?php } else { ?><a href="readsymbol.php?rid=<?php echo $rec['symbol']; ?>"><img src="getportrait.php?nrid=<?php echo $rec['symbol']; ?>" alt="<?php echo StripSlashes($rec['name']).' '.StripSlashes($rec['surname']); ?>" id="symbolimg" /></a>
 		<?php } ?>
 		<div id="info">
 			<?php
@@ -76,9 +73,9 @@ $latte->setTempDirectory($config['folder_cache']);
 	        if ($rec['secret'] == 1 || $rec['dead'] == 1 || $rec['archiv'] == 1 || $rec['deleted'] == 1) {
 	            echo '</h2>';
 	        } ?>
-			<h3>Jméno: </h3><p><?php echo(StripSlashes($rec['name'])); ?></p>
+			<h3>Jméno: </h3><p><?php echo StripSlashes($rec['name']); ?></p>
 			<div class="clear">&nbsp;</div>
-			<h3>Příjmení: </h3><p><?php echo(StripSlashes($rec['surname'])); ?></p>
+			<h3>Příjmení: </h3><p><?php echo StripSlashes($rec['surname']); ?></p>
 			<div class="clear">&nbsp;</div> 
 			<h3>Strana: </h3><p><?php
 				switch ($rec['side']) {
@@ -145,7 +142,7 @@ $latte->setTempDirectory($config['folder_cache']);
 				$name = getAuthor($rec['regid'],1);
 	        echo (($rec['regid'] == 0) ? 'asi Krauz' : $name); ?> </p>
 			<div class="clear">&nbsp;</div>
-			<p><strong>Datum poslední změny:</strong> <?php echo(webdate($rec['datum'])); ?>
+			<p><strong>Datum poslední změny:</strong> <?php echo webdate($rec['datum']); ?>
 				<strong>Změnil:</strong> <?php
 				$name = getAuthor($rec['iduser'],1);
 	        echo $name; ?> </p>
@@ -214,9 +211,9 @@ $latte->setTempDirectory($config['folder_cache']);
 	<ul id="prilozenadata">
 			<?php }
 	            if (in_array($rec['mime'],$config['mime-image'])) { ?>
-							<li><a href="getfile.php?idfile=<?php echo($rec['id']); ?>"><img  width="300px" alt="<?php echo(StripSlashes($rec['title'])); ?>" src="getfile.php?idfile=<?php echo($rec['id']); ?>"></a></li>
+							<li><a href="getfile.php?idfile=<?php echo $rec['id']; ?>"><img  width="300px" alt="<?php echo StripSlashes($rec['title']); ?>" src="getfile.php?idfile=<?php echo $rec['id']; ?>"></a></li>
 			<?php		} else { ?>
-							<li><a href="getfile.php?idfile=<?php echo($rec['id']); ?>"><?php echo(StripSlashes($rec['title'])); ?></a></li>
+							<li><a href="getfile.php?idfile=<?php echo $rec['id']; ?>"><?php echo StripSlashes($rec['title']); ?></a></li>
 			<?php }
 	        }
 	        if ($i <> 0) { ?>
@@ -248,17 +245,17 @@ if ($hn != 1) { ?>
 		<hr /><?php
 			} ?>
 		<div class="poznamka">
-			<h4><?php echo(StripSlashes($rec['title'])).' - '.(StripSlashes($rec['user'])).' ['.(webdate($rec['date_created'])).']'; ?><?php
-			if ($rec['secret'] == 0) {
-			    echo ' (veřejná)';
-			}
+			<h4><?php echo StripSlashes($rec['title']).' - '.(StripSlashes($rec['user'])).' ['.(webdate($rec['date_created'])).']';
+		    if ($rec['secret'] == 0) {
+		        echo ' (veřejná)';
+		    }
 		    if ($rec['secret'] == 1) {
 		        echo ' (tajná)';
 		    }
 		    if ($rec['secret'] == 2) {
 		        echo ' (soukromá)';
 		    } ?></h4>
-			<div><?php echo(StripSlashes($rec['note'])); ?></div>
+			<div><?php echo StripSlashes($rec['note']); ?></div>
 			<span class="poznamka-edit-buttons"><?php
 			if (($rec['iduser'] == $usrinfo['id']) || ($usrinfo['right_text'])) {
 			    echo '<a class="edit" href="editnote.php?rid='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=1" title="upravit"><span class="button-text">upravit</span></a> ';
@@ -291,5 +288,5 @@ if ($hn != 1) { ?>
 	    $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
 	    Header ('location: index.php');
 	}
-        $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+        latteFooter($latteParameters);
 ?>

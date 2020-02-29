@@ -1,14 +1,12 @@
 <?php
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-$latteParameters['title'] = 'Nová osoba';
-  
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
-$latte->render($config['folder_templates'].'header.latte', $latteParameters);
+latteHeader($latteParameters);
 
-	mainMenu ();
+$latteParameters['title'] = 'Nová osoba';
+
+mainMenu ();
 	sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>nová osoba</strong>');
 ?>
 <div id="obsah">
@@ -89,5 +87,5 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 </div>
 <!-- end of #obsah -->
 <?php
-	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+	latteFooter($latteParameters);
 ?>

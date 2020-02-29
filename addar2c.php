@@ -2,13 +2,11 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
+latteHeader($latteParameters);
+
 $latteParameters['title'] = 'Úprava hlášení';
-$latte->render($config['folder_templates'].'header.latte', $latteParameters);
-	
-	mainMenu ();
-        $custom_Filter = custom_Filter(18);
+mainMenu ();
+    $custom_Filter = custom_Filter(18);
 	sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení</strong>');
 	$autharray = mysqli_fetch_assoc (mysqli_query ($database,"SELECT iduser FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']));
 	$author = $autharray['iduser'];
@@ -100,6 +98,6 @@ if (mysqli_num_rows ($res)) {
 	} else {
 	    echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
 	}
-	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+	latteFooter($latteParameters);
 	
 ?>

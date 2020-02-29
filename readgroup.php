@@ -2,8 +2,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
+latteHeader($latteParameters);
 
 	if (is_numeric($_REQUEST['rid'])) {
 	    $res = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."group WHERE id=".$_REQUEST['rid']);
@@ -14,7 +13,6 @@ $latte->setTempDirectory($config['folder_cache']);
 	        auditTrail(2, 1, $_REQUEST['rid']);
 
 	        $latteParameters['title'] = StripSlashes($rec_g['title']);
-	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
 	        mainMenu ();
 	        $custom_Filter = custom_Filter(14, $_REQUEST['rid']);
@@ -88,10 +86,10 @@ $latte->setTempDirectory($config['folder_cache']);
         <legend><strong>Obecné informace</strong></legend>
         <div id="info"><?php
 		if ($rec_g['secret'] == 1) { ?>
-            <h2>TAJNÉ</h2><?php } ?><?php
-		if ($rec_g['archived'] == 1) { ?>
-            <h2>ARCHIV</h2><?php } ?><?php
-		if ($rec_g['deleted'] == 1) { ?>
+            <h2>TAJNÉ</h2><?php }
+	        if ($rec_g['archived'] == 1) { ?>
+            <h2>ARCHIV</h2><?php }
+	        if ($rec_g['deleted'] == 1) { ?>
             <h2>SMAZANÝ ZÁZNAM</h2><?php } ?>
             <h3>Členové: </h3>
             <p><?php
@@ -134,7 +132,7 @@ $latte->setTempDirectory($config['folder_cache']);
 
     <fieldset>
         <legend><strong>Popis</strong></legend>
-        <div class="field-text"><?php echo(StripSlashes($rec_g['contents'])); ?></div>
+        <div class="field-text"><?php echo StripSlashes($rec_g['contents']); ?></div>
     </fieldset>
 
     <!-- následuje seznam přiložených souborů -->
@@ -154,9 +152,9 @@ $latte->setTempDirectory($config['folder_cache']);
         <ul id="prilozenadata">
             <?php } //zobrazovani obrazku i jako obrazky
 	            if (in_array($rec['mime'],$config['mime-image'])) { ?>
-            <li><a href="getfile.php?idfile=<?php echo($rec['id']); ?>"><img width="300px" alt="<?php echo(StripSlashes($rec['title'])); ?>" src="getfile.php?idfile=<?php echo($rec['id']); ?>"></a></li>
+            <li><a href="getfile.php?idfile=<?php echo $rec['id']; ?>"><img width="300px" alt="<?php echo StripSlashes($rec['title']); ?>" src="getfile.php?idfile=<?php echo $rec['id']; ?>"></a></li>
             <?php		} else { ?>
-            <li><?php echo $rec['mime']?><a href="getfile.php?idfile=<?php echo($rec['id']); ?>"><?php echo(StripSlashes($rec['title'])); ?></a></li>
+            <li><?php echo $rec['mime']?><a href="getfile.php?idfile=<?php echo $rec['id']; ?>"><?php echo StripSlashes($rec['title']); ?></a></li>
             <?php } ?>
             <?php
 	        }
@@ -190,17 +188,17 @@ if ($hn != 1) { ?>
             <hr /><?php
 			} ?>
             <div class="poznamka">
-                <h4><?php echo(StripSlashes($rec_n['title'])).' - '.(StripSlashes($rec_n['user'])).' ['.webdate($rec_n['date_created']).']'; ?><?php
-			if ($rec_n['secret'] == 0) {
-			    echo ' (veřejná)';
-			}
+                <h4><?php echo StripSlashes($rec_n['title']).' - '.StripSlashes($rec_n['user']).' ['.webdate($rec_n['date_created']).']';
+		    if ($rec_n['secret'] == 0) {
+		        echo ' (veřejná)';
+		    }
 		    if ($rec_n['secret'] == 1) {
 		        echo ' (tajná)';
 		    }
 		    if ($rec_n['secret'] == 2) {
 		        echo ' (soukromá)';
 		    } ?></h4>
-                <div><?php echo(StripSlashes($rec_n['note'])); ?></div>
+                <div><?php echo StripSlashes($rec_n['note']); ?></div>
                 <span
                       class="poznamka-edit-buttons"><?php
 			if (($rec_n['iduser'] == $usrinfo['id']) || ($usrinfo['right_text'])) {
@@ -233,5 +231,5 @@ if ($hn != 1) { ?>
 	    $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
 	    Header ('location: index.php');
 	}
-	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+	latteFooter($latteParameters);
 ?>

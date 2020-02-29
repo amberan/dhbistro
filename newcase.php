@@ -1,14 +1,12 @@
 <?php
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-$latteParameters['title'] = 'Nový případ';
-  
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
-$latte->render($config['folder_templates'].'header.latte', $latteParameters);
+latteHeader($latteParameters);
 
-	mainMenu ();
+$latteParameters['title'] = 'Nový případ';
+
+mainMenu ();
 	sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>nový případ</strong>');
 ?>
 <div id="obsah">	
@@ -48,5 +46,5 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 </div>
 <!-- end of #obsah -->
 <?php
-	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+	latteFooter($latteParameters);
 ?>

@@ -6,6 +6,8 @@ define('SERVER_ROOT', $_SERVER['DOCUMENT_ROOT']);
 require_once SERVER_ROOT."/config.php";
 require_once SERVER_ROOT.'/vendor/autoload.php';
 
+$latte = new Latte\Engine();
+$latte->setTempDirectory($config['folder_cache']);
 
 $URL = explode('/', $_SERVER['REQUEST_URI']); // for THE LOOP
 require_once $config['folder_custom'].'text.php'; // defaultni text might be overloaded from inc/platform.php
@@ -17,14 +19,15 @@ if (null !== $config['custom']) {
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 require_once SERVER_ROOT.'/inc/database.php';
+require_once SERVER_ROOT."/lib/security.php";
 require_once SERVER_ROOT.'/inc/backup.php';
 require_once SERVER_ROOT.'/inc/session.php';
 require_once SERVER_ROOT.'/inc/audit_trail.php';
-require_once SERVER_ROOT.'/inc/image.php';
+//require_once SERVER_ROOT.'/lib/image.php';
 require_once SERVER_ROOT.'/inc/unread.php';
 // *** FUNCTIONS for objects
-require_once SERVER_ROOT.'/processing/_person.php';
-require_once SERVER_ROOT.'/processing/_news.php';
+require_once SERVER_ROOT.'/lib/person.php';
+require_once SERVER_ROOT.'/lib/news.php';
 // *** GENERAL ALERT - to be removed
 if (isset($_SESSION['message']) && null !== $_SESSION['message']) {
     echo "\n<script>window.onload = alert('".$_SESSION['message']."')</script>\n";
@@ -35,6 +38,76 @@ $latteParameters['text'] = $text;
 $latteParameters['config'] = $config;
 if (isset($usrinfo)) {
     $latteParameters['usrinfo'] = $usrinfo;
+}
+
+
+function siteURL()
+{
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+    $domainName = $_SERVER['HTTP_HOST'].'/';
+
+    return $protocol.$domainName;
+}
+
+$latteParameters['website_link'] = siteURL();
+
+
+function latteHeader($latteParameters)
+{
+    global $latte,$config;
+    $latte->render($config['folder_templates'].'header.latte', $latteParameters);
+}
+function latteFooter($latteParameters)
+{
+    global $latte,$config;
+    $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+    ;
+}
+
+
+function date_picker($name, $startyear = NULL, $endyear = NULL)
+{
+    global $aday,$amonth,$ayear,$usrinfo;
+    if ($usrinfo['right_org'] == 1) {
+        if ($startyear == NULL) {
+            $startyear = date("Y") - 40;
+        }
+    } else {
+        if ($startyear == NULL) {
+            $startyear = date("Y") - 10;
+        }
+    }
+    if ($endyear == NULL) {
+        $endyear = date("Y") + 5;
+    }
+
+    $months = array('', 'Leden', 'Únor', 'Březen', 'Duben', 'Květen',
+			'Červen', 'Červenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec');
+
+    // roletka dnů
+    $html = "<select class=\"day\" name=\"".$name."day\">";
+    for ($i = 1;$i <= 31;$i++) {
+        $html .= "<option ".(($i == $aday) ? ' selected' : '')." value='$i'>$i</option>";
+    }
+    $html .= "</select> ";
+
+    // roletka měsíců
+    $html .= "<select class=\"month\" name=\"".$name."month\">";
+
+    for ($i = 1;$i <= 12;$i++) {
+        $html .= "<option ".(($i == $amonth) ? ' selected' : '')." value='$i'>$months[$i]</option>";
+    }
+    $html .= "</select> ";
+
+    // roletka let
+    $html .= "<select class=\"year\" name=\"".$name."year\">";
+
+    for ($i = $startyear;$i <= $endyear;$i++) {
+        $html .= "<option ".(($i == $ayear) ? ' selected' : '')." value='$i'>$i</option>";
+    }
+    $html .= "</select> ";
+
+    return $html;
 }
 
 /**

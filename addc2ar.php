@@ -1,14 +1,13 @@
 <?php
-require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');;
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
+latteHeader($latteParameters);
+
 $latteParameters['title'] = 'Úprava hlášení';
-$latte->render($config['folder_templates'].'header.latte', $latteParameters);
-	
-	mainMenu ();
-        $custom_Filter = custom_Filter(16);
+mainMenu ();
+
+$custom_Filter = custom_Filter(16);
 	sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>úprava případu</strong> &raquo; <strong>přidání hlášení</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	    $res = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."case WHERE id=".$_REQUEST['rid']);
@@ -161,5 +160,5 @@ seřadit je podle <select name="sort">
 	} else {
 	    echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
 	}
-	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+	latteFooter($latteParameters);
 	?>
