@@ -11,14 +11,7 @@ $customFilter = custom_Filter(13);
 sparklets ('<strong>vyhledávání</strong>','<a href="symbol_search.php">vyhledat symbol</a>');
 
 // default SQL filters
-$searchSecret = " AND 'secret'=0 ";
-$searchDeleted = " AND 'deleted'=0 ";
-if ($usrinfo['right_power'] > 0) { //utajeni overload
-    $searchSecret = " AND 'secret'<=".$usrinfo['right_power']." ";
-}
-$searchContitions = $searchSecret.$searchDeleted;
-
-
+$searchContitions = " AND secret<=".$usrinfo['right_power']."  AND deleted<=".$usrinfo['right_org']." ";
 
 //Zpracování filtru
 if (!isset($customFilter['farchiv'])) {
@@ -29,7 +22,7 @@ if (!isset($customFilter['farchiv'])) {
 /* Prevzit vyhledavane */
 if (!isset($customFilter['search'])) {
     $searchedfor = NULL;
-} elseif ($_POST['search']) {
+} elseif (isset($_POST['search'])) {
     $searchedfor = $_POST['search'];
 } else {
     $searchedfor = $customFilter['search'];
@@ -81,7 +74,7 @@ $searchedfor = nocs($searchedfor);
                 $fsql_archiv = '';
             }
             $sql = "
-	SELECT ".DB_PREFIX."case.datum as date_changed, ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret'
+	SELECT ".DB_PREFIX."case.datum as date_changed, ".DB_PREFIX."case.title , ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.status , ".DB_PREFIX."case.secret , ".DB_PREFIX."case.deleted 
     FROM ".DB_PREFIX."case
 	WHERE (title LIKE '%$searchedfor%' or contents LIKE  '%$searchedfor%')
     ".$fsql_archiv.$searchContitions."
@@ -104,7 +97,7 @@ $searchedfor = nocs($searchedfor);
                 echo '<tr class="'.(($even % 2 == 0) ? 'even' : 'odd').'">
 	<td><a href="readcase.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a></td>
 	<td>'.webdate($rec['date_changed']).'</td>
-	<td>'.(($rec['status'] == 0) ? 'Otevřený' : 'Uzavřený').''.(($rec['secret'] == 1) ? ', Tajný' : '').'</td>
+	<td>'.(($rec['status'] == 0) ? 'Otevřený' : 'Uzavřený').''.(($rec['secret'] > 0) ? ', Tajný ['.$rec['secret'].']' : '').''.(($rec['deleted'] > 0) ? ', Smazané' : '').'</td>
         </tr>';
                 $even++;
             }
@@ -118,7 +111,7 @@ $searchedfor = nocs($searchedfor);
                 $fsql_archiv = '';
             }
             $sql = "
-    SELECT ".DB_PREFIX."report.adatum as date_created, ".DB_PREFIX."report.datum as date_changed,  ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.status AS 'status', ".DB_PREFIX."report.secret AS 'secret'
+    SELECT ".DB_PREFIX."report.adatum as date_created, ".DB_PREFIX."report.datum as date_changed,  ".DB_PREFIX."report.label , ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.status, ".DB_PREFIX."report.secret, ".DB_PREFIX."report.deleted
     FROM ".DB_PREFIX."report
 	WHERE (label LIKE '%$searchedfor%' or task LIKE  '%$searchedfor%' or summary LIKE  '%$searchedfor%' or impacts LIKE  '%$searchedfor%' or details LIKE  '%$searchedfor%')".$searchContitions.$fsql_archiv."
     ORDER BY 5 * MATCH(label) AGAINST ('$searchedfor')
@@ -160,8 +153,11 @@ $searchedfor = nocs($searchedfor);
                 case 3:
                     echo 'Archivované';
         }
-                if ($rec['secret'] == 1) {
-                    echo ', Tajné';
+                if ($rec['secret'] > 0) {
+                    echo ', Tajné ['.$rec['secret'].']';
+                }
+                if ($rec['deleted'] > 0) {
+                    echo ', Smazané ';
                 }
                 echo '</td></tr>';
 		
@@ -177,7 +173,7 @@ $searchedfor = nocs($searchedfor);
                 $fsql_archiv = '';
             }
             $sql = "
-        SELECT ".DB_PREFIX."person.regdate as date_created, ".DB_PREFIX."person.datum as date_changed, ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.archiv AS 'archiv', ".DB_PREFIX."person.dead AS 'dead', ".DB_PREFIX."person.secret AS 'secret'
+        SELECT ".DB_PREFIX."person.regdate as date_created, ".DB_PREFIX."person.datum as date_changed, ".DB_PREFIX."person.surname , ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.name , ".DB_PREFIX."person.archiv , ".DB_PREFIX."person.dead , ".DB_PREFIX."person.secret , ".DB_PREFIX."person.deleted
         FROM ".DB_PREFIX."person
 		WHERE (surname LIKE '%$searchedfor%' or name LIKE  '%$searchedfor%' or contents LIKE  '%$searchedfor%')
         ".$searchContitions.$fsql_archiv."
@@ -206,7 +202,7 @@ $searchedfor = nocs($searchedfor);
 	<td>'.webdate($rec['date_created']).'</td>
 	<td>'.webdate($rec['date_changed']).'</td>
 
-	<td>'.(($rec['archiv'] == 1) ? 'Archivovaný' : 'Aktivní').''.(($rec['dead'] == 1) ? ', Mrtvý' : '').''.(($rec['secret'] == 1) ? ', Tajný' : '').'</td>
+    <td>'.(($rec['archiv'] == 1) ? 'Archivovaný' : 'Aktivní').''.(($rec['dead'] == 1) ? ', Mrtvý' : '').' '.(($rec['secret'] > 0) ? ', Tajný ['.$rec['secret'].']' : '').' '.(($rec['deleted'] > 0) ? ', Smazané' : '').'</td>
         </tr>';
                 $even++;
             }
@@ -221,7 +217,7 @@ $searchedfor = nocs($searchedfor);
                 $fsql_archiv = '';
             }
             $sql = "
-    SELECT  ".DB_PREFIX."group.datum as date_changed, ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.archived AS 'archived'
+    SELECT  ".DB_PREFIX."group.datum as date_changed, ".DB_PREFIX."group.title, ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.secret, ".DB_PREFIX."group.archived,".DB_PREFIX."group.deleted
     FROM ".DB_PREFIX."group
 	WHERE (title LIKE '%$searchedfor%' or contents LIKE  '%$searchedfor%')
     ".$searchContitions.$fsql_archiv."
@@ -247,7 +243,7 @@ $searchedfor = nocs($searchedfor);
 	<td><a href="readgroup.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a></td>
 	<td>'.webdate($rec['date_changed']).'</td>
 
-	<td>'.(($rec['secret'] == 1) ? 'Tajná' : '').''.(($rec['archived'] == 1) ? ' Archivovaná' : '').'</td>
+	<td>'.(($rec['secret'] > 0) ? 'Tajná ['.$rec['secret'].'] ' : '').' '.(($rec['archived'] == 1) ? ' Archivovaná' : '').' '.(($rec['deleted'] > 0) ? ' Smazané' : '').'</td>
         </tr>';
                 $even++;
             }
@@ -256,7 +252,7 @@ $searchedfor = nocs($searchedfor);
 
             /* Symboly */
             /* Není tu ošetřené, aby to nevyhazovalo symboly od tajných osob. Nutno v budoucnu ošetřit. */
-            $sql = "SELECT ".DB_PREFIX."symbol.created as date_created, ".DB_PREFIX."symbol.modified as date_changed,  ".DB_PREFIX."symbol.id AS 'id', ".DB_PREFIX."symbol.assigned AS 'assigned', ".DB_PREFIX."symbol.secret AS 'secret'
+            $sql = "SELECT ".DB_PREFIX."symbol.created as date_created, ".DB_PREFIX."symbol.modified as date_changed,  ".DB_PREFIX."symbol.id AS 'id', ".DB_PREFIX."symbol.assigned , ".DB_PREFIX."symbol.secret, ".DB_PREFIX."symbol.deleted
 		FROM ".DB_PREFIX."symbol
 		WHERE (".DB_PREFIX."symbol.desc LIKE '%$searchedfor%')
         ".$searchContitions."
@@ -283,7 +279,7 @@ $searchedfor = nocs($searchedfor);
 	<td>'.webdate($rec['date_created']).'</td>
 	<td>'.webdate($rec['date_changed']).'</td>
 
-	<td>'.(($rec['assigned'] == 1) ? 'Přiřazený' : 'Nepřiřazený').''.(($rec['secret'] == 1) ? ', Tajný' : '').'</td>
+	<td>'.(($rec['assigned'] == 1) ? 'Přiřazený' : 'Nepřiřazený').' '.(($rec['secret'] > 0) ? ', Tajný ['.$rec['secret'].']' : '').' '.(($rec['deleted'] > 0) ? ', Smazané' : '').'</td>
         </tr>';
                 $even++;
             }
@@ -292,7 +288,7 @@ $searchedfor = nocs($searchedfor);
           
             /* Poznámky */
             /* POZOR, tady bude hrozny opich udelat ten join pro zobrazeni jen poznamek k nearchivovanym vecem */
-            $sql = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.id AS 'id', ".DB_PREFIX."note.idtable AS 'idtable', ".DB_PREFIX."note.iditem AS 'iditem', ".DB_PREFIX."note.secret AS 'secret'
+            $sql = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.title , ".DB_PREFIX."note.id AS 'id', ".DB_PREFIX."note.idtable , ".DB_PREFIX."note.iditem , ".DB_PREFIX."note.secret , ".DB_PREFIX."note.deleted 
 		FROM ".DB_PREFIX."note
 		WHERE (title LIKE '%$searchedfor%' or note LIKE '%$searchedfor%')		
 		".$searchContitions."
@@ -377,30 +373,16 @@ $searchedfor = nocs($searchedfor);
                                 $type = "Jiná";
                             break;
                     }
-                //TODO chybi zobrazovani priznaku utajeni VSUDE krom poznamek
-                if ($usrinfo['right_power']) {
-                    echo '<tr class="'.(($even % 2 == 0) ? 'even' : 'odd').'">
+
+                echo '<tr class="'.(($even % 2 == 0) ? 'even' : 'odd').'">
                 <td><a href="readnote.php?rid='.$rec['id'].'&idtable='.$rec['idtable'].'">'.StripSlashes($rec['title']).'</a></td>
                 <td><a href="'.$linktype.'">'.StripSlashes($notetitle).'</a></td>
 				<td>'.StripSlashes($type).'</td>
 				<td>'.webdate($rec['date_created']).'</td>
-                <td>'.(($rec['secret'] == 1) ? 'Tajná' : '').'</td>
+                <td>'.(($rec['secret'] > 0) ? 'Tajná ['.$rec['secret'].']' : '').(($rec['deleted'] > 0) ? ' Smazané' : '').'</td>
                 </tr>';
 		
-                    $even++;
-                } else {
-                    if ($secret == 0) {
-                        echo '<tr class="'.(($even % 2 == 0) ? 'even' : 'odd').'">
-                <td><a href="readnote.php?rid='.$rec['id'].'&idtable='.$rec['idtable'].'">'.StripSlashes($rec['title']).'</a></td>
-                <td><a href="'.$linktype.'">'.StripSlashes($notetitle).'</a></td>
-				<td>'.StripSlashes($type).'</td>
-				<td>'.webdate($rec['date_created']).'</td>
-                <td>'.(($rec['secret'] == 1) ? 'Tajná' : '').'</td>
-                </tr>';
-		
-                        $even++;
-                    }
-                }
+                $even++;
             }
             echo '</tbody>
 </table>';
