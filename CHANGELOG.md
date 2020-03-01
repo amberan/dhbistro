@@ -2,6 +2,8 @@
 
 **1.6.7**
 - CODECLIMATE cleanup
+- ve vyhledavani se zobrazuji flagy utajeni a smazani (s ohledem na prava uzivatele)[#53](https://gitlab.alembiq.net/larp/bistro/issues/53)[#85](https://gitlab.alembiq.net/larp/bistro/issues/85)
+- sprava uzivatelu uz zobrazuje pouze neuzavrene pripady [#84](https://gitlab.alembiq.net/larp/bistro/issues/84)
 
 **1.6.6**
 - BUGFIX databaze
