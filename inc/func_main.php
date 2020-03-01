@@ -23,7 +23,7 @@ require_once SERVER_ROOT."/lib/security.php";
 require_once SERVER_ROOT.'/inc/backup.php';
 require_once SERVER_ROOT.'/inc/session.php';
 require_once SERVER_ROOT.'/inc/audit_trail.php';
-//require_once SERVER_ROOT.'/lib/image.php';
+require_once SERVER_ROOT.'/lib/image.php';
 require_once SERVER_ROOT.'/inc/unread.php';
 // *** FUNCTIONS for objects
 require_once SERVER_ROOT.'/lib/person.php';
