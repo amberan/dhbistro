@@ -24,7 +24,7 @@ if (isset($_POST['userid'], $_POST['edituser']) && $usrinfo['right_power'] && !p
     }
 }
 
-	$custom_Filter = custom_Filter(8);
+	$customFilter = custom_Filter(8);
 
     $personList = personList('deleted=0 and archiv=0 and dead=0','surname');
     foreach ($personList as $personList) {

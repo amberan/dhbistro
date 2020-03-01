@@ -17,7 +17,7 @@ $latteParameters['title'] = 'Přidán úkol';
 	    // vlozeni noveho ukolu
 	    if (isset($_POST['inserttask']) && !empty($_POST['task'])) {
 	        mainMenu ();
-	        $custom_Filter = custom_Filter(10);
+	        $customFilter = custom_Filter(10);
 	        $sql_t = "INSERT INTO ".DB_PREFIX."task VALUES('','".$_POST['task']."','".$_POST['target']."','0','".Time()."','".$usrinfo['id']."','','')";
 	        mysqli_query ($database,$sql_t);
 	        // Ukládání do novinek zakomentováno, protože nevím, jestli se použije. Kdyžtak SMAZAT.
@@ -34,7 +34,7 @@ $latteParameters['title'] = 'Přidán úkol';
 
 
 	            mainMenu ();
-	            $custom_Filter = custom_Filter(10);
+	            $customFilter = custom_Filter(10);
 	            sparklets ('<a href="/users">uživatelé</a> &raquo; <strong>úkoly</strong>');
 	            echo '<div id="obsah"><p>Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
 	            latteFooter($latteParameters);
@@ -43,7 +43,7 @@ $latteParameters['title'] = 'Přidán úkol';
 
 
 	            mainMenu ();
-	            $custom_Filter = custom_Filter(10);
+	            $customFilter = custom_Filter(10);
 	            sparklets ('<a href="/users">uživatelé</a> &raquo; <strong>úkoly</strong>');
 	        }
 	    }
@@ -64,27 +64,27 @@ $latteParameters['title'] = 'Přidán úkol';
 	    }
 
 	    // zpracovani filtru
-	    if (!isset($custom_Filter['kategorie'])) {
-	        $f_cat = 1;
+	    if (!isset($customFilter['kategorie'])) {
+	        $filterCat = 1;
 	    } else {
-	        $f_cat = $custom_Filter['kategorie'];
+	        $filterCat = $customFilter['kategorie'];
 	    }
-	    if (!isset($custom_Filter['sort'])) {
-	        $f_sort = 1;
+	    if (!isset($customFilter['sort'])) {
+	        $filterSort = 1;
 	    } else {
-	        $f_sort = $custom_Filter['sort'];
+	        $filterSort = $customFilter['sort'];
 	    }
-	    switch ($f_cat) {
-	  case 0: $fsql_cat = ' WHERE '.DB_PREFIX.'task.status<3 '; break;
-	  case 1: $fsql_cat = ' WHERE '.DB_PREFIX.'task.status<2 '; break;
-	  case 2: $fsql_cat = ' WHERE '.DB_PREFIX.'task.status=1 '; break;
-	  case 3: $fsql_cat = ' WHERE '.DB_PREFIX.'task.status<4 '; break;
-	  default: $fsql_cat = ' WHERE '.DB_PREFIX.'task.status<2 ';
+	    switch ($filterCat) {
+	  case 0: $filterSqlCat = ' WHERE '.DB_PREFIX.'task.status<3 '; break;
+	  case 1: $filterSqlCat = ' WHERE '.DB_PREFIX.'task.status<2 '; break;
+	  case 2: $filterSqlCat = ' WHERE '.DB_PREFIX.'task.status=1 '; break;
+	  case 3: $filterSqlCat = ' WHERE '.DB_PREFIX.'task.status<4 '; break;
+	  default: $filterSqlCat = ' WHERE '.DB_PREFIX.'task.status<2 ';
 	}
-	    switch ($f_sort) {
-	  case 1: $fsql_sort = ' '.DB_PREFIX.'task.created ASC '; break;
-	  case 2: $fsql_sort = ' '.DB_PREFIX.'task.created DESC '; break;
-	  default: $fsql_sort = ' '.DB_PREFIX.'task.created ASC ';
+	    switch ($filterSort) {
+	  case 1: $filterSqlSort = ' '.DB_PREFIX.'task.created ASC '; break;
+	  case 2: $filterSqlSort = ' '.DB_PREFIX.'task.created DESC '; break;
+	  default: $filterSqlSort = ' '.DB_PREFIX.'task.created ASC ';
 	} ?>
 <!-- Přidání úkolu -->
 <div id="filter-wrapper">
@@ -112,18 +112,18 @@ $latteParameters['title'] = 'Přidán úkol';
 	// filtr
 	function filter ()
 	{
-	    global $f_cat,$f_sort;
+	    global $filterCat,$filterSort;
 	    echo '<div id="filter-wrapper"><form action="tasks.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat <select name="kategorie">
-	<option value="0"'.(($f_cat == 0) ? ' selected="selected"' : '').'>všechny</option>
-	<option value="1"'.(($f_cat == 1) ? ' selected="selected"' : '').'>neuzavřené</option>
-	<option value="2"'.(($f_cat == 2) ? ' selected="selected"' : '').'>dokončené</option>
-	<option value="3"'.(($f_cat == 3) ? ' selected="selected"' : '').'>i zrušené</option>
+	<option value="0"'.(($filterCat == 0) ? ' selected="selected"' : '').'>všechny</option>
+	<option value="1"'.(($filterCat == 1) ? ' selected="selected"' : '').'>neuzavřené</option>
+	<option value="2"'.(($filterCat == 2) ? ' selected="selected"' : '').'>dokončené</option>
+	<option value="3"'.(($filterCat == 3) ? ' selected="selected"' : '').'>i zrušené</option>
 </select> úkoly a seřadit je podle <select name="sort">
-	<option value="1"'.(($f_sort == 1) ? ' selected="selected"' : '').'>data zadání vzestupně</option>
-	<option value="2"'.(($f_sort == 2) ? ' selected="selected"' : '').'>data zadání sestupně</option>
+	<option value="1"'.(($filterSort == 1) ? ' selected="selected"' : '').'>data zadání vzestupně</option>
+	<option value="2"'.(($filterSort == 2) ? ' selected="selected"' : '').'>data zadání sestupně</option>
 </select>.</p>
 	  <div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
@@ -131,7 +131,7 @@ $latteParameters['title'] = 'Přidán úkol';
 	}
 	    filter();
 	    // vypis uživatelů
-	    $sql = "SELECT * FROM ".DB_PREFIX."task".$fsql_cat." ORDER BY ".$fsql_sort;
+	    $sql = "SELECT * FROM ".DB_PREFIX."task".$filterSqlCat." ORDER BY ".$filterSqlSort;
 	    $res = mysqli_query ($database,$sql);
 	    if (mysqli_num_rows ($res)) {
 	        echo '<div id="obsah">

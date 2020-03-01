@@ -10,35 +10,35 @@ $latteParameters['title'] = 'Skupiny';
 auditTrail(3, 1, 0);
 mainMenu ();
 
-$custom_Filter = custom_Filter(2);
+$customFilter = custom_Filter(2);
 sparklets ('<strong>skupiny</strong>','<a href="newgroup.php">přidat skupinu</a>');
 	// zpracovani filtru
-	if (!isset($custom_Filter['sort'])) {
-	    $f_sort = 1;
+	if (!isset($customFilter['sort'])) {
+	    $filterSort = 1;
 	} else {
-	    $f_sort = $custom_Filter['sort'];
+	    $filterSort = $customFilter['sort'];
 	}
-	if (!isset($custom_Filter['sec'])) {
-	    $f_sec = 0;
+	if (!isset($customFilter['sec'])) {
+	    $filterSec = 0;
 	} else {
-	    $f_sec = 1;
+	    $filterSec = 1;
 	}
-        if (!isset($custom_Filter['new'])) {
+        if (!isset($customFilter['new'])) {
             $f_new = 0;
         } else {
             $f_new = 1;
         }
-        if (!isset($custom_Filter['arch'])) {
+        if (!isset($customFilter['arch'])) {
             $f_arch = 0;
         } else {
             $f_arch = 1;
         }
-	switch ($f_sort) {
-	  case 1: $fsql_sort = ' '.DB_PREFIX.'group.title ASC '; break;
-	  case 2: $fsql_sort = ' '.DB_PREFIX.'group.title DESC '; break;
-	  default: $fsql_sort = ' '.DB_PREFIX.'group.title ASC ';
+	switch ($filterSort) {
+	  case 1: $filterSqlSort = ' '.DB_PREFIX.'group.title ASC '; break;
+	  case 2: $filterSqlSort = ' '.DB_PREFIX.'group.title DESC '; break;
+	  default: $filterSqlSort = ' '.DB_PREFIX.'group.title ASC ';
 	}
-	switch ($f_sec) {
+	switch ($filterSec) {
 		case 0: $fsql_sec = ''; break;
 		case 1: $fsql_sec = ' AND '.DB_PREFIX.'group.secret=1 '; break;
 		default: $fsql_sec = '';
@@ -51,18 +51,18 @@ sparklets ('<strong>skupiny</strong>','<a href="newgroup.php">přidat skupinu</a
 	//
 	function filter ()
 	{
-	    global $f_sort, $f_sec, $f_new, $f_arch, $usrinfo;
+	    global $filterSort, $filterSec, $f_new, $f_arch, $usrinfo;
 	    echo '<div id="filter-wrapper"><form action="groups.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat všechny skupiny a seřadit je podle <select name="sort">
-	<option value="1"'.(($f_sort == 1) ? ' selected="selected"' : '').'>názvu vzestupně</option>
-	<option value="2"'.(($f_sort == 2) ? ' selected="selected"' : '').'>názvu sestupně</option>
+	<option value="1"'.(($filterSort == 1) ? ' selected="selected"' : '').'>názvu vzestupně</option>
+	<option value="2"'.(($filterSort == 2) ? ' selected="selected"' : '').'>názvu sestupně</option>
         </select>.
         <br /> <input type="checkbox" name="new" value="new" class="checkbox"'.(($f_new == 1) ? ' checked="checked"' : '').' /> Jen nové.
         <br /> <input type="checkbox" name="arch" value="arch" class="checkbox"'.(($f_arch == 1) ? ' checked="checked"' : '').' /> I archiv.';
 	    if ($usrinfo['right_power']) {
-	        echo '<br /> <input type="checkbox" name="sec" value="sec" class="checkbox"'.(($f_sec == 1) ? ' checked="checked"' : '').' /> Jen tajné.</p>';
+	        echo '<br /> <input type="checkbox" name="sec" value="sec" class="checkbox"'.(($filterSec == 1) ? ' checked="checked"' : '').' /> Jen tajné.</p>';
 	    } else {
 	        echo '</p>';
 	    }
@@ -74,11 +74,11 @@ sparklets ('<strong>skupiny</strong>','<a href="newgroup.php">přidat skupinu</a
 	filter();
 	/* Stary vypis skupin
 	if ($usrinfo['right_power']) {
-		$sql="SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.archived AS 'archived' FROM ".DB_PREFIX."group WHERE ".DB_PREFIX."group.deleted=0".$fsql_sec.$fsql_arch." ORDER BY ".$fsql_sort;
+		$sql="SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.archived AS 'archived' FROM ".DB_PREFIX."group WHERE ".DB_PREFIX."group.deleted=0".$fsql_sec.$fsql_arch." ORDER BY ".$filterSqlSort;
 	} else {
-	  $sql="SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.archived AS 'archived' FROM ".DB_PREFIX."group WHERE ".DB_PREFIX."group.deleted=0".$fsql_sec.$fsql_arch." AND ".DB_PREFIX."group.secret=0 ORDER BY ".$fsql_sort;
+	  $sql="SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.archived AS 'archived' FROM ".DB_PREFIX."group WHERE ".DB_PREFIX."group.deleted=0".$fsql_sec.$fsql_arch." AND ".DB_PREFIX."group.secret=0 ORDER BY ".$filterSqlSort;
 	} Alternativni vypis skupin*/
-    $sql = "SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.archived AS 'archived' FROM ".DB_PREFIX."group WHERE ".DB_PREFIX."group.deleted=0".$fsql_sec.$fsql_arch." AND ".DB_PREFIX."group.secret<=".$usrinfo['right_power']." ORDER BY ".$fsql_sort;
+    $sql = "SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.archived AS 'archived' FROM ".DB_PREFIX."group WHERE ".DB_PREFIX."group.deleted=0".$fsql_sec.$fsql_arch." AND ".DB_PREFIX."group.secret<=".$usrinfo['right_power']." ORDER BY ".$filterSqlSort;
 	$res = mysqli_query ($database,$sql);
 	if (mysqli_num_rows ($res)) {
 	    echo '<div id="obsah">

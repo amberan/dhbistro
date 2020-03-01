@@ -9,65 +9,65 @@ $latteParameters['title'] = 'Osoby';
   
 	auditTrail(1, 1, 0);
 	mainMenu ();
-        $custom_Filter = custom_Filter(1);
+        $customFilter = custom_Filter(1);
 	sparklets ('<strong>osoby</strong>','<a href="newperson.php">přidat osobu</a>; <a href="symbols.php" '.((searchTable(7)) ? ' class="unread"' : '').'>nepřiřazené symboly</a>; <a href="symbol_search.php">vyhledat symbol</a>');
 	// zpracovani filtru
-	if (!isset($custom_Filter['sort'])) {
-	    $f_sort = 1;
+	if (!isset($customFilter['sort'])) {
+	    $filterSort = 1;
 	} else {
-	    $f_sort = $custom_Filter['sort'];
+	    $filterSort = $customFilter['sort'];
 	}
-	if (!isset($custom_Filter['sportraits'])) {
+	if (!isset($customFilter['sportraits'])) {
 	    $sportraits = false;
 	} else {
-	    $sportraits = $custom_Filter['sportraits'];
+	    $sportraits = $customFilter['sportraits'];
 	}
-	if (!isset($custom_Filter['ssymbols'])) {
+	if (!isset($customFilter['ssymbols'])) {
 	    $ssymbols = false;
 	} else {
-	    $ssymbols = $custom_Filter['ssymbols'];
+	    $ssymbols = $customFilter['ssymbols'];
 	}
-	if (!isset($custom_Filter['fdead'])) {
+	if (!isset($customFilter['fdead'])) {
 	    $fdead = 0;
 	} else {
 	    $fdead = 1;
 	}
-	if (!isset($custom_Filter['farchiv'])) {
+	if (!isset($customFilter['farchiv'])) {
 	    $farchiv = 0;
 	} else {
 	    $farchiv = 1;
 	}
-	if (!isset($custom_Filter['sec'])) {
-	    $f_sec = 0;
+	if (!isset($customFilter['sec'])) {
+	    $filterSec = 0;
 	} else {
-	    $f_sec = 1;
+	    $filterSec = 1;
 	}
-        if (!isset($custom_Filter['new'])) {
+        if (!isset($customFilter['new'])) {
             $f_new = 0;
         } else {
             $f_new = 1;
         }
-	if (!isset($custom_Filter['fspec'])) {
+	if (!isset($customFilter['fspec'])) {
 	    $fspec = 0;
 	} else {
-	    $fspec = $custom_Filter['fspec'];
+	    $fspec = $customFilter['fspec'];
 	}
-	if (!isset($custom_Filter['fside'])) {
+	if (!isset($customFilter['fside'])) {
 	    $fside = 0;
 	} else {
-	    $fside = $custom_Filter['fside'];
+	    $fside = $customFilter['fside'];
 	}
-	if (!isset($custom_Filter['fpow'])) {
+	if (!isset($customFilter['fpow'])) {
 	    $fpow = 0;
 	} else {
-	    $fpow = $custom_Filter['fpow'];
+	    $fpow = $customFilter['fpow'];
 	}
-	switch ($f_sort) {
-	  case 1: $fsql_sort = ' '.DB_PREFIX.'person.surname ASC, '.DB_PREFIX.'person.name ASC '; break;
-	  case 2: $fsql_sort = ' '.DB_PREFIX.'person.surname DESC, '.DB_PREFIX.'person.name DESC '; break;
-	  default: $fsql_sort = ' '.DB_PREFIX.'person.surname ASC, '.DB_PREFIX.'person.name ASC ';
+	switch ($filterSort) {
+	  case 1: $filterSqlSort = ' '.DB_PREFIX.'person.surname ASC, '.DB_PREFIX.'person.name ASC '; break;
+	  case 2: $filterSqlSort = ' '.DB_PREFIX.'person.surname DESC, '.DB_PREFIX.'person.name DESC '; break;
+	  default: $filterSqlSort = ' '.DB_PREFIX.'person.surname ASC, '.DB_PREFIX.'person.name ASC ';
 	}
-	switch ($f_sec) {
+	switch ($filterSec) {
 		case 0: $fsql_sec = ''; break;
 		case 1: $fsql_sec = ' AND '.DB_PREFIX.'person.secret=1 '; break;
 		default: $fsql_sec = '';
@@ -121,13 +121,13 @@ $latteParameters['title'] = 'Osoby';
 	// formular filtru
 	function filter ()
 	{
-	    global $f_sort, $sportraits, $ssymbols, $f_sec, $f_new, $fdead, $farchiv, $usrinfo, $fspec, $fside, $fpow;
+	    global $filterSort, $sportraits, $ssymbols, $filterSec, $f_new, $fdead, $farchiv, $usrinfo, $fspec, $fside, $fpow;
 	    echo '<div id="filter-wrapper"><form action="persons.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat osoby a seřadit je podle <select name="sort">
-	<option value="1"'.(($f_sort == 1) ? ' selected="selected"' : '').'>příjmení a jména vzestupně</option>
-	<option value="2"'.(($f_sort == 2) ? ' selected="selected"' : '').'>příjmení a jména sestupně</option>
+	<option value="1"'.(($filterSort == 1) ? ' selected="selected"' : '').'>příjmení a jména vzestupně</option>
+	<option value="2"'.(($filterSort == 2) ? ' selected="selected"' : '').'>příjmení a jména sestupně</option>
 	</select>.</p>
 	<p> Strana: 
 	<select name="fside">
@@ -176,7 +176,7 @@ $latteParameters['title'] = 'Osoby';
 	<td class="filter"><input type="checkbox" name="ssymbols" value="1"'.(($ssymbols) ? ' checked="checked"' : '').'> Zobrazit symboly.</td>
 	<td class="filter"><input type="checkbox" name="farchiv" value="1"'.(($farchiv == 1) ? ' checked="checked"' : '').'> Zobrazit i archiv.</td>';
 	    if ($usrinfo['right_power']) {
-	        echo '<td class="filter"><input type="checkbox" name="sec" value="sec" class="checkbox"'.(($f_sec == 1) ? ' checked="checked"' : '').' /> Jen tajné.</td></tr></table>';
+	        echo '<td class="filter"><input type="checkbox" name="sec" value="sec" class="checkbox"'.(($filterSec == 1) ? ' checked="checked"' : '').' /> Jen tajné.</td></tr></table>';
 	    } else {
 	        echo '</tr></table>';
 	    }
@@ -188,12 +188,12 @@ $latteParameters['title'] = 'Osoby';
 	filter();
 	/* Stary vypis osob
 	if ($usrinfo['right_power']) {
-		$sql="SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.archiv AS 'archiv', ".DB_PREFIX."person.dead AS 'dead', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol' FROM ".DB_PREFIX."person WHERE ".DB_PREFIX."person.deleted=0".$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow." ORDER BY ".$fsql_sort;
+		$sql="SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.archiv AS 'archiv', ".DB_PREFIX."person.dead AS 'dead', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol' FROM ".DB_PREFIX."person WHERE ".DB_PREFIX."person.deleted=0".$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow." ORDER BY ".$filterSqlSort;
 	} else {
-	  $sql="SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.archiv AS 'archiv', ".DB_PREFIX."person.dead AS 'dead', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol' FROM ".DB_PREFIX."person WHERE ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret=0".$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow." ORDER BY ".$fsql_sort;
+	  $sql="SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.archiv AS 'archiv', ".DB_PREFIX."person.dead AS 'dead', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol' FROM ".DB_PREFIX."person WHERE ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret=0".$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow." ORDER BY ".$filterSqlSort;
 	}
 	Alternativni vypis osob zahrnujici vice stupnu tajne.*/
-    $sql = "SELECT  ".DB_PREFIX."person.regdate as date_created, ".DB_PREFIX."person.datum as date_changed, ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.archiv AS 'archiv', ".DB_PREFIX."person.dead AS 'dead', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol' FROM ".DB_PREFIX."person WHERE ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret<=".$usrinfo['right_power'].$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow." ORDER BY ".$fsql_sort;
+    $sql = "SELECT  ".DB_PREFIX."person.regdate as date_created, ".DB_PREFIX."person.datum as date_changed, ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.archiv AS 'archiv', ".DB_PREFIX."person.dead AS 'dead', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol' FROM ".DB_PREFIX."person WHERE ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret<=".$usrinfo['right_power'].$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow." ORDER BY ".$filterSqlSort;
     //Debugger::log('DEBUG: '.$sql);
 	$res = mysqli_query ($database,$sql);
 	if (mysqli_num_rows ($res)) {

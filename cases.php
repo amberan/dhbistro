@@ -9,42 +9,42 @@ $latteParameters['title'] = 'Případy';
 
 	auditTrail(3, 1, 0);
 	mainMenu ();
-        $custom_Filter = custom_Filter(3);
+        $customFilter = custom_Filter(3);
 	sparklets ('<strong>případy</strong>','<a href="newcase.php">přidat případ</a>');
 	// zpracovani filtru
-	if (!isset($custom_Filter['sort'])) {
-	    $f_sort = 4;
+	if (!isset($customFilter['sort'])) {
+	    $filterSort = 4;
 	} else {
-	    $f_sort = $custom_Filter['sort'];
+	    $filterSort = $customFilter['sort'];
 	}
-	if (!isset($custom_Filter['stat'])) {
-	    $f_stat = 0;
+	if (!isset($customFilter['stat'])) {
+	    $filterStat = 0;
 	} else {
-	    $f_stat = 1;
+	    $filterStat = 1;
 	}
-	if (!isset($custom_Filter['sec'])) {
-	    $f_sec = 0;
+	if (!isset($customFilter['sec'])) {
+	    $filterSec = 0;
 	} else {
-	    $f_sec = 1;
+	    $filterSec = 1;
 	}
-        if (!isset($custom_Filter['new'])) {
+        if (!isset($customFilter['new'])) {
             $f_new = 0;
         } else {
             $f_new = 1;
         }
-	switch ($f_sort) {
-	  case 1: $fsql_sort = ' '.DB_PREFIX.'case.title ASC '; break;
-	  case 2: $fsql_sort = ' '.DB_PREFIX.'case.title DESC '; break;
-	  case 3: $fsql_sort = ' '.DB_PREFIX.'case.datum ASC '; break;
-	  case 4: $fsql_sort = ' '.DB_PREFIX.'case.datum DESC '; break;
-	  default: $fsql_sort = ' '.DB_PREFIX.'case.datum DESC ';
+	switch ($filterSort) {
+	  case 1: $filterSqlSort = ' '.DB_PREFIX.'case.title ASC '; break;
+	  case 2: $filterSqlSort = ' '.DB_PREFIX.'case.title DESC '; break;
+	  case 3: $filterSqlSort = ' '.DB_PREFIX.'case.datum ASC '; break;
+	  case 4: $filterSqlSort = ' '.DB_PREFIX.'case.datum DESC '; break;
+	  default: $filterSqlSort = ' '.DB_PREFIX.'case.datum DESC ';
 	}
-	switch ($f_sec) {
+	switch ($filterSec) {
 		case 0: $fsql_sec = ''; break;
 		case 1: $fsql_sec = ' AND '.DB_PREFIX.'case.secret=1 '; break;
 		default: $fsql_sec = '';
 	}
-	switch ($f_stat) {
+	switch ($filterStat) {
 		case 0: $fsql_stat = ' AND '.DB_PREFIX.'case.status=0 '; break;
 		case 1: $fsql_stat = ''; break;
 		default: $fsql_stat = ' AND '.DB_PREFIX.'case.status=0 ';
@@ -52,20 +52,20 @@ $latteParameters['title'] = 'Případy';
 	//
 	function filter ()
 	{
-	    global $f_sort, $f_sec, $f_stat, $f_new, $usrinfo;
+	    global $filterSort, $filterSec, $filterStat, $f_new, $usrinfo;
 	    echo '<div id="filter-wrapper"><form action="cases.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat všechny případy a seřadit je podle <select name="sort">
-	<option value="1"'.(($f_sort == 1) ? ' selected="selected"' : '').'>názvu vzestupně</option>
-	<option value="2"'.(($f_sort == 2) ? ' selected="selected"' : '').'>názvu sestupně</option>
-	<option value="3"'.(($f_sort == 3) ? ' selected="selected"' : '').'>data vzestupně</option>
-	<option value="4"'.(($f_sort == 4) ? ' selected="selected"' : '').'>data sestupně</option>
+	<option value="1"'.(($filterSort == 1) ? ' selected="selected"' : '').'>názvu vzestupně</option>
+	<option value="2"'.(($filterSort == 2) ? ' selected="selected"' : '').'>názvu sestupně</option>
+	<option value="3"'.(($filterSort == 3) ? ' selected="selected"' : '').'>data vzestupně</option>
+	<option value="4"'.(($filterSort == 4) ? ' selected="selected"' : '').'>data sestupně</option>
 </select>.<br />
-<input type="checkbox" name="stat" value="stat" class="checkbox"'.(($f_stat == 1) ? ' checked="checked"' : '').' /> I uzavřené. <br />
+<input type="checkbox" name="stat" value="stat" class="checkbox"'.(($filterStat == 1) ? ' checked="checked"' : '').' /> I uzavřené. <br />
 <input type="checkbox" name="new" value="new" class="checkbox"'.(($f_new == 1) ? ' checked="checked"' : '').' /> Jen nové.';
 	    if ($usrinfo['right_power']) {
-	        echo '<br /> <input type="checkbox" name="sec" value="sec" class="checkbox"'.(($f_sec == 1) ? ' checked="checked"' : '').' /> Jen tajné.</p>';
+	        echo '<br /> <input type="checkbox" name="sec" value="sec" class="checkbox"'.(($filterSec == 1) ? ' checked="checked"' : '').' /> Jen tajné.</p>';
 	    } else {
 	        echo '</p>';
 	    }
@@ -77,11 +77,11 @@ $latteParameters['title'] = 'Případy';
 	filter();
 	/* stary vypis pripadu
 	if ($usrinfo['right_power']) {
-		$sql="SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.datum AS 'datum' FROM ".DB_PREFIX."case WHERE ".DB_PREFIX."case.deleted=0".$fsql_sec.$fsql_stat." ORDER BY ".$fsql_sort;
+		$sql="SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.datum AS 'datum' FROM ".DB_PREFIX."case WHERE ".DB_PREFIX."case.deleted=0".$fsql_sec.$fsql_stat." ORDER BY ".$filterSqlSort;
 	} else {
-	  $sql="SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.datum AS 'datum' FROM ".DB_PREFIX."case WHERE ".DB_PREFIX."case.deleted=0".$fsql_sec.$fsql_stat." AND ".DB_PREFIX."case.secret=0 ORDER BY ".$fsql_sort;
+	  $sql="SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.datum AS 'datum' FROM ".DB_PREFIX."case WHERE ".DB_PREFIX."case.deleted=0".$fsql_sec.$fsql_stat." AND ".DB_PREFIX."case.secret=0 ORDER BY ".$filterSqlSort;
 	} Alternativni vypis osob*/
-    $sql = "SELECT ".DB_PREFIX."case.datum as date_changed, ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.datum AS 'datum' FROM ".DB_PREFIX."case WHERE ".DB_PREFIX."case.deleted=0".$fsql_sec.$fsql_stat." AND ".DB_PREFIX."case.secret<=".$usrinfo['right_power']." ORDER BY ".$fsql_sort;
+    $sql = "SELECT ".DB_PREFIX."case.datum as date_changed, ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.datum AS 'datum' FROM ".DB_PREFIX."case WHERE ".DB_PREFIX."case.deleted=0".$fsql_sec.$fsql_stat." AND ".DB_PREFIX."case.secret<=".$usrinfo['right_power']." ORDER BY ".$filterSqlSort;
 	$res = mysqli_query ($database,$sql);
 	if (mysqli_num_rows ($res)) {
 	    echo '<div id="obsah">

@@ -71,46 +71,46 @@ elseif (isset($_POST['insertuser']) && $usrinfo['right_power'] && !preg_match ('
 }
 
 
-	$custom_Filter = custom_Filter(8);
+	$customFilter = custom_Filter(8);
 
 // *** zpracovani filtru
-if (!isset($custom_Filter['kategorie'])) {
-    $f_cat = 0;
+if (!isset($customFilter['kategorie'])) {
+    $filterCat = 0;
 } else {
-    $f_cat = $custom_Filter['kategorie'];
+    $filterCat = $customFilter['kategorie'];
 }
-if (!isset($custom_Filter['sort'])) {
-    $f_sort = 1;
+if (!isset($customFilter['sort'])) {
+    $filterSort = 1;
 } else {
-    $f_sort = $custom_Filter['sort'];
+    $filterSort = $customFilter['sort'];
 }
-switch ($f_cat) {
-	case 0: $fsql_cat = ''; break;
-	case 1: $fsql_cat = ' AND '.DB_PREFIX.'user.right_power=1 '; break;
-	case 2: $fsql_cat = ' AND '.DB_PREFIX.'user.right_text=1 '; break;
-	default: $fsql_cat = '';
+switch ($filterCat) {
+	case 0: $filterSqlCat = ''; break;
+	case 1: $filterSqlCat = ' AND '.DB_PREFIX.'user.right_power=1 '; break;
+	case 2: $filterSqlCat = ' AND '.DB_PREFIX.'user.right_text=1 '; break;
+	default: $filterSqlCat = '';
 }
-switch ($f_sort) {
-	case 1: $fsql_sort = ' '.DB_PREFIX.'user.login ASC '; break;
-	case 2: $fsql_sort = ' '.DB_PREFIX.'user.login DESC '; break;
-	default: $fsql_sort = ' '.DB_PREFIX.'user.login ASC ';
+switch ($filterSort) {
+	case 1: $filterSqlSort = ' '.DB_PREFIX.'user.login ASC '; break;
+	case 2: $filterSqlSort = ' '.DB_PREFIX.'user.login DESC '; break;
+	default: $filterSqlSort = ' '.DB_PREFIX.'user.login ASC ';
 }
 function filter ()
 {
-    global $f_cat,$f_sort;
+    global $filterCat,$filterSort;
     echo
 '<div id="filtr" class="table">
-	<form action="/users" method="get">
+	<form action="/users/" method="get">
 		<p>Vypsat
 			<select name="kategorie">
-				<option value="0"'.(($f_cat == 0) ? ' selected="selected"' : '').'>všechny uživatele</option>
-				<option value="1"'.(($f_cat == 1) ? ' selected="selected"' : '').'>power usery</option>
-				<option value="2"'.(($f_cat == 2) ? ' selected="selected"' : '').'>editory</option>
+				<option value="0"'.(($filterCat == 0) ? ' selected="selected"' : '').'>všechny uživatele</option>
+				<option value="1"'.(($filterCat == 1) ? ' selected="selected"' : '').'>power usery</option>
+				<option value="2"'.(($filterCat == 2) ? ' selected="selected"' : '').'>editory</option>
 			</select> 
 			a seřadit je podle 
 			<select name="sort">
-				<option value="1"'.(($f_sort == 1) ? ' selected="selected"' : '').'>ID vzestupně</option>
-				<option value="2"'.(($f_sort == 2) ? ' selected="selected"' : '').'>ID sestupně</option>
+				<option value="1"'.(($filterSort == 1) ? ' selected="selected"' : '').'>ID vzestupně</option>
+				<option value="2"'.(($filterSort == 2) ? ' selected="selected"' : '').'>ID sestupně</option>
 			</select>
 		.</p>
 	  <input type="submit" id="filterbutton" name="filter" value="Filtrovat" />
@@ -125,9 +125,9 @@ function filter ()
 
 
 if ($usrinfo['right_org']) {
-    $user_sql = "SELECT ".DB_PREFIX."user.*,".DB_PREFIX."person.name,".DB_PREFIX."person.surname FROM ".DB_PREFIX."user left outer join `".DB_PREFIX."person` on ".DB_PREFIX."user.idperson=".DB_PREFIX."person.id WHERE ".DB_PREFIX."user.deleted=0 ".$fsql_cat." ORDER BY ".$fsql_sort;
+    $user_sql = "SELECT ".DB_PREFIX."user.*,".DB_PREFIX."person.name,".DB_PREFIX."person.surname FROM ".DB_PREFIX."user left outer join `".DB_PREFIX."person` on ".DB_PREFIX."user.idperson=".DB_PREFIX."person.id WHERE ".DB_PREFIX."user.deleted=0 ".$filterSqlCat." ORDER BY ".$filterSqlSort;
 } else {
-    $user_sql = "SELECT ".DB_PREFIX."user.*,".DB_PREFIX."person.name,".DB_PREFIX."person.surname FROM ".DB_PREFIX."user left outer join `".DB_PREFIX."person` on ".DB_PREFIX."user.idperson=".DB_PREFIX."person.id WHERE ".DB_PREFIX."user.deleted=0 AND ".DB_PREFIX."user.right_org=0 ".$fsql_cat." ORDER BY ".$fsql_sort;
+    $user_sql = "SELECT ".DB_PREFIX."user.*,".DB_PREFIX."person.name,".DB_PREFIX."person.surname FROM ".DB_PREFIX."user left outer join `".DB_PREFIX."person` on ".DB_PREFIX."user.idperson=".DB_PREFIX."person.id WHERE ".DB_PREFIX."user.deleted=0 AND ".DB_PREFIX."user.right_org=0 ".$filterSqlCat." ORDER BY ".$filterSqlSort;
 }
 $user_query = mysqli_query ($database,$user_sql);
 if (mysqli_num_rows ($user_query)) {

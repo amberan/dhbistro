@@ -6,7 +6,7 @@ latteHeader($latteParameters);
 
 $latteParameters['title'] = 'Přiřazení symbolu';
 	mainMenu ();
-        $custom_Filter = custom_Filter(21);
+        $customFilter = custom_Filter(21);
 	sparklets ('<a href="./symbols.php">nepřiřazené symboly</a> &raquo; <strong>přiřazení symbolu k případu</strong>');
 	$sql = "SELECT created_by FROM ".DB_PREFIX."symbol WHERE id=".$_REQUEST['rid'];
 	$autharray = mysqli_fetch_assoc (mysqli_query ($database,$sql));
@@ -23,26 +23,26 @@ $latteParameters['title'] = 'Přiřazení symbolu';
 
     <?php
 // zpracovani filtru
-if (!isset($custom_Filter['sort'])) {
-    $f_sort = 1;
+if (!isset($customFilter['sort'])) {
+    $filterSort = 1;
 } else {
-    $f_sort = $custom_Filter['sort'];
+    $filterSort = $customFilter['sort'];
 }
-	        switch ($f_sort) {
-	case 1: $fsql_sort = ' '.DB_PREFIX.'case.title ASC '; break;
-	case 2: $fsql_sort = ' '.DB_PREFIX.'case.title DESC '; break;
-	default: $fsql_sort = ' '.DB_PREFIX.'case.title ASC ';
+	        switch ($filterSort) {
+	case 1: $filterSqlSort = ' '.DB_PREFIX.'case.title ASC '; break;
+	case 2: $filterSqlSort = ' '.DB_PREFIX.'case.title DESC '; break;
+	default: $filterSqlSort = ' '.DB_PREFIX.'case.title ASC ';
 }
 //
 	        function filter ()
 	        {
-	            global $f_sort;
+	            global $filterSort;
 	            echo '<form action="addsy2c.php" method="post" id="filter">
 	<fieldset>
 	<legend>Filtr</legend>
 	<p>Vypsat všechny případy a seřadit je podle <select name="sort">
-	<option value="1"'.(($f_sort == 1) ? ' selected="selected"' : '').'>názvu vzestupně</option>
-	<option value="2"'.(($f_sort == 2) ? ' selected="selected"' : '').'>názvu sestupně</option>
+	<option value="1"'.(($filterSort == 1) ? ' selected="selected"' : '').'>názvu vzestupně</option>
+	<option value="2"'.(($filterSort == 2) ? ' selected="selected"' : '').'>názvu sestupně</option>
 	</select>.</p>
 	<input type="hidden" name="rid" value="'.$_REQUEST['rid'].'" />
 	<div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
@@ -53,9 +53,9 @@ if (!isset($custom_Filter['sort'])) {
     <form action="addsymbols.php" method="post" class="otherform">
         <?php // vypis pripadu
 if ($usrinfo['right_power']) {
-    $sql = "SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."symbol2all.iduser FROM ".DB_PREFIX."case LEFT JOIN ".DB_PREFIX."symbol2all ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."case.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." WHERE ".DB_PREFIX."case.deleted=0 ORDER BY ".$fsql_sort;
+    $sql = "SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."symbol2all.iduser FROM ".DB_PREFIX."case LEFT JOIN ".DB_PREFIX."symbol2all ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."case.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." WHERE ".DB_PREFIX."case.deleted=0 ORDER BY ".$filterSqlSort;
 } else {
-    $sql = "SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."symbol2all.iduser FROM ".DB_PREFIX."case LEFT JOIN ".DB_PREFIX."symbol2all ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."case.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." WHERE ".DB_PREFIX."case.deleted=0 AND ".DB_PREFIX."case.secret=0 ORDER BY ".$fsql_sort;
+    $sql = "SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."symbol2all.iduser FROM ".DB_PREFIX."case LEFT JOIN ".DB_PREFIX."symbol2all ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."case.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." WHERE ".DB_PREFIX."case.deleted=0 AND ".DB_PREFIX."case.secret=0 ORDER BY ".$filterSqlSort;
 }
 	        $res = mysqli_query ($database,$sql); ?>
         <div id="in-form-table">

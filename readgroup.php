@@ -15,7 +15,7 @@ latteHeader($latteParameters);
 	        $latteParameters['title'] = StripSlashes($rec_g['title']);
 
 	        mainMenu ();
-	        $custom_Filter = custom_Filter(14, $_REQUEST['rid']);
+	        $customFilter = custom_Filter(14, $_REQUEST['rid']);
 	        if (!isset($_REQUEST['hidenotes'])) {
 	            $hn = 0;
 	        } else {
@@ -36,27 +36,27 @@ latteHeader($latteParameters);
 	        deleteUnread (2,$_REQUEST['rid']);
 	        sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>'.StripSlashes($rec_g['title']).'</strong>','<a href="readgroup.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton); ?>
 <?php // zpracovani filtru
-	if (!isset($custom_Filter['sort'])) {
-	    $f_sort = 1;
+	if (!isset($customFilter['sort'])) {
+	    $filterSort = 1;
 	} else {
-	    $f_sort = $custom_Filter['sort'];
+	    $filterSort = $customFilter['sort'];
 	}
-	        if (!isset($custom_Filter['sportraits'])) {
+	        if (!isset($customFilter['sportraits'])) {
 	            $sportraits = false;
 	        } else {
-	            $sportraits = $custom_Filter['sportraits'];
+	            $sportraits = $customFilter['sportraits'];
 	        }
-	        if (!isset($custom_Filter['sec'])) {
-	            $f_sec = 0;
+	        if (!isset($customFilter['sec'])) {
+	            $filterSec = 0;
 	        } else {
-	            $f_sec = 1;
+	            $filterSec = 1;
 	        }
-	        switch ($f_sort) {
-	  case 1: $fsql_sort = ' '.DB_PREFIX.'person.surname ASC, '.DB_PREFIX.'person.name ASC '; break;
-	  case 2: $fsql_sort = ' '.DB_PREFIX.'person.surname DESC, '.DB_PREFIX.'person.name DESC '; break;
-	  default: $fsql_sort = ' '.DB_PREFIX.'person.surname ASC, '.DB_PREFIX.'person.name ASC ';
+	        switch ($filterSort) {
+	  case 1: $filterSqlSort = ' '.DB_PREFIX.'person.surname ASC, '.DB_PREFIX.'person.name ASC '; break;
+	  case 2: $filterSqlSort = ' '.DB_PREFIX.'person.surname DESC, '.DB_PREFIX.'person.name DESC '; break;
+	  default: $filterSqlSort = ' '.DB_PREFIX.'person.surname ASC, '.DB_PREFIX.'person.name ASC ';
 	}
-	        switch ($f_sec) {
+	        switch ($filterSec) {
 		case 0: $fsql_sec = ''; break;
 		case 1: $fsql_sec = ' AND '.DB_PREFIX.'person.secret=1 '; break;
 		default: $fsql_sec = '';
@@ -64,13 +64,13 @@ latteHeader($latteParameters);
 	        //
 	        function filter ()
 	        {
-	            global $f_sort, $sportraits;
+	            global $filterSort, $sportraits;
 	            echo '<div id="filter-wrapper"><form action="readgroup.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Členy skupiny řadit podle <select name="sort">
-	<option value="1"'.(($f_sort == 1) ? ' selected="selected"' : '').'>příjmení a jména vzestupně</option>
-	<option value="2"'.(($f_sort == 2) ? ' selected="selected"' : '').'>příjmení a jména sestupně</option>
+	<option value="1"'.(($filterSort == 1) ? ' selected="selected"' : '').'>příjmení a jména vzestupně</option>
+	<option value="2"'.(($filterSort == 2) ? ' selected="selected"' : '').'>příjmení a jména sestupně</option>
 </select>.</p>
 		<p><input type="checkbox" name="sportraits" value="1"'.(($sportraits) ? ' checked="checked"' : '').'> Zobrazit portréty.</p>';
 	            echo '
@@ -94,9 +94,9 @@ latteHeader($latteParameters);
             <h3>Členové: </h3>
             <p><?php
 		if ($usrinfo['right_power']) {
-		    $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."person, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." AND ".DB_PREFIX."person.deleted=0 ORDER BY ".$fsql_sort;
+		    $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."person, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." AND ".DB_PREFIX."person.deleted=0 ORDER BY ".$filterSqlSort;
 		} else {
-		    $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."person, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." AND ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret=0 ORDER BY ".$fsql_sort;
+		    $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."person, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." AND ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret=0 ORDER BY ".$filterSqlSort;
 		}
 	        $res = mysqli_query ($database,$sql);
 	        if (mysqli_num_rows ($res)) {

@@ -19,7 +19,7 @@ if ($label != '') {
   
 $latteParameters['title'] = 'Úprava hlášení';
 mainMenu ();
-        $custom_Filter = custom_Filter(17);
+        $customFilter = custom_Filter(17);
 	sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení</strong>'.(($label != '') ? ' - "'.$label.' ('.$typestring.')"' : ''));
 	// *** původní načítání autora ---
 	//$autharray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT iduser FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']));
@@ -37,35 +37,35 @@ mainMenu ();
 
     <?php
 	// zpracovani filtru
-	if (!isset($custom_Filter['sort'])) {
-	    $f_sort = 1;
+	if (!isset($customFilter['sort'])) {
+	    $filterSort = 1;
 	} else {
-	    $f_sort = $custom_Filter['sort'];
+	    $filterSort = $customFilter['sort'];
 	}
-	        if (!isset($custom_Filter['sportraits'])) {
+	        if (!isset($customFilter['sportraits'])) {
 	            $sportraits = false;
 	        } else {
-	            $sportraits = $custom_Filter['sportraits'];
+	            $sportraits = $customFilter['sportraits'];
 	        }
-	        if (!isset($custom_Filter['ssymbols'])) {
+	        if (!isset($customFilter['ssymbols'])) {
 	            $ssymbols = false;
 	        } else {
-	            $ssymbols = $custom_Filter['ssymbols'];
+	            $ssymbols = $customFilter['ssymbols'];
 	        }
-	        if (!isset($custom_Filter['fdead'])) {
+	        if (!isset($customFilter['fdead'])) {
 	            $fdead = 0;
 	        } else {
 	            $fdead = 1;
 	        }
-	        if (!isset($custom_Filter['farchiv'])) {
+	        if (!isset($customFilter['farchiv'])) {
 	            $farchiv = 0;
 	        } else {
 	            $farchiv = 1;
 	        }
-	        switch ($f_sort) {
-	  case 1: $fsql_sort = ' '.DB_PREFIX.'person.surname, '.DB_PREFIX.'person.name ASC '; break;
-	  case 2: $fsql_sort = ' '.DB_PREFIX.'person.surname, '.DB_PREFIX.'person.name DESC '; break;
-	  default: $fsql_sort = ' '.DB_PREFIX.'person.surname, '.DB_PREFIX.'person.name ASC ';
+	        switch ($filterSort) {
+	  case 1: $filterSqlSort = ' '.DB_PREFIX.'person.surname, '.DB_PREFIX.'person.name ASC '; break;
+	  case 2: $filterSqlSort = ' '.DB_PREFIX.'person.surname, '.DB_PREFIX.'person.name DESC '; break;
+	  default: $filterSqlSort = ' '.DB_PREFIX.'person.surname, '.DB_PREFIX.'person.name ASC ';
 	}
 	        switch ($fdead) {
 		case 0: $fsql_dead = ' AND '.DB_PREFIX.'person.dead=0 '; break;
@@ -80,13 +80,13 @@ mainMenu ();
 	        // formular filtru
 	        function filter ()
 	        {
-	            global $f_sort, $sportraits, $ssymbols, $farchiv, $fdead;
+	            global $filterSort, $sportraits, $ssymbols, $farchiv, $fdead;
 	            echo '<form action="addp2ar.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat osoby a seřadit je podle <select name="sort">
-	<option value="1"'.(($f_sort == 1) ? ' selected="selected"' : '').'>příjmení a jména vzestupně</option>
-	<option value="2"'.(($f_sort == 2) ? ' selected="selected"' : '').'>příjmení a jména sestupně</option>
+	<option value="1"'.(($filterSort == 1) ? ' selected="selected"' : '').'>příjmení a jména vzestupně</option>
+	<option value="2"'.(($filterSort == 2) ? ' selected="selected"' : '').'>příjmení a jména sestupně</option>
 </select>.</p>
 		<table class="filter">
 	<tr class="filter">
@@ -104,9 +104,9 @@ mainMenu ();
 	        filter();
 	        // vypis osob
 	        if ($usrinfo['right_power']) {
-	            $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol', ".DB_PREFIX."ar2p.role AS 'role', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."person LEFT JOIN ".DB_PREFIX."ar2p ON ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."person.deleted=0 ".$fsql_dead.$fsql_archiv." ORDER BY ".$fsql_sort;
+	            $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol', ".DB_PREFIX."ar2p.role AS 'role', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."person LEFT JOIN ".DB_PREFIX."ar2p ON ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."person.deleted=0 ".$fsql_dead.$fsql_archiv." ORDER BY ".$filterSqlSort;
 	        } else {
-	            $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol', ".DB_PREFIX."ar2p.role AS 'role', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."person LEFT JOIN ".DB_PREFIX."ar2p ON ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."person.deleted=0 ".$fsql_dead.$fsql_archiv." AND ".DB_PREFIX."person.secret=0 ORDER BY ".$fsql_sort;
+	            $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol', ".DB_PREFIX."ar2p.role AS 'role', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."person LEFT JOIN ".DB_PREFIX."ar2p ON ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."person.deleted=0 ".$fsql_dead.$fsql_archiv." AND ".DB_PREFIX."person.secret=0 ORDER BY ".$filterSqlSort;
 	        }
 	        $res = mysqli_query ($database,$sql); ?>
     <div id="in-form-table">
