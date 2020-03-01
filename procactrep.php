@@ -96,7 +96,7 @@ if (isset($_POST['reportid'])) {
 	    auditTrail(4, 4, $_POST['reportid']);
 	    $newname = Time().MD5(uniqid(Time().Rand()));
 	    move_uploaded_file ($_FILES['attachment']['tmp_name'],'./files/'.$newname);
-	    $sql = "INSERT INTO ".DB_PREFIX."file VALUES('','".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','4','".$_POST['reportid']."','".$_POST['secret']."')";
+	    $sql = "INSERT INTO ".DB_PREFIX."file (uniquename,originalname,mime,size,datum,iduser,idtable,iditem,secret) VALUES('".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','4','".$_POST['reportid']."','".$_POST['secret']."')";
 	    mysqli_query ($database,$sql);
 	    unreadRecords (4,$_POST['reportid']);
 	    Header ('Location: '.$_POST['backurl']);

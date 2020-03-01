@@ -5,9 +5,7 @@ use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 latteHeader($latteParameters);
 
-$latteParameters['title'] = 'Zobrazení symbolu';
-
-	if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete'])) {
+	if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete'])) { //delete case
 	    auditTrail(3, 11, $_REQUEST['delete']);
 	    mysqli_query ($database,"UPDATE ".DB_PREFIX."case SET deleted=1 WHERE id=".$_REQUEST['delete']);
 	    deleteAllUnread (3,$_REQUEST['delete']);
@@ -75,10 +73,12 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	    }
 	}
 	if (isset($_POST['uploadfile']) && is_uploaded_file($_FILES['attachment']['tmp_name']) && is_numeric($_POST['caseid']) && is_numeric($_POST['secret'])) {
+	    Debugger::log('DEBUG: case file upload');
 	    auditTrail(3, 4, $_POST['caseid']);
 	    $newname = Time().MD5(uniqid(Time().Rand()));
 	    move_uploaded_file ($_FILES['attachment']['tmp_name'],'./files/'.$newname);
-	    $sql = "INSERT INTO ".DB_PREFIX."file VALUES('','".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','3','".$_POST['caseid']."','".$_POST['secret']."')";
+	    $sql = "INSERT INTO ".DB_PREFIX."file (uniquename,originalname,mime,size,datum,iduser,idtable,iditem,secret) VALUES('".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','3','".$_POST['caseid']."','".$_POST['secret']."')";
+	    Debugger::log($sql);
 	    mysqli_query ($database,$sql);
 	    if (!isset($_POST['fnotnew'])) {
 	        unreadRecords (3,$_POST['caseid']);

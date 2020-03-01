@@ -23,7 +23,7 @@ require_once SERVER_ROOT."/lib/security.php";
 require_once SERVER_ROOT.'/inc/backup.php';
 require_once SERVER_ROOT.'/inc/session.php';
 require_once SERVER_ROOT.'/inc/audit_trail.php';
-//require_once SERVER_ROOT.'/lib/image.php';
+require_once SERVER_ROOT.'/lib/image.php';
 require_once SERVER_ROOT.'/inc/unread.php';
 // *** FUNCTIONS for objects
 require_once SERVER_ROOT.'/lib/person.php';
@@ -400,8 +400,8 @@ function validate_mail($addr): bool
         list($username, $domain) = explode('@', $addr);
         $patternUsername = '^([0-9a-z]+([-|_]?[0-9a-z]+)*)(([-|_]?)\.([-|_]?)[0-9a-z]*([-|_]?[0-9a-z]+)+)*([-|_]?)$';
         $patternDomain = '^([0-9a-z]+([-]?[0-9a-z]+)*)(([-]?)\.([-]?)[0-9a-z]*([-]?[0-9a-z]+)+)*\.[a-z]{2,4}$';
-        echo $matchUsername = mb_ereg($patternUsername, $username);
-        echo $matchDomain = mb_ereg($patternDomain, $domain);
+        $matchUsername = mb_ereg($patternUsername, $username);
+        $matchDomain = mb_ereg($patternDomain, $domain);
 
         return $matchUsername && $matchDomain ? true : false;
     }
