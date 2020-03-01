@@ -1,16 +1,13 @@
 <?php
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-$latteParameters['title'] = 'Vyhledávání';
-  
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
-$latte->render($config['folder_templates'].'header.latte', $latteParameters);
+latteHeader($latteParameters);
 
+$latteParameters['title'] = 'Vyhledávání';
 auditTrail(12, 1, 0);
 mainMenu ();
-$custom_Filter = custom_Filter(13);
+$customFilter = custom_Filter(13);
 sparklets ('<strong>vyhledávání</strong>','<a href="symbol_search.php">vyhledat symbol</a>');
 
 // default SQL filters
@@ -24,18 +21,18 @@ $searchContitions = $searchSecret.$searchDeleted;
 
 
 //Zpracování filtru
-if (!isset($custom_Filter['farchiv'])) {
+if (!isset($customFilter['farchiv'])) {
     $farchiv = 0;
 } else {
     $farchiv = 1;
 }
 /* Prevzit vyhledavane */
-if (!isset($custom_Filter['search'])) {
+if (!isset($customFilter['search'])) {
     $searchedfor = NULL;
 } elseif ($_POST['search']) {
     $searchedfor = $_POST['search'];
 } else {
-    $searchedfor = $custom_Filter['search'];
+    $searchedfor = $customFilter['search'];
 }
 
 	//$search = $searchedfor;
@@ -408,5 +405,5 @@ $searchedfor = nocs($searchedfor);
             echo '</tbody>
 </table>';
         }
-$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+latteFooter($latteParameters);
 ?>

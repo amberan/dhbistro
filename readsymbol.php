@@ -2,14 +2,9 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
+latteHeader($latteParameters);
 
 $latteParameters['title'] = 'Zobrazení symbolu';
-$latte->render($config['folder_templates'].'header.latte', $latteParameters);
-
-
-
 
 	if (is_numeric($_REQUEST['rid'])) {
 	    $res = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."symbol WHERE id=".$_REQUEST['rid']);
@@ -46,7 +41,7 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	<h1>Symbol</h1>
 	<fieldset><legend><strong>Základní údaje</strong></legend>
 		<?php if ($rec['symbol'] == NULL) { ?><img src="#" alt="symbol chybí" title="symbol chybí" id="symbolimg" class="noname"/>
-		<?php } else { ?><img src="getportrait.php?nrid=<?php echo($rec['id']); ?>" id="symbolimg" />
+		<?php } else { ?><img src="getportrait.php?nrid=<?php echo $rec['id']; ?>" id="symbolimg" />
 		<?php } ?>
 		<div id="info">
 			<?php
@@ -75,17 +70,17 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 					    echo '<a class="redirection" href="readperson.php?rid='.(StripSlashes($rec_person['id'])).'&hidenotes=0">'.(StripSlashes($rec_person['title'])).'</a>';
 					} ?></p>
 			<div class="clear">&nbsp;</div>
-			<h3>Čáry: </h3><p><?php echo(StripSlashes($rec['search_lines'])); ?></p>
+			<h3>Čáry: </h3><p><?php echo StripSlashes($rec['search_lines']); ?></p>
 			<div class="clear">&nbsp;</div>
-			<h3>Křivky: </h3><p><?php echo(StripSlashes($rec['search_curves'])); ?></p>
+			<h3>Křivky: </h3><p><?php echo StripSlashes($rec['search_curves'] ); ?></p>
 			<div class="clear">&nbsp;</div>
-			<h3>Body: </h3><p><?php echo(StripSlashes($rec['search_points'])); ?></p>
+			<h3>Body: </h3><p><?php echo StripSlashes($rec['search_points']); ?></p>
 			<div class="clear">&nbsp;</div>
-			<h3>Geom. tvary: </h3><p><?php echo(StripSlashes($rec['search_geometricals'])); ?></p>
+			<h3>Geom. tvary: </h3><p><?php echo StripSlashes($rec['search_geometricals'] ); ?></p>
 			<div class="clear">&nbsp;</div>
-			<h3>Písma: </h3><p><?php echo(StripSlashes($rec['search_alphabets'])); ?></p>
+			<h3>Písma: </h3><p><?php echo StripSlashes($rec['search_alphabets']); ?></p>
 			<div class="clear">&nbsp;</div>
-			<h3>Spec. znaky: </h3><p><?php echo(StripSlashes($rec['search_specialchars'])); ?></p>
+			<h3>Spec. znaky: </h3><p><?php echo StripSlashes($rec['search_specialchars']); ?></p>
 			<div class="clear">&nbsp;</div>        
 			 
 			<p><strong>Datum vytvoření:</strong> <?php echo webdate($rec['created']); ?>
@@ -186,17 +181,17 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 			<hr /><?php
 				} ?>
 			<div class="poznamka">
-				<h4><?php echo(StripSlashes($rec_n['title'])).' - '.(StripSlashes($rec_n['user'])); ?><?php
-				if ($rec_n['secret'] == 0) {
-				    echo ' (veřejná)';
-				}
+				<h4><?php echo StripSlashes($rec_n['title']).' - '.StripSlashes($rec_n['user']);
+	            if ($rec_n['secret'] == 0) {
+	                echo ' (veřejná)';
+	            }
 	            if ($rec_n['secret'] == 1) {
 	                echo ' (tajná)';
 	            }
 	            if ($rec_n['secret'] == 2) {
 	                echo ' (soukromá)';
 	            } ?></h4>
-				<div><?php echo(StripSlashes($rec_n['note'])); ?></div>
+				<div><?php echo StripSlashes($rec_n['note']); ?></div>
 				<span class="poznamka-edit-buttons"><?php
 				if (($rec_n['iduser'] == $usrinfo['id']) || ($usrinfo['right_text'])) {
 				    echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=7" title="upravit"><span class="button-text">upravit</span></a> ';
@@ -229,5 +224,5 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	    $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
 	    Header ('location: index.php');
 	}
-        $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+        latteFooter($latteParameters);
 ?>

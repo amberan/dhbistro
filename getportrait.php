@@ -1,9 +1,10 @@
 <?php
 
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+
+
 header('Content-Type: image/jpg');
 header("Cache-Control: no-cache, no-store, must-revalidate");
 header("Pragma: no-cache");

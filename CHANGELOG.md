@@ -1,5 +1,8 @@
 # BISTRO changelog 
 
+**1.6.7**
+- CODECLIMATE cleanup
+
 **1.6.6**
 - BUGFIX databaze
 

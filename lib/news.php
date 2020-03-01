@@ -1,4 +1,5 @@
 <?php
+
 use Tracy\Debugger;
     Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
@@ -22,10 +23,10 @@ use Tracy\Debugger;
 	return $person;
 }
 
-function newsList($fsql_cat = 1, $fsql_sort = 1) {
+function newsList($filterSqlCat = 1, $filterSqlSort = 1) {
 	//vraci seznam novinek
     global $database, $usrinfo; 
-    $sqlwhere = $fsql_cat;
+    $sqlwhere = $filterSqlCat;
 	if (isset($usrinfo['right_admin']) AND $usrinfo['right_admin'] > 0) {
 		$sqlwhere .= " AND deleted = 1";
 	} else {
@@ -40,8 +41,8 @@ function newsList($fsql_cat = 1, $fsql_sort = 1) {
     ".DB_PREFIX."news.kategorie AS 'kategorie',
     ".DB_PREFIX."user.login AS 'autor'
         FROM ".DB_PREFIX."news, ".DB_PREFIX."user
-        WHERE ".DB_PREFIX."news.iduser=".DB_PREFIX."user.id $sql_where $fsql_cat
-        ORDER BY $fsql_sort LIMIT 10";
+        WHERE ".DB_PREFIX."news.iduser=".DB_PREFIX."user.id $sql_where $filterSqlCat
+        ORDER BY $filterSqlSort LIMIT 10";
 	$query = mysqli_query($database,$sql);
 	if (mysqli_num_rows($query)> 0) {
 		while ($person = mysqli_fetch_assoc ($query)) {

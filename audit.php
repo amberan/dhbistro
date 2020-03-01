@@ -1,13 +1,10 @@
 <?php
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-$latteParameters['title'] = 'Audit';
-  
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
-$latte->render($config['folder_templates'].'header.latte', $latteParameters);
+latteHeader($latteParameters);
 
+$latteParameters['title'] = 'Audit';
         if (!$usrinfo['right_aud']) {
             unauthorizedAccess(11, 1, 0, 0);
         }
@@ -15,11 +12,11 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	function operationType ($type)
 	{
 	    global $database;
-	    $sql_ga = "SELECT ".DB_PREFIX."operation_type.name as 'name' FROM ".DB_PREFIX."operation_type WHERE ".DB_PREFIX."operation_type.id='".$type."'";
-	    $res_ga = mysqli_query ($database,$sql_ga);
-	    if (mysqli_num_rows ($res_ga)) {
-	        while ($rec_ga = mysqli_fetch_assoc ($res_ga)) {
-	            $name = StripSlashes ($rec_ga['name']);
+	    $sqlGa = "SELECT ".DB_PREFIX."operation_type.name as 'name' FROM ".DB_PREFIX."operation_type WHERE ".DB_PREFIX."operation_type.id='".$type."'";
+	    $resGa = mysqli_query ($database,$sqlGa);
+	    if (mysqli_num_rows ($resGa)) {
+	        while ($recGa = mysqli_fetch_assoc ($resGa)) {
+	            $name = StripSlashes ($recGa['name']);
 
 	            return $name;
 	        }
@@ -33,11 +30,11 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	function recordType ($type)
 	{
 	    global $database;
-	    $sql_ga = "SELECT ".DB_PREFIX."record_type.name as 'name' FROM ".DB_PREFIX."record_type WHERE ".DB_PREFIX."record_type.id='".$type."'";
-	    $res_ga = mysqli_query ($database,$sql_ga);
-	    if (mysqli_num_rows ($res_ga)) {
-	        while ($rec_ga = mysqli_fetch_assoc ($res_ga)) {
-	            $name = StripSlashes ($rec_ga['name']);
+	    $sqlGa = "SELECT ".DB_PREFIX."record_type.name as 'name' FROM ".DB_PREFIX."record_type WHERE ".DB_PREFIX."record_type.id='".$type."'";
+	    $resGa = mysqli_query ($database,$sqlGa);
+	    if (mysqli_num_rows ($resGa)) {
+	        while ($recGa = mysqli_fetch_assoc ($resGa)) {
+	            $name = StripSlashes ($recGa['name']);
 	            //					if ($name=='zlobody') {
 	            //						$name=$GLOBALS['point'].'y';
 	            //					}
@@ -55,52 +52,52 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	    global $database;
 	    if ($idrecord > 0) {
 	        switch ($type) {
-				case 1: $sql_type = "SELECT ".DB_PREFIX."person.name as 'name', ".DB_PREFIX."person.surname as 'surname' FROM ".DB_PREFIX."person WHERE ".DB_PREFIX."person.id='".$idrecord."'";
-						$res_type = mysqli_query ($database,$sql_type);
-						if (mysqli_num_rows ($res_type)) {
-						    while ($rec_type = mysqli_fetch_assoc ($res_type)) {
-						        $name = StripSlashes ($rec_type['surname']).', '.StripSlashes ($rec_type['name']);
+				case 1: $sqlType = "SELECT ".DB_PREFIX."person.name as 'name', ".DB_PREFIX."person.surname as 'surname' FROM ".DB_PREFIX."person WHERE ".DB_PREFIX."person.id='".$idrecord."'";
+						$resType = mysqli_query ($database,$sqlType);
+						if (mysqli_num_rows ($resType)) {
+						    while ($recType = mysqli_fetch_assoc ($resType)) {
+						        $name = StripSlashes ($recType['surname']).', '.StripSlashes ($recType['name']);
 						    }
 						} else {
 						    $name = 'neznámý';
 						}
 						break;
-				case 2: $sql_type = "SELECT ".DB_PREFIX."group.title as 'name' FROM ".DB_PREFIX."group WHERE ".DB_PREFIX."group.id='".$idrecord."'";
-						$res_type = mysqli_query ($database,$sql_type);
-						if (mysqli_num_rows ($res_type)) {
-						    while ($rec_type = mysqli_fetch_assoc ($res_type)) {
-						        $name = StripSlashes ($rec_type['name']);
+				case 2: $sqlType = "SELECT ".DB_PREFIX."group.title as 'name' FROM ".DB_PREFIX."group WHERE ".DB_PREFIX."group.id='".$idrecord."'";
+						$resType = mysqli_query ($database,$sqlType);
+						if (mysqli_num_rows ($resType)) {
+						    while ($recType = mysqli_fetch_assoc ($resType)) {
+						        $name = StripSlashes ($recType['name']);
 						    }
 						} else {
 						    $name = 'neznámý';
 						}
 						break;
-				case 3: $sql_type = "SELECT ".DB_PREFIX."case.title as 'name' FROM ".DB_PREFIX."case WHERE ".DB_PREFIX."case.id='".$idrecord."'";
-						$res_type = mysqli_query ($database,$sql_type);
-						if (mysqli_num_rows ($res_type)) {
-						    while ($rec_type = mysqli_fetch_assoc ($res_type)) {
-						        $name = StripSlashes ($rec_type['name']);
+				case 3: $sqlType = "SELECT ".DB_PREFIX."case.title as 'name' FROM ".DB_PREFIX."case WHERE ".DB_PREFIX."case.id='".$idrecord."'";
+						$resType = mysqli_query ($database,$sqlType);
+						if (mysqli_num_rows ($resType)) {
+						    while ($recType = mysqli_fetch_assoc ($resType)) {
+						        $name = StripSlashes ($recType['name']);
 						    }
 						} else {
 						    $name = 'neznámý';
 						}
 						break;
-				case 4: $sql_type = "SELECT ".DB_PREFIX."report.label as 'name' FROM ".DB_PREFIX."report WHERE ".DB_PREFIX."report.id='".$idrecord."'";
-						$res_type = mysqli_query ($database,$sql_type);
-						if (mysqli_num_rows ($res_type)) {
-						    while ($rec_type = mysqli_fetch_assoc ($res_type)) {
-						        $name = StripSlashes ($rec_type['name']);
+				case 4: $sqlType = "SELECT ".DB_PREFIX."report.label as 'name' FROM ".DB_PREFIX."report WHERE ".DB_PREFIX."report.id='".$idrecord."'";
+						$resType = mysqli_query ($database,$sqlType);
+						if (mysqli_num_rows ($resType)) {
+						    while ($recType = mysqli_fetch_assoc ($resType)) {
+						        $name = StripSlashes ($recType['name']);
 						    }
 						} else {
 						    $name = 'neznámý';
 						}
 						break;
 				case 7: $name = $idrecord; break;
-				case 8: $sql_type = "SELECT ".DB_PREFIX."user.login as 'name' FROM ".DB_PREFIX."user WHERE ".DB_PREFIX."user.id='".$idrecord."'";
-						$res_type = mysqli_query ($database,$sql_type);
-						if (mysqli_num_rows ($res_type)) {
-						    while ($rec_type = mysqli_fetch_assoc ($res_type)) {
-						        $name = StripSlashes ($rec_type['name']);
+				case 8: $sqlType = "SELECT ".DB_PREFIX."user.login as 'name' FROM ".DB_PREFIX."user WHERE ".DB_PREFIX."user.id='".$idrecord."'";
+						$resType = mysqli_query ($database,$sqlType);
+						if (mysqli_num_rows ($resType)) {
+						    while ($recType = mysqli_fetch_assoc ($resType)) {
+						        $name = StripSlashes ($recType['name']);
 						    }
 						} else {
 						    $name = 'neznámý';
@@ -136,95 +133,95 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	
 	auditTrail(11, 1, 0);
 	mainMenu ();
-        $custom_Filter = custom_Filter(11);
+        $customFilter = custom_Filter(11);
 	sparklets ('<strong>audit</strong>');
 	
 	// zpracovani filtru
-	if (!isset($custom_Filter['kategorie'])) {
-	    $f_cat = 0;
+	if (!isset($customFilter['kategorie'])) {
+	    $filterCat = 0;
 	} else {
-	    $f_cat = $custom_Filter['kategorie'];
+	    $filterCat = $customFilter['kategorie'];
 	}
-	if (!isset($custom_Filter['sort'])) {
-	    $f_sort = 2;
+	if (!isset($customFilter['sort'])) {
+	    $filterSort = 2;
 	} else {
-	    $f_sort = $custom_Filter['sort'];
+	    $filterSort = $customFilter['sort'];
 	}
-	if (!isset($custom_Filter['user'])) {
-	    $f_user = 0;
+	if (!isset($customFilter['user'])) {
+	    $filterUser = 0;
 	} else {
-	    $f_user = $custom_Filter['user'];
+	    $filterUser = $customFilter['user'];
 	}
-	if (!isset($custom_Filter['typ'])) {
-	    $f_type = 1;
+	if (!isset($customFilter['typ'])) {
+	    $filterType = 1;
 	} else {
-	    $f_type = $custom_Filter['typ'];
+	    $filterType = $customFilter['typ'];
 	}
-	if (!isset($custom_Filter['org'])) {
-	    $f_org = 0;
+	if (!isset($customFilter['org'])) {
+	    $filterOrg = 0;
 	} else {
-	    $f_org = 1;
+	    $filterOrg = 1;
 	}
-	if (!isset($custom_Filter['my'])) {
-	    $f_my = 0;
+	if (!isset($customFilter['my'])) {
+	    $filterMine = 0;
 	} else {
-	    $f_my = 1;
+	    $filterMine = 1;
 	}
-	if (!isset($custom_Filter['glob'])) {
-	    $f_glob = 0;
+	if (!isset($customFilter['glob'])) {
+	    $filterGlob = 0;
 	} else {
-	    $f_glob = 1;
+	    $filterGlob = 1;
 	}
-	if (!isset($custom_Filter['count'])) {
-	    $f_count = '10';
+	if (!isset($customFilter['count'])) {
+	    $filterCount = '10';
 	} else {
-	    $f_count = $custom_Filter['count'];
+	    $filterCount = $customFilter['count'];
 	}
-	switch ($f_cat) {
-	  case 0: $fsql_cat = ' WHERE '.DB_PREFIX.'audit_trail.record_type NOT IN (5,11) '; break;
-	  case 1: $fsql_cat = ' WHERE '.DB_PREFIX.'audit_trail.record_type<>11 '; break;
-	  case 2: $fsql_cat = ' WHERE '.DB_PREFIX.'audit_trail.record_type=11 '; break;
-	  case 3: $fsql_cat = ' WHERE '.DB_PREFIX.'audit_trail.record_type=1 '; break;
-	  case 4: $fsql_cat = ' WHERE '.DB_PREFIX.'audit_trail.record_type=2 '; break;
-	  case 5: $fsql_cat = ' WHERE '.DB_PREFIX.'audit_trail.record_type=3 '; break;
-	  case 6: $fsql_cat = ' WHERE '.DB_PREFIX.'audit_trail.record_type=4 '; break;
-	  default: $fsql_cat = ' WHERE '.DB_PREFIX.'audit_trail.record_type NOT IN (5,11) ';
+	switch ($filterCat) {
+	  case 0: $filterSqlCat = ' WHERE '.DB_PREFIX.'audit_trail.record_type NOT IN (5,11) '; break;
+	  case 1: $filterSqlCat = ' WHERE '.DB_PREFIX.'audit_trail.record_type<>11 '; break;
+	  case 2: $filterSqlCat = ' WHERE '.DB_PREFIX.'audit_trail.record_type=11 '; break;
+	  case 3: $filterSqlCat = ' WHERE '.DB_PREFIX.'audit_trail.record_type=1 '; break;
+	  case 4: $filterSqlCat = ' WHERE '.DB_PREFIX.'audit_trail.record_type=2 '; break;
+	  case 5: $filterSqlCat = ' WHERE '.DB_PREFIX.'audit_trail.record_type=3 '; break;
+	  case 6: $filterSqlCat = ' WHERE '.DB_PREFIX.'audit_trail.record_type=4 '; break;
+	  default: $filterSqlCat = ' WHERE '.DB_PREFIX.'audit_trail.record_type NOT IN (5,11) ';
 	}
-	switch ($f_type) {
-		case 0: $fsql_type = ' '; break;
-		case 1: $fsql_type = ' AND '.DB_PREFIX.'audit_trail.operation_type<>1 '; break;
-		case 2: $fsql_type = ' WHERE '.DB_PREFIX.'audit_trail.operation_type NOT IN (4,5,6,7,8,9) '; break;
-		default: $fsql_type = ' WHERE '.DB_PREFIX.'audit_trail.record_type NOT IN (5,11) ';
+	switch ($filterType) {
+		case 0: $filterSqlType = ' '; break;
+		case 1: $filterSqlType = ' AND '.DB_PREFIX.'audit_trail.operation_type<>1 '; break;
+		case 2: $filterSqlType = ' WHERE '.DB_PREFIX.'audit_trail.operation_type NOT IN (4,5,6,7,8,9) '; break;
+		default: $filterSqlType = ' WHERE '.DB_PREFIX.'audit_trail.record_type NOT IN (5,11) ';
 	}
-	if ($f_user == 0) {
-	    $fsql_user = ' ';
+	if ($filterUser == 0) {
+	    $filterSqlUser = ' ';
 	} else {
-	    $fsql_user = ' AND '.DB_PREFIX.'audit_trail.iduser='.$f_user;
+	    $filterSqlUser = ' AND '.DB_PREFIX.'audit_trail.iduser='.$filterUser;
 	}
-	switch ($f_sort) {
-	  case 1: $fsql_sort = ' '.DB_PREFIX.'audit_trail.time ASC '; break;
-	  case 2: $fsql_sort = ' '.DB_PREFIX.'audit_trail.time DESC '; break;
-	  default: $fsql_sort = ' '.DB_PREFIX.'audit_trail.time ASC ';
+	switch ($filterSort) {
+	  case 1: $filterSqlSort = ' '.DB_PREFIX.'audit_trail.time ASC '; break;
+	  case 2: $filterSqlSort = ' '.DB_PREFIX.'audit_trail.time DESC '; break;
+	  default: $filterSqlSort = ' '.DB_PREFIX.'audit_trail.time ASC ';
 	}
-	if ($f_org == 0) {
-	    $fsql_org = ' AND '.DB_PREFIX.'audit_trail.org=0';
+	if ($filterOrg == 0) {
+	    $filterSqlOrg = ' AND '.DB_PREFIX.'audit_trail.org=0';
 	} else {
-	    $fsql_org = ' ';
+	    $filterSqlOrg = ' ';
 	}
-	if ($f_my == 0) {
-	    $fsql_my = ' AND '.DB_PREFIX.'audit_trail.iduser<>'.$usrinfo['id'];
+	if ($filterMine == 0) {
+	    $filterSqlMine = ' AND '.DB_PREFIX.'audit_trail.iduser<>'.$usrinfo['id'];
 	} else {
-	    $fsql_my = ' ';
+	    $filterSqlMine = ' ';
 	}
-	if ($f_glob == 0) {
-	    $fsql_glob = ' AND '.DB_PREFIX.'audit_trail.idrecord<>0';
+	if ($filterGlob == 0) {
+	    $filterSqlGlob = ' AND '.DB_PREFIX.'audit_trail.idrecord<>0';
 	} else {
-	    $fsql_glob = ' ';
+	    $filterSqlGlob = ' ';
 	}
-	if ($f_count <> 0) {
-	    $fsql_count = ' LIMIT '.$f_count;
+	if ($filterCount <> 0) {
+	    $filterSqlCount = ' LIMIT '.$filterCount;
 	} else {
-	    $fsql_count = ' ';
+	    $filterSqlCount = ' ';
 	}
 ?>
 
@@ -232,61 +229,61 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	// filtr
 	function filter ()
 	{
-	    global $database,$f_cat,$f_sort,$f_user,$f_type,$usrinfo,$f_org,$f_my,$f_glob,$f_count;
+	    global $database,$filterCat,$filterSort,$filterUser,$filterType,$usrinfo,$filterOrg,$filterMine,$filterGlob,$filterCount;
 	    echo '<div id="filter-wrapper"><form action="audit.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat <select name="kategorie">
-	<option value="0"'.(($f_cat == 0) ? ' selected="selected"' : '').'>všechny auditní záznamy</option>
-	<option value="1"'.(($f_cat == 1) ? ' selected="selected"' : '').'>i s aktualitami</option>
-	<option value="2"'.(($f_cat == 2) ? ' selected="selected"' : '').'>prohlížení auditních záznamů</option>
-	<option value="3"'.(($f_cat == 3) ? ' selected="selected"' : '').'>manipulaci s osobami</option>
-	<option value="4"'.(($f_cat == 4) ? ' selected="selected"' : '').'>manipulaci se skupinami</option>
-	<option value="5"'.(($f_cat == 5) ? ' selected="selected"' : '').'>manipulaci s případy</option>
-	<option value="6"'.(($f_cat == 6) ? ' selected="selected"' : '').'>manipulaci s hlášeními</option>	  			  		
+	<option value="0"'.(($filterCat == 0) ? ' selected="selected"' : '').'>všechny auditní záznamy</option>
+	<option value="1"'.(($filterCat == 1) ? ' selected="selected"' : '').'>i s aktualitami</option>
+	<option value="2"'.(($filterCat == 2) ? ' selected="selected"' : '').'>prohlížení auditních záznamů</option>
+	<option value="3"'.(($filterCat == 3) ? ' selected="selected"' : '').'>manipulaci s osobami</option>
+	<option value="4"'.(($filterCat == 4) ? ' selected="selected"' : '').'>manipulaci se skupinami</option>
+	<option value="5"'.(($filterCat == 5) ? ' selected="selected"' : '').'>manipulaci s případy</option>
+	<option value="6"'.(($filterCat == 6) ? ' selected="selected"' : '').'>manipulaci s hlášeními</option>	  			  		
 	</select> 
 	<select name="typ">
-	<option value="0"'.(($f_type == 0) ? ' selected="selected"' : '').'>všech typů</option>
-	<option value="1"'.(($f_type == 1) ? ' selected="selected"' : '').'>jen zásahy</option>
-	<option value="2"'.(($f_type == 2) ? ' selected="selected"' : '').'>bez souborů a poznámek</option>
+	<option value="0"'.(($filterType == 0) ? ' selected="selected"' : '').'>všech typů</option>
+	<option value="1"'.(($filterType == 1) ? ' selected="selected"' : '').'>jen zásahy</option>
+	<option value="2"'.(($filterType == 2) ? ' selected="selected"' : '').'>bez souborů a poznámek</option>
 	</select>
 	provedené uživatelem 
 		<select name="user" id="user">
-	  	<option value=0 '.(($f_user == 0) ? ' selected="selected"' : '').'>všemi</option>';
+	  	<option value=0 '.(($filterUser == 0) ? ' selected="selected"' : '').'>všemi</option>';
  	
-	    $sql_u = "SELECT id, login FROM ".DB_PREFIX."user WHERE deleted=0 ORDER BY login ASC";
-	    $res_u = mysqli_query ($database,$sql_u);
-	    while ($rec_u = mysqli_fetch_assoc ($res_u)) {
-	        echo '<option value="'.$rec_u['id'].'"'.(($rec_u['id'] == $f_user) ? ' selected="selected"' : '').'>'.$rec_u['login'].'</option>';
+	    $sqlU = "SELECT id, login FROM ".DB_PREFIX."user WHERE deleted=0 ORDER BY login ASC";
+	    $resU = mysqli_query ($database,$sqlU);
+	    while ($recU = mysqli_fetch_assoc ($resU)) {
+	        echo '<option value="'.$recU['id'].'"'.(($recU['id'] == $filterUser) ? ' selected="selected"' : '').'>'.$recU['login'].'</option>';
 	    };
 	    echo '</select>';
 
 
 	  		
 	    echo 'a seřadit je podle <select name="sort">
-	<option value="1"'.(($f_sort == 1) ? ' selected="selected"' : '').'>času vzestupně</option>
-	<option value="2"'.(($f_sort == 2) ? ' selected="selected"' : '').'>času sestupně</option>
+	<option value="1"'.(($filterSort == 1) ? ' selected="selected"' : '').'>času vzestupně</option>
+	<option value="2"'.(($filterSort == 2) ? ' selected="selected"' : '').'>času sestupně</option>
 	</select>.</p>';
 	    if ($usrinfo['right_org'] == 1) {
 	        echo '					
 		<label for="org">Zobrazit i zásahy organizátorů</label>
-		<input type="checkbox" name="org" '.(($f_org == 1) ? ' checked="checked"' : '').'/><br/>
+		<input type="checkbox" name="org" '.(($filterOrg == 1) ? ' checked="checked"' : '').'/><br/>
 		<div class="clear">&nbsp;</div>';
 	    }
 	    echo '<label for="my">Zobrazit i moje zásahy</label>
-	<input type="checkbox" name="my" '.(($f_my == 1) ? ' checked="checked"' : '').'/><br/>
+	<input type="checkbox" name="my" '.(($filterMine == 1) ? ' checked="checked"' : '').'/><br/>
 	<div class="clear">&nbsp;</div>
 	<label for="my">Zobrazit i globální operace</label>
-	<input type="checkbox" name="glob" '.(($f_glob == 1) ? ' checked="checked"' : '').'/><br/>
+	<input type="checkbox" name="glob" '.(($filterGlob == 1) ? ' checked="checked"' : '').'/><br/>
 	<div class="clear">&nbsp;</div>
-	Zobrazit <input type="text" name="count" size=5 value="'.$f_count.'"> posledních záznamů. (Pro všechny záznamy ponechte pole prázdné).<br/>
+	Zobrazit <input type="text" name="count" size=5 value="'.$filterCount.'"> posledních záznamů. (Pro všechny záznamy ponechte pole prázdné).<br/>
 	<div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
 </form></div><!-- end of #filter-wrapper -->';
 	}
 	filter();
 	// vypis uživatelů
-	$sql = "SELECT * FROM ".DB_PREFIX."audit_trail".$fsql_cat.$fsql_type.$fsql_org.$fsql_my.$fsql_glob.$fsql_user." ORDER BY ".$fsql_sort.$fsql_count;
+	$sql = "SELECT * FROM ".DB_PREFIX."audit_trail".$filterSqlCat.$filterSqlType.$filterSqlOrg.$filterSqlMine.$filterSqlGlob.$filterSqlUser." ORDER BY ".$filterSqlSort.$filterSqlCount;
 	$res = mysqli_query ($database,$sql);
 	if (mysqli_num_rows ($res)) {
 	    echo '<div id="obsah">
@@ -329,5 +326,5 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	}
 ?>
 <?php
-	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+	latteFooter($latteParameters);
 ?>

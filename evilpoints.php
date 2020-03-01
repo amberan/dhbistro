@@ -1,12 +1,10 @@
 <?php
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-$latteParameters['title'] = $text['point'].'y';
-  
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
-$latte->render($config['folder_templates'].'header.latte', $latteParameters);
+latteHeader($latteParameters);
+
+$latteParameters['title'] = $text['point'].'y';
 
 if (isset($_POST['addpoints'])) {
     auditTrail(9, 2, 0);
@@ -14,7 +12,7 @@ if (isset($_POST['addpoints'])) {
     auditTrail(9, 1, 0);
 }
 	mainMenu ();
-        $custom_Filter = custom_Filter(9);
+        $customFilter = custom_Filter(9);
 	sparklets ('<strong>'.$text['point'].'y</strong>',(($usrinfo['right_power']) ? 'aktuální stav' : ''));
 	//Přidání zlobodů
 	if (isset($_POST['addpoints'])) {
@@ -28,30 +26,30 @@ if (isset($_POST['addpoints'])) {
 	}
 	
 	// zpracovani filtru
-	if (!isset($custom_Filter['sort'])) {
-	    $f_sort = 1;
+	if (!isset($customFilter['sort'])) {
+	    $filterSort = 1;
 	} else {
-	    $f_sort = $custom_Filter['sort'];
+	    $filterSort = $customFilter['sort'];
 	}
-	switch ($f_sort) {
-	  case 1: $fsql_sort = ' '.DB_PREFIX.'user.login ASC '; break;
-	  case 2: $fsql_sort = ' '.DB_PREFIX.'user.login DESC '; break;
-	  case 3: $fsql_sort = ' '.DB_PREFIX.'user.zlobody ASC '; break;
-	  case 4: $fsql_sort = ' '.DB_PREFIX.'user.zlobody DESC '; break;
-	  default: $fsql_sort = ' '.DB_PREFIX.'user.login ASC ';
+	switch ($filterSort) {
+	  case 1: $filterSqlSort = ' '.DB_PREFIX.'user.login ASC '; break;
+	  case 2: $filterSqlSort = ' '.DB_PREFIX.'user.login DESC '; break;
+	  case 3: $filterSqlSort = ' '.DB_PREFIX.'user.zlobody ASC '; break;
+	  case 4: $filterSqlSort = ' '.DB_PREFIX.'user.zlobody DESC '; break;
+	  default: $filterSqlSort = ' '.DB_PREFIX.'user.login ASC ';
 	}
 	// Filtr
 	function filter ()
 	{
-	    global $text,$f_sort;
+	    global $text,$filterSort;
 	    echo '<div id="filter-wrapper"><form action="evilpoints.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat všechny uživatele a seřadit je podle <select name="sort">
-	<option value="1"'.(($f_sort == 1) ? ' selected="selected"' : '').'>jména vzestupně</option>
-	<option value="2"'.(($f_sort == 2) ? ' selected="selected"' : '').'>jména sestupně</option>
-	<option value="3"'.(($f_sort == 3) ? ' selected="selected"' : '').'>'.$text['point'].'ů vzestupně</option>
-	<option value="4"'.(($f_sort == 4) ? ' selected="selected"' : '').'>'.$text['point'].'ů sestupně</option>
+	<option value="1"'.(($filterSort == 1) ? ' selected="selected"' : '').'>jména vzestupně</option>
+	<option value="2"'.(($filterSort == 2) ? ' selected="selected"' : '').'>jména sestupně</option>
+	<option value="3"'.(($filterSort == 3) ? ' selected="selected"' : '').'>'.$text['point'].'ů vzestupně</option>
+	<option value="4"'.(($filterSort == 4) ? ' selected="selected"' : '').'>'.$text['point'].'ů sestupně</option>
 </select>.</p>
 	  <div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
@@ -59,7 +57,7 @@ if (isset($_POST['addpoints'])) {
 	}
 	filter();
 	// vypis uživatelů
-	$sql = "SELECT * FROM ".DB_PREFIX."user WHERE ".DB_PREFIX."user.deleted=0 ORDER BY ".$fsql_sort;
+	$sql = "SELECT * FROM ".DB_PREFIX."user WHERE ".DB_PREFIX."user.deleted=0 ORDER BY ".$filterSqlSort;
 	$res = mysqli_query ($database,$sql);
 	if (mysqli_num_rows ($res)) {
 	    echo '<div id="obsah">
@@ -98,5 +96,5 @@ if (isset($_POST['addpoints'])) {
 	}
 ?>
 <?php
-	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+	latteFooter($latteParameters);
 ?>

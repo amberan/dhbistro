@@ -1,63 +1,18 @@
 <?php
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-$latteParameters['title'] = 'Úprava osoby';
-  
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
-$latte->render($config['folder_templates'].'header.latte', $latteParameters);
+latteHeader($latteParameters);
 
+$latteParameters['title'] = 'Úprava osoby';
 	mainMenu ();
 	sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>úprava osoby</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	    $res = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."person WHERE id=".$_REQUEST['rid']);
 	    if ($rec_p = mysqli_fetch_assoc ($res)) {
-
-	// kalendář
-	        function date_picker($name, $rdate, $startyear = NULL, $endyear = NULL)
-	        {
-	            if ($startyear == NULL) {
-	                $startyear = date("Y") - 10;
-	            }
-	            if ($endyear == NULL) {
-	                $endyear = date("Y") + 5;
-	            }
-
-	            $cday = StrFTime("%d", $rdate);
-	            $cmonth = StrFTime("%m", $rdate);
-	            $cyear = StrFTime("%Y", $rdate);
-
-	            $months = array('', 'Leden', 'Únor', 'Březen', 'Duben', 'Květen',
-		'Červen', 'Červenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec');
-
-	            // roletka dnů
-	            $html = "<select class=\"day\" name=\"".$name."day\">";
-	            for ($i = 1;$i <= 31;$i++) {
-	                $html .= "<option value='$i'".(($i == $cday) ? 'selected="selected"' : '').">$i</option>";
-	            }
-	            $html .= "</select> ";
-	
-	            // roletka měsíců
-	            $html .= "<select class=\"month\" name=\"".$name."month\">";
-	
-	            for ($i = 1;$i <= 12;$i++) {
-	                $html .= "<option value='$i'".(($i == $cmonth) ? 'selected="selected"' : '').">$months[$i]</option>";
-	            }
-	            $html .= "</select> ";
-	
-	            // roletka let
-	            $html .= "<select class=\"year\" name=\"".$name."year\">";
-	
-	            for ($i = $startyear;$i <= $endyear;$i++) {
-	                $html .= "<option value='$i'".(($i == $cyear) ? 'selected="selected"' : '').">$i</option>";
-	            }
-	            $html .= "</select> ";
-
-	            return $html;
-	        } ?>
+	        ?>
 <div id="obsah">
-<fieldset><legend><strong>Organizační úprava osoby: <?php echo(StripSlashes($rec_p['surname']).', '.StripSlashes($rec_p['name'])); ?></strong></legend>
+<fieldset><legend><strong>Organizační úprava osoby: <?php echo StripSlashes($rec_p['surname']).', '.StripSlashes($rec_p['name']); ?></strong></legend>
 	<form action="procperson.php" method="post" id="inputform" enctype="multipart/form-data">
 		<fieldset><legend><strong>Základní údaje</strong></legend>
 			<div id="info">
@@ -98,5 +53,5 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	} else {
 	    echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
 	}
-	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+	latteFooter($latteParameters);
 ?>

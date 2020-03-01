@@ -2,8 +2,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
+latteHeader($latteParameters);
 
 $latteParameters['title'] = 'Zobrazení symbolu';
 
@@ -12,51 +11,6 @@ $type = intval($reportarray['type']); // určuje typ hlášení
 	$typestring = (($type == 1) ? 'výjezd' : (($type == 2) ? 'výslech' : '?')); //odvozuje slovní typ hlášení
 $author = $reportarray['iduser']; // určuje autora hlášení
 
-// kalendář
-function date_picker($name, $startyear = NULL, $endyear = NULL)
-{
-    global $aday,$amonth,$ayear,$usrinfo;
-    if ($usrinfo['right_org'] == 1) {
-        if ($startyear == NULL) {
-            $startyear = date("Y") - 40;
-        }
-    } else {
-        if ($startyear == NULL) {
-            $startyear = date("Y") - 10;
-        }
-    }
-    if ($endyear == NULL) {
-        $endyear = date("Y") + 5;
-    }
-
-    $months = array('', 'Leden', 'Únor', 'Březen', 'Duben', 'Květen',
-			'Červen', 'Červenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec');
-
-    // roletka dnů
-    $html = "<select class=\"day\" name=\"".$name."day\">";
-    for ($i = 1;$i <= 31;$i++) {
-        $html .= "<option ".(($i == $aday) ? ' selected' : '')." value='$i'>$i</option>";
-    }
-    $html .= "</select> ";
-
-    // roletka měsíců
-    $html .= "<select class=\"month\" name=\"".$name."month\">";
-
-    for ($i = 1;$i <= 12;$i++) {
-        $html .= "<option ".(($i == $amonth) ? ' selected' : '')." value='$i'>$months[$i]</option>";
-    }
-    $html .= "</select> ";
-
-    // roletka let
-    $html .= "<select class=\"year\" name=\"".$name."year\">";
-
-    for ($i = $startyear;$i <= $endyear;$i++) {
-        $html .= "<option ".(($i == $ayear) ? ' selected' : '')." value='$i'>$i</option>";
-    }
-    $html .= "</select> ";
-
-    return $html;
-}
 
 if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id'] == $author && $reportarray['status'] < 1))) {
     $sql = "SELECT
@@ -89,8 +43,6 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id'] =
         auditTrail(4, 1, $_REQUEST['rid']);
         // následuje generování hlavičky
         $latteParameters['title'] = ('Úprava hlášení'.(($type == 1) ? ' z výjezdu' : (($type == 2) ? ' z výslechu' : '')));
-        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
-
         mainMenu ();
         sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení'.(($type == 1) ? ' z výjezdu' : (($type == 2) ? ' z výslechu' : '')).'</strong>','<a href="symbols.php">přiřadit symboly</a>');
 
@@ -276,7 +228,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id'] =
             if ($i == 1) { ?>
         <ul id="prilozenadata">
             <?php } ?>
-            <li class="soubor"><a href="getfile.php?idfile=<?php echo($rec_f['id']); ?>" title=""><?php echo(StripSlashes($rec_f['title'])); ?></a><?php if ($rec_f['secret'] == 1) { ?> (TAJNÝ)<?php }; ?><span
+            <li class="soubor"><a href="getfile.php?idfile=<?php echo $rec_f['id']; ?>" title=""><?php echo StripSlashes($rec_f['title']); ?></a><?php if ($rec_f['secret'] == 1) { ?> (TAJNÝ)<?php }; ?><span
                       class="poznamka-edit-buttons"><?php
 				if (($rec_f['iduser'] == $usrinfo['id']) || ($usrinfo['right_power'])) {
 				    echo '<a class="delete" title="smazat" href="procactrep.php?deletefile='.$rec_f['id'].'&amp;reportid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('editactrep.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat soubor &quot;'.StripSlashes($rec_f['title']).'&quot; náležící k hlášení?\')"><span class="button-text">smazat soubor</span></a>';
@@ -346,7 +298,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id'] =
             <hr /><?php
 				} ?>
             <div class="poznamka">
-                <h4><?php echo(StripSlashes($rec_n['title'])).' - '.(StripSlashes($rec_n['user'])); ?><?php
+                <h4><?php echo StripSlashes($rec_n['title']).' - '.StripSlashes($rec_n['user']); ?><?php
 				if ($rec_n['secret'] == 0) {
 				    echo ' (veřejná)';
 				}
@@ -356,7 +308,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id'] =
             if ($rec_n['secret'] == 2) {
                 echo ' (soukromá)';
             } ?></h4>
-                <div><?php echo(StripSlashes($rec_n['note'])); ?></div>
+                <div><?php echo StripSlashes($rec_n['note']); ?></div>
                 <span
                       class="poznamka-edit-buttons"><?php
 				if (($rec_n['iduser'] == $usrinfo['id']) || ($usrinfo['right_text'])) {
@@ -428,5 +380,5 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id'] =
     $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
     Header ('location: index.php');
 }
-$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+latteFooter($latteParameters);
 ?>

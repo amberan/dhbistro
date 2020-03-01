@@ -6,6 +6,8 @@ define('SERVER_ROOT', $_SERVER['DOCUMENT_ROOT']);
 require_once SERVER_ROOT."/config.php";
 require_once SERVER_ROOT.'/vendor/autoload.php';
 
+$latte = new Latte\Engine();
+$latte->setTempDirectory($config['folder_cache']);
 
 $URL = explode('/', $_SERVER['REQUEST_URI']); // for THE LOOP
 require_once $config['folder_custom'].'text.php'; // defaultni text might be overloaded from inc/platform.php
@@ -17,14 +19,15 @@ if (null !== $config['custom']) {
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 require_once SERVER_ROOT.'/inc/database.php';
+require_once SERVER_ROOT."/lib/security.php";
 require_once SERVER_ROOT.'/inc/backup.php';
 require_once SERVER_ROOT.'/inc/session.php';
 require_once SERVER_ROOT.'/inc/audit_trail.php';
-require_once SERVER_ROOT.'/inc/image.php';
+//require_once SERVER_ROOT.'/lib/image.php';
 require_once SERVER_ROOT.'/inc/unread.php';
 // *** FUNCTIONS for objects
-require_once SERVER_ROOT.'/processing/_person.php';
-require_once SERVER_ROOT.'/processing/_news.php';
+require_once SERVER_ROOT.'/lib/person.php';
+require_once SERVER_ROOT.'/lib/news.php';
 // *** GENERAL ALERT - to be removed
 if (isset($_SESSION['message']) && null !== $_SESSION['message']) {
     echo "\n<script>window.onload = alert('".$_SESSION['message']."')</script>\n";
@@ -35,6 +38,76 @@ $latteParameters['text'] = $text;
 $latteParameters['config'] = $config;
 if (isset($usrinfo)) {
     $latteParameters['usrinfo'] = $usrinfo;
+}
+
+
+function siteURL()
+{
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+    $domainName = $_SERVER['HTTP_HOST'].'/';
+
+    return $protocol.$domainName;
+}
+
+$latteParameters['website_link'] = siteURL();
+
+
+function latteHeader($latteParameters)
+{
+    global $latte,$config;
+    $latte->render($config['folder_templates'].'header.latte', $latteParameters);
+}
+function latteFooter($latteParameters)
+{
+    global $latte,$config;
+    $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+    ;
+}
+
+
+function date_picker($name, $startyear = NULL, $endyear = NULL)
+{
+    global $aday,$amonth,$ayear,$usrinfo;
+    if ($usrinfo['right_org'] == 1) {
+        if ($startyear == NULL) {
+            $startyear = date("Y") - 40;
+        }
+    } else {
+        if ($startyear == NULL) {
+            $startyear = date("Y") - 10;
+        }
+    }
+    if ($endyear == NULL) {
+        $endyear = date("Y") + 5;
+    }
+
+    $months = array('', 'Leden', 'Únor', 'Březen', 'Duben', 'Květen',
+			'Červen', 'Červenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec');
+
+    // roletka dnů
+    $html = "<select class=\"day\" name=\"".$name."day\">";
+    for ($i = 1;$i <= 31;$i++) {
+        $html .= "<option ".(($i == $aday) ? ' selected' : '')." value='$i'>$i</option>";
+    }
+    $html .= "</select> ";
+
+    // roletka měsíců
+    $html .= "<select class=\"month\" name=\"".$name."month\">";
+
+    for ($i = 1;$i <= 12;$i++) {
+        $html .= "<option ".(($i == $amonth) ? ' selected' : '')." value='$i'>$months[$i]</option>";
+    }
+    $html .= "</select> ";
+
+    // roletka let
+    $html .= "<select class=\"year\" name=\"".$name."year\">";
+
+    for ($i = $startyear;$i <= $endyear;$i++) {
+        $html .= "<option ".(($i == $ayear) ? ' selected' : '')." value='$i'>$i</option>";
+    }
+    $html .= "</select> ";
+
+    return $html;
 }
 
 /**
@@ -74,11 +147,11 @@ function getAuthor($recid, $trn)
 {
     global $database;
     if (1 === $trn) { //person
-        $sql_ga = 'SELECT '.DB_PREFIX."person.name as 'name', ".DB_PREFIX."person.surname as 'surname', ".DB_PREFIX."user.login as 'nick' FROM ".DB_PREFIX.'person, '.DB_PREFIX.'user WHERE '.DB_PREFIX.'user.id='.$recid.' AND '.DB_PREFIX.'person.id='.DB_PREFIX.'user.idperson';
-        $res_ga = mysqli_query($database, $sql_ga);
-        if (mysqli_num_rows($res_ga)) {
-            while ($rec_ga = mysqli_fetch_assoc($res_ga)) {
-                $name = stripslashes($rec_ga['surname']).', '.stripslashes($rec_ga['name']);
+        $getAuthorSql = 'SELECT '.DB_PREFIX."person.name as 'name', ".DB_PREFIX."person.surname as 'surname', ".DB_PREFIX."user.login as 'nick' FROM ".DB_PREFIX.'person, '.DB_PREFIX.'user WHERE '.DB_PREFIX.'user.id='.$recid.' AND '.DB_PREFIX.'person.id='.DB_PREFIX.'user.idperson';
+        $getAuthorQuery = mysqli_query($database, $getAuthorSql);
+        if (mysqli_num_rows($getAuthorQuery)) {
+            while ($getAuthorResult = mysqli_fetch_assoc($getAuthorQuery)) {
+                $name = stripslashes($getAuthorResult['surname']).', '.stripslashes($getAuthorResult['name']);
 
                 return $name;
             }
@@ -88,11 +161,11 @@ function getAuthor($recid, $trn)
             return $name;
         }
     } else { //user
-        $sql_ga = 'SELECT '.DB_PREFIX."user.login as 'nick' FROM ".DB_PREFIX.'user WHERE '.DB_PREFIX.'user.id='.$recid;
-        $res_ga = mysqli_query($database, $sql_ga);
-        if (mysqli_num_rows($res_ga)) {
-            while ($rec_ga = mysqli_fetch_assoc($res_ga)) {
-                $name = stripslashes($rec_ga['nick']);
+        $getAuthorSql = 'SELECT '.DB_PREFIX."user.login as 'nick' FROM ".DB_PREFIX.'user WHERE '.DB_PREFIX.'user.id='.$recid;
+        $getAuthorQuery = mysqli_query($database, $getAuthorSql);
+        if (mysqli_num_rows($getAuthorQuery)) {
+            while ($getAuthorResult = mysqli_fetch_assoc($getAuthorQuery)) {
+                $name = stripslashes($getAuthorResult['nick']);
 
                 return $name;
             }
@@ -306,9 +379,9 @@ function randomPassword($lenght = 8): string
     $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
     $pass = [];
     $alphaLength = mb_strlen($alphabet) - 1;
-    for ($i = 0; $i < $lenght; ++$i) {
-        $n = rand(0, $alphaLength);
-        $pass[] = $alphabet[$n];
+    for ($lenghtTarget = 0; $lenghtTarget < $lenght; ++$lenghtTarget) {
+        $randomCharacter = rand(0, $alphaLength);
+        $pass[] = $alphabet[$randomCharacter];
     }
 
     return implode('', $pass);
@@ -324,13 +397,13 @@ function validate_mail($addr): bool
     if (!mb_strpos($addr, '@')) {
         return false;
     }
-    list($local, $domain) = explode('@', $addr);
-    $pattern_local = '^([0-9a-z]+([-|_]?[0-9a-z]+)*)(([-|_]?)\.([-|_]?)[0-9a-z]*([-|_]?[0-9a-z]+)+)*([-|_]?)$';
-    $pattern_domain = '^([0-9a-z]+([-]?[0-9a-z]+)*)(([-]?)\.([-]?)[0-9a-z]*([-]?[0-9a-z]+)+)*\.[a-z]{2,4}$';
-    $match_local = mb_ereg($pattern_local, $local);
-    $match_domain = mb_ereg($pattern_domain, $domain);
+    list($username, $domain) = explode('@', $addr);
+    $patternUsername = '^([0-9a-z]+([-|_]?[0-9a-z]+)*)(([-|_]?)\.([-|_]?)[0-9a-z]*([-|_]?[0-9a-z]+)+)*([-|_]?)$';
+    $patternDomain = '^([0-9a-z]+([-]?[0-9a-z]+)*)(([-]?)\.([-]?)[0-9a-z]*([-]?[0-9a-z]+)+)*\.[a-z]{2,4}$';
+    $matchUsername = mb_ereg($patternUsername, $username);
+    $matchDomain = mb_ereg($patternDomain, $domain);
 
-    return $match_local && $match_domain ? true : false;
+    return $matchUsername && $matchDomain ? true : false;
     //	if (!eregi('^[+]?[a-z0-9]+([-_.]?[a-z0-9]*)*@[a-z0-9]+([-_.]?[a-z0-9])*\.[a-z]{2,4}$',$addr)){
 }
 

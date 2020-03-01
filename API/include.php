@@ -1,7 +1,6 @@
 <?php
 
 session_start();
-define ('DB_PREFIX','nw_'); // table prefix
 
 require_once SERVER_ROOT."/config.php";
 
@@ -13,7 +12,7 @@ require_once $config['folder_custom'].'text.php';
 if ($config['custom'] != null) {
     require_once ( $config['folder_custom'].'/text-'.$config['custom'].'.php');
 }
-require_once SERVER_ROOT.'/processing/_person.php';
+require_once SERVER_ROOT.'/lib/person.php';
 
 function session_validation($sessionID)
 {

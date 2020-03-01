@@ -24,17 +24,17 @@ function unreadRecords ($tablenum,$rid) {
 	if (isset($_POST['nsecret'])) {
 		$secret=$_POST['nsecret'];
 	}
-	$sql_ur="SELECT ".DB_PREFIX."user.id as 'id', ".DB_PREFIX."user.right_power as 'right_power', ".DB_PREFIX."user.deleted as 'deleted' FROM ".DB_PREFIX."user";
-	$res_ur=mysqli_query ($database,$sql_ur);
-	while ($rec_ur=mysqli_fetch_assoc ($res_ur)) {
-		if ($secret > 0 && $rec_ur['deleted'] <> 1) {
-			if ($rec_ur['id'] <> $usrinfo['id'] && $rec_ur['right_power'] > 0) {
-				$srsql="INSERT INTO ".DB_PREFIX."unread (idtable, idrecord, iduser) VALUES('".$tablenum."', '".$rid."', '".$rec_ur['id']."')";
+	$unreadSql="SELECT ".DB_PREFIX."user.id as 'id', ".DB_PREFIX."user.right_power as 'right_power', ".DB_PREFIX."user.deleted as 'deleted' FROM ".DB_PREFIX."user";
+	$unreadResult=mysqli_query ($database,$unreadSql);
+	while ($unreadRecord=mysqli_fetch_assoc ($unreadResult)) {
+		if ($secret > 0 && $unreadRecord['deleted'] <> 1) {
+			if ($unreadRecord['id'] <> $usrinfo['id'] && $unreadRecord['right_power'] > 0) {
+				$srsql="INSERT INTO ".DB_PREFIX."unread (idtable, idrecord, iduser) VALUES('".$tablenum."', '".$rid."', '".$unreadRecord['id']."')";
 				mysqli_query ($database,$srsql);
 			}
-		} else if ($secret == 0 && $rec_ur['deleted'] <> 1) {
-			if ($rec_ur['id'] <> $usrinfo['id']) {
-				$srsql="INSERT INTO ".DB_PREFIX."unread (idtable, idrecord, iduser) VALUES('".$tablenum."', '".$rid."', '".$rec_ur['id']."')";
+		} else if ($secret == 0 && $unreadRecord['deleted'] <> 1) {
+			if ($unreadRecord['id'] <> $usrinfo['id']) {
+				$srsql="INSERT INTO ".DB_PREFIX."unread (idtable, idrecord, iduser) VALUES('".$tablenum."', '".$rid."', '".$unreadRecord['id']."')";
 				mysqli_query ($database,$srsql);
 			}
 		}
@@ -45,38 +45,38 @@ function unreadRecords ($tablenum,$rid) {
 function deleteUnread ($tablenum,$rid) {
 	global $database,$usrinfo;
 	if ($rid<>'none') {
-		$sql_ur="DELETE FROM ".DB_PREFIX."unread WHERE idtable=".$tablenum." AND idrecord=".$rid." AND iduser=".$usrinfo['id'];
+		$unreadSql="DELETE FROM ".DB_PREFIX."unread WHERE idtable=".$tablenum." AND idrecord=".$rid." AND iduser=".$usrinfo['id'];
 	} else {
-		$sql_ur="DELETE FROM ".DB_PREFIX."unread WHERE idtable=".$tablenum." AND iduser=".$usrinfo['id'];
+		$unreadSql="DELETE FROM ".DB_PREFIX."unread WHERE idtable=".$tablenum." AND iduser=".$usrinfo['id'];
 	}
-	mysqli_query ($database,$sql_ur);
+	mysqli_query ($database,$unreadSql);
 }
 
 // vymaz z tabulek neprectenych pri smazani zaznamu
 function deleteAllUnread ($tablenum,$rid) {
 	global $database;
-	$sql_ur="SELECT ".DB_PREFIX."user.id as 'id', ".DB_PREFIX."user.right_power as 'right_power' FROM ".DB_PREFIX."user";
-	$res_ur=mysqli_query ($database,$sql_ur);
-	while ($rec_ur=mysqli_fetch_assoc ($res_ur)) {
-		$srsql="DELETE FROM ".DB_PREFIX."unread WHERE idtable=".$tablenum." AND idrecord=".$rid." AND iduser=".$rec_ur['id'];
+	$unreadSql="SELECT ".DB_PREFIX."user.id as 'id', ".DB_PREFIX."user.right_power as 'right_power' FROM ".DB_PREFIX."user";
+	$unreadResult=mysqli_query ($database,$unreadSql);
+	while ($unreadRecord=mysqli_fetch_assoc ($unreadResult)) {
+		$srsql="DELETE FROM ".DB_PREFIX."unread WHERE idtable=".$tablenum." AND idrecord=".$rid." AND iduser=".$unreadRecord['id'];
 		mysqli_query ($database,$srsql);
 	}
 }
 
 // natazeni tabulky neprectenych zaznamu do promenne
 if (isset($_SESSION['sid'])) {
-		$sql_r="SELECT * FROM ".DB_PREFIX."unread WHERE iduser=".$usrinfo['id'];
-		$sql_r="SELECT idtable, count(*) as count FROM ".DB_PREFIX."unread WHERE iduser=".$usrinfo['id']." GROUP BY idtable";
-		$res_r=mysqli_query ($database,$sql_r);
-		while ($unread[]=mysqli_fetch_array ($res_r));
+		$unreadSql="SELECT * FROM ".DB_PREFIX."unread WHERE iduser=".$usrinfo['id'];
+		$unreadSql="SELECT idtable, count(*) as count FROM ".DB_PREFIX."unread WHERE iduser=".$usrinfo['id']." GROUP BY idtable";
+		$unreadResult=mysqli_query ($database,$unreadSql);
+		while ($unread[]=mysqli_fetch_array ($unreadResult));
 }
 
 // vyhledani zaznamu v neprectenych zaznamech - cases, groups, persons, reports, symbols,
 function searchRecord ($tablenum, $recordnum) {
 	global $database,$usrinfo;
-	$sql_r="SELECT * FROM ".DB_PREFIX."unread WHERE iduser=".$usrinfo['id']." and idtable=".$tablenum." and idrecord=".$recordnum;
-	$res_r=mysqli_num_rows(mysqli_query ($database,$sql_r));
-	if ($res_r > 0) { 
+	$unreadSql="SELECT * FROM ".DB_PREFIX."unread WHERE iduser=".$usrinfo['id']." and idtable=".$tablenum." and idrecord=".$recordnum;
+	$unreadResult=mysqli_num_rows(mysqli_query ($database,$unreadSql));
+	if ($unreadResult > 0) { 
 		return true;
 	} else {
 		return false;

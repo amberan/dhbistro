@@ -1,14 +1,11 @@
 <?php
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-$latteParameters['title'] = 'Úprava symbolu';
-  
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
-$latte->render($config['folder_templates'].'header.latte', $latteParameters);
+latteHeader($latteParameters);
 
-
+$latteParameters['title'] = 'Úprava symbolu';
+  
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	    $res = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."symbol WHERE id=".$_REQUEST['rid']);
 	    if ($rec_s = mysqli_fetch_assoc ($res)) {
@@ -38,7 +35,7 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 			</datalist>
 		<fieldset class="symbol"><legend><strong>Symbol</strong></legend>
 		<?php if ($rec_s['symbol'] == NULL) { ?><img src="#" alt="symbol chybí" title="symbol chybí" id="ssymbolimg" class="noname"/>
-		<?php } else { ?><img src="getportrait.php?nrid=<?php echo($_REQUEST['rid']); ?>" alt="symbol" id="ssymbolimg" />
+		<?php } else { ?><img src="getportrait.php?nrid=<?php echo $_REQUEST['rid']; ?>" alt="symbol" id="ssymbolimg" />
 		<?php } ?>
 			<div id="info">
 				<h3><label for="symbol">Nový&nbsp;symbol:</label></h3><input type="file" name="symbol" id="symbol" /><br />	        	
@@ -165,17 +162,17 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 			<hr /><?php
 				} ?>
 			<div class="poznamka">
-				<h4><?php echo(StripSlashes($rec_n['title'])).' - '.(StripSlashes($rec_n['user'])); ?><?php
-				if ($rec_n['secret'] == 0) {
-				    echo ' (veřejná)';
-				}
+				<h4><?php echo StripSlashes($rec_n['title']).' - '.StripSlashes($rec_n['user']);
+	            if ($rec_n['secret'] == 0) {
+	                echo ' (veřejná)';
+	            }
 	            if ($rec_n['secret'] == 1) {
 	                echo ' (tajná)';
 	            }
 	            if ($rec_n['secret'] == 2) {
 	                echo ' (soukromá)';
 	            } ?></h4>
-				<div><?php echo(StripSlashes($rec_n['note'])); ?></div>
+				<div><?php echo StripSlashes($rec_n['note']); ?></div>
 				<span class="poznamka-edit-buttons"><?php
 				if (($rec_n['iduser'] == $usrinfo['id']) || ($usrinfo['right_text'])) {
 				    echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=7" title="upravit"><span class="button-text">upravit</span></a> ';
@@ -206,5 +203,5 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	} else {
 	    echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
 	}
-	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+	latteFooter($latteParameters);
 ?>

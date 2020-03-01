@@ -1,4 +1,5 @@
 <?php
+
 use Tracy\Debugger;
     Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 $latteParameters['title'] = $text['nastaveni'];
@@ -38,6 +39,6 @@ $latteParameters['settings_email'] = $usrinfo['email'];
 $latteParameters['settings_timeout'] = $usrinfo['timeout'];
 $latteParameters['settings_plan'] = stripslashes($usrinfo['plan_md']);
 
-$latte->render($config['folder_templates'].'sparklet.latte', $latteParameters);
-$latte->render($config['folder_templates'].'settings.latte', $latteParameters);
+latteDrawTemplate('sparklet');
+latteDrawTemplate('settings');
 ?>

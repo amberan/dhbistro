@@ -1,4 +1,5 @@
 <?php
+
 use Tracy\Debugger;
     Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
@@ -27,9 +28,8 @@ if (isset($dashboard['content'])) {
     $latteParameters['board'] = $text['nastenkaprazdna'];
 }
 
-$latte->render($config['folder_templates'].'sparklet.latte', $latteParameters);
-$latte->render($config['folder_templates'].'dashboard.latte', $latteParameters);
-$latte->render($config['folder_templates'].'board.latte', $latteParameters);
-
+latteDrawTemplate('sparklet');
+latteDrawTemplate('dashboard');
+latteDrawTemplate('board');
 
 ?>

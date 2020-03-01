@@ -1,14 +1,11 @@
 <?php
 
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-$latteParameters['title'] = 'Uložení změn';
-  
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
-$latte->render($config['folder_templates'].'header.latte', $latteParameters);
-	
+latteHeader($latteParameters);
+
+$latteParameters['title'] = 'Uložení změn';
 	if (isset($_POST['addsymbol2c'])) {
 	    auditTrail(7, 6, $_POST['symbolid']);
 	    if ($usrinfo['right_power'] == 1) {
@@ -30,7 +27,7 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	            mysqli_query ($database,$sql);
 	        }
 	    }
-	    $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+	    latteFooter($latteParameters);
 	}
 	
 	if (isset($_POST['addsymbol2ar'])) {
@@ -54,7 +51,7 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	            mysqli_query ($database,"INSERT INTO ".DB_PREFIX."symbol2all VALUES('".$_POST['symbolid']."','".$report[$i]."','".$usrinfo['id']."','4')");
 	        }
 	    }
-	    $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+	    latteFooter($latteParameters);
 	}
 	
         if (isset ($_POST['addsymb2pers'])) {
@@ -99,6 +96,6 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
                 mysqli_query ($database,$sql_ni);
             }
             
-            $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+            latteFooter($latteParameters);
         }
 ?>

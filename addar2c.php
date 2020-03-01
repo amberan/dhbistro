@@ -2,13 +2,11 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
+latteHeader($latteParameters);
+
 $latteParameters['title'] = 'Úprava hlášení';
-$latte->render($config['folder_templates'].'header.latte', $latteParameters);
-	
-	mainMenu ();
-        $custom_Filter = custom_Filter(18);
+mainMenu ();
+    $customFilter = custom_Filter(18);
 	sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení</strong>');
 	$autharray = mysqli_fetch_assoc (mysqli_query ($database,"SELECT iduser FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']));
 	$author = $autharray['iduser'];
@@ -24,26 +22,26 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
     <?php
 // zpracovani filtru
-if (!isset($custom_Filter['sort'])) {
-    $f_sort = 1;
+if (!isset($customFilter['sort'])) {
+    $filterSort = 1;
 } else {
-    $f_sort = $custom_Filter['sort'];
+    $filterSort = $customFilter['sort'];
 }
-	        switch ($f_sort) {
-	case 1: $fsql_sort = ' '.DB_PREFIX.'case.title ASC '; break;
-	case 2: $fsql_sort = ' '.DB_PREFIX.'case.title DESC '; break;
-	default: $fsql_sort = ' '.DB_PREFIX.'case.title ASC ';
+	        switch ($filterSort) {
+	case 1: $filterSqlSort = ' '.DB_PREFIX.'case.title ASC '; break;
+	case 2: $filterSqlSort = ' '.DB_PREFIX.'case.title DESC '; break;
+	default: $filterSqlSort = ' '.DB_PREFIX.'case.title ASC ';
 }
 //
 	        function filter ()
 	        {
-	            global $f_sort;
+	            global $filterSort;
 	            echo '<form action="addar2c.php" method="post" id="filter">
 	<fieldset>
 	<legend>Filtr</legend>
 	<p>Vypsat všechny případy a seřadit je podle <select name="sort">
-	<option value="1"'.(($f_sort == 1) ? ' selected="selected"' : '').'>názvu vzestupně</option>
-	<option value="2"'.(($f_sort == 2) ? ' selected="selected"' : '').'>názvu sestupně</option>
+	<option value="1"'.(($filterSort == 1) ? ' selected="selected"' : '').'>názvu vzestupně</option>
+	<option value="2"'.(($filterSort == 2) ? ' selected="selected"' : '').'>názvu sestupně</option>
 	</select>.</p>
 	<input type="hidden" name="rid" value="'.$_REQUEST['rid'].'" />
 	<div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
@@ -54,9 +52,9 @@ if (!isset($custom_Filter['sort'])) {
     <form action="addreports.php" method="post" class="otherform">
         <?php // vypis pripadu
 if ($usrinfo['right_power']) {
-    $sql = "SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."ar2c.iduser FROM ".DB_PREFIX."case LEFT JOIN ".DB_PREFIX."ar2c ON ".DB_PREFIX."ar2c.idcase=".DB_PREFIX."case.id AND ".DB_PREFIX."ar2c.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."case.deleted=0 ORDER BY ".$fsql_sort;
+    $sql = "SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."ar2c.iduser FROM ".DB_PREFIX."case LEFT JOIN ".DB_PREFIX."ar2c ON ".DB_PREFIX."ar2c.idcase=".DB_PREFIX."case.id AND ".DB_PREFIX."ar2c.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."case.deleted=0 ORDER BY ".$filterSqlSort;
 } else {
-    $sql = "SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."ar2c.iduser FROM ".DB_PREFIX."case LEFT JOIN ".DB_PREFIX."ar2c ON ".DB_PREFIX."ar2c.idcase=".DB_PREFIX."case.id AND ".DB_PREFIX."ar2c.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."case.deleted=0 AND ".DB_PREFIX."case.secret=0 ORDER BY ".$fsql_sort;
+    $sql = "SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."ar2c.iduser FROM ".DB_PREFIX."case LEFT JOIN ".DB_PREFIX."ar2c ON ".DB_PREFIX."ar2c.idcase=".DB_PREFIX."case.id AND ".DB_PREFIX."ar2c.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."case.deleted=0 AND ".DB_PREFIX."case.secret=0 ORDER BY ".$filterSqlSort;
 }
 	        $res = mysqli_query ($database,$sql); ?>
         <div id="in-form-table">
@@ -100,6 +98,6 @@ if (mysqli_num_rows ($res)) {
 	} else {
 	    echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
 	}
-	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+	latteFooter($latteParameters);
 	
 ?>

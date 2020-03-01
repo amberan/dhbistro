@@ -1,4 +1,5 @@
 <?php
+
 use Tracy\Debugger;
     Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
@@ -12,7 +13,7 @@ if ($dashboard = mysqli_fetch_assoc ($sql_dashboard)) {
         $latteParameters['dashboard'] = '';
     }
 }
-$latte->render($config['folder_templates'].'sparklet.latte', $latteParameters);
-$latte->render($config['folder_templates'].'board_edit.latte', $latteParameters);
+latteDrawTemplate('sparklet');
+latteDrawTemplate('board_edit');
 
 ?>

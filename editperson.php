@@ -2,11 +2,9 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
+latteHeader($latteParameters);
 
 $latteParameters['title'] = 'Zobrazení symbolu';
-$latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	    $res = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."person WHERE id=".$_REQUEST['rid']);
@@ -16,19 +14,18 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	        }
 	        auditTrail(1, 1, $_REQUEST['rid']);
 	        $latteParameters['title'] = 'Úprava osoby';
-	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	        mainMenu ();
 	        sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>úprava osoby</strong>'); ?>
 <div id="obsah">
-<fieldset id="ramecek"><legend><strong>Úprava osoby: <?php echo(StripSlashes($rec_p['surname']).', '.StripSlashes($rec_p['name'])); ?></strong></legend>
+<fieldset id="ramecek"><legend><strong>Úprava osoby: <?php echo StripSlashes($rec_p['surname']).', '.StripSlashes($rec_p['name']); ?></strong></legend>
 	<p id="top-text">Portréty nahrávejte pokud možno ve velikosti 100x130 bodů, symboly ve velikosti 100x100 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen portréty, o rozmazané postavy nebude nouze v přílohách. Symboly rovněž nahrávejte jasně rozeznatelné.</p>
 	<form action="procperson.php" method="post" id="inputform" enctype="multipart/form-data">
 		<fieldset><legend><strong>Základní údaje</strong></legend>
 		<?php if ($rec_p['portrait'] == NULL) { ?><img src="#" alt="portrét chybí" title="portrét chybí" id="portraitimg" class="noname"/>
-		<?php } else { ?><img src="getportrait.php?rid=<?php echo($_REQUEST['rid']); ?>" alt="<?php echo(StripSlashes($rec_p['name']).' '.StripSlashes($rec_p['surname'])); ?>" id="portraitimg" />
+		<?php } else { ?><img src="getportrait.php?rid=<?php echo $_REQUEST['rid']; ?>" alt="<?php echo StripSlashes($rec_p['name']).' '.StripSlashes($rec_p['surname']); ?>" id="portraitimg" />
 		<?php } ?>
 		<?php if ($rec_p['symbol'] == NULL) { ?><img src="#" alt="symbol chybí" title="symbol chybí" id="symbolimg" class="noname"/>
-		<?php } else { ?><a href="readsymbol.php?rid=<?php echo($rec_p['symbol']); ?>"><img src="getportrait.php?nrid=<?php echo($rec_p['symbol']); ?>" alt="<?php echo(StripSlashes($rec_p['name']).' '.StripSlashes($rec_p['surname'])); ?>" id="symbolimg" /></a>
+		<?php } else { ?><a href="readsymbol.php?rid=<?php echo $rec_p['symbol']; ?>"><img src="getportrait.php?nrid=<?php echo $rec_p['symbol']; ?>" alt="<?php echo StripSlashes($rec_p['name']).' '.StripSlashes($rec_p['surname']); ?>" id="symbolimg" /></a>
 		<?php } ?>
 		<?php if ($rec_p['symbol'] == NULL) { ?>
 		<?php } else { ?><span class="info-delete-symbol"><a class="delete" title="odpojit" href="procperson.php?deletesymbol=<?php echo $rec_p['symbol']; ?>&amp;personid=<?php echo $_REQUEST['rid']; ?>&amp;backurl=<?php echo URLEncode('editperson.php?rid='.$_REQUEST['rid']); ?>" onclick="return confirm('Opravdu odpojit symbol?')"><span class="button-text">smazat soubor</span></a></span>
@@ -219,7 +216,7 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	            if ($i == 1) { ?>
 		<ul id="prilozenadata">
 				<?php } ?>
-			<li class="soubor"><a href="getfile.php?idfile=<?php echo($rec_f['id']); ?>" title=""><?php echo(StripSlashes($rec_f['title'])); ?></a><?php if ($rec_f['secret'] == 1) { ?> (TAJNÝ)<?php }; ?><span class="poznamka-edit-buttons"><?php
+			<li class="soubor"><a href="getfile.php?idfile=<?php echo $rec_f['id']; ?>" title=""><?php echo StripSlashes($rec_f['title']); ?></a><?php if ($rec_f['secret'] == 1) { ?> (TAJNÝ)<?php }; ?><span class="poznamka-edit-buttons"><?php
 				if (($rec_f['iduser'] == $usrinfo['id']) || ($usrinfo['right_power'])) {
 				    echo '<a class="delete" title="smazat" href="procperson.php?deletefile='.$rec_f['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('editperson.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat soubor &quot;'.StripSlashes($rec_f['title']).'&quot; náležící k osobě?\')"><span class="button-text">smazat soubor</span></a>';
 				} ?>
@@ -284,17 +281,17 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 			<hr /><?php
 				} ?>
 			<div class="poznamka">
-				<h4><?php echo(StripSlashes($rec_n['title'])).' - '.(StripSlashes($rec_n['user'])); ?><?php
-				if ($rec_n['secret'] == 0) {
-				    echo ' (veřejná)';
-				}
+				<h4><?php echo StripSlashes($rec_n['title']).' - '.StripSlashes($rec_n['user']);
+	            if ($rec_n['secret'] == 0) {
+	                echo ' (veřejná)';
+	            }
 	            if ($rec_n['secret'] == 1) {
 	                echo ' (tajná)';
 	            }
 	            if ($rec_n['secret'] == 2) {
 	                echo ' (soukromá)';
 	            } ?></h4>
-				<div><?php echo(StripSlashes($rec_n['note'])); ?></div>
+				<div><?php echo StripSlashes($rec_n['note']); ?></div>
 				<span class="poznamka-edit-buttons"><?php
 				if (($rec_n['iduser'] == $usrinfo['id']) || ($usrinfo['right_text'])) {
 				    echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=1" title="upravit"><span class="button-text">upravit</span></a> ';
@@ -362,5 +359,5 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	    $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
 	    Header ('location: index.php');
 	}
-	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+	latteFooter($latteParameters);
 ?>

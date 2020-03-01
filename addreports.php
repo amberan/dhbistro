@@ -1,14 +1,11 @@
 <?php
 
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-$latteParameters['title'] = 'Úprava hlášení';
-  
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
-$latte->render($config['folder_templates'].'header.latte', $latteParameters);
+latteHeader($latteParameters);
 
+$latteParameters['title'] = 'Úprava hlášení';
 	if (isset($_POST['addtoareport'])) {
 	    auditTrail(4, 6, $_POST['reportid']);
 	    if ($usrinfo['right_power'] == 1) {
@@ -27,7 +24,7 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	            mysqli_query ($database,"INSERT INTO ".DB_PREFIX."ar2c VALUES('".$_POST['reportid']."','".$case[$i]."','".$usrinfo['id']."')");
 	        }
 	    }
-	    $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+	    latteFooter($latteParameters);
 	}
 	
 	if (isset($_POST['addcasetoareport'])) {
@@ -48,7 +45,7 @@ $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 	            mysqli_query ($database,"INSERT INTO ".DB_PREFIX."ar2c VALUES('".$report[$i]."','".$_POST['caseid']."','".$usrinfo['id']."')");
 	        }
 	    }
-	    $latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+	    latteFooter($latteParameters);
 	}
 	
 ?>

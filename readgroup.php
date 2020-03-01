@@ -2,8 +2,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
+latteHeader($latteParameters);
 
 	if (is_numeric($_REQUEST['rid'])) {
 	    $res = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."group WHERE id=".$_REQUEST['rid']);
@@ -14,10 +13,9 @@ $latte->setTempDirectory($config['folder_cache']);
 	        auditTrail(2, 1, $_REQUEST['rid']);
 
 	        $latteParameters['title'] = StripSlashes($rec_g['title']);
-	        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
 
 	        mainMenu ();
-	        $custom_Filter = custom_Filter(14, $_REQUEST['rid']);
+	        $customFilter = custom_Filter(14, $_REQUEST['rid']);
 	        if (!isset($_REQUEST['hidenotes'])) {
 	            $hn = 0;
 	        } else {
@@ -38,27 +36,27 @@ $latte->setTempDirectory($config['folder_cache']);
 	        deleteUnread (2,$_REQUEST['rid']);
 	        sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>'.StripSlashes($rec_g['title']).'</strong>','<a href="readgroup.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton); ?>
 <?php // zpracovani filtru
-	if (!isset($custom_Filter['sort'])) {
-	    $f_sort = 1;
+	if (!isset($customFilter['sort'])) {
+	    $filterSort = 1;
 	} else {
-	    $f_sort = $custom_Filter['sort'];
+	    $filterSort = $customFilter['sort'];
 	}
-	        if (!isset($custom_Filter['sportraits'])) {
+	        if (!isset($customFilter['sportraits'])) {
 	            $sportraits = false;
 	        } else {
-	            $sportraits = $custom_Filter['sportraits'];
+	            $sportraits = $customFilter['sportraits'];
 	        }
-	        if (!isset($custom_Filter['sec'])) {
-	            $f_sec = 0;
+	        if (!isset($customFilter['sec'])) {
+	            $filterSec = 0;
 	        } else {
-	            $f_sec = 1;
+	            $filterSec = 1;
 	        }
-	        switch ($f_sort) {
-	  case 1: $fsql_sort = ' '.DB_PREFIX.'person.surname ASC, '.DB_PREFIX.'person.name ASC '; break;
-	  case 2: $fsql_sort = ' '.DB_PREFIX.'person.surname DESC, '.DB_PREFIX.'person.name DESC '; break;
-	  default: $fsql_sort = ' '.DB_PREFIX.'person.surname ASC, '.DB_PREFIX.'person.name ASC ';
+	        switch ($filterSort) {
+	  case 1: $filterSqlSort = ' '.DB_PREFIX.'person.surname ASC, '.DB_PREFIX.'person.name ASC '; break;
+	  case 2: $filterSqlSort = ' '.DB_PREFIX.'person.surname DESC, '.DB_PREFIX.'person.name DESC '; break;
+	  default: $filterSqlSort = ' '.DB_PREFIX.'person.surname ASC, '.DB_PREFIX.'person.name ASC ';
 	}
-	        switch ($f_sec) {
+	        switch ($filterSec) {
 		case 0: $fsql_sec = ''; break;
 		case 1: $fsql_sec = ' AND '.DB_PREFIX.'person.secret=1 '; break;
 		default: $fsql_sec = '';
@@ -66,13 +64,13 @@ $latte->setTempDirectory($config['folder_cache']);
 	        //
 	        function filter ()
 	        {
-	            global $f_sort, $sportraits;
+	            global $filterSort, $sportraits;
 	            echo '<div id="filter-wrapper"><form action="readgroup.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Členy skupiny řadit podle <select name="sort">
-	<option value="1"'.(($f_sort == 1) ? ' selected="selected"' : '').'>příjmení a jména vzestupně</option>
-	<option value="2"'.(($f_sort == 2) ? ' selected="selected"' : '').'>příjmení a jména sestupně</option>
+	<option value="1"'.(($filterSort == 1) ? ' selected="selected"' : '').'>příjmení a jména vzestupně</option>
+	<option value="2"'.(($filterSort == 2) ? ' selected="selected"' : '').'>příjmení a jména sestupně</option>
 </select>.</p>
 		<p><input type="checkbox" name="sportraits" value="1"'.(($sportraits) ? ' checked="checked"' : '').'> Zobrazit portréty.</p>';
 	            echo '
@@ -88,17 +86,17 @@ $latte->setTempDirectory($config['folder_cache']);
         <legend><strong>Obecné informace</strong></legend>
         <div id="info"><?php
 		if ($rec_g['secret'] == 1) { ?>
-            <h2>TAJNÉ</h2><?php } ?><?php
-		if ($rec_g['archived'] == 1) { ?>
-            <h2>ARCHIV</h2><?php } ?><?php
-		if ($rec_g['deleted'] == 1) { ?>
+            <h2>TAJNÉ</h2><?php }
+	        if ($rec_g['archived'] == 1) { ?>
+            <h2>ARCHIV</h2><?php }
+	        if ($rec_g['deleted'] == 1) { ?>
             <h2>SMAZANÝ ZÁZNAM</h2><?php } ?>
             <h3>Členové: </h3>
             <p><?php
 		if ($usrinfo['right_power']) {
-		    $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."person, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." AND ".DB_PREFIX."person.deleted=0 ORDER BY ".$fsql_sort;
+		    $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."person, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." AND ".DB_PREFIX."person.deleted=0 ORDER BY ".$filterSqlSort;
 		} else {
-		    $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."person, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." AND ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret=0 ORDER BY ".$fsql_sort;
+		    $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."person, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." AND ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret=0 ORDER BY ".$filterSqlSort;
 		}
 	        $res = mysqli_query ($database,$sql);
 	        if (mysqli_num_rows ($res)) {
@@ -134,7 +132,7 @@ $latte->setTempDirectory($config['folder_cache']);
 
     <fieldset>
         <legend><strong>Popis</strong></legend>
-        <div class="field-text"><?php echo(StripSlashes($rec_g['contents'])); ?></div>
+        <div class="field-text"><?php echo StripSlashes($rec_g['contents']); ?></div>
     </fieldset>
 
     <!-- následuje seznam přiložených souborů -->
@@ -154,9 +152,9 @@ $latte->setTempDirectory($config['folder_cache']);
         <ul id="prilozenadata">
             <?php } //zobrazovani obrazku i jako obrazky
 	            if (in_array($rec['mime'],$config['mime-image'])) { ?>
-            <li><a href="getfile.php?idfile=<?php echo($rec['id']); ?>"><img width="300px" alt="<?php echo(StripSlashes($rec['title'])); ?>" src="getfile.php?idfile=<?php echo($rec['id']); ?>"></a></li>
+            <li><a href="getfile.php?idfile=<?php echo $rec['id']; ?>"><img width="300px" alt="<?php echo StripSlashes($rec['title']); ?>" src="getfile.php?idfile=<?php echo $rec['id']; ?>"></a></li>
             <?php		} else { ?>
-            <li><?php echo $rec['mime']?><a href="getfile.php?idfile=<?php echo($rec['id']); ?>"><?php echo(StripSlashes($rec['title'])); ?></a></li>
+            <li><?php echo $rec['mime']?><a href="getfile.php?idfile=<?php echo $rec['id']; ?>"><?php echo StripSlashes($rec['title']); ?></a></li>
             <?php } ?>
             <?php
 	        }
@@ -190,17 +188,17 @@ if ($hn != 1) { ?>
             <hr /><?php
 			} ?>
             <div class="poznamka">
-                <h4><?php echo(StripSlashes($rec_n['title'])).' - '.(StripSlashes($rec_n['user'])).' ['.webdate($rec_n['date_created']).']'; ?><?php
-			if ($rec_n['secret'] == 0) {
-			    echo ' (veřejná)';
-			}
+                <h4><?php echo StripSlashes($rec_n['title']).' - '.StripSlashes($rec_n['user']).' ['.webdate($rec_n['date_created']).']';
+		    if ($rec_n['secret'] == 0) {
+		        echo ' (veřejná)';
+		    }
 		    if ($rec_n['secret'] == 1) {
 		        echo ' (tajná)';
 		    }
 		    if ($rec_n['secret'] == 2) {
 		        echo ' (soukromá)';
 		    } ?></h4>
-                <div><?php echo(StripSlashes($rec_n['note'])); ?></div>
+                <div><?php echo StripSlashes($rec_n['note']); ?></div>
                 <span
                       class="poznamka-edit-buttons"><?php
 			if (($rec_n['iduser'] == $usrinfo['id']) || ($usrinfo['right_text'])) {
@@ -233,5 +231,5 @@ if ($hn != 1) { ?>
 	    $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
 	    Header ('location: index.php');
 	}
-	$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+	latteFooter($latteParameters);
 ?>

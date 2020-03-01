@@ -2,8 +2,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
+latteHeader($latteParameters);
 
 if (is_numeric($_REQUEST['rid'])) {
     $sql_a = "SELECT * FROM ".DB_PREFIX."c2s WHERE ".DB_PREFIX."c2s.idsolver=".$usrinfo['id']." AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid'];
@@ -18,7 +17,7 @@ if (is_numeric($_REQUEST['rid'])) {
 
 
         $latteParameters['title'] = StripSlashes($rec['title']);
-        $latte->render($config['folder_templates'].'header.latte', $latteParameters);
+
 
         mainMenu ();
         if (!isset($_REQUEST['hidenotes'])) {
@@ -118,7 +117,7 @@ if (is_numeric($_REQUEST['rid'])) {
                 if ($i == 1) {
                     echo '<ul id="pripady">';
                 } ?>
-					<li><a href="readactrep.php?rid=<?php echo $perc['id']; ?>&hidenotes=0&truenames=0"><?php echo $perc['label']; ?></a> <span class="top">[ <strong><?php echo((($perc['type'] == 1) ? 'Výjezd' : (($perc['type'] == 2) ? 'Výslech' : 'Hlášení'))); ?></strong> | <strong>Ze dne:</strong> <?php echo(Date ('d.m.Y',$perc['adatum'])); ?> | <strong>Vyhotovil:</strong> <?php echo $perc['user']; ?> ]</span> - <?php echo $perc['task']; ?></li>
+					<li><a href="readactrep.php?rid=<?php echo $perc['id']; ?>&hidenotes=0&truenames=0"><?php echo $perc['label']; ?></a> <span class="top">[ <strong><?php echo((($perc['type'] == 1) ? 'Výjezd' : (($perc['type'] == 2) ? 'Výslech' : 'Hlášení'))); ?></strong> | <strong>Ze dne:</strong> <?php echo Date ('d.m.Y',$perc['adatum']); ?> | <strong>Vyhotovil:</strong> <?php echo $perc['user']; ?> ]</span> - <?php echo $perc['task']; ?></li>
 				<?php
             }
             if ($i <> 0) {
@@ -186,9 +185,9 @@ if (is_numeric($_REQUEST['rid'])) {
 	<ul id="prilozenadata">
 		<?php }
                 if (in_array($rec_f['mime'],$config['mime-image'])) { ?>
-							<li><a href="getfile.php?idfile=<?php echo($rec_f['id']); ?>"><img  width="300px" alt="<?php echo(StripSlashes($rec_f['title'])); ?>" src="getfile.php?idfile=<?php echo($rec_f['id']); ?>"></a></li>
+							<li><a href="getfile.php?idfile=<?php echo $rec_f['id']; ?>"><img  width="300px" alt="<?php echo StripSlashes($rec_f['title'] ); ?>" src="getfile.php?idfile=<?php echo $rec_f['id']; ?>"></a></li>
 			<?php		} else { ?>
-							<li><a href="getfile.php?idfile=<?php echo($rec_f['id']); ?>"><?php echo(StripSlashes($rec_f['title'])); ?></a></li>
+							<li><a href="getfile.php?idfile=<?php echo $rec_f['id']; ?>"><?php echo StripSlashes($rec_f['title']); ?></a></li>
 			<?php }
             }
             if ($i <> 0) {
@@ -219,10 +218,10 @@ if (is_numeric($_REQUEST['rid'])) {
 		<div class="poznamka">
 			<h4>
 			<?php
-				echo(StripSlashes($rec_n['title'])).' - '.(StripSlashes($rec_n['user'])).' ['.webdate($rec_n['date_created']).']'; ?><?php
-				if ($rec_n['secret'] == 0) {
-				    echo ' (veřejná)';
-				}
+				echo StripSlashes($rec_n['title']).' - '.StripSlashes($rec_n['user']).' ['.webdate($rec_n['date_created']).']';
+			    if ($rec_n['secret'] == 0) {
+			        echo ' (veřejná)';
+			    }
 			    if ($rec_n['secret'] == 1) {
 			        echo ' (tajná)';
 			    }
@@ -230,7 +229,7 @@ if (is_numeric($_REQUEST['rid'])) {
 			        echo ' (soukromá)';
 			    } ?>
 			</h4>
-			<div><?php echo(StripSlashes($rec_n['note'])); ?></div>
+			<div><?php echo StripSlashes($rec_n['note']); ?></div>
 			<span class="poznamka-edit-buttons"><?php
 				if (($rec_n['iduser'] == $usrinfo['id']) || ($usrinfo['right_text'])) {
 				    echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;idtable=3" title="upravit"><span class="button-text">upravit</span></a> ';
@@ -262,5 +261,5 @@ if (is_numeric($_REQUEST['rid'])) {
     $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
     Header ('location: index.php');
 }
-$latte->render($config['folder_templates'].'footer.latte', $latteParameters);
+latteFooter($latteParameters);
 ?>
