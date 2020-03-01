@@ -396,14 +396,15 @@ function validate_mail($addr): bool
 {
     if (!mb_strpos($addr, '@')) {
         return false;
-    }
-    list($username, $domain) = explode('@', $addr);
-    $patternUsername = '^([0-9a-z]+([-|_]?[0-9a-z]+)*)(([-|_]?)\.([-|_]?)[0-9a-z]*([-|_]?[0-9a-z]+)+)*([-|_]?)$';
-    $patternDomain = '^([0-9a-z]+([-]?[0-9a-z]+)*)(([-]?)\.([-]?)[0-9a-z]*([-]?[0-9a-z]+)+)*\.[a-z]{2,4}$';
-    $matchUsername = mb_ereg($patternUsername, $username);
-    $matchDomain = mb_ereg($patternDomain, $domain);
+    } else {
+        list($username, $domain) = explode('@', $addr);
+        $patternUsername = '^([0-9a-z]+([-|_]?[0-9a-z]+)*)(([-|_]?)\.([-|_]?)[0-9a-z]*([-|_]?[0-9a-z]+)+)*([-|_]?)$';
+        $patternDomain = '^([0-9a-z]+([-]?[0-9a-z]+)*)(([-]?)\.([-]?)[0-9a-z]*([-]?[0-9a-z]+)+)*\.[a-z]{2,4}$';
+        echo $matchUsername = mb_ereg($patternUsername, $username);
+        echo $matchDomain = mb_ereg($patternDomain, $domain);
 
-    return $matchUsername && $matchDomain ? true : false;
+        return $matchUsername && $matchDomain ? true : false;
+    }
     //	if (!eregi('^[+]?[a-z0-9]+([-_.]?[a-z0-9]*)*@[a-z0-9]+([-_.]?[a-z0-9])*\.[a-z]{2,4}$',$addr)){
 }
 
