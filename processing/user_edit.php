@@ -45,7 +45,7 @@ if (isset($_POST['userid'], $_POST['edituser']) && $usrinfo['right_power'] && !p
 	        $latteParameters['user']['hlaseni'] = $hlaseni_array;
 	    }
 
-	    $pripady_sql = mysqli_query ($database,"SELECT ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.title AS 'title' FROM ".DB_PREFIX."c2s, ".DB_PREFIX."case WHERE ".DB_PREFIX."case.id=".DB_PREFIX."c2s.idcase AND ".DB_PREFIX."c2s.idsolver=".$rec['id']." ORDER BY ".DB_PREFIX."case.title ASC");
+	    $pripady_sql = mysqli_query ($database,"SELECT ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.title AS 'title' FROM ".DB_PREFIX."c2s, ".DB_PREFIX."case WHERE ".DB_PREFIX."case.id=".DB_PREFIX."c2s.idcase AND ".DB_PREFIX."case.status=0 AND ".DB_PREFIX."c2s.idsolver=".$rec['id']." ORDER BY ".DB_PREFIX."case.title ASC");
 	    while ($pripady = mysqli_fetch_assoc ($pripady_sql)) {
 	        $pripady_array[] = array ($pripady['id'], $pripady['title']);
 	    }
