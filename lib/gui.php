@@ -1,6 +1,4 @@
 <?php
-
-
 /**
 * Draw Latte Template
 * @param string template to draw

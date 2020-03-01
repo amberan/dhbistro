@@ -12,7 +12,7 @@ latteHeader($latteParameters);
 	    if (is_uploaded_file($_FILES['symbol']['tmp_name'])) {
 	        $sfile = Time().MD5(uniqid(Time().Rand()));
 	        move_uploaded_file ($_FILES['symbol']['tmp_name'],'./files/'.$sfile.'tmp');
-	        $sdst = resize_Image ('./files/'.$sfile.'tmp',100,100);
+	        $sdst = imageResize ('./files/'.$sfile.'tmp',100,100);
 	        imagejpeg($sdst,'./files/symbols/'.$sfile);
 	        unlink('./files/'.$sfile.'tmp');
 	    } else {
@@ -64,7 +64,7 @@ latteHeader($latteParameters);
 	        }
 	        $sfile = Time().MD5(uniqid(Time().Rand()));
 	        move_uploaded_file ($_FILES['symbol']['tmp_name'],'./files/'.$sfile.'tmp');
-	        $sdst = resize_Image ('./files/'.$sfile.'tmp',100,100);
+	        $sdst = imageResize ('./files/'.$sfile.'tmp',100,100);
 	        imagejpeg($sdst,'./files/symbols/'.$sfile);
 	        unlink('./files/'.$sfile.'tmp');
 	        mysqli_query ($database,"UPDATE ".DB_PREFIX."symbol SET symbol='".$sfile."' WHERE id=".$_POST['symbolid']);

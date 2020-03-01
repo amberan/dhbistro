@@ -18,7 +18,7 @@ latteHeader($latteParameters);
 	    if (is_uploaded_file($_FILES['portrait']['tmp_name'])) {
 	        $file = Time().MD5(uniqid(Time().Rand()));
 	        move_uploaded_file ($_FILES['portrait']['tmp_name'],'./files/'.$file.'tmp');
-	        $sdst = resize_Image ('./files/'.$file.'tmp',100,130);
+	        $sdst = imageResize ('./files/'.$file.'tmp',100,130);
 	        imagejpeg($sdst,'./files/portraits/'.$file);
 	        unlink('./files/'.$file.'tmp');
 	    } else {
@@ -27,7 +27,7 @@ latteHeader($latteParameters);
 	    if (is_uploaded_file($_FILES['symbol']['tmp_name'])) {
 	        $sfile = Time().MD5(uniqid(Time().Rand()));
 	        move_uploaded_file ($_FILES['symbol']['tmp_name'],'./files/'.$sfile.'tmp');
-	        $sdst = resize_Image ('./files/'.$sfile.'tmp',100,130);
+	        $sdst = imageResize ('./files/'.$sfile.'tmp',100,130);
 	        imagejpeg($sdst,'./files/symbols/'.$sfile);
 	        unlink('./files/'.$sfile.'tmp');
 	        $sql_sy = "INSERT INTO ".DB_PREFIX."symbol  ( symbol, `desc`, deleted, created, created_by, modified, modified_by, archiv, assigned, search_lines, search_curves, search_points, search_geometricals, search_alphabets, search_specialchars, secret) VALUES( '".$sfile."', '', 0, '".Time()."', '".$usrinfo['id']."', '".Time()."', '".$usrinfo['id']."', 0, 1, 0, 0, 0, 0, 0, 0, 0)";
@@ -75,7 +75,7 @@ latteHeader($latteParameters);
 	        }
 	        $file = Time().MD5(uniqid(Time().Rand()));
 	        move_uploaded_file ($_FILES['portrait']['tmp_name'],'./files/'.$file.'tmp');
-	        $dst = resize_Image ('./files/'.$file.'tmp',100,130);
+	        $dst = imageResize ('./files/'.$file.'tmp',100,130);
 	        imagejpeg($dst,'./files/portraits/'.$file);
 	        unlink('./files/'.$file.'tmp');
 	        mysqli_query ($database,"UPDATE ".DB_PREFIX."person SET portrait='".$file."' WHERE id=".$_POST['personid']);
@@ -90,7 +90,7 @@ latteHeader($latteParameters);
 	        }
 	        $sfile = Time().MD5(uniqid(Time().Rand()));
 	        move_uploaded_file ($_FILES['symbol']['tmp_name'],'./files/'.$sfile.'tmp');
-	        $sdst = resize_Image ('./files/'.$sfile.'tmp',100,100);
+	        $sdst = imageResize ('./files/'.$sfile.'tmp',100,100);
 	        imagejpeg($sdst,'./files/symbols/'.$sfile);
 	        unlink('./files/'.$sfile.'tmp');
 	        $sql_sy = "INSERT INTO ".DB_PREFIX."symbol  ( symbol, `desc`, deleted, created, created_by, modified, modified_by, archiv, assigned, search_lines, search_curves, search_points, search_geometricals, search_alphabets, search_specialchars, secret) VALUES( '".$sfile."', '', 0, '".Time()."', '".$usrinfo['id']."', '".Time()."', '".$usrinfo['id']."', 0, 1, 0, 0, 0, 0, 0, 0, 0)";
