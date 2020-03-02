@@ -2,7 +2,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteHeader($latteParameters);
+latteDrawTemplate(header);
 
 $latteParameters['title'] = 'Úprava osoby';
 	mainMenu ();
@@ -53,5 +53,5 @@ $latteParameters['title'] = 'Úprava osoby';
 	} else {
 	    echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
 	}
-	latteFooter($latteParameters);
+	latteDrawTemplate(footer);
 ?>

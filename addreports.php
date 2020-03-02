@@ -3,7 +3,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteHeader($latteParameters);
+latteDrawTemplate(header);
 
 $latteParameters['title'] = 'Úprava hlášení';
 	if (isset($_POST['addtoareport'])) {
@@ -24,7 +24,7 @@ $latteParameters['title'] = 'Úprava hlášení';
 	            mysqli_query ($database,"INSERT INTO ".DB_PREFIX."ar2c VALUES('".$_POST['reportid']."','".$case[$i]."','".$usrinfo['id']."')");
 	        }
 	    }
-	    latteFooter($latteParameters);
+	    latteDrawTemplate(footer);
 	}
 	
 	if (isset($_POST['addcasetoareport'])) {
@@ -45,7 +45,7 @@ $latteParameters['title'] = 'Úprava hlášení';
 	            mysqli_query ($database,"INSERT INTO ".DB_PREFIX."ar2c VALUES('".$report[$i]."','".$_POST['caseid']."','".$usrinfo['id']."')");
 	        }
 	    }
-	    latteFooter($latteParameters);
+	    latteDrawTemplate(footer);
 	}
 	
 ?>

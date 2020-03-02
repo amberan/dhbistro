@@ -2,7 +2,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteHeader($latteParameters);
+latteDrawTemplate(header);
 
 if (is_numeric($_REQUEST['rid'])) {
     $sql_a = "SELECT * FROM ".DB_PREFIX."c2s WHERE ".DB_PREFIX."c2s.idsolver=".$usrinfo['id']." AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid'];
@@ -261,5 +261,5 @@ if (is_numeric($_REQUEST['rid'])) {
     $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
     Header ('location: index.php');
 }
-latteFooter($latteParameters);
+latteDrawTemplate(footer);
 ?>

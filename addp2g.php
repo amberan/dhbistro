@@ -2,7 +2,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteHeader($latteParameters);
+latteDrawTemplate(header);
 
 $latteParameters['title'] = 'Úprava hlášení';
 mainMenu ();
@@ -133,5 +133,5 @@ mainMenu ();
 	} else {
 	    echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
 	}
-	latteFooter($latteParameters);
+	latteDrawTemplate(footer);
 ?>

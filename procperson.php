@@ -3,7 +3,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteHeader($latteParameters);
+latteDrawTemplate(header);
 
 
 	if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete']) && $usrinfo['right_text']) {
@@ -48,14 +48,14 @@ latteHeader($latteParameters);
 	    auditTrail(1, 3, $pid);
 	    sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./newperson.php">nová osoba</a> &raquo; <strong>přidána osoba</strong>','<a href="./readperson.php?rid='.$pid.'">zobrazit vytvořené</a> &raquo; <a href="./editperson.php?rid='.$pid.'">úprava osoby</a>');
 	    echo '<div id="obsah"><p>Osoba vytvořena.</p></div>';
-	    latteFooter($latteParameters);
+	    latteDrawTemplate(footer);
 	} else {
 	    if (isset($_POST['insertperson'])) {
 	        $latteParameters['title'] = 'Přidána osoba';
 	        mainMenu ();
 	        sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./newperson.php">nová osoba</a> &raquo; <strong>neúspěšné přidání osoby</strong>');
 	        echo '<div id="obsah"><p>Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
-	        latteFooter($latteParameters);
+	        latteDrawTemplate(footer);
 	    }
 	}
 	if (isset($_POST['personid'], $_POST['editperson']) && $usrinfo['right_text'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['name']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['side']) && is_numeric($_POST['power']) && is_numeric($_POST['spec'])) {
@@ -105,7 +105,7 @@ latteHeader($latteParameters);
 	        mysqli_query ($database,"UPDATE ".DB_PREFIX."person SET name='".$_POST['name']."', surname='".$_POST['surname']."', phone='".$_POST['phone']."', datum='".Time()."', iduser='".$usrinfo['id']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead']) ? '1' : '0')."', archiv='".(isset($_POST['archiv']) ? '1' : '0')."' WHERE id=".$_POST['personid']);
 	    }
 	    echo '<div id="obsah"><p>Osoba upravena.</p></div>';
-	    latteFooter($latteParameters);
+	    latteDrawTemplate(footer);
 	} else {
 	    if (isset($_POST['editperson'])) {
 	        $latteParameters['title'] = 'Uložení změn';
@@ -114,7 +114,7 @@ latteHeader($latteParameters);
 	        mainMenu ();
 	        sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./editperson.php?rid='.$_POST['personid'].'">úprava osoby</a> &raquo; <strong>uložení změn neúspešné</strong>');
 	        echo '<div id="obsah"><p>Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
-	        latteFooter($latteParameters);
+	        latteDrawTemplate(footer);
 	    }
 	}
 	if (isset($_POST['personid'], $_POST['orgperson']) && is_numeric($_POST['rdatumday']) && is_numeric($_POST['regusr'])) {
@@ -128,7 +128,7 @@ latteHeader($latteParameters);
 	    $rdatum = mktime(0,0,0,$_POST['rdatummonth'],$_POST['rdatumday'],$_POST['rdatumyear']);
 	    mysqli_query ($database,"UPDATE ".DB_PREFIX."person SET regdate='".$rdatum."', regid='".$_POST['regusr']."' WHERE id=".$_POST['personid']);
 	    echo '<div id="obsah"><p>Osoba upravena.</p></div>';
-	    latteFooter($latteParameters);
+	    latteDrawTemplate(footer);
 	} else {
 	    if (isset($_POST['orgperson'])) {
 	        $latteParameters['title'] = 'Uložení změn';
@@ -137,7 +137,7 @@ latteHeader($latteParameters);
 	        mainMenu ();
 	        sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./editperson.php?rid='.$_POST['personid'].'">úprava osoby</a> &raquo; <strong>uložení změn neúspešné</strong>');
 	        echo '<div id="obsah"><p>Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
-	        latteFooter($latteParameters);
+	        latteDrawTemplate(footer);
 	    }
 	}
 	if (isset($_POST['setgroups'])) {
@@ -153,7 +153,7 @@ latteHeader($latteParameters);
 	    for ($i = 0;$i < Count($group);$i++) {
 	        mysqli_query ($database,"INSERT INTO ".DB_PREFIX."g2p VALUES('".$_POST['personid']."','".$group[$i]."','".$usrinfo['id']."')");
 	    }
-	    latteFooter($latteParameters);
+	    latteDrawTemplate(footer);
 	}
 	if (isset($_POST['uploadfile']) && is_uploaded_file($_FILES['attachment']['tmp_name']) && is_numeric($_POST['personid']) && is_numeric($_POST['secret'])) {
 	    auditTrail(1, 4, $_POST['personid']);
@@ -172,7 +172,7 @@ latteHeader($latteParameters);
 	        mainMenu ();
 	        sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./editperson.php?rid='.$_POST['personid'].'">úprava osoby</a> &raquo; <strong>přiložení souboru neúspěšné</strong>');
 	        echo '<div id="obsah"><p>Soubor nebyl přiložen, něco se nepodařilo. Možná nebyl zvolen přikládaný soubor.</p></div>';
-	        latteFooter($latteParameters);
+	        latteDrawTemplate(footer);
 	    }
 	}
 	if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {

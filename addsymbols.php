@@ -3,7 +3,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteHeader($latteParameters);
+latteDrawTemplate(header);
 
 $latteParameters['title'] = 'Uložení změn';
 	if (isset($_POST['addsymbol2c'])) {
@@ -27,7 +27,7 @@ $latteParameters['title'] = 'Uložení změn';
 	            mysqli_query ($database,$sql);
 	        }
 	    }
-	    latteFooter($latteParameters);
+	    latteDrawTemplate(footer);
 	}
 	
 	if (isset($_POST['addsymbol2ar'])) {
@@ -51,7 +51,7 @@ $latteParameters['title'] = 'Uložení změn';
 	            mysqli_query ($database,"INSERT INTO ".DB_PREFIX."symbol2all VALUES('".$_POST['symbolid']."','".$report[$i]."','".$usrinfo['id']."','4')");
 	        }
 	    }
-	    latteFooter($latteParameters);
+	    latteDrawTemplate(footer);
 	}
 	
         if (isset ($_POST['addsymb2pers'])) {
@@ -96,6 +96,6 @@ $latteParameters['title'] = 'Uložení změn';
                 mysqli_query ($database,$sql_ni);
             }
             
-            latteFooter($latteParameters);
+            latteDrawTemplate(footer);
         }
 ?>

@@ -2,7 +2,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteHeader($latteParameters);
+latteDrawTemplate(header);
 
 $latteParameters['title'] = 'Nová poznámka';
 
@@ -64,5 +64,5 @@ if (is_numeric($_REQUEST['rid'])) {
 } else {
         echo '<div id="obsah"><p>Tohle nezkoušejte.';
     }
-latteFooter($latteParameters);
+latteDrawTemplate(footer);
 ?>

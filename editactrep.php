@@ -2,7 +2,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteHeader($latteParameters);
+latteDrawTemplate(header);
 
 $latteParameters['title'] = 'Zobrazení symbolu';
 
@@ -380,5 +380,5 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id'] =
     $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
     Header ('location: index.php');
 }
-latteFooter($latteParameters);
+latteDrawTemplate(footer);
 ?>

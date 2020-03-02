@@ -2,7 +2,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteHeader($latteParameters);
+latteDrawTemplate(header);
 
 $latteParameters['title'] = 'Audit';
         if (!$usrinfo['right_aud']) {
@@ -326,5 +326,5 @@ $latteParameters['title'] = 'Audit';
 	}
 ?>
 <?php
-	latteFooter($latteParameters);
+	latteDrawTemplate(footer);
 ?>

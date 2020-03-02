@@ -3,7 +3,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteHeader($latteParameters);
+latteDrawTemplate(header);
        
         // Přidání symbolu
 	if (isset($_POST['insertsymbol'])) {
@@ -30,14 +30,14 @@ latteHeader($latteParameters);
 	    }
 	    sparklets ('<a href="persons.php">osoby</a> &raquo; <a href="symbols.php">nepřiřazené symboly</a> &raquo; <strong>nový symbol</strong>','<a href="./editsymbol.php?rid='.$pid.'">úprava symbolu</a>');
 	    echo '<div id="obsah"><p>Symbol vložen.</p></div>';
-	    latteFooter($latteParameters);
+	    latteDrawTemplate(footer);
 	} else {
 	    if (isset($_POST['insertperson'])) {
 	        $latteParameters['title'] = 'Nepřidán symbol';
 	        mainMenu ();
 	        sparklets ('<a href="persons.php">osoby</a> &raquo; <a href="symbols.php">nepřiřazené symboly</a> &raquo; <strong>neúspěšné vložení symbolu</strong>');
 	        echo '<div id="obsah"><p>Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
-	        latteFooter($latteParameters);
+	        latteDrawTemplate(footer);
 	    }
 	}
         // Vymazani symbolu
@@ -77,14 +77,14 @@ latteHeader($latteParameters);
 	        mysqli_query ($database,$sql);
 	    }
 	    echo '<div id="obsah"><p>Symbol upraven.</p></div>';
-	    latteFooter($latteParameters);
+	    latteDrawTemplate(footer);
 	} else {
 	    if (isset($_POST['editsymbol'])) {
 	        $latteParameters['title'] = 'Uložení změn';
 	        mainMenu ();
 	        sparklets ('<a href="./symbols.php">symboly</a> &raquo; <a href="./editsymbol.php?rid='.$_POST['symbolid'].'">úprava symbolu</a> &raquo; <strong>uložení změn neúspešné</strong>');
 	        echo '<div id="obsah"><p>Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
-	        latteFooter($latteParameters);
+	        latteDrawTemplate(footer);
 	    }
 	}
         
