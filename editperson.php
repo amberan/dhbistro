@@ -2,7 +2,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteHeader($latteParameters);
+latteDrawTemplate(header);
 
 $latteParameters['title'] = 'Zobrazení symbolu';
 
@@ -359,5 +359,5 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	    $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
 	    Header ('location: index.php');
 	}
-	latteFooter($latteParameters);
+	latteDrawTemplate(footer);
 ?>

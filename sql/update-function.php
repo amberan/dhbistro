@@ -121,15 +121,15 @@ function bistroDBColumnAlter($data): int
 function bistroDBPasswordEncrypt(): int
 {
     global $database,$config;
-    $alter_password = $alter = 0;
+    $alterPassword = $alter = 0;
     $passwordSql = mysqli_query($database,"SELECT pwd FROM ".$config['dbdatabase'].".".DB_PREFIX."user");
     while ($passwordData = mysqli_fetch_array($passwordSql)) {
         if (mb_strlen($passwordData['pwd']) != 32) {
-            $alter_password++;
+            $alterPassword++;
         }
     }
     unset ($passwordSql);
-    if ($alter_password > 0) {
+    if ($alterPassword > 0) {
         $passwordSql = mysqli_query($database,"SELECT pwd,id,login FROM ".$config['dbdatabase'].".".DB_PREFIX."user");
         while ($passwordData = mysqli_fetch_array($passwordSql)) {
             mysqli_query($database,"UPDATE ".$config['dbdatabase'].".".DB_PREFIX."user set pwd=md5('".$passwordData['pwd']."') where id=".$passwordData['id']);

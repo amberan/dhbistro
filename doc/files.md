@@ -29,7 +29,6 @@ inc/database.php        | pripojeni a nastaveni databaze
 inc/footer.php          | fnc footer
 inc/func_main.php       | knihovna balastu - pouzivane vsude
 inc/header.php          | fnc header
-inc/image.php			| manipulace s obrazky
 inc/important.php       | heslo databaze
 inc/menu.php            | generovani menu
 inc/platform.php		| konfiguracni udaje jednotlivych platforem
@@ -42,11 +41,17 @@ js/mrFixit.js			| nevim, vyzaduje jQuery
 js/timeout.js.php		| timeout pro ukladaci disketu
 js/tinymce.init.js		| iniciace a konfigurace TinyMCE
 --- | --- | ---
+lib 					| **podpurne knihovny**
+lib/formatter.php       | formatovani dat
+lib/gui.php             | funkce pro uzivatelske rozhrani
+lib/image.php           | manipulace s obrazovymi daty
+lib/security.php        | bezpecnostni funkce
+lib/news.php            | abstrakcni vrstva pro praci s novinkami
+lib/person.php          | abstrakcni vrstva pro praci s osobami
+--- | --- | ---
 log 					| **vystupy z logovani**
 --- | --- | ---
-processing/users.php    | zpracovani uzivatele                      | uzivatele
-processing/settings.php	| zpracovani osobnich nastaveni
-processing/person.php	| opeace s objekty osoby					| osoba
+processing              | **THE LOOP jednotlive podstranky** docasne lokalita
 --- | --- | ---
 sql						| **SQL updaty, prazdna DB**
 --- | --- | ---
@@ -102,7 +107,6 @@ procnews.php            | zpracovani novinek                        | novinky
 procnote.php            | zpracovani poznamek                       | poznamky
 procother.php           | zpracovani 
 procperson.php          | zpracovani osob                           | osoby
-pull.php				| GIT webhook
 readactrep.php          | DETAIL reportu                            | reporty
 readcase.php            | DETAIL pripadu                            | pripady
 readgroup.php           | DETAIL skupiny                            | skupiny

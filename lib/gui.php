@@ -9,4 +9,6 @@ function latteDrawTemplate($template)
     $latte->render($config['folder_templates'].$template.'.latte', $latteParameters);
 }
 
+
+
 ?>

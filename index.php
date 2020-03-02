@@ -8,9 +8,11 @@ require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 //define('SERVER_ROOT', $_SERVER['DOCUMENT_ROOT']);
 //require_once SERVER_ROOT."/config.php";
 //require_once SERVER_ROOT.'/vendor/autoload.php';
-require_once SERVER_ROOT."/lib/gui.php";
-require_once SERVER_ROOT."/lib/image.php";
+//require_once SERVER_ROOT."/lib/gui.php";
 //require_once SERVER_ROOT."/lib/security.php";
+//require_once SERVER_ROOT."/lib/image.php";
+//require_once SERVER_ROOT."/lib/formatter.php";
+//require_once SERVER_ROOT."/lib/filters.php";
 use League\CommonMark\CommonMarkConverter;
     $converter = new CommonMarkConverter([
         'html_input' => 'strip',

@@ -2,7 +2,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteHeader($latteParameters);
+latteDrawTemplate(header);
 
 $latteParameters['title'] = 'Vyhledávání';
 auditTrail(12, 1, 0);
@@ -387,5 +387,5 @@ $searchedfor = nocs($searchedfor);
             echo '</tbody>
 </table>';
         }
-latteFooter($latteParameters);
+latteDrawTemplate(footer);
 ?>
