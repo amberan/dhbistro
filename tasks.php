@@ -2,7 +2,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteDrawTemplate(header);
+latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Přidán úkol';
 
@@ -37,7 +37,7 @@ $latteParameters['title'] = 'Přidán úkol';
 	            $customFilter = custom_Filter(10);
 	            sparklets ('<a href="/users">uživatelé</a> &raquo; <strong>úkoly</strong>');
 	            echo '<div id="obsah"><p>Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
-	            latteDrawTemplate(footer);
+	            latteDrawTemplate("footer");
 	        } else {
 	            $latteParameters['title'] = 'Úkoly';
 
@@ -182,5 +182,5 @@ $latteParameters['title'] = 'Přidán úkol';
 	}
 ?>
 <?php
-	latteDrawTemplate(footer);
+	latteDrawTemplate("footer");
 ?>

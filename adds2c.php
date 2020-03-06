@@ -2,7 +2,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteDrawTemplate(header);
+latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Úprava případu';
 	mainMenu ();
@@ -59,5 +59,5 @@ K případu můžete přiřadit řešitele.
 	} else {
 	    echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
 	}
-	latteDrawTemplate(footer);
+	latteDrawTemplate("footer");
 ?>

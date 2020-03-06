@@ -2,7 +2,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteDrawTemplate(header);
+latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Nový případ';
 
@@ -46,5 +46,5 @@ mainMenu ();
 </div>
 <!-- end of #obsah -->
 <?php
-	latteDrawTemplate(footer);
+	latteDrawTemplate("footer");
 ?>

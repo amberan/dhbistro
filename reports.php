@@ -3,7 +3,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteDrawTemplate(header);
+latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Hlášení';
 	auditTrail(4, 1, 0);
@@ -89,8 +89,8 @@ $latteParameters['title'] = 'Hlášení';
 	}
 	switch ($filterSec) {
 		case 0: $fsql_sec = ''; break;
-		case 1: $fsql_sec = ' AND '.DB_PREFIX.'report.secret=1 '; break;
-		default: $fsql_sec = '';
+		case 1: $fsql_sec = ' AND '.DB_PREFIX.'report.secret>0 '; break;
+		default: $fsql_sec = ''; ;
 	}
         switch ($filterArchiv) {
 		case 0: $fsql_archiv = ' AND '.DB_PREFIX.'report.status<>3 '; break;
@@ -152,9 +152,9 @@ $latteParameters['title'] = 'Hlášení';
 				".DB_PREFIX."report.start AS 'start',
 				".DB_PREFIX."report.end AS 'end'  
                     FROM ".DB_PREFIX."user, ".DB_PREFIX."report".$fsql_conn2." 
-                    WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.id AND ".DB_PREFIX."report.deleted=0 AND ".DB_PREFIX."report.secret<=".$usrinfo['right_power'].$filterSqlCat.$fsql_stat.$filterSqlMine.$fsql_conn.$fsql_archiv."
+                    WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.id AND ".DB_PREFIX."report.deleted=0 AND ".DB_PREFIX."report.secret<=".$usrinfo['right_power'].$filterSqlCat.$fsql_sec.$fsql_stat.$filterSqlMine.$fsql_conn.$fsql_archiv."
 					ORDER BY ".$filterSqlSort;
-
+                Debugger::log($sql);
 	$res = mysqli_query ($database,$sql);
 	while ($rec = mysqli_fetch_assoc ($res)) {
 	    if ($f_new == 0 || ($f_new == 1 && searchRecord(4,$rec['id']))) {
@@ -183,5 +183,5 @@ $latteParameters['title'] = 'Hlášení';
 	        echo '</p></div></div>';
 	    }
 	}
-	latteDrawTemplate(footer);
+	latteDrawTemplate("footer");
 ?>

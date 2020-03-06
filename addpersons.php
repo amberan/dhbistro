@@ -3,7 +3,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteDrawTemplate(header);
+latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Úprava hlášení';
 if (isset($_POST['addtocase'])) {
@@ -41,7 +41,7 @@ if (isset($_POST['addtocase'])) {
             mysqli_query ($database,"INSERT INTO ".DB_PREFIX."c2p VALUES('".$person[$i]."','".$_POST['caseid']."','".$usrinfo['id']."')");
         }
     }
-    latteDrawTemplate(footer);
+    latteDrawTemplate("footer");
 }
 
 if (isset($_POST['addtogroup'])) {
@@ -79,7 +79,7 @@ if (isset($_POST['addtogroup'])) {
             mysqli_query ($database,"INSERT INTO ".DB_PREFIX."g2p VALUES('".$person[$i]."','".$_POST['groupid']."','".$usrinfo['id']."')");
         }
     }
-    latteDrawTemplate(footer);
+    latteDrawTemplate("footer");
 }
 
 if (isset($_POST['addtoareport'])) {
@@ -128,7 +128,7 @@ if (isset($_POST['addtoareport'])) {
     mainMenu ();
     sparklets ('<a href="./reports.php">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>uložení změn</strong>','<a href="readactrep.php?rid='.$_POST['reportid'].'&hidenotes=0&truenames=0">zobrazit upravené</a>');
     echo '<div id="obsah"><p>Osoby příslušné k hlášení uloženy.</p></div>';
-    latteDrawTemplate(footer);
+    latteDrawTemplate("footer");
 }
 
 if (isset($_POST['addsolver'])) {
@@ -145,7 +145,7 @@ if (isset($_POST['addsolver'])) {
             mysqli_query ($database,"INSERT INTO ".DB_PREFIX."c2s VALUES('".$solver[$i]."','".$_POST['caseid']."','".$usrinfo['id']."')");
         }
     }
-    latteDrawTemplate(footer);
+    latteDrawTemplate("footer");
 }
 
 ?>
