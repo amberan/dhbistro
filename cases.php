@@ -3,7 +3,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteDrawTemplate(header);
+latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Případy';
 
@@ -41,7 +41,7 @@ $latteParameters['title'] = 'Případy';
 	}
 	switch ($filterSec) {
 		case 0: $fsql_sec = ''; break;
-		case 1: $fsql_sec = ' AND '.DB_PREFIX.'case.secret=1 '; break;
+		case 1: $fsql_sec = ' AND '.DB_PREFIX.'case.secret>0 '; break;
 		default: $fsql_sec = '';
 	}
 	switch ($filterStat) {
@@ -116,5 +116,5 @@ $latteParameters['title'] = 'Případy';
 	} else {
 	    echo '<div id="obsah"><p>Žádné případy neodpovídají výběru.</p></div>';
 	}
-	latteDrawTemplate(footer);
+	latteDrawTemplate("footer");
 ?>

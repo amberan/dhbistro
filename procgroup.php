@@ -3,7 +3,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteDrawTemplate(header);
+latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Zobrazení symbolu';
 
@@ -42,14 +42,14 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	        sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./newgroup.php">nová skupina</a> &raquo; <strong>přidána skupina</strong>','<a href="./readgroup.php?rid='.$gid.'">zobrazit vytvořené</a> &raquo; <a href="./editgroup.php?rid='.$gid.'">úprava skupiny</a>');
 	        echo '<div id="obsah"><p>Skupina vytvořena.</p></div>';
 	    }
-	    latteDrawTemplate(footer);
+	    latteDrawTemplate("footer");
 	} else {
 	    if (isset($_POST['insertgroup'])) {
 	        $latteParameters['title'] = 'Přidána skupina';
 	        mainMenu ();
 	        sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./newgroup.php">nová skupina</a> &raquo; <strong>přidání skupiny neúspěšné</strong>');
 	        echo '<div id="obsah"><p>Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
-	        latteDrawTemplate(footer);
+	        latteDrawTemplate("footer");
 	    }
 	}
 	if (isset($_POST['groupid'], $_POST['editgroup']) && $usrinfo['right_text'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match ('/i^[[:blank:]]*$/i',$_POST['contents'])) {
@@ -68,14 +68,14 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	        sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./editgroup.php?rid='.$_POST['groupid'].'">úprava skupiny</a> &raquo; <strong>uložení změn</strong>','<a href="./readgroup.php?rid='.$_POST['groupid'].'">zobrazit upravené</a>');
 	        echo '<div id="obsah"><p>Skupina upravena.</p></div>';
 	    }
-	    latteDrawTemplate(footer);
+	    latteDrawTemplate("footer");
 	} else {
 	    if (isset($_POST['editgroup'])) {
 	        $latteParameters['title'] = 'Uložení změn';
 	        mainMenu ();
 	        sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./editgroup.php?rid='.$_POST['groupid'].'">úprava skupiny</a> &raquo; <strong>uložení změn neúspěšné</strong>');
 	        echo '<div id="obsah"><p>Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
-	        latteDrawTemplate(footer);
+	        latteDrawTemplate("footer");
 	    }
 	}
 	if (isset($_POST['setperson'])) {
@@ -102,7 +102,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	        mainMenu ();
 	        sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./editgroup.php?rid='.$_POST['groupid'].'">úprava skupiny</a> &raquo; <strong>přiložení souboru neúspěšné</strong>');
 	        echo '<div id="obsah"><p>Soubor nebyl přiložen, něco se nepodařilo. Možná nebyl zvolen přikládaný soubor.</p></div>';
-	        latteDrawTemplate(footer);
+	        latteDrawTemplate("footer");
 	    }
 	}
 	if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {

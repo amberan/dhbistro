@@ -2,7 +2,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteDrawTemplate(header);
+latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Symboly';
 	auditTrail(7, 1, 0);
@@ -138,5 +138,5 @@ $latteParameters['title'] = 'Symboly';
 </table>
 </div>';
 	}
-	latteDrawTemplate(footer);
+	latteDrawTemplate("footer");
 ?>

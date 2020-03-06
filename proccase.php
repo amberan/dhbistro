@@ -3,7 +3,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteDrawTemplate(header);
+latteDrawTemplate("header");
 
 	if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete'])) { //delete case
 	    auditTrail(3, 11, $_REQUEST['delete']);
@@ -30,7 +30,7 @@ latteDrawTemplate(header);
 	        sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./newcase.php">nový případ</a> &raquo; <strong>přidán případ</strong>','<a href="./readcase.php?rid='.$cid.'">zobrazit vytvořené</a> &raquo; <a href="./editcase.php?rid='.$cid.'">úprava případu</a>');
 	        echo '<div id="obsah"><p>Případ vytvořen.</p></div>';
 	    }
-	    latteDrawTemplate(footer);
+	    latteDrawTemplate("footer");
 	} else {
 	    if (isset($_POST['insertcase'])) {
 	        $latteParameters['title'] = 'Přidán případ';
@@ -38,7 +38,7 @@ latteDrawTemplate(header);
 	        mainMenu ();
 	        sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./newcase.php">nový případ</a> &raquo; <strong>přidání případu neúspěšné</strong>');
 	        echo '<div id="obsah"><p>Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
-	        latteDrawTemplate(footer);
+	        latteDrawTemplate("footer");
 	    }
 	}
 	if (isset($_POST['caseid'], $_POST['editcase']) && $usrinfo['right_text'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret']) && is_numeric($_POST['status'])) {
@@ -62,14 +62,14 @@ latteDrawTemplate(header);
 	        sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>uložení změn</strong>','<a href="./readcase.php?rid='.$_POST['caseid'].'">zobrazit upravené</a>');
 	        echo '<div id="obsah"><p>Případ upraven.</p></div>';
 	    }
-	    latteDrawTemplate(footer);
+	    latteDrawTemplate("footer");
 	} else {
 	    if (isset($_POST['editcase'])) {
 	        $latteParameters['title'] = 'Uložení změn';
 	        mainMenu ();
 	        sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>uložení změn neúspěšné</strong>');
 	        echo '<div id="obsah"><p>Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
-	        latteDrawTemplate(footer);
+	        latteDrawTemplate("footer");
 	    }
 	}
 	if (isset($_POST['uploadfile']) && is_uploaded_file($_FILES['attachment']['tmp_name']) && is_numeric($_POST['caseid']) && is_numeric($_POST['secret'])) {
@@ -90,7 +90,7 @@ latteDrawTemplate(header);
 	        mainMenu ();
 	        sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>přiložení souboru neúspěšné</strong>');
 	        echo '<div id="obsah"><p>Soubor nebyl přiložen, něco se nepodařilo. Možná nebyl zvolen přikládaný soubor.</p></div>';
-	        latteDrawTemplate(footer);
+	        latteDrawTemplate("footer");
 	    }
 	}
 	if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {

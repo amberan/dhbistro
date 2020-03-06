@@ -2,7 +2,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteDrawTemplate(header);
+latteDrawTemplate("header");
 
 	if (is_numeric($_REQUEST['rid'])) {
 	    $check = mysqli_fetch_assoc (mysqli_query ($database,"SELECT ".DB_PREFIX."user.idperson AS 'aid'
@@ -375,5 +375,5 @@ if ($hn != 1) { ?>
 	    $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
 	    Header ('location: index.php');
 	}
-	latteDrawTemplate(footer);
+	latteDrawTemplate("footer");
 ?>

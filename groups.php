@@ -3,7 +3,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteDrawTemplate(header);
+latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Skupiny';
   
@@ -40,7 +40,7 @@ sparklets ('<strong>skupiny</strong>','<a href="newgroup.php">přidat skupinu</a
 	}
 	switch ($filterSec) {
 		case 0: $fsql_sec = ''; break;
-		case 1: $fsql_sec = ' AND '.DB_PREFIX.'group.secret=1 '; break;
+		case 1: $fsql_sec = ' AND '.DB_PREFIX.'group.secret>0 '; break;
 		default: $fsql_sec = '';
 	}
         switch ($f_arch) {
@@ -108,5 +108,5 @@ sparklets ('<strong>skupiny</strong>','<a href="newgroup.php">přidat skupinu</a
 	} else {
 	    echo '<div id="obsah"><p>Žádné skupiny neodpovídají výběru.</p></div>';
 	}
-latteDrawTemplate(footer);
+latteDrawTemplate("footer");
 ?>

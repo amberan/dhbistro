@@ -2,7 +2,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteDrawTemplate(header);
+latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Nové hlášení';
 
@@ -15,7 +15,7 @@ $latteParameters['title'] = 'Nové hlášení';
 	        sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>nové hlášení z výslechu</strong>');
 	    } else { ?>
 <h1>Požadovaný typ hlášení neexistuje - vraťte se prosím <a href="./reports.php" title="">zpět &raquo;</a></h1>
-<?php latteDrawTemplate(footer);exit; }
+<?php latteDrawTemplate("footer");exit; }
 	};
 
 ?>
@@ -93,5 +93,5 @@ $latteParameters['title'] = 'Nové hlášení';
 </div>
 <!-- end of #obsah -->
 <?php
-	latteDrawTemplate(footer);
+	latteDrawTemplate("footer");
 ?>

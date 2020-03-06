@@ -3,7 +3,7 @@
 require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteDrawTemplate(header);
+latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Osoby';
   
@@ -69,7 +69,7 @@ $latteParameters['title'] = 'Osoby';
 	}
 	switch ($filterSec) {
 		case 0: $fsql_sec = ''; break;
-		case 1: $fsql_sec = ' AND '.DB_PREFIX.'person.secret=1 '; break;
+		case 1: $fsql_sec = ' AND '.DB_PREFIX.'person.secret>1 '; break;
 		default: $fsql_sec = '';
 	}
 	switch ($fdead) {
@@ -194,7 +194,7 @@ $latteParameters['title'] = 'Osoby';
 	}
 	Alternativni vypis osob zahrnujici vice stupnu tajne.*/
     $sql = "SELECT  ".DB_PREFIX."person.regdate as date_created, ".DB_PREFIX."person.datum as date_changed, ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.archiv AS 'archiv', ".DB_PREFIX."person.dead AS 'dead', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol' FROM ".DB_PREFIX."person WHERE ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret<=".$usrinfo['right_power'].$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow." ORDER BY ".$filterSqlSort;
-    //Debugger::log('DEBUG: '.$sql);
+    Debugger::log('DEBUG: '.$sql);
 	$res = mysqli_query ($database,$sql);
 	if (mysqli_num_rows ($res)) {
 	    echo '<div id="obsah">
@@ -231,5 +231,5 @@ $latteParameters['title'] = 'Osoby';
 </table>
 </div>';
 	}
-	latteDrawTemplate(footer);
+	latteDrawTemplate("footer");
 ?>
