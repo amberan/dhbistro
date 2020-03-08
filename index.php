@@ -3,7 +3,7 @@
  * INITialisatin
  * parts commented out until removal od func_main.php
  */
-require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php'); ;
 //session_start();
 //define('SERVER_ROOT', $_SERVER['DOCUMENT_ROOT']);
 //require_once SERVER_ROOT."/config.php";
