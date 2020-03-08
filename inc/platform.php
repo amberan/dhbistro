@@ -11,7 +11,7 @@ switch ($_SERVER["SERVER_NAME"]) {
         $config['dbdatabase'] = 'bistro';
         $config['barva'] = 'local';
         $config['custom'] = 'NH';
-        $config['theme_bg'] = 'warning';
+        $config['theme_bg'] = 'dark';
         $config['theme_navbar'] = 'secondary';
         break;
     case 'localhost':
@@ -21,6 +21,7 @@ switch ($_SERVER["SERVER_NAME"]) {
         $config['theme_bg'] = 'warning';
         $config['theme_navbar'] = 'secondary';
         break;
+    case 'dhbistro.cz';
     case 'www.dhbistro.cz':
         $config['dbuser'] = $config['dbdatabase'] = 'dhbistrocz';
         $config['barva'] = 'dh';
