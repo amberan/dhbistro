@@ -3,7 +3,6 @@
 use Tracy\Debugger;
     Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
-
 // smazat uzivatele
 if (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] == 'delete') {
     if (!$usrinfo['right_power']) {
@@ -40,7 +39,7 @@ elseif (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] = 'reset') {
         unauthorizedAccess(8, 11, 0, 0);
     } else {
         $newpassword = randomPassword();
-        auditTrail(8, 11, $_REQUEST['user_reset']);
+        auditTrail(8, 11, @$URL[3]);
         Debugger::log("USER $URL[3] PASSWORD RESET");
         mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET pwd=md5('".$newpassword."') WHERE id=".$URL[3]);
         $latteParameters['message'] = $text['heslonastaveno'].$newpassword;

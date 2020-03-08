@@ -11,18 +11,21 @@ switch ($_SERVER["SERVER_NAME"]) {
         $config['dbdatabase'] = 'bistro';
         $config['barva'] = 'local';
         $config['custom'] = 'NH';
-        $config['theme_bg'] = 'light';
-        $config['theme_navbar'] = 'light';
+        $config['theme_bg'] = 'warning';
+        $config['theme_navbar'] = 'secondary';
         break;
     case 'localhost':
         $config['dbuser'] = $config['dbdatabase'] = 'dhbistrocz';
         $config['custom'] = 'DH';
         $config['barva'] = 'local';
+        $config['theme_bg'] = 'warning';
+        $config['theme_navbar'] = 'secondary';
         break;
     case 'www.dhbistro.cz':
         $config['dbuser'] = $config['dbdatabase'] = 'dhbistrocz';
         $config['barva'] = 'dh';
         $config['custom'] = 'DH';
+        $config['theme_bg'] = 'secondary';
         break;
     case 'nh.dhbistro.cz':
         $config['dbuser'] = $config['dbdatabase'] = 'nhbistro';
@@ -33,16 +36,22 @@ switch ($_SERVER["SERVER_NAME"]) {
         $config['dbuser'] = $config['dbdatabase'] = 'testbistro';
         $config['barva'] = 'test';
         $config['custom'] = 'DH';
+        $config['theme_bg'] = 'warning';
+        $config['theme_navbar'] = 'secondary';
     break;
     case 'org.dhbistro.cz':
         $config['dbuser'] = $config['dbdatabase'] = 'orgbistro';
         $config['barva'] = 'org';
         $config['custom'] = 'DH';
+        $config['theme_bg'] = 'dark';
+        $config['theme_navbar'] = 'secondary';
         break;
     case 'enigma.dhbistro.cz':
         $config['dbuser'] = $config['dbdatabase'] = 'enigmabistro';
         $config['barva'] = 'enigma';
         $config['custom'] = 'enigma';
+        $config['theme_bg'] = 'dark';
+        $config['theme_navbar'] = 'secondary';
         break;
     case 'nhtest.dhbistro.cz':
         $config['dbuser'] = $config['dbdatabase'] = 'nhtestbistro';
@@ -54,6 +63,8 @@ switch ($_SERVER["SERVER_NAME"]) {
         $config['dbdatabase'] = 'alembiq_bistro';
         $config['barva'] = 'test';
         $config['custom'] = 'NH';
+        $config['theme_bg'] = 'warning';
+        $config['theme_navbar'] = 'secondary';
         break;
     case 'nhtestbistro.talmahera.eu':
         $config['dbuser'] = $config['dbdatabase'] = 'nhtestbistro';
@@ -62,14 +73,17 @@ switch ($_SERVER["SERVER_NAME"]) {
         break;
     case 'dbp.talmahera.eu':
         $config['dbuser'] = 'dbp';
-    $config['dbdatabase'] = 'dbpbistro';
+        $config['dbdatabase'] = 'dbpbistro';
         $config['barva'] = 'test';
         $config['custom'] = 'DB';
+        $config['theme_bg'] = 'dark';
+        $config['theme_navbar'] = 'secondary';
         break;
     case 'dhtestbistro.talmahera.eu':
         $config['dbuser'] = $config['dbdatabase'] = 'dhtestbistro';
         $config['barva'] = 'test';
         $config['custom'] = 'DH';
+        $config['theme_bg'] = 'secondary';
 }
 
 
