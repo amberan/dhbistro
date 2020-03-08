@@ -1,11 +1,16 @@
 # BISTRO changelog 
 
+**1.7.0** HLIDKY BREZEN 2020
+
 **1.6.7**
 - CODECLIMATE cleanup
 - ve vyhledavani se zobrazuji flagy utajeni a smazani (s ohledem na prava uzivatele)[#53](https://gitlab.alembiq.net/larp/bistro/issues/53)[#85](https://gitlab.alembiq.net/larp/bistro/issues/85)
 - sprava uzivatelu uz zobrazuje pouze neuzavrene pripady [#84](https://gitlab.alembiq.net/larp/bistro/issues/84)
 - nastaveni nevyzaduje k ulozeni email [#83](https://gitlab.alembiq.net/larp/bistro/issues/83)
 - oprava pridavani priloh [#86](https://gitlab.alembiq.net/larp/bistro/issues/86)
+- prihlasovaci obrazovka v bootstrapu [#75](https://gitlab.alembiq.net/larp/bistro/issues/75)
+- bootstrap zobrazeni zprav [#17](https://gitlab.alembiq.net/larp/bistro/issues/17)
+- prepinani temat [#72](https://gitlab.alembiq.net/larp/bistro/issues/72)
 
 **1.6.6**
 - BUGFIX databaze

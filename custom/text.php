@@ -11,6 +11,8 @@ $text['smazat'] = 'smazat';
 $text['nadpis'] = 'Nadpis';
 $text['kategorie'] = 'Kategorie';
 $text['obsah'] = 'Obsah';
+$text['zavrit'] = 'Zavřít';
+$text['notifikace'] = 'Notifikace';
 
 // LOGIN
 $text['jmeno'] = 'Jméno';
