@@ -1,19 +1,22 @@
 <div id="wrapper">
     <div id="logincontent">
-        <div id="loginmiddle">
-            <form action="index.php" method="post" id="dh" style="background-image: url('custom/logo-{$config[custom]}.gif');">
-            <div>
-                <label for="loginname">{$text[jmeno]}:</label>
-                <input type="text" name="loginname" id="loginname" tabindex="1">
+        <div id="loginmiddle" class="card">
+            <div class="card-body">
+                <div class="login-image-wrapper" id="dh">
+                    <img src="custom/logo-{$config[custom]}.gif" />
+                </div>
+                <form action="index.php" method="post">
+                    <div>
+                        <input class="form-control" type="text" name="loginname" id="loginname" tabindex="1" placeholder="{$text[jmeno]}">
+                    </div>
+                    <div>
+                        <input class="form-control" type="password" name="loginpwd" id="loginpwd" tabindex="2" placeholder="{$text[heslo]}">
+                    </div>
+                    <div id="logmein">
+                        <input type="submit" class="btn btn-dark" name="logmein" value="{$text[prihlasit]}" tabindex="3">
+                    </div>
+                </form>
             </div>
-            <div>
-                <label for="loginpwd">{$text[heslo]}:</label>
-                <input type="password" name="loginpwd" id="loginpwd" tabindex="2">
-            </div>
-            <div id="logmein">
-                <input type="submit" name="logmein" value="{$text[prihlasit]}" tabindex="3">
-            </div>
-            </form>
         </div>
     </div>
 </div>
