@@ -3,7 +3,6 @@
 use Tracy\Debugger;
     Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
-
 // smazat uzivatele
 if (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] == 'delete') {
     if (!$usrinfo['right_power']) {
