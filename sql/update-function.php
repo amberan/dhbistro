@@ -46,14 +46,14 @@ function bistroDBColumnAdd($data): int
     $alter = 0;
     foreach (array_keys($data) as $table) {
         foreach (array_keys($data[$table]) as $column) {
-            $checkSql = mysqli_query($database,"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table' and column_name='$column'");
-            $checkTable = mysqli_query($database,"SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table'");
-            if ((mysqli_num_rows($checkTable) != 0) and (mysqli_num_rows($checkSql) == 0)) {
+            //$checkSql = mysqli_query($database,"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table' and column_name='$column'");
+            //$checkTable = mysqli_query($database,"SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table'");
+            //if ((mysqli_num_rows($checkTable) != 0) and (mysqli_num_rows($checkSql) == 0)) {
                 $alterSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table ADD COLUMN `$column` ".$data[$table][$column];
                 Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$alterSql);
                 mysqli_query($database,$A);
                 $alter++;
-            }
+            //}
         }
     }
 
