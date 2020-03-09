@@ -69,7 +69,7 @@ $latteParameters['title'] = 'Osoby';
 	}
 	switch ($filterSec) {
 		case 0: $fsql_sec = ''; break;
-		case 1: $fsql_sec = ' AND '.DB_PREFIX.'person.secret>1 '; break;
+		case 1: $fsql_sec = ' AND '.DB_PREFIX.'person.secret>0 '; break;
 		default: $fsql_sec = '';
 	}
 	switch ($fdead) {
