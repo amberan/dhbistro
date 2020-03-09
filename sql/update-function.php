@@ -217,3 +217,29 @@ function bistroDBTableDrop($data): int
 
     return $alter;
 }
+
+
+/**
+ * CREATE `database`.`table`;
+ * @return int of deleted tables
+ */
+function bistroDBTableCreate($table): int
+{
+    global $database,$config;
+    $alter = 0;
+    foreach ($table as $key => $value) {
+        $checkTable = mysqli_query($database,"SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX.$key."'");
+        if (mysqli_num_rows($checkTable) == 0) {
+            $sqlCreate = "CREATE TABLE ".DB_PREFIX.$key." (";
+            foreach ($value as $column => $params) {
+                $sqlCreate .= $column." ".$params.",";
+            }
+            $sqlCreate = rtrim($sqlCreate,",");
+            $sqlCreate .= ")";
+            mysqli_query($database,$sqlCreate);
+            $alter++;
+        }
+    }
+
+    return $alter;
+}
