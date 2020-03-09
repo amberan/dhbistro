@@ -28,9 +28,9 @@ $latteParameters['title'] = 'Případy';
 	    $filterSec = 1;
 	}
         if (!isset($customFilter['new'])) {
-            $f_new = 0;
+            $fNew = 0;
         } else {
-            $f_new = 1;
+            $fNew = 1;
         }
 	switch ($filterSort) {
 	  case 1: $filterSqlSort = ' '.DB_PREFIX.'case.title ASC '; break;
@@ -52,7 +52,7 @@ $latteParameters['title'] = 'Případy';
 	//
 	function filter ()
 	{
-	    global $filterSort, $filterSec, $filterStat, $f_new, $usrinfo;
+	    global $filterSort, $filterSec, $filterStat, $fNew, $usrinfo;
 	    echo '<div id="filter-wrapper"><form action="cases.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -63,7 +63,7 @@ $latteParameters['title'] = 'Případy';
 	<option value="4"'.(($filterSort == 4) ? ' selected="selected"' : '').'>data sestupně</option>
 </select>.<br />
 <input type="checkbox" name="stat" value="stat" class="checkbox"'.(($filterStat == 1) ? ' checked="checked"' : '').' /> I uzavřené. <br />
-<input type="checkbox" name="new" value="new" class="checkbox"'.(($f_new == 1) ? ' checked="checked"' : '').' /> Jen nové.';
+<input type="checkbox" name="new" value="new" class="checkbox"'.(($fNew == 1) ? ' checked="checked"' : '').' /> Jen nové.';
 	    if ($usrinfo['right_power']) {
 	        echo '<br /> <input type="checkbox" name="sec" value="sec" class="checkbox"'.(($filterSec == 1) ? ' checked="checked"' : '').' /> Jen tajné.</p>';
 	    } else {
@@ -99,7 +99,7 @@ $latteParameters['title'] = 'Případy';
 	    //TODO case nema timestamp pro vytvoreni
 	    $even = 0;
 	    while ($rec = mysqli_fetch_assoc ($res)) {
-	        if ($f_new == 0 || ($f_new == 1 && searchRecord(3,$rec['id']))) {
+	        if ($fNew == 0 || ($fNew == 1 && searchRecord(3,$rec['id']))) {
 	            echo '<tr class="'.((searchRecord(3,$rec['id'])) ? ' unread_record' : (($even % 2 == 0) ? 'even' : 'odd')).(($rec['status']) ? ' solved' : '').'">
                         <td>'.(($rec['secret']) ? '<span class="secret"><a href="readcase.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a></span>' : '<a href="readcase.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a>').'</td>
 						<td>'.(($rec['status']) ? 'uzavřený' : 'otevřený').'</td>

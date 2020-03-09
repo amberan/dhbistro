@@ -7,28 +7,28 @@ use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
 //auditni stopa
-function auditTrail ($record_type,$operation_type,$idrecord)
+function auditTrail ($recordType,$operationType,$idrecord)
 {
     global $database,$usrinfo;
-    $sql_check = "SELECT * FROM ".DB_PREFIX."audit_trail WHERE iduser='".$usrinfo['id']."' AND time='".time()."'";
-    $res_check = mysqli_query ($database,$sql_check);
-    if (mysqli_num_rows ($res_check)) {
+    $sqlCheck = "SELECT * FROM ".DB_PREFIX."audit_trail WHERE iduser='".$usrinfo['id']."' AND time='".time()."'";
+    $resCheck = mysqli_query ($database,$sqlCheck);
+    if (mysqli_num_rows ($resCheck)) {
     } else {
         if (!$usrinfo['currip']) {
             $currip = $_SERVER['REMOTE_ADDR'];
         } else {
             $currip = $usrinfo['currip'];
         }
-        $sql_au = "INSERT INTO ".DB_PREFIX."audit_trail VALUES('','".$usrinfo['id']."','".time()."','".$operation_type."','".$record_type."','".$idrecord."','".$currip."','".$usrinfo['right_org']."')";
-        mysqli_query ($database,$sql_au);
+        $sqlAu = "INSERT INTO ".DB_PREFIX."audit_trail VALUES('','".$usrinfo['id']."','".time()."','".$operationType."','".$recordType."','".$idrecord."','".$currip."','".$usrinfo['right_org']."')";
+        mysqli_query ($database,$sqlAu);
     }
 }
 
 //pokus o pristup k tajnemu, soukromemu nebo smazanemu zaznamu
-function unauthorizedAccess ($record_type,$secret,$deleted,$idrecord)
+function unauthorizedAccess ($recordType,$secret,$deleted,$idrecord)
 {
 $latteParameters['title'] = 'Neautorizovaný přístup';
-    switch ($record_type) {
+    switch ($recordType) {
             case 1:
                 $link = '<a href="./persons.php">osoby</a>';
                 break;
@@ -49,9 +49,9 @@ $latteParameters['title'] = 'Neautorizovaný přístup';
                 break;
         }
     if ($deleted == 1) {
-        auditTrail($record_type, 13, $idrecord);
+        auditTrail($recordType, 13, $idrecord);
     } else {
-        auditTrail($record_type, 12, $idrecord);
+        auditTrail($recordType, 12, $idrecord);
     }
     $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
     Header ('location: index.php');

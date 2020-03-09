@@ -43,9 +43,9 @@ $latteParameters['title'] = 'Osoby';
 	    $filterSec = 1;
 	}
         if (!isset($customFilter['new'])) {
-            $f_new = 0;
+            $fNew = 0;
         } else {
-            $f_new = 1;
+            $fNew = 1;
         }
 	if (!isset($customFilter['fspec'])) {
 	    $fspec = 0;
@@ -121,7 +121,7 @@ $latteParameters['title'] = 'Osoby';
 	// formular filtru
 	function filter ()
 	{
-	    global $filterSort, $sportraits, $ssymbols, $filterSec, $f_new, $fdead, $farchiv, $usrinfo, $fspec, $fside, $fpow;
+	    global $filterSort, $sportraits, $ssymbols, $filterSec, $fNew, $fdead, $farchiv, $usrinfo, $fspec, $fside, $fpow;
 	    echo '<div id="filter-wrapper"><form action="persons.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -170,7 +170,7 @@ $latteParameters['title'] = 'Osoby';
 	<tr class="filter">
 	<td class="filter"><input type="checkbox" name="sportraits" value="1"'.(($sportraits) ? ' checked="checked"' : '').'> Zobrazit portréty.</td>
 	<td class="filter"><input type="checkbox" name="fdead" value="1"'.(($fdead == 1) ? ' checked="checked"' : '').'> Zobrazit i mrtvé.</td>
-        <td class="filter"><input type="checkbox" name="new" value="1"'.(($f_new == 1) ? ' checked="checked"' : '').'> Zobrazit jen nové.</td>
+        <td class="filter"><input type="checkbox" name="new" value="1"'.(($fNew == 1) ? ' checked="checked"' : '').'> Zobrazit jen nové.</td>
 	</tr>
         <tr class="filter">
 	<td class="filter"><input type="checkbox" name="ssymbols" value="1"'.(($ssymbols) ? ' checked="checked"' : '').'> Zobrazit symboly.</td>
@@ -213,7 +213,7 @@ $latteParameters['title'] = 'Osoby';
 ';
 	    $even = 0;
 	    while ($rec = mysqli_fetch_assoc ($res)) {
-	        if ($f_new == 0 || ($f_new == 1 && searchRecord(1,$rec['id']))) {
+	        if ($fNew == 0 || ($fNew == 1 && searchRecord(1,$rec['id']))) {
 	            echo '<tr class="'.((searchRecord(1,$rec['id'])) ? ' unread_record' : (($even % 2 == 0) ? 'even' : 'odd')).'">
                         '.(($sportraits) ? '<td><img src="getportrait.php?rid='.$rec['id'].'" alt="" /></td>' : '').'
                         '.(($ssymbols) ? '<td><img src="getportrait.php?nrid='.$rec['symbol'].'" alt="" /></td>' : '').'

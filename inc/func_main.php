@@ -185,26 +185,26 @@ break;  //symbol 2 case
 
 break; //symbol 2 action report
     }
-    $sql_cf = 'SELECT filter FROM '.DB_PREFIX.'user WHERE id = '.$usrinfo['id'];
-    $res_cf = mysqli_query($database, $sql_cf);
+    $sqlCf = 'SELECT filter FROM '.DB_PREFIX.'user WHERE id = '.$usrinfo['id'];
+    $resCf = mysqli_query($database, $sqlCf);
     $filter = $_REQUEST;
     // pokud přichází nový filtr a nejedná se o zadání úkolu či přidání zlobodů, případně pokud se jedná o konkrétní záznam a je nově filtrovaný,
     // použij nový filtr a ulož ho do databáze
     if ((!empty($filter) && !isset($_POST['inserttask']) && !isset($_POST['addpoints']) && !isset($filter['rid'])) || (isset($filter['sort'], $filter['rid']))) {
-        if ($res_cf) {
-            $rec_cf = mysqli_fetch_assoc($res_cf);
+        if ($resCf) {
+            $rec_cf = mysqli_fetch_assoc($resCf);
             $filters = unserialize($rec_cf['filter']);
             $filters[$table] = $filter;
         } else {
             $filters[$table] = $filter;
         }
         $sfilters = serialize($filters);
-        $sql_scf = 'UPDATE '.DB_PREFIX."user SET filter='".$sfilters."' WHERE id=".$usrinfo['id'];
-        mysqli_query($database, $sql_scf);
+        $sqlScf = 'UPDATE '.DB_PREFIX."user SET filter='".$sfilters."' WHERE id=".$usrinfo['id'];
+        mysqli_query($database, $sqlScf);
     // v opačném případě zkontroluj, zda existuje odpovídající filtr v databázi, a pokud ano, načti jej
     } else {
-        if ($res_cf) {
-            $rec_cf = mysqli_fetch_assoc($res_cf);
+        if ($resCf) {
+            $rec_cf = mysqli_fetch_assoc($resCf);
             $filters = unserialize($rec_cf['filter']);
             if (!empty($filters)) {
                 if (array_key_exists($table, $filters)) {

@@ -51,9 +51,9 @@ $latteParameters['title'] = 'Hlášení';
             $filterArchiv = 1;
         }
         if (!isset($customFilter['new'])) {
-            $f_new = 0;
+            $fNew = 0;
         } else {
-            $f_new = 1;
+            $fNew = 1;
         }
 	switch ($filterCat) {
 	  case 0: $filterSqlCat = ''; break;
@@ -100,7 +100,7 @@ $latteParameters['title'] = 'Hlášení';
 	// filtr samotny
 	function filter ()
 	{
-	    global $filterCat, $filterSort, $filterStat, $filterMine, $filterConn, $filterSec, $f_new, $filterArchiv, $usrinfo, $text;
+	    global $filterCat, $filterSort, $filterStat, $filterMine, $filterConn, $filterSec, $fNew, $filterArchiv, $usrinfo, $text;
 	    echo '<div id="filter-wrapper"><form action="reports.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -124,7 +124,7 @@ $latteParameters['title'] = 'Hlášení';
         <table class="filter">
 	<tr class="filter">
 	<td class="filter"><input type="checkbox" name="my" value="my" class="checkbox"'.(($filterMine == 1) ? ' checked="checked"' : '').' /> Jen moje.</td>
-        <td class="filter"><input type="checkbox" name="new" value="new" class="checkbox"'.(($f_new == 1) ? ' checked="checked"' : '').' /> Jen nové.</td>
+        <td class="filter"><input type="checkbox" name="new" value="new" class="checkbox"'.(($fNew == 1) ? ' checked="checked"' : '').' /> Jen nové.</td>
 	<td class="filter"><input type="checkbox" name="conn" value="conn" class="checkbox"'.(($filterConn == 1) ? ' checked="checked"' : '').' /> Jen nepřiřazené.</td>
         </tr>
         <tr class="filter">
@@ -156,7 +156,7 @@ $latteParameters['title'] = 'Hlášení';
 					ORDER BY ".$filterSqlSort;
 	$res = mysqli_query ($database,$sql);
 	while ($rec = mysqli_fetch_assoc ($res)) {
-	    if ($f_new == 0 || ($f_new == 1 && searchRecord(4,$rec['id']))) {
+	    if ($fNew == 0 || ($fNew == 1 && searchRecord(4,$rec['id']))) {
 	        echo '<div class="news_div '.(($rec['type'] == 1) ? 'game_news' : 'system_news').((searchRecord(4,$rec['id'])) ? ' unread_record' : '').'">
                 <div class="news_head"><strong><a href="readactrep.php?rid='.$rec['id'].'&amp;hidenotes=0&amp;truenames=0">'.StripSlashes($rec['label']).'</a></strong>';
 	        if (($usrinfo['right_text']) || ($usrinfo['id'] == $rec['riduser'] && $rec['status'] < 1)) {
