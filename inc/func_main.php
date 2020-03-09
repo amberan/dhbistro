@@ -192,8 +192,8 @@ break; //symbol 2 action report
     // použij nový filtr a ulož ho do databáze
     if ((!empty($filter) && !isset($_POST['inserttask']) && !isset($_POST['addpoints']) && !isset($filter['rid'])) || (isset($filter['sort'], $filter['rid']))) {
         if ($resCf) {
-            $rec_cf = mysqli_fetch_assoc($resCf);
-            $filters = unserialize($rec_cf['filter']);
+            $recCf = mysqli_fetch_assoc($resCf);
+            $filters = unserialize($recCf['filter']);
             $filters[$table] = $filter;
         } else {
             $filters[$table] = $filter;
@@ -204,8 +204,8 @@ break; //symbol 2 action report
     // v opačném případě zkontroluj, zda existuje odpovídající filtr v databázi, a pokud ano, načti jej
     } else {
         if ($resCf) {
-            $rec_cf = mysqli_fetch_assoc($resCf);
-            $filters = unserialize($rec_cf['filter']);
+            $recCf = mysqli_fetch_assoc($resCf);
+            $filters = unserialize($recCf['filter']);
             if (!empty($filters)) {
                 if (array_key_exists($table, $filters)) {
                     $filter = $filters[$table];

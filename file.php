@@ -9,7 +9,7 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
  * @param string type portrait/symbol/attachement/backup
  * @param int id ID
  */
-function fileIdentify($type,$id)
+function fileIdentify($type,$objectId)
 {
     global $config,$database;
     //user privilegies > sql modifiers
