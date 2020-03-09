@@ -149,4 +149,5 @@ function backup_process()
 	if (round($backupLast,-5) < round(time(),-5) or file_exists($updateFile)) {
 	    backup_process();
 	}
+    
 ?>
