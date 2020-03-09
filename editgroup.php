@@ -77,7 +77,6 @@ latteDrawTemplate("header");
 			} else {
 			    $sql = "SELECT ".DB_PREFIX."file.iduser AS 'iduser', ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.secret AS 'secret', ".DB_PREFIX."file.id AS 'id' FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=2 AND ".DB_PREFIX."file.secret=0 ORDER BY ".DB_PREFIX."file.originalname ASC";
 			}
-	        Debugger::log($sql);
 	        $res = mysqli_query ($database,$sql);
 	        $i = 0;
 	        while ($rec_f = mysqli_fetch_assoc ($res)) {

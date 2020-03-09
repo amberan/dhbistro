@@ -14,7 +14,6 @@ if (isset($_GET['username']) and isset($_GET['password'])) {
         session_destroy();
         session_start();
         mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET sid='".session_id()."', lastlogon=".Time().", ip='".$_SERVER['REMOTE_ADDR']."', user_agent='".$_SERVER['HTTP_USER_AGENT']."' WHERE id=".$userresult['id']);
-        Debugger::log("API-LOGIN SUCCESS: ".$_GET['username']);
         http_response_code(202);
         header('Content-Type: application/json');
         echo json_encode(array(
@@ -22,7 +21,6 @@ if (isset($_GET['username']) and isset($_GET['password'])) {
                                 'TTL' => time() + $userresult['timeout']
         ));
     } else {
-        Debugger::log("API-LOGIN FAILED: ".$_GET['username']." / ".$_GET['password']);
         header('Content-Type: application/json');
         http_response_code(401);
         echo json_encode(array( 'error' => $text['http401']));

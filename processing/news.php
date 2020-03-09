@@ -7,7 +7,6 @@ if (isset($URL['3']) AND ($URL['1']) == "news" AND ($usrinfo['right_power'] > 0 
     mysqli_query ($database,"UPDATE ".DB_PREFIX."news set deleted=1 where id='".$URL['3']."'");
     if (mysqli_affected_rows($database) == 1) {
         auditTrail(5, 11, $URL['3']);
-        Debugger::log("NEWS DELETED");
         $latteParameters['message'] = $text['aktualitaodebrana'];
     } else {
         $latteParameters['message'] = $text['aktualitaneodebrana'];
@@ -22,7 +21,6 @@ if ($URL['1'] == "news" AND $usrinfo['right_power'] > 0 AND isset($_POST['news_n
         mysqli_query ($database,"INSERT INTO ".DB_PREFIX."news ( datum, iduser, kategorie, nadpis, obsah, obsah_md, deleted) VALUES('".Time()."','".$usrinfo['id']."','".$_POST['kategorie']."','".$_POST['nadpis']."','','".$_POST['news_new']."',0)");
         if (mysqli_affected_rows($database) == 1) {
             auditTrail(5, 3, 0);
-            Debugger::log("NEWS INSERTED");
             $latteParameters['message'] = $text['aktualitavlozena'];
             unreadRecords (5,0);
         } else {
