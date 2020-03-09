@@ -24,14 +24,14 @@ sparklets ('<strong>skupiny</strong>','<a href="newgroup.php">přidat skupinu</a
 	    $filterSec = 1;
 	}
         if (!isset($customFilter['new'])) {
-            $f_new = 0;
+            $fNew = 0;
         } else {
-            $f_new = 1;
+            $fNew = 1;
         }
         if (!isset($customFilter['arch'])) {
-            $f_arch = 0;
+            $fArch = 0;
         } else {
-            $f_arch = 1;
+            $fArch = 1;
         }
 	switch ($filterSort) {
 	  case 1: $filterSqlSort = ' '.DB_PREFIX.'group.title ASC '; break;
@@ -43,7 +43,7 @@ sparklets ('<strong>skupiny</strong>','<a href="newgroup.php">přidat skupinu</a
 		case 1: $fsql_sec = ' AND '.DB_PREFIX.'group.secret>0 '; break;
 		default: $fsql_sec = '';
 	}
-        switch ($f_arch) {
+        switch ($fArch) {
 		case 0: $fsql_arch = ' AND '.DB_PREFIX.'group.archived=0 '; break;
 		case 1: $fsql_arch = ''; break;
 		default: $fsql_arch = ' AND '.DB_PREFIX.'group.archived=0 ';
@@ -51,7 +51,7 @@ sparklets ('<strong>skupiny</strong>','<a href="newgroup.php">přidat skupinu</a
 	//
 	function filter ()
 	{
-	    global $filterSort, $filterSec, $f_new, $f_arch, $usrinfo;
+	    global $filterSort, $filterSec, $fNew, $fArch, $usrinfo;
 	    echo '<div id="filter-wrapper"><form action="groups.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -59,8 +59,8 @@ sparklets ('<strong>skupiny</strong>','<a href="newgroup.php">přidat skupinu</a
 	<option value="1"'.(($filterSort == 1) ? ' selected="selected"' : '').'>názvu vzestupně</option>
 	<option value="2"'.(($filterSort == 2) ? ' selected="selected"' : '').'>názvu sestupně</option>
         </select>.
-        <br /> <input type="checkbox" name="new" value="new" class="checkbox"'.(($f_new == 1) ? ' checked="checked"' : '').' /> Jen nové.
-        <br /> <input type="checkbox" name="arch" value="arch" class="checkbox"'.(($f_arch == 1) ? ' checked="checked"' : '').' /> I archiv.';
+        <br /> <input type="checkbox" name="new" value="new" class="checkbox"'.(($fNew == 1) ? ' checked="checked"' : '').' /> Jen nové.
+        <br /> <input type="checkbox" name="arch" value="arch" class="checkbox"'.(($fArch == 1) ? ' checked="checked"' : '').' /> I archiv.';
 	    if ($usrinfo['right_power']) {
 	        echo '<br /> <input type="checkbox" name="sec" value="sec" class="checkbox"'.(($filterSec == 1) ? ' checked="checked"' : '').' /> Jen tajné.</p>';
 	    } else {
@@ -93,7 +93,7 @@ sparklets ('<strong>skupiny</strong>','<a href="newgroup.php">přidat skupinu</a
 ';
 	    $even = 0;
 	    while ($rec = mysqli_fetch_assoc ($res)) {
-	        if ($f_new == 0 || ($f_new == 1 && searchRecord(2,$rec['id']))) {
+	        if ($fNew == 0 || ($fNew == 1 && searchRecord(2,$rec['id']))) {
 	            echo '<tr class="'.((searchRecord(2,$rec['id'])) ? ' unread_record' : (($even % 2 == 0) ? 'even' : 'odd')).'">
                         <td>'.(($rec['secret']) ? '<span class="secret"><a href="readgroup.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a></span>' : '<a href="readgroup.php?rid='.$rec['id'].'&amp;hidenotes=0">'.StripSlashes($rec['title']).'</a>').'</td>
                         '.(($usrinfo['right_text']) ? '	<td><a href="editgroup.php?rid='.$rec['id'].'">upravit</a> | '.(($rec['archived'] == 0) ? '<a href="procgroup.php?archive='.$rec['id'].'" onclick="'."return confirm('Opravdu archivovat skupinu &quot;".StripSlashes($rec['title'])."&quot;?');".'">archivovat</a>' : '<a href="procgroup.php?dearchive='.$rec['id'].'" onclick="'."return confirm('Opravdu vyjmout z archivu skupinu &quot;".StripSlashes($rec['title'])."&quot;?');".'">z archivu</a>').' | <a href="procgroup.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat skupinu &quot;".StripSlashes($rec['title'])."&quot;?');".'">smazat</a></td>' : '<td><a href="newnote.php?rid='.$rec['id'].'&idtable=6">přidat poznámku</a></td>').'

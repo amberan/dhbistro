@@ -127,44 +127,44 @@ if (isset($_POST['searchit'])) {
 	
     // funkce pro změnu barvy ve výsledku vyhledávání
 		
-    function colorSwitch($input_sql_column)
+    function colorSwitch($inputSqlColumn)
     {
-        $segment_color;
+        $segmentColor;
 	
-        if ($input_sql_column == '100') {
-            $segment_color = "grey";
-        } elseif (('100' > $input_sql_column) && ($input_sql_column >= '75')) {
-            $segment_color = "blue";
-        } elseif (('75' > $input_sql_column) && ($input_sql_column >= '50')) {
-            $segment_color = "green";
-        } elseif (('50' > $input_sql_column) && ($input_sql_column >= '25')) {
-            $segment_color = "yellow";
-        } elseif (('25' > $input_sql_column) && ($input_sql_column > '0')) {
-            $segment_color = "orange";
-        } elseif (('0' > $input_sql_column) && ($input_sql_column != '')) {
-            $segment_color = "red";
-        } elseif ($input_sql_column == '0') {
-            $segment_color = "brown";
-        } elseif ($input_sql_column == '') {
-            $segment_color = "white";
+        if ($inputSqlColumn == '100') {
+            $segmentColor = "grey";
+        } elseif (('100' > $inputSqlColumn) && ($inputSqlColumn >= '75')) {
+            $segmentColor = "blue";
+        } elseif (('75' > $inputSqlColumn) && ($inputSqlColumn >= '50')) {
+            $segmentColor = "green";
+        } elseif (('50' > $inputSqlColumn) && ($inputSqlColumn >= '25')) {
+            $segmentColor = "yellow";
+        } elseif (('25' > $inputSqlColumn) && ($inputSqlColumn > '0')) {
+            $segmentColor = "orange";
+        } elseif (('0' > $inputSqlColumn) && ($inputSqlColumn != '')) {
+            $segmentColor = "red";
+        } elseif ($inputSqlColumn == '0') {
+            $segmentColor = "brown";
+        } elseif ($inputSqlColumn == '') {
+            $segmentColor = "white";
         }
 	
-        return $segment_color;
+        return $segmentColor;
     }
 	
     // funkce pro string dotazu na osobu
 	
-    function ownerString($person_id,$symbol_id)
+    function ownerString($personId,$symbolId)
     {
-        $segment_output;
+        $segmentOutput;
 	
-        if ($person_id === '') {
-            $segment_output = "<a class=\"redirection\" href=\"readsymbol.php?rid=".$symbol_id."&hidenotes=0\">Zobrazit info k symbolu</a>";
+        if ($personId === '') {
+            $segmentOutput = "<a class=\"redirection\" href=\"readsymbol.php?rid=".$symbolId."&hidenotes=0\">Zobrazit info k symbolu</a>";
         } else {
-            $segment_output = "<a class=\"redirection\" href=\"readperson.php?rid=".$person_id."&hidenotes=0\">Zobrazit info k vlastníkovi</a>";
+            $segmentOutput = "<a class=\"redirection\" href=\"readperson.php?rid=".$personId."&hidenotes=0\">Zobrazit info k vlastníkovi</a>";
         }
 	
-        return $segment_output;
+        return $segmentOutput;
     }
 	
     ////////////////////////////////////////////////////////////////// ?>
