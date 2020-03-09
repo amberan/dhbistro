@@ -221,6 +221,7 @@ function bistroDBTableDrop($data): int
 
 /**
  * CREATE `database`.`table`;
+ * @param array create table[column][params]
  * @return int of deleted tables
  */
 function bistroDBTableCreate($table): int
