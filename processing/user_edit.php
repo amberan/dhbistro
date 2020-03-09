@@ -14,11 +14,9 @@ if (isset($_POST['userid'], $_POST['edituser']) && $usrinfo['right_power'] && !p
         mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET login='".$_POST['login']."', email='".$_POST['email']."', right_power='".$_POST['power']."', right_text='".$_POST['texty']."', idperson='".$_POST['idperson']."' WHERE id=".$_POST['userid']);
         if ($usrinfo['right_aud'] > 0) {
             mysqli_query ($database,"UPDATE ".DB_PREFIX."user set right_aud='".$_POST['auditor']."' WHERE id=".$_POST['userid']);
-            Debugger::log('USERID: '.$_POST['userid'].' AUDIT='.$_POST['auditor']);
         }
         if ($usrinfo['right_org'] > 0) {
             mysqli_query ($database,"UPDATE ".DB_PREFIX."user set right_org='".$_POST['organizator']."' WHERE id=".$_POST['userid']);
-            Debugger::log('USERID: '.$_POST['userid'].' ORG='.$_POST['organizator']);
         }
         $latteParameters['message'] = "Uživatel ".$_POST['login']." upraven.";
     }

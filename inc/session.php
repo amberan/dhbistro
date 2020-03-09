@@ -40,7 +40,6 @@ function logout_forced($msg)
 {
     global $database,$_SESSION;
     if (isset($_SESSION['sid'])) {
-        Debugger::log("FORCED LOGOUT: ".$msg." - ".$_SESSION['sid']);
         if (isset($_SESSION['sid'])) {
             mysqli_query ($database,"UPDATE ".DB_PREFIX."user set sid=null WHERE sid=".$_SESSION['sid']);
         }

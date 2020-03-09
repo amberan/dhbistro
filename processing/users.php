@@ -9,7 +9,6 @@ if (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] == 'delete') {
         unauthorizedAccess(8, 1, 0, 0);
     } else {
         auditTrail(8, 11, $_REQUEST['user_delete']);
-        Debugger::log("USER $URL[3] DELETED");
         mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET deleted=1 WHERE id=".$URL[3]);
         $latteParameters['message'] = $text['uzivatelodstranen'];
     }
@@ -19,7 +18,6 @@ elseif (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] == 'lock') {
         unauthorizedAccess(8, 2, 0, 0);
     } else {
         auditTrail(8, 11, $URL[3]);
-        Debugger::log("USER $URL[3] LOCKED");
         mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET suspended=1 WHERE id=".$URL[3]);
         $latteParameters['message'] = $text['uzivatelzablokovan'];
     }
@@ -29,7 +27,6 @@ elseif (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] == 'unlock') {
         unauthorizedAccess(8, 2, 0, 0);
     } else {
         auditTrail(8, 11, $URL[3]);
-        Debugger::log("USER $URL[3] UNLOCKED");
         mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET suspended=0 WHERE id=".$URL[3]);
         $latteParameters['message'] = $text['uzivatelodblokovan'];
     }
@@ -40,7 +37,6 @@ elseif (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] = 'reset') {
     } else {
         $newpassword = randomPassword();
         auditTrail(8, 11, @$URL[3]);
-        Debugger::log("USER $URL[3] PASSWORD RESET");
         mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET pwd=md5('".$newpassword."') WHERE id=".$URL[3]);
         $latteParameters['message'] = $text['heslonastaveno'].$newpassword;
     }
@@ -61,7 +57,6 @@ elseif (isset($_POST['insertuser']) && $usrinfo['right_power'] && !preg_match ('
                 mysqli_query ($database,"UPDATE ".DB_PREFIX."user set right_org='".$_POST['organizator']."' WHERE id=".$uidarray['id']);
             }
             auditTrail(8, 3, $uidarray['id']);
-            Debugger::log("USER ".$_POST['login']."[".$uidarray['id']."] CREATED");
             $latteParameters['message'] = $text['uzivatelvytvoren'].$_POST['login'];
         } else {
             $latteParameters['message'] = $text['neytvoreno'];

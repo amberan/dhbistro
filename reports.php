@@ -154,7 +154,6 @@ $latteParameters['title'] = 'Hlášení';
                     FROM ".DB_PREFIX."user, ".DB_PREFIX."report".$fsql_conn2." 
                     WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.id AND ".DB_PREFIX."report.deleted=0 AND ".DB_PREFIX."report.secret<=".$usrinfo['right_power'].$filterSqlCat.$fsql_sec.$fsql_stat.$filterSqlMine.$fsql_conn.$fsql_archiv."
 					ORDER BY ".$filterSqlSort;
-                Debugger::log($sql);
 	$res = mysqli_query ($database,$sql);
 	while ($rec = mysqli_fetch_assoc ($res)) {
 	    if ($f_new == 0 || ($f_new == 1 && searchRecord(4,$rec['id']))) {

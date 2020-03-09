@@ -11,12 +11,10 @@ header("Pragma: no-cache");
 header("Expires: -1");
 if (isset($_REQUEST['rid']) && is_numeric ($_REQUEST['rid'])) { //portret
     $getres = mysqli_query ($database,"SELECT portrait FROM ".DB_PREFIX."person WHERE ".(($usrinfo['right_power']) ? '' : ' secret=0 AND ')." id=".$_REQUEST['rid']);
-    //Debugger::log("DEBUG: SELECT portrait FROM ".DB_PREFIX."person WHERE ".(($usrinfo['right_power']) ? '' : ' secret=0 AND ')." id=".$_REQUEST['rid']);
     if ($getrec = mysqli_fetch_assoc ($getres)) {
         header('Content-Disposition: inline; filename="portrait'.$_REQUEST['rid'].'.jpg"');
         if (mb_strlen($getrec['portrait']) > 0 and file_exists($config['folder_portrait'].$getrec['portrait']) ) {
             $getf = FOpen ($config['folder_portrait'].$getrec['portrait'],"r");
-        //Debugger::log("DEBUG: ".$config['folder_portrait'].$getrec['portrait']);
         } else {
             $getf = FOpen (SERVER_ROOT."/images/placeholder.jpg","r");
         }
@@ -27,7 +25,6 @@ if (isset($_REQUEST['rid']) && is_numeric ($_REQUEST['rid'])) { //portret
         header('Content-Disposition: inline; filename="symbol'.$_REQUEST['nrid'].'.jpg"');
         if (file_exists($config['folder_symbol'].$getrec['symbol'])) {
             $getf = FOpen ($config['folder_symbol'].$getrec['symbol'],"r");
-            //Debugger::log("DEBUG: ".$config['folder_symbol'].$getrec['symbol']);
         }
     }
 } else {
