@@ -80,18 +80,15 @@ elseif (isset($_POST['insertuser']) && $usrinfo['right_power'] && !preg_match ('
     }
 }
 
-	$customFilter = custom_Filter(8);
+
 
 // *** zpracovani filtru
+$customFilter = custom_Filter(8);
+print_r ($customFilter);
 if (!isset($customFilter['kategorie'])) {
     $filterCat = 0;
 } else {
     $filterCat = $customFilter['kategorie'];
-}
-if (!isset($customFilter['sort'])) {
-    $filterSort = 1;
-} else {
-    $filterSort = $customFilter['sort'];
 }
 switch ($filterCat) {
 	case 0: $filterSqlCat = ''; break;
@@ -99,14 +96,9 @@ switch ($filterCat) {
 	case 2: $filterSqlCat = ' AND '.DB_PREFIX.'user.right_text=1 '; break;
 	default: $filterSqlCat = '';
 }
-switch ($filterSort) {
-	case 1: $filterSqlSort = ' '.DB_PREFIX.'user.login ASC '; break;
-	case 2: $filterSqlSort = ' '.DB_PREFIX.'user.login DESC '; break;
-	default: $filterSqlSort = ' '.DB_PREFIX.'user.login ASC ';
-}
 function filter ()
 {
-    global $filterCat,$filterSort;
+    global $filterCat;
     echo
 '<div id="filtr" class="table">
 	<form action="/users/" method="get">
@@ -128,12 +120,11 @@ if (isset($_GET['sort'])) {
 }
 
 // *** vypis uživatelů
+$user_sql = "SELECT ".DB_PREFIX."user.*,".DB_PREFIX."person.name,".DB_PREFIX."person.surname 
+            FROM ".DB_PREFIX."user 
+            left outer join `".DB_PREFIX."person` on ".DB_PREFIX."user.idperson=".DB_PREFIX."person.id 
+            WHERE ".DB_PREFIX."user.deleted=0 AND ".DB_PREFIX."user.right_org <= ".$usrinfo['right_org']." ".$filterSqlCat.sortingGet('user','person');
 
-if ($usrinfo['right_org']) {
-    $user_sql = "SELECT ".DB_PREFIX."user.*,".DB_PREFIX."person.name,".DB_PREFIX."person.surname FROM ".DB_PREFIX."user left outer join `".DB_PREFIX."person` on ".DB_PREFIX."user.idperson=".DB_PREFIX."person.id WHERE ".DB_PREFIX."user.deleted=0 ".$filterSqlCat.sortingGet('user','person');
-} else {
-    $user_sql = "SELECT ".DB_PREFIX."user.*,".DB_PREFIX."person.name,".DB_PREFIX."person.surname FROM ".DB_PREFIX."user left outer join `".DB_PREFIX."person` on ".DB_PREFIX."user.idperson=".DB_PREFIX."person.id WHERE ".DB_PREFIX."user.deleted=0 AND ".DB_PREFIX."user.right_org=0 ".$filterSqlCat.sortingGet('user','person');
-}
 $user_query = mysqli_query ($database,$user_sql);
 if (mysqli_num_rows ($user_query)) {
     while ($user_record = mysqli_fetch_assoc($user_query)) {

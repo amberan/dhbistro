@@ -1,4 +1,5 @@
 <?php
+
 // default
 define('DB_PREFIX', 'nw_'); // prefix tabulek
 $config['theme_bg'] = 'dark';
@@ -11,7 +12,7 @@ switch ($_SERVER["SERVER_NAME"]) {
         $config['dbdatabase'] = 'bistro';
         $config['barva'] = 'local';
         $config['custom'] = 'NH';
-        $config['theme_bg'] = 'dark';
+        $config['theme_bg'] = 'warning';
         $config['theme_navbar'] = 'secondary';
         break;
     case 'localhost':
