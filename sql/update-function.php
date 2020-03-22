@@ -4,8 +4,32 @@
     use Tracy\Debugger;
     Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
+
+/**
+ * CREATE database.table;
+ * @param array create table  $table['key'] ($table['value'] auto_increment primary)
+ * @return int of created tables
+ */
+function bistroDBTableCreate($table): int
+{
+    global $database,$config;
+    $alter = 0;
+    foreach ($table as $key => $value) {
+        if (DBtableExist($key) == 0) {
+            $sqlCreate = "CREATE TABLE ".DB_PREFIX.$key." (".$value." int NOT NULL AUTO_INCREMENT PRIMARY KEY)";
+            mysqli_query($database,$sqlCreate);
+            if (DBtableExist($key) != 0) {
+                Debugger::log('UPDATER '.$config['version'].' DB CHANGE: CREATE TABLE '.DB_PREFIX.$key);
+                $alter++;
+            }
+        }
+    }
+
+    return $alter;
+}
+
 /** 
-* ALTER TABLE `database`.`oldtable` RENAME TO `database`.`newtable';
+* RENAME TABLE database.oldtable RENAME TO database.newtable';
 * @param array $data rename_table['table'] = "tableNew";
 * @return int of changed items
 */
@@ -14,18 +38,11 @@ function bistroDBTableRename ($data): int
     global $database,$config;
     $alter = 0;
     foreach ($data as $old => $new) {
-        $checkNewSql = "SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$new'";
-        $checkOldSql = "SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$old'";
-        $checkNew = mysqli_query($database,$checkNewSql);
-        $checkOld = mysqli_query($database,$checkOldSql);
-        if ((mysqli_num_rows($checkNew) == 0) AND (mysqli_num_rows($checkOld) != 0)) {
+        if (DBtableExist($new) == 0 AND DBtableExist($old) != 0) {
             $renameSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$old RENAME TO ".$config['dbdatabase'].".".DB_PREFIX."$new";
             mysqli_query($database,$renameSql);
             unset ($checkNew, $checkOld);
-             
-            $checkNew = mysqli_query($database,$checkNewSql);
-            $checkOld = mysqli_query($database,$checkOldSql);
-            if ((mysqli_num_rows($checkNew) != 0) AND (mysqli_num_rows($checkOld) == 0)) {
+            if (DBtableExist($new) != 0 AND DBtableExist($old) == 0) {
                 Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$renameSql);
                 $alter++;
             }
@@ -35,9 +52,11 @@ function bistroDBTableRename ($data): int
     return $alter;
 }
 
+
+
 /**
- * ALTER TABLE `database`.`table` ADD COLUMN `column` params; 
- * @param array $data add_column['table']['column'] = "VARCHAR(32) NOT NULL AFTER `columnPrevious`";
+ * ALTER TABLE database.table ADD COLUMN column params; 
+ * @param array $data add_column['table']['column'] = "VARCHAR(32) NOT NULL AFTER columnPrevious";
  * @return int of changed items
  */
 function bistroDBColumnAdd($data): int
@@ -46,13 +65,13 @@ function bistroDBColumnAdd($data): int
     $alter = 0;
     foreach (array_keys($data) as $table) {
         foreach (array_keys($data[$table]) as $column) {
-            $checkSql = mysqli_query($database,"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table' and column_name='$column'");
-            $checkTable = mysqli_query($database,"SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table'");
-            if ((mysqli_num_rows($checkTable) != 0) and (mysqli_num_rows($checkSql) == 0)) {
-                $alterSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table ADD COLUMN `$column` ".$data[$table][$column];
-                Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$alterSql);
+            if (DBtableExist($table) != 0 and DBcolumnExist($table,$column) == 0) {
+                $alterSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table ADD COLUMN $column ".$data[$table][$column];
                 mysqli_query($database,$alterSql);
-                $alter++;
+                if (DBcolumnExist($table,$column) != 0 ) {
+                    Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$alterSql);
+                    $alter++;
+                }
             }
         }
     }
@@ -61,7 +80,7 @@ function bistroDBColumnAdd($data): int
 }
 
 /**
- * ALTER TABLE `database`.`table` ADD FULLTEXT (`column`)"
+ * ALTER TABLE database.table ADD FULLTEXT (column)"
  * @param array $data add_fulltext['table'] = ['column1', 'column2', 'column3'];
  * @return int of changed items
  */
@@ -72,9 +91,8 @@ function bistroDBFulltextAdd($data): int
     foreach (array_keys($data) as $table) {
         foreach ($data[$table] as $value ) { // =>
             $checkSql = mysqli_query($database,"SHOW INDEX FROM ".$config['dbdatabase'].".".DB_PREFIX."$table WHERE index_type = 'FULLTEXT' and column_name='$value'");
-            $checkTable = mysqli_query($database,"SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table'");
-            if ((mysqli_num_rows($checkTable) != 0) and (mysqli_num_rows($checkSql) == 0)) {
-                $alterSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table ADD FULLTEXT (`$value`)";
+            if (DBtableExist($table) != 0 and (mysqli_num_rows($checkSql) == 0)) {
+                $alterSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table ADD FULLTEXT ($value)";
                 Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$alterSql);
                 mysqli_query($database,$alterSql);
                 $alter++;
@@ -85,10 +103,22 @@ function bistroDBFulltextAdd($data): int
     return $alter;
 }
 
+/**
+ * ALTER TABLE ADD INDEX
+ */
+// function bistroDBIndexAdd($data): int
+// {
+//     global $database, $config;
+//     $alter = 0;
+
+//     return $alter++;
+// }
+
+
 
 /**
- * ALTER TABLE `database`.`table` CHANGE `oldcolumn` `newcolumn` newparams;
- * @param array $data alter_column['table']['column'] = " `columnNew` varchar(32) COLLATE 'utf8_general_ci' NULL AFTER `columnPrevious`";
+ * ALTER TABLE database.table CHANGE oldcolumn newcolumn newparams;
+ * @param array $data alter_column['table']['column'] = " columnNew varchar(32) COLLATE 'utf8_general_ci' NULL AFTER columnPrevious";
  * @return int of changed items
  */
 function bistroDBColumnAlter($data): int
@@ -97,12 +127,10 @@ function bistroDBColumnAlter($data): int
     $alter = 0;
     foreach (array_keys($data) as $table) {
         foreach (array_keys($data[$table]) as $column) {
-            $checkSql = mysqli_query($database,"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table' and column_name='$column'");
-            $checkTable = mysqli_query($database,"SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."$table'");
-            if ((mysqli_num_rows($checkTable) != 0) and (mysqli_num_rows($checkSql) != 0)) {  //existuje > updatnout
-                $alterSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table CHANGE `$column` ".$data[$table][$column];
+            if (DBtableExist($table) != 0 and DBcolumnExist($table,$column) != 0) {  //existuje > updatnout
+                $alterSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table CHANGE $column TO ".$data[$table][$column];
                 mysqli_query($database,$alterSql);
-                if (mysqli_affected_rows($database) > 0) {
+                if (DBcolumnExist($table,$column) != 0) {
                     Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$alterSql);
                     $alter++;
                 }
@@ -115,7 +143,7 @@ function bistroDBColumnAlter($data): int
 
 /**
  * if user.password != 32 
- * UPDATE `database`.user set pwd=md5(`password`) where id=`user_id`);
+ * UPDATE database.user set pwd=md5(password) where id=user_id);
  * @return int of changed items
  */
 function bistroDBPasswordEncrypt(): int
@@ -143,7 +171,7 @@ function bistroDBPasswordEncrypt(): int
 
 
 /**
- * UPDATE `database`.`table` SET columnMarkdown='contentMarkdown' WHERE id = id;
+ * UPDATE database.table SET columnMarkdown='contentMarkdown' WHERE id = id;
  * @param array $data data[] = ['table','id','htmlColumn','markdownColumn'];
  * @return int of changed items
  */
@@ -165,8 +193,10 @@ function bistroDBColumnMarkdown($data): int
     return $alter;
 }
 
+
+
 /**
- * DROP `database`.`table`;
+ * DROP database.table;
  * @param array $data
  * @return int of deleted tables
  */
@@ -175,39 +205,13 @@ function bistroDBTableDrop($data): int
     global $database,$config;
     $alter = 0;
     foreach ($data as $value) { //$data as $key => $value
-        $dropSql = "DROP TABLE ".$config['dbdatabase'].".".DB_PREFIX.$value;
-        mysqli_query($database,$dropSql);
-        $checkTable = mysqli_query($database,"SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX.$value."'");
-        if (mysqli_num_rows($checkTable) == 0) {
-            Debugger::log('UPDATER '.$config['version'].' DB CHANGE: DELETE TABLE '.DB_PREFIX.$value);
-            $alter++;
-        }
-    }
-
-    return $alter;
-}
-
-
-/**
- * CREATE `database`.`table`;
- * @param array create table[column][params]
- * @return int of deleted tables
- */
-function bistroDBTableCreate($table): int
-{
-    global $database,$config;
-    $alter = 0;
-    foreach ($table as $key => $value) {
-        $checkTable = mysqli_query($database,"SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX.$key."'");
-        if (mysqli_num_rows($checkTable) == 0) {
-            $sqlCreate = "CREATE TABLE ".DB_PREFIX.$key." (";
-            foreach ($value as $column => $params) {
-                $sqlCreate .= $column." ".$params.",";
+        if (DBtableExist($value) != 0) {
+            $dropSql = "DROP TABLE ".$config['dbdatabase'].".".DB_PREFIX.$value;
+            mysqli_query($database,$dropSql);
+            if (DBtableExist($value) == 0) {
+                Debugger::log('UPDATER '.$config['version'].' DB CHANGE: DELETE TABLE '.DB_PREFIX.$value);
+                $alter++;
             }
-            $sqlCreate = rtrim($sqlCreate,",");
-            $sqlCreate .= ")";
-            mysqli_query($database,$sqlCreate);
-            $alter++;
         }
     }
 

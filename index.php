@@ -27,6 +27,7 @@ use Tracy\Debugger;
 $latteParameters['current_location'] = $_SERVER["SCRIPT_URI"];
 $latteParameters['menu'] = $menu;
 $latteParameters['menu2'] = $menu2;
+$latteParameters['URL'] = $URL;
 
 
 latteDrawTemplate('headerMD');
@@ -93,6 +94,16 @@ if ($URL[1] == 'settings') { // SETTINGS
         require_once (SERVER_ROOT.'/processing/news.php');
     }
 }
+
+//show tracy bar unless it's a sending a file (picture) to the user
+if ('getportrait.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?')) &&
+    'getfile.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?')) &&
+    'file.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?'))) {
+    Debugger::barDump($_SESSION, 'session');
+    Debugger::barDump($latteParameters, 'latte');
+}
+
+
 
 latteDrawTemplate('footerMD');
 ?>

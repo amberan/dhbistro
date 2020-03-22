@@ -19,16 +19,16 @@
                     <thead>
                         <tr>
                             <th>
-                                Jméno
+                                Jméno <a href="{$website_link}{$URL[1]}/?sort=surname">&#8661;</a>
                             </th>
                             <th>
-                                Login
+                                Login <a href="{$website_link}{$URL[1]}/?sort=login">&#8661;</a>
                             </th>
                             <th>
                                 Práva
                             </th>
                             <th>
-                                Poslední přihlášení
+                                Poslední přihlášení <a href="{$website_link}{$URL[1]}/?sort=lastlogon">&#8661;</a>
                             </th>
                             <th>
                                 Akce
@@ -39,7 +39,7 @@
                         {foreach $user_record as $user}
                             <tr>
                                 <td>
-                                    {$user['name']} {$user['surname']}
+                                     {$user['surname']}{$user['surname'] ? ',' } {$user['name']}
                                 </td>
                                 <td>
                                     {$user['login']}

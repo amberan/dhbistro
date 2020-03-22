@@ -218,9 +218,3 @@ break; //symbol 2 action report
     return $filter;
 }
 
-//show tracy bar unless it's a sending a file (picture) to the user
-if ('getportrait.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?')) &&
-    'getfile.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?')) &&
-    'file.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?'))) {
-    Debugger::barDump($_SESSION, 'session');
-}

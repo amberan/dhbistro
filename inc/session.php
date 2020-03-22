@@ -51,7 +51,7 @@ function logout_forced($msg)
         $_SESSION['message'] .= $msg;
     }
     $_SESSION['timestamp'] = time();
-    Header ('location: login.php');
+    Header ('location: '.siteURL().'login.php');
     exit(111);
 }
 
