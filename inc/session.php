@@ -19,12 +19,18 @@ if (isset($_REQUEST['logmein'])) {
 // prihlasi uzivatele a nacte jej do promene
 function read_user()
 {
+    //TODO UPDATE for new RIGHTs
     global $database, $_SESSION, $usrinfo;
-    $usersql = "SELECT id, login, pwd, idperson, email, lastlogon as 'lastaction', right_power, right_text, right_org, right_aud, right_super, timeout, ip as 'currip', plan_md, sid
+    $usersql = "SELECT id, login, pwd, idperson, email, lastlogon as 'lastaction', aclTask, aclGroup, aclPerson, aclCase, aclAudit, aclGamemaster, aclDirector, aclDeputy, aclSecret, aclHunt, aclRoot, timeout, ip as 'currip', plan_md, sid
 	FROM ".DB_PREFIX."user 
 	WHERE deleted=0 AND suspended=0 AND ".DB_PREFIX."user.sid ='".$_SESSION['sid']."' AND user_agent='".$_SERVER['HTTP_USER_AGENT']."'";
     if ($usrinfo = mysqli_fetch_assoc (mysqli_query ($database,$usersql))) {
         $_SESSION['inactiveallowance'] = $usrinfo['timeout'];
+        $usrinfo['right_power'] = $usrinfo['aclDirector'];
+        $usrinfo['right_text'] = $usrinfo['aclPerson'];
+        $usrinfo['right_org'] = $usrinfo['aclGamemaster'];
+        $usrinfo['right_aud'] =  $usrinfo['aclAudit'];
+        $usrinfo['right_super'] = $usrinfo['aclRoot'];
     } else {
         unset($_SESSION['sid']);
     }

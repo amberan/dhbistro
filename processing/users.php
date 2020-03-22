@@ -84,7 +84,6 @@ elseif (isset($_POST['insertuser']) && $usrinfo['right_power'] && !preg_match ('
 
 // *** zpracovani filtru
 $customFilter = custom_Filter(8);
-print_r ($customFilter);
 if (!isset($customFilter['kategorie'])) {
     $filterCat = 0;
 } else {

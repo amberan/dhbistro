@@ -1,6 +1,6 @@
 <?php
 
-$config['version'] = '1.7.1';  // version
+$config['version'] = '1.7.2';  // version
 $config['dbpass'] = SERVER_ROOT.'/inc/important.php'; // database password - second line of the file
 $config['page_prefix'] = ''; // uri cesta mezi domenou a adresarem bistra - to be removed
 $config['page_free'] = ['login.php', 'logout.php']; // to be removed
