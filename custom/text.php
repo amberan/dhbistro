@@ -30,6 +30,7 @@ $text['uzivatelexistuje'] = 'Uživatel již existuje, použijte jiné přihlašo
 $text['databazenenalezena'] = 'Databáze nenalezena, vytvářím novou: ';
 $text['vytvorenadmin'] = ', vytvořen uživatel admin s heslem: ';
 $text['soubornenalezen'] = 'Soubor nenalezen!';
+$text['akcinelzeprovest'] = 'Požadovanou akci se nepodařilo uskutečnit!';
 
 // MENU
 $text['point'] = 'zlobod';

@@ -16,7 +16,11 @@ if (isset($URL[2]) AND ($usrinfo['right_super'] > 1) AND $URL[2] == 'now') {
     $latteParameters['message'] = $text['zalohavytvorena'];
 }
 
-$backups_sql = "SELECT ".DB_PREFIX."backup.* FROM ".DB_PREFIX."backup ORDER BY id DESC";
+if (isset($_GET['sort'])) {
+    sortingSet('backup',$_GET['sort']);
+}
+
+$backups_sql = "SELECT ".DB_PREFIX."backup.* FROM ".DB_PREFIX."backup ".sortingGet('backup');
 $backups_query = mysqli_query ($database,$backups_sql);
 while ($backup_record = mysqli_fetch_assoc($backups_query)) {
     unset ($backup);

@@ -1,7 +1,15 @@
 <?php
 
+/** 
+ * CREATE TABLE
+ */
+$tableCreate['test'] = 'testId';
+$tableCreate['sort'] = 'sortId';
 
-// *** RENAME TABLE
+/** 
+ * RENAME TABLE
+ */
+$tableRename['test'] = "test2";
 $tableRename['loggedin'] = "loggedin_deleted";
 $tableRename['map'] = "map_deleted";
 $tableRename['backups'] = "backup";
@@ -15,12 +23,15 @@ $tableRename['symbols'] = "symbol";
 $tableRename['tasks'] = "task";
 $tableRename['users'] = "user";
 
-// *** ADD COLUMN
+/** 
+ * ADD COLUMN
+ */
+$columnAdd['test2']['test'] = "int NULL after testId";
 $columnAdd['backup']['version'] = "varchar(50) NOT NULL DEFAULT '".$config['version']." =<'";
-$columnAdd['user']['sid'] = "VARCHAR(32) NOT NULL AFTER `id`";
-$columnAdd['user']['user_agent'] = "VARCHAR(256) NULL AFTER `ip`";
-$columnAdd['user']['suspended'] = "INT NOT NULL DEFAULT '0' AFTER `deleted`";
-$columnAdd['news']['deleted'] = "INT(3) NOT NULL DEFAULT '0' AFTER `kategorie`";
+$columnAdd['user']['sid'] = "VARCHAR(32) NOT NULL AFTER id";
+$columnAdd['user']['user_agent'] = "VARCHAR(256) NULL AFTER ip";
+$columnAdd['user']['suspended'] = "INT NOT NULL DEFAULT '0' AFTER deleted";
+$columnAdd['news']['deleted'] = "INT(3) NOT NULL DEFAULT '0' AFTER kategorie";
 $columnAdd['case']['contents_md'] = "TEXT NULL";
 $columnAdd['dashboard']['content_md'] = "TEXT NULL";
 $columnAdd['group']['contents_md'] = "TEXT NULL";
@@ -35,39 +46,36 @@ $columnAdd['report']['inputs_md'] = "TEXT NULL";
 $columnAdd['symbol']['desc_md'] = "TEXT NULL";
 $columnAdd['user']['plan_md'] = "TEXT NULL";
 $columnAdd['task']['task_md'] = "TEXT NULL";
-$columnAdd['user']['email'] = "VARCHAR(256) NULL AFTER `pwd`";
+$columnAdd['user']['email'] = "VARCHAR(256) NULL AFTER pwd";
+$columnAdd['sort']['userId'] = "int NOT NULL AFTER sortId";
+$columnAdd['sort']['objectType'] = "varchar(15) NOT NULL AFTER userId";
+$columnAdd['sort']['sortColumn'] = "varchar(100) NULL AFTER objectType";
+$columnAdd['sort']['sortDirection'] = "varchar(4) NULL AFTER sortColumn";
 //$columnAdd['task']['deleted'] = "int(3) NOT NULL DEFAULT '0'";
 
-// *** ADD FULLTEXT INDEX
-$columnAddFulltext['case'] = ['contents_md'];
-$columnAddFulltext['dashboard'] = ['content_md'];
-$columnAddFulltext['group'] = ['contents_md'];
-$columnAddFulltext['news'] = ['obsah_md'];
-$columnAddFulltext['note'] = ['note_md'];
-$columnAddFulltext['person'] = ['contents_md'];
-$columnAddFulltext['report'] = ['summary_md', 'impacts_md', 'details_md', 'energy_md', 'inputs_md'];
-$columnAddFulltext['symbol'] = ['desc_md'];
-
-// *** ALTER COLUMN
-$columnAlter['user']['sid'] = " `sid` varchar(32) COLLATE 'utf8_general_ci' NULL AFTER `id`";
-$columnAlter['user']['idperson'] = " `idperson` int(11) NULL AFTER `pwd`";
-$columnAlter['user']['lastlogon'] = " `lastlogon` int(11) NULL AFTER `idperson`";
-$columnAlter['user']['ip'] = " `ip` varchar(50) COLLATE 'utf8_general_ci' NULL AFTER `lastlogon`";
-$columnAlter['user']['user_agent'] = " `user_agent` varchar(256) COLLATE 'utf8_general_ci' NULL AFTER `ip`";
+/** 
+ * ALTER COLUMN
+ */
+$columnAlter['test2']['test'] = "test2 int null";
+$columnAlter['user']['sid'] = " sid varchar(32) COLLATE 'utf8_general_ci' NULL AFTER id";
+$columnAlter['user']['idperson'] = " idperson int(11) NULL AFTER pwd";
+$columnAlter['user']['lastlogon'] = " lastlogon int(11) NULL AFTER idperson";
+$columnAlter['user']['ip'] = " ip varchar(50) COLLATE 'utf8_general_ci' NULL AFTER lastlogon";
+$columnAlter['user']['user_agent'] = " user_agent varchar(256) COLLATE 'utf8_general_ci' NULL AFTER ip";
 $columnAlter['user']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
-$columnAlter['user']['suspended'] = " `suspended` int(11) NOT NULL DEFAULT '0' AFTER `deleted`";
-$columnAlter['user']['zlobody'] = " `zlobody` int(11) NOT NULL DEFAULT '0' AFTER `suspended`";
-$columnAlter['user']['right_text'] = " `right_text` int(11) NOT NULL DEFAULT '0' AFTER `timeout`";
-$columnAlter['user']['right_power'] = " `right_power` int(11) NOT NULL DEFAULT '0' AFTER `right_text`";
-$columnAlter['user']['right_org'] = " `right_org` int(11) NOT NULL DEFAULT '0' AFTER `right_power`";
-$columnAlter['user']['right_aud'] = " `right_aud` int(11) NOT NULL DEFAULT '0' AFTER `right_org`";
-$columnAlter['user']['right_super'] = " `right_super` int(11) NOT NULL DEFAULT '0' AFTER `right_aud`";
-$columnAlter['user']['filter'] = " `filter` text COLLATE 'utf8_general_ci' NULL AFTER `right_super`";
-$columnAlter['user']['plan'] = " `plan` text COLLATE 'utf8_general_ci' NULL AFTER `right_super`";
+$columnAlter['user']['suspended'] = " suspended int(11) NOT NULL DEFAULT '0' AFTER deleted";
+$columnAlter['user']['zlobody'] = " zlobody int(11) NOT NULL DEFAULT '0' AFTER suspended";
+$columnAlter['user']['right_text'] = " right_text int(11) NOT NULL DEFAULT '0' AFTER timeout";
+$columnAlter['user']['right_power'] = " right_power int(11) NOT NULL DEFAULT '0' AFTER right_text";
+$columnAlter['user']['right_org'] = " right_org int(11) NOT NULL DEFAULT '0' AFTER right_power";
+$columnAlter['user']['right_aud'] = " right_aud int(11) NOT NULL DEFAULT '0' AFTER right_org";
+$columnAlter['user']['right_super'] = " right_super int(11) NOT NULL DEFAULT '0' AFTER right_aud";
+$columnAlter['user']['filter'] = " filter text COLLATE 'utf8_general_ci' NULL AFTER right_super";
+$columnAlter['user']['plan'] = " plan text COLLATE 'utf8_general_ci' NULL AFTER right_super";
 //$columnAlter['audit_trail']['id'] = "auditid int(11) NOT NULL AUTO_INCREMENT FIRST";
 //$columnAlter['audit_trail']['time'] = "timestamp int(11) NOT NULL";
 //$columnAlter['backup']['id'] = "backupid int(11) NOT NULL AUTO_INCREMENT FIRST";
-//$columnAlter['backup']['time'] = "timestamp INT NOT NULL DEFAULT UNIX_TIMESTAMP() AFTER `id`";
+//$columnAlter['backup']['time'] = "timestamp INT NOT NULL DEFAULT UNIX_TIMESTAMP() AFTER id";
 //$columnAlter['case']['id'] = "caseid int(11) NOT NULL AUTO_INCREMENT FIRST";
 //$columnAlter['case']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
 //$columnAlter['case']['time'] = "timestamp int(11) NOT NULL";
@@ -112,8 +120,9 @@ $columnAlter['user']['plan'] = " `plan` text COLLATE 'utf8_general_ci' NULL AFTE
 //$columnAlter['user']['id'] = "userid int(11) NOT NULL AUTO_INCREMENT FIRST";
 //$columnAlter['user']['login'] = "username varchar(255) NOT NULL";
 
-
-// *** CONVERT TO MD
+/** 
+ * CONVERT DATA TO MARKDOWN
+ */
 $columnToMD[] = ['user', 'id', 'plan', 'plan_md'];
 //$columnToMD[] = ['case','id','contents','contents_md'];
 $columnToMD[] = ['dashboard', 'id', 'content', 'content_md'];
@@ -128,29 +137,51 @@ $columnToMD[] = ['news', 'id', 'obsah', 'obsah_md'];
 //$columnToMD[] = ['report','id','inputs','inputs_md'];
 //$columnToMD[] = ['symbol','id','desc','desc_md'];
 
-// *** ADD INDEX
-// ALTER TABLE `nw_unread` ADD INDEX(`iduser`)
+/**
+ * ADD FULLTEXT INDEX
+ */
+$columnAddFulltext['test2'] = ['test2'];
+$columnAddFulltext['case'] = ['contents_md'];
+$columnAddFulltext['dashboard'] = ['content_md'];
+$columnAddFulltext['group'] = ['contents_md'];
+$columnAddFulltext['news'] = ['obsah_md'];
+$columnAddFulltext['note'] = ['note_md'];
+$columnAddFulltext['person'] = ['contents_md'];
+$columnAddFulltext['report'] = ['summary_md', 'impacts_md', 'details_md', 'energy_md', 'inputs_md'];
+$columnAddFulltext['symbol'] = ['desc_md'];
 
 
-// *** DROP TABLE
+/**
+ * ADD INDEX
+ */
+// ALTER TABLE nw_unread ADD INDEX(iduser)
+
+
+/** 
+ * DROP TABLE
+ */
+$tableDrop[] = 'test2';
 $tableDrop[] = 'loggedin_deleted';
 $tableDrop[] = 'map_deleted';
+
 
 use Tracy\Debugger;
 Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
 require_once('update-function.php');
 
-$counterTableDrop = bistroDBTableDrop($tableDrop);
 $counterTableCreate = bistroDBTableCreate($tableCreate);
 $counterTableRename = bistroDBTableRename($tableRename);
-$counterColumnAlter = bistroDBColumnAlter($columnAlter);
 $counterColumnAdd = bistroDBColumnAdd($columnAdd);
-$counterPasswordEncrypt = bistroDBPasswordEncrypt();
+$counterColumnAlter = bistroDBColumnAlter($columnAlter);
 $counterColumnMarkdown = bistroDBColumnMarkdown($columnToMD);
+$counterPasswordEncrypt = bistroDBPasswordEncrypt();
 $counterFulltextAdd = bistroDBFulltextAdd($columnAddFulltext);
+//$counterIndexAdd = bistroDBIndexAdd($columnAddIndex);
+$counterIndexAdd = 0;
+$counterTableDrop = bistroDBTableDrop($tableDrop);
 
 //pokud zmeny probehly, prejmenovat tento soubor
-if ($counterColumnAdd + $counterColumnAlter + $counterColumnMarkdown + $counterFulltextAdd + $counterPasswordEncrypt + $counterTableRename + $counterTableDrop + $counterTableCreate > 0) {
+if ($counterColumnAdd + $counterColumnAlter + $counterColumnMarkdown + $counterFulltextAdd + $counterPasswordEncrypt + $counterTableRename + $counterTableDrop + $counterTableCreate + $counterIndexAdd > 0) {
     rename(__FILE__,__FILE__.".old");
 }
 

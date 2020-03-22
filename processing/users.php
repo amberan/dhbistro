@@ -8,9 +8,13 @@ if (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] == 'delete') {
     if (!$usrinfo['right_power']) {
         unauthorizedAccess(8, 1, 0, 0);
     } else {
-        auditTrail(8, 11, $_REQUEST['user_delete']);
+        auditTrail(8, 11, $URL[3]);
         mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET deleted=1 WHERE id=".$URL[3]);
-        $latteParameters['message'] = $text['uzivatelodstranen'];
+        if (mysqli_affected_rows($database) > 0) {
+            $latteParameters['message'] = $text['uzivatelodstranen'];
+        } else {
+            $latteParameters['message'] = $text['akcinelzeprovest'];
+        }
     }
 }// zamknout uzivatele
 elseif (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] == 'lock') {
@@ -19,7 +23,11 @@ elseif (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] == 'lock') {
     } else {
         auditTrail(8, 11, $URL[3]);
         mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET suspended=1 WHERE id=".$URL[3]);
-        $latteParameters['message'] = $text['uzivatelzablokovan'];
+        if (mysqli_affected_rows($database) > 0) {
+            $latteParameters['message'] = $text['uzivatelzablokovan'];
+        } else {
+            $latteParameters['message'] = $text['akcinelzeprovest'];
+        }
     }
 }// odemknout uzivatele
 elseif (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] == 'unlock') {
@@ -28,7 +36,11 @@ elseif (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] == 'unlock') {
     } else {
         auditTrail(8, 11, $URL[3]);
         mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET suspended=0 WHERE id=".$URL[3]);
-        $latteParameters['message'] = $text['uzivatelodblokovan'];
+        if (mysqli_affected_rows($database) > 0) {
+            $latteParameters['message'] = $text['uzivatelodblokovan'];
+        } else {
+            $latteParameters['message'] = $text['akcinelzeprovest'];
+        }
     }
 }// reset hesla uzivatele
 elseif (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] = 'reset') {
@@ -38,7 +50,11 @@ elseif (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] = 'reset') {
         $newpassword = randomPassword();
         auditTrail(8, 11, @$URL[3]);
         mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET pwd=md5('".$newpassword."') WHERE id=".$URL[3]);
-        $latteParameters['message'] = $text['heslonastaveno'].$newpassword;
+        if (mysqli_affected_rows($database) > 0) {
+            $latteParameters['message'] = $text['heslonastaveno'].$newpassword;
+        } else {
+            $latteParameters['message'] = $text['akcinelzeprovest'];
+        }
     }
 }  // vytvorit uzivatele
 elseif (isset($_POST['insertuser']) && $usrinfo['right_power'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['login']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['heslo']) && is_numeric($_POST['power']) && is_numeric($_POST['texty'])) {
@@ -63,7 +79,6 @@ elseif (isset($_POST['insertuser']) && $usrinfo['right_power'] && !preg_match ('
         }
     }
 }
-
 
 	$customFilter = custom_Filter(8);
 
@@ -101,27 +116,23 @@ function filter ()
 				<option value="1"'.(($filterCat == 1) ? ' selected="selected"' : '').'>power usery</option>
 				<option value="2"'.(($filterCat == 2) ? ' selected="selected"' : '').'>editory</option>
 			</select> 
-			a seřadit je podle 
-			<select name="sort">
-				<option value="1"'.(($filterSort == 1) ? ' selected="selected"' : '').'>ID vzestupně</option>
-				<option value="2"'.(($filterSort == 2) ? ' selected="selected"' : '').'>ID sestupně</option>
-			</select>
+
 		.</p>
 	  <input type="submit" id="filterbutton" name="filter" value="Filtrovat" />
 	</form>
 </div>';
 }
 
-
-
+if (isset($_GET['sort'])) {
+    sortingSet('user',$_GET['sort'],'person');
+}
 
 // *** vypis uživatelů
 
-
 if ($usrinfo['right_org']) {
-    $user_sql = "SELECT ".DB_PREFIX."user.*,".DB_PREFIX."person.name,".DB_PREFIX."person.surname FROM ".DB_PREFIX."user left outer join `".DB_PREFIX."person` on ".DB_PREFIX."user.idperson=".DB_PREFIX."person.id WHERE ".DB_PREFIX."user.deleted=0 ".$filterSqlCat." ORDER BY ".$filterSqlSort;
+    $user_sql = "SELECT ".DB_PREFIX."user.*,".DB_PREFIX."person.name,".DB_PREFIX."person.surname FROM ".DB_PREFIX."user left outer join `".DB_PREFIX."person` on ".DB_PREFIX."user.idperson=".DB_PREFIX."person.id WHERE ".DB_PREFIX."user.deleted=0 ".$filterSqlCat.sortingGet('user','person');
 } else {
-    $user_sql = "SELECT ".DB_PREFIX."user.*,".DB_PREFIX."person.name,".DB_PREFIX."person.surname FROM ".DB_PREFIX."user left outer join `".DB_PREFIX."person` on ".DB_PREFIX."user.idperson=".DB_PREFIX."person.id WHERE ".DB_PREFIX."user.deleted=0 AND ".DB_PREFIX."user.right_org=0 ".$filterSqlCat." ORDER BY ".$filterSqlSort;
+    $user_sql = "SELECT ".DB_PREFIX."user.*,".DB_PREFIX."person.name,".DB_PREFIX."person.surname FROM ".DB_PREFIX."user left outer join `".DB_PREFIX."person` on ".DB_PREFIX."user.idperson=".DB_PREFIX."person.id WHERE ".DB_PREFIX."user.deleted=0 AND ".DB_PREFIX."user.right_org=0 ".$filterSqlCat.sortingGet('user','person');
 }
 $user_query = mysqli_query ($database,$user_sql);
 if (mysqli_num_rows ($user_query)) {

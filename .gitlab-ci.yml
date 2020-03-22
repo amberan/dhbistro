@@ -2,6 +2,13 @@ stages:
   - test 
   - staging
 
+include:
+  - template: Code-Quality.gitlab-ci.yml
+
+code_quality:
+  variables:
+    CODE_QUALITY_IMAGE: "registry.example.com/codequality-fork:latest"
+
 code_quality-html:
   #https://gitlab.com/frakman1/codeclimate-test/blob/master/.gitlab-ci.yml
   stage: test
@@ -39,30 +46,6 @@ code_quality-html:
     variables:
       - $CODE_QUALITY_DISABLED
 
-#code_quality:
-#  image: docker:stable
-#  variables:
-#    DOCKER_DRIVER: overlay2
-#    DOCKER_TLS_CERTDIR: "/certs"
-#  allow_failure: true
-#  services:
-#    - docker:stable-dind
-#  script:
-#    - export SP_VERSION=$(echo "$CI_SERVER_VERSION" | sed 's/^\([0-9]*\)\.\([0-9]*\).*/\1-\2-stable/')
-#    - docker run
-#        --env SOURCE_CODE="$PWD"
-#        --env CODECLIMATE_DEBUG=0
-#        --volume "$PWD":/code
-#        --volume /var/run/docker.sock:/var/run/docker.sock
-#        "registry.gitlab.com/gitlab-org/security-products/codequality:$SP_VERSION" /code
-#  only:
-#    - merge_requests
-#    - web
-#  artifacts:
-#    reports:
-#      codequality: gl-code-quality-report.json
-##    paths: [gl-code-quality-report.json]
-#    expire_in: 10 weeks
 
 #static_analysis:
 #  stage: test
@@ -71,7 +54,6 @@ code_quality-html:
 #    - wget https://github.com/phpstan/phpstan/releases/download/0.11.19/phpstan.phar -O bin/phpstan.phar
 #  script:
 #    - php bin/phpstan.phar --error-format gitlab  analyse src --level=1
-
 
 
 test to bistro.alembiq.net:
@@ -97,27 +79,27 @@ test to bistro.alembiq.net:
     - merge_requests
     - web
 
-deploy to bistro.alembiq.net:
-  image: debian:latest
-  stage: staging
-  before_script: 
-    - DEBIAN_FRONTEND="noninteractive"
-    - 'which ssh-agent || ( apt update -y && apt install openssh-client -y )'
-    - eval $(ssh-agent -s)
-    - mkdir ~/.ssh
-    - ssh-keyscan $CI_ENVIRONMENT_URL >> ~/.ssh/known_hosts
-    - chmod 600 ~/.ssh/known_hosts
-  script:
-    - echo "Deploy to staging $URL"
-    - chmod 600 $SSH_KEY
-    - cat $SSH_KEY | tr -d '\r' | ssh-add -
-    - export
-    - ssh gitlab-ci@$CI_ENVIRONMENT_URL "cd /srv/net.alembiq.bistro/htdocs && git checkout . &&  git remote set-url origin $CI_MERGE_REQUEST_PROJECT_URL && git pull origin $CI_MERGE_REQUEST_TARGET_BRANCH_NAME && exit"
-  environment:
-    name: staging
-    url: bistro.alembiq.net
-  when: manual
-  only: 
-    - merge_requests
-    - web
+# deploy to bistro.alembiq.net:
+#   image: debian:latest
+#   stage: staging
+#   before_script: 
+#     - DEBIAN_FRONTEND="noninteractive"
+#     - 'which ssh-agent || ( apt update -y && apt install openssh-client -y )'
+#     - eval $(ssh-agent -s)
+#     - mkdir ~/.ssh
+#     - ssh-keyscan $CI_ENVIRONMENT_URL >> ~/.ssh/known_hosts
+#     - chmod 600 ~/.ssh/known_hosts
+#   script:
+#     - echo "Deploy to staging $URL"
+#     - chmod 600 $SSH_KEY
+#     - cat $SSH_KEY | tr -d '\r' | ssh-add -
+#     - export
+#     - ssh gitlab-ci@$CI_ENVIRONMENT_URL "cd /srv/net.alembiq.bistro/htdocs && git checkout . &&  git remote set-url origin $CI_MERGE_REQUEST_PROJECT_URL && git pull origin $CI_MERGE_REQUEST_TARGET_BRANCH_NAME && exit"
+#   environment:
+#     name: staging
+#     url: bistro.alembiq.net
+#   when: manual
+#   only: 
+#     - merge_requests
+#     - web
 
