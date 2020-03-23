@@ -82,6 +82,7 @@ $text['vytvorituzivatele'] = 'Vytvořit nového uživatele';
 $text['cisloosoby'] = 'Hraná osoba';
 $text['prava'] = 'Práva';
 $text['uzivatelodstranen'] = 'Uživatelský účet odstraněn!';
+$text['uzivatelobnoven'] = 'Uživatelský účet obnoven!';
 $text['uzivatelzablokovan'] = 'Uživatelský účet zablokován!';
 $text['uzivatelodblokovan'] = 'Uživatelský účet odblokován!';
 $text['heslonastaveno'] = 'Nové heslo nastaveno: ';
@@ -102,6 +103,7 @@ $text['opravdugenerovatheslo'] = 'Opravdu vygenerovat nové heslo pro uživatele
 $text['opravduodemnkout'] = 'Opravdu odemknout uživatele';
 $text['opravduzamknout'] = 'Opravdu zamknout uživatele';
 $text['opravdusmazat'] = 'Opravdu smazat uživatele';
+$text['opravduobnovit'] = 'Opravdu obnovit uživatele';
 
 // BACKUP
 $text['existujicizalohy'] = 'Existující zálohy';

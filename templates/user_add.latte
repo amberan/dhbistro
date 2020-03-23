@@ -74,7 +74,7 @@
                     </div>
                 </div>
             </div>
-            {if $usrinfo['right_aud'] > 0 }
+            {if $user['aclAudit'] > 0 }
                 <div class="col-3">
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -91,7 +91,7 @@
                     </div>
                 </div>
             {/if}
-            {if $usrinfo['right_org'] > 0 }
+            {if $user['aclGamemaster'] > 0 }
                 <div class="col-3">
                     <div class="input-group">
                         <div class="input-group-prepend">

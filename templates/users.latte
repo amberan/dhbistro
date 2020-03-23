@@ -22,13 +22,13 @@
                                 Jméno <a href="{$website_link}{$URL[1]}/?sort=surname">&#8661;</a>
                             </th>
                             <th>
-                                Login <a href="{$website_link}{$URL[1]}/?sort=login">&#8661;</a>
+                                Login <a href="{$website_link}{$URL[1]}/?sort=userName">&#8661;</a>
                             </th>
                             <th>
                                 Práva
                             </th>
                             <th>
-                                Poslední přihlášení <a href="{$website_link}{$URL[1]}/?sort=lastlogon">&#8661;</a>
+                                Poslední přihlášení <a href="{$website_link}{$URL[1]}/?sort=lastLogin">&#8661;</a>
                             </th>
                             <th>
                                 Akce
@@ -36,43 +36,47 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {foreach $user_record as $user}
+                        {foreach $user_record as $users}
                             <tr>
                                 <td>
-                                     {$user['surname']}{$user['surname'] ? ',' } {$user['name']}
+                                     {$users['surname']}{$users['surname'] ? ',' } {$users['name']}
                                 </td>
                                 <td>
-                                    {$user['login']}
+                                    {$users['userName']}
                                 </td>
                                 <td>
-                                    {if $user['right_power']} POWER USER {/if}
-                                    {if $user['right_text']} EDITOR {/if}
-                                    {if $user['right_org']} ORGANIZATOR {/if}
-                                    {if $user['right_aud']} AUDITOR {/if}
+                                    {if $users['aclDeputy']} POWER USER {/if}
+                                    {if $users['aclTask']} EDITOR {/if}
+                                    {if $users['aclGamemaster']} ORGANIZATOR {/if}
+                                    {if $users['aclAudit']} AUDITOR {/if}
                                 </td>
                                 <td>
                                     {$text['naposledy']}:
-                                    {if $user['lastlogon']}
-                                        {$user['lastlogon']}
+                                    {if $users['lastLogin']}
+                                        {$users['lastLogin']}
                                     {else}
                                         {$text[nikdy]}
                                     {/if}
                                 </td>
                                 <td>
-                                    <a class="btn btn-sm  btn-info" href="/users/edit/{$user['id']}">
+                                    <a class="btn btn-sm  btn-info" href="/users/edit/{$users['userId']}">
                                         {php  echo file_get_contents($website_link."images/icons/edit-solid.svg")}
                                     </a>
 
-                                    {if $user['id'] != $usrinfo['id']}
-                                        <a class="btn btn-sm  btn-info" href="/users/reset/{$user['id']}" onclick="return confirm('{$text['opravdugenerovatheslo']} {$user['login']}?')">{$text[noveheslo]}</a>
-                                        {if $user['suspended'] == "1"}
-                                            <a class="btn btn-sm  btn-success" href="/users/unlock/{$user['id']}" onclick="return confirm('{$text['opravduodemnkout']} {$user['login']}?')">
+                                    {if $users['userId'] != $user['userId']}
+                                        <a class="btn btn-sm  btn-info" href="/users/reset/{$users['userId']}" onclick="return confirm('{$text['opravdugenerovatheslo']} {$users['userName']}?')">{$text[noveheslo]}</a>
+                                        {if $users['userSuspended'] == "1"}
+                                            <a class="btn btn-sm  btn-success" href="/users/unlock/{$users['userId']}" onclick="return confirm('{$text['opravduodemnkout']} {$users['userName']}?')">
                                             {php  echo file_get_contents($website_link."images/icons/lock-open-solid.svg")}
                                         {else}
-                                            <a class="btn btn-sm  btn-warning" href="/users/lock/{$user['id']}" onclick="return confirm('{$text['opravduzamknout']} {$user['login']}?')">
+                                            <a class="btn btn-sm  btn-warning" href="/users/lock/{$users['userId']}" onclick="return confirm('{$text['opravduzamknout']} {$users['userName']}?')">
                                             {php  echo file_get_contents($website_link."images/icons/lock-solid.svg")}
                                         {/if}
-                                        <a class="btn btn-sm  btn-danger" href="/users/delete/{$user['id']}" onclick="return confirm('{$text['opravdusmazat']} {$user['login']}?')">
+                                        {if $users[userDeleted] == 0}
+                                            <a class="btn btn-sm  btn-danger" href="/users/delete/{$users['userId']}" onclick="return confirm('{$text['opravdusmazat']} {$users['userName']}?')">
+                                        {elseif $user['userDeleted'] == 1}
+                                            <a class="btn btn-sm  btn-restore" href="/users/restore/{$users['userId']}" onclick="return confirm('{$text['opravduobnovit']} {$users['userName']}?')">
+                                        {/if}
                                         {php  echo file_get_contents($website_link."images/icons/trash-solid.svg")}
                                     {/if}
                                 </td>

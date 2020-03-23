@@ -14,8 +14,10 @@
                         {$news[datum]}, {$news[author]}
                     </div>
                     <div class="col-md-6 col-sm-12 text-right">
-                        {if $usrinfo[right_power] > 0}
+                        {if ($user[aclDeputy] > 0 or $user[aclDirector] > 0) and $news[deleted] == 0}
                             <a href='/news/delete/{$news[id]}' onclick='return confirm("Opravdu smazat aktualitu &quot;{$news[nadpis]}&quot;?")' title={$text[smazat]}>{$text[smazat]}</a>
+                        {elseif ($user[aclDeputy] > 0 or $user[aclDirector] > 0) > 0 and $news[deleted] == 1}
+                            <a href='/news/restore/{$news[id]}' onclick='return confirm("Opravdu obnovit aktualitu &quot;{$news[nadpis]}&quot;?")' title={$text[smazat]}>{$text[obnovit]}</a>
                         {/if}
                     </div>
                 </div>
