@@ -24,18 +24,14 @@ require_once SERVER_ROOT."/lib/gui.php";
 require_once SERVER_ROOT."/lib/formatter.php";
 require_once SERVER_ROOT."/lib/filters.php";
 require_once SERVER_ROOT.'/inc/backup.php';
-require_once SERVER_ROOT.'/inc/session.php';
+// lib/user
+require_once SERVER_ROOT.'/lib/session.php';
 require_once SERVER_ROOT.'/inc/audit_trail.php';
 require_once SERVER_ROOT.'/lib/image.php';
 require_once SERVER_ROOT.'/inc/unread.php';
 // *** FUNCTIONS for objects
 require_once SERVER_ROOT.'/lib/person.php';
 require_once SERVER_ROOT.'/lib/news.php';
-// *** GENERAL ALERT - to be removed
-if (isset($_SESSION['message']) && null !== $_SESSION['message']) {
-    echo "\n<script>window.onload = alert('".$_SESSION['message']."')</script>\n";
-    unset($_SESSION['message']);
-}
 require_once SERVER_ROOT.'/inc/menu.php';
 $latteParameters['text'] = $text;
 $latteParameters['config'] = $config;

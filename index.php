@@ -13,6 +13,7 @@ require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php'); ;
 //require_once SERVER_ROOT."/lib/image.php";
 //require_once SERVER_ROOT."/lib/formatter.php";
 //require_once SERVER_ROOT."/lib/filters.php";
+//require_once SERVER_ROOT."/lib/session.php";
 use League\CommonMark\CommonMarkConverter;
     $converter = new CommonMarkConverter([
         'html_input' => 'strip',
@@ -23,6 +24,7 @@ use Tracy\Debugger;
 //$latte = new Latte\Engine();
 //$latte->setTempDirectory($config['folder_cache']);
 
+require_once SERVER_ROOT."/pages/menu.php";
 
 $latteParameters['current_location'] = $_SERVER["SCRIPT_URI"];
 $latteParameters['menu'] = $menu;
@@ -31,68 +33,73 @@ $latteParameters['URL'] = $URL;
 
 
 latteDrawTemplate('headerMD');
-latteDrawTemplate('menu');
+
 //echo "<xmp>"; print_r ($_SERVER); echo "</xmp>";
 /**
  * THE LOOP 
  * */
-if ($URL[1] == 'settings') { // SETTINGS
-    $latteParameters['title'] = $text['nastaveni'];
-    require_once ( SERVER_ROOT.'/processing/settings.php');
-} elseif ($usrinfo['right_super'] > 0 and $URL[1] == 'backup') { // BACKUP
-    $latteParameters['title'] = $text['zalohovani'];
-    require_once ( SERVER_ROOT.'/processing/backup.php');
-} elseif ($URL[1] == 'users') { // USER MANAGEMENT
-    if ($usrinfo['right_power'] < 1) {
-        unauthorizedAccess(8, 1, 0, 0);
-    } else {
-        $latteParameters['title'] = $text['spravauzivatelu'];
-        auditTrail(8, 1, 0);
-        if (isset($URL[2]) AND $URL[2] == 'new') { // USER MANAGEMENT > ADD USER
-            $latteParameters['actions'][] = array("/users", $text['spravauzivatelu']);
-            $latteParameters['subtitle'] = $text['vytvorituzivatele'];
-            require_once ( SERVER_ROOT.'/processing/user_add.php');
-        } elseif (isset($URL[2]) AND $URL[2] == 'edit') { // USER MANAGEMENT >EDIT USER
-            $latteParameters['actions'][] = array("/users/new", $text['vytvorituzivatele']);
-            $latteParameters['subtitle'] = $text['upravituzivatele'];
-            require_once ( SERVER_ROOT.'/processing/user_edit.php');
-        } else { // USER MANAGEMENT > LIST USERS
-            $latteParameters['actions'][] = array("/users/new", $text['vytvorituzivatele']);
-            require_once ( SERVER_ROOT.'/processing/users.php');
+if (isset($user)) {
+    latteDrawTemplate('menu');
+    if ($URL[1] == 'settings') { // SETTINGS
+        $latteParameters['title'] = $text['nastaveni'];
+        require_once ( SERVER_ROOT.'/processing/settings.php');
+    } elseif ($user['aclRoot'] > 0 and $URL[1] == 'backup') { // BACKUP
+        $latteParameters['title'] = $text['zalohovani'];
+        require_once ( SERVER_ROOT.'/processing/backup.php');
+    } elseif ($URL[1] == 'users') { // USER MANAGEMENT
+        if ($user['aclDirector'] < 1) {
+            unauthorizedAccess(8, 1, 0, 0);
+        } else {
+            $latteParameters['title'] = $text['spravauzivatelu'];
+            auditTrail(8, 1, 0);
+            if (isset($URL[2]) AND $URL[2] == 'new') { // USER MANAGEMENT > ADD USER
+                $latteParameters['actions'][] = array("/users", $text['spravauzivatelu']);
+                $latteParameters['subtitle'] = $text['vytvorituzivatele'];
+                require_once ( SERVER_ROOT.'/processing/user_add.php');
+            } elseif (isset($URL[2]) AND $URL[2] == 'edit') { // USER MANAGEMENT >EDIT USER
+                $latteParameters['actions'][] = array("/users/new", $text['vytvorituzivatele']);
+                $latteParameters['subtitle'] = $text['upravituzivatele'];
+                require_once ( SERVER_ROOT.'/processing/user_edit.php');
+            } else { // USER MANAGEMENT > LIST USERS
+                $latteParameters['actions'][] = array("/users/new", $text['vytvorituzivatele']);
+                require_once ( SERVER_ROOT.'/processing/users.php');
+            }
         }
-    }
-} elseif ($URL[1] == 'board') { // BOARD (nastenka)
-    auditTrail(6, 1, 0);
-    $latteParameters['title'] = $text['nastenka'];
-    $latteParameters['actions'][] = array("/news", $text['zobrazitaktuality']);
-    if (isset($URL[2]) AND $URL[2] == 'edit' AND $usrinfo['right_power'] < 0) {
-        unauthorizedAccess(6, 2, 0, 0);
-    } elseif (isset($URL[2]) AND $URL[2] == 'edit' AND $usrinfo['right_power'] > 0) { // BOARD > EDIT
-        $latteParameters['subtitle'] = $text['upravitnastenku'];
-        $latteParameters['actions'][] = array("/board", $text['zobrazitnastenku']);
-        require_once ( SERVER_ROOT.'/processing/board_edit.php');
-    } else { // BOARD > SHOW
-        if ($usrinfo['right_power'] > 0) {
-            $latteParameters['actions'][] = array("/board/edit", $text['upravitnastenku']);
-        }
-        require_once ( SERVER_ROOT.'/processing/dashboard.php');
-        require_once ( SERVER_ROOT.'/processing/board.php');
-    }
-} else { // NEWS - DEFAULT
-    auditTrail(5, 1, 0);
-    $latteParameters['title'] = 'Aktuality';
-    $latteParameters['actions'][] = array("/board", $text['zobrazitnastenku']);
-    if (isset($URL[2]) AND $URL[2] == 'new' AND $usrinfo['right_power'] > 0 AND $URL[1] == 'news') { // NEWS > NEW
-        $latteParameters['subtitle'] = $text['pridataktualitu'];
+    } elseif ($URL[1] == 'board') { // BOARD (nastenka)
+        auditTrail(6, 1, 0);
+        $latteParameters['title'] = $text['nastenka'];
         $latteParameters['actions'][] = array("/news", $text['zobrazitaktuality']);
-        require_once (SERVER_ROOT.'/processing/news_add.php');
-    } else { // NEWS > SHOW
-        if ($usrinfo['right_power'] > 0) {
-            $latteParameters['actions'][] = array("/news/new", $text['pridataktualitu']);
+        if (isset($URL[2]) AND $URL[2] == 'edit' AND $user['aclDeputy'] < 1 AND $user['aclDirector'] < 1) {
+            unauthorizedAccess(6, 2, 0, 0);
+        } elseif ((isset($URL[2]) AND $URL[2] == 'edit' AND ($user['aclDeputy'] > 0 OR $user['aclDirector'] > 0))) { // BOARD > EDIT
+            $latteParameters['subtitle'] = $text['upravitnastenku'];
+            $latteParameters['actions'][] = array("/board", $text['zobrazitnastenku']);
+            require_once ( SERVER_ROOT.'/processing/board_edit.php');
+        } else { // BOARD > SHOW
+            if ($user['aclDeputy'] > 0 OR $user['aclDirector'] > 0) {
+                $latteParameters['actions'][] = array("/board/edit", $text['upravitnastenku']);
+            }
+            require_once ( SERVER_ROOT.'/processing/dashboard.php');
+            require_once ( SERVER_ROOT.'/processing/board.php');
         }
-        require_once (SERVER_ROOT.'/processing/dashboard.php');
-        require_once (SERVER_ROOT.'/processing/news.php');
+    } else { // NEWS - DEFAULT
+        auditTrail(5, 1, 0);
+        $latteParameters['title'] = 'Aktuality';
+        $latteParameters['actions'][] = array("/board", $text['zobrazitnastenku']);
+        if (isset($URL[2]) AND $URL[2] == 'new' AND ($user['aclDeputy'] > 0 OR $user['aclDirector'] > 0) AND $URL[1] == 'news') { // NEWS > NEW
+            $latteParameters['subtitle'] = $text['pridataktualitu'];
+            $latteParameters['actions'][] = array("/news", $text['zobrazitaktuality']);
+            require_once (SERVER_ROOT.'/processing/news_add.php');
+        } else { // NEWS > SHOW
+            if ($user['aclDeputy'] > 0 OR $user['aclDirector'] > 0) {
+                $latteParameters['actions'][] = array("/news/new", $text['pridataktualitu']);
+            }
+            require_once (SERVER_ROOT.'/processing/dashboard.php');
+            require_once (SERVER_ROOT.'/processing/news.php');
+        }
     }
+} else {
+    require_once (SERVER_ROOT.'/pages/login.php');
 }
 
 //show tracy bar unless it's a sending a file (picture) to the user

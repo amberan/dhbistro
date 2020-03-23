@@ -82,7 +82,7 @@ function bistroDBColumnAdd($data): int
 
 /**
  * ALTER TABLE database.table CHANGE oldcolumn newcolumn newparams;
- * @param array $data alter_column['table']['column'] = " columnNew varchar(32) COLLATE 'utf8_general_ci' NULL AFTER columnPrevious";
+ * @param array $data alter_column['table']['column'] = " columnNew varchar(32) NULL AFTER columnPrevious";
  * @return int of changed items
  */
 function bistroDBColumnAlter($data): int
@@ -91,12 +91,15 @@ function bistroDBColumnAlter($data): int
     $alter = 0;
     foreach (array_keys($data) as $table) {
         foreach (array_keys($data[$table]) as $column) {
-            if (DBtableExist($table) != 0 and DBcolumnExist($table,$column) != 0) {  //existuje > updatnout
+            if (DBcolumnExist($table,$column) != 0) {  //existuje > updatnout
                 $alterSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table CHANGE $column ".$data[$table][$column];
+                
                 mysqli_query($database,$alterSql);
                 if (DBcolumnExist($table,strtok($column,' ')) != 0) {
                     Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$alterSql);
                     $alter++;
+                    // } else {
+                //     Debugger::log('UPDATER '.$config['version'].' DB SKIPED: '.$alterSql);
                 }
             }
         }
@@ -160,22 +163,22 @@ function bistroDBColumnMarkdown($data): int
 /** 
  * MIGRATE ACCESS RIGHTS
  */
-function bistroMigrateRights($data):int 
+function bistroMigrateRights($data): int
 {
     global $database,$config;
     $alter = 0;
     foreach (array_keys($data) as $old) {
-            foreach ($data[$old] as $new ) { 
-                if (DBcolumnExist('user',$new) AND DBcolumnExist('user',$old)) {
-                    $alterSql = "UPDATE ".$config['dbdatabase'].".".DB_PREFIX."user SET $new=$old;";
-                    mysqli_query($database,$alterSql);
-                    if (mysqli_affected_rows($database) > 0) {
-                        Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$old.' => '.$new);
-                        $alter++;
-                    }
+        foreach ($data[$old] as $new ) {
+            if (DBcolumnExist('user',$new) AND DBcolumnExist('user',$old)) {
+                $alterSql = "UPDATE ".$config['dbdatabase'].".".DB_PREFIX."user SET $new=$old;";
+                mysqli_query($database,$alterSql);
+                if (mysqli_affected_rows($database) > 0) {
+                    Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$old.' => '.$new);
+                    $alter++;
                 }
             }
         }
+    }
 
     return $alter;
 }
@@ -190,7 +193,7 @@ function bistroDBFulltextAdd($data): int
     global $database,$config;
     $alter = 0;
     foreach (array_keys($data) as $table) {
-        foreach ($data[$table] as $value ) { // =>
+        foreach ($data[$table] as $value ) {
             $checkSql = mysqli_query($database,"SHOW INDEX FROM ".$config['dbdatabase'].".".DB_PREFIX."$table WHERE index_type = 'FULLTEXT' and column_name='$value'");
             if (DBtableExist($table) != 0 and (mysqli_num_rows($checkSql) == 0)) {
                 $alterSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table ADD FULLTEXT ($value)";
@@ -216,6 +219,29 @@ function bistroDBFulltextAdd($data): int
 // }
 
 
+/** 
+ * DROP table.column
+ * @return int of droped columns
+ */
+function bistroDBColumnDrop($data): int
+{
+    global $database,$config;
+    $alter = 0;
+    foreach (array_keys($data) as $table) {
+        foreach ($data[$table] as $column ) {
+            if (DBcolumnExist($table,$column) != 0) {
+                $dropSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX.$table." DROP $column";
+                mysqli_query($database,$dropSql);
+                if (DBColumnExist($table,$column) == 0) {
+                    Debugger::log('UPDATER '.$config['version'].' DB CHANGE: DELETE COLUMN '.DB_PREFIX.$table.".".$column);
+                    $alter++;
+                }
+            }
+        }
+    }
+
+    return $alter;
+}
 
 /**
  * DROP database.table;

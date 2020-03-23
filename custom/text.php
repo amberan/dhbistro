@@ -8,6 +8,7 @@ $text['poslednizmena'] = 'Poslední změna';
 $text['zmenil'] = 'Změnil';
 $text['upravit'] = 'Upravit';
 $text['smazat'] = 'smazat';
+$text['obnovit'] = 'obnovit';
 $text['nadpis'] = 'Nadpis';
 $text['kategorie'] = 'Kategorie';
 $text['obsah'] = 'Obsah';
@@ -31,6 +32,7 @@ $text['databazenenalezena'] = 'Databáze nenalezena, vytvářím novou: ';
 $text['vytvorenadmin'] = ', vytvořen uživatel admin s heslem: ';
 $text['soubornenalezen'] = 'Soubor nenalezen!';
 $text['akcinelzeprovest'] = 'Požadovanou akci se nepodařilo uskutečnit!';
+$text['nuceneodhlaseni'] = 'Z bezpečnostních důvodů jste byl odhlášen!';
 
 // MENU
 $text['point'] = 'zlobod';
@@ -129,4 +131,6 @@ $text['aktualitanevlozena'] = 'Aktualitu se nepodařilo vložit';
 $text['novaaktualita'] = 'Nová aktualita';
 $text['kategorieherni'] = 'herní';
 $text['kategoriesystemova'] = 'systémová';
+$text['aktualitaobnovena'] = 'Aktualita obnovena';
+$text['aktualitaneobnovena'] = 'Aktualitu se nepodařilo obnovit';
 ?>
