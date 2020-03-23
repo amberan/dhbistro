@@ -5,10 +5,6 @@ stages:
 include:
   - template: Code-Quality.gitlab-ci.yml
 
-code_quality:
-  variables:
-    CODE_QUALITY_IMAGE: "registry.example.com/codequality-fork:latest"
-
 code_quality-html:
   #https://gitlab.com/frakman1/codeclimate-test/blob/master/.gitlab-ci.yml
   stage: test
