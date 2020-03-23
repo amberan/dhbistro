@@ -13,7 +13,7 @@ function userRead($userId): array
 {
     global $database, $text, $user;
 
-    $querySql = "SELECT * from ".DB_PREFIX."user where ".$user['sqlDeleted']." AND userId=".$userId;
+    $querySql = "SELECT * from ".DB_PREFIX."user where userDeleted <= ".$user['aclRoot']." AND userId=".$userId;
 
     $query = mysqli_query($database,$querySql);
     if (mysqli_num_rows($query) > 0) {
@@ -33,31 +33,48 @@ function userRead($userId): array
 * TODO strankovani
 * TODO osetrit ze nevydim prava nizsi nez mam sam
 */
-function userList($where = 1, $order = 1): array
+function userList($where = 1): array
 {
-    global $database, $usrinfo, $text;
+    global $database, $user, $text;
+
     if (mb_strlen($where) < 1) {
         $where = 1;
     }
-    if (mb_strlen($order) < 1) {
-        $order = 1;
-    }
-    $sqlwhere = " ($where) AND secret <=".$usrinfo['right_power'];
-    if (isset($usrinfo['right_admin']) AND $usrinfo['right_admin'] > 0) {
-        $sqlwhere .= " AND deleted = 1";
-    } else {
-        $sqlwhere .= " AND deleted = 0";
-    }
-    $sql = "SELECT * FROM ".DB_PREFIX."person WHERE $sqlwhere ORDER BY $order";
+    
+    $sql = "SELECT * FROM ".DB_PREFIX."user  left outer join `".DB_PREFIX."person` on ".DB_PREFIX."user.personId=".DB_PREFIX."person.id WHERE userDeleted <= ".$user['aclRoot']." AND ($where) ".sortingGet('user','person');
+    //
+    //sortingGet('user','person');
     $query = mysqli_query($database,$sql);
     if (mysqli_num_rows($query) > 0) {
-        while ($person = mysqli_fetch_assoc ($query)) {
-            unset ($person['deleted']);
-            $personList[] = $person;
+        while ($users = mysqli_fetch_assoc ($query)) {
+            if ($users['lastLogin'] < 1) { 
+                $users['lastLogin'] = $text['nikdy']; 
+            } else {
+                $users['lastLogin'] = webdatetime($users['lastLogin']); 
+            }
+            $userList[] = $users;
         }
     } else {
-        $personList[] = $text['prazdnyvypis'];
+        $userList[] = $text['prazdnyvypis'];
     }
 
-    return $personList;
+    return $userList;
+}
+
+
+
+
+
+//TODO uprava uzivatele
+function userChange($userId, $data) {
+    global $database, $user;
+    $chain = "";
+    foreach ($data as $column => $value) {
+        if (DBcolumnExist('user',$column)) {
+            $chain .= " $column = '$value',";
+        }
+    }
+    if (strlen($chain) > 0) {
+        echo $sql = "UPDATE ".DB_PREFIX."user SET ".rtrim($chain, ",")."  where userId=".$userId;
+    }
 }

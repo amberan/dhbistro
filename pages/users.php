@@ -1,5 +1,6 @@
 <?php
 
+
 use Tracy\Debugger;
     Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
@@ -98,23 +99,19 @@ if (isset($_GET['sort'])) {
     sortingSet('user',$_GET['sort'],'person');
 }
 
-// *** vypis uživatelů
-$user_sql = "SELECT ".DB_PREFIX."user.*,".DB_PREFIX."person.name,".DB_PREFIX."person.surname 
-            FROM ".DB_PREFIX."user 
-            left outer join `".DB_PREFIX."person` on ".DB_PREFIX."user.personId=".DB_PREFIX."person.id 
-            WHERE ".$user['sqlDeleted']." AND ".DB_PREFIX."user.aclGamemaster <= ".$user['aclGamemaster']." ".sortingGet('user','person');
-
-$user_query = mysqli_query ($database,$user_sql);
-if (mysqli_num_rows ($user_query)) {
-    while ($user_record = mysqli_fetch_assoc($user_query)) {
-        if ($user_record['lastLogin'] < 1) { $user_record['lastLogin'] = $text['nikdy']; }
-        else {$user_record['lastLogin'] = webdatetime($user_record['lastLogin']); }
-        $user_array[] = $user_record;
-    }
-    $latteParameters['user_record'] = $user_array;
+$userList = userList(); 
+if (count($userList) > 0) {
+    $latteParameters['user_record'] = $userList;
 } else {
     $latteParameters['warning'] = $text['prazdnyvypis'];
 }
+
+//TODO uprava uzivatele
+$array['aclRoot'] = 'hodnota';
+$array['dva'] = 'druha';
+userChange(150,$array);
+
+
 latteDrawTemplate('sparklet');
 //TODO DODELAT FILTROVANI PODLE PRAV
 latteDrawTemplate('users');
