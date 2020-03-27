@@ -45,10 +45,18 @@
                                     {$users['userName']}
                                 </td>
                                 <td>
-                                    {if $users['aclDeputy']} POWER USER {/if}
-                                    {if $users['aclTask']} EDITOR {/if}
-                                    {if $users['aclGamemaster']} ORGANIZATOR {/if}
-                                    {if $users['aclAudit']} AUDITOR {/if}
+                                    {if $users['aclRoot']} {$text['aclRoot']}  {/if}
+                                    {if $users['aclGamemaster']} {$text['aclGamemaster']} {/if}
+                                    {if $users['aclDirector']} {$text['aclDirector']} {/if}
+                                    {if $users['aclDeputy']} {$text['aclDeputy']} {/if}
+                                    {if $users['aclTask']} {$text['aclTask']} {/if}
+                                    {if $users['aclSecret']} {$text['aclSecret']} {/if}
+                                    {if $users['aclAudit']} {$text['aclAudit']} {/if}
+                                    {if $users['aclGroup']} {$text['aclGroup']} {/if}
+                                    {if $users['aclPerson']} {$text['aclPerson']} {/if}
+                                    {if $users['aclCase']} {$text['aclCase']} {/if}
+                                    {if $users['aclHunt']} {$text['aclHunt']} {/if}
+                                    {if $users['aclAPI']} {$text['aclAPI']} {/if}
                                 </td>
                                 <td>
                                     {$text['naposledy']}:
