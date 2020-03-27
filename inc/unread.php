@@ -24,7 +24,7 @@ function unreadRecords ($tablenum,$rid) {
 	if (isset($_POST['nsecret'])) {
 		$secret=$_POST['nsecret'];
 	}
-	$unreadSql="SELECT ".DB_PREFIX."user.userId as 'id', ".DB_PREFIX."user.right_power as 'right_power', ".DB_PREFIX."user.deleted as 'deleted' FROM ".DB_PREFIX."user";
+	$unreadSql="SELECT ".DB_PREFIX."user.userId as 'id', ".DB_PREFIX."user.right_power as 'right_power', ".DB_PREFIX."user.userDeleted as 'deleted' FROM ".DB_PREFIX."user";
 	$unreadResult=mysqli_query ($database,$unreadSql);
 	while ($unreadRecord=mysqli_fetch_assoc ($unreadResult)) {
 		if ($secret > 0 && $unreadRecord['deleted'] <> 1) {

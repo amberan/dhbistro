@@ -64,9 +64,13 @@ function userList($where = 1): array
 
 
 
-
-//TODO uprava uzivatele
-//function userChange($userId, $data, $success = $text['operaceuspesna'], $failure = $text['odhlaseniuspesne']): string {
+/** 
+ * user change parameters
+ * @param int userId
+ * @param array data[key]=value
+ * @param string success message
+ * @param string failure message
+ */
 function userChange($userId, $data, $success = null, $failure = null): string {
     global $database, $latteParameters;
     $chain = "";

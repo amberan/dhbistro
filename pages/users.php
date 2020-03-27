@@ -95,12 +95,6 @@ if (count($userList) > 0) {
     $latteParameters['warning'] = $text['prazdnyvypis'];
 }
 
-//TODO uprava uzivatele
-// $array['aclRoot'] = 'hodnota';
-// $array['dva'] = 'druha';
-// userChange(150,$array);
-
-
 latteDrawTemplate('sparklet');
 //TODO DODELAT FILTROVANI PODLE PRAV
 latteDrawTemplate('users');

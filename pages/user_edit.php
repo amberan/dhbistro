@@ -42,34 +42,22 @@ if (isset($_POST['userid'], $_POST['edituser']) && $user['aclDirector'] && !preg
 	if ($rec = mysqli_fetch_assoc ($res)) {
 	    $latteParameters['userEdit'] = $rec;
 
-	    // $hlaseni_sql = mysqli_query ($database,"SELECT ".DB_PREFIX."report.secret AS 'secret', ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.id AS 'id' FROM ".DB_PREFIX."report WHERE ".DB_PREFIX."report.iduser=".$rec['userId']." AND ".DB_PREFIX."report.status=0 AND ".DB_PREFIX."report.deleted=0 ORDER BY ".DB_PREFIX."report.label ASC");
-	    // while ($hlaseni = mysqli_fetch_assoc ($hlaseni_sql)) {
-	    //     $hlaseni_array[] = array ($hlaseni['id'], $hlaseni['label']);
-	    // }
-	    // if (isset($hlaseni_array)) {
-	    //     $latteParameters['userEdit']['hlaseni'] = $hlaseni_array;
-        // }
         $reportsAssignedToUser = reportsAssignedTo($rec['userId']);
-        if ($reportsAssignedToUser) { print_r($reportsAssignedToUser);
+        if ($reportsAssignedToUser) { 
             $latteParameters['userEdit']['hlaseni'] = $reportsAssignedToUser;
         }
 
 
-	    $pripady_sql = mysqli_query ($database,"SELECT ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.title AS 'title' FROM ".DB_PREFIX."c2s, ".DB_PREFIX."case WHERE ".DB_PREFIX."case.id=".DB_PREFIX."c2s.idcase AND ".DB_PREFIX."case.status=0 AND ".DB_PREFIX."c2s.idsolver=".$rec['userId']." ORDER BY ".DB_PREFIX."case.title ASC");
-	    while ($pripady = mysqli_fetch_assoc ($pripady_sql)) {
-	        $pripady_array[] = array ($pripady['id'], $pripady['title']);
-	    }
-	    if (isset($pripady_array)) {
-	        $latteParameters['userEdit']['pripady'] = $pripady_array;
-	    }
-        
-	    $ukoly_sql = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."task WHERE ".DB_PREFIX."task.iduser=".$rec['userId']." AND ".DB_PREFIX."task.status=0 ORDER BY ".DB_PREFIX."task.created ASC");
-	    while ($ukoly = mysqli_fetch_assoc ($ukoly_sql)) {
-	        $ukoly_array[] = array ($ukoly['id'], $ukoly['task']);
-	    }
-	    if (isset($ukoly_array)) {
-	        $latteParameters['userEdit']['ukoly'] = $ukoly_array;
-	    }
+        $casesAssignedToUser = casesAssignedTo($rec['userId']);
+        if ($casesAssignedToUser) { 
+            $latteParameters['userEdit']['pripady'] = $casesAssignedToUser;
+        }
+
+        $tasksAssignedToUser = tasksAssignedTo($rec['userId']);
+        if ($tasksAssignedToUser) { 
+            $latteParameters['userEdit']['ukoly'] = $tasksAssignedToUser;
+        }
+
 	} else {
 	    $latteParameters['warning'] = $text['zaznamnenalezen'];
 	}
