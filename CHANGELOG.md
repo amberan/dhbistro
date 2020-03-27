@@ -1,5 +1,15 @@
 # BISTRO changelog 
 
+**1.7.2** Access 2.0
+- nova prava [#49](https://gitlab.alembiq.net/larp/bistro/issues/49)
+- uprava spravy uzivatelu podle [#49](https://gitlab.alembiq.net/larp/bistro/issues/49) [#101](https://gitlab.alembiq.net/larp/bistro/issues/101)
+- sessions overhelm [#89](https://gitlab.alembiq.net/larp/bistro/issues/89)
+- THE LOOP podle [#49](https://gitlab.alembiq.net/larp/bistro/issues/49) a [#89](https://gitlab.alembiq.net/larp/bistro/issues/89)
+- vypis nauzavrenych hlaseni/pripadu/ukolu uzivatele jako funkce [#104](https://gitlab.alembiq.net/larp/bistro/issues/104)
+
+**1.7.1** 
+- trideni [#87](https://gitlab.alembiq.net/larp/bistro/issues/87)
+
 **1.7.0** HLIDKY BREZEN 2020
 
 **1.6.7**

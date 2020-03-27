@@ -79,46 +79,10 @@ function bistroDBColumnAdd($data): int
     return $alter;
 }
 
-/**
- * ALTER TABLE database.table ADD FULLTEXT (column)"
- * @param array $data add_fulltext['table'] = ['column1', 'column2', 'column3'];
- * @return int of changed items
- */
-function bistroDBFulltextAdd($data): int
-{
-    global $database,$config;
-    $alter = 0;
-    foreach (array_keys($data) as $table) {
-        foreach ($data[$table] as $value ) { // =>
-            $checkSql = mysqli_query($database,"SHOW INDEX FROM ".$config['dbdatabase'].".".DB_PREFIX."$table WHERE index_type = 'FULLTEXT' and column_name='$value'");
-            if (DBtableExist($table) != 0 and (mysqli_num_rows($checkSql) == 0)) {
-                $alterSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table ADD FULLTEXT ($value)";
-                Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$alterSql);
-                mysqli_query($database,$alterSql);
-                $alter++;
-            }
-        }
-    }
-
-    return $alter;
-}
-
-/**
- * ALTER TABLE ADD INDEX
- */
-// function bistroDBIndexAdd($data): int
-// {
-//     global $database, $config;
-//     $alter = 0;
-
-//     return $alter++;
-// }
-
-
 
 /**
  * ALTER TABLE database.table CHANGE oldcolumn newcolumn newparams;
- * @param array $data alter_column['table']['column'] = " columnNew varchar(32) COLLATE 'utf8_general_ci' NULL AFTER columnPrevious";
+ * @param array $data alter_column['table']['column'] = " columnNew varchar(32) NULL AFTER columnPrevious";
  * @return int of changed items
  */
 function bistroDBColumnAlter($data): int
@@ -127,12 +91,15 @@ function bistroDBColumnAlter($data): int
     $alter = 0;
     foreach (array_keys($data) as $table) {
         foreach (array_keys($data[$table]) as $column) {
-            if (DBtableExist($table) != 0 and DBcolumnExist($table,$column) != 0) {  //existuje > updatnout
-                $alterSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table CHANGE $column TO ".$data[$table][$column];
+            if (DBcolumnExist($table,$column) != 0) {  //existuje > updatnout
+                $alterSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table CHANGE $column ".$data[$table][$column];
+                
                 mysqli_query($database,$alterSql);
-                if (DBcolumnExist($table,$column) != 0) {
+                if (DBcolumnExist($table,strtok($column,' ')) != 0) {
                     Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$alterSql);
                     $alter++;
+                    // } else {
+                //     Debugger::log('UPDATER '.$config['version'].' DB SKIPED: '.$alterSql);
                 }
             }
         }
@@ -193,7 +160,88 @@ function bistroDBColumnMarkdown($data): int
     return $alter;
 }
 
+/** 
+ * MIGRATE ACCESS RIGHTS
+ */
+function bistroMigrateRights($data): int
+{
+    global $database,$config;
+    $alter = 0;
+    foreach (array_keys($data) as $old) {
+        foreach ($data[$old] as $new ) {
+            if (DBcolumnExist('user',$new) AND DBcolumnExist('user',$old)) {
+                $alterSql = "UPDATE ".$config['dbdatabase'].".".DB_PREFIX."user SET $new=$old;";
+                mysqli_query($database,$alterSql);
+                if (mysqli_affected_rows($database) > 0) {
+                    Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$old.' => '.$new);
+                    $alter++;
+                }
+            }
+        }
+    }
 
+    return $alter;
+}
+
+/**
+ * ALTER TABLE database.table ADD FULLTEXT (column)"
+ * @param array $data add_fulltext['table'] = ['column1', 'column2', 'column3'];
+ * @return int of changed items
+ */
+function bistroDBFulltextAdd($data): int
+{
+    global $database,$config;
+    $alter = 0;
+    foreach (array_keys($data) as $table) {
+        foreach ($data[$table] as $value ) {
+            $checkSql = mysqli_query($database,"SHOW INDEX FROM ".$config['dbdatabase'].".".DB_PREFIX."$table WHERE index_type = 'FULLTEXT' and column_name='$value'");
+            if (DBtableExist($table) != 0 and (mysqli_num_rows($checkSql) == 0)) {
+                $alterSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table ADD FULLTEXT ($value)";
+                mysqli_query($database,$alterSql);
+                Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$alterSql);
+                $alter++;
+            }
+        }
+    }
+
+    return $alter;
+}
+
+/**
+ * ALTER TABLE ADD INDEX
+ */
+// function bistroDBIndexAdd($data): int
+// {
+//     global $database, $config;
+//     $alter = 0;
+
+//     return $alter++;
+// }
+
+
+/** 
+ * DROP table.column
+ * @return int of droped columns
+ */
+function bistroDBColumnDrop($data): int
+{
+    global $database,$config;
+    $alter = 0;
+    foreach (array_keys($data) as $table) {
+        foreach ($data[$table] as $column ) {
+            if (DBcolumnExist($table,$column) != 0) {
+                $dropSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX.$table." DROP $column";
+                mysqli_query($database,$dropSql);
+                if (DBColumnExist($table,$column) == 0) {
+                    Debugger::log('UPDATER '.$config['version'].' DB CHANGE: DELETE COLUMN '.DB_PREFIX.$table.".".$column);
+                    $alter++;
+                }
+            }
+        }
+    }
+
+    return $alter;
+}
 
 /**
  * DROP database.table;
@@ -217,3 +265,4 @@ function bistroDBTableDrop($data): int
 
     return $alter;
 }
+

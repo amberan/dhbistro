@@ -8,10 +8,10 @@ use Tracy\Debugger;
     $latteParameters['new_password'] = randomPassword();
 
     //seznam osob napojenych na uzivatele
-    $personLinkedSql = "SELECT ".DB_PREFIX."user.idperson FROM ".DB_PREFIX."user where idperson != 0 ORDER BY idperson";
+    $personLinkedSql = "SELECT ".DB_PREFIX."user.personId FROM ".DB_PREFIX."user where personId != 0 ORDER BY personId";
     $personLinkedQuery = mysqli_query ($database,$personLinkedSql);
     while ($personLinkedRecord = mysqli_fetch_assoc($personLinkedQuery)) {
-        $personLinked[] = $personLinkedRecord['idperson'];
+        $personLinked[] = $personLinkedRecord['personId'];
     }
 
     //seznam osob

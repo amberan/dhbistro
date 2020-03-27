@@ -39,9 +39,9 @@ function newsList($filterSqlCat = 1, $filterSqlSort = 1) {
     ".DB_PREFIX."news.obsah AS 'obsah',
     ".DB_PREFIX."news.deleted AS 'deleted',
     ".DB_PREFIX."news.kategorie AS 'kategorie',
-    ".DB_PREFIX."user.login AS 'autor'
+    ".DB_PREFIX."user.userName AS 'autor'
         FROM ".DB_PREFIX."news, ".DB_PREFIX."user
-        WHERE ".DB_PREFIX."news.iduser=".DB_PREFIX."user.id $sql_where $filterSqlCat
+        WHERE ".DB_PREFIX."news.iduser=".DB_PREFIX."user.userId $sql_where $filterSqlCat
         ORDER BY $filterSqlSort LIMIT 10";
 	$query = mysqli_query($database,$sql);
 	if (mysqli_num_rows($query)> 0) {

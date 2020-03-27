@@ -22,7 +22,7 @@ zálohování                                      | | | | | | X
 
 aktivita|ROOT|ORGANIZATOR|SUPERUSER|POWERUSER|UKOLY|UTAJENI|AUDIT|API|SKUPINY|OSOBY|PRIPADY|LOVENKY| 
 --- |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:
-||acl_root|acl_gm|acl_super|acl_power|acl_task|acl_secret|acl_audit|acl_api|acl_group|acl_person|acl_case|acl_hunt|
+||aclRoot|aclGamemaster|aclDirector|aclDeputy|aclTask|aclSecret|aclAudit|aclAPI|aclGroup|aclPerson|aclCase|aclHunt|
 zobrazní auditu                                 |||||||0/1|||||
 editace skupin                                  |||||||||||0/1|
 editace osob                                    ||||||||||0/1||
@@ -42,8 +42,8 @@ pristup k API                                   ||||||||0/r/w|||
 lovenky                                         ||||||||||||0/r/w| 
 
 #### konverze
-- right_power > acl_super
-- right_text > acl_task + acl_group + acl_person + acl_case
-- right_audit > acl_audit
-- right_org > acl_gm
-- right_super > acl_root
+- right_text > aclTask + aclGroup + aclPerson + aclCase
+- right_audit > aclAudit
+- right_org > aclGamemaster
+- right_power > aclDirector + aclDeputy + aclSecret + aclHunt
+- right_super > aclRoot

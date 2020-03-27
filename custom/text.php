@@ -8,11 +8,16 @@ $text['poslednizmena'] = 'Poslední změna';
 $text['zmenil'] = 'Změnil';
 $text['upravit'] = 'Upravit';
 $text['smazat'] = 'smazat';
+$text['obnovit'] = 'obnovit';
 $text['nadpis'] = 'Nadpis';
 $text['kategorie'] = 'Kategorie';
 $text['obsah'] = 'Obsah';
 $text['zavrit'] = 'Zavřít';
 $text['notifikace'] = 'Notifikace';
+$text['zapis'] = 'Zápis';
+$text['cteni'] = 'Čtení';
+$text['skryt'] = 'Skrýt';
+$text['zpristupnit'] = 'Zpřístupnit';
 
 // LOGIN
 $text['jmeno'] = 'Jméno';
@@ -25,12 +30,13 @@ $text['odhlaseniuspesne'] = 'Byl jste úspěsně odhlášen.';
 $text['zaznamnenalezen'] = 'Požadovaný záznam nebyl nalezen!';
 $text['prazdnyvypis'] = 'Výpis neobsahuje žádné položky!';
 $text['http401'] = 'You are unauthorized to make this request!';
-$text['neytvoreno'] = 'Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.';
+$text['nevytvoreno'] = 'Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.';
 $text['uzivatelexistuje'] = 'Uživatel již existuje, použijte jiné přihlašovací jméno!';
 $text['databazenenalezena'] = 'Databáze nenalezena, vytvářím novou: ';
 $text['vytvorenadmin'] = ', vytvořen uživatel admin s heslem: ';
 $text['soubornenalezen'] = 'Soubor nenalezen!';
 $text['akcinelzeprovest'] = 'Požadovanou akci se nepodařilo uskutečnit!';
+$text['nuceneodhlaseni'] = 'Z bezpečnostních důvodů jste byl odhlášen!';
 
 // MENU
 $text['point'] = 'zlobod';
@@ -80,6 +86,7 @@ $text['vytvorituzivatele'] = 'Vytvořit nového uživatele';
 $text['cisloosoby'] = 'Hraná osoba';
 $text['prava'] = 'Práva';
 $text['uzivatelodstranen'] = 'Uživatelský účet odstraněn!';
+$text['uzivatelobnoven'] = 'Uživatelský účet obnoven!';
 $text['uzivatelzablokovan'] = 'Uživatelský účet zablokován!';
 $text['uzivatelodblokovan'] = 'Uživatelský účet odblokován!';
 $text['heslonastaveno'] = 'Nové heslo nastaveno: ';
@@ -100,6 +107,20 @@ $text['opravdugenerovatheslo'] = 'Opravdu vygenerovat nové heslo pro uživatele
 $text['opravduodemnkout'] = 'Opravdu odemknout uživatele';
 $text['opravduzamknout'] = 'Opravdu zamknout uživatele';
 $text['opravdusmazat'] = 'Opravdu smazat uživatele';
+$text['opravduobnovit'] = 'Opravdu obnovit uživatele';
+$text['aclRoot'] = 'Administrátor';
+$text['aclDirector'] = 'Nejtemnější';
+$text['aclDeputy'] = 'Zástupce';
+$text['aclTask'] = 'Úkoly';
+$text['aclSecret'] = 'Tajné';
+$text['aclAudit'] = 'Audit';
+$text['aclGroup'] = 'Skupiny';
+$text['aclPerson'] = 'Osoby';
+$text['aclCase'] = 'Případy';
+$text['aclHunt'] = 'Lovenky';
+$text['aclGamemaster'] = 'Organizátor';
+$text['aclAPI'] = 'API';
+
 
 // BACKUP
 $text['existujicizalohy'] = 'Existující zálohy';
@@ -129,4 +150,6 @@ $text['aktualitanevlozena'] = 'Aktualitu se nepodařilo vložit';
 $text['novaaktualita'] = 'Nová aktualita';
 $text['kategorieherni'] = 'herní';
 $text['kategoriesystemova'] = 'systémová';
+$text['aktualitaobnovena'] = 'Aktualita obnovena';
+$text['aktualitaneobnovena'] = 'Aktualitu se nepodařilo obnovit';
 ?>

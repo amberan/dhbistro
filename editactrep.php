@@ -24,7 +24,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id'] =
 		".DB_PREFIX."report.details AS 'details',
 		".DB_PREFIX."report.secret AS 'secret',
 		".DB_PREFIX."report.status AS 'status',
-		".DB_PREFIX."user.login AS 'autor',
+		".DB_PREFIX."user.userName AS 'autor',
 		".DB_PREFIX."report.type AS 'type',
 		".DB_PREFIX."report.adatum AS 'adatum',
 		".DB_PREFIX."report.start AS 'start',
@@ -32,7 +32,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id'] =
 		".DB_PREFIX."report.energy AS 'energy',
 		".DB_PREFIX."report.inputs AS 'inputs'
 		FROM ".DB_PREFIX."report, ".DB_PREFIX."user
-		WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.id AND ".DB_PREFIX."report.id=".$_REQUEST['rid'];
+		WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."report.id=".$_REQUEST['rid'];
     $res = mysqli_query ($database,$sql);
     if ($rec_actr = mysqli_fetch_assoc ($res)) {
         //test oprávněnosti přístupu
@@ -136,25 +136,6 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id'] =
 
             <input type="hidden" name="reportid" value="<?php echo $rec_actr['id']; ?>" />
             <input type="submit" name="editactrep" id="submitbutton" value="Uložit změny" />
-            <div id="js-popup" class="popup-bg">
-                <div class="popup">
-                    <p class="warning">Vaše přihlašovací session vypršela.</p>
-                    <p>
-                        Pokud si přejete zahodit provedené změny, pokračujte bez uložení a budete odhlášeni.
-                    </p>
-                    <p>
-                        Pokud nechcete své úpravy ztratit, přihlašte se v jiné záložce / okně a pokuste se změny uložit znovu.
-                    </p>
-                    <div>
-                        <button class="close-button">
-                            Vrátit se
-                        </button>
-                        <button class="close-button">
-                            Pokračovat - neukládat
-                        </button>
-                    </div>
-                </div>
-            </div>
         </fieldset>
     </form>
 
@@ -283,9 +264,9 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($usrinfo['id'] =
         <!-- následuje seznam poznámek -->
         <?php // generování poznámek
 			if ($usrinfo['right_power']) {
-			    $sql = "SELECT ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.login AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.id AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=4 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret<2 OR ".DB_PREFIX."note.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."note.datum DESC";
+			    $sql = "SELECT ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=4 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret<2 OR ".DB_PREFIX."note.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."note.datum DESC";
 			} else {
-			    $sql = "SELECT ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.login AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.id AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=4 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret=0 OR ".DB_PREFIX."note.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."note.datum DESC";
+			    $sql = "SELECT ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=4 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret=0 OR ".DB_PREFIX."note.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."note.datum DESC";
 			}
         $res = mysqli_query ($database,$sql);
         $i = 0;

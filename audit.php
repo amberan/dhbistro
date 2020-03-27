@@ -93,7 +93,7 @@ $latteParameters['title'] = 'Audit';
 						}
 						break;
 				case 7: $name = $idrecord; break;
-				case 8: $sqlType = "SELECT ".DB_PREFIX."user.login as 'name' FROM ".DB_PREFIX."user WHERE ".DB_PREFIX."user.id='".$idrecord."'";
+				case 8: $sqlType = "SELECT ".DB_PREFIX."user.userName as 'name' FROM ".DB_PREFIX."user WHERE ".DB_PREFIX."user.userId='".$idrecord."'";
 						$resType = mysqli_query ($database,$sqlType);
 						if (mysqli_num_rows ($resType)) {
 						    while ($recType = mysqli_fetch_assoc ($resType)) {

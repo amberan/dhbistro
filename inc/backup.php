@@ -135,9 +135,9 @@ function backup_process()
             require_once ( $updateFile);
         }
         //odmazani UNREAD pro smazane uzivatele
-        $deletedusersSql = mysqli_query($database,"select id from ".DB_PREFIX."user where deleted=1");
+        $deletedusersSql = mysqli_query($database,"select id from ".DB_PREFIX."user where userDeleted=1");
         while ($deletedusers = mysqli_fetch_row($deletedusersSql)) {
-            mysqli_query ($database,"DELETE FROM ".DB_PREFIX."unread WHERE iduser = ".$deletedusers[0]);
+            mysqli_query ($database,"DELETE FROM ".DB_PREFIX."unread WHERE userId = ".$deletedusers[0]);
         }
     }
 }

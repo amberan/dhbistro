@@ -57,7 +57,7 @@ if (isset($_POST['addpoints'])) {
 	}
 	filter();
 	// vypis uživatelů
-	$sql = "SELECT * FROM ".DB_PREFIX."user WHERE ".DB_PREFIX."user.deleted=0 ORDER BY ".$filterSqlSort;
+	$sql = "SELECT * FROM ".DB_PREFIX."user WHERE ".DB_PREFIX."user.userDeleted=0 ORDER BY ".$filterSqlSort;
 	$res = mysqli_query ($database,$sql);
 	if (mysqli_num_rows ($res)) {
 	    echo '<div id="obsah">
