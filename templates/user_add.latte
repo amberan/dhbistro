@@ -44,46 +44,151 @@
             <div class="col-12">
                 {$text['prava']}
             </div>
-            <div class="col-3">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">
-                            POWER USER
-                        </span>
-                    </div>
-                    <div class="input-group-append" style="flex-grow: 1;">
-                        <select class="w-100" name="power" id="power">
-                            <option value="0">{$text['ne']}</option>
-                            <option value="1">{$text['ano']}</option>
-                        </select>
-                        </div>
-                    </div>
-                </div>
-            <div class="col-3">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">
-                            EDITOR
-                        </span>
-                    </div>
-                    <div class="input-group-append" style="flex-grow: 1;">
-                        <select class="w-100" name="texty" id="texty">
-                            <option value="0">{$text['ne']}</option>
-                            <option value="1">{$text['ano']}</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            {if $user['aclAudit'] > 0 }
                 <div class="col-3">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
-                                AUDITOR
+                                {$text[aclDirector]}
                             </span>
                         </div>
                         <div class="input-group-append" style="flex-grow: 1;">
-                            <select class="w-100" name="auditor" id="auditor">
+                            <select class="w-100" name="aclDirector" id="aclDirector">
+                                <option value="0">{$text['ne']}</option>
+                                <option value="1">{$text['ano']}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                {$text[aclDeputy]}
+                            </span>
+                        </div>
+                        <div class="input-group-append" style="flex-grow: 1;">
+                            <select class="w-100" name="aclDeputy" id="aclDeputy">
+                                <option value="0">{$text['ne']}</option>
+                                <option value="1">{$text['ano']}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                {$text[aclTask]}
+                            </span>
+                        </div>
+                        <div class="input-group-append" style="flex-grow: 1;">
+                            <select class="w-100" name="aclTask" id="aclTask">
+                                <option value="0">{$text['cteni']}</option>
+                                <option value="1">{$text['zapis']}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                {$text[aclSecret]}
+                            </span>
+                        </div>
+                        <div class="input-group-append" style="flex-grow: 1;">
+                            <select class="w-100" name="aclSecret" id="aclSecret">
+                                <option value="0">{$text['skryt']}</option>
+                                <option value="1">{$text['zpristupnit']}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                {$text[aclAudit]}
+                            </span>
+                        </div>
+                        <div class="input-group-append" style="flex-grow: 1;">
+                            <select class="w-100" name="aclAudit" id="aclAudit">
+                                <option value="0">{$text['skryt']}</option>
+                                <option value="1">{$text['zpristupnit']}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                {$text[aclGroup]}
+                            </span>
+                        </div>
+                        <div class="input-group-append" style="flex-grow: 1;">
+                            <select class="w-100" name="aclGroup" id="aclGroup">
+                                <option value="0">{$text['cteni']}</option>
+                                <option value="1">{$text['zapis']}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                {$text[aclPerson]}
+                            </span>
+                        </div>
+                        <div class="input-group-append" style="flex-grow: 1;">
+                            <select class="w-100" name="aclPerson" id="aclPerson">
+                                <option value="0">{$text['cteni']}</option>
+                                <option value="1">{$text['zapis']}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                {$text[aclCase]}
+                            </span>
+                        </div>
+                        <div class="input-group-append" style="flex-grow: 1;">
+                            <select class="w-100" name="aclCase" id="aclCase">
+                                <option value="0">{$text['cteni']}</option>
+                                <option value="1">{$text['zapis']}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                {$text[aclHunt]}
+                            </span>
+                        </div>
+                        <div class="input-group-append" style="flex-grow: 1;">
+                            <select class="w-100" name="aclHunt" id="aclHunt">
+                                <option value="0">{$text['skryt']}</option>
+                                <option value="1">{$text['zpristupnit']}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            {if $user['aclRoot'] > 0 }
+                <div class="col-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                {$text[aclRoot]}
+                            </span>
+                        </div>
+                        <div class="input-group-append" style="flex-grow: 1;">
+                            <select class="w-100" name="aclRoot" id="aclRoot">
                                 <option value="0">{$text['ne']}</option>
                                 <option value="1">{$text['ano']}</option>
                             </select>
@@ -96,11 +201,28 @@
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
-                                ORGANIZATOR
+                                {$text[aclGamemaster]}
                             </span>
                         </div>
                         <div class="input-group-append" style="flex-grow: 1;">
-                            <select class="w-100" name="organizator" id="organizator">
+                            <select class="w-100" name="aclGamemaster" id="aclGamemaster">
+                                <option value="0">{$text['ne']}</option>
+                                <option value="1">{$text['ano']}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            {/if}
+            {if $user['aclAPI'] > 0 }
+                <div class="col-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                {$text[aclAPI]}
+                            </span>
+                        </div>
+                        <div class="input-group-append" style="flex-grow: 1;">
+                            <select class="w-100" name="aclAPI" id="aclAPI">
                                 <option value="0">{$text['ne']}</option>
                                 <option value="1">{$text['ano']}</option>
                             </select>

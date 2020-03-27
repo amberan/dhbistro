@@ -41,7 +41,7 @@ if ($URL['1'] == "news" AND ($user['aclDeputy'] > 0 OR $user['aclDirector']) AND
             $latteParameters['message'] = $text['aktualitanevlozena'];
         }
     } else {
-        $latteParameters['message'] = $text['neytvoreno'];
+        $latteParameters['message'] = $text['nevytvoreno'];
     }
 }
 

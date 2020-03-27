@@ -66,15 +66,24 @@ function userList($where = 1): array
 
 
 //TODO uprava uzivatele
-function userChange($userId, $data) {
-    global $database, $user;
+//function userChange($userId, $data, $success = $text['operaceuspesna'], $failure = $text['odhlaseniuspesne']): string {
+function userChange($userId, $data, $success = null, $failure = null): string {
+    global $database, $latteParameters;
     $chain = "";
     foreach ($data as $column => $value) {
-        if (DBcolumnExist('user',$column)) {
+        if (DBcolumnExist('user',$column) AND strlen($value) > 0) {
             $chain .= " $column = '$value',";
         }
     }
     if (strlen($chain) > 0) {
         echo $sql = "UPDATE ".DB_PREFIX."user SET ".rtrim($chain, ",")."  where userId=".$userId;
+        mysqli_query($database,$sql);
+        if (mysqli_affected_rows($database) > 0) {
+             $latteParameters['message'] = $success;
+        } else {
+             $latteParameters['message'] = $failure;
+        }
     }
+
+    return $chain;
 }

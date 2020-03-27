@@ -14,6 +14,10 @@ $text['kategorie'] = 'Kategorie';
 $text['obsah'] = 'Obsah';
 $text['zavrit'] = 'Zavřít';
 $text['notifikace'] = 'Notifikace';
+$text['zapis'] = 'Zápis';
+$text['cteni'] = 'Čtení';
+$text['skryt'] = 'Skrýt';
+$text['zpristupnit'] = 'Zpřístupnit';
 
 // LOGIN
 $text['jmeno'] = 'Jméno';
@@ -26,7 +30,7 @@ $text['odhlaseniuspesne'] = 'Byl jste úspěsně odhlášen.';
 $text['zaznamnenalezen'] = 'Požadovaný záznam nebyl nalezen!';
 $text['prazdnyvypis'] = 'Výpis neobsahuje žádné položky!';
 $text['http401'] = 'You are unauthorized to make this request!';
-$text['neytvoreno'] = 'Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.';
+$text['nevytvoreno'] = 'Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.';
 $text['uzivatelexistuje'] = 'Uživatel již existuje, použijte jiné přihlašovací jméno!';
 $text['databazenenalezena'] = 'Databáze nenalezena, vytvářím novou: ';
 $text['vytvorenadmin'] = ', vytvořen uživatel admin s heslem: ';
@@ -104,6 +108,19 @@ $text['opravduodemnkout'] = 'Opravdu odemknout uživatele';
 $text['opravduzamknout'] = 'Opravdu zamknout uživatele';
 $text['opravdusmazat'] = 'Opravdu smazat uživatele';
 $text['opravduobnovit'] = 'Opravdu obnovit uživatele';
+$text['aclRoot'] = 'Administrátor';
+$text['aclDirector'] = 'Nejtemnější';
+$text['aclDeputy'] = 'Zástupce';
+$text['aclTask'] = 'Úkoly';
+$text['aclSecret'] = 'Tajné';
+$text['aclAudit'] = 'Audit';
+$text['aclGroup'] = 'Skupiny';
+$text['aclPerson'] = 'Osoby';
+$text['aclCase'] = 'Případy';
+$text['aclHunt'] = 'Lovenky';
+$text['aclGamemaster'] = 'Organizátor';
+$text['aclAPI'] = 'API';
+
 
 // BACKUP
 $text['existujicizalohy'] = 'Existující zálohy';
