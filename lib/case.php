@@ -15,5 +15,5 @@ function casesAssignedTo($userid) {
 	    while ($unfinishedcase = mysqli_fetch_assoc ($casesList)) {
 	        $unfinishedcases[] = array ($unfinishedcase['id'], $unfinishedcase['title']);
         }
-        return $unfinishedcases;
+        return @$unfinishedcases;
     }

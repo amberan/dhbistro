@@ -13,5 +13,5 @@ function reportsAssignedTo($userid) {
 	    while ($unfinishedReport = mysqli_fetch_assoc ($reportsList)) {
 	        $unfinishedReports[] = array ($unfinishedReport['id'], $unfinishedReport['label']);
         }
-        return $unfinishedReports;
+        return @$unfinishedReports;
     }

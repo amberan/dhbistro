@@ -14,5 +14,5 @@ function tasksAssignedTo($userid) {
 	    while ($unfinishedtask = mysqli_fetch_assoc ($tasksList)) {
 	        $unfinishedtasks[] = array ($unfinishedtask['id'], $unfinishedtask['task']);
         }
-        return $unfinishedtasks;
+        return @$unfinishedtasks;
     }
