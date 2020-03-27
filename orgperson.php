@@ -26,7 +26,7 @@ $latteParameters['title'] = 'Úprava osoby';
 				<h3><label for="regusr">Vytvořil:</label></h3>
 				<select name="regusr" id="regusr">
 				<?php
-					$sql = "SELECT ".DB_PREFIX."user.login AS 'login', ".DB_PREFIX."user.id AS 'id' FROM ".DB_PREFIX."user WHERE ".DB_PREFIX."user.deleted=0 ORDER BY ".DB_PREFIX."user.login ASC";
+					$sql = "SELECT ".DB_PREFIX."user.userName AS 'login', ".DB_PREFIX."user.userId AS 'id' FROM ".DB_PREFIX."user WHERE ".DB_PREFIX."user.deleted=0 ORDER BY ".DB_PREFIX."user.userName ASC";
 	        $res = mysqli_query ($database,$sql);
 	        while ($rec = mysqli_fetch_assoc ($res)) {
 	            echo '<div>

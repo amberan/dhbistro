@@ -5,15 +5,15 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 latteDrawTemplate("header");
 
 	if (is_numeric($_REQUEST['rid'])) {
-	    $check = mysqli_fetch_assoc (mysqli_query ($database,"SELECT ".DB_PREFIX."user.idperson AS 'aid'
+	    $check = mysqli_fetch_assoc (mysqli_query ($database,"SELECT ".DB_PREFIX."user.personId AS 'aid'
 											FROM ".DB_PREFIX."user, ".DB_PREFIX."report
 											WHERE ".DB_PREFIX."report.id=".$_REQUEST['rid']."
-											AND ".DB_PREFIX."report.iduser=".DB_PREFIX."user.id"));
+											AND ".DB_PREFIX."report.iduser=".DB_PREFIX."user.userId"));
 	    if ($check['aid'] == 0) {
 	        $connector = '';
 	        $notconnected = 1;
 	    } else {
-	        $connector = ' AND '.DB_PREFIX.'user.idperson='.DB_PREFIX.'person.id';
+	        $connector = ' AND '.DB_PREFIX.'user.personId='.DB_PREFIX.'person.id';
 	        $notconnected = 0;
 	    }
 	    $sql = "SELECT
@@ -24,7 +24,7 @@ latteDrawTemplate("header");
 			".DB_PREFIX."report.summary AS 'summary',
 			".DB_PREFIX."report.impacts AS 'impacts',
 			".DB_PREFIX."report.details AS 'details',
-			".DB_PREFIX."user.login AS 'autor',
+			".DB_PREFIX."user.userName AS 'autor',
 			".DB_PREFIX."report.type AS 'type',
 			".DB_PREFIX."report.adatum AS 'adatum',
 			".DB_PREFIX."report.start AS 'start',
@@ -35,7 +35,7 @@ latteDrawTemplate("header");
 			".DB_PREFIX."person.name AS 'name',
 			".DB_PREFIX."person.surname AS 'surname'
 			FROM ".DB_PREFIX."report, ".DB_PREFIX."user, ".DB_PREFIX."person
-			WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.id 
+			WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.userId 
 			AND ".DB_PREFIX."report.id=".$_REQUEST['rid'].$connector;
 	    $res = mysqli_query ($database,$sql);
 	    if ($rec_ar = mysqli_fetch_assoc ($res)) {
@@ -318,9 +318,9 @@ if ($hn != 1) { ?>
 <!-- následuje seznam poznámek -->
 	<?php // generování poznámek
 		if ($usrinfo['right_power']) {
-		    $sql = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.login AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.id AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=4 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret<2 OR ".DB_PREFIX."note.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."note.datum DESC";
+		    $sql = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=4 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret<2 OR ".DB_PREFIX."note.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."note.datum DESC";
 		} else {
-		    $sql = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.login AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.id AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=4 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret=0 OR ".DB_PREFIX."note.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."note.datum DESC";
+		    $sql = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=4 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret=0 OR ".DB_PREFIX."note.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."note.datum DESC";
 		}
 		$res = mysqli_query ($database,$sql);
 		$i = 0;

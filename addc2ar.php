@@ -111,12 +111,12 @@ seřadit je podle <select name="sort">
 	        ".DB_PREFIX."report.datum AS 'datum',
 	        ".DB_PREFIX."report.label AS 'label',
 	        ".DB_PREFIX."report.task AS 'task',
-	        ".DB_PREFIX."user.login AS 'autor',
+	        ".DB_PREFIX."user.userName AS 'autor',
 	        ".DB_PREFIX."report.type AS 'type',
 	        ".DB_PREFIX."ar2c.iduser 
 	        	FROM ".DB_PREFIX."user, ".DB_PREFIX."report LEFT JOIN ".DB_PREFIX."ar2c 
 	        	ON ".DB_PREFIX."ar2c.idreport=".DB_PREFIX."report.id AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']."
-				WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.id AND ".DB_PREFIX."report.deleted=0".$filterSqlCat.$fsql_stat.$fsql_archiv."
+				WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."report.deleted=0".$filterSqlCat.$fsql_stat.$fsql_archiv."
 				ORDER BY ".$filterSqlSort;
 	        } else {
 	            $sql = "SELECT
@@ -124,13 +124,13 @@ seřadit je podle <select name="sort">
 	        ".DB_PREFIX."report.datum AS 'datum',
 	        ".DB_PREFIX."report.label AS 'label',
 	        ".DB_PREFIX."report.task AS 'task',
-	        ".DB_PREFIX."user.login AS 'autor',
+	        ".DB_PREFIX."user.userName AS 'autor',
 	        ".DB_PREFIX."report.iduser AS 'iduser',
 	        ".DB_PREFIX."report.type AS 'type',
 	        ".DB_PREFIX."ar2c.iduser 
 	        	FROM ".DB_PREFIX."user, ".DB_PREFIX."report LEFT JOIN ".DB_PREFIX."ar2c 
 	        	ON ".DB_PREFIX."ar2c.idreport=".DB_PREFIX."report.id AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']."
-				WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.id AND ".DB_PREFIX."report.deleted=0 AND ".DB_PREFIX."report.secret=0".$filterSqlCat.$fsql_stat.$fsql_archiv."
+				WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."report.deleted=0 AND ".DB_PREFIX."report.secret=0".$filterSqlCat.$fsql_stat.$fsql_archiv."
 				ORDER BY ".$filterSqlSort;
 	        }
 	        $res = mysqli_query ($database,$sql); ?>

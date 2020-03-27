@@ -24,7 +24,7 @@ function unreadRecords ($tablenum,$rid) {
 	if (isset($_POST['nsecret'])) {
 		$secret=$_POST['nsecret'];
 	}
-	$unreadSql="SELECT ".DB_PREFIX."user.id as 'id', ".DB_PREFIX."user.right_power as 'right_power', ".DB_PREFIX."user.deleted as 'deleted' FROM ".DB_PREFIX."user";
+	$unreadSql="SELECT ".DB_PREFIX."user.userId as 'id', ".DB_PREFIX."user.right_power as 'right_power', ".DB_PREFIX."user.deleted as 'deleted' FROM ".DB_PREFIX."user";
 	$unreadResult=mysqli_query ($database,$unreadSql);
 	while ($unreadRecord=mysqli_fetch_assoc ($unreadResult)) {
 		if ($secret > 0 && $unreadRecord['deleted'] <> 1) {
@@ -55,7 +55,7 @@ function deleteUnread ($tablenum,$rid) {
 // vymaz z tabulek neprectenych pri smazani zaznamu
 function deleteAllUnread ($tablenum,$rid) {
 	global $database;
-	$unreadSql="SELECT ".DB_PREFIX."user.id as 'id', ".DB_PREFIX."user.right_power as 'right_power' FROM ".DB_PREFIX."user";
+	$unreadSql="SELECT ".DB_PREFIX."user.userId as 'id', ".DB_PREFIX."user.right_power as 'right_power' FROM ".DB_PREFIX."user";
 	$unreadResult=mysqli_query ($database,$unreadSql);
 	while ($unreadRecord=mysqli_fetch_assoc ($unreadResult)) {
 		$srsql="DELETE FROM ".DB_PREFIX."unread WHERE idtable=".$tablenum." AND idrecord=".$rid." AND iduser=".$unreadRecord['id'];

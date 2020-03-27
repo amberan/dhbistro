@@ -91,7 +91,7 @@ function getAuthor($recid, $trn)
 {
     global $database;
     if (1 === $trn) { //person
-        $getAuthorSql = 'SELECT '.DB_PREFIX."person.name as 'name', ".DB_PREFIX."person.surname as 'surname', ".DB_PREFIX."user.login as 'nick' FROM ".DB_PREFIX.'person, '.DB_PREFIX.'user WHERE '.DB_PREFIX.'user.id='.$recid.' AND '.DB_PREFIX.'person.id='.DB_PREFIX.'user.idperson';
+        $getAuthorSql = 'SELECT '.DB_PREFIX."person.name as 'name', ".DB_PREFIX."person.surname as 'surname', ".DB_PREFIX."user.userName as 'nick' FROM ".DB_PREFIX.'person, '.DB_PREFIX.'user WHERE '.DB_PREFIX.'user.id='.$recid.' AND '.DB_PREFIX.'person.id='.DB_PREFIX.'user.idperson';
         $getAuthorQuery = mysqli_query($database, $getAuthorSql);
         if (mysqli_num_rows($getAuthorQuery)) {
             while ($getAuthorResult = mysqli_fetch_assoc($getAuthorQuery)) {
@@ -181,7 +181,7 @@ break;  //symbol 2 case
 
 break; //symbol 2 action report
     }
-    $sqlCf = 'SELECT filter FROM '.DB_PREFIX.'user WHERE id = '.$usrinfo['id'];
+    $sqlCf = 'SELECT filter FROM '.DB_PREFIX.'user WHERE userId = '.$usrinfo['id'];
     $resCf = mysqli_query($database, $sqlCf);
     $filter = $_REQUEST;
     // pokud přichází nový filtr a nejedná se o zadání úkolu či přidání zlobodů, případně pokud se jedná o konkrétní záznam a je nově filtrovaný,
@@ -195,7 +195,7 @@ break; //symbol 2 action report
             $filters[$table] = $filter;
         }
         $sfilters = serialize($filters);
-        $sqlScf = 'UPDATE '.DB_PREFIX."user SET filter='".$sfilters."' WHERE id=".$usrinfo['id'];
+        $sqlScf = 'UPDATE '.DB_PREFIX."user SET filter='".$sfilters."' WHERE userId=".$usrinfo['id'];
         mysqli_query($database, $sqlScf);
     // v opačném případě zkontroluj, zda existuje odpovídající filtr v databázi, a pokud ano, načti jej
     } else {

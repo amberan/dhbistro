@@ -21,7 +21,7 @@ K případu můžete přiřadit řešitele.
 <?php
 
 	// vypis osob
-	$sql = "SELECT ".DB_PREFIX."user.id AS 'id', ".DB_PREFIX."user.login AS 'login', ".DB_PREFIX."c2s.iduser FROM ".DB_PREFIX."user LEFT JOIN ".DB_PREFIX."c2s ON ".DB_PREFIX."c2s.idsolver=".DB_PREFIX."user.id AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid']." WHERE ".DB_PREFIX."user.deleted=0 ORDER BY ".DB_PREFIX."user.login ASC";
+	$sql = "SELECT ".DB_PREFIX."user.userId AS 'id', ".DB_PREFIX."user.userName AS 'login', ".DB_PREFIX."c2s.iduser FROM ".DB_PREFIX."user LEFT JOIN ".DB_PREFIX."c2s ON ".DB_PREFIX."c2s.idsolver=".DB_PREFIX."user.userId AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid']." WHERE ".DB_PREFIX."user.deleted=0 ORDER BY ".DB_PREFIX."user.userName ASC";
 	        $res = mysqli_query ($database,$sql); ?>
 <div id="in-form-table">
 <?php

@@ -64,8 +64,8 @@ $latteParameters['title'] = 'Hlášení';
 	switch ($filterSort) {
 	  case 1: $filterSqlSort = ' '.DB_PREFIX.'report.datum DESC '; break;
 	  case 2: $filterSqlSort = ' '.DB_PREFIX.'report.datum ASC '; break;
-	  case 3: $filterSqlSort = ' '.DB_PREFIX.'user.login ASC '; break;
-	  case 4: $filterSqlSort = ' '.DB_PREFIX.'user.login DESC '; break;
+	  case 3: $filterSqlSort = ' '.DB_PREFIX.'user.userName ASC '; break;
+	  case 4: $filterSqlSort = ' '.DB_PREFIX.'user.userName DESC '; break;
 	  case 5: $filterSqlSort = ' '.DB_PREFIX.'report.adatum ASC, '.DB_PREFIX.'report.start ASC '; break;
 	  case 6: $filterSqlSort = ' '.DB_PREFIX.'report.adatum DESC, '.DB_PREFIX.'report.start DESC '; break;
 	  default: $filterSqlSort = ' '.DB_PREFIX.'report.adatum DESC ';
@@ -146,13 +146,13 @@ $latteParameters['title'] = 'Hlášení';
                 ".DB_PREFIX."report.label AS 'label',
                 ".DB_PREFIX."report.task AS 'task',
                 ".DB_PREFIX."report.status AS 'status',
-                ".DB_PREFIX."user.login AS 'autor',
+                ".DB_PREFIX."user.userName AS 'autor',
                 ".DB_PREFIX."report.iduser AS 'riduser',
 				".DB_PREFIX."report.type AS 'type' ,
 				".DB_PREFIX."report.start AS 'start',
 				".DB_PREFIX."report.end AS 'end'  
                     FROM ".DB_PREFIX."user, ".DB_PREFIX."report".$fsql_conn2." 
-                    WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.id AND ".DB_PREFIX."report.deleted=0 AND ".DB_PREFIX."report.secret<=".$usrinfo['right_power'].$filterSqlCat.$fsql_sec.$fsql_stat.$filterSqlMine.$fsql_conn.$fsql_archiv."
+                    WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."report.deleted=0 AND ".DB_PREFIX."report.secret<=".$usrinfo['right_power'].$filterSqlCat.$fsql_sec.$fsql_stat.$filterSqlMine.$fsql_conn.$fsql_archiv."
 					ORDER BY ".$filterSqlSort;
 	$res = mysqli_query ($database,$sql);
 	while ($rec = mysqli_fetch_assoc ($res)) {

@@ -15,6 +15,7 @@ require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php'); ;
 //require_once SERVER_ROOT."/lib/filters.php";
 //require_once SERVER_ROOT."/lib/session.php";
 require_once SERVER_ROOT."/lib/user.php";
+require_once SERVER_ROOT."/lib/report.php";
 use League\CommonMark\CommonMarkConverter;
     $converter = new CommonMarkConverter([
         'html_input' => 'strip',

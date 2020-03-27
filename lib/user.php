@@ -76,7 +76,7 @@ function userChange($userId, $data, $success = null, $failure = null): string {
         }
     }
     if (strlen($chain) > 0) {
-        echo $sql = "UPDATE ".DB_PREFIX."user SET ".rtrim($chain, ",")."  where userId=".$userId;
+        $sql = "UPDATE ".DB_PREFIX."user SET ".rtrim($chain, ",")."  where userId=".$userId;
         mysqli_query($database,$sql);
         if (mysqli_affected_rows($database) > 0) {
              $latteParameters['message'] = $success;

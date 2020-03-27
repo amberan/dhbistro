@@ -18,7 +18,7 @@ $latteParameters['title'] = 'Přidán úkol';
 	    if (isset($_POST['inserttask']) && !empty($_POST['task'])) {
 	        mainMenu ();
 	        $customFilter = custom_Filter(10);
-	        $sql_t = "INSERT INTO ".DB_PREFIX."task VALUES('','".$_POST['task']."','".$_POST['target']."','0','".Time()."','".$usrinfo['id']."','','')";
+	        $sql_t = "INSERT INTO ".DB_PREFIX."task (task,iduser,status,created,created_by) VALUES('".$_POST['task']."','".$_POST['target']."','0','".Time()."','".$usrinfo['id']."')";
 	        mysqli_query ($database,$sql_t);
 	        // Ukládání do novinek zakomentováno, protože nevím, jestli se použije. Kdyžtak SMAZAT.
 	        //		$gidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."group WHERE UCASE(title)=UCASE('".mysqli_real_escape_string ($database,$_POST['title'])."')"));
@@ -94,7 +94,7 @@ $latteParameters['title'] = 'Přidán úkol';
             <p><label for="task">Zadání:</label>
                 <input type="text" name="task" id="task" />
                 <?php
-	$sql = "SELECT id, login FROM ".DB_PREFIX."user WHERE deleted=0 ORDER BY login ASC";
+	$sql = "SELECT userId as id, userName as login FROM ".DB_PREFIX."user WHERE userDeleted=0 ORDER BY login ASC";
 	    $res_n = mysqli_query ($database,$sql);
 	    echo '<label for="target">Uživatel:</label>
 		<select name="target" id="target">';
