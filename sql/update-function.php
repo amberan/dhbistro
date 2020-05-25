@@ -41,7 +41,6 @@ function bistroDBTableRename ($data): int
         if (DBtableExist($new) == 0 AND DBtableExist($old) != 0) {
             $renameSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$old RENAME TO ".$config['dbdatabase'].".".DB_PREFIX."$new";
             mysqli_query($database,$renameSql);
-            unset ($checkNew, $checkOld);
             if (DBtableExist($new) != 0 AND DBtableExist($old) == 0) {
                 Debugger::log('UPDATER '.$config['version'].' DB CHANGE: '.$renameSql);
                 $alter++;

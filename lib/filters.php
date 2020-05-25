@@ -3,7 +3,7 @@
 // funkce na ukladani preference trideni
 function sortingSet($object,$column,$linkedTable = null)
 {
-    global $database,$user,$config;
+    global $database,$user;
     $currentSorting = sortingGet($object,$linkedTable);
     if (mb_strpos($currentSorting,$column) AND mb_strpos($currentSorting,'DESC')) {
         mysqli_query($database,"UPDATE ".DB_PREFIX."sort set sortDirection='ASC' where objectType='$object' AND userId=".$user['userId']);
@@ -20,7 +20,7 @@ function sortingSet($object,$column,$linkedTable = null)
 // funkce na nacitani preference trideni
 function sortingGet($object,$linkedTable = null): string
 {
-    global $database,$user,$config;
+    global $database,$user;
     $query = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."sort where objectType='$object' AND userId=".$user['userId']);
     $result = "";
     $sorter = mysqli_fetch_array ($query);

@@ -35,12 +35,12 @@ code_quality-html:
     paths: [report.html]
     expire_in: 10 weeks
   dependencies: []
-  only:
-    - merge_requests
-    - web
-  except:
-    variables:
-      - $CODE_QUALITY_DISABLED
+  rules: 
+    - if: $CI_MERGE_REQUEST_ID  &&  $CI_COMMIT_BRANCH == "master"
+      when: always
+    - if: $CI_PIPELINE_SOURCE == "web"
+      when: always
+    - when: never
 
 
 #static_analysis:
@@ -71,9 +71,12 @@ test to bistro.alembiq.net:
   environment:
     name: staging
     url: bistro.alembiq.net
-  only: 
-    - merge_requests
-    - web
+  rules: 
+    - if: $CI_MERGE_REQUEST_ID  &&  $CI_COMMIT_BRANCH == "master"
+      when: always
+    - if: $CI_PIPELINE_SOURCE == "web"
+      when: manual
+    - when: never
 
 # deploy to bistro.alembiq.net:
 #   image: debian:latest
