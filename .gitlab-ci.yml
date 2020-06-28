@@ -11,7 +11,7 @@ code_quality:
   artifacts:
     paths: [gl-code-quality-report.json]
     expire_in: 90 days
-    rules: 
+  rules: 
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"  
       when: always
     - if: $CI_PIPELINE_SOURCE == "web"
