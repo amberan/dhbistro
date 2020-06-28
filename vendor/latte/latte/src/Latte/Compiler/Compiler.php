@@ -56,13 +56,13 @@ class Compiler
 	/** @var int  position on source template */
 	private $position;
 
-	/** @var array of [name => IMacro[]] */
+	/** @var array of [name => Macro[]] */
 	private $macros = [];
 
 	/** @var string[] of orig name */
 	private $functions = [];
 
-	/** @var int[] IMacro flags */
+	/** @var int[] Macro flags */
 	private $flags;
 
 	/** @var HtmlNode|null */
@@ -95,15 +95,18 @@ class Compiler
 	/** @var array of [name => serialized value] */
 	private $properties = [];
 
+	/** @var Policy|null */
+	private $policy;
+
 
 	/**
-	 * Adds new macro with IMacro flags.
+	 * Adds new macro with Macro flags.
 	 * @return static
 	 */
-	public function addMacro(string $name, IMacro $macro, int $flags = null)
+	public function addMacro(string $name, Macro $macro, int $flags = null)
 	{
 		if (!isset($this->flags[$name])) {
-			$this->flags[$name] = $flags ?: IMacro::DEFAULT_FLAGS;
+			$this->flags[$name] = $flags ?: Macro::DEFAULT_FLAGS;
 		} elseif ($flags && $this->flags[$name] !== $flags) {
 			throw new \LogicException("Incompatible flags for macro $name.");
 		}
@@ -113,13 +116,14 @@ class Compiler
 
 
 	/**
-	 * Registers run-time function.
+	 * Registers run-time functions.
+	 * @param  string[]  $names
+	 * @return static
 	 */
-	public function addFunction(string $name): string
+	public function setFunctions(array $names)
 	{
-		$lname = strtolower($name);
-		$this->functions[$lname] = $name;
-		return '_fn' . $lname;
+		$this->functions = array_combine(array_map('strtolower', $names), $names);
+		return $this;
 	}
 
 
@@ -149,7 +153,7 @@ class Compiler
 
 		foreach ($tokens as $this->position => $token) {
 			if ($this->inHead && !($token->type === $token::COMMENT
-				|| $token->type === $token::MACRO_TAG && ($this->flags[$token->name] ?? null) & IMacro::ALLOWED_IN_HEAD
+				|| $token->type === $token::MACRO_TAG && ($this->flags[$token->name] ?? null) & Macro::ALLOWED_IN_HEAD
 				|| $token->type === $token::TEXT && trim($token->text) === ''
 			)) {
 				$this->inHead = false;
@@ -165,7 +169,7 @@ class Compiler
 		}
 
 		while ($this->macroNode) {
-			if (~$this->flags[$this->macroNode->name] & IMacro::AUTO_CLOSE) {
+			if (~$this->flags[$this->macroNode->name] & Macro::AUTO_CLOSE) {
 				throw new CompileException('Missing ' . self::printEndTag($this->macroNode));
 			}
 			$this->closeMacro($this->macroNode->name);
@@ -178,10 +182,10 @@ class Compiler
 			$epilogs = (empty($res[1]) ? '' : "<?php $res[1] ?>") . $epilogs;
 		}
 
-		$this->addMethod('main', $this->expandTokens("extract(\$this->params);?>\n$output$epilogs<?php return get_defined_vars();"));
+		$this->addMethod('main', $this->expandTokens("extract(\$this->params);?>\n$output$epilogs<?php return get_defined_vars();"), '', 'array');
 
 		if ($prepare) {
-			$this->addMethod('prepare', "extract(\$this->params);?>$prepare<?php");
+			$this->addMethod('prepare', "extract(\$this->params);?>$prepare<?php", '', 'void');
 		}
 		if ($this->contentType !== self::CONTENT_HTML) {
 			$this->addProperty('contentType', $this->contentType);
@@ -189,17 +193,34 @@ class Compiler
 
 		$members = [];
 		foreach ($this->properties as $name => $value) {
-			$members[] = "\tpublic $$name = " . PhpHelpers::dump($value) . ';';
+			$members[] = "\tpublic $$name = " . PhpHelpers::dump($value, true) . ';';
 		}
 		foreach (array_filter($this->methods) as $name => $method) {
-			$members[] = "\n\tfunction $name($method[arguments])\n\t{\n" . ($method['body'] ? "\t\t$method[body]\n" : '') . "\t}";
+			$members[] = "\n\tpublic function $name($method[arguments])"
+				. ($method['returns'] ? ': ' . $method['returns'] : '')
+				. "\n\t{\n"
+				. ($method['body'] ? "\t\t$method[body]\n" : '') . "\t}";
 		}
 
 		return "<?php\n"
 			. "use Latte\\Runtime as LR;\n\n"
-			. "class $className extends Latte\\Runtime\\Template\n{\n"
+			. "final class $className extends Latte\\Runtime\\Template\n{\n"
 			. implode("\n\n", $members)
 			. "\n\n}\n";
+	}
+
+
+	/** @return static */
+	public function setPolicy(?Policy $policy)
+	{
+		$this->policy = $policy;
+		return $this;
+	}
+
+
+	public function getPolicy(): ?Policy
+	{
+		return $this->policy;
 	}
 
 
@@ -249,9 +270,9 @@ class Compiler
 	 * Adds custom method to template.
 	 * @internal
 	 */
-	public function addMethod(string $name, string $body, string $arguments = ''): void
+	public function addMethod(string $name, string $body, string $arguments = '', $returns = ''): void
 	{
-		$this->methods[$name] = ['body' => trim($body), 'arguments' => $arguments];
+		$this->methods[$name] = ['body' => trim($body), 'arguments' => $arguments, 'returns' => $returns];
 	}
 
 
@@ -313,7 +334,7 @@ class Compiler
 		if ($token->closing) {
 			$this->closeMacro($token->name, $token->value, $token->modifiers, $isRightmost);
 		} else {
-			if (!$token->empty && ($this->flags[$token->name] ?? null) & IMacro::AUTO_EMPTY) {
+			if (!$token->empty && ($this->flags[$token->name] ?? null) & Macro::AUTO_EMPTY) {
 				$pos = $this->position;
 				while (($t = $this->tokens[++$pos] ?? null)
 					&& ($t->type !== Token::MACRO_TAG || $t->name !== $token->name)
@@ -325,7 +346,7 @@ class Compiler
 				if ($node->empty) {
 					throw new CompileException("Unexpected /} in tag {$token->text}");
 				}
-				$this->closeMacro($token->name, null, null, $isRightmost);
+				$this->closeMacro($token->name, '', '', $isRightmost);
 			}
 		}
 	}
@@ -416,7 +437,7 @@ class Compiler
 
 		} elseif (
 			(($lower = strtolower($htmlNode->name)) === 'script' || $lower === 'style')
-			&& (!isset($htmlNode->attrs['type']) || preg_match('#(java|j|ecma|live)script|json|css#i', $htmlNode->attrs['type']))
+			&& (!isset($htmlNode->attrs['type']) || preg_match('#(java|j|ecma|live)script|module|json|css#i', $htmlNode->attrs['type']))
 		) {
 			$this->context = $lower === 'script' ? self::CONTEXT_HTML_JS : self::CONTEXT_HTML_CSS;
 		}
@@ -499,7 +520,7 @@ class Compiler
 	 * Generates code for {macro ...} to the output.
 	 * @internal
 	 */
-	public function openMacro(string $name, string $args = null, string $modifiers = null, bool $isRightmost = false, string $nPrefix = null): MacroNode
+	public function openMacro(string $name, string $args = '', string $modifiers = '', bool $isRightmost = false, string $nPrefix = null): MacroNode
 	{
 		$node = $this->expandMacro($name, $args, $modifiers, $nPrefix);
 		if ($node->empty) {
@@ -521,7 +542,7 @@ class Compiler
 	 * Generates code for {/macro ...} to the output.
 	 * @internal
 	 */
-	public function closeMacro(string $name, string $args = null, string $modifiers = null, bool $isRightmost = false, string $nPrefix = null): MacroNode
+	public function closeMacro(string $name, string $args = '', string $modifiers = '', bool $isRightmost = false, string $nPrefix = null): MacroNode
 	{
 		$node = $this->macroNode;
 
@@ -529,7 +550,7 @@ class Compiler
 			!$node
 			|| ($node->name !== $name && $name !== '')
 			|| $modifiers
-			|| ($args && $node->args && !Helpers::startsWith("$node->args ", "$args "))
+			|| ($args !== '' && $node->args !== '' && !Helpers::startsWith("$node->args ", "$args "))
 			|| $nPrefix !== $node->prefix
 		) {
 			$name = $nPrefix
@@ -539,7 +560,7 @@ class Compiler
 		}
 
 		$this->macroNode = $node->parentNode;
-		if (!$node->args) {
+		if ($node->args === '') {
 			$node->setArgs($args);
 		}
 
@@ -606,11 +627,11 @@ class Compiler
 			if (isset($attrs[$attrName])) {
 				if ($this->htmlNode->closing) {
 					$left[] = function () use ($name) {
-						$this->closeMacro($name, '', null, false, MacroNode::PREFIX_INNER);
+						$this->closeMacro($name, '', '', false, MacroNode::PREFIX_INNER);
 					};
 				} else {
 					array_unshift($right, function () use ($name, $attrs, $attrName) {
-						if ($this->openMacro($name, $attrs[$attrName], null, false, MacroNode::PREFIX_INNER)->empty) {
+						if ($this->openMacro($name, $attrs[$attrName], '', false, MacroNode::PREFIX_INNER)->empty) {
 							throw new CompileException("Unable to use empty macro as n:$attrName.");
 						}
 					});
@@ -635,12 +656,12 @@ class Compiler
 			$attrName = MacroNode::PREFIX_TAG . "-$name";
 			if (isset($attrs[$attrName])) {
 				$left[] = function () use ($name, $attrs, $attrName) {
-					if ($this->openMacro($name, $attrs[$attrName], null, false, MacroNode::PREFIX_TAG)->empty) {
+					if ($this->openMacro($name, $attrs[$attrName], '', false, MacroNode::PREFIX_TAG)->empty) {
 						throw new CompileException("Unable to use empty macro as n:$attrName.");
 					}
 				};
 				array_unshift($right, function () use ($name) {
-					$this->closeMacro($name, '', null, false, MacroNode::PREFIX_TAG);
+					$this->closeMacro($name, '', '', false, MacroNode::PREFIX_TAG);
 				});
 				unset($attrs[$attrName]);
 			}
@@ -650,11 +671,11 @@ class Compiler
 			if (isset($attrs[$name])) {
 				if ($this->htmlNode->closing) {
 					$right[] = function () use ($name) {
-						$this->closeMacro($name, '', null, false, MacroNode::PREFIX_NONE);
+						$this->closeMacro($name, '', '', false, MacroNode::PREFIX_NONE);
 					};
 				} else {
 					array_unshift($left, function () use ($name, $attrs, &$innerMarker) {
-						$node = $this->openMacro($name, $attrs[$name], null, false, MacroNode::PREFIX_NONE);
+						$node = $this->openMacro($name, $attrs[$name], '', false, MacroNode::PREFIX_NONE);
 						if ($node->empty) {
 							unset($this->htmlNode->macroAttrs[$name]); // don't call closeMacro
 						} elseif (!$innerMarker) {
@@ -700,20 +721,27 @@ class Compiler
 	 * Expands macro and returns node & code.
 	 * @internal
 	 */
-	public function expandMacro(string $name, string $args, string $modifiers = null, string $nPrefix = null): MacroNode
+	public function expandMacro(string $name, string $args, string $modifiers = '', string $nPrefix = null): MacroNode
 	{
 		if (empty($this->macros[$name])) {
 			$hint = (($t = Helpers::getSuggestion(array_keys($this->macros), $name)) ? ", did you mean {{$t}}?" : '')
 				. (in_array($this->context, [self::CONTEXT_HTML_JS, self::CONTEXT_HTML_CSS], true) ? ' (in JavaScript or CSS, try to put a space after bracket or use n:syntax=off)' : '');
 			throw new CompileException("Unknown macro {{$name}}$hint");
+
+		} elseif ($this->policy && !$this->policy->isMacroAllowed($name)) {
+			throw new SecurityViolationException('Macro ' . ($nPrefix ? "n:$name" : "{{$name}}") . ' is not allowed.');
 		}
 
 		$modifiers = (string) $modifiers;
 
 		if (strpbrk($name, '=~%^&_')) {
 			if (in_array($this->context, [self::CONTEXT_HTML_ATTRIBUTE_URL, self::CONTEXT_HTML_ATTRIBUTE_UNQUOTED_URL], true)) {
-				if (!Helpers::removeFilter($modifiers, 'nocheck') && !preg_match('#\|datastream(?=\s|\||$)#Di', $modifiers)) {
-					$modifiers .= '|checkurl';
+				if (!Helpers::removeFilter($modifiers, 'nocheck')) {
+					if (!preg_match('#\|datastream(?=\s|\||$)#Di', $modifiers)) {
+						$modifiers .= '|checkurl';
+					}
+				} elseif ($this->policy && !$this->policy->isFilterAllowed('nocheck')) {
+					throw new SecurityViolationException('Filter |nocheck is not allowed.');
 				}
 			}
 
@@ -722,6 +750,8 @@ class Compiler
 				if ($this->context === self::CONTEXT_HTML_JS && $name === '=' && preg_match('#["\'] *$#D', $this->tokens[$this->position - 1]->text)) {
 					throw new CompileException("Do not place {$this->tokens[$this->position]->text} inside quotes.");
 				}
+			} elseif ($this->policy && !$this->policy->isFilterAllowed('noescape')) {
+				throw new SecurityViolationException('Filter |noescape is not allowed.');
 			}
 		}
 
