@@ -5,8 +5,16 @@ stages:
 include:
   - template: Code-Quality.gitlab-ci.yml
 
+# https://www.youtube.com/watch?time_continue=50&v=B32LxtJKo9M
+code_quality: 
+  stage: test 
+  artifacts:
+    paths: [gl-code-quality-report.json]
+    expire_in: 90 days
+
 code_quality-html:
-  #https://gitlab.com/frakman1/codeclimate-test/blob/master/.gitlab-ci.yml
+  # https://gitlab.com/frakman1/codeclimate-test/blob/master/.gitlab-ci.yml
+  # https://docs.gitlab.com/13.1/ee/user/project/merge_requests/code_quality.html
   stage: test
   image: docker:stable
   allow_failure: true
@@ -15,7 +23,7 @@ code_quality-html:
   variables:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: "/certs"
-    CODE_QUALITY_IMAGE: "registry.gitlab.com/gitlab-org/security-products/codequality:0.85.6"
+    CODE_QUALITY_IMAGE: "registry.gitlab.com/gitlab-org/security-products/codequality:0.85.10"
   script:
     - |
       if ! docker info &>/dev/null; then
@@ -36,7 +44,8 @@ code_quality-html:
     expire_in: 10 weeks
   dependencies: []
   rules: 
-    - if: $CI_MERGE_REQUEST_ID  &&  $CI_COMMIT_BRANCH == "master"
+  # https://gitlab.com/gitlab-org/gitlab-foss/-/blob/master/doc/ci/yaml/README.md
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"  &&  $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
       when: always
     - if: $CI_PIPELINE_SOURCE == "web"
       when: always
@@ -72,7 +81,7 @@ test to bistro.alembiq.net:
     name: staging
     url: bistro.alembiq.net
   rules: 
-    - if: $CI_MERGE_REQUEST_ID  &&  $CI_COMMIT_BRANCH == "master"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"  &&  $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
       when: always
     - if: $CI_PIPELINE_SOURCE == "web"
       when: manual
