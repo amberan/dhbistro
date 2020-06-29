@@ -14,6 +14,7 @@ use Latte\CompileException;
 use Latte\Engine;
 use Latte\Helpers;
 use Latte\MacroNode;
+use Latte\PhpHelpers;
 use Latte\PhpWriter;
 
 
@@ -24,6 +25,9 @@ class CoreMacros extends MacroSet
 {
 	/** @var array */
 	private $overwrittenVars;
+
+	/** @var string|null */
+	private $printTemplate;
 
 
 	public static function install(Latte\Compiler $compiler): void
@@ -62,11 +66,18 @@ class CoreMacros extends MacroSet
 		$me->addMacro('capture', [$me, 'macroCapture'], [$me, 'macroCaptureEnd']);
 		$me->addMacro('spaceless', [$me, 'macroSpaceless'], [$me, 'macroSpaceless']);
 		$me->addMacro('include', [$me, 'macroInclude']);
+		$me->addMacro('sandbox', [$me, 'macroInclude']);
 		$me->addMacro('contentType', [$me, 'macroContentType'], null, null, self::ALLOWED_IN_HEAD);
 		$me->addMacro('php', [$me, 'macroExpr']);
+		$me->addMacro('do', [$me, 'macroExpr']);
 
 		$me->addMacro('class', null, null, [$me, 'macroClass']);
 		$me->addMacro('attr', null, null, [$me, 'macroAttr']);
+
+		$me->addMacro('varType', [$me, 'macroVarType'], null, null, self::ALLOWED_IN_HEAD);
+		$me->addMacro('varPrint', [$me, 'macroVarPrint'], null, null, self::ALLOWED_IN_HEAD);
+		$me->addMacro('templateType', [$me, 'macroTemplateType'], null, null, self::ALLOWED_IN_HEAD);
+		$me->addMacro('templatePrint', [$me, 'macroTemplatePrint'], null, null, self::ALLOWED_IN_HEAD);
 	}
 
 
@@ -86,11 +97,15 @@ class CoreMacros extends MacroSet
 	 */
 	public function finalize()
 	{
+		if ($this->printTemplate) {
+			return ["(new Latte\\Runtime\\Blueprint)->printClass(\$this, $this->printTemplate); exit;"];
+		}
+
 		$code = '';
-		foreach ($this->overwrittenVars as $var => $lines) {
-			$s = var_export($var, true);
-			$code .= 'if (isset($this->params[' . var_export($var, true)
-			. "])) trigger_error('Variable $" . addcslashes($var, "'") . ' overwritten in foreach on line ' . implode(', ', $lines) . "'); ";
+		if ($this->overwrittenVars) {
+			$vars = array_map(function ($l) { return implode(', ', $l); }, $this->overwrittenVars);
+			$code .= 'foreach (array_intersect_key(' . Latte\PhpHelpers::dump($vars) . ', $this->params) as $_v => $_l) { '
+				. 'trigger_error("Variable \$$_v overwritten in foreach on line $_l"); } ';
 		}
 		$code = $code ? 'if (!$this->getReferringTemplate() || $this->getReferenceType() === "extends") { ' . $code . '}' : '';
 		return [$code];
@@ -144,7 +159,7 @@ class CoreMacros extends MacroSet
 	{
 		if ($node->modifiers) {
 			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
-		} elseif ($node->args) {
+		} elseif ($node->args !== '') {
 			$hint = Helpers::startsWith($node->args, 'if') ? ', did you mean {elseif}?' : '';
 			throw new CompileException('Arguments are not allowed in ' . $node->getNotation() . $hint);
 		}
@@ -178,7 +193,7 @@ class CoreMacros extends MacroSet
 	{
 		$node->openingCode = '<?php ob_start(function () {}); ?>';
 		$node->innerContent = '<?php ob_start(); ?>' . $node->innerContent . '<?php $this->global->ifcontent = ob_get_flush(); ?>';
-		$node->closingCode = '<?php if (rtrim($this->global->ifcontent) === "") ob_end_clean(); else echo ob_get_clean(); ?>';
+		$node->closingCode = '<?php if (rtrim($this->global->ifcontent) === "") { ob_end_clean(); } else { echo ob_get_clean(); } ?>';
 	}
 
 
@@ -189,7 +204,7 @@ class CoreMacros extends MacroSet
 	{
 		if ($node->closing) {
 			if (strpos($node->content, '<?php') === false) {
-				$value = var_export($node->content, true);
+				$value = PhpHelpers::dump($node->content);
 				$node->content = '';
 			} else {
 				$node->openingCode = '<?php ob_start(function () {}) ?>' . $node->openingCode;
@@ -206,23 +221,28 @@ class CoreMacros extends MacroSet
 
 	/**
 	 * {include "file" [,] [params]}
+	 * {sandbox "file" [,] [params]}
 	 */
 	public function macroInclude(MacroNode $node, PhpWriter $writer)
 	{
 		$node->replaced = false;
 		$noEscape = Helpers::removeFilter($node->modifiers, 'noescape');
 		if (!$noEscape && Helpers::removeFilter($node->modifiers, 'escape')) {
-			trigger_error('Macro {include} provides auto-escaping, remove |escape.');
+			trigger_error("Macro {{$node->name}} provides auto-escaping, remove |escape.");
 		}
 		if ($node->modifiers && !$noEscape) {
 			$node->modifiers .= '|escape';
 		}
 		return $writer->write(
-			'/* line ' . $node->startLine . ' */
-			$this->createTemplate(%node.word, %node.array? + $this->params, "include")->renderToContentType(%raw);',
+			"/* line $node->startLine */\n"
+			. ($node->name === 'sandbox'
+				? 'ob_start(function () {}); try { $this->createTemplate(%node.word, %node.array, %var)->renderToContentType(%raw); echo ob_get_clean(); }
+					catch (\Throwable $__e) { if (isset($this->global->coreExceptionHandler)) { ob_end_clean(); ($this->global->coreExceptionHandler)($__e, $this); } else { echo ob_get_clean(); throw $__e; } }'
+				: '$this->createTemplate(%node.word, %node.array' . ($node->name === 'include' ? '? + $this->params' : '') . ', %var)->renderToContentType(%raw);'),
+			$node->name,
 			$node->modifiers
 				? $writer->write('function ($s, $type) { $_fi = new LR\FilterInfo($type); return %modifyContent($s); }')
-				: var_export($noEscape ? null : implode($node->context), true)
+				: PhpHelpers::dump($noEscape ? null : implode($node->context))
 		);
 	}
 
@@ -259,13 +279,13 @@ class CoreMacros extends MacroSet
 	/**
 	 * {spaceless} ... {/spaceless}
 	 */
-	public function macroSpaceless(MacroNode $node, PhpWriter $writer)
+	public function macroSpaceless(MacroNode $node)
 	{
-		if ($node->modifiers || $node->args) {
+		if ($node->modifiers || $node->args !== '') {
 			throw new CompileException('Modifiers and arguments are not allowed in ' . $node->getNotation());
 		}
 		$node->openingCode = in_array($node->context[0], [Engine::CONTENT_HTML, Engine::CONTENT_XHTML], true)
-			? '<?php ob_start(function ($s, $phase) { static $strip = true; return LR\Filters::spacelessHtml($s, $phase, $strip); }, 4096); ?>'
+			? "<?php ob_start('Latte\\Runtime\\Filters::spacelessHtmlHandler', 4096); ?>"
 			: "<?php ob_start('Latte\\Runtime\\Filters::spacelessText', 4096); ?>";
 		$node->closingCode = '<?php ob_end_flush(); ?>';
 	}
@@ -355,7 +375,7 @@ class CoreMacros extends MacroSet
 		if (isset($node->htmlNode->attrs['class'])) {
 			throw new CompileException('It is not possible to combine class with n:class.');
 		}
-		return $writer->write('if ($_tmp = array_filter(%node.array)) echo \' class="\', %escape(implode(" ", array_unique($_tmp))), \'"\'');
+		return $writer->write('echo ($_tmp = array_filter(%node.array)) ? \' class="\' . %escape(implode(" ", array_unique($_tmp))) . \'"\' : "";');
 	}
 
 
@@ -393,7 +413,7 @@ class CoreMacros extends MacroSet
 			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
 		}
 		if (function_exists($func = 'debugbreak') || function_exists($func = 'xdebug_break')) {
-			return $writer->write($node->args == null ? "$func()" : "if (%node.args) $func();");
+			return $writer->write($node->args === '' ? "$func()" : "if (%node.args) $func();");
 		}
 	}
 
@@ -405,16 +425,27 @@ class CoreMacros extends MacroSet
 	public function macroVar(MacroNode $node, PhpWriter $writer)
 	{
 		if ($node->modifiers) {
-			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
+			$node->setArgs($node->args . $node->modifiers);
 		}
 		if ($node->args === '' && $node->parentNode && $node->parentNode->name === 'switch') {
 			return '} else {';
 		}
 
 		$var = true;
-		$tokens = $writer->preprocess();
+		$hasType = false;
+		$tokens = $node->tokenizer;
 		$res = new Latte\MacroTokens;
 		while ($tokens->nextToken()) {
+			if ($var && $tokens->isCurrent($tokens::T_SYMBOL) && ($tokens->isNext(',', '=>', '=') || !$tokens->isNext())) {
+				trigger_error("Inside macro {{$node->name} {$node->args}} should be '{$tokens->currentValue()}' replaced with '\${$tokens->currentValue()}'", E_USER_DEPRECATED);
+
+			} elseif ($var && !$hasType && $tokens->isCurrent($tokens::T_SYMBOL, '?', 'null', '\\')) { // type
+				$tokens->nextToken();
+				$tokens->nextAll($tokens::T_SYMBOL, '\\', '|', '[', ']', 'null');
+				$hasType = true;
+				continue;
+			}
+
 			if ($var && $tokens->isCurrent($tokens::T_SYMBOL, $tokens::T_VARIABLE)) {
 				if ($node->name === 'default') {
 					$res->append("'" . ltrim($tokens->currentValue(), '$') . "'");
@@ -424,6 +455,9 @@ class CoreMacros extends MacroSet
 				$var = null;
 
 			} elseif ($tokens->isCurrent('=', '=>') && $tokens->depth === 0) {
+				if ($tokens->isCurrent('=>')) {
+					trigger_error("Inside macro {{$node->name} {$node->args}} should be => replaced with =", E_USER_DEPRECATED);
+				}
 				$res->append($node->name === 'default' ? '=>' : '=');
 				$var = false;
 
@@ -433,6 +467,7 @@ class CoreMacros extends MacroSet
 				}
 				$res->append($node->name === 'default' ? ',' : ';');
 				$var = true;
+				$hasType = false;
 
 			} elseif ($var === null && $node->name === 'default' && !$tokens->isCurrent($tokens::T_WHITESPACE)) {
 				throw new CompileException("Unexpected '{$tokens->currentValue()}' in {default $node->args}");
@@ -444,6 +479,7 @@ class CoreMacros extends MacroSet
 		if ($var === null) {
 			$res->append($node->name === 'default' ? '=>null' : '=null');
 		}
+		$res = $writer->preprocess($res);
 		$out = $writer->quotingPass($res)->joinAll();
 		return $node->name === 'default' ? "extract([$out], EXTR_SKIP)" : "$out;";
 	}
@@ -452,9 +488,13 @@ class CoreMacros extends MacroSet
 	/**
 	 * {= ...}
 	 * {php ...}
+	 * {do ...}
 	 */
 	public function macroExpr(MacroNode $node, PhpWriter $writer)
 	{
+		if ($node->args === '') {
+			throw new CompileException('Missing arguments in ' . $node->getNotation());
+		}
 		return $writer->write($node->name === '='
 			? "echo %modify(%node.args) /* line $node->startLine */"
 			: '%modify(%node.args);'
@@ -494,7 +534,60 @@ class CoreMacros extends MacroSet
 		$compiler->setContentType($type);
 
 		if (strpos($node->args, '/') && !$node->htmlNode) {
-			return $writer->write('if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ["extends", null], true)) header(%var);', "Content-Type: $node->args");
+			return $writer->write('if (empty($this->global->coreCaptured) && in_array($this->getReferenceType(), ["extends", null], true)) { header(%var); } ', "Content-Type: $node->args");
 		}
+	}
+
+
+	/**
+	 * {varType type $var}
+	 */
+	public function macroVarType(MacroNode $node)
+	{
+		if ($node->modifiers) {
+			$node->setArgs($node->args . $node->modifiers);
+		}
+
+		$type = $node->tokenizer->fetchWord();
+		$variable = $node->tokenizer->fetchWord();
+		if (!$type || !$variable || !Helpers::startsWith($variable, '$')) {
+			throw new CompileException('Unexpected content, expecting {varType type $var}.');
+		}
+	}
+
+
+	/**
+	 * {varPrint [all]}
+	 */
+	public function macroVarPrint(MacroNode $node)
+	{
+		$vars = $node->tokenizer->fetchWord() === 'all'
+			? 'get_defined_vars()'
+			: 'array_diff_key(get_defined_vars(), $this->getParameters())';
+		return "(new Latte\\Runtime\\Blueprint)->printVars($vars); exit;";
+	}
+
+
+	/**
+	 * {templateType ClassName}
+	 */
+	public function macroTemplateType(MacroNode $node)
+	{
+		if (!$this->getCompiler()->isInHead()) {
+			throw new CompileException($node->getNotation() . ' is allowed only in template header.');
+		} elseif ($node->modifiers) {
+			throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
+		} elseif (!($type = $node->tokenizer->fetchWord())) {
+			throw new CompileException('Missing class name in {templateType} macro.');
+		}
+	}
+
+
+	/**
+	 * {templatePrint [ClassName]}
+	 */
+	public function macroTemplatePrint(MacroNode $node)
+	{
+		$this->printTemplate = PhpHelpers::dump($node->tokenizer->fetchWord() ?: null);
 	}
 }
