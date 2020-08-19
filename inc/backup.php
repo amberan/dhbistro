@@ -141,7 +141,7 @@ function backup_process()
                 mysqli_query ($database,"DELETE FROM ".DB_PREFIX."unread WHERE userId = ".$deletedusers[0]);
             }
         }
-    }   
+    }
 }
 
 	$checkSql = "SELECT time FROM ".DB_PREFIX."backup ORDER BY time DESC LIMIT 1";

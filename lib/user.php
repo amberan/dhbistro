@@ -47,10 +47,10 @@ function userList($where = 1): array
     $query = mysqli_query($database,$sql);
     if (mysqli_num_rows($query) > 0) {
         while ($users = mysqli_fetch_assoc ($query)) {
-            if ($users['lastLogin'] < 1) { 
-                $users['lastLogin'] = $text['nikdy']; 
+            if ($users['lastLogin'] < 1) {
+                $users['lastLogin'] = $text['nikdy'];
             } else {
-                $users['lastLogin'] = webdatetime($users['lastLogin']); 
+                $users['lastLogin'] = webdatetime($users['lastLogin']);
             }
             $userList[] = $users;
         }
@@ -71,21 +71,22 @@ function userList($where = 1): array
  * @param string success message
  * @param string failure message
  */
-function userChange($userId, $data, $success = null, $failure = null): string {
+function userChange($userId, $data, $success = null, $failure = null): string
+{
     global $database, $latteParameters;
     $chain = "";
     foreach ($data as $column => $value) {
-        if (DBcolumnExist('user',$column) AND strlen($value) > 0) {
+        if (DBcolumnExist('user',$column) AND mb_strlen($value) > 0) {
             $chain .= " $column = '$value',";
         }
     }
-    if (strlen($chain) > 0) {
+    if (mb_strlen($chain) > 0) {
         $sql = "UPDATE ".DB_PREFIX."user SET ".rtrim($chain, ",")."  where userId=".$userId;
         mysqli_query($database,$sql);
         if (mysqli_affected_rows($database) > 0) {
-             $latteParameters['message'] = $success;
+            $latteParameters['message'] = $success;
         } else {
-             $latteParameters['message'] = $failure;
+            $latteParameters['message'] = $failure;
         }
     }
 

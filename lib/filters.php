@@ -29,6 +29,7 @@ function sortingGet($object,$linkedTable = null): string
             $result = "ORDER BY ".$sorter['sortColumn']." ".$sorter['sortDirection'];
         }
     }
+
     return $result;
 }
 
