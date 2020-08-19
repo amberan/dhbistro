@@ -23,11 +23,12 @@ function sortingGet($object,$linkedTable = null): string
     global $database,$user;
     $query = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."sort where objectType='$object' AND userId=".$user['userId']);
     $result = "";
-    $sorter = mysqli_fetch_array ($query);
-    if (DBcolumnExist($object,$sorter['sortColumn']) OR DBcolumnExist($linkedTable,$sorter['sortColumn'])) {
-        $result = "ORDER BY ".$sorter['sortColumn']." ".$sorter['sortDirection'];
+    if (mysqli_num_rows($query) > 0) {
+        $sorter = mysqli_fetch_array ($query);
+        if (DBcolumnExist($object,$sorter['sortColumn']) OR DBcolumnExist($linkedTable,$sorter['sortColumn'])) {
+            $result = "ORDER BY ".$sorter['sortColumn']." ".$sorter['sortDirection'];
+        }
     }
-
     return $result;
 }
 

@@ -18,8 +18,9 @@ if (null !== $config['custom']) {
 
 use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT, $config['folder_logs']);
-require_once SERVER_ROOT.'/inc/database.php';
 require_once SERVER_ROOT."/lib/security.php";
+require_once SERVER_ROOT.'/inc/database.php';
+# installer require_once SERVER_ROOT."/lib/security.php";
 require_once SERVER_ROOT."/lib/gui.php";
 require_once SERVER_ROOT."/lib/formatter.php";
 require_once SERVER_ROOT."/lib/filters.php";

@@ -76,7 +76,7 @@ function searchRecord ($tablenum, $recordnum) {
 	global $database,$usrinfo;
 	$unreadSql="SELECT * FROM ".DB_PREFIX."unread WHERE iduser=".$usrinfo['id']." and idtable=".$tablenum." and idrecord=".$recordnum;
 	$unreadResult=mysqli_num_rows(mysqli_query ($database,$unreadSql));
-	if ($unreadResult > 0) { 
+	if ($unreadResult > 0) {
 		return true;
 	} else {
 		return false;
@@ -84,11 +84,10 @@ function searchRecord ($tablenum, $recordnum) {
 }
 
 // vyhledani tabulky v neprectenych zaznamech
-function searchTable ($tablenum) { 
-    global $unread;
-    
+function searchTable ($tablenum) {
+	global $unread;
 	foreach ((array) $unread as $record) {
-		if ($record['idtable'] == $tablenum) {
+		if (isset($record) AND $record['idtable'] == $tablenum) {
 			return $record['count'];
 		}
 	}

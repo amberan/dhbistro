@@ -1,5 +1,6 @@
 <div class="container-fluid mt-3 mb-3">
     <div class="row">
+    {if @$news_array}
         {foreach $news_array as $news} {* 1=herni, 2=systemova *}
             <div class="alert {if $news[category] == 1}alert-info{/if}{if $news[category] == 2}alert-warning{/if} mb-1 ml-2 mr-2 w-100">
                 <h5>{$news[nadpis]}</h5>
@@ -23,5 +24,8 @@
                 </div>
             </div>
         {/foreach}
+     {else}
+	V systému nejsou nadefinovány žádné aktuality!
+     {/if}
 	</div>
 </div>
