@@ -136,10 +136,12 @@ function backup_process()
         }
         //odmazani UNREAD pro smazane uzivatele
         $deletedusersSql = mysqli_query($database,"select id from ".DB_PREFIX."user where userDeleted=1");
-        while ($deletedusers = mysqli_fetch_row($deletedusersSql)) {
-            mysqli_query ($database,"DELETE FROM ".DB_PREFIX."unread WHERE userId = ".$deletedusers[0]);
+        if (mysqli_num_rows($database,$deletedusersSql) > 0) {
+            while ($deletedusers = mysqli_fetch_row($deletedusersSql)) {
+                mysqli_query ($database,"DELETE FROM ".DB_PREFIX."unread WHERE userId = ".$deletedusers[0]);
+            }
         }
-    }
+    }   
 }
 
 	$checkSql = "SELECT time FROM ".DB_PREFIX."backup ORDER BY time DESC LIMIT 1";

@@ -252,10 +252,10 @@ $latteParameters['title'] = 'Audit';
 	  	<option value=0 '.(($filterUser == 0) ? ' selected="selected"' : '').'>všemi</option>';
  	
 	    $sqlU = "SELECT id, login FROM ".DB_PREFIX."user WHERE deleted=0 ORDER BY login ASC";
-	    $resU = mysqli_query ($database,$sqlU);
+        $resU = mysqli_query ($database,$sqlU);
 	    while ($recU = mysqli_fetch_assoc ($resU)) {
 	        echo '<option value="'.$recU['id'].'"'.(($recU['id'] == $filterUser) ? ' selected="selected"' : '').'>'.$recU['login'].'</option>';
-	    };
+        };
 	    echo '</select>';
 
 

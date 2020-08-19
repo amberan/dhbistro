@@ -15,7 +15,7 @@ if (isset ($user) AND $user['aclDirector'] > 0) {
 }
 if (isset ($user) AND ($user['aclDeputy'] > 0 OR $user['aclDirector'] > 0)) {
     $menu2[] = array($text['casovadostupnost'], "/doodle.php", 0);
-} else {
+} elseif (isset ($user)) {
     $doodle = mysqli_fetch_assoc (mysqli_query ($database,"SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1"));
     $menu2[] = array($text['casovadostupnost'], $doodle['link'], 0);
 }

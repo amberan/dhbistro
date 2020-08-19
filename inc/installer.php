@@ -13,7 +13,7 @@ $dbExist = mysqli_query ($database,"show tables");
         $dbScriptQuery = explode(";",file_get_contents($dbScriptFilename));
         foreach ($dbScriptQuery as $query) {
             mysqli_query($database,$query);
-//          print_r(mysqli_error_list($database));
+            print_r(mysqli_error_list($database));
         }
         $dbScriptFilename = explode ("/",$dbScriptFilename);
         Debugger::log("DEBUG: Database EMPTY, populating based on ".end($dbScriptFilename));

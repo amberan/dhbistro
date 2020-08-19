@@ -29,9 +29,11 @@
                     </label>
                     <select class="form-control" name="idperson" id="idperson">
                         <option value="0"> ??? </option>
+			{if @$persons}
                         {foreach $persons as $person}
                             <option value="{$person[0]}"{if $person[0] == $userEdit['personId']} selected="selected"{/if}>{$person[1]}, {$person[2]}</option>
                         {/foreach}
+			{/if}
                     </select>
                 </div>
                 <div class="col-12 col-md-4">
