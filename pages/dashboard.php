@@ -6,7 +6,7 @@ use Tracy\Debugger;
 
 // REPORTS
 $reportsAssigned = reportsAssignedTo($user['userId']);
-if ($reportsAssigned) {
+if (isset($reportsAssigned[0][0])) {
     $latteParameters['reports'] = $reportsAssigned;
 } else {
     $latteParameters['reportsnone'] = $text['zadnanedokoncenahlaseni'];
@@ -15,7 +15,7 @@ if ($reportsAssigned) {
 
 // CASES
 $casesAssigned = casesAssignedTo($user['userId']);
-if ($casesAssigned) {
+if (isset($casesAssigned[0][0])) {
     $latteParameters['cases'] = $casesAssigned;
 } else {
     $latteParameters['casesnone'] = $text['zadnenadokoncenepripady'];
@@ -25,7 +25,7 @@ if ($casesAssigned) {
 
 // TASKS
 $tasksAssigned = tasksAssignedTo($user['userId']);
-if ($tasksAssigned) {
+if (isset($tasksAssigned[0][0])) {
     $latteParameters['tasks'] = $tasksAssigned;
 } else {
     $latteParameters['tasksnone'] = $text['zadnenedokonceneukoly'];
