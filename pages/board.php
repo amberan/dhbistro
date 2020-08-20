@@ -8,7 +8,7 @@ auditTrail(6, 1, 0);
 deleteUnread (6,0);
 
 // BOARD MEMO SAVE
-if (isset($_POST['editdashboard']) AND ($user['aclDirector'] > 0 or $user['aclDeputy']> 0)) {
+if (isset($_POST['editdashboard']) AND ($user['aclDirector'] > 0 or $user['aclDeputy'] > 0)) {
     auditTrail(6, 2, 0);
     $sql = "INSERT INTO ".DB_PREFIX."dashboard ( created, iduser, content,  content_md) VALUES('".Time()."','".$user['userId']."','','".$_REQUEST['dashboard']."')";
     mysqli_query ($database,$sql);

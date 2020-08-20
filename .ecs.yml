@@ -103,8 +103,8 @@ services:
             - 'return'
 
     # cognitive complexity - adjust level to your needs, starting from 100
-    Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
-        maxCognitiveComplexity: 30
+#    Symplify\CodingStandard\Sniffs\CleanCode\CognitiveComplexitySniff:
+#        maxCognitiveComplexity: 30
 
     # this one is RISKY, but if you are sure your phpdoc is right then go on
     SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff: ~

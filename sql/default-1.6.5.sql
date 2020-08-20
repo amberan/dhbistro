@@ -355,6 +355,6 @@ CREATE TABLE `nw_user` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 INSERT INTO `nw_user` (`id`, `sid`, `login`, `pwd`, `email`, `idperson`, `lastlogon`, `ip`, `user_agent`, `deleted`, `suspended`, `zlobody`, `timeout`, `right_text`, `right_power`, `right_org`, `right_aud`, `right_super`, `plan`, `filter`, `plan_md`) VALUES
-(1,	'sarn9l5q58vj608b8v5256pgnj',	'admin',	'e35baa4f20beaa4b71df3c20fc1e98aa',	NULL,	0,	1581590499,	'127.0.0.1',	'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36',	0,	0,	1,	600,	1,	1,	1,	1,	1,	'',	'',	'');
+(1,	'sarn9l5q58vj608b8v5256pgnj',	'admin',	'e35baa4f20beaa4b71df3c20fc1e98aa',	NULL,	0,	1581590499,	'127.0.0.1',	'',	0,	0,	1,	600,	1,	1,	1,	1,	1,	'',	'',	'');
 
 -- 2020-02-13 10:42:12

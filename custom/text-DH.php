@@ -1,4 +1,5 @@
 <?php
-$text['point']='zlobod';
-$text['menu-zlobody']='Zlobody';
+
+$text['point'] = 'zlobod';
+$text['menu-zlobody'] = 'Zlobody';
 ?>

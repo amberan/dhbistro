@@ -1,5 +1,6 @@
 <?php
-$text['point']='zlobod';
-$text['hlaseniV']='Zakázka';
-$text['hlaseniM']='zakázka';
+
+$text['point'] = 'zlobod';
+$text['hlaseniV'] = 'Zakázka';
+$text['hlaseniM'] = 'zakázka';
 ?>

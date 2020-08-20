@@ -24,7 +24,9 @@ if (isset($_POST['userid'], $_POST['edituser']) && $user['aclDirector'] && !preg
         $data['aclHunt'] = $_POST['aclHunt'];
         $data['aclGamemaster'] = $_POST['aclGamemaster'];
         $data['aclAPI'] = $_POST['aclAPI'];
-        if (validate_mail($_POST['userEmail'])) { $data['userEmail'] = $_POST['userEmail'];}
+        if (validate_mail($_POST['userEmail'])) {
+            $data['userEmail'] = $_POST['userEmail'];
+        }
         $data['personId'] = $_POST['idperson'];
         userChange($_POST['userid'],$data);
         $latteParameters['message'] = "Uživatel ".$_POST['login']." upraven.";
@@ -33,33 +35,31 @@ if (isset($_POST['userid'], $_POST['edituser']) && $user['aclDirector'] && !preg
 
     $personList = personList('deleted=0 and archiv=0 and dead=0','surname');
     if (count($personList) > 1 ) {
-
-    foreach ($personList as $personList) {
-        $persons[] = array ($personList['id'], $personList['surname'], $personList['name']);
-    } 
-    $latteParameters['persons'] = $persons;
+        foreach ($personList as $personList) {
+            $persons[] = array ($personList['id'], $personList['surname'], $personList['name']);
+        }
+        $latteParameters['persons'] = $persons;
     }
 
     $res = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."user WHERE userId=".$URL[3]);
 	if ($rec = mysqli_fetch_assoc ($res)) {
 	    $latteParameters['userEdit'] = $rec;
 
-        $reportsAssignedToUser = reportsAssignedTo($rec['userId']);
-        if ($reportsAssignedToUser) { 
-            $latteParameters['userEdit']['hlaseni'] = $reportsAssignedToUser;
-        }
+	    $reportsAssignedToUser = reportsAssignedTo($rec['userId']);
+	    if ($reportsAssignedToUser) {
+	        $latteParameters['userEdit']['hlaseni'] = $reportsAssignedToUser;
+	    }
 
 
-        $casesAssignedToUser = casesAssignedTo($rec['userId']);
-        if ($casesAssignedToUser) { 
-            $latteParameters['userEdit']['pripady'] = $casesAssignedToUser;
-        }
+	    $casesAssignedToUser = casesAssignedTo($rec['userId']);
+	    if ($casesAssignedToUser) {
+	        $latteParameters['userEdit']['pripady'] = $casesAssignedToUser;
+	    }
 
-        $tasksAssignedToUser = tasksAssignedTo($rec['userId']);
-        if ($tasksAssignedToUser) { 
-            $latteParameters['userEdit']['ukoly'] = $tasksAssignedToUser;
-        }
-
+	    $tasksAssignedToUser = tasksAssignedTo($rec['userId']);
+	    if ($tasksAssignedToUser) {
+	        $latteParameters['userEdit']['ukoly'] = $tasksAssignedToUser;
+	    }
 	} else {
 	    $latteParameters['warning'] = $text['zaznamnenalezen'];
 	}

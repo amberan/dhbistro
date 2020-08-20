@@ -74,7 +74,9 @@ elseif (isset($_POST['insertuser']) && $user['aclDirector'] && !preg_match ('/^[
             $data['aclHunt'] = $_POST['aclHunt'];
             $data['aclGamemaster'] = $_POST['aclGamemaster'];
             $data['aclAPI'] = $_POST['aclAPI'];
-            if (validate_mail($_POST['email'])) { $data['userEmail'] = $_POST['email'];}
+            if (validate_mail($_POST['email'])) {
+                $data['userEmail'] = $_POST['email'];
+            }
             $data['personId'] = $_POST['idperson'];
             userChange($uidarray['userId'],$data);
             $latteParameters['message'] = $text['uzivatelvytvoren'].$_POST['login'];
@@ -88,7 +90,7 @@ if (isset($_GET['sort'])) {
     sortingSet('user',$_GET['sort'],'person');
 }
 
-$userList = userList(); 
+$userList = userList();
 if (count($userList) > 0) {
     $latteParameters['user_record'] = $userList;
 } else {
