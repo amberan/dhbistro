@@ -4,6 +4,13 @@ stages:
 
 include:
   - template: Code-Quality.gitlab-ci.yml
+#  - template: Secret-Detection.gitlab-ci.yml
+#
+#secret_detection:
+#  stage: test
+#  allow_failure: true
+#  variables:
+#    SECRET_DETECTION_HISTORIC_SCAN: "true"
 
 # https://www.youtube.com/watch?time_continue=50&v=B32LxtJKo9M
 code_quality: 
