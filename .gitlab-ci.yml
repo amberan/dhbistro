@@ -4,6 +4,13 @@ stages:
 
 include:
   - template: Code-Quality.gitlab-ci.yml
+#  - template: Secret-Detection.gitlab-ci.yml
+#
+#secret_detection:
+#  stage: test
+#  allow_failure: true
+#  variables:
+#    SECRET_DETECTION_HISTORIC_SCAN: "true"
 
 # https://www.youtube.com/watch?time_continue=50&v=B32LxtJKo9M
 code_quality: 
@@ -82,7 +89,7 @@ test to bistro.alembiq.net:
     - chmod 600 $SSH_KEY
     - cat $SSH_KEY | tr -d '\r' | ssh-add -
     - export
-    - ssh gitlab-ci@$CI_ENVIRONMENT_URL "cd /srv/net.alembiq.bistro/htdocs && git checkout . && git remote set-url gitlab $CI_REPOSITORY_URL && git pull gitlab $CI_COMMIT_REF_NAME && exit"
+    - ssh gitlab-ci@$CI_ENVIRONMENT_URL "cd /srv/net.alembiq.bistro/htdocs && git checkout . && git remote set-url gitlab $CI_REPOSITORY_URL && git pull gitlab $CI_COMMIT_SHA && exit"
   environment:
     name: staging
     url: bistro.alembiq.net
