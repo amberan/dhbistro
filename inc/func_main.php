@@ -94,32 +94,23 @@ function getAuthor($recid, $trn)
     if (1 === $trn) { //person
         $getAuthorSql = 'SELECT '.DB_PREFIX."person.name as 'name', ".DB_PREFIX."person.surname as 'surname', ".DB_PREFIX."user.userName as 'nick' FROM ".DB_PREFIX.'person, '.DB_PREFIX.'user WHERE '.DB_PREFIX.'user.id='.$recid.' AND '.DB_PREFIX.'person.id='.DB_PREFIX.'user.idperson';
         $getAuthorQuery = mysqli_query($database, $getAuthorSql);
-        if (mysqli_num_rows($getAuthorQuery)) {
-            while ($getAuthorResult = mysqli_fetch_assoc($getAuthorQuery)) {
-                $name = stripslashes($getAuthorResult['surname']).', '.stripslashes($getAuthorResult['name']);
-
-                return $name;
-            }
+        if (!is_bool($getAuthorQuery)) {
+            $getAuthorResult = mysqli_fetch_assoc($getAuthorQuery);
+            $name = stripslashes($getAuthorResult['surname']).', '.stripslashes($getAuthorResult['name']);
         } else {
             $name = 'Uživatel není přiřazen.';
-
-            return $name;
         }
     } else { //user
         $getAuthorSql = 'SELECT '.DB_PREFIX."user.login as 'nick' FROM ".DB_PREFIX.'user WHERE '.DB_PREFIX.'user.id='.$recid;
         $getAuthorQuery = mysqli_query($database, $getAuthorSql);
-        if (mysqli_num_rows($getAuthorQuery)) {
-            while ($getAuthorResult = mysqli_fetch_assoc($getAuthorQuery)) {
-                $name = stripslashes($getAuthorResult['nick']);
-
-                return $name;
-            }
+        if (!is_bool($getAuthorQuery)) {
+            $getAuthorResult = mysqli_fetch_assoc($getAuthorQuery);
+            $name = stripslashes($getAuthorResult['nick']);
         } else {
             $name = 'Neznámo.';
-
-            return $name;
         }
     }
+    return $name;
 }
 
 // funkce pro ukládání fitru do databáza a načítání filtru z databáze
