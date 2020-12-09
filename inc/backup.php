@@ -136,7 +136,7 @@ function backup_process()
         }
         //odmazani UNREAD pro smazane uzivatele
         $deletedusersSql = mysqli_query($database,"select id from ".DB_PREFIX."user where userDeleted=1");
-        if (mysqli_num_rows($deletedusersSql) > 0) {
+        if (!is_bool($deletedusersSql)) {
             while ($deletedusers = mysqli_fetch_row($deletedusersSql)) {
                 mysqli_query ($database,"DELETE FROM ".DB_PREFIX."unread WHERE userId = ".$deletedusers[0]);
             }

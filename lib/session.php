@@ -66,7 +66,7 @@ function logout_forced($msg)
     session_destroy();
     session_start();
     if (isset($msg)) {
-        $_SESSION['message'] .= $msg;
+        @$_SESSION['message'] .= $msg;
         Debugger::log($_SESSION['message']);
     }
     Header ('location: '.siteURL());

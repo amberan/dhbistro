@@ -251,19 +251,12 @@ $latteParameters['title'] = 'Audit';
 		<select name="user" id="user">
 	  	<option value=0 '.(($filterUser == 0) ? ' selected="selected"' : '').'>všemi</option>';
  	
-	    $sqlU = "SELECT id, login FROM ".DB_PREFIX."user WHERE deleted=0 ORDER BY login ASC";
+	    $sqlU = "SELECT userId, userName FROM ".DB_PREFIX."user WHERE userDeleted=0 ORDER BY username ASC";
         $resU = mysqli_query ($database,$sqlU);
 	    while ($recU = mysqli_fetch_assoc ($resU)) {
-	        echo '<option value="'.$recU['id'].'"'.(($recU['id'] == $filterUser) ? ' selected="selected"' : '').'>'.$recU['login'].'</option>';
+	        echo '<option value="'.$recU['userId'].'"'.(($recU['userId'] == $filterUser) ? ' selected="selected"' : '').'>'.$recU['userName'].'</option>';
         };
-	    echo '</select>';
-
-
-	  		
-	    echo 'a seřadit je podle <select name="sort">
-	<option value="1"'.(($filterSort == 1) ? ' selected="selected"' : '').'>času vzestupně</option>
-	<option value="2"'.(($filterSort == 2) ? ' selected="selected"' : '').'>času sestupně</option>
-	</select>.</p>';
+	    echo '</select></p>';
 	    if ($usrinfo['right_org'] == 1) {
 	        echo '					
 		<label for="org">Zobrazit i zásahy organizátorů</label>
@@ -281,20 +274,24 @@ $latteParameters['title'] = 'Audit';
 	</fieldset>
 </form></div><!-- end of #filter-wrapper -->';
 	}
-	filter();
+    filter();
+if (isset($_GET['sort'])) {
+    sortingSet('audit',$_GET['sort'],'audit_trail');
+}
 	// vypis uživatelů
-	$sql = "SELECT * FROM ".DB_PREFIX."audit_trail".$filterSqlCat.$filterSqlType.$filterSqlOrg.$filterSqlMine.$filterSqlGlob.$filterSqlUser." ORDER BY ".$filterSqlSort.$filterSqlCount;
+    $sql = "SELECT * FROM ".DB_PREFIX."audit_trail".$filterSqlCat.$filterSqlType.$filterSqlOrg.$filterSqlMine.$filterSqlGlob.$filterSqlUser.sortingGet('audit','audit_trail').$filterSqlCount;
+    //////" ORDER BY ".$filterSqlSort.$filterSqlCount;
 	$res = mysqli_query ($database,$sql);
 	if (mysqli_num_rows ($res)) {
 	    echo '<div id="obsah">
 <table>
 <thead>
 	<tr>
-	  <th>Uživatel</th>
-	  <th>Čas</th>
+	  <th>Uživatel <a href="audit.php?sort=iduser">&#8661;</a></th>
+	  <th>Čas <a href="audit.php?sort=time">&#8661;</a></th>
 	  <th>IP</th>						
 	  <th>Typ operace</th>
-	  <th>Typ záznamu</th>
+	  <th>Typ záznamu <a href="audit.php?sort=record_type">&#8661;</a></th>
 	  <th>Záznam</th>
 	</tr>
 </thead>

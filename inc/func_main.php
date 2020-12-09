@@ -92,7 +92,7 @@ function getAuthor($recid, $trn)
 {
     global $database;
     if (1 === $trn) { //person
-        $getAuthorSql = 'SELECT '.DB_PREFIX."person.name as 'name', ".DB_PREFIX."person.surname as 'surname', ".DB_PREFIX."user.userName as 'nick' FROM ".DB_PREFIX.'person, '.DB_PREFIX.'user WHERE '.DB_PREFIX.'user.id='.$recid.' AND '.DB_PREFIX.'person.id='.DB_PREFIX.'user.idperson';
+        $getAuthorSql = 'SELECT '.DB_PREFIX."person.name as 'name', ".DB_PREFIX."person.surname as 'surname', ".DB_PREFIX."user.userName as 'nick' FROM ".DB_PREFIX.'person, '.DB_PREFIX.'user WHERE '.DB_PREFIX.'user.userId='.$recid.' AND '.DB_PREFIX.'person.id='.DB_PREFIX.'user.idperson';
         $getAuthorQuery = mysqli_query($database, $getAuthorSql);
         if (!is_bool($getAuthorQuery)) {
             $getAuthorResult = mysqli_fetch_assoc($getAuthorQuery);
@@ -101,7 +101,7 @@ function getAuthor($recid, $trn)
             $name = 'Uživatel není přiřazen.';
         }
     } else { //user
-        $getAuthorSql = 'SELECT '.DB_PREFIX."user.login as 'nick' FROM ".DB_PREFIX.'user WHERE '.DB_PREFIX.'user.id='.$recid;
+        $getAuthorSql = 'SELECT '.DB_PREFIX."user.userName as 'nick' FROM ".DB_PREFIX.'user WHERE '.DB_PREFIX.'user.userId='.$recid;
         $getAuthorQuery = mysqli_query($database, $getAuthorSql);
         if (!is_bool($getAuthorQuery)) {
             $getAuthorResult = mysqli_fetch_assoc($getAuthorQuery);
@@ -176,9 +176,9 @@ break; //symbol 2 action report
     $sqlCf = 'SELECT filter FROM '.DB_PREFIX.'user WHERE userId = '.$usrinfo['id'];
     $resCf = mysqli_query($database, $sqlCf);
     $filter = $_REQUEST;
-    // pokud přichází nový filtr a nejedná se o zadání úkolu či přidání zlobodů, případně pokud se jedná o konkrétní záznam a je nově filtrovaný,
+    // pokud přichází nový filtr a nejedná se o zadání úkolu či přidání zlobodů, případně pokud se jedná o konkrétní záznam a je nově filtrovaný, !$_GET['sort']
     // použij nový filtr a ulož ho do databáze
-    if ((!empty($filter) && !isset($_POST['inserttask']) && !isset($_POST['addpoints']) && !isset($filter['rid'])) || (isset($filter['sort'], $filter['rid']))) {
+    if ((!empty($filter) && !isset($_GET['sort']) && !isset($_POST['inserttask']) && !isset($_POST['addpoints']) && !isset($filter['rid'])) || (isset($filter['sort'], $filter['rid']))) {
         if ($resCf) {
             $recCf = mysqli_fetch_assoc($resCf);
             $filters = unserialize($recCf['filter']);

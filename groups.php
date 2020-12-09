@@ -55,10 +55,6 @@ sparklets ('<strong>skupiny</strong>','<a href="newgroup.php">přidat skupinu</a
 	    echo '<div id="filter-wrapper"><form action="groups.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
-	  <p>Vypsat všechny skupiny a seřadit je podle <select name="sort">
-	<option value="1"'.(($filterSort == 1) ? ' selected="selected"' : '').'>názvu vzestupně</option>
-	<option value="2"'.(($filterSort == 2) ? ' selected="selected"' : '').'>názvu sestupně</option>
-        </select>.
         <br /> <input type="checkbox" name="new" value="new" class="checkbox"'.(($fNew == 1) ? ' checked="checked"' : '').' /> Jen nové.
         <br /> <input type="checkbox" name="arch" value="arch" class="checkbox"'.(($fArch == 1) ? ' checked="checked"' : '').' /> I archiv.';
 	    if ($usrinfo['right_power']) {
@@ -78,14 +74,20 @@ sparklets ('<strong>skupiny</strong>','<a href="newgroup.php">přidat skupinu</a
 	} else {
 	  $sql="SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.archived AS 'archived' FROM ".DB_PREFIX."group WHERE ".DB_PREFIX."group.deleted=0".$fsql_sec.$fsql_arch." AND ".DB_PREFIX."group.secret=0 ORDER BY ".$filterSqlSort;
 	} Alternativni vypis skupin*/
-    $sql = "SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.archived AS 'archived' FROM ".DB_PREFIX."group WHERE ".DB_PREFIX."group.deleted=0".$fsql_sec.$fsql_arch." AND ".DB_PREFIX."group.secret<=".$usrinfo['right_power']." ORDER BY ".$filterSqlSort;
+
+if (isset($_GET['sort'])) {
+    sortingSet('group',$_GET['sort'],'group');
+}
+
+    $sql = "SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.archived AS 'archived' FROM ".DB_PREFIX."group WHERE ".DB_PREFIX."group.deleted=0".$fsql_sec.$fsql_arch." AND ".DB_PREFIX."group.secret<=".$usrinfo['right_power'].sortingGet('group');
+    /////" ORDER BY ".$filterSqlSort;
 	$res = mysqli_query ($database,$sql);
 	if (mysqli_num_rows ($res)) {
 	    echo '<div id="obsah">
 <table>
 <thead>
 	<tr>
-	  <th>Název</th>
+	  <th>Název <a href="groups.php?sort=title">&#8661;</a></th>
 	  <th>Akce</th>
 	</tr>
 </thead>
