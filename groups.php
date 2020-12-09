@@ -13,11 +13,6 @@ mainMenu ();
 $customFilter = custom_Filter(2);
 sparklets ('<strong>skupiny</strong>','<a href="newgroup.php">přidat skupinu</a>');
 	// zpracovani filtru
-	if (!isset($customFilter['sort'])) {
-	    $filterSort = 1;
-	} else {
-	    $filterSort = $customFilter['sort'];
-	}
 	if (!isset($customFilter['sec'])) {
 	    $filterSec = 0;
 	} else {
@@ -33,11 +28,6 @@ sparklets ('<strong>skupiny</strong>','<a href="newgroup.php">přidat skupinu</a
         } else {
             $fArch = 1;
         }
-	switch ($filterSort) {
-	  case 1: $filterSqlSort = ' '.DB_PREFIX.'group.title ASC '; break;
-	  case 2: $filterSqlSort = ' '.DB_PREFIX.'group.title DESC '; break;
-	  default: $filterSqlSort = ' '.DB_PREFIX.'group.title ASC ';
-	}
 	switch ($filterSec) {
 		case 0: $fsql_sec = ''; break;
 		case 1: $fsql_sec = ' AND '.DB_PREFIX.'group.secret>0 '; break;
@@ -68,19 +58,11 @@ sparklets ('<strong>skupiny</strong>','<a href="newgroup.php">přidat skupinu</a
 </form></div><!-- end of #filter-wrapper -->';
 	}
 	filter();
-	/* Stary vypis skupin
-	if ($usrinfo['right_power']) {
-		$sql="SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.archived AS 'archived' FROM ".DB_PREFIX."group WHERE ".DB_PREFIX."group.deleted=0".$fsql_sec.$fsql_arch." ORDER BY ".$filterSqlSort;
-	} else {
-	  $sql="SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.archived AS 'archived' FROM ".DB_PREFIX."group WHERE ".DB_PREFIX."group.deleted=0".$fsql_sec.$fsql_arch." AND ".DB_PREFIX."group.secret=0 ORDER BY ".$filterSqlSort;
-	} Alternativni vypis skupin*/
-
 if (isset($_GET['sort'])) {
     sortingSet('group',$_GET['sort'],'group');
 }
 
     $sql = "SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.archived AS 'archived' FROM ".DB_PREFIX."group WHERE ".DB_PREFIX."group.deleted=0".$fsql_sec.$fsql_arch." AND ".DB_PREFIX."group.secret<=".$usrinfo['right_power'].sortingGet('group');
-    /////" ORDER BY ".$filterSqlSort;
 	$res = mysqli_query ($database,$sql);
 	if (mysqli_num_rows ($res)) {
 	    echo '<div id="obsah">

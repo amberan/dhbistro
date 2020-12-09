@@ -1,5 +1,8 @@
 # BISTRO changelog 
 
+**1.7.3** 
+- nasazeni trideni na stare formulare [#87](https://gitlab.alembiq.net/larp/bistro/issues/87)
+
 **1.7.2** Access 2.0
 - nova prava [#49](https://gitlab.alembiq.net/larp/bistro/issues/49)
 - uprava spravy uzivatelu podle [#49](https://gitlab.alembiq.net/larp/bistro/issues/49) [#101](https://gitlab.alembiq.net/larp/bistro/issues/101)
