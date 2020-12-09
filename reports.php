@@ -138,7 +138,13 @@ $latteParameters['title'] = 'Hlášení';
 	</fieldset>
 </form></div><!-- end of #filter-wrapper -->';
 	}
-	filter();
+    filter();
+    
+    if (isset($_GET['sort'])) {
+    sortingSet('report',$_GET['sort'],'report');
+}
+
+
     $sql = "SELECT
                 ".DB_PREFIX."report.id AS 'id',
                 ".DB_PREFIX."report.datum AS 'datum',
@@ -152,8 +158,9 @@ $latteParameters['title'] = 'Hlášení';
 				".DB_PREFIX."report.start AS 'start',
 				".DB_PREFIX."report.end AS 'end'  
                     FROM ".DB_PREFIX."user, ".DB_PREFIX."report".$fsql_conn2." 
-                    WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."report.deleted=0 AND ".DB_PREFIX."report.secret<=".$usrinfo['right_power'].$filterSqlCat.$fsql_sec.$fsql_stat.$filterSqlMine.$fsql_conn.$fsql_archiv."
-					ORDER BY ".$filterSqlSort;
+                    WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."report.deleted=0 AND ".DB_PREFIX."report.secret<=".$usrinfo['right_power'].$filterSqlCat.$fsql_sec.$fsql_stat.$filterSqlMine.$fsql_conn.
+                    $fsql_archiv.sortingGet('report');
+                    /////" ORDER BY ".$filterSqlSort;
 	$res = mysqli_query ($database,$sql);
 	while ($rec = mysqli_fetch_assoc ($res)) {
 	    if ($fNew == 0 || ($fNew == 1 && searchRecord(4,$rec['id']))) {

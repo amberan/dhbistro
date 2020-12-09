@@ -42,8 +42,7 @@ function userList($where = 1): array
     }
     
     $sql = "SELECT * FROM ".DB_PREFIX."user  left outer join `".DB_PREFIX."person` on ".DB_PREFIX."user.personId=".DB_PREFIX."person.id WHERE userDeleted <= ".$user['aclRoot']." AND ($where) ".sortingGet('user','person');
-    //
-    //sortingGet('user','person');
+    sortingGet('user','person');
     $query = mysqli_query($database,$sql);
     if (mysqli_num_rows($query) > 0) {
         while ($users = mysqli_fetch_assoc ($query)) {

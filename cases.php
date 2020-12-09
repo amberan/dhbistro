@@ -12,11 +12,6 @@ $latteParameters['title'] = 'Případy';
         $customFilter = custom_Filter(3);
 	sparklets ('<strong>případy</strong>','<a href="newcase.php">přidat případ</a>');
 	// zpracovani filtru
-	if (!isset($customFilter['sort'])) {
-	    $filterSort = 4;
-	} else {
-	    $filterSort = $customFilter['sort'];
-	}
 	if (!isset($customFilter['stat'])) {
 	    $filterStat = 0;
 	} else {
@@ -32,13 +27,6 @@ $latteParameters['title'] = 'Případy';
         } else {
             $fNew = 1;
         }
-	switch ($filterSort) {
-	  case 1: $filterSqlSort = ' '.DB_PREFIX.'case.title ASC '; break;
-	  case 2: $filterSqlSort = ' '.DB_PREFIX.'case.title DESC '; break;
-	  case 3: $filterSqlSort = ' '.DB_PREFIX.'case.datum ASC '; break;
-	  case 4: $filterSqlSort = ' '.DB_PREFIX.'case.datum DESC '; break;
-	  default: $filterSqlSort = ' '.DB_PREFIX.'case.datum DESC ';
-	}
 	switch ($filterSec) {
 		case 0: $fsql_sec = ''; break;
 		case 1: $fsql_sec = ' AND '.DB_PREFIX.'case.secret>0 '; break;
@@ -56,12 +44,6 @@ $latteParameters['title'] = 'Případy';
 	    echo '<div id="filter-wrapper"><form action="cases.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
-	  <p>Vypsat všechny případy a seřadit je podle <select name="sort">
-	<option value="1"'.(($filterSort == 1) ? ' selected="selected"' : '').'>názvu vzestupně</option>
-	<option value="2"'.(($filterSort == 2) ? ' selected="selected"' : '').'>názvu sestupně</option>
-	<option value="3"'.(($filterSort == 3) ? ' selected="selected"' : '').'>data vzestupně</option>
-	<option value="4"'.(($filterSort == 4) ? ' selected="selected"' : '').'>data sestupně</option>
-</select>.<br />
 <input type="checkbox" name="stat" value="stat" class="checkbox"'.(($filterStat == 1) ? ' checked="checked"' : '').' /> I uzavřené. <br />
 <input type="checkbox" name="new" value="new" class="checkbox"'.(($fNew == 1) ? ' checked="checked"' : '').' /> Jen nové.';
 	    if ($usrinfo['right_power']) {
@@ -75,22 +57,19 @@ $latteParameters['title'] = 'Případy';
 </form></div><!-- end of #filter-wrapper -->';
 	}
 	filter();
-	/* stary vypis pripadu
-	if ($usrinfo['right_power']) {
-		$sql="SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.datum AS 'datum' FROM ".DB_PREFIX."case WHERE ".DB_PREFIX."case.deleted=0".$fsql_sec.$fsql_stat." ORDER BY ".$filterSqlSort;
-	} else {
-	  $sql="SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.datum AS 'datum' FROM ".DB_PREFIX."case WHERE ".DB_PREFIX."case.deleted=0".$fsql_sec.$fsql_stat." AND ".DB_PREFIX."case.secret=0 ORDER BY ".$filterSqlSort;
-	} Alternativni vypis osob*/
-    $sql = "SELECT ".DB_PREFIX."case.datum as date_changed, ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.datum AS 'datum' FROM ".DB_PREFIX."case WHERE ".DB_PREFIX."case.deleted=0".$fsql_sec.$fsql_stat." AND ".DB_PREFIX."case.secret<=".$usrinfo['right_power']." ORDER BY ".$filterSqlSort;
+    if (isset($_GET['sort'])) {
+        sortingSet('case',$_GET['sort'],'case');
+    }
+    $sql = "SELECT ".DB_PREFIX."case.datum as date_changed, ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.datum AS 'datum' FROM ".DB_PREFIX."case WHERE ".DB_PREFIX."case.deleted=0".$fsql_sec.$fsql_stat." AND ".DB_PREFIX."case.secret<=".$usrinfo['right_power'].sortingGet('case');
 	$res = mysqli_query ($database,$sql);
 	if (mysqli_num_rows ($res)) {
 	    echo '<div id="obsah">
 <table>
 <thead>
 	<tr>
-	  <th>Název</th>
+	  <th>Název <a href="cases.php?sort=title">&#8661;</a></th>
 	  <th>Stav</th>
-	  <th>Změněno</th>
+	  <th>Změněno  <a href="cases.php?sort=datum">&#8661;</a></th>
 	  <th>Akce</th>
 	</tr>
 </thead>
