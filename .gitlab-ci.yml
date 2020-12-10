@@ -67,8 +67,4 @@ test to bistro.alembiq.net:
     name: staging
     url: bistro.alembiq.net
   rules: 
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"  &&  $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
-      when: always
-    - if: $CI_PIPELINE_SOURCE == "web"
-      when: manual
-    - when: never
+    - when: manual
