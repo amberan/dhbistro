@@ -142,11 +142,6 @@ $latteParameters['title'] = 'Audit';
 	} else {
 	    $filterCat = $customFilter['kategorie'];
 	}
-	if (!isset($customFilter['sort'])) {
-	    $filterSort = 2;
-	} else {
-	    $filterSort = $customFilter['sort'];
-	}
 	if (!isset($customFilter['user'])) {
 	    $filterUser = 0;
 	} else {
@@ -197,11 +192,6 @@ $latteParameters['title'] = 'Audit';
 	    $filterSqlUser = ' ';
 	} else {
 	    $filterSqlUser = ' AND '.DB_PREFIX.'audit_trail.iduser='.$filterUser;
-	}
-	switch ($filterSort) {
-	  case 1: $filterSqlSort = ' '.DB_PREFIX.'audit_trail.time ASC '; break;
-	  case 2: $filterSqlSort = ' '.DB_PREFIX.'audit_trail.time DESC '; break;
-	  default: $filterSqlSort = ' '.DB_PREFIX.'audit_trail.time ASC ';
 	}
 	if ($filterOrg == 0) {
 	    $filterSqlOrg = ' AND '.DB_PREFIX.'audit_trail.org=0';
