@@ -26,7 +26,6 @@ code_quality_html:
   extends: code_quality
   variables:
     REPORT_FORMAT: html
-    CODE_QUALITY_IMAGE: "registry.example.com/codequality-fork:latest"
   artifacts:
     paths: [gl-code-quality-report.json,gl-code-quality-report.html]
     expire_in: 3 months
