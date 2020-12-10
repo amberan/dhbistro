@@ -111,7 +111,7 @@ $latteParameters['title'] = 'Osoby';
 	// formular filtru
 	function filter ()
 	{
-	    global $filterSort, $sportraits, $ssymbols, $filterSec, $fNew, $fdead, $farchiv, $usrinfo, $fspec, $fside, $fpow;
+	    global $sportraits, $ssymbols, $filterSec, $fNew, $fdead, $farchiv, $usrinfo, $fspec, $fside, $fpow;
 	    echo '<div id="filter-wrapper"><form action="persons.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -186,7 +186,7 @@ if (isset($_GET['sort'])) {
 	<tr>
 '.(($sportraits) ? '<th>Portrét</th>' : '').
 (($ssymbols) ? '<th>Symbol</th>' : '').'
-	  <th>Jméno<a href="persons.php?sort=surname">&#8661;</a></th>
+	  <th>Jméno <a href="persons.php?sort=surname">&#8661;</a></th>
 	  <th>Telefon</th>
 	  <th>Vytvořeno <a href="persons.php?sort=regdate">&#8661;</a>/ Změněno <a href="persons.php?sort=datum">&#8661;</a></th>
       <th style="min-width:100px">Status</th>

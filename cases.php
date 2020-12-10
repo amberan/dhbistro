@@ -40,7 +40,7 @@ $latteParameters['title'] = 'Případy';
 	//
 	function filter ()
 	{
-	    global $filterSort, $filterSec, $filterStat, $fNew, $usrinfo;
+	    global $filterSec, $filterStat, $fNew, $usrinfo;
 	    echo '<div id="filter-wrapper"><form action="cases.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>

@@ -1,6 +1,11 @@
 <?php
 
-// funkce na ukladani preference trideni
+/** 
+ * save user sorting preferencess
+ * @param string object - type of object to be sorted 
+ * @param string column - name of the column to sort by
+ * @param string linkedTable - db name of table where column is located
+ */
 function sortingSet($object,$column,$linkedTable = null)
 {
     global $database,$user;
@@ -16,8 +21,11 @@ function sortingSet($object,$column,$linkedTable = null)
     }
 }
 
-
-// funkce na nacitani preference trideni
+/**
+ * get current preference for sorting output
+ * @param string object - type of object to be sorted
+ * @param string linkedTable - db name of table where the sorting column is located
+ */
 function sortingGet($object,$linkedTable = null): string
 {
     global $database,$user;

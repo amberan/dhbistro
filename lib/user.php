@@ -12,17 +12,15 @@ use Tracy\Debugger;
 function userRead($userId): array
 {
     global $database, $text, $user;
-
     $querySql = "SELECT * from ".DB_PREFIX."user where userDeleted <= ".$user['aclRoot']." AND userId=".$userId;
-
     $query = mysqli_query($database,$querySql);
     if (mysqli_num_rows($query) > 0) {
         $user = mysqli_fetch_assoc($query);
     } else {
-        $person[] = $text['zaznamnenalezen'];
+        $user[] = $text['zaznamnenalezen'];
     }
 
-    return $person;
+    return $user;
 }
 
 /** 

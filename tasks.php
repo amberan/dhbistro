@@ -69,11 +69,6 @@ $latteParameters['title'] = 'Přidán úkol';
 	    } else {
 	        $filterCat = $customFilter['kategorie'];
 	    }
-	    if (!isset($customFilter['sort'])) {
-	        $filterSort = 1;
-	    } else {
-	        $filterSort = $customFilter['sort'];
-	    }
 	    switch ($filterCat) {
 	  case 0: $filterSqlCat = ' WHERE '.DB_PREFIX.'task.status<3 '; break;
 	  case 1: $filterSqlCat = ' WHERE '.DB_PREFIX.'task.status<2 '; break;
@@ -81,11 +76,7 @@ $latteParameters['title'] = 'Přidán úkol';
 	  case 3: $filterSqlCat = ' WHERE '.DB_PREFIX.'task.status<4 '; break;
 	  default: $filterSqlCat = ' WHERE '.DB_PREFIX.'task.status<2 ';
 	}
-	    switch ($filterSort) {
-	  case 1: $filterSqlSort = ' '.DB_PREFIX.'task.created ASC '; break;
-	  case 2: $filterSqlSort = ' '.DB_PREFIX.'task.created DESC '; break;
-	  default: $filterSqlSort = ' '.DB_PREFIX.'task.created ASC ';
-	} ?>
+ ?>
 <!-- Přidání úkolu -->
 <div id="filter-wrapper">
     <form action="tasks.php" method="post" id="filter">
@@ -112,7 +103,7 @@ $latteParameters['title'] = 'Přidán úkol';
 	// filtr
 	function filter ()
 	{
-	    global $filterCat,$filterSort;
+	    global $filterCat;
 	    echo '<div id="filter-wrapper"><form action="tasks.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -121,17 +112,17 @@ $latteParameters['title'] = 'Přidán úkol';
 	<option value="1"'.(($filterCat == 1) ? ' selected="selected"' : '').'>neuzavřené</option>
 	<option value="2"'.(($filterCat == 2) ? ' selected="selected"' : '').'>dokončené</option>
 	<option value="3"'.(($filterCat == 3) ? ' selected="selected"' : '').'>i zrušené</option>
-</select> úkoly a seřadit je podle <select name="sort">
-	<option value="1"'.(($filterSort == 1) ? ' selected="selected"' : '').'>data zadání vzestupně</option>
-	<option value="2"'.(($filterSort == 2) ? ' selected="selected"' : '').'>data zadání sestupně</option>
-</select>.</p>
+</p>
 	  <div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
 </form></div><!-- end of #filter-wrapper -->';
 	}
-	    filter();
+        filter();
+if (isset($_GET['sort'])) {
+    sortingSet('task',$_GET['sort'],'task');
+}
 	    // vypis uživatelů
-	    $sql = "SELECT * FROM ".DB_PREFIX."task".$filterSqlCat." ORDER BY ".$filterSqlSort;
+	    $sql = "SELECT * FROM ".DB_PREFIX."task".$filterSqlCat.sortingGet('task');
 	    $res = mysqli_query ($database,$sql);
 	    if (mysqli_num_rows ($res)) {
 	        echo '<div id="obsah">
@@ -140,12 +131,12 @@ $latteParameters['title'] = 'Přidán úkol';
 	<tr>
 	  <th>#</th>
 	  <th>Úkol</th>
-	  <th>Uživatel</th>
-	  <th>Stav</th>
-	  <th>Zadáno</th>
-	  <th>Zadavatel</th>
-	  <th>Upraveno</th>
-	  <th>Upravil</th>
+	  <th>Uživatel  <a href="tasks.php?sort=iduser">&#8661;</a></th>
+	  <th>Stav  <a href="tasks.php?sort=status">&#8661;</a></th>
+	  <th>Zadáno  <a href="tasks.php?sort=created">&#8661;</a></th>
+	  <th>Zadavatel  <a href="tasks.php?sort=created_by">&#8661;</a></th>
+	  <th>Upraveno  <a href="tasks.php?sort=modified">&#8661;</a></th>
+	  <th>Upravil  <a href="tasks.php?sort=modified_by">&#8661;</a></th>
 	  <th>Akce</th>
 	</tr>
 </thead>

@@ -1,5 +1,8 @@
 <?php
 
+use Tracy\Debugger;
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+
 /** 
  * CREATE TABLE
  */
@@ -168,9 +171,9 @@ $tableDrop[] = 'test2';
 $tableDrop[] = 'loggedin_deleted';
 $tableDrop[] = 'map_deleted';
 
-
-use Tracy\Debugger;
-Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+/**
+ * UPDATING
+ */
 require_once('update-function.php');
 
 $counterTableCreate = bistroDBTableCreate($tableCreate);

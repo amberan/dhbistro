@@ -36,11 +36,6 @@ latteDrawTemplate("header");
 	        deleteUnread (2,$_REQUEST['rid']);
 	        sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>'.StripSlashes($rec_g['title']).'</strong>','<a href="readgroup.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton); ?>
 <?php // zpracovani filtru
-	if (!isset($customFilter['sort'])) {
-	    $filterSort = 1;
-	} else {
-	    $filterSort = $customFilter['sort'];
-	}
 	        if (!isset($customFilter['sportraits'])) {
 	            $sportraits = false;
 	        } else {
@@ -51,11 +46,6 @@ latteDrawTemplate("header");
 	        } else {
 	            $filterSec = 1;
 	        }
-	        switch ($filterSort) {
-	  case 1: $filterSqlSort = ' '.DB_PREFIX.'person.surname ASC, '.DB_PREFIX.'person.name ASC '; break;
-	  case 2: $filterSqlSort = ' '.DB_PREFIX.'person.surname DESC, '.DB_PREFIX.'person.name DESC '; break;
-	  default: $filterSqlSort = ' '.DB_PREFIX.'person.surname ASC, '.DB_PREFIX.'person.name ASC ';
-	}
 	        switch ($filterSec) {
 		case 0: $fsql_sec = ''; break;
 		case 1: $fsql_sec = ' AND '.DB_PREFIX.'person.secret=1 '; break;
@@ -68,10 +58,6 @@ latteDrawTemplate("header");
 	            echo '<div id="filter-wrapper"><form action="readgroup.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
-	  <p>Členy skupiny řadit podle <select name="sort">
-	<option value="1"'.(($filterSort == 1) ? ' selected="selected"' : '').'>příjmení a jména vzestupně</option>
-	<option value="2"'.(($filterSort == 2) ? ' selected="selected"' : '').'>příjmení a jména sestupně</option>
-</select>.</p>
 		<p><input type="checkbox" name="sportraits" value="1"'.(($sportraits) ? ' checked="checked"' : '').'> Zobrazit portréty.</p>';
 	            echo '
 	  <input type="hidden" name="rid" value="'.$_REQUEST['rid'].'" />
@@ -79,7 +65,10 @@ latteDrawTemplate("header");
 	</fieldset>
 </form></div><!-- end of #filter-wrapper -->';
 	        }
-	        filter(); ?>
+            filter();
+    if (isset($_GET['sort'])) {
+        sortingSet('group-member',$_GET['sort'],'person');
+    }            ?>
 <div id="obsah">
     <h1><?php echo StripSlashes($rec_g['title']); ?></h1>
     <fieldset>
@@ -94,9 +83,9 @@ latteDrawTemplate("header");
             <h3>Členové: </h3>
             <p><?php
 		if ($usrinfo['right_power']) {
-		    $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."person, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." AND ".DB_PREFIX."person.deleted=0 ORDER BY ".$filterSqlSort;
+		    $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."person, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." AND ".DB_PREFIX."person.deleted=0".sortingGet('group-member','person');
 		} else {
-		    $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."person, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." AND ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret=0 ORDER BY ".$filterSqlSort;
+		    $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."person, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." AND ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret=0".sortingGet('group-member','person');
 		}
 	        $res = mysqli_query ($database,$sql);
 	        if (mysqli_num_rows ($res)) {
@@ -105,7 +94,7 @@ latteDrawTemplate("header");
 <thead>
 	<tr>
 '.(($sportraits) ? '<th>Portrét</th>' : '').'
-	  <th>Jméno</th>
+	  <th>Jméno <a href="readgroup.php?rid='.$_GET['rid'].'&sort=surname">&#8661;</a></th>
 	  <th>Telefon</th>
 	</tr>
 </thead>

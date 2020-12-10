@@ -27,6 +27,7 @@ function auditTrail ($recordType,$operationType,$idrecord)
 //pokus o pristup k tajnemu, soukromemu nebo smazanemu zaznamu
 function unauthorizedAccess ($recordType,$secret,$deleted,$idrecord)
 {
+    global $latteParameters;
     $latteParameters['title'] = 'Neautorizovaný přístup';
     switch ($recordType) {
             case 1:

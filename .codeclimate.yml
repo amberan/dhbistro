@@ -50,7 +50,9 @@ plugins:
     enabled: false  
   phpmd:
     enabled: true
-    rulesets: "cleancode,design,unusedcode,codesize"
+    config:
+      file_extensions: "php"
+      rulesets: "cleancode,design,unusedcode,codesize"
   phpcodesniffer:
     enabled: false
     config:

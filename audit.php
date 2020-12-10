@@ -219,7 +219,7 @@ $latteParameters['title'] = 'Audit';
 	// filtr
 	function filter ()
 	{
-	    global $database,$filterCat,$filterSort,$filterUser,$filterType,$usrinfo,$filterOrg,$filterMine,$filterGlob,$filterCount;
+	    global $database,$filterCat,$filterUser,$filterType,$usrinfo,$filterOrg,$filterMine,$filterGlob,$filterCount;
 	    echo '<div id="filter-wrapper"><form action="audit.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
