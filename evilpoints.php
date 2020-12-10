@@ -30,7 +30,6 @@ if (isset($_POST['addpoints'])) {
         sortingSet('points',$_GET['sort'],'user');
     }
     $sql = "SELECT * FROM ".DB_PREFIX."user WHERE ".DB_PREFIX."user.userDeleted=0".sortingGet('points','user');
-    ////////// ORDER BY ".$filterSqlSort;
 	$res = mysqli_query ($database,$sql);
 	if (!is_bool($res)) {
 	    echo '<div id="obsah">

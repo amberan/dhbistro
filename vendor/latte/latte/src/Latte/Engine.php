@@ -17,8 +17,8 @@ class Engine
 {
 	use Strict;
 
-	public const VERSION = '2.8.1';
-	public const VERSION_ID = 20801;
+	public const VERSION = '2.9.1';
+	public const VERSION_ID = 20901;
 
 	/** Content types */
 	public const
@@ -48,7 +48,7 @@ class Engine
 	/** @var \stdClass */
 	private $functions;
 
-	/** @var array */
+	/** @var mixed[] */
 	private $providers = [];
 
 	/** @var string */
@@ -74,12 +74,20 @@ class Engine
 	{
 		$this->filters = new Runtime\FilterExecutor;
 		$this->functions = new \stdClass;
+
+		$defaults = new Runtime\Defaults;
+		foreach ($defaults->getFilters() as $name => $callback) {
+			$this->filters->add($name, $callback);
+		}
+		foreach ($defaults->getFunctions() as $name => $callback) {
+			$this->functions->$name = $callback;
+		}
 	}
 
 
 	/**
 	 * Renders template to output.
-	 * @param  object|array  $params
+	 * @param  object|mixed[]  $params
 	 */
 	public function render(string $name, $params = [], string $block = null): void
 	{
@@ -90,7 +98,7 @@ class Engine
 
 	/**
 	 * Renders template to string.
-	 * @param  object|array  $params
+	 * @param  object|mixed[]  $params
 	 */
 	public function renderToString(string $name, $params = [], string $block = null): string
 	{
@@ -101,6 +109,7 @@ class Engine
 
 	/**
 	 * Creates template object.
+	 * @param  mixed[]  $params
 	 */
 	public function createTemplate(string $name, array $params = []): Runtime\Template
 	{
@@ -140,7 +149,9 @@ class Engine
 			if (!$e instanceof CompileException) {
 				$e = new CompileException($e instanceof SecurityViolationException ? $e->getMessage() : "Thrown exception '{$e->getMessage()}'", 0, $e);
 			}
-			$line = isset($tokens) ? $this->getCompiler()->getLine() : $this->getParser()->getLine();
+			$line = isset($tokens)
+				? $this->getCompiler()->getLine()
+				: $this->getParser()->getLine();
 			throw $e->setSource($source, $line, $name);
 		}
 
@@ -150,6 +161,7 @@ class Engine
 		if (!preg_match('#\n|\?#', $name)) {
 			$code = "<?php\n// source: $name\n?>" . $code;
 		}
+		$code = PhpHelpers::inlineHtmlToEcho($code);
 		$code = PhpHelpers::reformatCode($code);
 		return $code;
 	}
@@ -206,7 +218,7 @@ class Engine
 			$code = $this->compile($name);
 			if (file_put_contents("$file.tmp", $code) !== strlen($code) || !rename("$file.tmp", $file)) {
 				@unlink("$file.tmp"); // @ - file may not exist
-				throw new \RuntimeException("Unable to create '$file'.");
+				throw new RuntimeException("Unable to create '$file'.");
 			}
 			if (function_exists('opcache_invalidate')) {
 				@opcache_invalidate($file, true); // @ can be restricted
@@ -214,23 +226,26 @@ class Engine
 		}
 
 		if ((include $file) === false) {
-			throw new \RuntimeException("Unable to load '$file'.");
+			throw new RuntimeException("Unable to load '$file'.");
 		}
 	}
 
 
+	/**
+	 * @return resource
+	 */
 	private function acquireLock(string $file, int $mode)
 	{
 		$dir = dirname($file);
 		if (!is_dir($dir) && !@mkdir($dir) && !is_dir($dir)) { // @ - dir may already exist
-			throw new \RuntimeException("Unable to create directory '$dir'. " . error_get_last()['message']);
+			throw new RuntimeException("Unable to create directory '$dir'. " . error_get_last()['message']);
 		}
 
 		$handle = @fopen($file, 'w'); // @ is escalated to exception
 		if (!$handle) {
-			throw new \RuntimeException("Unable to create file '$file'. " . error_get_last()['message']);
+			throw new RuntimeException("Unable to create file '$file'. " . error_get_last()['message']);
 		} elseif (!@flock($handle, $mode)) { // @ is escalated to exception
-			throw new \RuntimeException('Unable to acquire ' . ($mode & LOCK_EX ? 'exclusive' : 'shared') . " lock on file '$file'. " . error_get_last()['message']);
+			throw new RuntimeException('Unable to acquire ' . ($mode & LOCK_EX ? 'exclusive' : 'shared') . " lock on file '$file'. " . error_get_last()['message']);
 		}
 		return $handle;
 	}
@@ -265,6 +280,9 @@ class Engine
 	 */
 	public function addFilter(?string $name, callable $callback)
 	{
+		if ($name !== null && !preg_match('#^[a-z]\w*$#iD', $name)) {
+			throw new \LogicException("Invalid filter name '$name'.");
+		}
 		$this->filters->add($name, $callback);
 		return $this;
 	}
@@ -282,6 +300,7 @@ class Engine
 
 	/**
 	 * Call a run-time filter.
+	 * @param  mixed[]  $args
 	 * @return mixed
 	 */
 	public function invokeFilter(string $name, array $args)
@@ -307,17 +326,41 @@ class Engine
 	 */
 	public function addFunction(string $name, callable $callback)
 	{
+		if (!preg_match('#^[a-z]\w*$#iD', $name)) {
+			throw new \LogicException("Invalid function name '$name'.");
+		}
 		$this->functions->$name = $callback;
 		return $this;
 	}
 
 
 	/**
+	 * Call a run-time function.
+	 * @param  mixed[]  $args
+	 * @return mixed
+	 */
+	public function invokeFunction(string $name, array $args)
+	{
+		if (!isset($this->functions->$name)) {
+			$hint = ($t = Helpers::getSuggestion(array_keys((array) $this->functions), $name))
+				? ", did you mean '$t'?"
+				: '.';
+			throw new \LogicException("Function '$name' is not defined$hint");
+		}
+		return ($this->functions->$name)(...$args);
+	}
+
+
+	/**
 	 * Adds new provider.
+	 * @param  mixed  $value
 	 * @return static
 	 */
 	public function addProvider(string $name, $value)
 	{
+		if (!preg_match('#^[a-z]\w*$#iD', $name)) {
+			throw new \LogicException("Invalid provider name '$name'.");
+		}
 		$this->providers[$name] = $value;
 		return $this;
 	}
@@ -325,6 +368,7 @@ class Engine
 
 	/**
 	 * Returns all providers.
+	 * @return mixed[]
 	 */
 	public function getProviders(): array
 	{
@@ -435,7 +479,8 @@ class Engine
 
 
 	/**
-	 * @param  object|array  $params
+	 * @param  object|mixed[]  $params
+	 * @return mixed[]
 	 */
 	private function processParams($params): array
 	{
