@@ -49,7 +49,7 @@ code_quality_html:
 
 test to bistro.alembiq.net:
   image: debian:latest
-  stage: alembiq
+  stage: staging
   before_script: 
     - DEBIAN_FRONTEND="noninteractive"
     - 'which ssh-agent || ( apt update -y && apt install openssh-client -y )'
@@ -64,7 +64,7 @@ test to bistro.alembiq.net:
     - export
     - ssh gitlab-ci@$CI_ENVIRONMENT_URL "cd /srv/net.alembiq.bistro/htdocs && git reset --hard && git remote set-url gitlab $CI_REPOSITORY_URL && git pull gitlab $CI_COMMIT_SHA && exit"
   environment:
-    name: alembiq
+    name: bistro.alembiq.net
     url: bistro.alembiq.net
   rules: 
     - when: manual
