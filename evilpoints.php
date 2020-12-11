@@ -12,13 +12,12 @@ if (isset($_POST['addpoints'])) {
     auditTrail(9, 1, 0);
 }
 	mainMenu ();
-        $customFilter = custom_Filter(9);
 	sparklets ('<strong>'.$text['point'].'y</strong>',(($usrinfo['right_power']) ? 'aktuální stav' : ''));
 	//Přidání zlobodů
 	if (isset($_POST['addpoints'])) {
 	    if (is_numeric($_POST['plus'])) {
 	        $ep_result = $_POST['oldpoints'] + $_POST['plus'];
-            mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET zlobod=".$ep_result." WHERE userId=".$_POST['usrid']."");
+	        mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET zlobod=".$ep_result." WHERE userId=".$_POST['usrid']."");
 	        echo '<div id="obsah"><p>Zlobody přidány.</p></div>';
 	    } else {
 	        echo '<div id="obsah"><p>Přidané '.$text['point'].'y musí být číselné.</p></div>';

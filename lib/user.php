@@ -58,9 +58,6 @@ function userList($where = 1): array
     return $userList;
 }
 
-
-
-
 /** 
  * user change parameters
  * @param int userId
