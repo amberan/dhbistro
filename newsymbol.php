@@ -36,7 +36,7 @@ $latteParameters['title'] = 'Nový symbol';
 				<h3><label for="alphabeter">Písma:</label></h3><input type="range" value="0" min="0" max="10" step="1" name="alphabeter" id="alphabeter" list=hodnoty /><br />
 				<h3><label for="specialchar">Spec. znaky:</label></h3><input type="range" value="0" min="0" max="10" step="1" name="specialchar" id="specialchar" list=hodnoty /><br />
 	        <div class="clear">&nbsp;</div>
-<?php 			if ($usrinfo['right_power'] == 1) {
+<?php 			if ($user['aclDirector'] == 1) {
     echo '					
 				<h3><label for="notnew">Není nové</label></h3>
 					<input type="checkbox" name="notnew"/><br/>

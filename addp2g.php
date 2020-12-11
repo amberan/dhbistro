@@ -86,7 +86,7 @@ mainMenu ();
 	        }
 	        filter();
 	        // vypis osob
-	        if ($usrinfo['right_power']) {
+	        if ($user['aclDirector']) {
 	            $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."person LEFT JOIN ".DB_PREFIX."g2p ON ".DB_PREFIX."g2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." WHERE ".DB_PREFIX."person.deleted=0 ".$fsql_dead.$fsql_archiv." ORDER BY ".$filterSqlSort;
 	        } else {
 	            $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."person LEFT JOIN ".DB_PREFIX."g2p ON ".DB_PREFIX."g2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." WHERE ".DB_PREFIX."person.deleted=0 ".$fsql_dead.$fsql_archiv." AND ".DB_PREFIX."person.secret=0 ORDER BY ".$filterSqlSort;

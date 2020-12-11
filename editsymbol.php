@@ -9,7 +9,7 @@ $latteParameters['title'] = 'Úprava symbolu';
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	    $res = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."symbol WHERE id=".$_REQUEST['rid']);
 	    if ($rec_s = mysqli_fetch_assoc ($res)) {
-	        if (($rec_s['secret'] == 1 || $rec_s['deleted'] == 1) && !$usrinfo['right_power']) {
+	        if (($rec_s['secret'] == 1 || $rec_s['deleted'] == 1) && !$user['aclDirector']) {
 	            unauthorizedAccess(7, $rec_s['secret'], $rec_s['deleted'], $_REQUEST['rid']);
 	        }
 	        auditTrail(7, 1, $_REQUEST['rid']);
@@ -46,7 +46,7 @@ $latteParameters['title'] = 'Úprava symbolu';
 				<h3><label for="alphabeter">Písma:</label></h3><input type="range" value="<?php echo $rec_s['search_alphabets']; ?>" min="0" max="10" step="1" name="alphabeter" id="alphabeter" list=hodnoty /><br />
 				<h3><label for="specialchar">Spec. znaky:</label></h3><input type="range" value="<?php echo $rec_s['search_specialchars']; ?>" min="0" max="10" step="1" name="specialchar" id="specialchar" list=hodnoty /><br />	        
 			<div class="clear">&nbsp;</div>
-<?php 			if ($usrinfo['right_power'] == 1) {
+<?php 			if ($user['aclDirector'] == 1) {
 	            echo '
 				<h3><label for="archiv">Archiv:</label></h3>
 					<input type="checkbox" name="archiv" value=1';
@@ -55,7 +55,7 @@ $latteParameters['title'] = 'Úprava symbolu';
 	            }
 	        }
 	        echo '/>';
-	        if ($usrinfo['right_org'] == 1) {
+	        if ($user['aclGamemaster'] == 1) {
 	            echo '<br/>
 				<div class="clear">&nbsp;</div>					
 				<h3><label for="notnew">Není nové</label></h3>
@@ -83,7 +83,7 @@ $latteParameters['title'] = 'Úprava symbolu';
 		<p><span class="poznamka-edit-buttons"><a class="connect" href="addsy2c.php?rid=<?php echo $_REQUEST['rid']; ?>" title="přiřazení"><span class="button-text">přiřazení případů</span></a><em style="font-size:smaller;"> (přiřazování)</em></span></p>
 		<!-- následuje seznam případů -->
 		<?php // generování seznamu přiřazených případů
-			if ($usrinfo['right_power']) {
+			if ($user['aclDirector']) {
 			    $sql = "SELECT ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.title AS 'title' FROM ".DB_PREFIX."symbol2all, ".DB_PREFIX."case WHERE ".DB_PREFIX."case.id=".DB_PREFIX."symbol2all.idrecord AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=3 ORDER BY ".DB_PREFIX."case.title ASC";
 			} else {
 			    $sql = "SELECT ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.title AS 'title' FROM ".DB_PREFIX."symbol2all, ".DB_PREFIX."case WHERE ".DB_PREFIX."case.id=".DB_PREFIX."symbol2all.idrecord AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=3 AND ".DB_PREFIX."case.secret=0 ORDER BY ".DB_PREFIX."case.title ASC";
@@ -115,7 +115,7 @@ $latteParameters['title'] = 'Úprava symbolu';
 		<p><span class="poznamka-edit-buttons"><a class="connect" href="addsy2ar.php?rid=<?php echo $_REQUEST['rid']; ?>" title="přiřazení"><span class="button-text">přiřazení hlášení</span></a><em style="font-size:smaller;"> (přiřazování)</em></span></p>
 		<!-- následuje seznam případů -->
 		<?php // generování seznamu přiřazených hlášení
-			if ($usrinfo['right_power']) {
+			if ($user['aclDirector']) {
 			    $sql = "SELECT ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.label AS 'label' FROM ".DB_PREFIX."symbol2all, ".DB_PREFIX."report WHERE ".DB_PREFIX."report.id=".DB_PREFIX."symbol2all.idrecord AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4 ORDER BY ".DB_PREFIX."report.label ASC";
 			} else {
 			    $sql = "SELECT ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.label AS 'label' FROM ".DB_PREFIX."symbol2all, ".DB_PREFIX."report WHERE ".DB_PREFIX."report.id=".DB_PREFIX."symbol2all.idrecord AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4 AND ".DB_PREFIX."report.secret=0 ORDER BY ".DB_PREFIX."report.label ASC";
@@ -146,10 +146,10 @@ $latteParameters['title'] = 'Úprava symbolu';
 		<span class="poznamka-edit-buttons"><a class="new" href="newnote.php?rid=<?php echo $_REQUEST['rid']; ?>&amp;idtable=9" title="nová poznámka"><span class="button-text">nová poznámka</span></a><em style="font-size:smaller;"> (K symbolu si můžete připsat kolik chcete poznámek.)</em></span>
 		<!-- následuje seznam poznámek -->
 		<?php // generování poznámek
-			if ($usrinfo['right_power']) {
-			    $sql = "SELECT ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=7 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret<2 OR ".DB_PREFIX."note.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."note.datum DESC";
+			if ($user['aclDirector']) {
+			    $sql = "SELECT ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=7 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret<2 OR ".DB_PREFIX."note.iduser=".$user['userId'].") ORDER BY ".DB_PREFIX."note.datum DESC";
 			} else {
-			    $sql = "SELECT ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=7 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret=0 OR ".DB_PREFIX."note.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."note.datum DESC";
+			    $sql = "SELECT ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=7 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret=0 OR ".DB_PREFIX."note.iduser=".$user['userId'].") ORDER BY ".DB_PREFIX."note.datum DESC";
 			}
 	        $res = mysqli_query ($database,$sql);
 	        $i = 0;
@@ -174,10 +174,10 @@ $latteParameters['title'] = 'Úprava symbolu';
 	            } ?></h4>
 				<div><?php echo StripSlashes($rec_n['note']); ?></div>
 				<span class="poznamka-edit-buttons"><?php
-				if (($rec_n['iduser'] == $usrinfo['id']) || ($usrinfo['right_text'])) {
+				if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
 				    echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=7" title="upravit"><span class="button-text">upravit</span></a> ';
 				}
-	            if (($rec_n['iduser'] == $usrinfo['id']) || ($usrinfo['right_power'])) {
+	            if (($rec_n['iduser'] == $user['userId']) || ($user['aclDirector'])) {
 	                echo '<a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('readperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec_n['title'])."&quot; náležící k symbolu?');".'" title="smazat"><span class="button-text">smazat</span></a>';
 	            } ?>
 				</span>

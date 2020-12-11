@@ -11,7 +11,7 @@ $customFilter = custom_Filter(13);
 sparklets ('<strong>vyhledávání</strong>','<a href="symbol_search.php">vyhledat symbol</a>');
 
 // default SQL filters
-$searchContitions = " AND secret<=".$usrinfo['right_power']."  AND deleted<=".$usrinfo['right_org']." ";
+$searchContitions = " AND secret<=".$user['aclDirector']."  AND deleted<=".$user['aclGamemaster']." ";
 
 //Zpracování filtru
 if (!isset($customFilter['farchiv'])) {

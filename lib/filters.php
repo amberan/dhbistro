@@ -52,10 +52,10 @@ function filterSet($object,$data)
     //TODO overeni ze bylo zapsano do db
     global $database,$user;
     $currentFilter = filterGet($object);
-    if (sizeof($data) > 0) {
+    if (is_array($data) AND sizeof($data) > 0) {
         $data = json_encode($data);
     }
-    if ($currentFilter['id'] != 'X') {
+    if (@$currentFilter['id'] != 'X') {
         $sql = "UPDATE ".DB_PREFIX."filter SET filterPreference='".$data."' WHERE userId=".$user['userId']." AND objectType='".$object."'";
     } else {
         $sql = "INSERT INTO ".DB_PREFIX."filter (userId,objectType,filterPreference) VALUES (".$user['userId'].",'".$object."','".$data."')";

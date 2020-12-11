@@ -5,7 +5,7 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Audit';
-        if (!$usrinfo['right_aud']) {
+        if (!$user['aclAudit']) {
             unauthorizedAccess(11, 1, 0, 0);
         }
 	
@@ -199,7 +199,7 @@ $latteParameters['title'] = 'Audit';
 	    $filterSqlOrg = ' ';
 	}
 	if ($filterMine == 0) {
-	    $filterSqlMine = ' AND '.DB_PREFIX.'audit_trail.iduser<>'.$usrinfo['id'];
+	    $filterSqlMine = ' AND '.DB_PREFIX.'audit_trail.iduser<>'.$user['userId'];
 	} else {
 	    $filterSqlMine = ' ';
 	}
@@ -242,12 +242,12 @@ $latteParameters['title'] = 'Audit';
 	  	<option value=0 '.(($filterUser == 0) ? ' selected="selected"' : '').'>všemi</option>';
  	
 	    $sqlU = "SELECT userId, userName FROM ".DB_PREFIX."user WHERE userDeleted=0 ORDER BY username ASC";
-        $resU = mysqli_query ($database,$sqlU);
+	    $resU = mysqli_query ($database,$sqlU);
 	    while ($recU = mysqli_fetch_assoc ($resU)) {
 	        echo '<option value="'.$recU['userId'].'"'.(($recU['userId'] == $filterUser) ? ' selected="selected"' : '').'>'.$recU['userName'].'</option>';
-        };
+	    };
 	    echo '</select></p>';
-	    if ($usrinfo['right_org'] == 1) {
+	    if ($user['aclGamemaster'] == 1) {
 	        echo '					
 		<label for="org">Zobrazit i zásahy organizátorů</label>
 		<input type="checkbox" name="org" '.(($filterOrg == 1) ? ' checked="checked"' : '').'/><br/>

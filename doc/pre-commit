@@ -1,4 +1,4 @@
-#!/usr/bin/env bash  
+#!/usr/bin/env -S bash -i
 # https://gist.github.com/jwage/b1614c96ea22ccaf68b7
 # https://tsh.io/blog/tips-on-keeping-php-code-under-control/
 

@@ -24,3 +24,10 @@ function casesAssignedTo($userid): array
 
     return @$unfinishedcases;
 }
+
+//vypis pripadu musi oznacovat NEW - if (@$filter['new'] == null || ($filter['new'] == on && searchRecord(3,$rec['id']))) {
+//pridat sloupec pro created
+//prejmenovat datum za edited
+
+
+

@@ -18,7 +18,7 @@ $latteParameters['title'] = 'Přidán úkol';
 	    if (isset($_POST['inserttask']) && !empty($_POST['task'])) {
 	        mainMenu ();
 	        $customFilter = custom_Filter(10);
-	        $sql_t = "INSERT INTO ".DB_PREFIX."task (task,iduser,status,created,created_by) VALUES('".$_POST['task']."','".$_POST['target']."','0','".Time()."','".$usrinfo['id']."')";
+	        $sql_t = "INSERT INTO ".DB_PREFIX."task (task,iduser,status,created,created_by) VALUES('".$_POST['task']."','".$_POST['target']."','0','".Time()."','".$user['userId']."')";
 	        mysqli_query ($database,$sql_t);
 	        // Ukládání do novinek zakomentováno, protože nevím, jestli se použije. Kdyžtak SMAZAT.
 	        //		$gidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."group WHERE UCASE(title)=UCASE('".mysqli_real_escape_string ($database,$_POST['title'])."')"));
@@ -90,7 +90,7 @@ $latteParameters['title'] = 'Přidán úkol';
 	    echo '<label for="target">Uživatel:</label>
 		<select name="target" id="target">';
 	    while ($rec_n = mysqli_fetch_assoc ($res_n)) {
-	        echo '<option value="'.$rec_n['id'].'"'.(($rec_n['id'] == $usrinfo['id']) ? ' selected="selected"' : '').'>'.$rec_n['login'].'</option>';
+	        echo '<option value="'.$rec_n['id'].'"'.(($rec_n['id'] == $user['userId']) ? ' selected="selected"' : '').'>'.$rec_n['login'].'</option>';
 	    };
 	    echo '</select>'; ?>
             </p>

@@ -19,9 +19,9 @@ latteDrawTemplate("header");
 	        $sfile = '';
 	    }
 	    $time = time();
-	    $sql_p = "INSERT INTO ".DB_PREFIX."symbol (symbol, `desc`, deleted, created, created_by, modified, modified_by, archiv, assigned, search_lines, search_curves, search_points, search_geometricals, search_alphabets, search_specialchars, secret)  VALUES( '".$sfile."', '".$_POST['contents']."', '0', '".$time."', '".$usrinfo['id']."', '".$time."', '".$usrinfo['id']."', '0', '0', '".$_POST['liner']."', '".$_POST['curver']."', '".$_POST['pointer']."', '".$_POST['geometrical']."', '".$_POST['alphabeter']."', '".$_POST['specialchar']."', 0)";
+	    $sql_p = "INSERT INTO ".DB_PREFIX."symbol (symbol, `desc`, deleted, created, created_by, modified, modified_by, archiv, assigned, search_lines, search_curves, search_points, search_geometricals, search_alphabets, search_specialchars, secret)  VALUES( '".$sfile."', '".$_POST['contents']."', '0', '".$time."', '".$user['userId']."', '".$time."', '".$user['userId']."', '0', '0', '".$_POST['liner']."', '".$_POST['curver']."', '".$_POST['pointer']."', '".$_POST['geometrical']."', '".$_POST['alphabeter']."', '".$_POST['specialchar']."', 0)";
 	    mysqli_query ($database,$sql_p);
-	    $sql_f = "SELECT id FROM ".DB_PREFIX."symbol WHERE created='".$time."' AND created_by='".$usrinfo['id']."' AND modified='".$time."' AND modified_by='".$usrinfo['id']."'";
+	    $sql_f = "SELECT id FROM ".DB_PREFIX."symbol WHERE created='".$time."' AND created_by='".$user['userId']."' AND modified='".$time."' AND modified_by='".$user['userId']."'";
 	    $pidarray = mysqli_fetch_assoc (mysqli_query ($database,$sql_f));
 	    $pid = $pidarray['id'];
 	    auditTrail(7, 3, $pid);
@@ -69,11 +69,11 @@ latteDrawTemplate("header");
 	        unlink('./files/'.$sfile.'tmp');
 	        mysqli_query ($database,"UPDATE ".DB_PREFIX."symbol SET symbol='".$sfile."' WHERE id=".$_POST['symbolid']);
 	    }
-	    if ($usrinfo['right_org'] == 1) {
+	    if ($user['aclGamemaster'] == 1) {
 	        $sql = "UPDATE ".DB_PREFIX."symbol SET `desc`='".$_POST['desc']."', archiv='".(isset($_POST['archiv']) ? '1' : '0')."', search_lines='".$_POST['liner']."', search_curves='".$_POST['curver']."', search_points='".$_POST['pointer']."', search_geometricals='".$_POST['geometrical']."', search_alphabets='".$_POST['alphabeter']."', search_specialchars='".$_POST['specialchar']."' WHERE id=".$_POST['symbolid'];
 	        mysqli_query ($database,$sql);
 	    } else {
-	        $sql = "UPDATE ".DB_PREFIX."symbol SET `desc`='".$_POST['desc']."', modified='".Time()."', modified_by='".$usrinfo['id']."', archiv='".(isset($_POST['archiv']) ? '1' : '0')."', search_lines='".$_POST['liner']."', search_curves='".$_POST['curver']."', search_points='".$_POST['pointer']."', search_geometricals='".$_POST['geometrical']."', search_alphabets='".$_POST['alphabeter']."', search_specialchars='".$_POST['specialchar']."' WHERE id=".$_POST['symbolid'];
+	        $sql = "UPDATE ".DB_PREFIX."symbol SET `desc`='".$_POST['desc']."', modified='".Time()."', modified_by='".$user['userId']."', archiv='".(isset($_POST['archiv']) ? '1' : '0')."', search_lines='".$_POST['liner']."', search_curves='".$_POST['curver']."', search_points='".$_POST['pointer']."', search_geometricals='".$_POST['geometrical']."', search_alphabets='".$_POST['alphabeter']."', search_specialchars='".$_POST['specialchar']."' WHERE id=".$_POST['symbolid'];
 	        mysqli_query ($database,$sql);
 	    }
 	    echo '<div id="obsah"><p>Symbol upraven.</p></div>';
@@ -91,25 +91,25 @@ latteDrawTemplate("header");
         // Ukoly
 	if (isset($_REQUEST['acctask']) && is_numeric($_REQUEST['acctask']) && $usrinfo['right_text']) {
 	    auditTrail(10, 2, $_REQUEST['acctask']);
-	    mysqli_query ($database,"UPDATE ".DB_PREFIX."task SET status=2, modified='".Time()."', modified_by='".$usrinfo['id']."' WHERE id=".$_REQUEST['acctask']);
+	    mysqli_query ($database,"UPDATE ".DB_PREFIX."task SET status=2, modified='".Time()."', modified_by='".$user['userId']."' WHERE id=".$_REQUEST['acctask']);
 	    //		deleteAllUnread (1,$_REQUEST['delete']);
 	    Header ('Location: '.$_SERVER['HTTP_REFERER']);
 	}
 	if (isset($_REQUEST['rtrntask']) && is_numeric($_REQUEST['rtrntask']) && $usrinfo['right_text']) {
 	    auditTrail(10, 2, $_REQUEST['rtrntask']);
-	    mysqli_query ($database,"UPDATE ".DB_PREFIX."task SET status=0, modified='".Time()."', modified_by='".$usrinfo['id']."' WHERE id=".$_REQUEST['rtrntask']);
+	    mysqli_query ($database,"UPDATE ".DB_PREFIX."task SET status=0, modified='".Time()."', modified_by='".$user['userId']."' WHERE id=".$_REQUEST['rtrntask']);
 	    //		deleteAllUnread (1,$_REQUEST['delete']);
 	    Header ('Location: '.$_SERVER['HTTP_REFERER']);
 	}
 	if (isset($_REQUEST['fnshtask']) && is_numeric($_REQUEST['fnshtask'])) {
 	    auditTrail(10, 2, $_REQUEST['fnshtask']);
-	    mysqli_query ($database,"UPDATE ".DB_PREFIX."task SET status=1, modified='".Time()."', modified_by='".$usrinfo['id']."' WHERE id=".$_REQUEST['fnshtask']);
+	    mysqli_query ($database,"UPDATE ".DB_PREFIX."task SET status=1, modified='".Time()."', modified_by='".$user['userId']."' WHERE id=".$_REQUEST['fnshtask']);
 	    //		deleteAllUnread (1,$_REQUEST['delete']);
 	    Header ('Location: '.$_SERVER['HTTP_REFERER']);
 	}
 	if (isset($_REQUEST['cncltask']) && is_numeric($_REQUEST['cncltask']) && $usrinfo['right_text']) {
 	    auditTrail(10, 2, $_REQUEST['cncltask']);
-	    mysqli_query ($database,"UPDATE ".DB_PREFIX."task SET status=3, modified='".Time()."', modified_by='".$usrinfo['id']."' WHERE id=".$_REQUEST['cncltask']);
+	    mysqli_query ($database,"UPDATE ".DB_PREFIX."task SET status=3, modified='".Time()."', modified_by='".$user['userId']."' WHERE id=".$_REQUEST['cncltask']);
 	    //		deleteAllUnread (1,$_REQUEST['delete']);
 	    Header ('Location: '.$_SERVER['HTTP_REFERER']);
 	}

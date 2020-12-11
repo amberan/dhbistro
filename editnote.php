@@ -10,7 +10,7 @@ mainMenu ();
 	switch ($_REQUEST['idtable']) {
 		case 1: $sourceurl = "persons.php"; $sourcename = "osoby"; break;
 		case 2: $sourceurl = "groups.php"; $sourcename = "skupiny"; break;
-		case 3: $sourceurl = "cases.php"; $sourcename = "případy"; break;
+		case 3: $sourceurl = "/cases/"; $sourcename = "případy"; break;
 		case 4: $sourceurl = "reports.php"; $sourcename = "hlášení"; break;
 		case 7: $sourceurl = "symbols.php"; $sourcename = "symboly"; break;
 		default: $sourceurl = ""; $sourcename = ""; break;
@@ -19,7 +19,7 @@ mainMenu ();
 	if (is_numeric($_REQUEST['rid'])) {
 	    $res = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."note WHERE id=".$_REQUEST['rid']);
 	    if ($rec = mysqli_fetch_assoc ($res)) {
-	        if ((($rec['secret'] <= $usrinfo['right_power']) || $rec['iduser'] == $usrinfo['id']) && !$rec['deleted'] == 1) {
+	        if ((($rec['secret'] <= $user['aclDirector']) || $rec['iduser'] == $user['userId']) && !$rec['deleted'] == 1) {
 	            ?>
 <div id="obsah">
 <form action="procnote.php" method="post" class="otherform">
@@ -42,21 +42,21 @@ mainMenu ();
 		</select>
 	</div>
 	<?php
-	if ($usrinfo['right_power']) {
+	if ($user['aclDirector']) {
 	    $sql = "SELECT id, login FROM ".DB_PREFIX."user WHERE deleted=0 ORDER BY login ASC";
 	    $res_n = mysqli_query ($database,$sql);
 	    echo '<div>
 		<label for="nowner">Vlastník:</label>
 		<select name="nowner" id="nowner">';
 	    while ($rec_n = mysqli_fetch_assoc ($res_n)) {
-	        echo '<option value="'.$rec_n['id'].'"'.(($rec_n['id'] == $usrinfo['id']) ? ' selected="selected"' : '').'>'.$rec_n['login'].'</option>';
+	        echo '<option value="'.$rec_n['id'].'"'.(($rec_n['id'] == $user['userId']) ? ' selected="selected"' : '').'>'.$rec_n['login'].'</option>';
 	    };
 	    echo '</select>
 			  </div>';
 	} else {
 	    echo '<input type="hidden" name="nowner" value="'.$rec['iduser'].'" />';
 	} ?>
-<?php 			if ($usrinfo['right_org'] == 1) {
+<?php 			if ($user['aclGamemaster'] == 1) {
 	    echo '					
 				<div>
 				<label for="nnotnew">Není nové</label>

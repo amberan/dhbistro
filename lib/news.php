@@ -7,7 +7,7 @@ use Tracy\Debugger;
 /* function newsRead($newsid) {
 	//vraci jednu osobu; aplikuje prava podle uzivatele
 	global $database, $usrinfo; 
-	$sqlwhere = " id = $personid AND secret <=".$usrinfo['right_power'];
+	$sqlwhere = " id = $personid AND secret <=".$user['aclDirector'];
 	if (isset($usrinfo['right_admin']) AND $usrinfo['right_admin'] > 0) {
 		$sqlwhere .= " AND deleted = 1";
 	} else {

@@ -5,12 +5,12 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 latteDrawTemplate("header");
 
 if (is_numeric($_REQUEST['rid'])) {
-    $sql_a = "SELECT * FROM ".DB_PREFIX."c2s WHERE ".DB_PREFIX."c2s.idsolver=".$usrinfo['id']." AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid'];
+    $sql_a = "SELECT * FROM ".DB_PREFIX."c2s WHERE ".DB_PREFIX."c2s.idsolver=".$user['userId']." AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid'];
     $res_a = mysqli_query ($database,$sql_a);
     $rec_a = mysqli_fetch_array ($res_a);
     $res = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."case WHERE id=".$_REQUEST['rid']);
     if ($rec = mysqli_fetch_assoc ($res)) {
-        if ((($rec['secret'] > $usrinfo['right_power']) && $usrinfo['id'] <> $rec_a['idsolver']) || $rec['deleted'] == 1) {
+        if ((($rec['secret'] > $user['aclSecret']) && $user['userId'] <> $rec_a['idsolver']) || $rec['deleted'] == 1) {
             unauthorizedAccess(3, $rec['secret'], $rec['deleted'], $_REQUEST['rid']);
         }
         auditTrail(3, 1, $_REQUEST['rid']);
@@ -49,14 +49,14 @@ if (is_numeric($_REQUEST['rid'])) {
                 }
             }
         }
-        if (($usrinfo['right_text']) && (($rec['secret'] == 0) || ($usrinfo['right_power']) || ($rec_a['iduser']))) {
+        if (($usrinfo['right_text']) && (($rec['secret'] == 0) || ($user['aclDirector']) || ($rec_a['iduser']))) {
             $editbutton = '; <a href="editcase.php?rid='.$_REQUEST['rid'].'">upravit případ</a>';
         } else {
             $editbutton = '';
         }
         deleteUnread (3,$_REQUEST['rid']);
-        sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>'.StripSlashes($rec['title']).'</strong>',$spaction.$editbutton);
-        if (($rec['secret'] == 1) && (!$usrinfo['right_power']) && (!$rec_a['iduser'])) {
+        sparklets ('<a href="/cases/">případy</a> &raquo; <strong>'.StripSlashes($rec['title']).'</strong>',$spaction.$editbutton);
+        if (($rec['secret'] == 1) && (!$user['aclDirector']) && (!$rec_a['iduser'])) {
             echo '<div id="obsah"><p>Hezký pokus.</p></div>';
         } else {
             ?>
@@ -86,7 +86,7 @@ if (is_numeric($_REQUEST['rid'])) {
 			<h3>Osoby spojené s případem: </h3>
 			<p>
 			<?php
-			if ($usrinfo['right_power']) {
+			if ($user['aclDirector']) {
 			    $sql = "SELECT ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."c2p.iduser FROM ".DB_PREFIX."person, ".DB_PREFIX."c2p WHERE ".DB_PREFIX."c2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."person.deleted=0 ORDER BY ".DB_PREFIX."person.surname, ".DB_PREFIX."person.name ASC";
 			} else {
 			    $sql = "SELECT ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."c2p.iduser FROM ".DB_PREFIX."person, ".DB_PREFIX."c2p WHERE ".DB_PREFIX."c2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret=0 ORDER BY ".DB_PREFIX."person.surname, ".DB_PREFIX."person.name ASC";
@@ -105,7 +105,7 @@ if (is_numeric($_REQUEST['rid'])) {
 			<div class="clear">&nbsp;</div>
 			<h3>Hlášení přiřazená k případu:</h3>
 				<?php
-				if ($usrinfo['right_power']) {
+				if ($user['aclDirector']) {
 				    $sql = "SELECT ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.task AS 'task', ".DB_PREFIX."report.type AS 'type', ".DB_PREFIX."report.adatum AS 'adatum', ".DB_PREFIX."user.userName AS 'user' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."report, ".DB_PREFIX."user WHERE ".DB_PREFIX."report.id=".DB_PREFIX."ar2c.idreport AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userId=".DB_PREFIX."report.iduser ORDER BY ".DB_PREFIX."report.label ASC";
 				} else {
 				    $sql = "SELECT ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.task AS 'task', ".DB_PREFIX."report.type AS 'type', ".DB_PREFIX."report.adatum AS 'adatum', ".DB_PREFIX."user.userName AS 'user' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."report, ".DB_PREFIX."user WHERE ".DB_PREFIX."report.id=".DB_PREFIX."ar2c.idreport AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userId=".DB_PREFIX."report.iduser AND ".DB_PREFIX."report.secret=0 ORDER BY ".DB_PREFIX."report.label ASC";
@@ -171,7 +171,7 @@ if (is_numeric($_REQUEST['rid'])) {
 	
 	<!-- následuje seznam přiložených souborů -->
 	<?php //generování seznamu přiložených souborů
-		if ($usrinfo['right_power']) {
+		if ($user['aclDirector']) {
 		    $sql = "SELECT ".DB_PREFIX."file.mime as mime,  ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.id AS 'id' FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=3 ORDER BY ".DB_PREFIX."file.originalname ASC";
 		} else {
 		    $sql = "SELECT ".DB_PREFIX."file.mime as mime,  ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.id AS 'id' FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=3 AND ".DB_PREFIX."file.secret=0 ORDER BY ".DB_PREFIX."file.originalname ASC";
@@ -199,10 +199,10 @@ if (is_numeric($_REQUEST['rid'])) {
 	if ($hn != 1) { ?>
 	<!-- následuje seznam poznámek -->
 	<?php // generování poznámek
-		if ($usrinfo['right_power']) {
-		    $sql_n = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=3 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret<2 OR ".DB_PREFIX."note.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."note.datum DESC";
+		if ($user['aclDirector']) {
+		    $sql_n = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=3 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret<2 OR ".DB_PREFIX."note.iduser=".$user['userId'].") ORDER BY ".DB_PREFIX."note.datum DESC";
 		} else {
-		    $sql_n = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=3 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret=0 OR ".DB_PREFIX."note.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."note.datum DESC";
+		    $sql_n = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=3 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret=0 OR ".DB_PREFIX."note.iduser=".$user['userId'].") ORDER BY ".DB_PREFIX."note.datum DESC";
 		}
 		$res_n = mysqli_query ($database,$sql_n);
 		$i = 0;
@@ -231,10 +231,10 @@ if (is_numeric($_REQUEST['rid'])) {
 			</h4>
 			<div><?php echo StripSlashes($rec_n['note']); ?></div>
 			<span class="poznamka-edit-buttons"><?php
-				if (($rec_n['iduser'] == $usrinfo['id']) || ($usrinfo['right_text'])) {
+				if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
 				    echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;idtable=3" title="upravit"><span class="button-text">upravit</span></a> ';
 				}
-			    if (($rec_n['iduser'] == $usrinfo['id']) || ($usrinfo['right_power'])) {
+			    if (($rec_n['iduser'] == $user['userId']) || ($user['aclDirector'])) {
 			        echo '<a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode($backurl).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec_n['title'])."&quot; náležící k osobě?');".'" title="smazat"><span class="button-text">smazat</span></a>';
 			    } ?>
 			</span>

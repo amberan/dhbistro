@@ -15,10 +15,10 @@ function fileIdentify($type,$objectId)
     //user privilegies > sql modifiers
     switch ($fileType) {
         case 'portrait': echo "profilovka";
-            // "SELECT portrait FROM ".DB_PREFIX."person WHERE ".(($usrinfo['right_power']) ? '' : ' secret=0 AND ')." id=".$_REQUEST['rid']);
+            // "SELECT portrait FROM ".DB_PREFIX."person WHERE ".(($user['aclDirector']) ? '' : ' secret=0 AND ')." id=".$_REQUEST['rid']);
             break;
         case 'symbol': echo "symbol";
-            // "SELECT symbol FROM ".DB_PREFIX."symbol WHERE ".(($usrinfo['right_power']) ? '' : ' secret=0 AND ')." id=".$_REQUEST['nrid']
+            // "SELECT symbol FROM ".DB_PREFIX."symbol WHERE ".(($user['aclDirector']) ? '' : ' secret=0 AND ')." id=".$_REQUEST['nrid']
             break;
         case 'attachement': echo "priloha";
             // "SELECT mime, uniquename AS 'soubor', originalname AS 'nazev', size FROM ".DB_PREFIX."file WHERE id=".$_REQUEST['idfile']." AND secret=0"

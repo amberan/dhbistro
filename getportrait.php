@@ -10,7 +10,7 @@ header("Cache-Control: no-cache, no-store, must-revalidate");
 header("Pragma: no-cache");
 header("Expires: -1");
 if (isset($_REQUEST['rid']) && is_numeric ($_REQUEST['rid'])) { //portret
-    $getres = mysqli_query ($database,"SELECT portrait FROM ".DB_PREFIX."person WHERE ".(($usrinfo['right_power']) ? '' : ' secret=0 AND ')." id=".$_REQUEST['rid']);
+    $getres = mysqli_query ($database,"SELECT portrait FROM ".DB_PREFIX."person WHERE ".(($user['aclDirector']) ? '' : ' secret=0 AND ')." id=".$_REQUEST['rid']);
     if ($getrec = mysqli_fetch_assoc ($getres)) {
         header('Content-Disposition: inline; filename="portrait'.$_REQUEST['rid'].'.jpg"');
         if (mb_strlen($getrec['portrait']) > 0 and file_exists($config['folder_portrait'].$getrec['portrait']) ) {
@@ -20,7 +20,7 @@ if (isset($_REQUEST['rid']) && is_numeric ($_REQUEST['rid'])) { //portret
         }
     }
 } elseif (isset($_REQUEST['nrid']) && is_numeric ($_REQUEST['nrid'])) { //symbol
-    $getres = mysqli_query ($database,"SELECT symbol FROM ".DB_PREFIX."symbol WHERE ".(($usrinfo['right_power']) ? '' : ' secret=0 AND ')." id=".$_REQUEST['nrid']);
+    $getres = mysqli_query ($database,"SELECT symbol FROM ".DB_PREFIX."symbol WHERE ".(($user['aclDirector']) ? '' : ' secret=0 AND ')." id=".$_REQUEST['nrid']);
     if ($getrec = mysqli_fetch_assoc ($getres)) {
         header('Content-Disposition: inline; filename="symbol'.$_REQUEST['nrid'].'.jpg"');
         if (file_exists($config['folder_symbol'].$getrec['symbol'])) {

@@ -7,7 +7,7 @@ latteDrawTemplate("header");
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	    $res = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."group WHERE id=".$_REQUEST['rid']);
 	    if ($rec_g = mysqli_fetch_assoc ($res)) {
-	        if (($rec_g['secret'] > $usrinfo['right_power']) || $rec_g['deleted'] == 1) {
+	        if (($rec_g['secret'] > $user['aclDirector']) || $rec_g['deleted'] == 1) {
 	            unauthorizedAccess(2, $rec_g['secret'], $rec_g['deleted'], $_REQUEST['rid']);
 	        }
 	        auditTrail(2, 1, $_REQUEST['rid']);
@@ -33,7 +33,7 @@ latteDrawTemplate("header");
                 <h3><label for="secret">Přísně tajné:</label></h3>
 			<input type="checkbox" name="secret" value=1 <?php if ($rec_g['secret'] == 1) { ?>checked="checked"<?php } ?>/><br/>
 		<div class="clear">&nbsp;</div>
-<?php if ($usrinfo['right_org'] == 1) {
+<?php if ($user['aclGamemaster'] == 1) {
 	            echo '					
 				<h3><label for="notnew">Není nové</label></h3>
 					<input type="checkbox" name="notnew"/><br/>
@@ -55,7 +55,7 @@ latteDrawTemplate("header");
 		<input type="submit" value="Upravit osoby" name="setperson" class="submitbutton editbutton" title="Upravit členy"/>
 	</form>
 	<p><?php
-	if ($usrinfo['right_power']) {
+	if ($user['aclDirector']) {
 	    $sql = "SELECT ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname' FROM ".DB_PREFIX."g2p, ".DB_PREFIX."person WHERE ".DB_PREFIX."person.id=".DB_PREFIX."g2p.idperson AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." ORDER BY ".DB_PREFIX."person.surname, ".DB_PREFIX."person.name ASC";
 	} else {
 	    $sql = "SELECT ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname' FROM ".DB_PREFIX."g2p, ".DB_PREFIX."person WHERE ".DB_PREFIX."person.id=".DB_PREFIX."g2p.idperson AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." AND ".DB_PREFIX."person.secret=0 ORDER BY ".DB_PREFIX."person.surname, ".DB_PREFIX."person.name ASC";
@@ -72,7 +72,7 @@ latteDrawTemplate("header");
 	<fieldset><legend><strong>Přiložené soubory</strong></legend>
 		<strong><em>Ke skupině je možné nahrát neomezené množství souborů, ale velikost jednoho souboru je omezena na 2 MB.</em></strong>
 		<?php //generování seznamu přiložených souborů
-			if ($usrinfo['right_power']) {
+			if ($user['aclDirector']) {
 			    $sql = "SELECT ".DB_PREFIX."file.iduser AS 'iduser', ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.secret AS 'secret', ".DB_PREFIX."file.id AS 'id' FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=2 ORDER BY ".DB_PREFIX."file.originalname ASC";
 			} else {
 			    $sql = "SELECT ".DB_PREFIX."file.iduser AS 'iduser', ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.secret AS 'secret', ".DB_PREFIX."file.id AS 'id' FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=2 AND ".DB_PREFIX."file.secret=0 ORDER BY ".DB_PREFIX."file.originalname ASC";
@@ -85,7 +85,7 @@ latteDrawTemplate("header");
 		<ul id="prilozenadata">
 				<?php } ?>
 			<li class="soubor"><a href="getfile.php?idfile=<?php echo $rec_f['id']; ?>" title=""><?php echo StripSlashes($rec_f['title']); ?></a><?php if ($rec_f['secret'] == 1) { ?> (TAJNÝ)<?php }; ?><span class="poznamka-edit-buttons"><?php
-				if (($rec_f['iduser'] == $usrinfo['id']) || ($usrinfo['right_power'])) {
+				if (($rec_f['iduser'] == $user['userId']) || ($user['aclDirector'])) {
 				    echo '<a class="delete" title="smazat" href="procgroup.php?deletefile='.$rec_f['id'].'&amp;groupid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('editgroup.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat soubor &quot;'.StripSlashes($rec_f['title']).'&quot; náležící ke skupině?\')"><span class="button-text">smazat soubor</span></a>';
 				} ?>
 				</span></li><?php
@@ -112,7 +112,7 @@ latteDrawTemplate("header");
 			  	<?php if ($rec_g['secret'] != 1) { ?>&nbsp;<input type="radio" name="secret" value="0" checked="checked"/>ne&nbsp;/<?php }; ?>
 				&nbsp;<input type="radio" name="secret" value="1" <?php if ($rec_g['secret'] == 1) { ?>checked="checked"<?php }; ?>/>ano
 			</div>
-<?php 		if ($usrinfo['right_org'] == 1) {
+<?php 		if ($user['aclGamemaster'] == 1) {
 	            echo '					
 			<div>
 			<strong><label for="fnotnew">Není nové</label></strong>
@@ -133,10 +133,10 @@ latteDrawTemplate("header");
 		<span class="poznamka-edit-buttons"><a class="new" href="newnote.php?rid=<?php echo $_REQUEST['rid']; ?>&amp;idtable=2&amp;s=<?php echo $rec_g['secret']; ?>" title="nová poznámka"><span class="button-text">nová poznámka</span></a><em style="font-size:smaller;"> (K případu si můžete připsat kolik chcete poznámek.)</em></span>
 		<ul>
 		<?php
-		if ($usrinfo['right_power']) {
+		if ($user['aclDirector']) {
 		    $sql_n = "SELECT ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=2 AND ".DB_PREFIX."note.deleted=0 ORDER BY ".DB_PREFIX."note.datum DESC";
 		} else {
-		    $sql_n = "SELECT ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=2 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret=0 OR ".DB_PREFIX."note.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."note.datum DESC";
+		    $sql_n = "SELECT ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=2 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret=0 OR ".DB_PREFIX."note.iduser=".$user['userId'].") ORDER BY ".DB_PREFIX."note.datum DESC";
 		}
 	        $res_n = mysqli_query ($database,$sql_n);
 	        while ($rec_n = mysqli_fetch_assoc ($res_n)) { ?>
@@ -145,10 +145,10 @@ latteDrawTemplate("header");
 			if ($rec_n['secret'] == 1) { ?> (tajná)<?php }
 			if ($rec_n['secret'] == 2) { ?> (soukromá)<?php }
 			?><span class="poznamka-edit-buttons"><?php
-			if (($rec_n['iduser'] == $usrinfo['id']) || ($usrinfo['right_text'])) {
+			if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
 			    echo ' <a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=2" title="upravit"><span class="button-text">upravit poznámku</span></a>';
 			}
-			if (($rec_n['iduser'] == $usrinfo['id']) || ($usrinfo['right_power'])) {
+			if (($rec_n['iduser'] == $user['userId']) || ($user['aclDirector'])) {
 			    echo ' <a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('editgroup.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec_n['title'])."&quot; náležící ke skupině?');".'" title="smazat"><span class="button-text">smazat poznámku</span></a>';
 			}
 			?></span></li><?php

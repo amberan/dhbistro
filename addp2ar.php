@@ -25,7 +25,7 @@ mainMenu ();
 	//$autharray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT iduser FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']));
 	//$author=$autharray['iduser'];
 	// --- původní načítání autora ***
-	if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || $usrinfo['id'] == $author)) {
+	if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || $user['userId'] == $author)) {
 	    $res = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']);
 	    if ($rec = mysqli_fetch_assoc ($res)) {
 	        ?>
@@ -103,7 +103,7 @@ mainMenu ();
 	        }
 	        filter();
 	        // vypis osob
-	        if ($usrinfo['right_power']) {
+	        if ($user['aclDirector']) {
 	            $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol', ".DB_PREFIX."ar2p.role AS 'role', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."person LEFT JOIN ".DB_PREFIX."ar2p ON ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."person.deleted=0 ".$fsql_dead.$fsql_archiv." ORDER BY ".$filterSqlSort;
 	        } else {
 	            $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol', ".DB_PREFIX."ar2p.role AS 'role', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."person LEFT JOIN ".DB_PREFIX."ar2p ON ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."person.deleted=0 ".$fsql_dead.$fsql_archiv." AND ".DB_PREFIX."person.secret=0 ORDER BY ".$filterSqlSort;

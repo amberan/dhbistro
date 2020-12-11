@@ -47,7 +47,7 @@ sparklets ('<strong>skupiny</strong>','<a href="newgroup.php">přidat skupinu</a
 	  <legend>Filtr</legend>
         <br /> <input type="checkbox" name="new" value="new" class="checkbox"'.(($fNew == 1) ? ' checked="checked"' : '').' /> Jen nové.
         <br /> <input type="checkbox" name="arch" value="arch" class="checkbox"'.(($fArch == 1) ? ' checked="checked"' : '').' /> I archiv.';
-	    if ($usrinfo['right_power']) {
+	    if ($user['aclDirector']) {
 	        echo '<br /> <input type="checkbox" name="sec" value="sec" class="checkbox"'.(($filterSec == 1) ? ' checked="checked"' : '').' /> Jen tajné.</p>';
 	    } else {
 	        echo '</p>';
@@ -62,7 +62,7 @@ if (isset($_GET['sort'])) {
     sortingSet('group',$_GET['sort'],'group');
 }
 
-    $sql = "SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.archived AS 'archived' FROM ".DB_PREFIX."group WHERE ".DB_PREFIX."group.deleted=0".$fsql_sec.$fsql_arch." AND ".DB_PREFIX."group.secret<=".$usrinfo['right_power'].sortingGet('group');
+    $sql = "SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.archived AS 'archived' FROM ".DB_PREFIX."group WHERE ".DB_PREFIX."group.deleted=0".$fsql_sec.$fsql_arch." AND ".DB_PREFIX."group.secret<=".$user['aclDirector'].sortingGet('group');
 	$res = mysqli_query ($database,$sql);
 	if (mysqli_num_rows ($res)) {
 	    echo '<div id="obsah">

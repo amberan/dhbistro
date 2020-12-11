@@ -16,7 +16,7 @@ function sessionUser($sid): array
     WHERE userDeleted=0 AND userSuspended=0 AND ".DB_PREFIX."user.sid ='$sid' AND userAgent='".$_SERVER['HTTP_USER_AGENT']."'";
     if ($usrinfo = mysqli_fetch_assoc (mysqli_query ($database,$usersql))) {
         //$_SESSION['inactiveallowance'] = $usrinfo['userTimeout'];
-        $usrinfo['id'] = $usrinfo['userId'];
+        $user['userId'] = $usrinfo['userId'];
         $usrinfo['login'] = $usrinfo['userName'];
         $usrinfo['idperson'] = $usrinfo['personId'];
         $usrinfo['lastaction'] = $usrinfo['lastLogin'];
@@ -26,11 +26,11 @@ function sessionUser($sid): array
         $usrinfo['deleted'] = $usrinfo['userDeleted'];
         $usrinfo['suspended'] = $usrinfo['userSuspended'];
         $usrinfo['zlobody'] = $usrinfo['zlobod'];
-        $usrinfo['right_power'] = $usrinfo['aclDirector'];
+        $user['aclDirector'] = $usrinfo['aclDirector'];
         $usrinfo['right_text'] = $usrinfo['aclPerson'];
-        $usrinfo['right_org'] = $usrinfo['aclGamemaster'];
-        $usrinfo['right_aud'] = $usrinfo['aclAudit'];
-        $usrinfo['right_super'] = $usrinfo['aclRoot'];
+        $user['aclGamemaster'] = $usrinfo['aclGamemaster'];
+        $user['aclAudit'] = $usrinfo['aclAudit'];
+        $user['aclRoot'] = $usrinfo['aclRoot'];
         $usrinfo['plan_md'] = $usrinfo['planMD'] = stripslashes($usrinfo['planMD']);
 
         $usrinfo['sqlDeleted'] = " deleted <= ".$usrinfo['aclRoot'];

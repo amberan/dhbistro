@@ -152,4 +152,23 @@ $text['kategorieherni'] = 'herní';
 $text['kategoriesystemova'] = 'systémová';
 $text['aktualitaobnovena'] = 'Aktualita obnovena';
 $text['aktualitaneobnovena'] = 'Aktualitu se nepodařilo obnovit';
+
+// FILTERS
+$text['iuzavrene'] = 'I uzavřené.';
+$text['jennove'] = 'Jen nové.';
+$text['jentajne'] = 'Jen tajné.';
+
+// CASES
+$text['pridatpripad'] = 'Přidat případ';
+$text['nazev'] = 'Název';
+$text['stav'] = 'Stav';
+$text['zmeneno'] = 'Změněno';
+$text['uzavreny'] = 'uzavřený';
+$text['otevreny'] = 'otevřený';
+$text['smazany'] = 'smazáný';
+$text['pridatpoznamku'] = '';
+$text['opravdusmazatpripad'] = 'Opravdu smazat případ';
+$text['opravduobnovitpripad'] = 'Opravdu obnovit případ';
+$text['vytvoreno'] = 'Vytvořeno';
+$text['utajeno'] = 'utajeno';
 ?>

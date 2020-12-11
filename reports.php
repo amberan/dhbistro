@@ -79,7 +79,7 @@ $latteParameters['title'] = 'Hlášení';
 	}
 	switch ($filterMine) {
 		case 0: $filterSqlMine = ''; break;
-		case 1: $filterSqlMine = ' AND '.DB_PREFIX.'report.iduser='.$usrinfo['id'].' '; break;
+		case 1: $filterSqlMine = ' AND '.DB_PREFIX.'report.iduser='.$user['userId'].' '; break;
 		default: $filterSqlMine = '';
 	}
 	switch ($filterConn) {
@@ -129,7 +129,7 @@ $latteParameters['title'] = 'Hlášení';
         </tr>
         <tr class="filter">
         <td class="filter"><input type="checkbox" name="archiv" value="archiv" class="checkbox"'.(($filterArchiv == 1) ? ' checked="checked"' : '').' /> I archiv.</td>';
-	    if ($usrinfo['right_power']) {
+	    if ($user['aclDirector']) {
 	        echo '<td class="filter"><input type="checkbox" name="sec" value="sec" class="checkbox"'.(($filterSec == 1) ? ' checked="checked"' : '').' /> Jen tajné.</td></tr></table>';
 	    } else {
 	        echo '</tr></table>';
@@ -141,8 +141,8 @@ $latteParameters['title'] = 'Hlášení';
     filter();
     
     if (isset($_GET['sort'])) {
-    sortingSet('report',$_GET['sort'],'report');
-}
+        sortingSet('report',$_GET['sort'],'report');
+    }
 
 
     $sql = "SELECT
@@ -158,7 +158,7 @@ $latteParameters['title'] = 'Hlášení';
 				".DB_PREFIX."report.start AS 'start',
 				".DB_PREFIX."report.end AS 'end'  
                     FROM ".DB_PREFIX."user, ".DB_PREFIX."report".$fsql_conn2." 
-                    WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."report.deleted=0 AND ".DB_PREFIX."report.secret<=".$usrinfo['right_power'].$filterSqlCat.$fsql_sec.$fsql_stat.$filterSqlMine.$fsql_conn.
+                    WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."report.deleted=0 AND ".DB_PREFIX."report.secret<=".$user['aclDirector'].$filterSqlCat.$fsql_sec.$fsql_stat.$filterSqlMine.$fsql_conn.
                     $fsql_archiv.sortingGet('report');
                     /////" ORDER BY ".$filterSqlSort;
 	$res = mysqli_query ($database,$sql);
@@ -166,7 +166,7 @@ $latteParameters['title'] = 'Hlášení';
 	    if ($fNew == 0 || ($fNew == 1 && searchRecord(4,$rec['id']))) {
 	        echo '<div class="news_div '.(($rec['type'] == 1) ? 'game_news' : 'system_news').((searchRecord(4,$rec['id'])) ? ' unread_record' : '').'">
                 <div class="news_head"><strong><a href="readactrep.php?rid='.$rec['id'].'&amp;hidenotes=0&amp;truenames=0">'.StripSlashes($rec['label']).'</a></strong>';
-	        if (($usrinfo['right_text']) || ($usrinfo['id'] == $rec['riduser'] && $rec['status'] < 1)) {
+	        if (($usrinfo['right_text']) || ($user['userId'] == $rec['riduser'] && $rec['status'] < 1)) {
 	            echo '	 | <td><a href="editactrep.php?rid='.$rec['id'].'">upravit</a> | <a href="procactrep.php?delete='.$rec['id'].'&amp;table=4" onclick="'."return confirm('Opravdu smazat &quot;".$text['hlaseniM']."&quot; &quot;".StripSlashes($rec['label'])."&quot;?');".'">smazat</a></td>';
 	        } else {
 	            echo '   | <td><a href="newnote.php?rid='.$rec['id'].'&idtable=8">přidat poznámku</a></td>';

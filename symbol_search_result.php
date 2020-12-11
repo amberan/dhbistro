@@ -199,7 +199,7 @@ if (isset($_POST['searchit'])) {
 			$result = '
 	    <div class="central_result_frame">';
     while ($symbol_record = mysqli_fetch_assoc ($symbol_result)) {
-        if ($usrinfo['right_power']) {
+        if ($user['aclDirector']) {
             $color_l = colorSwitch((string)$symbol_record['lining']);
             $color_c = colorSwitch((string)$symbol_record['curving']);
             $color_p = colorSwitch((string)$symbol_record['pointing']);

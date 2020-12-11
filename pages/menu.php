@@ -3,7 +3,7 @@
 $menu[] = array($text['aktuality'], "/", searchTable(5) + searchTable(6));
 $menu[] = array($text['hlaseniV'], "/reports.php", searchTable(4));
 $menu[] = array($text['osoby'], "/persons.php", searchTable(1) + searchTable(7));
-$menu[] = array($text['pripady'], "/cases.php", searchTable(3));
+$menu[] = array($text['pripady'], "/cases/", searchTable(3));
 $menu[] = array($text['skupiny'], "/groups.php", searchTable(2));
 $menu2[] = array($text['forum'], "http://www.prazskahlidka.cz/forums/", 0);
 $menu2[] = array($text['menu-zlobody'], "/evilpoints.php", 0);

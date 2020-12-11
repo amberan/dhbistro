@@ -86,6 +86,22 @@ if (isset($user)) {
             require_once ( SERVER_ROOT.'/pages/dashboard.php');
             require_once ( SERVER_ROOT.'/pages/board.php');
         }
+    } elseif ($URL[1] == 'cases') { // CASES (nastenka)
+        auditTrail(3, 1, 0);
+        $latteParameters['title'] = $text['pripady'];
+        $latteParameters['actions'][] = array("/newcase.php", $text['pridatpripad']);
+        // if (isset($URL[2]) AND $URL[2] == 'edit' AND $user['aclDeputy'] < 1 AND $user['aclDirector'] < 1) {
+        //     unauthorizedAccess(6, 2, 0, 0);
+        // } elseif ((isset($URL[2]) AND $URL[2] == 'edit' AND ($user['aclDeputy'] > 0 OR $user['aclDirector'] > 0))) { // BOARD > EDIT
+        //     $latteParameters['subtitle'] = $text['upravitnastenku'];
+        //     $latteParameters['actions'][] = array("/board", $text['zobrazitnastenku']);
+        //     require_once ( SERVER_ROOT.'/pages/board_edit.php');
+        // } else { // BOARD > SHOW
+        //     if ($user['aclDeputy'] > 0 OR $user['aclDirector'] > 0) {
+        //         $latteParameters['actions'][] = array("/board/edit", $text['upravitnastenku']);
+        //     }
+            require_once ( SERVER_ROOT.'/pages/cases.php');
+        //}
     } else { // NEWS - DEFAULT
         auditTrail(5, 1, 0);
         $latteParameters['title'] = 'Aktuality';

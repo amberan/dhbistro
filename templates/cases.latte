@@ -1,0 +1,73 @@
+<div class="container-fluid mt-3 mb-3 mr-2 w-100">
+    <div class="row mb-1">
+	    <div class="col-6 text-left">
+	        <h4>
+                {$text[pripady]}
+            </h4>
+	    </div>
+        <div class="col-6 text-right">
+        </div>
+	</div>
+    <div class="row mb-1">
+        <div class="col-12">
+            {if @$warning}
+                <div>
+                    {$warning}
+                </div>
+            {else}
+
+<form action="{$website_link}{$URL[1]}/" method="POST" id="filter"> 
+<input type="hidden" name="placeholder"  />
+<input type="checkbox" name="filter[stat]" {if (isset($filter['stat']) AND $filter['stat'] == 'on') } checked {/if} onchange="this.form.submit()"/>{$text['iuzavrene']} 
+<input type="checkbox" name="filter[new]" {if (isset($filter['new']) AND $filter['new'] == 'on') } checked{/if} onchange="this.form.submit()"/> {$text['jennove']}
+{if ($user['aclSecret'])}
+    <input type="checkbox" name="filter[sec]" {if (isset($filter['sec']) AND $filter['sec'] == 'on') } checked{/if}  onchange="this.form.submit()"/>{$text['jentajne']}
+{/if}
+
+
+<div id="obsah">
+<table>
+<thead>
+	<tr>
+	  <th>{$text['nazev']} <a href="{$website_link}{$URL[1]}/?sort=title">&#8661;</a></th>
+	  <th>{$text['stav']}</th>
+      <th>{$text['vytvoreno']}  <a href="{$website_link}{$URL[1]}/?sort=created">&#8661;</a></th>
+	  <th>{$text['zmeneno']}  <a href="{$website_link}{$URL[1]}/?sort=datum">&#8661;</a></th>
+	  <th>{$text['akce']}</th>
+	</tr>
+</thead>
+<tbody>
+                        {foreach $case_record as $cases}
+<tr class="{if $cases['new']} unread_record{/if}{if $cases['status']} solved{/if}">
+    <td>
+        <a href="/readcase.php?rid={$cases['id']}&amp;hidenotes=0">{$cases['title']}</a>     
+        {if $cases['secret']} {$text['utajeno']|upper} {/if}
+    </td>
+    <td>
+    {if $cases['status']} {$text['uzavreny']} {else} {$text['otevreny']} {/if} 
+    {if $cases['deleted']} {$text['smazany']} {/if}
+    </td>
+    <td>{$cases['date_created']|date:'%d.%m.%Y'}</td>
+    <td>{$cases['date_changed']|date:'%d.%m.%Y'}</td>
+    <td>
+    {if $user['aclCase']} <a href="/editcase.php?rid={$cases['id']}">{$text['upravit']}</a>{/if}
+    <a href="/newnote.php?rid={$cases['id']}&idtable=7">přidat poznámku</a>
+    {if $user['aclRoot'] AND !$cases['deleted']} <a href="/proccase.php?delete={$cases['id']}" onclick="return confirm('{$text['opravdusmazatpripad']} &quot; {$cases['title']|stripHtml}&quot;?');">{$text['smazat']}</a>{/if}
+    {if $user['aclRoot'] AND $cases['deleted']} <a href="/proccase.php?restore={$cases['id']}" onclick="return confirm('{$text['opravduobnovitpripad']} &quot; {$cases['title']|stripHtml}&quot;?');">{$text['obnovit']}</a>{/if}
+    </td>
+</tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            {/if}
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+

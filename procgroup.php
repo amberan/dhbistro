@@ -32,7 +32,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	    if (mysqli_num_rows ($ures)) {
 	        echo '<div id="obsah"><p>Skupina již existuje, změňte její jméno.</p></div>';
 	    } else {
-	        mysqli_query ($database,"INSERT INTO ".DB_PREFIX."group ( title, contents, datum, iduser, deleted, secret, archived) VALUES('".$_POST['title']."','".$_POST['contents']."','".Time()."','".$usrinfo['id']."','0','".$_POST['secret']."',0)");
+	        mysqli_query ($database,"INSERT INTO ".DB_PREFIX."group ( title, contents, datum, iduser, deleted, secret, archived) VALUES('".$_POST['title']."','".$_POST['contents']."','".Time()."','".$user['userId']."','0','".$_POST['secret']."',0)");
 	        $gidarray = mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."group WHERE UCASE(title)=UCASE('".$_POST['title']."')"));
 	        $gid = $gidarray['id'];
 	        auditTrail(2, 3, $gid);
@@ -88,7 +88,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	    auditTrail(2, 4, $_POST['groupid']);
 	    $newname = Time().MD5(uniqid(Time().Rand()));
 	    move_uploaded_file ($_FILES['attachment']['tmp_name'],'./files/'.$newname);
-	    $sql = "INSERT INTO ".DB_PREFIX."file (uniquename,originalname,mime,size,datum,iduser,idtable,iditem,secret) VALUES('".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','2','".$_POST['groupid']."','".$_POST['secret']."')";
+	    $sql = "INSERT INTO ".DB_PREFIX."file (uniquename,originalname,mime,size,datum,iduser,idtable,iditem,secret) VALUES('".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".Time()."','".$user['userId']."','2','".$_POST['groupid']."','".$_POST['secret']."')";
 	    mysqli_query ($database,$sql);
 	    if (!isset($_POST['fnotnew'])) {
 	        unreadRecords (2,$_POST['groupid']);

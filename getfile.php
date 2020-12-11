@@ -6,7 +6,7 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
 
 	if (is_numeric ($_REQUEST['idfile'])) {
-	    if ($usrinfo['right_power']) {
+	    if ($user['aclDirector']) {
 	        $sql = "SELECT mime, uniquename AS 'soubor', originalname AS 'nazev', size FROM ".DB_PREFIX."file WHERE id=".$_REQUEST['idfile'];
 	    } else {
 	        $sql = "SELECT mime, uniquename AS 'soubor', originalname AS 'nazev', size FROM ".DB_PREFIX."file WHERE id=".$_REQUEST['idfile']." AND secret=0";

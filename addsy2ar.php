@@ -92,7 +92,7 @@ seřadit je podle <select name="sort">
 	        }
 	        filter();
 	        // vypis hlášení
-	        if ($usrinfo['right_power']) {
+	        if ($user['aclDirector']) {
 	            $sql = "SELECT
 			".DB_PREFIX."report.id AS 'id',
 	        ".DB_PREFIX."report.datum AS 'datum',

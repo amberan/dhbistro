@@ -10,7 +10,7 @@ mainMenu ();
 	sparklets ('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení</strong>');
 	$autharray = mysqli_fetch_assoc (mysqli_query ($database,"SELECT iduser FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']));
 	$author = $autharray['iduser'];
-	if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || $usrinfo['id'] == $author)) {
+	if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || $user['userId'] == $author)) {
 	    $res = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']);
 	    if ($rec = mysqli_fetch_assoc ($res)) {
 	        ?>
@@ -51,7 +51,7 @@ if (!isset($customFilter['sort'])) {
 	        filter(); ?>
     <form action="addreports.php" method="post" class="otherform">
         <?php // vypis pripadu
-if ($usrinfo['right_power']) {
+if ($user['aclDirector']) {
     $sql = "SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."ar2c.iduser FROM ".DB_PREFIX."case LEFT JOIN ".DB_PREFIX."ar2c ON ".DB_PREFIX."ar2c.idcase=".DB_PREFIX."case.id AND ".DB_PREFIX."ar2c.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."case.deleted=0 ORDER BY ".$filterSqlSort;
 } else {
     $sql = "SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."ar2c.iduser FROM ".DB_PREFIX."case LEFT JOIN ".DB_PREFIX."ar2c ON ".DB_PREFIX."ar2c.idcase=".DB_PREFIX."case.id AND ".DB_PREFIX."ar2c.idreport=".$_REQUEST['rid']." WHERE ".DB_PREFIX."case.deleted=0 AND ".DB_PREFIX."case.secret=0 ORDER BY ".$filterSqlSort;

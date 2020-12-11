@@ -9,17 +9,17 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 //auditni stopa
 function auditTrail ($recordType,$operationType,$idrecord)
 {
-    global $database,$usrinfo;
-    $sqlCheck = "SELECT * FROM ".DB_PREFIX."audit_trail WHERE iduser='".$usrinfo['id']."' AND time='".time()."'";
+    global $database,$user;
+    $sqlCheck = "SELECT * FROM ".DB_PREFIX."audit_trail WHERE iduser='".$user['userId']."' AND time='".time()."'";
     $resCheck = mysqli_query ($database,$sqlCheck);
     if (mysqli_num_rows ($resCheck)) {
     } else {
-        if (!$usrinfo['currip']) {
+        if (!$user['ipv4']) {
             $currip = $_SERVER['REMOTE_ADDR'];
         } else {
-            $currip = $usrinfo['currip'];
+            $currip = $user['ipv4'];
         }
-        $sqlAu = "INSERT INTO ".DB_PREFIX."audit_trail VALUES('','".$usrinfo['id']."','".time()."','".$operationType."','".$recordType."','".$idrecord."','".$currip."','".$usrinfo['right_org']."')";
+        $sqlAu = "INSERT INTO ".DB_PREFIX."audit_trail VALUES('','".$user['userId']."','".time()."','".$operationType."','".$recordType."','".$idrecord."','".$currip."','".$user['aclGamemaster']."')";
         mysqli_query ($database,$sqlAu);
     }
 }
@@ -37,7 +37,7 @@ function unauthorizedAccess ($recordType,$secret,$deleted,$idrecord)
                 $link = '<a href="./groups.php">skupiny</a>';
                 break;
             case 3:
-                $link = '<a href="./cases.php">případy</a>';
+                $link = '<a href="/cases/">případy</a>';
                 break;
             case 4:
                 $link = '<a href="./reports.php">hlášení</a>';

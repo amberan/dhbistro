@@ -43,7 +43,7 @@ if (isset($usrinfo)) {
 function date_picker($name, $startyear = NULL, $endyear = NULL)
 {
     global $aday,$amonth,$ayear,$usrinfo;
-    if ($usrinfo['right_org'] == 1) {
+    if ($user['aclGamemaster'] == 1) {
         if ($startyear == NULL) {
             $startyear = date("Y") - 40;
         }
@@ -110,6 +110,7 @@ function getAuthor($recid, $trn)
             $name = 'Neznámo.';
         }
     }
+
     return $name;
 }
 
@@ -118,36 +119,36 @@ function custom_Filter($idtable, $idrecord = 0)
 {
     global $database,$usrinfo;
     switch ($idtable) {
-        case 1: $table = 'person';
+//        case 1: $table = 'person';
+//
+//break;
+//        case 2: $table = 'group';
+//
+//break;
+//        case 3: $table = 'case';
+//
+//break;
+//         case 4: $table = 'report';
 
-break;
-        case 2: $table = 'group';
+// break;
+//         case 8: $table = 'user';
 
-break;
-        case 3: $table = 'case';
+// break;
+//         case 9: $table = 'evilpts';
 
-break;
-        case 4: $table = 'report';
+// break;
+//         case 10: $table = 'task';
 
-break;
-        case 8: $table = 'user';
+// break;
+//         case 11: $table = 'audit';
 
-break;
-        case 9: $table = 'evilpts';
+// break;
+//         case 13: $table = 'search';
 
-break;
-        case 10: $table = 'task';
+// break;
+//         case 14: $table = 'group'.$idrecord;
 
-break;
-        case 11: $table = 'audit';
-
-break;
-        case 13: $table = 'search';
-
-break;
-        case 14: $table = 'group'.$idrecord;
-
-break;
+// break;
         case 15: $table = 'p2c';
 
 break;   //person 2 case
@@ -173,7 +174,7 @@ break;  //symbol 2 case
 
 break; //symbol 2 action report
     }
-    $sqlCf = 'SELECT filter FROM '.DB_PREFIX.'user WHERE userId = '.$usrinfo['id'];
+    $sqlCf = 'SELECT filter FROM '.DB_PREFIX.'user WHERE userId = '.$user['userId'];
     $resCf = mysqli_query($database, $sqlCf);
     $filter = $_REQUEST;
     // pokud přichází nový filtr a nejedná se o zadání úkolu či přidání zlobodů, případně pokud se jedná o konkrétní záznam a je nově filtrovaný, !$_GET['sort']
@@ -187,7 +188,7 @@ break; //symbol 2 action report
             $filters[$table] = $filter;
         }
         $sfilters = serialize($filters);
-        $sqlScf = 'UPDATE '.DB_PREFIX."user SET filter='".$sfilters."' WHERE userId=".$usrinfo['id'];
+        $sqlScf = 'UPDATE '.DB_PREFIX."user SET filter='".$sfilters."' WHERE userId=".$user['userId'];
         mysqli_query($database, $sqlScf);
     // v opačném případě zkontroluj, zda existuje odpovídající filtr v databázi, a pokud ano, načti jej
     } else {

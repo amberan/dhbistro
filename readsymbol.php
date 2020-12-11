@@ -9,7 +9,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	if (is_numeric($_REQUEST['rid'])) {
 	    $res = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."symbol WHERE id=".$_REQUEST['rid']);
 	    if ($rec = mysqli_fetch_assoc ($res)) {
-	        if (($rec['deleted'] == 1 || $rec['secret'] == 1) && !$usrinfo['right_power']) {
+	        if (($rec['deleted'] == 1 || $rec['secret'] == 1) && !$user['aclDirector']) {
 	            unauthorizedAccess(1, $rec['secret'], $rec['deleted'], $_REQUEST['rid']);
 	        }
 	        auditTrail(7, 1, $_REQUEST['rid']);
@@ -26,7 +26,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	            $hidenotes = '&amp;hidenotes=0">zobrazit poznámky</a>';
 	            $backurl = 'readsymbol.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
 	        }
-	        if ($usrinfo['right_power']) {
+	        if ($user['aclDirector']) {
 	            $editbutton = '; <a href="editsymbol.php?rid='.$_REQUEST['rid'].'">upravit symbol</a>; číslo symbolu: '.$rec['id'].'';
 	        } else {
 	            if ($usrinfo['right_text']) {
@@ -108,7 +108,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 		<legend><strong>Hlášení a případy</strong></legend>
 		<h3>Výskyt v případech</h3><!-- následuje seznam případů -->
 		<?php // generování seznamu přiřazených případů
-			if ($usrinfo['right_power']) {
+			if ($user['aclDirector']) {
 			    $sql = "SELECT ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.title AS 'title' FROM ".DB_PREFIX."symbol2all, ".DB_PREFIX."case WHERE ".DB_PREFIX."case.id=".DB_PREFIX."symbol2all.idrecord AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=3 ORDER BY ".DB_PREFIX."case.title ASC";
 			} else {
 			    $sql = "SELECT ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.title AS 'title' FROM ".DB_PREFIX."symbol2all, ".DB_PREFIX."case WHERE ".DB_PREFIX."case.id=".DB_PREFIX."symbol2all.idrecord AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=3 AND ".DB_PREFIX."case.secret=0 ORDER BY ".DB_PREFIX."case.title ASC";
@@ -135,7 +135,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 		<h3>Výskyt v hlášení</h3>
 		<!-- následuje seznam hlášení -->
 		<?php // generování seznamu přiřazených hlášení
-			if ($usrinfo['right_power']) {
+			if ($user['aclDirector']) {
 			    $sql = "SELECT ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.label AS 'label' FROM ".DB_PREFIX."symbol2all, ".DB_PREFIX."report WHERE ".DB_PREFIX."report.id=".DB_PREFIX."symbol2all.idrecord AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4 ORDER BY ".DB_PREFIX."report.label ASC";
 			} else {
 			    $sql = "SELECT ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.label AS 'label' FROM ".DB_PREFIX."symbol2all, ".DB_PREFIX."report WHERE ".DB_PREFIX."report.id=".DB_PREFIX."symbol2all.idrecord AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4 AND ".DB_PREFIX."report.secret=0 ORDER BY ".DB_PREFIX."report.label ASC";
@@ -165,10 +165,10 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	<fieldset><legend><strong>Poznámky</strong></legend>
 	<!-- následuje seznam poznámek -->
 		<?php // generování poznámek
-			if ($usrinfo['right_power']) {
-			    $sql = "SELECT ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=7 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret<2 OR ".DB_PREFIX."note.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."note.datum DESC";
+			if ($user['aclDirector']) {
+			    $sql = "SELECT ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=7 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret<2 OR ".DB_PREFIX."note.iduser=".$user['userId'].") ORDER BY ".DB_PREFIX."note.datum DESC";
 			} else {
-			    $sql = "SELECT ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=7 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret=0 OR ".DB_PREFIX."note.iduser=".$usrinfo['id'].") ORDER BY ".DB_PREFIX."note.datum DESC";
+			    $sql = "SELECT ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=7 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret=0 OR ".DB_PREFIX."note.iduser=".$user['userId'].") ORDER BY ".DB_PREFIX."note.datum DESC";
 			}
 	        $res = mysqli_query ($database,$sql);
 	        $i = 0;
@@ -193,10 +193,10 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	            } ?></h4>
 				<div><?php echo StripSlashes($rec_n['note']); ?></div>
 				<span class="poznamka-edit-buttons"><?php
-				if (($rec_n['iduser'] == $usrinfo['id']) || ($usrinfo['right_text'])) {
+				if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
 				    echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=7" title="upravit"><span class="button-text">upravit</span></a> ';
 				}
-	            if (($rec_n['iduser'] == $usrinfo['id']) || ($usrinfo['right_power'])) {
+	            if (($rec_n['iduser'] == $user['userId']) || ($user['aclDirector'])) {
 	                echo '<a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.URLEncode('readperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".StripSlashes($rec_n['title'])."&quot; náležící k symbolu?');".'" title="smazat"><span class="button-text">smazat</span></a>';
 	            } ?>
 				</span>
