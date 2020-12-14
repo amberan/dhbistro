@@ -72,8 +72,9 @@ $tableDrop[] = 'loggedin_deleted';
 $tableDrop[] = 'map_deleted';
 
 use Tracy\Debugger;
+
 Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
-require_once ( 'update-function.php');
+require_once 'update-function.php';
 
 $counterTableRename = bistroDBTableRename($tableRename);
 $counterColumnAlter = bistroDBColumnAlter($columnAlter);
@@ -87,5 +88,3 @@ $counterTableDrop = bistroDBTableDrop($tableDrop);
 if ($counterColumnAdd + $counterColumnAlter + $counterColumnMarkdown + $counterFulltextAdd + $counterPasswordEncrypt + $counterTableRename + $counterTableDrop > 0) {
     rename(__FILE__,__FILE__.".old");
 }
-
-?>

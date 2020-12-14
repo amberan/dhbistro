@@ -1,16 +1,17 @@
 <?php
 
 use Tracy\Debugger;
+
 Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
 
-/** 
+/*
  * CREATE TABLE
  */
 $tableCreate['test'] = 'testId';
 $tableCreate['sort'] = 'sortId';
 $tableCreate['filter'] = 'filterId';
 
-/** 
+/*
  * RENAME TABLE
  */
 $tableRename['test'] = "test2";
@@ -27,7 +28,7 @@ $tableRename['symbols'] = "symbol";
 $tableRename['tasks'] = "task";
 $tableRename['users'] = "user";
 
-/** 
+/*
  * ADD COLUMN
  */
 $columnAdd['test2']['test'] = "int NULL after testId";
@@ -60,7 +61,7 @@ $columnAdd['filter']['objectType'] = "varchar(15) NOT NULL AFTER userId";
 $columnAdd['filter']['filterPreference'] = "varchar(200) NULL AFTER objectType";
 //$columnAdd['task']['deleted'] = "int(3) NOT NULL DEFAULT '0'";
 
-/** 
+/*
  * ALTER COLUMN
  */
 $columnAlter['test2']['test'] = "test2 int null";
@@ -127,7 +128,7 @@ $columnAlter['user']['plan'] = " plan text COLLATE 'utf8_general_ci' NULL AFTER 
 //$columnAlter['user']['id'] = "userid int(11) NOT NULL AUTO_INCREMENT FIRST";
 //$columnAlter['user']['login'] = "username varchar(255) NOT NULL";
 
-/** 
+/*
  * CONVERT DATA TO MARKDOWN
  */
 $columnToMD[] = ['user', 'id', 'plan', 'plan_md'];
@@ -144,7 +145,7 @@ $columnToMD[] = ['news', 'id', 'obsah', 'obsah_md'];
 //$columnToMD[] = ['report','id','inputs','inputs_md'];
 //$columnToMD[] = ['symbol','id','desc','desc_md'];
 
-/**
+/*
  * ADD FULLTEXT INDEX
  */
 $columnAddFulltext['test2'] = ['test2'];
@@ -157,14 +158,12 @@ $columnAddFulltext['person'] = ['contents_md'];
 $columnAddFulltext['report'] = ['summary_md', 'impacts_md', 'details_md', 'energy_md', 'inputs_md'];
 $columnAddFulltext['symbol'] = ['desc_md'];
 
-
-/**
+/*
  * ADD INDEX
  */
 // ALTER TABLE nw_unread ADD INDEX(iduser)
 
-
-/** 
+/*
  * DROP TABLE
  */
 $tableDrop[] = 'test2';
@@ -172,9 +171,9 @@ $tableDrop[] = 'loggedin_deleted';
 $tableDrop[] = 'map_deleted';
 
 /**
- * UPDATING
+ * UPDATING.
  */
-require_once('update-function.php');
+require_once 'update-function.php';
 
 $counterTableCreate = bistroDBTableCreate($tableCreate);
 $counterTableRename = bistroDBTableRename($tableRename);
@@ -191,5 +190,3 @@ $counterTableDrop = bistroDBTableDrop($tableDrop);
 if ($counterColumnAdd + $counterColumnAlter + $counterColumnMarkdown + $counterFulltextAdd + $counterPasswordEncrypt + $counterTableRename + $counterTableDrop + $counterTableCreate + $counterIndexAdd > 0) {
     rename(__FILE__,__FILE__.".old");
 }
-
-?>

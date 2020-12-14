@@ -1,12 +1,12 @@
 <?php
 
-/** 
- * CREATE TABLE
+/**
+ * CREATE TABLE.
  */
 $tableCreate['test'] = 'testId';
 $tableCreate['sort'] = 'sortId';
 
-/** 
+/*
  * RENAME TABLE
  */
 $tableRename['test'] = "test2";
@@ -23,7 +23,7 @@ $tableRename['symbols'] = "symbol";
 $tableRename['tasks'] = "task";
 $tableRename['users'] = "user";
 
-/** 
+/*
  * ADD COLUMN
  */
 $columnAdd['test2']['test'] = "int NULL after testId";
@@ -65,7 +65,7 @@ $columnAdd['user']['aclCase'] = "int(3) NOT NULL DEFAULT '0'";
 $columnAdd['user']['aclHunt'] = "int(3) NOT NULL DEFAULT '0'";
 //$columnAdd['task']['deleted'] = "int(3) NOT NULL DEFAULT '0'";
 
-/** 
+/*
  * ALTER COLUMN
  */
 $columnAlter['test2']['test'] = "test2 int null";
@@ -138,7 +138,7 @@ $columnAlter['task']['modified_by'] = " `modified_by` int(4) NULL AFTER `modifie
 //$columnAlter['task']['id'] = "taskid int(11) NOT NULL AUTO_INCREMENT FIRST";
 //$columnAlter['unread']['id'] = "unreadid int(11) NOT NULL AUTO_INCREMENT FIRST";
 
-/** 
+/*
  * CONVERT DATA TO MARKDOWN
  */
 $columnToMD[] = ['user', 'id', 'plan', 'plan_md'];
@@ -155,8 +155,7 @@ $columnToMD[] = ['news', 'id', 'obsah', 'obsah_md'];
 //$columnToMD[] = ['report','id','inputs','inputs_md'];
 //$columnToMD[] = ['symbol','id','desc','desc_md'];
 
-
-/** 
+/*
  * RIGHTS TO UPDATE
  */
 $rightsToUpdate['rightTextOld'] = ['aclTask', 'aclGroup', 'aclPerson', 'aclCase'];
@@ -165,7 +164,7 @@ $rightsToUpdate['rightOrgOld'] = ['aclGamemaster'];
 $rightsToUpdate['rightPowerOld'] = ['aclDirector', 'aclDeputy', 'aclSecret', 'aclHunt'];
 $rightsToUpdate['rightSuperOld'] = ['aclRoot'];
 
-/**
+/*
  * ADD FULLTEXT INDEX
  */
 $columnAddFulltext['test2'] = ['test2'];
@@ -178,15 +177,13 @@ $columnAddFulltext['person'] = ['contents_md'];
 $columnAddFulltext['report'] = ['summary_md', 'impacts_md', 'details_md', 'energy_md', 'inputs_md'];
 $columnAddFulltext['symbol'] = ['desc_md'];
 
-
-/**
+/*
  * ADD INDEX
  */
 // ALTER TABLE nw_unread ADD INDEX(iduser)
 
-
-/** 
- * COLUMNS TO DROP 
+/*
+ * COLUMNS TO DROP
  */
 $columnDrop['test2'][] = "test2";
 // $columnDrop['user'] = 'rightTextOld';
@@ -199,18 +196,17 @@ $columnDrop['user'][] = 'suspended';
 $columnDrop['user'][] = 'plan_md';
 $columnDrop['user'][] = 'email';
 
-
-/** 
+/*
  * DROP TABLE
  */
 $tableDrop[] = 'test2';
 $tableDrop[] = 'loggedin_deleted';
 $tableDrop[] = 'map_deleted';
 
-
 use Tracy\Debugger;
+
 Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
-require_once('update-function.php');
+require_once 'update-function.php';
 
 $counterTableCreate = bistroDBTableCreate($tableCreate);
 $counterTableRename = bistroDBTableRename($tableRename);
@@ -225,12 +221,9 @@ $counterIndexAdd = 0;
 $counterColumnDrop = bistroDBColumnDrop($columnDrop);
 $counterTableDrop = bistroDBTableDrop($tableDrop);
 
-
 //pokud zmeny probehly, prejmenovat tento soubor
 if ($counterColumnAdd + $counterColumnAlter + $counterColumnMarkdown + $counterFulltextAdd + $counterPasswordEncrypt
     + $counterTableRename + $counterTableDrop + $counterTableCreate + $counterIndexAdd + $counterUPdateRight
     + $counterColumnDrop > 0) {
     rename(__FILE__,__FILE__.".old");
 }
-
-?>

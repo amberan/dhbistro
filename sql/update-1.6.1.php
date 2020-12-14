@@ -66,8 +66,9 @@ $columnAlter['user']['plan'] = " `plan` text COLLATE 'utf8_general_ci' NULL AFTE
 $columnToMD[] = ['user', 'id', 'plan', 'plan_md'];
 
 use Tracy\Debugger;
+
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-require_once ( 'update-function.php');
+require_once 'update-function.php';
 
 $counterTableRename = bistroDBTableRename($tableRename);
 $counterColumnAlter = bistroDBColumnAlter($columnAlter);
@@ -76,10 +77,7 @@ $counterPasswordEncrypt = bistroDBPasswordEncrypt();
 $counterColumnMarkdown = bistroDBColumnMarkdown($columnToMD);
 $counterFulltextAdd = bistroDBFulltextAdd($columnAddFulltext);
 
-
 //pokud zmeny probehly, prejmenovat tento soubor
 if ($counterColumnAdd + $counterColumnAlter + $counterColumnMarkdown + $counterFulltextAdd + $counterPasswordEncrypt + $counterTableRename > 0) {
     rename(__FILE__,__FILE__.".old");
 }
-
-?>
