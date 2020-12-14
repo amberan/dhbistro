@@ -121,7 +121,6 @@ $text['aclHunt'] = 'Lovenky';
 $text['aclGamemaster'] = 'Organizátor';
 $text['aclAPI'] = 'API';
 
-
 // BACKUP
 $text['existujicizalohy'] = 'Existující zálohy';
 $text['zalohovatrucne'] = 'Vytvořit zálohu ručně';
@@ -171,4 +170,3 @@ $text['opravdusmazatpripad'] = 'Opravdu smazat případ';
 $text['opravduobnovitpripad'] = 'Opravdu obnovit případ';
 $text['vytvoreno'] = 'Vytvořeno';
 $text['utajeno'] = 'utajeno';
-?>
