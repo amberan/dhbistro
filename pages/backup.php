@@ -1,7 +1,8 @@
 <?php
 
 use Tracy\Debugger;
-    Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+
+Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
 function human_filesize($bytes, $decimals = 2)
 {
@@ -11,7 +12,7 @@ function human_filesize($bytes, $decimals = 2)
     return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor];
 }
 
-if (isset($URL[2]) AND ($user['aclRoot'] > 1) AND $URL[2] == 'now') {
+if (isset($URL[2]) and ($user['aclRoot'] > 1) and $URL[2] === 'now') {
     backup_process();
     $latteParameters['message'] = $text['zalohavytvorena'];
 }
@@ -21,10 +22,10 @@ if (isset($_GET['sort'])) {
 }
 
 $backups_sql = "SELECT ".DB_PREFIX."backup.* FROM ".DB_PREFIX."backup ".sortingGet('backup');
-$backups_query = mysqli_query ($database,$backups_sql);
+$backups_query = mysqli_query($database,$backups_sql);
 while ($backup_record = mysqli_fetch_assoc($backups_query)) {
-    unset ($backup);
-    $explode = explode( "/",$backup_record['file']);
+    unset($backup);
+    $explode = explode("/",$backup_record['file']);
     $backup['file'] = $file = end($explode);
     $backup['datetime'] = webDateTime($backup_record['time']);
     $backup['version'] = $backup_record['version'];
@@ -38,5 +39,3 @@ while ($backup_record = mysqli_fetch_assoc($backups_query)) {
 $latteParameters['backup'] = $backup_array;
 latteDrawTemplate('sparklet');
 latteDrawTemplate('backup');
-    
-?>
