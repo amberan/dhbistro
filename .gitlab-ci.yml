@@ -11,7 +11,7 @@ build:
   before_script:
     - apk add gzip
   script:
-    - ll -all
+    - ls -all
     - tar cf build.tar ../bistro --exclude ../bistro.git --exclude ../bistro/bistro.tmp
     - tar czf build.tgz --exclude .git --exclude bistro.tmp .
   artifacts:
