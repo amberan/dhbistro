@@ -11,12 +11,10 @@ build:
   before_script:
     - apk add gzip
   script:
-    - pwd
-    - ls -ll
-    - ls >filelist.txt
-    - tar czf build.tgz * .* --exclude .git
+    - ls -all
+    - tar czf build.tgz * .* --exclude .git --exclude bistro-tmp
   artifacts:
-    paths: [build.tgz,filelist.txt]
+    paths: [build.tgz]
     expire_in: 1 days
   rules:
     - when: always
@@ -70,8 +68,7 @@ deploy test:
     - export
     - ssh-keyscan alembiq.net >> ~/.ssh/known_hosts
   script:
-    - ls -ll
     - scp build.tgz gitlab-ci@alembiq.net:.
-    - ssh gitlab-ci@alembiq.net "mkdir $DEPLOY_FOLDER/$CI_JOB_ID && tar zxf build.tgz -C $DEPLOY_FOLDER/$CI_JOB_ID/ && cp $DEPLOY_FOLDER/htdocs/inc/important.php $DEPLOY_FOLDER/$CI_JOB_ID/inc/ && mv $DEPLOY_FOLDER/htdocs/files/ $DEPLOY_FOLDER/$CI_JOB_ID/files/ && tar zcvf $DEPLOY_FOLDER/backup-$CI_JOB_ID.tgz --exclude $DEPLOY_FOLDER/htdocs/cache --exclude $DEPLOY_FOLDER/htdocs/.git $DEPLOY_FOLDER/htdocs/ && mv $DEPLOY_FOLDER/htdocs $DEPLOY_FOLDER/backup && mv $DEPLOY_FOLDER/$CI_JOB_ID $DEPLOY_FOLDER/htdocs && rm -rf $DEPLOY_FOLDER/backup"
+    - ssh gitlab-ci@alembiq.net "mkdir $DEPLOY_FOLDER/$CI_JOB_ID && tar zxf build.tgz -C $DEPLOY_FOLDER/$CI_JOB_ID/ && cp $DEPLOY_FOLDER/htdocs/inc/important.php $DEPLOY_FOLDER/$CI_JOB_ID/inc/ && mv $DEPLOY_FOLDER/htdocs/files/ $DEPLOY_FOLDER/$CI_JOB_ID/files/ && tar zcvf $DEPLOY_FOLDER/backup-$CI_JOB_ID.tgz --exclude $DEPLOY_FOLDER/htdocs/cache --exclude $DEPLOY_FOLDER/htdocs/.git $DEPLOY_FOLDER/htdocs/ && mv $DEPLOY_FOLDER/htdocs $DEPLOY_FOLDER/backup && mv $DEPLOY_FOLDER/$CI_JOB_ID $DEPLOY_FOLDER/htdocs && rm -rf $DEPLOY_FOLDER/backup && rm build.tgz"
   rules: 
     - when: manual
