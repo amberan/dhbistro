@@ -12,10 +12,11 @@ build:
     - apk add gzip
   script:
     - ls -all
-    - tar cf build.tar * .* --exclude .git --exclude bistro.tmp
+    - tar cf build.tar ../bistro --exclude ../bistro.git --exclude ../bistro/bistro.tmp
     - tar czf build.tgz * .* --exclude .git --exclude bistro.tmp
+    - tar czf build.tar.gz ../bistro --exclude ../bistro.git --exclude ../bistro/bistro.tmp
   artifacts:
-    paths: [build.tgz,build.tar]
+    paths: [build.tgz,build.tar,build.tar.gz]
     expire_in: 1 days
   rules:
     - when: always
