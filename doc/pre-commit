@@ -9,20 +9,41 @@ LINT="/home/$(whoami)/.config/composer/vendor/bin/parallel-lint"
 if [[ -x $ECS && -x $LINT ]]; then
 	FILES=` git status --porcelain | grep -e '^[AM]\(.*\).php$' | cut -c 3- | tr '\n' ' '`
 	if [ -n "$FILES" ]; then
-		$ECS check --config=$ECS_CONFIG ${FILES}
-		#echo "$ECS check --config=$ECS_CONFIG --fix ${FILES}"
-		read -p "Do you want to fix this? y/n " -n 1 -r </dev/tty
-		echo
-		if [[ $REPLY =~ ^[Yy]$ ]]
-		then
-			$ECS check --config=$ECS_CONFIG --fix ${FILES}
-	                git add ${FILES}
-		fi
                 $LINT ${FILES}
-	fi
+        fi
+
+
+	$ECS check --config=.ecs.php * --match-git-diff
+#	$ECS check-markdown --config=.ecs.php * --match-git-diff
+
+
+#		$ECS check --config=$ECS_CONFIG ${FILES}
+#		#echo "$ECS check --config=$ECS_CONFIG --fix ${FILES}"
+#		read -p "Do you want to fix this? y/n " -n 1 -r </dev/tty
+#		echo
+#		if [[ $REPLY =~ ^[Yy]$ ]]
+#		then
+#			$ECS check --config=$ECS_CONFIG --fix ${FILES}
+#	                git add ${FILES}
+#		fi
+#
+#                $ECS check-markdown --config=$ECS_CONFIG ${FILES}
+#                read -p "Do you want to fix this? y/n " -n 1 -r </dev/tty
+#                echo
+#                if [[ $REPLY =~ ^[Yy]$ ]]
+#                then
+#                        $ECS check-markdown --config=$ECS_CONFIG --fix ${FILES}
+#                        git add ${FILES}
+#                fi
+
+#	$ECS check --config=.ecs.php * --match-git-diff
+#	$ECS check-markdown --config=.ecs.php * --match-git-diff
+
+
 else
     echo ""
     echo "Please install:"
-    echo "  composer global require symplify/easy-coding-standard jakub-onderka/php-parallel-lint jakub-onderka/php-console-highlighter"
+    echo "  composer global require symplify/easy-coding-standard jakub-onderka/php-parallel-lint \
+jakub-onderka/php-console-highlighter symplify/easy-coding-standard "
     echo ""
 fi
