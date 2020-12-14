@@ -1,16 +1,19 @@
 <?php
 
 use Tracy\Debugger;
-    Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
+Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
 //TODO funkce pro prevod id fotek s symbolu na odkazy
 
-/** 
-* one person array
-* @param string personId
-* @return array nw_person row
-*/
+/**
+ * one person array.
+ *
+ * @param string personId
+ * @param mixed $personId
+ *
+ * @return array nw_person row
+ */
 function personRead($personId): array
 {
     global $database, $usrinfo, $text;
@@ -18,7 +21,7 @@ function personRead($personId): array
     $query = mysqli_query($database,$sql);
     if (mysqli_num_rows($query) > 0) {
         $person = mysqli_fetch_assoc($query);
-        unset ($person['deleted']);
+        unset($person['deleted']);
     } else {
         $person[] = $text['zaznamnenalezen'];
     }
@@ -26,13 +29,17 @@ function personRead($personId): array
     return $person;
 }
 
-/** 
-* person list array
-* @param string where where clause for SQL
-* @param string order order by clause for SQL
-* @return array nw_person array
-* TODO strankovani
-*/
+/**
+ * person list array.
+ *
+ * @param string where where clause for SQL
+ * @param string order order by clause for SQL
+ * @param mixed $where
+ * @param mixed $order
+ *
+ * @return array nw_person array
+ *               TODO strankovani
+ */
 function personList($where = 1, $order = 1): array
 {
     global $database, $usrinfo, $text;
@@ -45,8 +52,8 @@ function personList($where = 1, $order = 1): array
     $sql = "SELECT * FROM ".DB_PREFIX."person WHERE ($where) AND ".$usrinfo['sqlDeleted']." AND ".$usrinfo['sqlDeleted']." ORDER BY $order";
     $query = mysqli_query($database,$sql);
     if (mysqli_num_rows($query) > 0) {
-        while ($person = mysqli_fetch_assoc ($query)) {
-            unset ($person['deleted']);
+        while ($person = mysqli_fetch_assoc($query)) {
+            unset($person['deleted']);
             $personList[] = $person;
         }
     } else {
@@ -55,5 +62,3 @@ function personList($where = 1, $order = 1): array
 
     return $personList;
 }
-
-?>

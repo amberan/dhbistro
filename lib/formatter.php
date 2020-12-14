@@ -1,9 +1,12 @@
 <?php
 /**
-* timestamp to date
-* @param int date timestamp
-* @return string d. m. Y
-*/
+ * timestamp to date.
+ *
+ * @param int date timestamp
+ * @param mixed $date
+ *
+ * @return string d. m. Y
+ */
 function webDate($date): string
 {
     if ($date < '1') {
@@ -16,10 +19,13 @@ function webDate($date): string
 }
 
 /**
-* timestamp to date and time
-* @param int date timestamp
-* @return string d. m. Y - H:i:s
-*/
+ * timestamp to date and time.
+ *
+ * @param int date timestamp
+ * @param mixed $date
+ *
+ * @return string d. m. Y - H:i:s
+ */
 function webDateTime($date): string
 {
     if ($date < '1') {
@@ -32,10 +38,13 @@ function webDateTime($date): string
 }
 
 /**
-* remove diacritics for search purposes
-* @param string string
-* @return string string without diacritics
-*/
+ * remove diacritics for search purposes.
+ *
+ * @param string string
+ * @param mixed $string
+ *
+ * @return string string without diacritics
+ */
 function nocs($string): string
 {
     $table = [
@@ -129,4 +138,3 @@ function nocs($string): string
 
     return strtr($string, $table);
 }
-?>
