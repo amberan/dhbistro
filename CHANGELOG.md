@@ -5,6 +5,7 @@
 - WIP filtrovani - pripady [#59](https://gitlab.alembiq.net/larp/bistro/issues/59)
 - WIP redesign pripady [#118](https://gitlab.alembiq.net/larp/bistro/issues/118)
 - WIP odstaneni proccase.php [#106](https://gitlab.alembiq.net/larp/bistro/issues/106)
+- CI rework nasazeni na test [#127](https://gitlab.alembiq.net/larp/bistro/issues/127)
 
 **1.7.2** Access 2.0
 - nova prava [#49](https://gitlab.alembiq.net/larp/bistro/issues/49)

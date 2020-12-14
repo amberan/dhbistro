@@ -51,3 +51,4 @@ GIT [pre-commit-hook](https://gitlab.alembiq.net/larp/bistro/raw/master/doc/pre-
 ### Merging to `master`
 Mergin to `master` it's done about before every instance of the game (about 
 twice a year) or when there is a critical bugfix.
+
