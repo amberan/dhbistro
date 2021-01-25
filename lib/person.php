@@ -16,8 +16,8 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
  */
 function personRead($personId): array
 {
-    global $database, $usrinfo, $text;
-    $sql = "SELECT * FROM ".DB_PREFIX."person WHERE id = $personId AND ".$usrinfo['sqlDeleted']." AND ".$usrinfo['sqlDeleted'];
+    global $database, $user, $text;
+    $sql = "SELECT * FROM ".DB_PREFIX."person WHERE id = $personId AND ".$user['sqlDeleted']." AND ".$user['sqlDeleted'];
     $query = mysqli_query($database,$sql);
     if (mysqli_num_rows($query) > 0) {
         $person = mysqli_fetch_assoc($query);
@@ -42,14 +42,14 @@ function personRead($personId): array
  */
 function personList($where = 1, $order = 1): array
 {
-    global $database, $usrinfo, $text;
+    global $database, $user, $text;
     if (mb_strlen($where) < 1) {
         $where = 1;
     }
     if (mb_strlen($order) < 1) {
         $order = 1;
     }
-    $sql = "SELECT * FROM ".DB_PREFIX."person WHERE ($where) AND ".$usrinfo['sqlDeleted']." AND ".$usrinfo['sqlDeleted']." ORDER BY $order";
+    $sql = "SELECT * FROM ".DB_PREFIX."person WHERE ($where) AND ".$user['sqlDeleted']." AND ".$user['sqlDeleted']." ORDER BY $order";
     $query = mysqli_query($database,$sql);
     if (mysqli_num_rows($query) > 0) {
         while ($person = mysqli_fetch_assoc($query)) {

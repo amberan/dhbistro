@@ -7,6 +7,7 @@ $config['page_free'] = ['', 'favicon.ico']; // to be removed
 $config['folder_backup'] = SERVER_ROOT.'/files/backups/';
 $config['folder_portrait'] = SERVER_ROOT.'/files/portraits/';
 $config['folder_symbol'] = SERVER_ROOT.'/files/symbols/';
+$config['folder_attachement'] = SERVER_ROOT.'files/';
 $config['folder_logs'] = SERVER_ROOT.'/log/'; //
 $config['folder_custom'] = SERVER_ROOT.'/custom/'; // customisations (dh, nh, enigma....)
 $config['folder_templates'] = SERVER_ROOT.'/templates/'; // Latte templates

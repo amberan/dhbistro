@@ -1,49 +1,53 @@
 #!/usr/bin/env -S bash -i
 # https://gist.github.com/jwage/b1614c96ea22ccaf68b7
 # https://tsh.io/blog/tips-on-keeping-php-code-under-control/
+# $ECS check --config=.ecs.php * --match-git-diff
+# $ECS check-markdown --config=.ecs.php * --match-git-diff
+
 
 ECS="/home/$(whoami)/.config/composer/vendor/bin/ecs"
-ECS_CONFIG=".ecs.yml"
+ECS_CONFIG=".ecs.php"
 LINT="/home/$(whoami)/.config/composer/vendor/bin/parallel-lint"
 
-if [[ -x $ECS && -x $LINT ]]; then
-	FILES=` git status --porcelain | grep -e '^[AM]\(.*\).php$' | cut -c 3- | tr '\n' ' '`
-	if [ -n "$FILES" ]; then
-                $LINT ${FILES}
-        fi
+FILES_PHP=` git status --porcelain | grep -e '^[AM]\(.*\).php$' | cut -c 3- | tr '\n' ' '`
+FILES_MD=` git status --porcelain | grep -e '^[AM]\(.*\).md$' | cut -c 3- | tr '\n' ' '`
 
 
-	$ECS check --config=.ecs.php * --match-git-diff
-#	$ECS check-markdown --config=.ecs.php * --match-git-diff
+function install_tools()
+{
+        read -p "No validation tools found, should I install them? y/n " -n 1 -r </dev/tty
+        if [[ $REPLY =~ ^[Yy]$ ]]; then 
+		sudo apt -qq -y install composer
+		composer global require symplify/easy-coding-standard symplify/coding-standard
+		composer global require php-parallel-lint/php-parallel-lint php-parallel-lint/php-console-highlighter
+	fi
+}
+
+function ecs_validate_php()
+{
+	 $ECS check --config=$ECS_CONFIG ${FILES_PHP}
+}
+
+function ecs_fix_php()
+{
+	$ECS check --config=$ECS_CONFIG --fix ${FILES_PHP}
+	git add ${FILES_PHP}
+}
 
 
-#		$ECS check --config=$ECS_CONFIG ${FILES}
-#		#echo "$ECS check --config=$ECS_CONFIG --fix ${FILES}"
-#		read -p "Do you want to fix this? y/n " -n 1 -r </dev/tty
-#		echo
-#		if [[ $REPLY =~ ^[Yy]$ ]]
-#		then
-#			$ECS check --config=$ECS_CONFIG --fix ${FILES}
-#	                git add ${FILES}
-#		fi
-#
-#                $ECS check-markdown --config=$ECS_CONFIG ${FILES}
-#                read -p "Do you want to fix this? y/n " -n 1 -r </dev/tty
-#                echo
-#                if [[ $REPLY =~ ^[Yy]$ ]]
-#                then
-#                        $ECS check-markdown --config=$ECS_CONFIG --fix ${FILES}
-#                        git add ${FILES}
-#                fi
-
-#	$ECS check --config=.ecs.php * --match-git-diff
-#	$ECS check-markdown --config=.ecs.php * --match-git-diff
-
-
-else
-    echo ""
-    echo "Please install:"
-    echo "  composer global require symplify/easy-coding-standard jakub-onderka/php-parallel-lint \
-jakub-onderka/php-console-highlighter symplify/easy-coding-standard "
-    echo ""
+if [[ ! -x $ECS || ! -x $LINT ]]; then install_tools; fi
+if { [ -x $ECS ] || [ -x $LINT ]; } && [ -n "$FILES_PHP" ]; then 
+	ecs_validate_php 
+	if [ $? != 0 ]; then
+		read -p "Do you want to fix this? y/n " -n 1 -r </dev/tty
+		if [[ $REPLY =~ ^[Yy]$ ]]; then
+			printf "\n"
+			ecs_fix_php
+			ecs_validate_php
+		else
+			printf "\n\nThen fix it yourself ;P\n\n"
+			exit 1
+		fi
+	fi 
+	$LINT ${FILES_PHP}
 fi

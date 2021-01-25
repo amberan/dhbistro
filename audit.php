@@ -103,7 +103,8 @@ $latteParameters['title'] = 'Audit';
 						    $name = 'neznámý';
 						}
 						break;
-				case 10: $name = $idrecord; break;
+                case 10: $name = $idrecord; break;
+                default: break;
 			}
 
 	        return $name;
@@ -124,7 +125,8 @@ $latteParameters['title'] = 'Audit';
 				case 4: $link = 'readactrep.php?rid='.$recid.'&hidenotes=0&truenames=0'; break;
 				case 7: $link = 'readsymbol.php?rid='.$recid; break;
 				case 8: $link = 'edituser.php?rid='.$recid; break;
-				case 10: $link = 'tasks.php'; break;
+                case 10: $link = 'tasks.php'; break;
+                default: break;
 			}
 
 	        return $link;
@@ -219,7 +221,7 @@ $latteParameters['title'] = 'Audit';
 	// filtr
 	function filter ()
 	{
-	    global $database,$filterCat,$filterUser,$filterType,$usrinfo,$filterOrg,$filterMine,$filterGlob,$filterCount;
+	    global $database,$filterCat,$filterUser,$filterType,$user,$filterOrg,$filterMine,$filterGlob,$filterCount;
 	    echo '<div id="filter-wrapper"><form action="audit.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>

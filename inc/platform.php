@@ -15,13 +15,6 @@ switch ($_SERVER["SERVER_NAME"]) {
         $config['theme_bg'] = 'warning';
         $config['theme_navbar'] = 'secondary';
         break;
-    case 'localhost':
-        $config['dbuser'] = $config['dbdatabase'] = 'dhbistrocz';
-        $config['custom'] = 'DH';
-        $config['barva'] = 'local';
-        $config['theme_bg'] = 'warning';
-        $config['theme_navbar'] = 'secondary';
-        break;
     case 'dhbistro.cz';
     case 'www.dhbistro.cz':
         $config['dbuser'] = $config['dbdatabase'] = 'dhbistrocz';
@@ -86,6 +79,14 @@ switch ($_SERVER["SERVER_NAME"]) {
         $config['barva'] = 'test';
         $config['custom'] = 'DH';
         $config['theme_bg'] = 'secondary';
+    break;
+    default:
+        $config['dbuser'] = $config['dbdatabase'] = 'dhbistrocz';
+        $config['custom'] = 'DH';
+        $config['barva'] = 'local';
+        $config['theme_bg'] = 'warning';
+        $config['theme_navbar'] = 'secondary';
+    break;
 }
 
 

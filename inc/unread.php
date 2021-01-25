@@ -79,7 +79,7 @@ if (isset($_SESSION['sid'])) {
 // vyhledani zaznamu v neprectenych zaznamech - cases, groups, persons, reports, symbols,
 function searchRecord ($tablenum, $recordnum)
 {
-    global $database,$usrinfo;
+    global $database,$user;
     $unreadSql = "SELECT * FROM ".DB_PREFIX."unread WHERE iduser=".$user['userId']." and idtable=".$tablenum." and idrecord=".$recordnum;
     $unreadResult = mysqli_num_rows(mysqli_query ($database,$unreadSql));
     if ($unreadResult > 0) {

@@ -48,6 +48,9 @@ function unauthorizedAccess ($recordType,$secret,$deleted,$idrecord)
             case 11:
                 $link = 'A ven!';
                 break;
+            default:
+                $link = 'A ven!';
+            break;
         }
     if ($deleted == 1) {
         auditTrail($recordType, 13, $idrecord);

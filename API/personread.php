@@ -6,10 +6,10 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 header('Content-Type: application/json');
 
 if (isset($_GET[sessionID])) { # verify user
-    $usrinfo = session_validation($_GET['sessionID']);
+    $user = session_validation($_GET['sessionID']);
 }
 
-if ($usrinfo == null) { //invalid user
+if ($user == null) { //invalid user
     http_response_code(401);
     echo json_encode(array( 'error' => $text['http401']));
 } else { //valid user

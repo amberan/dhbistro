@@ -1,4 +1,4 @@
----
+version: "2"
 checks:
   argument-count:
     enabled: true
@@ -7,15 +7,15 @@ checks:
   complex-logic:
     enabled: true
     config:
-      threshold: 5 # 4
+      threshold: 40 #4
   file-lines:
-    enabled: false # true
+    enabled: true
     config:
-      threshold: 250
+      threshold: 500 #250
   method-complexity:
     enabled: true
     config:
-      threshold: 10 #5
+      threshold: 50 #5
   method-count:
     enabled: true
     config:
@@ -23,7 +23,7 @@ checks:
   method-lines:
     enabled: true
     config:
-      threshold: 100 # 25
+      threshold: 250 #25
   nested-control-flow:
     enabled: true
     config:
@@ -35,48 +35,87 @@ checks:
   similar-code:
     enabled: true
     config:
-      threshold: 60 #28
+      threshold: 75 #28
   identical-code:
     enabled: true
     config:
-      threshold: 28
+      threshold: 28 #language-specific defaults. overrides affect all languages.
 
 plugins:
-  rubocop:
+  brakeman:
     enabled: false
+  bundler-audit:
+    enabled: false
+  coffeelint:
+    enabled: false
+  csslint:
+    enabled: false
+  duplication:
+    enabled: true
+    checks:
+      Similar code:
+        enabled: false
   eslint:
     enabled: true
-  csslint:
-    enabled: false  
-  phpmd:
-    enabled: true
-    config:
-      file_extensions: "php"
-      rulesets: "cleancode,design,unusedcode,codesize"
-  phpcodesniffer:
-    enabled: false
-    config:
-      ignore_warnings: true
-      encoding: utf-8"
-  sonar-php:
-    enabled: true
-    config:
-      minimum_severity: critical
   fixme:
     enabled: true
     config:
       strings:
       - FIXME
       - TODO
-      
+  gofmt:
+    enabled: false
+  golint:
+    enabled: false
+  govet:
+    enabled: false
+  nodesecurity:
+    enabled: false
+  pep8:
+    enabled: false
+  phpcodesniffer:
+    enabled: false
+    config:
+      ignore_warnings: true
+      encoding: utf-8"
+      standard: "PSR1,PSR2"
+  phpmd:
+    enabled: true
+    config:
+      NpathComplexity:
+        minimum: 2000
+      file_extensions: "php"
+      rulesets: "cleancode,design,unusedcode" #,codesize,controversial,naming 
+#https://github.com/myadmin-plugins/servers-module/blob/master/.codeclimate.yml
+  pmd:
+    enabled: false
+  radon: 
+    enabled: false
+  rubocop:
+    enabled: false
+  sonar-java:
+    enabled: false
+  sonar-php:
+    enabled: true
+    config:
+      minimum_severity: critical
+    checks:
+      StringLiteralDuplicatedCheck:
+        enabled: false
+      rule:S1192:
+        enabled: false
+# https://github.com/codeclimate/codeclimate-sonar-java/blob/master/.codeclimate.yml example
+# https://github.com/SonarSource/sonar-php/blob/master/php-checks/src/main/java/org/sonar/php/checks/StringLiteralDuplicatedCheck.java
+  sonar-python:
+    enabled: false
+  swiftlint:
+    enabled: false
+
 exclude_patterns:
   - vendor/
-  - js/jquery*
-  - js/tinymce*
-  - js/tinymce5/
+  - js/
   - cache/
   - files/
   - images/
   - log/
   - nbproject/
-  - var/

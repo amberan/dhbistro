@@ -10,6 +10,7 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 //require_once SERVER_ROOT.'/vendor/autoload.php';
 //require_once SERVER_ROOT."/lib/gui.php";
 //require_once SERVER_ROOT."/lib/security.php";
+//require_once SERVER_ROOT.'/lib/file.php';
 //require_once SERVER_ROOT."/lib/image.php";
 //require_once SERVER_ROOT."/lib/formatter.php";
 //require_once SERVER_ROOT."/lib/filters.php";
@@ -91,18 +92,11 @@ if (isset($user)) {
         auditTrail(3, 1, 0);
         $latteParameters['title'] = $text['pripady'];
         $latteParameters['actions'][] = ["/newcase.php", $text['pridatpripad']];
-        // if (isset($URL[2]) AND $URL[2] == 'edit' AND $user['aclDeputy'] < 1 AND $user['aclDirector'] < 1) {
-        //     unauthorizedAccess(6, 2, 0, 0);
-        // } elseif ((isset($URL[2]) AND $URL[2] == 'edit' AND ($user['aclDeputy'] > 0 OR $user['aclDirector'] > 0))) { // BOARD > EDIT
-        //     $latteParameters['subtitle'] = $text['upravitnastenku'];
-        //     $latteParameters['actions'][] = array("/board", $text['zobrazitnastenku']);
-        //     require_once ( SERVER_ROOT.'/pages/board_edit.php');
-        // } else { // BOARD > SHOW
-        //     if ($user['aclDeputy'] > 0 OR $user['aclDirector'] > 0) {
-        //         $latteParameters['actions'][] = array("/board/edit", $text['upravitnastenku']);
-        //     }
+        //TODO view case, edit case
         require_once SERVER_ROOT.'/pages/cases.php';
-    //}
+    } elseif ($URL[1] === 'file') { // GET FILE type:  attachement,portrait,symbol,backup
+        //TODO auditTrail
+        require_once SERVER_ROOT.'file.php';
     } else { // NEWS - DEFAULT
         auditTrail(5, 1, 0);
         $latteParameters['title'] = 'Aktuality';
@@ -124,11 +118,11 @@ if (isset($user)) {
 }
 
 //show tracy bar unless it's a sending a file (picture) to the user
-if ('getportrait.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?')) &&
-    'getfile.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?')) &&
-    'file.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?'))) {
+if ('getportrait.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?')) and
+    'getfile.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?')) and
+//    'file.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?')) AND
+    $URL[1] !== 'file') {
     Debugger::barDump($_SESSION, 'session');
     Debugger::barDump($latteParameters, 'latte');
+    latteDrawTemplate('footerMD');
 }
-
-latteDrawTemplate('footerMD');

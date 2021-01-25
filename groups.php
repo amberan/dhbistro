@@ -41,7 +41,7 @@ sparklets ('<strong>skupiny</strong>','<a href="newgroup.php">přidat skupinu</a
 	//
 	function filter ()
 	{
-	    global $filterSec, $fNew, $fArch, $usrinfo;
+	    global $filterSec, $fNew, $fArch, $user;
 	    echo '<div id="filter-wrapper"><form action="groups.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>

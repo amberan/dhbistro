@@ -6,7 +6,7 @@ latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Úprava případu';
 
-if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
+if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
     $sql_a = "SELECT * FROM ".DB_PREFIX."c2s WHERE ".DB_PREFIX."c2s.idsolver=".$user['userId']." AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid'];
     $res_a = mysqli_query ($database,$sql_a);
     $rec_a = mysqli_fetch_array ($res_a);

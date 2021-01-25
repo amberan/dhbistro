@@ -1,6 +1,5 @@
 <?php
 
-
 session_start();
 define('SERVER_ROOT', $_SERVER['DOCUMENT_ROOT']);
 require_once SERVER_ROOT."/config.php";
@@ -17,13 +16,15 @@ if (null !== $config['custom']) {
 }
 
 use Tracy\Debugger;
+
 Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 require_once SERVER_ROOT."/lib/security.php";
 require_once SERVER_ROOT.'/inc/database.php';
-# installer require_once SERVER_ROOT."/lib/security.php";
+// installer require_once SERVER_ROOT."/lib/security.php";
 require_once SERVER_ROOT."/lib/gui.php";
 require_once SERVER_ROOT."/lib/formatter.php";
 require_once SERVER_ROOT."/lib/filters.php";
+require_once SERVER_ROOT.'/lib/file.php';
 require_once SERVER_ROOT.'/inc/backup.php';
 // lib/user
 require_once SERVER_ROOT.'/lib/session.php';
@@ -36,56 +37,54 @@ require_once SERVER_ROOT.'/lib/news.php';
 require_once SERVER_ROOT.'/inc/menu.php';
 $latteParameters['text'] = $text;
 $latteParameters['config'] = $config;
-if (isset($usrinfo)) {
-    $latteParameters['usrinfo'] = $usrinfo;
+if (isset($user)) {
+    $latteParameters['user'] = $user;
 }
 
-function date_picker($name, $startyear = NULL, $endyear = NULL)
+function date_picker($name, $startyear = null, $endyear = null)
 {
-    global $aday,$amonth,$ayear,$usrinfo;
-    if ($user['aclGamemaster'] == 1) {
-        if ($startyear == NULL) {
+    global $aday,$amonth,$ayear,$user;
+    if ($user['aclGamemaster'] === 1) {
+        if ($startyear === null) {
             $startyear = date("Y") - 40;
         }
     } else {
-        if ($startyear == NULL) {
+        if ($startyear === null) {
             $startyear = date("Y") - 10;
         }
     }
-    if ($endyear == NULL) {
+    if ($endyear === null) {
         $endyear = date("Y") + 5;
     }
 
-    $months = array('', 'Leden', 'Únor', 'Březen', 'Duben', 'Květen',
-			'Červen', 'Červenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec');
+    $months = ['', 'Leden', 'Únor', 'Březen', 'Duben', 'Květen',
+        'Červen', 'Červenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec', ];
 
     // roletka dnů
     $html = "<select class=\"day\" name=\"".$name."day\">";
-    for ($i = 1;$i <= 31;$i++) {
-        $html .= "<option ".(($i == $aday) ? ' selected' : '')." value='$i'>$i</option>";
+    for ($i = 1; $i <= 31; $i++) {
+        $html .= "<option ".($i === $aday ? ' selected' : '')." value='$i'>$i</option>";
     }
     $html .= "</select> ";
 
     // roletka měsíců
     $html .= "<select class=\"month\" name=\"".$name."month\">";
 
-    for ($i = 1;$i <= 12;$i++) {
-        $html .= "<option ".(($i == $amonth) ? ' selected' : '')." value='$i'>$months[$i]</option>";
+    for ($i = 1; $i <= 12; $i++) {
+        $html .= "<option ".($i === $amonth ? ' selected' : '')." value='$i'>$months[$i]</option>";
     }
     $html .= "</select> ";
 
     // roletka let
     $html .= "<select class=\"year\" name=\"".$name."year\">";
 
-    for ($i = $startyear;$i <= $endyear;$i++) {
-        $html .= "<option ".(($i == $ayear) ? ' selected' : '')." value='$i'>$i</option>";
+    for ($i = $startyear; $i <= $endyear; $i++) {
+        $html .= "<option ".($i === $ayear ? ' selected' : '')." value='$i'>$i</option>";
     }
     $html .= "</select> ";
 
     return $html;
 }
-
-
 
 // ziskani autora zaznamu - audit, dashboard, edituser, index, readcase, readperson, readsymbol, tasks
 function getAuthor($recid, $trn)
@@ -117,38 +116,38 @@ function getAuthor($recid, $trn)
 // funkce pro ukládání fitru do databáza a načítání filtru z databáze
 function custom_Filter($idtable, $idrecord = 0)
 {
-    global $database,$usrinfo;
+    global $database,$user;
     switch ($idtable) {
-//        case 1: $table = 'person';
-//
-//break;
-//        case 2: $table = 'group';
-//
-//break;
-//        case 3: $table = 'case';
-//
-//break;
-//         case 4: $table = 'report';
+       case 1: $table = 'person';
 
-// break;
-//         case 8: $table = 'user';
+break;
+       case 2: $table = 'group';
 
-// break;
-//         case 9: $table = 'evilpts';
+break;
+       case 3: $table = 'case';
 
-// break;
-//         case 10: $table = 'task';
+break;
+        case 4: $table = 'report';
 
-// break;
-//         case 11: $table = 'audit';
+break;
+        case 8: $table = 'user';
 
-// break;
-//         case 13: $table = 'search';
+break;
+        case 9: $table = 'evilpts';
 
-// break;
-//         case 14: $table = 'group'.$idrecord;
+break;
+        case 10: $table = 'task';
 
-// break;
+break;
+        case 11: $table = 'audit';
+
+break;
+        case 13: $table = 'search';
+
+break;
+        case 14: $table = 'group'.$idrecord;
+
+break;
         case 15: $table = 'p2c';
 
 break;   //person 2 case
@@ -173,6 +172,8 @@ break;  //symbol 2 case
         case 22: $table = 'sy2ar';
 
 break; //symbol 2 action report
+        default:
+break;
     }
     $sqlCf = 'SELECT filter FROM '.DB_PREFIX.'user WHERE userId = '.$user['userId'];
     $resCf = mysqli_query($database, $sqlCf);
@@ -206,4 +207,3 @@ break; //symbol 2 action report
 
     return $filter;
 }
-

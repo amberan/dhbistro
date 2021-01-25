@@ -100,7 +100,7 @@ $latteParameters['title'] = 'Hlášení';
 	// filtr samotny
 	function filter ()
 	{
-	    global $filterCat, $filterSort, $filterStat, $filterMine, $filterConn, $filterSec, $fNew, $filterArchiv, $usrinfo, $text;
+	    global $filterCat, $user, $filterStat, $filterMine, $filterConn, $filterSec, $fNew, $filterArchiv, $user, $text;
 	    echo '<div id="filter-wrapper"><form action="reports.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>

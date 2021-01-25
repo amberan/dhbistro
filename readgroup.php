@@ -54,7 +54,7 @@ latteDrawTemplate("header");
 	        //
 	        function filter ()
 	        {
-	            global $filterSort, $sportraits;
+	            global  $sportraits; //$filterSort,
 	            echo '<div id="filter-wrapper"><form action="readgroup.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>

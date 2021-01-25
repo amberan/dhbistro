@@ -2,7 +2,7 @@
 
 function mainMenu ()
 {
-    global $database,$usrinfo,$config,$text;
+    global $database,$user,$config,$text;
     $currentfile = $_SERVER["PHP_SELF"];
     $dlink = mysqli_fetch_assoc (mysqli_query ($database,"SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1"));
     echo '<div id="menu">
@@ -20,7 +20,6 @@ function mainMenu ()
 	  <li><a href="/settings">Nastavení</a></li>
 			  <li><a href="search.php">Vyhledávání</a></li>
 	  '.(($user['aclDirector'] > 0) ? '<li><a href="/users">Uživatelé</a></li>' : '').'
-	  '.(($user['aclDirector'] < 1 && $usrinfo['right_text']) ? '<li><a href="tasks.php">Úkoly</a></li>' : '').'
 	  '.(($user['aclAudit']) ? '<li><a href="audit.php">Audit</a></li>' : '').'
 	  <li class="float-right"><a href="/logout">Odhlásit</a></li>
 	  <li class="float-right"><a href="'.$currentfile.'?delallnew=true" onclick="'."return confirm('Opravdu označit vše jako přečtené?');".'">Přečíst vše</a></li>

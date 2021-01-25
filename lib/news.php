@@ -6,9 +6,9 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
 /* function newsRead($newsid) {
     //vraci jednu osobu; aplikuje prava podle uzivatele
-    global $database, $usrinfo;
+    global $database, $user;
     $sqlwhere = " id = $personid AND secret <=".$user['aclDirector'];
-    if (isset($usrinfo['right_admin']) AND $usrinfo['right_admin'] > 0) {
+    if (isset($user['aclDeputy']) AND $user['aclDeputy'] > 0) {
         $sqlwhere .= " AND deleted = 1";
     } else {
         $sqlwhere .= " AND deleted = 0";
@@ -25,9 +25,9 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
 function newsList($filterSqlCat = 1, $filterSqlSort = 1) {
     //vraci seznam novinek
-    global $database, $usrinfo;
+    global $database, $user;
     $sqlwhere = $filterSqlCat;
-    if (isset($usrinfo['right_admin']) AND $usrinfo['right_admin'] > 0) {
+    if (isset($user['aclDeputy']) AND $user['aclDeputy'] > 0) {
         $sqlwhere .= " AND deleted = 1";
     } else {
         $sqlwhere .= " AND deleted = 0";

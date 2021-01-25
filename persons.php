@@ -111,7 +111,7 @@ $latteParameters['title'] = 'Osoby';
 	// formular filtru
 	function filter ()
 	{
-	    global $sportraits, $ssymbols, $filterSec, $fNew, $fdead, $farchiv, $usrinfo, $fspec, $fside, $fpow;
+	    global $sportraits, $ssymbols, $filterSec, $fNew, $fdead, $farchiv, $user, $fspec, $fside, $fpow;
 	    echo '<div id="filter-wrapper"><form action="persons.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>

@@ -18,32 +18,32 @@ function sessionUser($sid): array
     global $database, $_SESSION;
     $usersql = "SELECT * FROM ".DB_PREFIX."user 
     WHERE userDeleted=0 AND userSuspended=0 AND ".DB_PREFIX."user.sid ='$sid' AND userAgent='".$_SERVER['HTTP_USER_AGENT']."'";
-    if ($usrinfo = mysqli_fetch_assoc(mysqli_query($database,$usersql))) {
-        //$_SESSION['inactiveallowance'] = $usrinfo['userTimeout'];
-        $user['userId'] = $usrinfo['userId'];
-        $usrinfo['login'] = $usrinfo['userName'];
-        $usrinfo['idperson'] = $usrinfo['personId'];
-        $usrinfo['lastaction'] = $usrinfo['lastLogin'];
-        $usrinfo['currip'] = $usrinfo['ipv4'];
-        $usrinfo['user_agent'] = $usrinfo['userAgent'];
-        $usrinfo['email'] = $usrinfo['userEmail'];
-        $usrinfo['deleted'] = $usrinfo['userDeleted'];
-        $usrinfo['suspended'] = $usrinfo['userSuspended'];
-        $usrinfo['zlobody'] = $usrinfo['zlobod'];
-        $user['aclDirector'] = $usrinfo['aclDirector'];
-        $usrinfo['right_text'] = $usrinfo['aclPerson'];
-        $user['aclGamemaster'] = $usrinfo['aclGamemaster'];
-        $user['aclAudit'] = $usrinfo['aclAudit'];
-        $user['aclRoot'] = $usrinfo['aclRoot'];
-        $usrinfo['plan_md'] = $usrinfo['planMD'] = stripslashes($usrinfo['planMD']);
+    if ($user = mysqli_fetch_assoc(mysqli_query($database,$usersql))) {
+        $usrinfo['userId'] = $user['userId'];
+        $usrinfo['login'] = $user['userName'];
+        $usrinfo['idperson'] = $user['personId'];
+        $usrinfo['lastaction'] = $user['lastLogin'];
+        $usrinfo['currip'] = $user['ipv4'];
+        $usrinfo['user_agent'] = $user['userAgent'];
+        $usrinfo['email'] = $user['userEmail'];
+        $usrinfo['deleted'] = $user['userDeleted'];
+        $usrinfo['suspended'] = $user['userSuspended'];
+        $usrinfo['zlobody'] = $user['zlobod'];
+        $user['aclDirector'] = $user['aclDirector'];
+        //TODO remove right_text ???missing aclReport???
+        $user['right_text'] = $usrinfo['right_text'] = $user['aclPerson'];
+        $user['aclGamemaster'] = $user['aclGamemaster'];
+        $user['aclAudit'] = $user['aclAudit'];
+        $user['aclRoot'] = $user['aclRoot'];
+        $usrinfo['plan_md'] = $user['planMD'] = stripslashes($user['planMD']);
 
-        $usrinfo['sqlDeleted'] = " deleted <= ".$usrinfo['aclRoot'];
-        $usrinfo['sqlSecret'] = " secret <= ".$usrinfo['aclSecret'];
+        $user['sqlDeleted'] = " deleted <= ".$user['aclRoot'];
+        $user['sqlSecret'] = " secret <= ".$user['aclSecret'];
     } else {
         unset($_SESSION['sid']);
     }
 
-    return $usrinfo;
+    return $user;
 }
 
 /**

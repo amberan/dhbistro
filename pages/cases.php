@@ -42,7 +42,7 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
             //     latteDrawTemplate("footer");
         }
     }
-    if (isset($_POST['caseid'], $_POST['editcase']) && $usrinfo['right_text'] && !preg_match('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret']) && is_numeric($_POST['status'])) {
+    if (isset($_POST['caseid'], $_POST['editcase']) && $user['aclCases'] && !preg_match('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret']) && is_numeric($_POST['status'])) {
         auditTrail(3, 2, $_POST['caseid']);
         //  $latteParameters['title'] = 'Uložení změn';
 
@@ -94,7 +94,7 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
     }
     if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {
         auditTrail(3, 5, $_GET['caseid']);
-        if ($usrinfo['right_text']) {
+        if ($user['right_text']) {
             $fres = mysqli_query($database,"SELECT uniquename FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
             $frec = mysqli_fetch_assoc($fres);
             unlink('./files/'.$frec['uniquename']);
@@ -113,8 +113,8 @@ if (sizeof($_POST) > 0) {
 $filter = filterGet('case');
 $sqlFilter = DB_PREFIX."case.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."case.secret<=".$user['aclSecret'];
 
-switch (@$filter['sec']) {
-    case 'on': $sqlFilter .= ' AND '.DB_PREFIX.'case.secret>0 ';
+if (isset($filter['sec']) and $filter['sec'] === 'on') {
+    $sqlFilter .= ' AND '.DB_PREFIX.'case.secret>0 ';
 }
 switch (@$filter['stat']) {
     case 'on': $sqlFilter .= ' AND '.DB_PREFIX.'case.status in (0,1)'; break;
