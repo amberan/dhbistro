@@ -1,16 +1,17 @@
 include:
   - template: Code-Quality.gitlab-ci.yml
   - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
 
 variables:
   SAST_EXPERIMENTAL_FEATURES: "true"
   SAST_DEFAULT_ANALYZERS: "nodejs-scan,eslint,phpcs-security-audit"
-  SAST_DISABLE_DIND: "true"
   SEARCH_MAX_DEPTH: 10
 
 stages:
   - build
   - test 
+  - deploy
 
 build:
   stage: build
@@ -29,7 +30,7 @@ build:
 code_quality:
   stage: test
   interruptible: true
-  resource_group: codequality
+  resource_group: $CI_COMMIT_SHA
   artifacts:
     reports:
       codequality: gl-code-quality-report.json
@@ -42,11 +43,12 @@ code_quality:
 code_quality_html:
   stage: test
   interruptible: true
-  resource_group: codequality
+  resource_group: $CI_COMMIT_SHA
   extends: code_quality
   allow_failure: true
   variables:
     REPORT_FORMAT: html
+    CI_DEBUG_TRACE: "true"
   artifacts:
     reports:
       codequality: gl-code-quality-report.json
@@ -83,14 +85,19 @@ code_quality_html:
 # https://docs.gitlab.com/ee/user/application_security/sast/index.html#configure-sast-manually
 phpcs-security-audit-sast:
   interruptible: true
-  dependencies:
-    - build
-  artifacts:
-    reports:
-      sast: gl-sast-report.json
+#  dependencies:
+#    - build
+
+# https://gitlab.alembiq.net/help/user/application_security/secret_detection/index.md
+secret_detection:
+  interruptible: true
+#  dependencies:
+#    - build
+  variables:
+    SECRET_DETECTION_HISTORIC_SCAN: "true"
 
 deploy test:  
-  stage: test
+  stage: deploy
   image: alpine
   needs: [build]
   before_script:
