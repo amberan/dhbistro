@@ -3,7 +3,7 @@
 # https://tsh.io/blog/tips-on-keeping-php-code-under-control/
 # $ECS check --config=.ecs.php * --match-git-diff
 # $ECS check-markdown --config=.ecs.php * --match-git-diff
-
+# possible improvements https://github.com/BernardoSilva/git-hooks-php/blob/master/pre-commit
 
 ECS="/home/$(whoami)/.config/composer/vendor/bin/ecs"
 ECS_CONFIG=".ecs.php"
@@ -34,20 +34,26 @@ function ecs_fix_php()
 	git add ${FILES_PHP}
 }
 
-
-if [[ ! -x $ECS || ! -x $LINT ]]; then install_tools; fi
-if { [ -x $ECS ] || [ -x $LINT ]; } && [ -n "$FILES_PHP" ]; then 
-	ecs_validate_php 
-	if [ $? != 0 ]; then
-		read -p "Do you want to fix this? y/n " -n 1 -r </dev/tty
-		if [[ $REPLY =~ ^[Yy]$ ]]; then
-			printf "\n"
-			ecs_fix_php
-			ecs_validate_php
-		else
-			printf "\n\nThen fix it yourself ;P\n\n"
-			exit 1
-		fi
-	fi 
-	$LINT ${FILES_PHP}
+if [ -t 2 ]; then # interactive
+	if [[ ! -x $ECS || ! -x $LINT ]]; then install_tools; fi
+	if { [ -x $ECS ] || [ -x $LINT ]; } && [ -n "$FILES_PHP" ]; then 
+		ecs_validate_php 
+		if [ $? != 0 ]; then
+			read -p "Do you want to fix this? y/n " -n 1 -r </dev/tty
+			if [[ $REPLY =~ ^[Yy]$ ]]; then
+				printf "\n"
+				ecs_fix_php
+				ecs_validate_php
+			else
+				printf "\n\nThen fix it yourself ;P\n\n"
+				exit 1
+			fi
+		fi 
+		$LINT ${FILES_PHP}
+	fi
+else 
+	if { [ -x $ECS ] || [ -x $LINT ]; } && [ -n "$FILES_PHP" ]; then
+		ecs_fix_php
+		$LINT ${FILES_PHP}
+	fi
 fi
