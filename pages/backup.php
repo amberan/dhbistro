@@ -26,7 +26,8 @@ $backups_query = mysqli_query($database,$backups_sql);
 while ($backup_record = mysqli_fetch_assoc($backups_query)) {
     unset($backup);
     $explode = explode("/",$backup_record['file']);
-    $backup['file'] = $file = end($explode);
+    $file = end($explode);
+    $backup['file'] = "file/backup/".$backup_record['id'];
     $backup['datetime'] = webDateTime($backup_record['time']);
     $backup['version'] = $backup_record['version'];
     if (file_exists($config['folder_backup'].$file)) {

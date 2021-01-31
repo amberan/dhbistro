@@ -16,7 +16,6 @@ if (isset($fileType)) {
     $requestedFile = fileIdentify($fileType,$fileId);
 
     if (strlen($requestedFile['fileName']) !== 0 or strlen($requestedFile['fileHash']) !== 0) {
-//        Debugger::log("DEBUG: getting file".$requestedFile['fullPath']);
         fileGet($requestedFile);
     } else {
         filePlaceholder($fileType);

@@ -32,14 +32,14 @@ function fileIdentify($type,$objectId = '0')
         case 'backup':
             $sql = 'SELECT file FROM '.DB_PREFIX.'backup where id='.$objectId;
             $folder = $config['folder_backup'];
-            // no break
+            break;
         default:
             break;
     }
     $query = mysqli_query($database,$sql);
     $file = mysqli_fetch_assoc($query);
     //set real path to file, and filename
-    $file['fileHash'] = $file['fileName'] = $file['file'];
+    $file['fileHash'] = $file['fileName'] = $file['file'] = end(explode("/",$file['file']));
     if ($file['originalname']) {
         $file['fileHash'] = $file['uniquename'];
         $file['fileName'] = $file['originalname'];
@@ -82,7 +82,11 @@ function fileGet($object): void
         header('Content-Disposition: attachment; filename='.$object['fileName']);
     }
     header('Content-Length: '.$object['filesize']);
-    fpassthru(fopen($object['fullPath'],"r"));
+    if (file_exists($object['fullPath'])) {
+        fpassthru(fopen($object['fullPath'],"r"));
+    } else {
+        Debugger::log("DEBUG: unable to locate file: ".$object['fullPath']);
+    }
 }
 
 /**
