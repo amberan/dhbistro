@@ -3,19 +3,22 @@
 require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
 
-if (isset($_GET['type'])) {
-    $_GET['type'] = $fileType;
+if (isset($URL[2])) {
+    $fileType = $URL[2];
 }
-if (isset($_GET['id'])) {
-    $_GET['id'] = $fileId;
+if (isset($URL[3]) and is_numeric($URL[3])) {
+    $fileId = $URL[3];
 }
-if (isset($fileId) and isset($fileType)) {
+
+if (isset($fileType)) {
     $requestedFile = fileIdentify($fileType,$fileId);
-    if ($requestedFile['fileSize'] > 0) {
+
+    if (strlen($requestedFile['fileName']) !== 0 or strlen($requestedFile['fileHash']) !== 0) {
+//        Debugger::log("DEBUG: getting file".$requestedFile['fullPath']);
         fileGet($requestedFile);
-    } elseif ($fileType !== 'attachement') {
+    } else {
         filePlaceholder($fileType);
     }
 }

@@ -3,7 +3,7 @@
 require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
 
 /**
  * get fileName based on type.
@@ -13,24 +13,24 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
  * @param mixed $type
  * @param mixed $objectId
  */
-function fileIdentify($type,$objectId)
+function fileIdentify($type,$objectId = '0')
 {
-    global $config,$database;
+    global $config,$database,$user;
     switch ($type) {
         case 'portrait':
-            echo $sql = 'SELECT portrait FROM '.DB_PREFIX.'person WHERE '.$user['sqlDeleted'].' AND '.$user['sqlSecret'].' AND id='.$objectId;
+            $sql = 'SELECT portrait FROM '.DB_PREFIX.'person WHERE '.$user['sqlDeleted'].' AND '.$user['sqlSecret'].' AND id='.$objectId;
             $folder = $config['folder_portrait'];
             break;
         case 'symbol':
-            echo $sql = 'SELECT symbol FROM '.DB_PREFIX.'symbol WHERE '.$user['sqlDeleted'].' AND '.$user['sqlSecret'].' AND id='.$objectId;
+            $sql = 'SELECT symbol FROM '.DB_PREFIX.'symbol WHERE '.$user['sqlDeleted'].' AND '.$user['sqlSecret'].' AND id='.$objectId;
             $folder = $config['folder_symbol'];
             break;
         case 'attachement':
-            echo $sql = 'SELECT *, uniquename AS soubor, originalname AS nazev, size FROM '.DB_PREFIX.'file WHERE '.$user['sqlSecret'].' AND id='.$objectId;
+            $sql = 'SELECT *, uniquename AS soubor, originalname AS nazev, size FROM '.DB_PREFIX.'file WHERE '.$user['sqlSecret'].' AND id='.$objectId;
             $folder = $config['folder_attachement'];
             break;
         case 'backup':
-            echo $sql = 'SELECT file FROM '.DB_PREFIX.'backup where id='.$objectId;
+            $sql = 'SELECT file FROM '.DB_PREFIX.'backup where id='.$objectId;
             $folder = $config['folder_backup'];
             // no break
         default:
@@ -46,10 +46,12 @@ function fileIdentify($type,$objectId)
     }
     if ($file['portrait']) {
         $file['fileHash'] = $file['fileName'] = $file['portrait'];
-        $file['mime'] = 'application/octet-stream';
+        $file['fileName'] = $file['id'];
+        $file['mime'] = 'image/jpg';
     }
     if ($file['symbol']) {
         $file['fileHash'] = $file['fileName'] = $file['symbol'];
+        $file['fileName'] = $file['id'];
         $file['mime'] = 'image/jpg';
     }
     $file['fullPath'] = $folder.$file['fileHash'];
@@ -92,11 +94,17 @@ function fileGet($object): void
 function filePlaceholder($fileType = 'logo'): void
 {
     switch ($fileType) {
-//        case 'portrait': fileGet(SERVER_ROOT."/images/placeholder.jpg");
-//            break;
-        case 'symbol': fileGet(SERVER_ROOT."/images/nosymbol.png");
+        case 'portrait': $placeholder = SERVER_ROOT."/images/placeholder.jpg";
             break;
-        default: fileGet(SERVER_ROOT."/images/placeholder.jpg");
+        case 'symbol': $placeholder = SERVER_ROOT."/images/nosymbol.jpg";
             break;
-    }
+        default: $placeholder = SERVER_ROOT."/images/placeholder.jpg";
+            break;
+        }
+    header("Cache-Control: no-cache, no-store, must-revalidate, post-check=0, pre-check=0");
+    header("Pragma: no-cache");
+    header("Expires: -1");
+    header('Content-Type: '.mime_content_type($placeholder));
+    $placeholderFile = fopen($placeholder,"r");
+    fpassthru($placeholderFile);
 }

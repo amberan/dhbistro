@@ -38,13 +38,17 @@ $latteParameters['menu'] = $menu;
 $latteParameters['menu2'] = $menu2;
 $latteParameters['URL'] = $URL;
 
-latteDrawTemplate('headerMD');
-
 //echo "<xmp>"; print_r ($_SERVER); echo "</xmp>";
 /*
  * THE LOOP
  * */
 if (isset($user)) {
+    if ($URL[1] === 'file') { // GET FILE type:  attachement,portrait,symbol,backup
+        //TODO auditTrail
+        require_once SERVER_ROOT.'/file.php';
+        exit;
+    }
+    latteDrawTemplate('headerMD');
     latteDrawTemplate('menu');
     if ($URL[1] === 'settings') { // SETTINGS
         $latteParameters['title'] = $text['nastaveni'];
@@ -94,9 +98,6 @@ if (isset($user)) {
         $latteParameters['actions'][] = ["/newcase.php", $text['pridatpripad']];
         //TODO view case, edit case
         require_once SERVER_ROOT.'/pages/cases.php';
-    } elseif ($URL[1] === 'file') { // GET FILE type:  attachement,portrait,symbol,backup
-        //TODO auditTrail
-        require_once SERVER_ROOT.'file.php';
     } else { // NEWS - DEFAULT
         auditTrail(5, 1, 0);
         $latteParameters['title'] = 'Aktuality';
@@ -114,15 +115,13 @@ if (isset($user)) {
         }
     }
 } else {
+    latteDrawTemplate('headerMD');
     require_once SERVER_ROOT.'/pages/login.php';
 }
 
 //show tracy bar unless it's a sending a file (picture) to the user
-if ('getportrait.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?')) and
-    'getfile.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?')) and
-//    'file.php' !== mb_substr(basename($_SERVER['REQUEST_URI']), 0, mb_strpos(basename($_SERVER['REQUEST_URI']), '?')) AND
-    $URL[1] !== 'file') {
+//if ( $URL[1] !== 'file') {
     Debugger::barDump($_SESSION, 'session');
     Debugger::barDump($latteParameters, 'latte');
     latteDrawTemplate('footerMD');
-}
+//}

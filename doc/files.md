@@ -83,8 +83,6 @@ editnote.php            | uprava poznamek                           | poznamky
 editperson.php          | uprava osoby                              | osoby
 editsymbol.php          | uprava symbolu                            | symboly
 evilpoints.php          | zlobody
-getfile.php             | stazeni prilohy
-getportrait.php         | zobrazeni fotografie
 groups.php              | LIST skupiny                              | skupiny
 index.php               | sdilena nastenka
 login.php               | prihlasovaci stranka

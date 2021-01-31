@@ -9,6 +9,7 @@ $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 
 $URL = explode('/', $_SERVER['REQUEST_URI']); // for THE LOOP
+
 require_once $config['folder_custom'].'text.php'; // defaultni text might be overloaded from inc/platform.php
 require_once SERVER_ROOT.'/inc/platform.php';  //platform setup based on server/link
 if (null !== $config['custom']) {
@@ -35,6 +36,7 @@ require_once SERVER_ROOT.'/inc/unread.php';
 require_once SERVER_ROOT.'/lib/person.php';
 require_once SERVER_ROOT.'/lib/news.php';
 require_once SERVER_ROOT.'/inc/menu.php';
+
 $latteParameters['text'] = $text;
 $latteParameters['config'] = $config;
 if (isset($user)) {
