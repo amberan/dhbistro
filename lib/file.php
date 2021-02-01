@@ -100,7 +100,7 @@ function filePlaceholder($fileType = 'logo'): void
     switch ($fileType) {
         case 'portrait': $placeholder = SERVER_ROOT."/images/placeholder.jpg";
             break;
-        case 'symbol': $placeholder = SERVER_ROOT."/images/nosymbol.jpg";
+        case 'symbol': $placeholder = SERVER_ROOT."/images/nosymbol.png";
             break;
         default: $placeholder = SERVER_ROOT."/images/placeholder.jpg";
             break;
