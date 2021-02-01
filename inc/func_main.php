@@ -12,7 +12,7 @@ $URL = explode('/', $_SERVER['REQUEST_URI']); // for THE LOOP
 
 require_once $config['folder_custom'].'text.php'; // defaultni text might be overloaded from inc/platform.php
 require_once SERVER_ROOT.'/inc/platform.php';  //platform setup based on server/link
-if (null !== $config['custom']) {
+if (isset($config['custom'])) {
     require_once $config['folder_custom'].'/text-'.$config['custom'].'.php';
 }
 
