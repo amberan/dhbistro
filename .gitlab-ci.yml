@@ -36,33 +36,18 @@ code_quality:
       codequality: gl-code-quality-report.json
     paths: [gl-code-quality-report.json]
   rules:
-    - if: '$CODE_QUALITY_DISABLED'
-      when: never  
-    - when: always
+    - if: '$CI_PIPELINE_SOURCE ==  "merge_request_event"' 
 
 code_quality_html:
   stage: test
   interruptible: true
   resource_group: $CI_COMMIT_SHA
   extends: code_quality
-  allow_failure: true
-  variables:
-    REPORT_FORMAT: html
-    CI_DEBUG_TRACE: "true"
-  artifacts:
-    reports:
-      codequality: gl-code-quality-report.json
-    paths: [gl-code-quality-report.json]
-  rules:
-    - if: '$CI_PIPELINE_SOURCE ==  "merge_request_event"' 
-
-code_quality_html:
-  stage: test
-  extends: code_quality
   needs: [build]
   allow_failure: true
   variables:
     REPORT_FORMAT: html
+    CI_DEBUG_TRACE: "true"
   artifacts:
     paths: [gl-code-quality-report.html] 
     expire_in: 3 months
@@ -76,14 +61,10 @@ code_quality_html:
 # https://docs.gitlab.com/ee/user/application_security/sast/index.html#configure-sast-manually
 phpcs-security-audit-sast:
   interruptible: true
-#  dependencies:
-#    - build
 
 # https://gitlab.alembiq.net/help/user/application_security/secret_detection/index.md
 secret_detection:
   interruptible: true
-#  dependencies:
-#    - build
   variables:
     SECRET_DETECTION_HISTORIC_SCAN: "true"
 
@@ -91,6 +72,7 @@ deploy test:
   stage: deploy
   image: alpine
   needs: [build]
+  allow_failure: true
   before_script:
     - apk add openssh-client
     - eval $(ssh-agent -s)
@@ -101,6 +83,6 @@ deploy test:
     - ssh-keyscan alembiq.net >> ~/.ssh/known_hosts
   script:
     - scp build.tgz gitlab-ci@alembiq.net:.
-    - ssh gitlab-ci@alembiq.net "mkdir $DEPLOY_FOLDER/$CI_JOB_ID && tar zxvf build.tgz -C $DEPLOY_FOLDER/$CI_JOB_ID/ && cp $DEPLOY_FOLDER/htdocs/inc/important.php $DEPLOY_FOLDER/$CI_JOB_ID/inc/ && rsync -vau --remove-source-files $DEPLOY_FOLDER/htdocs/files/ $DEPLOY_FOLDER/$CI_JOB_ID/files/ && tar zcvf $DEPLOY_FOLDER/backup-$CI_JOB_ID.tgz --exclude $DEPLOY_FOLDER/htdocs/cache --exclude $DEPLOY_FOLDER/htdocs/.git $DEPLOY_FOLDER/htdocs/ && mv $DEPLOY_FOLDER/htdocs $DEPLOY_FOLDER/backup && mv $DEPLOY_FOLDER/$CI_JOB_ID $DEPLOY_FOLDER/htdocs && rm -rf $DEPLOY_FOLDER/backup && rm build.tgz"
+    - ssh gitlab-ci@alembiq.net "mkdir $DEPLOY_FOLDER/$CI_JOB_ID && tar zxf build.tgz -C $DEPLOY_FOLDER/$CI_JOB_ID/ && cp $DEPLOY_FOLDER/htdocs/inc/important.php $DEPLOY_FOLDER/$CI_JOB_ID/inc/ && rsync -au --remove-source-files $DEPLOY_FOLDER/htdocs/files/ $DEPLOY_FOLDER/$CI_JOB_ID/files/ && tar zcf $DEPLOY_FOLDER/backup-$CI_JOB_ID.tgz --exclude $DEPLOY_FOLDER/htdocs/cache --exclude $DEPLOY_FOLDER/htdocs/.git $DEPLOY_FOLDER/htdocs/ && mv $DEPLOY_FOLDER/htdocs $DEPLOY_FOLDER/backup && mv $DEPLOY_FOLDER/$CI_JOB_ID $DEPLOY_FOLDER/htdocs && rm -rf $DEPLOY_FOLDER/backup && rm build.tgz"
   rules: 
     - when: manual
