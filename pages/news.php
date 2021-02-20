@@ -32,7 +32,7 @@ if (isset($URL['3']) and $URL['1'] === "news" and ($user['aclDeputy'] > 0 or $us
 
 if ($URL['1'] === "news" and ($user['aclDeputy'] > 0 or $user['aclDirector']) and isset($_POST['news_new'])) { // ADD
     if ($_POST['insertnews'] && !preg_match('/^[[:blank:]]*$/i',$_POST['nadpis']) && !preg_match('/^[[:blank:]]*$/i',$_POST['news_new']) && is_numeric($_POST['kategorie'])) {
-        mysqli_query($database,"INSERT INTO ".DB_PREFIX."news ( datum, iduser, kategorie, nadpis, obsah, obsah_md, deleted) VALUES('".time()."','".$user['userId']."','".$_POST['kategorie']."','".$_POST['nadpis']."','','".$_POST['news_new']."',0)");
+        mysqli_query($database,"INSERT INTO ".DB_PREFIX."news ( datum, iduser, kategorie, nadpis, obsah, obsahMD, deleted) VALUES('".time()."','".$user['userId']."','".$_POST['kategorie']."','".$_POST['nadpis']."','','".$_POST['news_new']."',0)");
         if (mysqli_affected_rows($database) === 1) {
             auditTrail(5, 3, 0);
             $latteParameters['message'] = $text['aktualitavlozena'];
@@ -55,7 +55,7 @@ if (mysqli_num_rows($news_query)) {
         $news_record['datum'] = webdatetime($news_record['datum']);
         $news_record['id'] = $news_record['id'];
         $news_record['nadpis'] = $news_record['nadpis'];
-        $news_record['obsah_md'] = $converter->convertToHtml($news_record['obsah_md']);
+        $news_record['obsahMD'] = $converter->convertToHtml($news_record['obsahMD']);
         $news_record['category'] = $news_record['kategorie'];
         $news_record['author'] = $news_record['author'];
         $news_record['deleted'] = $news_record['deleted'];

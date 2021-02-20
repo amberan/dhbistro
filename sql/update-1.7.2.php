@@ -63,7 +63,6 @@ $columnAdd['user']['aclGroup'] = "int(3) NOT NULL DEFAULT '0'";
 $columnAdd['user']['aclPerson'] = "int(3) NOT NULL DEFAULT '0'";
 $columnAdd['user']['aclCase'] = "int(3) NOT NULL DEFAULT '0'";
 $columnAdd['user']['aclHunt'] = "int(3) NOT NULL DEFAULT '0'";
-//$columnAdd['task']['deleted'] = "int(3) NOT NULL DEFAULT '0'";
 
 /*
  * ALTER COLUMN
@@ -92,68 +91,13 @@ $columnAlter['user']['right_aud'] = "rightAudOld int(3) NOT NULL DEFAULT '0' aft
 $columnAlter['user']['right_super'] = "rightSuperOld int(3) NOT NULL DEFAULT '0' after planMD";
 $columnAlter['task']['modified'] = " `modified` int(11) NULL AFTER `created_by`";
 $columnAlter['task']['modified_by'] = " `modified_by` int(4) NULL AFTER `modified`";
-//$columnAlter['audit_trail']['id'] = "auditid int(11) NOT NULL AUTO_INCREMENT FIRST";
-//$columnAlter['audit_trail']['time'] = "timestamp int(11) NOT NULL";
-//$columnAlter['backup']['id'] = "backupid int(11) NOT NULL AUTO_INCREMENT FIRST";
-//$columnAlter['backup']['time'] = "timestamp INT NOT NULL DEFAULT UNIX_TIMESTAMP() AFTER id";
-//$columnAlter['case']['id'] = "caseid int(11) NOT NULL AUTO_INCREMENT FIRST";
-//$columnAlter['case']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
-//$columnAlter['case']['time'] = "timestamp int(11) NOT NULL";
-//$columnAlter['case']['contents_md'] = "content_md text NULL";
-//$columnAlter['dashboard']['id'] = "dashboardid int(11) NOT NULL AUTO_INCREMENT FIRST";
-//$columnAlter['dashboard']['created'] = "timestamp int(11) NOT NULL";
-//$columnAlter['file']['id'] = "fileid int(11) NOT NULL AUTO_INCREMENT FIRST";
-//$columnAlter['file']['datum'] = "timestamp int(11) NOT NULL";
-//$columnAlter['doodle']['id'] = "doodleid int(11) NOT NULL AUTO_INCREMENT FIRST";
-//$columnAlter['doodle']['datum'] = "timestamp int(11) NOT NULL";
-//$columnAlter['group']['id'] = "groupid int(11) NOT NULL AUTO_INCREMENT FIRST";
-//$columnAlter['group']['datum'] = "timestamp int(11) NOT NULL";
-//$columnAlter['group']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
-//$columnAlter['case']['contents_md'] = "content_md text NULL";
-//$columnAlter['news']['id'] = "newsid int(11) NOT NULL AUTO_INCREMENT FIRST";
-//$columnAlter['news']['datum'] = "timestamp int(11) NOT NULL";
-//$columnAlter['news']['kategorie'] = "category int(11) NOT NULL";
-//$columnAlter['news']['nadpis'] = "title varchar(255) NOT NULL";
-//$columnAlter['news']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
-//$columnAlter['news']['obsah_md'] = "content_md text NOT NULL";
-//$columnAlter['note']['id'] = "noteid int(11) NOT NULL AUTO_INCREMENT FIRST";
-//$columnAlter['note']['datum'] = "timestamp int(11) NOT NULL";
-//$columnAlter['note']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
-//$columnAlter['operation_type']['id'] = "operationtypeid int(11) NOT NULL AUTO_INCREMENT FIRST";
-//$columnAlter['person']['id'] = "personid int(11) NOT NULL AUTO_INCREMENT FIRST";
-//$columnAlter['person']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
-//$columnAlter['person']['datum'] = "timestamp int(11) NOT NULL";
-//$columnAlter['person']['contents_md'] = "content_md text NULL";
-//$columnAlter['recordytype']['id'] = "recordtypeid int(11) NOT NULL AUTO_INCREMENT FIRST";
-//$columnAlter['report']['id'] = "reportid int(11) NOT NULL AUTO_INCREMENT FIRST";
-//$columnAlter['report']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
-//$columnAlter['report']['datum'] = "timestamp int(11) NOT NULL";
-//$columnAlter['report']['impacts_md'] = "impact_md text NULL";
-//$columnAlter['report']['details_md'] = "detail_md text NULL";
-//$columnAlter['report']['inputs_md'] = "input_md text NULL";
-//$columnAlter['symbol']['id'] = "symbolid int(11) NOT NULL AUTO_INCREMENT FIRST";
-//$columnAlter['symbol']['deleted'] = "deleted int(3) NOT NULL DEFAULT '0'";
-//$columnAlter['symbol']['desc'] = "description text NULL";
-//$columnAlter['symbol']['desc_md'] = "description_md text NULL";
-//$columnAlter['task']['id'] = "taskid int(11) NOT NULL AUTO_INCREMENT FIRST";
-//$columnAlter['unread']['id'] = "unreadid int(11) NOT NULL AUTO_INCREMENT FIRST";
 
 /*
  * CONVERT DATA TO MARKDOWN
  */
 $columnToMD[] = ['user', 'id', 'plan', 'plan_md'];
-//$columnToMD[] = ['case','id','contents','contents_md'];
 $columnToMD[] = ['dashboard', 'id', 'content', 'content_md'];
-//$columnToMD[] = ['group','id','contents','contents_md'];
 $columnToMD[] = ['news', 'id', 'obsah', 'obsah_md'];
-//$columnToMD[] = ['note','id','note','note_md'];
-//$columnToMD[] = ['person','id','contents','contents_md'];
-//$columnToMD[] = ['report','id','summary','summary_md'];
-//$columnToMD[] = ['report','id','impacts','impacts_md'];
-//$columnToMD[] = ['report','id','details','details_md'];
-//$columnToMD[] = ['report','id','energy','energy_md'];
-//$columnToMD[] = ['report','id','inputs','inputs_md'];
-//$columnToMD[] = ['symbol','id','desc','desc_md'];
 
 /*
  * RIGHTS TO UPDATE
@@ -180,17 +124,11 @@ $columnAddFulltext['symbol'] = ['desc_md'];
 /*
  * ADD INDEX
  */
-// ALTER TABLE nw_unread ADD INDEX(iduser)
 
 /*
  * COLUMNS TO DROP
  */
 $columnDrop['test2'][] = "test2";
-// $columnDrop['user'] = 'rightTextOld';
-// $columnDrop['user'] = 'rightAudOld';
-// $columnDrop['user'] = 'rightOrgOld';
-// $columnDrop['user'] = 'rightPowerOld';
-// $columnDrop['user'] = 'rightSuperOld';
 $columnDrop['user'][] = 'user_agent';
 $columnDrop['user'][] = 'suspended';
 $columnDrop['user'][] = 'plan_md';
@@ -216,7 +154,6 @@ $counterColumnMarkdown = bistroDBColumnMarkdown($columnToMD);
 $counterPasswordEncrypt = bistroDBPasswordEncrypt();
 $counterUPdateRight = bistroMigrateRights($rightsToUpdate);
 $counterFulltextAdd = bistroDBFulltextAdd($columnAddFulltext);
-//$counterIndexAdd = bistroDBIndexAdd($columnAddIndex);
 $counterIndexAdd = 0;
 $counterColumnDrop = bistroDBColumnDrop($columnDrop);
 $counterTableDrop = bistroDBTableDrop($tableDrop);
