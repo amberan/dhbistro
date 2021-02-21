@@ -35,8 +35,10 @@ code_quality:
     reports:
       codequality: gl-code-quality-report.json
     paths: [gl-code-quality-report.json]
+    expire_in: 3 months
   rules:
     - if: '$CI_PIPELINE_SOURCE ==  "merge_request_event"' 
+    - when: always #aby se html nevstekalo, ze nemuze najit json ?
 
 code_quality_html:
   stage: test

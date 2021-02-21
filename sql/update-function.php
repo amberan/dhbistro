@@ -21,7 +21,7 @@ function bistroDBTableCreate($table): int
             $sqlCreate = "CREATE TABLE ".DB_PREFIX.$key." (".$value." int NOT NULL AUTO_INCREMENT PRIMARY KEY)";
             mysqli_query($database,$sqlCreate);
             if (DBtableExist($key) !== 0) {
-                Debugger::log('UPDATER '.$config['version'].' DB CHANGE: CREATE TABLE '.DB_PREFIX.$key);
+                Debugger::log('UPDATER '.$config['version'].': '.$sqlCreate);
                 $alter++;
             }
         }
@@ -46,7 +46,7 @@ function bistroDBTableRename($data): int
             $renameSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$old RENAME TO ".$config['dbdatabase'].".".DB_PREFIX."$new";
             mysqli_query($database,$renameSql);
             if (DBtableExist($new) !== 0 and DBtableExist($old) === 0) {
-                Debugger::log('UPDATER '.$config['version'].' DB CHANGE: RENAME TABLE '.$renameSql);
+                Debugger::log('UPDATER '.$config['version'].': '.$renameSql);
                 $alter++;
             }
         }
@@ -72,7 +72,7 @@ function bistroDBColumnAdd($data): int
                 $alterSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table ADD COLUMN $column ".$data[$table][$column];
                 mysqli_query($database,$alterSql);
                 if (DBcolumnExist($table,$column) !== 0) {
-                    Debugger::log('UPDATER '.$config['version'].' DB CHANGE: ADD COLUMN '.$alterSql);
+                    Debugger::log('UPDATER '.$config['version'].': '.$alterSql);
                     $alter++;
                 }
             }
@@ -99,10 +99,8 @@ function bistroDBColumnAlter($data): int
                 $alterSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table CHANGE $column ".$data[$table][$column];
                 mysqli_query($database,$alterSql);
                 if (DBcolumnExist($table,strtok($column,' ')) !== 0 && DBcolumnExist($table,strtok($data[$table][$column],' ')) === 0) {
-                    Debugger::log('UPDATER '.$config['version'].' DB CHANGE: ALTER COLUMN '.$alterSql);
+                    Debugger::log('UPDATER '.$config['version'].': '.$alterSql);
                     $alter++;
-                } else {
-                    Debugger::log('UPDATER '.$config['version'].' DB VALIDATION: COLUMN ALREADY CHANGED '.$alterSql);
                 }
             }
         }
@@ -130,10 +128,11 @@ function bistroDBPasswordEncrypt(): int
     }
     unset($passwordSql);
     if ($alterPassword > 0) {
-        $passwordSql = "SELECT userPassword,userId,login FROM ".$config['dbdatabase'].".".DB_PREFIX."user";
-        while ($passwordData = mysqli_fetch_array(mysqli_query($database,$passwordSql))) {
+        $passwordSql = "SELECT userPassword,userId,userName FROM ".$config['dbdatabase'].".".DB_PREFIX."user";
+        $passwordQuery = mysqli_query($database,$passwordSql);
+        while ($passwordData = mysqli_fetch_array($passwordQuery)) {
             mysqli_query($database,"UPDATE ".$config['dbdatabase'].".".DB_PREFIX."user set userPassword=md5('".$passwordData['userPassword']."') where userId=".$passwordData['userId']);
-            Debugger::log('UPDATER '.$config['version'].' Hashing password for userid: '.$passwordData['userName']);
+            Debugger::log('UPDATER '.$config['version'].': Hashing '.$passwordData['userName'].'.userPassword');
             $alter++;
         }
     }
@@ -159,12 +158,10 @@ function bistroDBColumnMarkdown($data): int
             $preMarkdownQuery = mysqli_query($database,$preMarkdownSql);
             while ($preMarkdown = mysqli_fetch_array($preMarkdownQuery)) {
                 $markdownColumn = $converter->convert(str_replace('\'', '', $preMarkdown[$value[2]]));
-                Debugger::log('UPDATER '.$config['version'].' Markdown conversion ['.DB_PREFIX.$value[0].'.'.$value[2].'.'.$preMarkdown[$value[1]].'] > '.$value[3]);
+                Debugger::log('UPDATER '.$config['version'].' CONVERTING '.DB_PREFIX.$value[0].'.'.$value[2].'.'.$preMarkdown[$value[1]].'] TO MARKDOWN '.$value[3]);
                 mysqli_query($database,"UPDATE ".DB_PREFIX.$value[0]." SET ".$value[3]."='".$markdownColumn."' WHERE ".$value[1]."=".$preMarkdown[$value[1]]);
                 $alter++;
             }
-        } else {
-            Debugger::log('UPDATER '.$config['version'].' NOT CONVERTING '.DB_PREFIX.$value[0].'.'.$value[2].' TO '.$value[3].' '.$preMarkdownSql);
         }
     }
 
@@ -176,22 +173,18 @@ function bistroDBColumnMarkdown($data): int
  *
  * @param mixed $data
  */
-function bistroMigrateRights($data): int
+function bistroMigratePermissions($data): int
 {
     global $database,$config;
     $alter = 0;
     foreach (array_keys($data) as $old) {
         foreach ($data[$old] as $new) {
             if (DBcolumnExist('user',$new) and DBcolumnExist('user',$old)) {
-                if (DBcolumntNotEmpty('user','$new') === 0) {
-                    $alterSql = "UPDATE ".$config['dbdatabase'].".".DB_PREFIX."user SET $new=$old;";
-                    mysqli_query($database,$alterSql);
-                    if (mysqli_affected_rows($database) > 0) {
-                        Debugger::log('UPDATER '.$config['version'].' Migrating permissions: '.$old.' => '.$new);
-                        $alter++;
-                    }
-                } else {
-                    Debugger::log('UPDATER '.$config['version'].' DB VALIDATION: PERMISSION ALREADY CHANGED '.$new);
+                $alterSql = "UPDATE ".$config['dbdatabase'].".".DB_PREFIX."user SET $new=$old;";
+                mysqli_query($database,$alterSql);
+                if (mysqli_affected_rows($database) > 0) {
+                    Debugger::log('UPDATER '.$config['version'].': PERMISSIONS '.$old.' => '.$new);
+                    $alter++;
                 }
             }
         }
@@ -217,7 +210,7 @@ function bistroDBFulltextAdd($data): int
             if (DBtableExist($table) !== 0 and (mysqli_num_rows(mysqli_query($database,$checkSql)) === 0)) {
                 $alterSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table ADD FULLTEXT ($value)";
                 mysqli_query($database,$alterSql);
-                Debugger::log('UPDATER '.$config['version'].' DB CHANGE: ADD FULLTEXT '.$alterSql);
+                Debugger::log('UPDATER '.$config['version'].': '.$alterSql);
                 $alter++;
             }
         }
@@ -254,7 +247,7 @@ function bistroDBColumnDrop($data): int
                 $dropSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX.$table." DROP $column";
                 mysqli_query($database,$dropSql);
                 if (DBColumnExist($table,$column) === 0) {
-                    Debugger::log('UPDATER '.$config['version'].' DB CHANGE: DELETE COLUMN '.DB_PREFIX.$table.".".$column);
+                    Debugger::log('UPDATER '.$config['version'].': '.$dropSql);
                     $alter++;
                 }
             }
@@ -280,7 +273,7 @@ function bistroDBTableDrop($data): int
             $dropSql = "DROP TABLE ".$config['dbdatabase'].".".DB_PREFIX.$value;
             mysqli_query($database,$dropSql);
             if (DBtableExist($value) === 0) {
-                Debugger::log('UPDATER '.$config['version'].' DB CHANGE: DELETE TABLE '.DB_PREFIX.$value);
+                Debugger::log('UPDATER '.$config['version'].': '.$dropSql);
                 $alter++;
             }
         }

@@ -134,13 +134,6 @@ function backup_process(): void
             Debugger::log("RUNNING UPDATE SCRIPT: /sql/".basename($updateFile));
             require_once $updateFile;
         }
-        //odmazani UNREAD pro smazane uzivatele
-/*        $deletedusersSql = mysqli_query($database,"select id from ".DB_PREFIX."user where userDeleted=1");
-        if (!is_bool($deletedusersSql)) {
-            while ($deletedusers = mysqli_fetch_row($deletedusersSql)) {
-                mysqli_query ($database,"DELETE FROM ".DB_PREFIX."unread WHERE userId = ".$deletedusers[0]);
-            }
-        }*/
     }
 }
 

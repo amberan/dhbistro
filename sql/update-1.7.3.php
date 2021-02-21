@@ -47,10 +47,10 @@ $columnAdd['report']['energyMD'] = "TEXT NULL";
 $columnAdd['report']['impactMD'] = "TEXT NULL";
 $columnAdd['report']['inputMD'] = "TEXT NULL";
 $columnAdd['report']['summaryMD'] = "TEXT NULL";
+$columnAdd['sort']['userId'] = "int NOT NULL AFTER sortId";
 $columnAdd['sort']['objectType'] = "varchar(15) NOT NULL AFTER userId";
 $columnAdd['sort']['sortColumn'] = "varchar(100) NULL AFTER objectType";
 $columnAdd['sort']['sortDirection'] = "varchar(4) NULL AFTER sortColumn";
-$columnAdd['sort']['userId'] = "int NOT NULL AFTER sortId";
 $columnAdd['symbol']['descriptionMD'] = "TEXT NULL";
 $columnAdd['task']['taskMD'] = "TEXT NULL";
 //$columnAdd['test2']['test'] = "int NULL after testId";
@@ -66,41 +66,54 @@ $columnAdd['user']['aclPerson'] = "int(3) NOT NULL DEFAULT '0'";
 $columnAdd['user']['aclRoot'] = "int(3) NOT NULL DEFAULT '0'";
 $columnAdd['user']['aclSecret'] = "int(3) NOT NULL DEFAULT '0'";
 $columnAdd['user']['aclTask'] = "int(3) NOT NULL DEFAULT '0'";
-$columnAdd['user']['email'] = "VARCHAR(256) NULL AFTER pwd";
+$columnAdd['user']['userEmail'] = "VARCHAR(256) NULL AFTER pwd";
 $columnAdd['user']['planMD'] = "TEXT NULL";
 $columnAdd['user']['sid'] = "VARCHAR(32) NOT NULL AFTER id";
-$columnAdd['user']['suspended'] = "INT NOT NULL DEFAULT '0' AFTER deleted";
-$columnAdd['user']['user_agent'] = "VARCHAR(256) NULL AFTER ip";
+$columnAdd['user']['userSuspended'] = "INT NOT NULL DEFAULT '0' AFTER deleted";
+$columnAdd['user']['userAgent'] = "VARCHAR(256) NULL AFTER ip";
 
 /*
  * ALTER COLUMN
  */
-$columnAlter['dashboard']['content_md'] = " contentMD text COLLATE 'utf8_general_ci' NULL ";
-$columnAlter['news']['obsah_md'] = " obsahMD text COLLATE 'utf8_general_ci' NULL ";
+$columnAlter['dashboard']['content_md'] = " contentMD text COLLATE 'utf8_general_ci' NULL "; //bugfix
+$columnAlter['news']['obsah_md'] = " obsahMD text COLLATE 'utf8_general_ci' NULL "; //bugfix
 $columnAlter['task']['modified_by'] = " `modified_by` int(4) NULL AFTER `modified`";
 $columnAlter['task']['modified'] = " `modified` int(11) NULL AFTER `created_by`";
 //$columnAlter['test2']['test'] = "test2 TEXT NOT NULL DEFAULT 'random string'";
 //$columnAlter['test2']['test'] = "test3 TEXT NULL";
 $columnAlter['user']['deleted'] = "userDeleted int(3) NOT NULL DEFAULT '0' AFTER userSuspended";
 $columnAlter['user']['email'] = "userEmail VARCHAR(256) NULL AFTER userPassword";
-$columnAlter['user']['filter'] = "filter text NULL AFTER planMD";
+$columnAlter['user']['filter'] = "filter text NULL AFTER planMD";  //already exist?
 $columnAlter['user']['idperson'] = "personId int(6) NULL AFTER userDeleted";
-$columnAlter['user']['id'] = "userId int(6) NOT NULL AUTO_INCREMENT FIRST";
+$columnAlter['user']['id'] = "userId int(6) NOT NULL AUTO_INCREMENT FIRST"; //already exist?
 $columnAlter['user']['ip'] = "ipv4 varchar(15) NULL AFTER lastLogin";
 $columnAlter['user']['lastlogon'] = "lastLogin INT(11) NULL AFTER userEmail";
-$columnAlter['user']['login'] = "userName varchar(40) NOT NULL AFTER sid";
-$columnAlter['user']['plan_md'] = "planMD TEXT NULL AFTER aclHunt";
-$columnAlter['user']['pwd'] = "userPassword varchar(40) NOT NULL AFTER userName";
-$columnAlter['user']['right_aud'] = "rightAudOld int(3) NOT NULL DEFAULT '0' after planMD";
-$columnAlter['user']['right_org'] = "rightOrgOld int(3) NOT NULL DEFAULT '0' after planMD";
-$columnAlter['user']['right_power'] = "rightPowerOld int(3) NOT NULL DEFAULT '0' after planMD";
-$columnAlter['user']['right_super'] = "rightSuperOld int(3) NOT NULL DEFAULT '0' after planMD";
-$columnAlter['user']['right_text'] = "rightTextOld int(3) NOT NULL DEFAULT '0' after planMD";
-$columnAlter['user']['sid'] = "sid varchar(32) NULL AFTER userId";
+$columnAlter['user']['login'] = "userName varchar(40) NOT NULL AFTER sid"; //already exist?
+$columnAlter['user']['plan_md'] = "planMD TEXT NULL AFTER aclHunt"; //bugfix
+$columnAlter['user']['pwd'] = "userPassword varchar(40) NOT NULL AFTER userName"; //already exist?
+$columnAlter['user']['right_aud'] = "rightAudOld int(3) NOT NULL DEFAULT '0' after planMD"; //already exist?
+$columnAlter['user']['right_org'] = "rightOrgOld int(3) NOT NULL DEFAULT '0' after planMD"; //already exist?
+$columnAlter['user']['right_power'] = "rightPowerOld int(3) NOT NULL DEFAULT '0' after planMD"; //already exist?
+$columnAlter['user']['right_super'] = "rightSuperOld int(3) NOT NULL DEFAULT '0' after planMD"; //already exist?
+$columnAlter['user']['right_text'] = "rightTextOld int(3) NOT NULL DEFAULT '0' after planMD"; //already exist?
+$columnAlter['user']['sid'] = "sid varchar(32) NULL AFTER userId"; //already exist?
 $columnAlter['user']['suspended'] = "userSuspended int(3) NOT NULL DEFAULT '0' AFTER userTimeout";
 $columnAlter['user']['timeout'] = "userTimeout INT(6) NOT NULL DEFAULT '600' AFTER userAgent";
 $columnAlter['user']['user_agent'] = "userAgent VARCHAR(256) NULL AFTER ipv4";
 $columnAlter['user']['zlobody'] = "zlobod int(6) NOT NULL DEFAULT '0' AFTER personId";
+
+/*
+ * ADD FULLTEXT INDEX
+ */
+//$columnAddFulltext['test2'] = ['test2'];
+$columnAddFulltext['case'] = ['contentMD'];
+$columnAddFulltext['dashboard'] = ['contentMD'];
+$columnAddFulltext['group'] = ['contentMD'];
+$columnAddFulltext['news'] = ['obsahMD'];
+$columnAddFulltext['note'] = ['noteMD'];
+$columnAddFulltext['person'] = ['contentMD'];
+$columnAddFulltext['report'] = ['summaryMD', 'impactMD', 'detailMD', 'energyMD', 'inputMD'];
+$columnAddFulltext['symbol'] = ['descriptionMD'];
 
 /*
  * CONVERT DATA TO MARKDOWN
@@ -120,19 +133,6 @@ $rightsToUpdate['rightSuperOld'] = ['aclRoot'];
 $rightsToUpdate['rightTextOld'] = ['aclTask', 'aclGroup', 'aclPerson', 'aclCase'];
 
 /*
- * ADD FULLTEXT INDEX
- */
-//$columnAddFulltext['test2'] = ['test2'];
-$columnAddFulltext['case'] = ['contentMD'];
-$columnAddFulltext['dashboard'] = ['contentMD'];
-$columnAddFulltext['group'] = ['contentMD'];
-$columnAddFulltext['news'] = ['obsahMD'];
-$columnAddFulltext['note'] = ['noteMD'];
-$columnAddFulltext['person'] = ['contentMD'];
-$columnAddFulltext['report'] = ['summaryMD', 'impactMD', 'detailMD', 'energyMD', 'inputMD'];
-$columnAddFulltext['symbol'] = ['descriptionMD'];
-
-/*
  * ADD INDEX
  */
 // ALTER TABLE nw_unread ADD INDEX(iduser)
@@ -140,24 +140,24 @@ $columnAddFulltext['symbol'] = ['descriptionMD'];
 /*
  * COLUMNS TO DROP
  */
-$columnDrop['case'][] = 'contents_md';
+$columnDrop['case'][] = 'contents_md'; //bugfix
 $columnDrop['dashboard'][] = 'content';
-$columnDrop['group'][] = 'contents_md';
+$columnDrop['group'][] = 'contents_md'; //bugfix
 $columnDrop['news'][] = 'obsah';
-$columnDrop['news'][] = 'obsah_md';
-$columnDrop['note'][] = 'note_md';
-$columnDrop['person'][] = 'contents_md';
-$columnDrop['report'][] = 'details_md';
-$columnDrop['report'][] = 'energy_md';
-$columnDrop['report'][] = 'impacts_md';
-$columnDrop['report'][] = 'inputs_md';
-$columnDrop['report'][] = 'summary_md';
-$columnDrop['symbol'][] = 'desc_md';
-$columnDrop['task'][] = 'task_md';
+$columnDrop['news'][] = 'obsah_md'; //bugfix
+$columnDrop['note'][] = 'note_md'; //bugfix
+$columnDrop['person'][] = 'contents_md'; //bugfix
+$columnDrop['report'][] = 'details_md'; //bugfix
+$columnDrop['report'][] = 'energy_md'; //bugfix
+$columnDrop['report'][] = 'impacts_md'; //bugfix
+$columnDrop['report'][] = 'inputs_md'; //bugfix
+$columnDrop['report'][] = 'summary_md'; //bugfix
+$columnDrop['symbol'][] = 'desc_md'; //bugfix
+$columnDrop['task'][] = 'task_md'; //bugfix
 //$columnDrop['test2'][] = "test2";
 $columnDrop['user'][] = 'email';
 $columnDrop['user'][] = 'plan';
-$columnDrop['user'][] = 'plan_md';
+$columnDrop['user'][] = 'plan_md'; //bugfix
 $columnDrop['user'][] = 'rightAudOld';
 $columnDrop['user'][] = 'rightOrgOld';
 $columnDrop['user'][] = 'rightPowerOld';
@@ -188,14 +188,14 @@ $counterIndexAdd = 0;
 
 $counterColumnMarkdown = bistroDBColumnMarkdown($columnToMD);
 $counterPasswordEncrypt = bistroDBPasswordEncrypt();
-$counterUPdateRight = bistroMigrateRights($rightsToUpdate);
+$counterUPdateRight = bistroMigratePermissions($rightsToUpdate);
 
 $counterColumnDrop = bistroDBColumnDrop($columnDrop);
 $counterTableDrop = bistroDBTableDrop($tableDrop);
 
 //pokud zmeny probehly, prejmenovat tento soubor
-/*if ($counterColumnAdd + $counterColumnAlter + $counterColumnMarkdown + $counterFulltextAdd + $counterPasswordEncrypt
+if ($counterColumnAdd + $counterColumnAlter + $counterColumnMarkdown + $counterFulltextAdd + $counterPasswordEncrypt
     + $counterTableRename + $counterTableDrop + $counterTableCreate + $counterIndexAdd + $counterUPdateRight
     + $counterColumnDrop > 0) {
     rename(__FILE__,__FILE__.".old");
-}*/
+}
