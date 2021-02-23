@@ -56,7 +56,7 @@ function validate_mail($addr): bool
  */
 function siteURL(): string
 {
-    $protocol = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] === 443 ? "https://" : "http://";
+    $protocol = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' || $_SERVER['SERVER_PORT'] == 443 ? "https://" : "http://";
     $domainName = $_SERVER['HTTP_HOST'].'/';
 
     return $protocol.$domainName;

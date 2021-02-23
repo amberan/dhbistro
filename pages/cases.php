@@ -55,7 +55,7 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
             //      sparklets ('<a href="/cases/">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>uložení změn neúspěšné</strong>');
             echo '<div id="obsah"><p>Případ již existuje, změňte jeho jméno.</p></div>';
         } else {
-            if ($user['aclGamemaster'] === 1) {
+            if ($user['aclGamemaster'] == 1) {
                 mysqli_query($database,"UPDATE ".DB_PREFIX."case SET title='".$_POST['title']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', status='".$_POST['status']."' WHERE id=".$_POST['caseid']);
             } else {
                 mysqli_query($database,"UPDATE ".DB_PREFIX."case SET title='".$_POST['title']."', datum='".time()."', iduser='".$user['userId']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', status='".$_POST['status']."' WHERE id=".$_POST['caseid']);
@@ -113,7 +113,7 @@ if (sizeof($_POST) > 0) {
 $filter = filterGet('case');
 $sqlFilter = DB_PREFIX."case.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."case.secret<=".$user['aclSecret'];
 
-if (isset($filter['sec']) and $filter['sec'] === 'on') {
+if (isset($filter['sec']) and $filter['sec'] == 'on') {
     $sqlFilter .= ' AND '.DB_PREFIX.'case.secret>0 ';
 }
 switch (@$filter['stat']) {

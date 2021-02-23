@@ -132,7 +132,7 @@ if (isset($_POST['searchit'])) {
     {
         $segmentColor;
 
-        if ($inputSqlColumn === '100') {
+        if ($inputSqlColumn == '100') {
             $segmentColor = "grey";
         } elseif (('100' > $inputSqlColumn) && ($inputSqlColumn >= '75')) {
             $segmentColor = "blue";
@@ -142,11 +142,11 @@ if (isset($_POST['searchit'])) {
             $segmentColor = "yellow";
         } elseif (('25' > $inputSqlColumn) && ($inputSqlColumn > '0')) {
             $segmentColor = "orange";
-        } elseif (('0' > $inputSqlColumn) && ($inputSqlColumn !== '')) {
+        } elseif (('0' > $inputSqlColumn) && ($inputSqlColumn != '')) {
             $segmentColor = "red";
-        } elseif ($inputSqlColumn === '0') {
+        } elseif ($inputSqlColumn == '0') {
             $segmentColor = "brown";
-        } elseif ($inputSqlColumn === '') {
+        } elseif ($inputSqlColumn == '') {
             $segmentColor = "white";
         }
 
@@ -159,7 +159,7 @@ if (isset($_POST['searchit'])) {
     {
         $segmentOutput;
 
-        if ($personId === '') {
+        if ($personId == '') {
             $segmentOutput = "<a class=\"redirection\" href=\"readsymbol.php?rid=".$symbolId."&hidenotes=0\">Zobrazit info k symbolu</a>";
         } else {
             $segmentOutput = "<a class=\"redirection\" href=\"readperson.php?rid=".$personId."&hidenotes=0\">Zobrazit info k vlastníkovi</a>";
@@ -238,7 +238,7 @@ if (isset($_POST['searchit'])) {
 	            </div>
 	        </div>';
         } else {
-            if ($symbol_record['ssecret'] === 0 && $symbol_record['psecret'] === 0) {
+            if ($symbol_record['ssecret'] == 0 && $symbol_record['psecret'] == 0) {
                 $color_l = colorSwitch((string) $symbol_record['lining']);
                 $color_c = colorSwitch((string) $symbol_record['curving']);
                 $color_p = colorSwitch((string) $symbol_record['pointing']);

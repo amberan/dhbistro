@@ -10,7 +10,7 @@ $latteParameters['title'] = 'Úprava symbolu';
     if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
         $res = mysqli_query($database,"SELECT * FROM ".DB_PREFIX."symbol WHERE id=".$_REQUEST['rid']);
         if ($rec_s = mysqli_fetch_assoc($res)) {
-            if (($rec_s['secret'] === 1 || $rec_s['deleted'] === 1) && !$user['aclDirector']) {
+            if (($rec_s['secret'] == 1 || $rec_s['deleted'] == 1) && !$user['aclDirector']) {
                 unauthorizedAccess(7, $rec_s['secret'], $rec_s['deleted'], $_REQUEST['rid']);
             }
             auditTrail(7, 1, $_REQUEST['rid']);
@@ -35,7 +35,7 @@ $latteParameters['title'] = 'Úprava symbolu';
 				<option>10</option>
 			</datalist>
 		<fieldset class="symbol"><legend><strong>Symbol</strong></legend>
-		<?php if ($rec_s['symbol'] === null) { ?><img src="#" alt="symbol chybí" title="symbol chybí" id="ssymbolimg" class="noname"/>
+		<?php if ($rec_s['symbol'] == null) { ?><img src="#" alt="symbol chybí" title="symbol chybí" id="ssymbolimg" class="noname"/>
 		<?php } else { ?><img src="file/symbol/<?php echo $_REQUEST['rid']; ?>" alt="symbol" id="ssymbolimg" />
 		<?php } ?>
 			<div id="info">
@@ -47,16 +47,16 @@ $latteParameters['title'] = 'Úprava symbolu';
 				<h3><label for="alphabeter">Písma:</label></h3><input type="range" value="<?php echo $rec_s['search_alphabets']; ?>" min="0" max="10" step="1" name="alphabeter" id="alphabeter" list=hodnoty /><br />
 				<h3><label for="specialchar">Spec. znaky:</label></h3><input type="range" value="<?php echo $rec_s['search_specialchars']; ?>" min="0" max="10" step="1" name="specialchar" id="specialchar" list=hodnoty /><br />	        
 			<div class="clear">&nbsp;</div>
-<?php 			if ($user['aclDirector'] === 1) {
+<?php 			if ($user['aclDirector'] == 1) {
                 echo '
 				<h3><label for="archiv">Archiv:</label></h3>
 					<input type="checkbox" name="archiv" value=1';
-                if ($rec_s['archiv'] === 1) {
+                if ($rec_s['archiv'] == 1) {
                     echo ' checked="checked"';
                 }
             }
             echo '/>';
-            if ($user['aclGamemaster'] === 1) {
+            if ($user['aclGamemaster'] == 1) {
                 echo '<br/>
 				<div class="clear">&nbsp;</div>					
 				<h3><label for="notnew">Není nové</label></h3>
@@ -94,13 +94,13 @@ $latteParameters['title'] = 'Úprava symbolu';
             $i = 0;
             while ($perc = mysqli_fetch_assoc($pers)) {
                 $i++;
-                if ($i === 1) { ?>
+                if ($i == 1) { ?>
 		<ul id=""><?php
                 } ?>
 			<li><a href="readcase.php?rid=<?php echo $perc['id']; ?>"><?php echo $perc['title']; ?></a></li>
 		<?php
             }
-            if ($i !== 0) { ?>
+            if ($i != 0) { ?>
 		</ul>
 		<!-- end of # -->
 		<?php
@@ -126,13 +126,13 @@ $latteParameters['title'] = 'Úprava symbolu';
             $i = 0;
             while ($perc = mysqli_fetch_assoc($pers)) {
                 $i++;
-                if ($i === 1) { ?>
+                if ($i == 1) { ?>
 		<ul id=""><?php
                 } ?>
 			<li><a href="readactrep.php?rid=<?php echo $perc['id']; ?>"><?php echo $perc['label']; ?></a></li>
 		<?php
             }
-            if ($i !== 0) { ?>
+            if ($i != 0) { ?>
 		</ul>
 		<!-- end of # -->
 		<?php
@@ -156,7 +156,7 @@ $latteParameters['title'] = 'Úprava symbolu';
             $i = 0;
             while ($rec_n = mysqli_fetch_assoc($res)) {
                 $i++;
-                if ($i === 1) { ?>
+                if ($i == 1) { ?>
 		<div id="poznamky"><?php
                 }
                 if ($i > 1) {?>
@@ -164,21 +164,21 @@ $latteParameters['title'] = 'Úprava symbolu';
                 } ?>
 			<div class="poznamka">
 				<h4><?php echo stripslashes($rec_n['title']).' - '.stripslashes($rec_n['user']);
-                if ($rec_n['secret'] === 0) {
+                if ($rec_n['secret'] == 0) {
                     echo ' (veřejná)';
                 }
-                if ($rec_n['secret'] === 1) {
+                if ($rec_n['secret'] == 1) {
                     echo ' (tajná)';
                 }
-                if ($rec_n['secret'] === 2) {
+                if ($rec_n['secret'] == 2) {
                     echo ' (soukromá)';
                 } ?></h4>
 				<div><?php echo stripslashes($rec_n['note']); ?></div>
 				<span class="poznamka-edit-buttons"><?php
-                if (($rec_n['iduser'] === $user['userId']) || ($usrinfo['right_text'])) {
+                if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
                     echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=7" title="upravit"><span class="button-text">upravit</span></a> ';
                 }
-                if (($rec_n['iduser'] === $user['userId']) || ($user['aclDirector'])) {
+                if (($rec_n['iduser'] == $user['userId']) || ($user['aclDirector'])) {
                     echo '<a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('readperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec_n['title'])."&quot; náležící k symbolu?');".'" title="smazat"><span class="button-text">smazat</span></a>';
                 } ?>
 				</span>
@@ -186,7 +186,7 @@ $latteParameters['title'] = 'Úprava symbolu';
 			<!-- end of .poznamka -->
 		<?php
             }
-            if ($i !== 0) { ?>
+            if ($i != 0) { ?>
 		</div>
 		<!-- end of #poznamky -->
 		<?php

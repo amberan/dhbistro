@@ -65,7 +65,7 @@ function filterSet($object,$data): void
     if (is_array($data) and sizeof($data) > 0) {
         $data = json_encode($data);
     }
-    if (@$currentFilter['id'] !== 'X') {
+    if (@$currentFilter['id'] != 'X') {
         $sql = "UPDATE ".DB_PREFIX."filter SET filterPreference='".$data."' WHERE userId=".$user['userId']." AND objectType='".$object."'";
     } else {
         $sql = "INSERT INTO ".DB_PREFIX."filter (userId,objectType,filterPreference) VALUES (".$user['userId'].",'".$object."','".$data."')";

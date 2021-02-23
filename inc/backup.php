@@ -19,10 +19,10 @@ function backupData($soubor = "")
         if (!isset($radky)) {
             $radky = '';
         }
-        if ($pocet === 0) {
+        if ($pocet == 0) {
             return;
         }
-        if ($prefix === 'FULLTEXT') {
+        if ($prefix == 'FULLTEXT') {
             for ($i = 0; $i < $pocet; $i++) {
                 $radky .= 'FULLTEXT (`'.$array[$i].'`)';
                 if ($i < $pocet - 1) {
@@ -33,7 +33,7 @@ function backupData($soubor = "")
             return ",\n".$radky;
         }   //MULL
         for ($i = 0; $i < $pocet; $i++) {
-            $radky .= "`".$array[$i]."`".($i !== $pocet - 1 ? "," : "");
+            $radky .= "`".$array[$i]."`".($i != $pocet - 1 ? "," : "");
         }
 
         return  ",\n".$prefix."(".$radky.")";
@@ -55,18 +55,18 @@ function backupData($soubor = "")
             } else {
                 $text .= ",\n";
             }
-            $null = $dataa[2] === "NO" ? "NOT NULL" : "NULL";
+            $null = $dataa[2] == "NO" ? "NOT NULL" : "NULL";
             $default = !empty($dataa[4]) ? " DEFAULT '".$dataa[4]."'" : "";
-            if ($default === " DEFAULT 'CURRENT_TIMESTAMP'") {
+            if ($default == " DEFAULT 'CURRENT_TIMESTAMP'") {
                 $default = " DEFAULT CURRENT_TIMESTAMP";
             }
-            if ($dataa[3] === "PRI") {
+            if ($dataa[3] == "PRI") {
                 $primary[] = $dataa[0];
             }
-            if ($dataa[3] === "UNI") {
+            if ($dataa[3] == "UNI") {
                 $unique[] = $dataa[0];
             }
-            if ($dataa[3] === "MUL") {
+            if ($dataa[3] == "MUL") {
                 $fulltext[] = $dataa[0];
             }
             $extra = !empty($dataa[5]) ? " ".$dataa[5] : "";
@@ -118,7 +118,7 @@ function backup_process(): void
     if (filesize($backupFile) > 1024) {
         Debugger::log("BACKUP GENERATED: ".$config['folder_backup'].basename($backupFile)." [".round(filesize($backupFile) / 1024)." kB]");
         $checkSql = mysqli_query($database,"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."user' and column_name='sid'");
-        if (mysqli_num_rows($checkSql) === 0) { //old backup 1.5.2>
+        if (mysqli_num_rows($checkSql) == 0) { //old backup 1.5.2>
             $backupSql = "INSERT INTO ".DB_PREFIX."backups (time, file) VALUES(".time().",'".$backupFile."')";
         } else { //new backup 1.5.2<
             $backupSql = "INSERT INTO ".DB_PREFIX."backup (time, file, version) VALUES(".time().",'".$backupFile."','".$config['version']."')";

@@ -5,7 +5,7 @@ use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
 // smazat uzivatele
-if (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] === 'delete') {
+if (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] == 'delete') {
     if (!$user['aclDirector']) {
         unauthorizedAccess(8, 1, 0, 0);
     } else {
@@ -14,7 +14,7 @@ if (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] === 'delete') {
         userChange($URL[3],$data,$text['uzivatelodstranen'],$text['akcinelzeprovest']);
     }
 } // obnovit uzivatele
-elseif (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] === 'restore') {
+elseif (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] == 'restore') {
     if (!$user['aclDirector']) {
         unauthorizedAccess(8, 1, 0, 0);
     } else {
@@ -23,7 +23,7 @@ elseif (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] === 'restore') {
         userChange($URL[3],$data,$text['uzivatelobnoven'],$text['akcinelzeprovest']);
     }
 } // zamknout uzivatele
-elseif (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] === 'lock') {
+elseif (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] == 'lock') {
     if (!$user['aclDirector']) {
         unauthorizedAccess(8, 2, 0, 0);
     } else {
@@ -32,7 +32,7 @@ elseif (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] === 'lock') {
         userChange($URL[3],$data,$text['uzivatelzablokovan'],$text['akcinelzeprovest']);
     }
 } // odemknout uzivatele
-elseif (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] === 'unlock') {
+elseif (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] == 'unlock') {
     if (!$user['aclDirector']) {
         unauthorizedAccess(8, 2, 0, 0);
     } else {

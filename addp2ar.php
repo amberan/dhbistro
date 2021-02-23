@@ -8,23 +8,23 @@ latteDrawTemplate("header");
     // následuje načtení dat reportu a jejich uložení do vybranných proměných
     $reportarray = mysqli_fetch_assoc(mysqli_query($database,"SELECT * FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid'])); // načte data z DB
     $type = intval($reportarray['type']); // určuje typ hlášení
-        $typestring = $type === 1 ? 'výjezd' : ($type === 2 ? 'výslech' : '?'); //odvozuje slovní typ hlášení
+        $typestring = $type == 1 ? 'výjezd' : ($type == 2 ? 'výslech' : '?'); //odvozuje slovní typ hlášení
     $author = $reportarray['iduser']; // určuje autora hlášení
     $label = ($reportarray['label'] ?? ''); // nadpis hlášení, ke kterému je přiřazováno
 
-if ($label !== '') {
+if ($label != '') {
     $latteParameters['title'] .= $label.' ('.$typestring.')'; // specifikace TITLE
 }
 
 $latteParameters['title'] = 'Úprava hlášení';
 mainMenu();
         $customFilter = custom_Filter(17);
-    sparklets('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení</strong>'.($label !== '' ? ' - "'.$label.' ('.$typestring.')"' : ''));
+    sparklets('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení</strong>'.($label != '' ? ' - "'.$label.' ('.$typestring.')"' : ''));
     // *** původní načítání autora ---
     //$autharray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT iduser FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']));
     //$author=$autharray['iduser'];
     // --- původní načítání autora ***
-    if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || $user['userId'] === $author)) {
+    if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || $user['userId'] == $author)) {
         $res = mysqli_query($database,"SELECT * FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']);
         if ($rec = mysqli_fetch_assoc($res)) {
             ?>
@@ -84,16 +84,16 @@ mainMenu();
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat osoby a seřadit je podle <select name="sort">
-	<option value="1"'.($filterSort === 1 ? ' selected="selected"' : '').'>příjmení a jména vzestupně</option>
-	<option value="2"'.($filterSort === 2 ? ' selected="selected"' : '').'>příjmení a jména sestupně</option>
+	<option value="1"'.($filterSort == 1 ? ' selected="selected"' : '').'>příjmení a jména vzestupně</option>
+	<option value="2"'.($filterSort == 2 ? ' selected="selected"' : '').'>příjmení a jména sestupně</option>
 </select>.</p>
 		<table class="filter">
 	<tr class="filter">
 	<td class="filter"><input type="checkbox" name="sportraits" value="1"'.($sportraits ? ' checked="checked"' : '').'> Zobrazit portréty.</td>
-	<td class="filter"><input type="checkbox" name="fdead" value="1"'.($fdead === 1 ? ' checked="checked"' : '').'> Zobrazit i mrtvé.</td>
+	<td class="filter"><input type="checkbox" name="fdead" value="1"'.($fdead == 1 ? ' checked="checked"' : '').'> Zobrazit i mrtvé.</td>
 	</tr>
 	<td class="filter"><input type="checkbox" name="ssymbols" value="1"'.($ssymbols ? ' checked="checked"' : '').'> Zobrazit symboly.</td>
-	<td class="filter"><input type="checkbox" name="farchiv" value="1"'.($farchiv === 1 ? ' checked="checked"' : '').'> Zobrazit i archiv.</td>
+	<td class="filter"><input type="checkbox" name="farchiv" value="1"'.($farchiv == 1 ? ' checked="checked"' : '').'> Zobrazit i archiv.</td>
 	</tr>
 	</table>
 	  <div id="filtersubmit"><input type="hidden" name="rid" value="'.$_REQUEST['rid'].'" /><input type="submit" name="filter" value="Filtrovat" /></div>
@@ -140,15 +140,15 @@ mainMenu();
 			// -->
 			</script>';
 
-            echo '<tr class="'.($even % 2 === 0 ? 'even' : 'odd').'"><td><input type="checkbox" id="isthere'.$iterator.'" name="person[]" value="'.$rec['id'].'" class="checkbox"'.($rec['iduser'] ? ' checked="checked"' : '').' onClick="NameChanger'.$iterator.'();"/></td>
+            echo '<tr class="'.($even % 2 == 0 ? 'even' : 'odd').'"><td><input type="checkbox" id="isthere'.$iterator.'" name="person[]" value="'.$rec['id'].'" class="checkbox"'.($rec['iduser'] ? ' checked="checked"' : '').' onClick="NameChanger'.$iterator.'();"/></td>
 	<td><select type="role" id="role'.$iterator.'" '.($rec['iduser'] ? ' name="role[]' : 'name="norole[]').'">
 			<option value="0">osoba přítomná</option>'
-            .($type === 1 ? '
-			<option value="4"'.($rec['role'] === 4 ? ' selected="selected"' : '').'>velitel zásahu</option>
-			<option value="3"'.($rec['role'] === 3 ? ' selected="selected"' : '').'>zatčený</option>' : '')
-            .($type === 2 ? '
-			<option value="1"'.($rec['role'] === 1 ? ' selected="selected"' : '').'>vyslýchaný</option>
-			<option value="2"'.($rec['role'] === 2 ? ' selected="selected"' : '').'>vyslýchající</option>' : '').'
+            .($type == 1 ? '
+			<option value="4"'.($rec['role'] == 4 ? ' selected="selected"' : '').'>velitel zásahu</option>
+			<option value="3"'.($rec['role'] == 3 ? ' selected="selected"' : '').'>zatčený</option>' : '')
+            .($type == 2 ? '
+			<option value="1"'.($rec['role'] == 1 ? ' selected="selected"' : '').'>vyslýchaný</option>
+			<option value="2"'.($rec['role'] == 2 ? ' selected="selected"' : '').'>vyslýchající</option>' : '').'
 		</select></td>
 '.($sportraits ? '<td><img src="file/portrait/'.$rec['id'].'" alt="portrét chybí" /></td>' : '').($ssymbols ? '<td><img src="file/symbol/'.$rec['symbol'].'" alt="symbol chybí" /></td>' : '').'
 	<td>'.($rec['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$rec['id'].'">'.implode(', ',[stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a></span>' : '<a href="readperson.php?rid='.$rec['id'].'">'.implode(', ',[stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a>').'</td>

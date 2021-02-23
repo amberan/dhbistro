@@ -10,7 +10,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
     if (is_numeric($_REQUEST['rid'])) {
         $res = mysqli_query($database,"SELECT * FROM ".DB_PREFIX."symbol WHERE id=".$_REQUEST['rid']);
         if ($rec = mysqli_fetch_assoc($res)) {
-            if (($rec['deleted'] === 1 || $rec['secret'] === 1) && !$user['aclDirector']) {
+            if (($rec['deleted'] == 1 || $rec['secret'] == 1) && !$user['aclDirector']) {
                 unauthorizedAccess(1, $rec['secret'], $rec['deleted'], $_REQUEST['rid']);
             }
             auditTrail(7, 1, $_REQUEST['rid']);
@@ -20,7 +20,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
             } else {
                 $hn = $_REQUEST['hidenotes'];
             }
-            if ($hn === 0) {
+            if ($hn == 0) {
                 $hidenotes = '&amp;hidenotes=1">skrýt poznámky</a>';
                 $backurl = 'readsymbol.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
             } else {
@@ -41,26 +41,26 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 <div id="obsah">
 	<h1>Symbol</h1>
 	<fieldset><legend><strong>Základní údaje</strong></legend>
-		<?php if ($rec['symbol'] === null) { ?><img src="#" alt="symbol chybí" title="symbol chybí" id="symbolimg" class="noname"/>
+		<?php if ($rec['symbol'] == null) { ?><img src="#" alt="symbol chybí" title="symbol chybí" id="symbolimg" class="noname"/>
 		<?php } else { ?><img src="file/symbol/<?php echo $rec['id']; ?>" id="symbolimg" />
 		<?php } ?>
 		<div id="info">
 			<?php
-            if ($rec['archiv'] === 1 || $rec['deleted'] === 1) {
+            if ($rec['archiv'] == 1 || $rec['deleted'] == 1) {
                 echo '<h2>';
             }
-            if ($rec['archiv'] === 1) {
+            if ($rec['archiv'] == 1) {
                 echo 'ARCHIV';
             }
-            if ($rec['deleted'] === 1) {
+            if ($rec['deleted'] == 1) {
                 echo 'SMAZANÝ ZÁZNAM';
             }
-            if ($rec['archiv'] === 1 || $rec['deleted'] === 1) {
+            if ($rec['archiv'] == 1 || $rec['deleted'] == 1) {
                 echo '</h2>';
             } ?>
 			<h3>Přiřazená osoba: </h3><p>
 				<?php
-                    if ($rec['assigned'] === 0) {
+                    if ($rec['assigned'] == 0) {
                         echo 'Nepřiřazený symbol';
                     } else {
                         $res_person = mysqli_query($database,"
@@ -87,7 +87,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 			<p><strong>Datum vytvoření:</strong> <?php echo webdate($rec['created']); ?>
 				<strong>Vytvořil:</strong> <?php
                 $name = getAuthor($rec['created_by'],1);
-            echo $rec['created_by'] === 0 ? 'asi Krauz' : $name; ?> </p>
+            echo $rec['created_by'] == 0 ? 'asi Krauz' : $name; ?> </p>
 			<div class="clear">&nbsp;</div>
 			<p><strong>Datum poslední změny:</strong> <?php echo webdate($rec['modified']); ?>
 				<strong>Změnil:</strong> <?php
@@ -119,13 +119,13 @@ $latteParameters['title'] = 'Zobrazení symbolu';
             $i = 0;
             while ($perc = mysqli_fetch_assoc($pers)) {
                 $i++;
-                if ($i === 1) { ?>
+                if ($i == 1) { ?>
 		<ul id=""><?php
                 } ?>
 			<li><a href="readcase.php?rid=<?php echo $perc['id']; ?>"><?php echo $perc['title']; ?></a></li>
 		<?php
             }
-            if ($i !== 0) { ?>
+            if ($i != 0) { ?>
 		</ul>
 		<!-- end of # -->
 		<?php
@@ -146,13 +146,13 @@ $latteParameters['title'] = 'Zobrazení symbolu';
             $i = 0;
             while ($perc = mysqli_fetch_assoc($pers)) {
                 $i++;
-                if ($i === 1) { ?>
+                if ($i == 1) { ?>
 		<ul id=""><?php
                 } ?>
 			<li><a href="readactrep.php?rid=<?php echo $perc['id']; ?>"><?php echo $perc['label']; ?></a></li>
 		<?php
             }
-            if ($i !== 0) { ?>
+            if ($i != 0) { ?>
 		</ul>
 		<!-- end of # -->
 		<?php
@@ -175,7 +175,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
             $i = 0;
             while ($rec_n = mysqli_fetch_assoc($res)) {
                 $i++;
-                if ($i === 1) { ?>
+                if ($i == 1) { ?>
 		<div id="poznamky"><?php
                 }
                 if ($i > 1) {?>
@@ -183,21 +183,21 @@ $latteParameters['title'] = 'Zobrazení symbolu';
                 } ?>
 			<div class="poznamka">
 				<h4><?php echo stripslashes($rec_n['title']).' - '.stripslashes($rec_n['user']);
-                if ($rec_n['secret'] === 0) {
+                if ($rec_n['secret'] == 0) {
                     echo ' (veřejná)';
                 }
-                if ($rec_n['secret'] === 1) {
+                if ($rec_n['secret'] == 1) {
                     echo ' (tajná)';
                 }
-                if ($rec_n['secret'] === 2) {
+                if ($rec_n['secret'] == 2) {
                     echo ' (soukromá)';
                 } ?></h4>
 				<div><?php echo stripslashes($rec_n['note']); ?></div>
 				<span class="poznamka-edit-buttons"><?php
-                if (($rec_n['iduser'] === $user['userId']) || ($usrinfo['right_text'])) {
+                if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
                     echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=7" title="upravit"><span class="button-text">upravit</span></a> ';
                 }
-                if (($rec_n['iduser'] === $user['userId']) || ($user['aclDirector'])) {
+                if (($rec_n['iduser'] == $user['userId']) || ($user['aclDirector'])) {
                     echo '<a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('readperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec_n['title'])."&quot; náležící k symbolu?');".'" title="smazat"><span class="button-text">smazat</span></a>';
                 } ?>
 				</span>
@@ -205,7 +205,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 			<!-- end of .poznamka -->
 		<?php
             }
-            if ($i !== 0) { ?>
+            if ($i != 0) { ?>
 		</div>
 		<!-- end of #poznamky -->
 		<?php

@@ -48,7 +48,7 @@ function DBcolumntNotEmpty($table,$column)
 {
     global $config,$database;
     $result[] = '1';
-    if (DBcolumnExist($table,$column) === true) {
+    if (DBcolumnExist($table,$column) == true) {
         $query = "select count(*) from ".$config['dbdatabase'].".".DB_PREFIX.$table." where length($column) is not null;";
         $result = mysqli_fetch_array(mysqli_query($database,$query));
     }

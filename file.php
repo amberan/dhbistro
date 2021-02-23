@@ -15,7 +15,7 @@ if (isset($URL[3]) and is_numeric($URL[3])) {
 if (isset($fileType)) {
     $requestedFile = fileIdentify($fileType,$fileId);
 
-    if (strlen($requestedFile['fileName']) !== 0 or strlen($requestedFile['fileHash']) !== 0) {
+    if (strlen($requestedFile['fileName']) != 0 or strlen($requestedFile['fileHash']) != 0) {
         fileGet($requestedFile);
     } else {
         filePlaceholder($fileType);

@@ -21,13 +21,13 @@ function imageResize($img,$maxWidth,$maxHeight)
             $heightTn = $maxHeight;
         }
     }
-    if ($size[2] === 1) {
+    if ($size[2] == 1) {
         $src = imagecreatefromgif($img);
     }
-    if ($size[2] === 2) {
+    if ($size[2] == 2) {
         $src = imagecreatefromjpeg($img);
     }
-    if ($size[2] === 3) {
+    if ($size[2] == 3) {
         $src = imagecreatefrompng($img);
     }
     $dst = imagecreatetruecolor($widthTn,$heightTn);

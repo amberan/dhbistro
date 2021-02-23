@@ -10,7 +10,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
     if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
         $res = mysqli_query($database,"SELECT * FROM ".DB_PREFIX."person WHERE id=".$_REQUEST['rid']);
         if ($rec_p = mysqli_fetch_assoc($res)) {
-            if (($rec_p['secret'] > $user['aclDirector']) || $rec_p['deleted'] === 1) {
+            if (($rec_p['secret'] > $user['aclDirector']) || $rec_p['deleted'] == 1) {
                 unauthorizedAccess(1, $rec_p['secret'], $rec_p['deleted'], $_REQUEST['rid']);
             }
             auditTrail(1, 1, $_REQUEST['rid']);
@@ -22,13 +22,13 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	<p id="top-text">Portréty nahrávejte pokud možno ve velikosti 100x130 bodů, symboly ve velikosti 100x100 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen portréty, o rozmazané postavy nebude nouze v přílohách. Symboly rovněž nahrávejte jasně rozeznatelné.</p>
 	<form action="procperson.php" method="post" id="inputform" enctype="multipart/form-data">
 		<fieldset><legend><strong>Základní údaje</strong></legend>
-		<?php if ($rec_p['portrait'] === null) { ?><img src="#" alt="portrét chybí" title="portrét chybí" id="portraitimg" class="noname"/>
+		<?php if ($rec_p['portrait'] == null) { ?><img src="#" alt="portrét chybí" title="portrét chybí" id="portraitimg" class="noname"/>
 		<?php } else { ?><img src="file/portrait/<?php echo $_REQUEST['rid']; ?>" alt="<?php echo stripslashes($rec_p['name']).' '.stripslashes($rec_p['surname']); ?>" id="portraitimg" />
 		<?php } ?>
-		<?php if ($rec_p['symbol'] === null) { ?><img src="#" alt="symbol chybí" title="symbol chybí" id="symbolimg" class="noname"/>
+		<?php if ($rec_p['symbol'] == null) { ?><img src="#" alt="symbol chybí" title="symbol chybí" id="symbolimg" class="noname"/>
 		<?php } else { ?><a href="readsymbol.php?rid=<?php echo $rec_p['symbol']; ?>"><img src="file/symbol/<?php echo $rec_p['symbol']; ?>" alt="<?php echo stripslashes($rec_p['name']).' '.stripslashes($rec_p['surname']); ?>" id="symbolimg" /></a>
 		<?php } ?>
-		<?php if ($rec_p['symbol'] === null) { ?>
+		<?php if ($rec_p['symbol'] == null) { ?>
 		<?php } else { ?><span class="info-delete-symbol"><a class="delete" title="odpojit" href="procperson.php?deletesymbol=<?php echo $rec_p['symbol']; ?>&amp;personid=<?php echo $_REQUEST['rid']; ?>&amp;backurl=<?php echo urlencode('editperson.php?rid='.$_REQUEST['rid']); ?>" onclick="return confirm('Opravdu odpojit symbol?')"><span class="button-text">smazat soubor</span></a></span>
 		<?php } ?>
 			<div id="info">
@@ -40,84 +40,84 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 				<div class="clear">&nbsp;</div>
 				<h3><label for="side">Strana:</label></h3>
 					<select name="side" id="side">
-						<option value="0"<?php if ($rec_p['side'] === 0) {
+						<option value="0"<?php if ($rec_p['side'] == 0) {
                 echo ' selected="selected"';
             } ?>>neznámá</option>
-						<option value="1"<?php if ($rec_p['side'] === 1) {
+						<option value="1"<?php if ($rec_p['side'] == 1) {
                 echo ' selected="selected"';
             } ?>>světlo</option>
-						<option value="2"<?php if ($rec_p['side'] === 2) {
+						<option value="2"<?php if ($rec_p['side'] == 2) {
                 echo ' selected="selected"';
             } ?>>tma</option>
-						<option value="3"<?php if ($rec_p['side'] === 3) {
+						<option value="3"<?php if ($rec_p['side'] == 3) {
                 echo ' selected="selected"';
             } ?>>člověk</option>
 					</select>
 				<div class="clear">&nbsp;</div>
 				<h3><label for="power">Síla:</label></h3>
 					<select name="power" id="power">
-						<option value="0"<?php if ($rec_p['power'] === 0) {
+						<option value="0"<?php if ($rec_p['power'] == 0) {
                 echo ' selected="selected"';
             } ?>>neznámá</option>
-						<option value="1"<?php if ($rec_p['power'] === 1) {
+						<option value="1"<?php if ($rec_p['power'] == 1) {
                 echo ' selected="selected"';
             } ?>>1. kategorie</option>
-						<option value="2"<?php if ($rec_p['power'] === 2) {
+						<option value="2"<?php if ($rec_p['power'] == 2) {
                 echo ' selected="selected"';
             } ?>>2. kategorie</option>
-						<option value="3"<?php if ($rec_p['power'] === 3) {
+						<option value="3"<?php if ($rec_p['power'] == 3) {
                 echo ' selected="selected"';
             } ?>>3. kategorie</option>
-						<option value="4"<?php if ($rec_p['power'] === 4) {
+						<option value="4"<?php if ($rec_p['power'] == 4) {
                 echo ' selected="selected"';
             } ?>>4. kategorie</option>
-						<option value="5"<?php if ($rec_p['power'] === 5) {
+						<option value="5"<?php if ($rec_p['power'] == 5) {
                 echo ' selected="selected"';
             } ?>>5. kategorie</option>
-						<option value="6"<?php if ($rec_p['power'] === 6) {
+						<option value="6"<?php if ($rec_p['power'] == 6) {
                 echo ' selected="selected"';
             } ?>>6. kategorie</option>
-						<option value="7"<?php if ($rec_p['power'] === 7) {
+						<option value="7"<?php if ($rec_p['power'] == 7) {
                 echo ' selected="selected"';
             } ?>>7. kategorie</option>
-						<option value="8"<?php if ($rec_p['power'] === 8) {
+						<option value="8"<?php if ($rec_p['power'] == 8) {
                 echo ' selected="selected"';
             } ?>>mimo kategorie</option>
 					</select>
 				<div class="clear">&nbsp;</div>
 				<h3><label for="spec">Specializace:</label></h3>
 					<select name="spec" id="spec">
-						<option value="0"<?php if ($rec_p['spec'] === 0) {
+						<option value="0"<?php if ($rec_p['spec'] == 0) {
                 echo ' selected="selected"';
             } ?>>neznámá</option>
-						<option value="1"<?php if ($rec_p['spec'] === 1) {
+						<option value="1"<?php if ($rec_p['spec'] == 1) {
                 echo ' selected="selected"';
             } ?>>bílý mág</option>
-						<option value="2"<?php if ($rec_p['spec'] === 2) {
+						<option value="2"<?php if ($rec_p['spec'] == 2) {
                 echo ' selected="selected"';
             } ?>>černý mág</option>
-						<option value="3"<?php if ($rec_p['spec'] === 3) {
+						<option value="3"<?php if ($rec_p['spec'] == 3) {
                 echo ' selected="selected"';
             } ?>>léčitel</option>
-						<option value="4"<?php if ($rec_p['spec'] === 4) {
+						<option value="4"<?php if ($rec_p['spec'] == 4) {
                 echo ' selected="selected"';
             } ?>>obrateň</option>
-						<option value="5"<?php if ($rec_p['spec'] === 5) {
+						<option value="5"<?php if ($rec_p['spec'] == 5) {
                 echo ' selected="selected"';
             } ?>>upír</option>
-						<option value="6"<?php if ($rec_p['spec'] === 6) {
+						<option value="6"<?php if ($rec_p['spec'] == 6) {
                 echo ' selected="selected"';
             } ?>>vlkodlak</option>
-						<option value="7"<?php if ($rec_p['spec'] === 7) {
+						<option value="7"<?php if ($rec_p['spec'] == 7) {
                 echo ' selected="selected"';
             } ?>>vědma</option>
-						<option value="8"<?php if ($rec_p['spec'] === 8) {
+						<option value="8"<?php if ($rec_p['spec'] == 8) {
                 echo ' selected="selected"';
             } ?>>zaříkávač</option>
-						<option value="9"<?php if ($rec_p['spec'] === 9) {
+						<option value="9"<?php if ($rec_p['spec'] == 9) {
                 echo ' selected="selected"';
             } ?>>vykladač</option>
-						<option value="10"<?php if ($rec_p['spec'] === 10) {
+						<option value="10"<?php if ($rec_p['spec'] == 10) {
                 echo ' selected="selected"';
             } ?>>jasnovidec</option>
 					</select>
@@ -133,21 +133,21 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 				<div class="clear">&nbsp;</div>
 				<h3><label for="secret">Stupeň utajení:</label></h3>
                     <select name="secret" id="secret">
-                        <option value="0"<?php if ($rec_p['secret'] === 0) {
+                        <option value="0"<?php if ($rec_p['secret'] == 0) {
                 echo ' selected="selected"';
             } ?>>0</option>
-                        <option value="1"<?php if ($rec_p['secret'] === 1) {
+                        <option value="1"<?php if ($rec_p['secret'] == 1) {
                 echo ' selected="selected"';
             } ?>>1</option>
                     </select>
 				<div class="clear">&nbsp;</div>
 				<h3><label for="dead">Mrtvá:</label></h3>
-					<input type="checkbox" name="dead" value=1 <?php if ($rec_p['dead'] === 1) { ?>checked="checked"<?php } ?>/><br/>
+					<input type="checkbox" name="dead" value=1 <?php if ($rec_p['dead'] == 1) { ?>checked="checked"<?php } ?>/><br/>
 				<div class="clear">&nbsp;</div>
                                 <h3><label for="archiv">Archiv:</label></h3>
-					<input type="checkbox" name="archiv" value=1 <?php if ($rec_p['archiv'] === 1) { ?>checked="checked"<?php } ?>/><br/>
+					<input type="checkbox" name="archiv" value=1 <?php if ($rec_p['archiv'] == 1) { ?>checked="checked"<?php } ?>/><br/>
 				<div class="clear">&nbsp;</div>
-<?php 			if ($user['aclGamemaster'] === 1) {
+<?php 			if ($user['aclGamemaster'] == 1) {
                 echo '
                                 <h3><label for="notnew">Není nové</label></h3>
 					<input type="checkbox" name="notnew"/><br/>
@@ -214,16 +214,16 @@ $latteParameters['title'] = 'Zobrazení symbolu';
             $i = 0;
             while ($rec_f = mysqli_fetch_assoc($res)) {
                 $i++;
-                if ($i === 1) { ?>
+                if ($i == 1) { ?>
 		<ul id="prilozenadata">
 				<?php } ?>
-			<li class="soubor"><a href="file/attachement/<?php echo $rec_f['id']; ?>" title=""><?php echo stripslashes($rec_f['title']); ?></a><?php if ($rec_f['secret'] === 1) { ?> (TAJNÝ)<?php } ?><span class="poznamka-edit-buttons"><?php
-                if (($rec_f['iduser'] === $user['userId']) || ($user['aclDirector'])) {
+			<li class="soubor"><a href="file/attachement/<?php echo $rec_f['id']; ?>" title=""><?php echo stripslashes($rec_f['title']); ?></a><?php if ($rec_f['secret'] == 1) { ?> (TAJNÝ)<?php } ?><span class="poznamka-edit-buttons"><?php
+                if (($rec_f['iduser'] == $user['userId']) || ($user['aclDirector'])) {
                     echo '<a class="delete" title="smazat" href="procperson.php?deletefile='.$rec_f['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editperson.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat soubor &quot;'.stripslashes($rec_f['title']).'&quot; náležící k osobě?\')"><span class="button-text">smazat soubor</span></a>';
                 } ?>
 				</span></li><?php
             }
-            if ($i !== 0) { ?>
+            if ($i != 0) { ?>
 		</ul>
 		<!-- end of #prilozenadata -->
 		<?php
@@ -242,10 +242,10 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 			</div>
 			<div>
 				<strong><label for="usecret">Přísně tajné:</label></strong>
-			  	<?php if ($rec_p['secret'] !== 1) { ?>&nbsp;<input type="radio" name="secret" value="0" checked="checked"/>ne&nbsp;/<?php } ?>
-				&nbsp;<input type="radio" name="secret" value="1" <?php if ($rec_p['secret'] === 1) { ?>checked="checked"<?php } ?>/>ano
+			  	<?php if ($rec_p['secret'] != 1) { ?>&nbsp;<input type="radio" name="secret" value="0" checked="checked"/>ne&nbsp;/<?php } ?>
+				&nbsp;<input type="radio" name="secret" value="1" <?php if ($rec_p['secret'] == 1) { ?>checked="checked"<?php } ?>/>ano
 			</div>
-<?php 			if ($user['aclGamemaster'] === 1) {
+<?php 			if ($user['aclGamemaster'] == 1) {
                 echo '					
 				<div>
 				<strong><label for="fnotnew">Není nové</label></strong>
@@ -275,7 +275,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
             $i = 0;
             while ($rec_n = mysqli_fetch_assoc($res)) {
                 $i++;
-                if ($i === 1) { ?>
+                if ($i == 1) { ?>
 		<div id="poznamky"><?php
                 }
                 if ($i > 1) {?>
@@ -283,21 +283,21 @@ $latteParameters['title'] = 'Zobrazení symbolu';
                 } ?>
 			<div class="poznamka">
 				<h4><?php echo stripslashes($rec_n['title']).' - '.stripslashes($rec_n['user']);
-                if ($rec_n['secret'] === 0) {
+                if ($rec_n['secret'] == 0) {
                     echo ' (veřejná)';
                 }
-                if ($rec_n['secret'] === 1) {
+                if ($rec_n['secret'] == 1) {
                     echo ' (tajná)';
                 }
-                if ($rec_n['secret'] === 2) {
+                if ($rec_n['secret'] == 2) {
                     echo ' (soukromá)';
                 } ?></h4>
 				<div><?php echo stripslashes($rec_n['note']); ?></div>
 				<span class="poznamka-edit-buttons"><?php
-                if (($rec_n['iduser'] === $user['userId']) || ($usrinfo['right_text'])) {
+                if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
                     echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=1" title="upravit"><span class="button-text">upravit</span></a> ';
                 }
-                if (($rec_n['iduser'] === $user['userId']) || ($user['aclDirector'])) {
+                if (($rec_n['iduser'] == $user['userId']) || ($user['aclDirector'])) {
                     echo '<a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec_n['title'])."&quot; náležící k osobě?');".'" title="smazat"><span class="button-text">smazat</span></a>';
                 } ?>
 				</span>
@@ -305,7 +305,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 			<!-- end of .poznamka -->
 		<?php
             }
-            if ($i !== 0) { ?>
+            if ($i != 0) { ?>
 		</div>
 		<!-- end of #poznamky -->
 		<?php
@@ -324,11 +324,11 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 			</div>
 			<div>
 			  <strong><label for="nsecret">Utajení:</label></strong>
-			  	<?php if ($rec_p['secret'] !== 1) { ?>&nbsp;<input type="radio" name="secret" id="nsecret" value="0" checked="checked"/>veřejná&nbsp;/<?php } ?>
-				&nbsp;<input type="radio" name="secret" value="1" <?php if ($rec_p['secret'] === 1) { ?>checked="checked"<?php } ?>/>tajná&nbsp;/
+			  	<?php if ($rec_p['secret'] != 1) { ?>&nbsp;<input type="radio" name="secret" id="nsecret" value="0" checked="checked"/>veřejná&nbsp;/<?php } ?>
+				&nbsp;<input type="radio" name="secret" value="1" <?php if ($rec_p['secret'] == 1) { ?>checked="checked"<?php } ?>/>tajná&nbsp;/
 				&nbsp;<input type="radio" name="secret" value="2" />soukromá
 			</div>
-<?php 			if ($user['aclGamemaster'] === 1) {
+<?php 			if ($user['aclGamemaster'] == 1) {
                 echo '					
 				<div>
 				<strong><label for="nnotnew">Není nové</label></strong>

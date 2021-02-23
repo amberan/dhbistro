@@ -14,20 +14,20 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
     $res = mysqli_query($database,"SELECT * FROM ".DB_PREFIX."case WHERE id=".$_REQUEST['rid']);
     $rec = mysqli_fetch_assoc($res);
 
-    if ($usrinfo['right_text'] && (($rec['secret'] === 0) || ($user['aclDirector']) || ($rec_a['iduser']))) {
+    if ($usrinfo['right_text'] && (($rec['secret'] == 0) || ($user['aclDirector']) || ($rec_a['iduser']))) {
         $symbolbutton = ' <a href="symbols.php">přiřadit symboly</a>';
     } else {
         $symbolbutton = '';
     }
     $res = mysqli_query($database,"SELECT * FROM ".DB_PREFIX."case WHERE id=".$_REQUEST['rid']);
     if ($rec_c = mysqli_fetch_assoc($res)) {
-        if (($rec['secret'] > $user['aclDirector']) || $rec['deleted'] === 1) {
+        if (($rec['secret'] > $user['aclDirector']) || $rec['deleted'] == 1) {
             unauthorizedAccess(3, $rec_c['secret'], $rec_c['deleted'], $_REQUEST['rid']);
         }
         auditTrail(3, 1, $_REQUEST['rid']);
         mainMenu();
         sparklets('<a href="/cases/">případy</a> &raquo; <strong>úprava případu</strong>',$symbolbutton); ?>
-<?php if (($rec['secret'] === 1) && (!$user['aclDirector']) && (!$rec_a['iduser'])) {
+<?php if (($rec['secret'] == 1) && (!$user['aclDirector']) && (!$rec_a['iduser'])) {
             echo '<div id="obsah"><p>Hezký pokus.</p></div>';
         } else {
             ?>
@@ -40,21 +40,21 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
 				<div class="clear">&nbsp;</div>
 				
 				<h3><label for="secret">Přísně&nbsp;tajné:</label></h3>
-				<input type="radio" name="secret" value="0" <?php if ($rec_c['secret'] === 0) { ?>checked="checked"<?php } ?>/>ne<br/>
-				<h3><label>&nbsp;</label></h3><input type="radio" name="secret" value="1"<?php if ($rec_c['secret'] === 1) { ?>checked="checked"<?php } ?>>ano
+				<input type="radio" name="secret" value="0" <?php if ($rec_c['secret'] == 0) { ?>checked="checked"<?php } ?>/>ne<br/>
+				<h3><label>&nbsp;</label></h3><input type="radio" name="secret" value="1"<?php if ($rec_c['secret'] == 1) { ?>checked="checked"<?php } ?>>ano
 				<div class="clear">&nbsp;</div>
 	
 				<h3><label for="status">Stav:</label></h3>
 				<select name="status" id="status">
-					<option value="0"<?php if ($rec_c['status'] === 0) {
+					<option value="0"<?php if ($rec_c['status'] == 0) {
                 echo ' selected="selected"';
             } ?>>otevřený</option>
-					<option value="1"<?php if ($rec_c['status'] === 1) {
+					<option value="1"<?php if ($rec_c['status'] == 1) {
                 echo ' selected="selected"';
             } ?>>uzavřený</option>
 				</select>
 				<div class="clear">&nbsp;</div>
-<?php 			if ($user['aclGamemaster'] === 1) {
+<?php 			if ($user['aclGamemaster'] == 1) {
                 echo '					
 				<h3><label for="notnew">Není nové</label></h3>
 					<input type="checkbox" name="notnew"/><br/>
@@ -84,7 +84,7 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
             while ($perc = mysqli_fetch_assoc($pers)) {
                 $solvers[] = $perc['login'];
             }
-            echo implode($solvers, '; ') !== "" ? implode($solvers, '; ') : '<em>Případ nemá přiřazené řešitele.</em>'; ?></p>		
+            echo implode($solvers, '; ') != "" ? implode($solvers, '; ') : '<em>Případ nemá přiřazené řešitele.</em>'; ?></p>		
 	</fieldset>
 
 	<fieldset><legend><strong>Osoby přiřazené k případu: </strong></legend>
@@ -104,7 +104,7 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
             while ($perc = mysqli_fetch_assoc($pers)) {
                 $persons[] = '<a href="readperson.php?rid='.$perc['id'].'">'.$perc['surname'].', '.$perc['name'].'</a>';
             }
-            echo implode($persons, '; ') !== "" ? implode($persons, '; ') : '<em>Nejsou připojeny žádné osoby.</em>'; ?></p>		
+            echo implode($persons, '; ') != "" ? implode($persons, '; ') : '<em>Nejsou připojeny žádné osoby.</em>'; ?></p>		
 	</fieldset>
 	
 	
@@ -125,7 +125,7 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
             while ($perc = mysqli_fetch_assoc($pers)) {
                 $reports[] = '<li><a href="readactrep.php?rid='.$perc['id'].'">'.$perc['label'].'</a> - '.$perc['task'].' - <b>'.$perc['user'].'</b>';
             }
-            echo implode($reports, '; ') !== "" ? implode($reports, '; ') : '<em>Nejsou připojena žádná hlášení.</em>'; ?>
+            echo implode($reports, '; ') != "" ? implode($reports, '; ') : '<em>Nejsou připojena žádná hlášení.</em>'; ?>
 		</ul>
 	</fieldset>
 
@@ -142,16 +142,16 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
             $i = 0;
             while ($rec_f = mysqli_fetch_assoc($res)) {
                 $i++;
-                if ($i === 1) { ?>
+                if ($i == 1) { ?>
 		<ul id="prilozenadata">
 				<?php } ?>
-			<li class="soubor"><a href="file/attachement/<?php echo $rec_f['id']; ?>" title=""><?php echo stripslashes($rec_f['title']); ?></a><?php if ($rec_f['secret'] === 1) { ?> (TAJNÝ)<?php } ?><span class="poznamka-edit-buttons"><?php
-                if (($rec_f['iduser'] === $user['userId']) || ($user['aclDirector'])) {
+			<li class="soubor"><a href="file/attachement/<?php echo $rec_f['id']; ?>" title=""><?php echo stripslashes($rec_f['title']); ?></a><?php if ($rec_f['secret'] == 1) { ?> (TAJNÝ)<?php } ?><span class="poznamka-edit-buttons"><?php
+                if (($rec_f['iduser'] == $user['userId']) || ($user['aclDirector'])) {
                     echo '<a class="delete" title="smazat" href="/cases/?deletefile='.$rec_f['id'].'&amp;caseid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editcase.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat soubor &quot;'.stripslashes($rec_f['title']).'&quot; náležící k případu?\')"><span class="button-text">smazat soubor</span></a>';
                 } ?>
 				</span><br><br></li><?php
             }
-            if ($i !== 0) { ?>
+            if ($i != 0) { ?>
 		</ul>
 		<!-- end of #prilozenadata -->
 		<?php
@@ -170,10 +170,10 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
 			</div>
 			<div>
 				<strong><label for="usecret">Přísně tajné:</label></strong>
-			  	<?php if ($rec_c['secret'] !== 1) { ?>&nbsp;<input type="radio" name="secret" value="0" checked="checked"/>ne&nbsp;/<?php } ?>
-				&nbsp;<input type="radio" name="secret" value="1" <?php if ($rec_c['secret'] === 1) { ?>checked="checked"<?php } ?>/>ano
+			  	<?php if ($rec_c['secret'] != 1) { ?>&nbsp;<input type="radio" name="secret" value="0" checked="checked"/>ne&nbsp;/<?php } ?>
+				&nbsp;<input type="radio" name="secret" value="1" <?php if ($rec_c['secret'] == 1) { ?>checked="checked"<?php } ?>/>ano
 			</div>
-<?php 			if ($user['aclGamemaster'] === 1) {
+<?php 			if ($user['aclGamemaster'] == 1) {
                 echo '					
 				<div>
 				<strong><label for="fnotnew">Není nové</label></strong>
@@ -204,14 +204,14 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
             $res_n = mysqli_query($database,$sql_n);
             while ($rec_n = mysqli_fetch_assoc($res_n)) { ?>
 			<li class="Clear"><a href="readnote.php?rid=<?php echo $rec_n['id']; ?>&amp;idtable=3"><?php echo stripslashes($rec_n['title']); ?></a> - <?php echo stripslashes($rec_n['user']);
-            if ($rec_n['secret'] === 0) { ?> (veřejná)<?php }
-            if ($rec_n['secret'] === 1) { ?> (tajná)<?php }
-            if ($rec_n['secret'] === 2) { ?> (soukromá)<?php }
+            if ($rec_n['secret'] == 0) { ?> (veřejná)<?php }
+            if ($rec_n['secret'] == 1) { ?> (tajná)<?php }
+            if ($rec_n['secret'] == 2) { ?> (soukromá)<?php }
             ?><span class="poznamka-edit-buttons"><?php
-            if (($rec_n['iduser'] === $user['userId']) || ($usrinfo['right_text'])) {
+            if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
                 echo ' <a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=3" title="upravit"><span class="button-text">upravit poznámku</span></a>';
             }
-            if (($rec_n['iduser'] === $user['userId']) || ($user['aclDirector'])) {
+            if (($rec_n['iduser'] == $user['userId']) || ($user['aclDirector'])) {
                 echo ' <a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editgroup.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec_n['title'])."&quot; náležící k hlášení?');".'" title="smazat"><span class="button-text">smazat poznámku</span></a>';
             }
             ?></span></li><?php

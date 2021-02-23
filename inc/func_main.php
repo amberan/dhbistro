@@ -46,16 +46,16 @@ if (isset($user)) {
 function date_picker($name, $startyear = null, $endyear = null)
 {
     global $aday,$amonth,$ayear,$user;
-    if ($user['aclGamemaster'] === 1) {
-        if ($startyear === null) {
+    if ($user['aclGamemaster'] == 1) {
+        if ($startyear == null) {
             $startyear = date("Y") - 40;
         }
     } else {
-        if ($startyear === null) {
+        if ($startyear == null) {
             $startyear = date("Y") - 10;
         }
     }
-    if ($endyear === null) {
+    if ($endyear == null) {
         $endyear = date("Y") + 5;
     }
 
@@ -65,7 +65,7 @@ function date_picker($name, $startyear = null, $endyear = null)
     // roletka dnů
     $html = "<select class=\"day\" name=\"".$name."day\">";
     for ($i = 1; $i <= 31; $i++) {
-        $html .= "<option ".($i === $aday ? ' selected' : '')." value='$i'>$i</option>";
+        $html .= "<option ".($i == $aday ? ' selected' : '')." value='$i'>$i</option>";
     }
     $html .= "</select> ";
 
@@ -73,7 +73,7 @@ function date_picker($name, $startyear = null, $endyear = null)
     $html .= "<select class=\"month\" name=\"".$name."month\">";
 
     for ($i = 1; $i <= 12; $i++) {
-        $html .= "<option ".($i === $amonth ? ' selected' : '')." value='$i'>$months[$i]</option>";
+        $html .= "<option ".($i == $amonth ? ' selected' : '')." value='$i'>$months[$i]</option>";
     }
     $html .= "</select> ";
 
@@ -81,7 +81,7 @@ function date_picker($name, $startyear = null, $endyear = null)
     $html .= "<select class=\"year\" name=\"".$name."year\">";
 
     for ($i = $startyear; $i <= $endyear; $i++) {
-        $html .= "<option ".($i === $ayear ? ' selected' : '')." value='$i'>$i</option>";
+        $html .= "<option ".($i == $ayear ? ' selected' : '')." value='$i'>$i</option>";
     }
     $html .= "</select> ";
 
@@ -92,7 +92,7 @@ function date_picker($name, $startyear = null, $endyear = null)
 function getAuthor($recid, $trn)
 {
     global $database;
-    if (1 === $trn) { //person
+    if (1 == $trn) { //person
         $getAuthorSql = 'SELECT '.DB_PREFIX."person.name as 'name', ".DB_PREFIX."person.surname as 'surname', ".DB_PREFIX."user.userName as 'nick' FROM ".DB_PREFIX.'person, '.DB_PREFIX.'user WHERE '.DB_PREFIX.'user.userId='.$recid.' AND '.DB_PREFIX.'person.id='.DB_PREFIX.'user.idperson';
         $getAuthorQuery = mysqli_query($database, $getAuthorSql);
         if (!is_bool($getAuthorQuery)) {
