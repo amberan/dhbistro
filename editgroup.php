@@ -8,7 +8,7 @@ latteDrawTemplate("header");
     if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
         $res = mysqli_query($database,"SELECT * FROM ".DB_PREFIX."group WHERE id=".$_REQUEST['rid']);
         if ($rec_g = mysqli_fetch_assoc($res)) {
-            if (($rec_g['secret'] > $user['aclDirector']) || $rec_g['deleted'] === 1) {
+            if (($rec_g['secret'] > $user['aclDirector']) || $rec_g['deleted'] == 1) {
                 unauthorizedAccess(2, $rec_g['secret'], $rec_g['deleted'], $_REQUEST['rid']);
             }
             auditTrail(2, 1, $_REQUEST['rid']);
@@ -19,22 +19,22 @@ latteDrawTemplate("header");
 <fieldset><legend><strong>Úprava skupiny: <?php echo stripslashes($rec_g['title']); ?></strong></legend>
 <form action="procgroup.php" method="post" id="inputform">
 	<div id="info"><?php
-        if ($rec_g['secret'] === 1) { ?>
+        if ($rec_g['secret'] == 1) { ?>
 	 	<h2>TAJNÉ</h2><?php }
-            if ($rec_g['archived'] === 1) { ?>
+            if ($rec_g['archived'] == 1) { ?>
 	 	<h2>ARCHIV</h2><?php } ?>	
 		<h3><label for="title">Název:</label></h3>
 		<input type="text" name="title" id="title" value="<?php echo stripslashes($rec_g['title']); ?>" />
 		
                 <div class="clear">&nbsp;</div>
                 <h3><label for="archived">Archiv:</label></h3>
-			<input type="checkbox" name="archived" value=1 <?php if ($rec_g['archived'] === 1) { ?>checked="checked"<?php } ?>/><br/>
+			<input type="checkbox" name="archived" value=1 <?php if ($rec_g['archived'] == 1) { ?>checked="checked"<?php } ?>/><br/>
 		<div class="clear">&nbsp;</div>
 		                
                 <h3><label for="secret">Přísně tajné:</label></h3>
-			<input type="checkbox" name="secret" value=1 <?php if ($rec_g['secret'] === 1) { ?>checked="checked"<?php } ?>/><br/>
+			<input type="checkbox" name="secret" value=1 <?php if ($rec_g['secret'] == 1) { ?>checked="checked"<?php } ?>/><br/>
 		<div class="clear">&nbsp;</div>
-<?php if ($user['aclGamemaster'] === 1) {
+<?php if ($user['aclGamemaster'] == 1) {
                 echo '					
 				<h3><label for="notnew">Není nové</label></h3>
 					<input type="checkbox" name="notnew"/><br/>
@@ -66,7 +66,7 @@ latteDrawTemplate("header");
             while ($perc = mysqli_fetch_assoc($pers)) {
                 $persons[] = '<a href="readperson.php?rid='.$perc['id'].'">'.$perc['surname'].', '.$perc['name'].'</a>';
             }
-            echo implode($persons, '; ') !== "" ? implode($persons, '; ') : '<em>Nejsou připojeny žádné osoby.</em>'; ?></p>
+            echo implode($persons, '; ') != "" ? implode($persons, '; ') : '<em>Nejsou připojeny žádné osoby.</em>'; ?></p>
 	</fieldset>
 	
 	<!-- následuje seznam přiložených souborů -->
@@ -82,16 +82,16 @@ latteDrawTemplate("header");
             $i = 0;
             while ($rec_f = mysqli_fetch_assoc($res)) {
                 $i++;
-                if ($i === 1) { ?>
+                if ($i == 1) { ?>
 		<ul id="prilozenadata">
 				<?php } ?>
-			<li class="soubor"><a href="file/attachement/<?php echo $rec_f['id']; ?>" title=""><?php echo stripslashes($rec_f['title']); ?></a><?php if ($rec_f['secret'] === 1) { ?> (TAJNÝ)<?php } ?><span class="poznamka-edit-buttons"><?php
-                if (($rec_f['iduser'] === $user['userId']) || ($user['aclDirector'])) {
+			<li class="soubor"><a href="file/attachement/<?php echo $rec_f['id']; ?>" title=""><?php echo stripslashes($rec_f['title']); ?></a><?php if ($rec_f['secret'] == 1) { ?> (TAJNÝ)<?php } ?><span class="poznamka-edit-buttons"><?php
+                if (($rec_f['iduser'] == $user['userId']) || ($user['aclDirector'])) {
                     echo '<a class="delete" title="smazat" href="procgroup.php?deletefile='.$rec_f['id'].'&amp;groupid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editgroup.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat soubor &quot;'.stripslashes($rec_f['title']).'&quot; náležící ke skupině?\')"><span class="button-text">smazat soubor</span></a>';
                 } ?>
 				</span></li><?php
             }
-            if ($i !== 0) { ?>
+            if ($i != 0) { ?>
 		</ul>
 		<!-- end of #prilozenadata -->
 		<?php
@@ -110,10 +110,10 @@ latteDrawTemplate("header");
 			</div>
 			<div>
 				<strong><label for="usecret">Přísně tajné:</label></strong>
-			  	<?php if ($rec_g['secret'] !== 1) { ?>&nbsp;<input type="radio" name="secret" value="0" checked="checked"/>ne&nbsp;/<?php } ?>
-				&nbsp;<input type="radio" name="secret" value="1" <?php if ($rec_g['secret'] === 1) { ?>checked="checked"<?php } ?>/>ano
+			  	<?php if ($rec_g['secret'] != 1) { ?>&nbsp;<input type="radio" name="secret" value="0" checked="checked"/>ne&nbsp;/<?php } ?>
+				&nbsp;<input type="radio" name="secret" value="1" <?php if ($rec_g['secret'] == 1) { ?>checked="checked"<?php } ?>/>ano
 			</div>
-<?php 		if ($user['aclGamemaster'] === 1) {
+<?php 		if ($user['aclGamemaster'] == 1) {
                 echo '					
 			<div>
 			<strong><label for="fnotnew">Není nové</label></strong>
@@ -142,14 +142,14 @@ latteDrawTemplate("header");
             $res_n = mysqli_query($database,$sql_n);
             while ($rec_n = mysqli_fetch_assoc($res_n)) { ?>
 			<li><a href="readnote.php?rid=<?php echo $rec_n['id']; ?>&amp;idtable=2"><?php echo stripslashes($rec_n['title']); ?></a> - <?php echo stripslashes($rec_n['user']);
-            if ($rec_n['secret'] === 0) { ?> (veřejná)<?php }
-            if ($rec_n['secret'] === 1) { ?> (tajná)<?php }
-            if ($rec_n['secret'] === 2) { ?> (soukromá)<?php }
+            if ($rec_n['secret'] == 0) { ?> (veřejná)<?php }
+            if ($rec_n['secret'] == 1) { ?> (tajná)<?php }
+            if ($rec_n['secret'] == 2) { ?> (soukromá)<?php }
             ?><span class="poznamka-edit-buttons"><?php
-            if (($rec_n['iduser'] === $user['userId']) || ($usrinfo['right_text'])) {
+            if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
                 echo ' <a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=2" title="upravit"><span class="button-text">upravit poznámku</span></a>';
             }
-            if (($rec_n['iduser'] === $user['userId']) || ($user['aclDirector'])) {
+            if (($rec_n['iduser'] == $user['userId']) || ($user['aclDirector'])) {
                 echo ' <a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editgroup.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec_n['title'])."&quot; náležící ke skupině?');".'" title="smazat"><span class="button-text">smazat poznámku</span></a>';
             }
             ?></span></li><?php

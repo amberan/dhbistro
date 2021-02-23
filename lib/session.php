@@ -108,13 +108,13 @@ if (isset($_SESSION['sid'])) {
 /*
  * LOGOUT
  */
-if (!isset($_SESSION['sid']) and (in_array($URL[1],$config['page_free'], true) === false)) { //neprihlaseny, zkousi
+if (!isset($_SESSION['sid']) and (in_array($URL[1],$config['page_free'], true) == false)) { //neprihlaseny, zkousi
     logout_forced($text['http401']);
 }
 if (isset($user) and (@$user['userTimeout'] + @$_SESSION['timestamp'] < time()) and !isset($_POST['logmein'])) { //neprihlasuje se, je prihlaseny, ale vyprsel timeout
     logout_forced($text['nuceneodhlaseni']);
 }
-if ($URL[1] === 'logout') { //user logout
+if ($URL[1] == 'logout') { //user logout
     logout_forced($text['odhlaseniuspesne']);
 }
 

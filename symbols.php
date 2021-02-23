@@ -28,7 +28,7 @@ $latteParameters['title'] = 'Symboly';
 ';
         $even = 0;
         while ($rec = mysqli_fetch_assoc($res)) {
-            echo '<tr class="'.(searchRecord(7,$rec['id']) ? ' unread_record' : ($even % 2 === 0 ? 'even' : 'odd')).'">
+            echo '<tr class="'.(searchRecord(7,$rec['id']) ? ' unread_record' : ($even % 2 == 0 ? 'even' : 'odd')).'">
 		  <td><a href="readsymbol.php?rid='.$rec['id'].'"><img src="file/symbol/'.$rec['id'].'" alt="symbol chybí" /></a></td>
 		  <td>'.stripslashes($rec['desc']).'<br />';
             // generování poznámek
@@ -43,7 +43,7 @@ $latteParameters['title'] = 'Symboly';
             $i = 0;
             while ($rec_n = mysqli_fetch_assoc($res_n)) {
                 $i++;
-                if ($i === 1) { ?>
+                if ($i == 1) { ?>
 		  	<div id="poznamky"><?php
                     }
                 if ($i > 1) {?>
@@ -51,13 +51,13 @@ $latteParameters['title'] = 'Symboly';
                     } ?>
 		  		<div class="poznamka">
 		  			<h4><?php echo stripslashes($rec_n['title']).' - '.stripslashes($rec_n['user']);
-                if ($rec_n['secret'] === 0) {
+                if ($rec_n['secret'] == 0) {
                     echo ' (veřejná)';
                 }
-                if ($rec_n['secret'] === 1) {
+                if ($rec_n['secret'] == 1) {
                     echo ' (tajná)';
                 }
-                if ($rec_n['secret'] === 2) {
+                if ($rec_n['secret'] == 2) {
                     echo ' (soukromá)';
                 } ?></h4>
 		  			<div><?php echo stripslashes($rec_n['note']); ?></div>
@@ -65,7 +65,7 @@ $latteParameters['title'] = 'Symboly';
 		  		<!-- end of .poznamka -->
 		  			<?php
             }
-            if ($i !== 0) { ?>
+            if ($i != 0) { ?>
 		  	</div>
 		  	<!-- end of #poznamky -->
 		  	<?php }
@@ -84,14 +84,14 @@ $latteParameters['title'] = 'Symboly';
             $i = 0;
             while ($perc = mysqli_fetch_assoc($pers)) {
                 $i++;
-                if ($i === 1) { ?>
+                if ($i == 1) { ?>
 		  		<strong>Případy:</strong>
 		  		<ul id=""><?php
                         } ?>
 		  			<li><a href="readcase.php?rid=<?php echo $perc['id']; ?>"><?php echo $perc['title']; ?></a></li>
 		  		<?php
             }
-            if ($i !== 0) { ?>
+            if ($i != 0) { ?>
 		  		</ul>
 		  		<!-- end of # -->
 		  		<?php
@@ -110,14 +110,14 @@ $latteParameters['title'] = 'Symboly';
             $i = 0;
             while ($perc = mysqli_fetch_assoc($pers)) {
                 $i++;
-                if ($i === 1) { ?>
+                if ($i == 1) { ?>
 		  		<strong>Hlášení:</strong>
 		  		<ul id=""><?php
                 } ?>
 		  		<li><a href="readactrep.php?rid=<?php echo $perc['id']; ?>"><?php echo $perc['label']; ?></a></li>
 		  		<?php
             }
-            if ($i !== 0) { ?>
+            if ($i != 0) { ?>
 		  		</ul>
 		  		<!-- end of # -->
 		  	    <?php

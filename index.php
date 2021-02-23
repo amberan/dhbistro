@@ -43,30 +43,30 @@ $latteParameters['URL'] = $URL;
  * THE LOOP
  * */
 if (isset($user)) {
-    if ($URL[1] === 'file') { // GET FILE type:  attachement,portrait,symbol,backup
+    if ($URL[1] == 'file') { // GET FILE type:  attachement,portrait,symbol,backup
         //TODO auditTrail
         require_once SERVER_ROOT.'/file.php';
         exit;
     }
     latteDrawTemplate('headerMD');
     latteDrawTemplate('menu');
-    if ($URL[1] === 'settings') { // SETTINGS
+    if ($URL[1] == 'settings') { // SETTINGS
         $latteParameters['title'] = $text['nastaveni'];
         require_once SERVER_ROOT.'/pages/settings.php';
-    } elseif ($user['aclRoot'] > 0 and $URL[1] === 'backup') { // BACKUP
+    } elseif ($user['aclRoot'] > 0 and $URL[1] == 'backup') { // BACKUP
         $latteParameters['title'] = $text['zalohovani'];
         require_once SERVER_ROOT.'/pages/backup.php';
-    } elseif ($URL[1] === 'users') { // USER MANAGEMENT
+    } elseif ($URL[1] == 'users') { // USER MANAGEMENT
         if ($user['aclDirector'] < 1) {
             unauthorizedAccess(8, 1, 0, 0);
         } else {
             $latteParameters['title'] = $text['spravauzivatelu'];
             auditTrail(8, 1, 0);
-            if (isset($URL[2]) and $URL[2] === 'new') { // USER MANAGEMENT > ADD USER
+            if (isset($URL[2]) and $URL[2] == 'new') { // USER MANAGEMENT > ADD USER
                 $latteParameters['actions'][] = ["/users", $text['spravauzivatelu']];
                 $latteParameters['subtitle'] = $text['vytvorituzivatele'];
                 require_once SERVER_ROOT.'/pages/user_add.php';
-            } elseif (isset($URL[2]) and $URL[2] === 'edit') { // USER MANAGEMENT >EDIT USER
+            } elseif (isset($URL[2]) and $URL[2] == 'edit') { // USER MANAGEMENT >EDIT USER
                 $latteParameters['actions'][] = ["/users/new", $text['vytvorituzivatele']];
                 $latteParameters['subtitle'] = $text['upravituzivatele'];
                 require_once SERVER_ROOT.'/pages/user_edit.php';
@@ -75,13 +75,13 @@ if (isset($user)) {
                 require_once SERVER_ROOT.'/pages/users.php';
             }
         }
-    } elseif ($URL[1] === 'board') { // BOARD (nastenka)
+    } elseif ($URL[1] == 'board') { // BOARD (nastenka)
         auditTrail(6, 1, 0);
         $latteParameters['title'] = $text['nastenka'];
         $latteParameters['actions'][] = ["/news", $text['zobrazitaktuality']];
-        if (isset($URL[2]) and $URL[2] === 'edit' and $user['aclDeputy'] < 1 and $user['aclDirector'] < 1) {
+        if (isset($URL[2]) and $URL[2] == 'edit' and $user['aclDeputy'] < 1 and $user['aclDirector'] < 1) {
             unauthorizedAccess(6, 2, 0, 0);
-        } elseif ((isset($URL[2]) and $URL[2] === 'edit' and ($user['aclDeputy'] > 0 or $user['aclDirector'] > 0))) { // BOARD > EDIT
+        } elseif ((isset($URL[2]) and $URL[2] == 'edit' and ($user['aclDeputy'] > 0 or $user['aclDirector'] > 0))) { // BOARD > EDIT
             $latteParameters['subtitle'] = $text['upravitnastenku'];
             $latteParameters['actions'][] = ["/board", $text['zobrazitnastenku']];
             require_once SERVER_ROOT.'/pages/board_edit.php';
@@ -92,7 +92,7 @@ if (isset($user)) {
             require_once SERVER_ROOT.'/pages/dashboard.php';
             require_once SERVER_ROOT.'/pages/board.php';
         }
-    } elseif ($URL[1] === 'cases') { // CASES (nastenka)
+    } elseif ($URL[1] == 'cases') { // CASES (nastenka)
         auditTrail(3, 1, 0);
         $latteParameters['title'] = $text['pripady'];
         $latteParameters['actions'][] = ["/newcase.php", $text['pridatpripad']];
@@ -102,7 +102,7 @@ if (isset($user)) {
         auditTrail(5, 1, 0);
         $latteParameters['title'] = 'Aktuality';
         $latteParameters['actions'][] = ["/board", $text['zobrazitnastenku']];
-        if (isset($URL[2]) and $URL[2] === 'new' and ($user['aclDeputy'] > 0 or $user['aclDirector'] > 0) and $URL[1] === 'news') { // NEWS > NEW
+        if (isset($URL[2]) and $URL[2] == 'new' and ($user['aclDeputy'] > 0 or $user['aclDirector'] > 0) and $URL[1] == 'news') { // NEWS > NEW
             $latteParameters['subtitle'] = $text['pridataktualitu'];
             $latteParameters['actions'][] = ["/news", $text['zobrazitaktuality']];
             require_once SERVER_ROOT.'/pages/news_add.php';
@@ -120,7 +120,7 @@ if (isset($user)) {
 }
 
 //show tracy bar unless it's a sending a file (picture) to the user
-//if ( $URL[1] !== 'file') {
+//if ( $URL[1] != 'file') {
     Debugger::barDump($_SESSION, 'session');
     Debugger::barDump($latteParameters, 'latte');
     latteDrawTemplate('footerMD');

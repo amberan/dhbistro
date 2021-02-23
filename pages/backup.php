@@ -12,7 +12,7 @@ function human_filesize($bytes, $decimals = 2)
     return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor];
 }
 
-if (isset($URL[2]) and ($user['aclRoot'] > 1) and $URL[2] === 'now') {
+if (isset($URL[2]) and ($user['aclRoot'] > 1) and $URL[2] == 'now') {
     backup_process();
     $latteParameters['message'] = $text['zalohavytvorena'];
 }

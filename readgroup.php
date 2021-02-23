@@ -8,7 +8,7 @@ latteDrawTemplate("header");
     if (is_numeric($_REQUEST['rid'])) {
         $res = mysqli_query($database,"SELECT * FROM ".DB_PREFIX."group WHERE id=".$_REQUEST['rid']);
         if ($rec_g = mysqli_fetch_assoc($res)) {
-            if (($rec_g['secret'] > $user['aclDirector']) || $rec_g['deleted'] === 1) {
+            if (($rec_g['secret'] > $user['aclDirector']) || $rec_g['deleted'] == 1) {
                 unauthorizedAccess(2, $rec_g['secret'], $rec_g['deleted'], $_REQUEST['rid']);
             }
             auditTrail(2, 1, $_REQUEST['rid']);
@@ -22,7 +22,7 @@ latteDrawTemplate("header");
             } else {
                 $hn = $_REQUEST['hidenotes'];
             }
-            if ($hn === 0) {
+            if ($hn == 0) {
                 $hidenotes = '&amp;hidenotes=1">skrýt poznámky</a>';
                 $backurl = 'readgroup.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
             } else {
@@ -74,11 +74,11 @@ latteDrawTemplate("header");
     <fieldset>
         <legend><strong>Obecné informace</strong></legend>
         <div id="info"><?php
-        if ($rec_g['secret'] === 1) { ?>
+        if ($rec_g['secret'] == 1) { ?>
             <h2>TAJNÉ</h2><?php }
-            if ($rec_g['archived'] === 1) { ?>
+            if ($rec_g['archived'] == 1) { ?>
             <h2>ARCHIV</h2><?php }
-            if ($rec_g['deleted'] === 1) { ?>
+            if ($rec_g['deleted'] == 1) { ?>
             <h2>SMAZANÝ ZÁZNAM</h2><?php } ?>
             <h3>Členové: </h3>
             <p><?php
@@ -102,7 +102,7 @@ latteDrawTemplate("header");
 ';
                 $even = 0;
                 while ($rec = mysqli_fetch_assoc($res)) {
-                    echo '<tr class="'.($even % 2 === 0 ? 'even' : 'odd').'">
+                    echo '<tr class="'.($even % 2 == 0 ? 'even' : 'odd').'">
 '.($sportraits ? '<td><img src="file/portrait/'.$rec['id'].'" alt="portrét chybí" /></td>' : '').'
 	<td>'.($rec['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ',[stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a></span>' : '<a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ',[stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a>').'</td>
 	<td><a href="tel:'.str_replace(' ', '',$rec['phone']).'">'.$rec['phone'].'</a></td>
@@ -135,7 +135,7 @@ latteDrawTemplate("header");
             $i = 0;
             while ($rec = mysqli_fetch_assoc($res)) {
                 $i++;
-                if ($i === 1) { ?>
+                if ($i == 1) { ?>
     <fieldset>
         <legend><strong>Přiložené soubory</strong></legend>
         <ul id="prilozenadata">
@@ -147,7 +147,7 @@ latteDrawTemplate("header");
             <?php } ?>
             <?php
             }
-            if ($i !== 0) { ?>
+            if ($i != 0) { ?>
         </ul>
         <!-- end of #prilozenadata -->
     </fieldset>
@@ -156,7 +156,7 @@ latteDrawTemplate("header");
             // konec seznamu přiložených souborů?>
 
     <?php //skryti poznamek
-if ($hn !== 1) { ?>
+if ($hn != 1) { ?>
     <!-- následuje seznam poznámek -->
     <?php // generování poznámek
         if ($user['aclDirector']) {
@@ -168,7 +168,7 @@ if ($hn !== 1) { ?>
         $i = 0;
         while ($rec_n = mysqli_fetch_assoc($res_n)) {
             $i++;
-            if ($i === 1) { ?>
+            if ($i == 1) { ?>
     <fieldset>
         <legend><strong>Poznámky</strong></legend>
         <div id="poznamky"><?php
@@ -178,22 +178,22 @@ if ($hn !== 1) { ?>
             } ?>
             <div class="poznamka">
                 <h4><?php echo stripslashes($rec_n['title']).' - '.stripslashes($rec_n['user']).' ['.webdate($rec_n['date_created']).']';
-            if ($rec_n['secret'] === 0) {
+            if ($rec_n['secret'] == 0) {
                 echo ' (veřejná)';
             }
-            if ($rec_n['secret'] === 1) {
+            if ($rec_n['secret'] == 1) {
                 echo ' (tajná)';
             }
-            if ($rec_n['secret'] === 2) {
+            if ($rec_n['secret'] == 2) {
                 echo ' (soukromá)';
             } ?></h4>
                 <div><?php echo stripslashes($rec_n['note']); ?></div>
                 <span
                       class="poznamka-edit-buttons"><?php
-            if (($rec_n['iduser'] === $user['userId']) || ($usrinfo['right_text'])) {
+            if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
                 echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;idtable=2" title="upravit"><span class="button-text">upravit</span></a> ';
             }
-            if (($rec_n['iduser'] === $user['userId']) || ($user['aclDirector'])) {
+            if (($rec_n['iduser'] == $user['userId']) || ($user['aclDirector'])) {
                 echo '<a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.urlencode($backurl).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec_n['title'])."&quot; náležící k osobě?');".'" title="smazat"><span class="button-text">smazat</span></a>';
             } ?>
                 </span>
@@ -201,7 +201,7 @@ if ($hn !== 1) { ?>
             <!-- end of .poznamka -->
             <?php
         }
-        if ($i !== 0) { ?>
+        if ($i != 0) { ?>
         </div>
         <!-- end of #poznamky -->
     </fieldset>

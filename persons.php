@@ -118,52 +118,52 @@ $latteParameters['title'] = 'Osoby';
 	  <legend>Filtr</legend>
 	<p> Strana: 
 	<select name="fside">
-	<option value="0"'.($fside === 0 ? ' selected="selected"' : '').'>vše</option>
-	<option value="1"'.($fside === 1 ? ' selected="selected"' : '').'>neznámá</option>
-	<option value="2"'.($fside === 2 ? ' selected="selected"' : '').'>světlo</option>
-	<option value="3"'.($fside === 3 ? ' selected="selected"' : '').'>tma</option>
-	<option value="4"'.($fside === 4 ? ' selected="selected"' : '').'>člověk</option>
+	<option value="0"'.($fside == 0 ? ' selected="selected"' : '').'>vše</option>
+	<option value="1"'.($fside == 1 ? ' selected="selected"' : '').'>neznámá</option>
+	<option value="2"'.($fside == 2 ? ' selected="selected"' : '').'>světlo</option>
+	<option value="3"'.($fside == 3 ? ' selected="selected"' : '').'>tma</option>
+	<option value="4"'.($fside == 4 ? ' selected="selected"' : '').'>člověk</option>
 	</select>
 	 Specializace: 
 	<select name="fspec">
-	<option value="0"'.($fspec === 0 ? ' selected="selected"' : '').'>vše</option>
-	<option value="1"'.($fspec === 1 ? ' selected="selected"' : '').'>neznámá</option>
-	<option value="2"'.($fspec === 2 ? ' selected="selected"' : '').'>bílý mág</option>
-	<option value="3"'.($fspec === 3 ? ' selected="selected"' : '').'>černý mág</option>
-	<option value="4"'.($fspec === 4 ? ' selected="selected"' : '').'>léčitel</option>
-	<option value="5"'.($fspec === 5 ? ' selected="selected"' : '').'>obrateň</option>
-	<option value="6"'.($fspec === 6 ? ' selected="selected"' : '').'>upír</option>
-	<option value="7"'.($fspec === 7 ? ' selected="selected"' : '').'>vlkodlak</option>
-	<option value="8"'.($fspec === 8 ? ' selected="selected"' : '').'>vědma</option>
-	<option value="9"'.($fspec === 9 ? ' selected="selected"' : '').'>zaříkávač</option>
-	<option value="10"'.($fspec === 10 ? ' selected="selected"' : '').'>vykladač</option>
-	<option value="11"'.($fspec === 11 ? ' selected="selected"' : '').'>jasnovidec</option>
+	<option value="0"'.($fspec == 0 ? ' selected="selected"' : '').'>vše</option>
+	<option value="1"'.($fspec == 1 ? ' selected="selected"' : '').'>neznámá</option>
+	<option value="2"'.($fspec == 2 ? ' selected="selected"' : '').'>bílý mág</option>
+	<option value="3"'.($fspec == 3 ? ' selected="selected"' : '').'>černý mág</option>
+	<option value="4"'.($fspec == 4 ? ' selected="selected"' : '').'>léčitel</option>
+	<option value="5"'.($fspec == 5 ? ' selected="selected"' : '').'>obrateň</option>
+	<option value="6"'.($fspec == 6 ? ' selected="selected"' : '').'>upír</option>
+	<option value="7"'.($fspec == 7 ? ' selected="selected"' : '').'>vlkodlak</option>
+	<option value="8"'.($fspec == 8 ? ' selected="selected"' : '').'>vědma</option>
+	<option value="9"'.($fspec == 9 ? ' selected="selected"' : '').'>zaříkávač</option>
+	<option value="10"'.($fspec == 10 ? ' selected="selected"' : '').'>vykladač</option>
+	<option value="11"'.($fspec == 11 ? ' selected="selected"' : '').'>jasnovidec</option>
 	</select>
 	 Kategorie: 
 	<select name="fpow">
-	<option value="0"'.($fpow === 0 ? ' selected="selected"' : '').'>vše</option>
-	<option value="1"'.($fpow === 1 ? ' selected="selected"' : '').'>neznámá</option>
-	<option value="2"'.($fpow === 2 ? ' selected="selected"' : '').'>první</option>
-	<option value="3"'.($fpow === 3 ? ' selected="selected"' : '').'>druhá</option>
-	<option value="4"'.($fpow === 4 ? ' selected="selected"' : '').'>třetí</option>
-	<option value="5"'.($fpow === 5 ? ' selected="selected"' : '').'>čtvrtá</option>
-	<option value="6"'.($fpow === 6 ? ' selected="selected"' : '').'>pátá</option>
-	<option value="7"'.($fpow === 7 ? ' selected="selected"' : '').'>šestá</option>
-	<option value="8"'.($fpow === 8 ? ' selected="selected"' : '').'>sedmá</option>
-	<option value="9"'.($fpow === 9 ? ' selected="selected"' : '').'>mimo kategorie</option>
+	<option value="0"'.($fpow == 0 ? ' selected="selected"' : '').'>vše</option>
+	<option value="1"'.($fpow == 1 ? ' selected="selected"' : '').'>neznámá</option>
+	<option value="2"'.($fpow == 2 ? ' selected="selected"' : '').'>první</option>
+	<option value="3"'.($fpow == 3 ? ' selected="selected"' : '').'>druhá</option>
+	<option value="4"'.($fpow == 4 ? ' selected="selected"' : '').'>třetí</option>
+	<option value="5"'.($fpow == 5 ? ' selected="selected"' : '').'>čtvrtá</option>
+	<option value="6"'.($fpow == 6 ? ' selected="selected"' : '').'>pátá</option>
+	<option value="7"'.($fpow == 7 ? ' selected="selected"' : '').'>šestá</option>
+	<option value="8"'.($fpow == 8 ? ' selected="selected"' : '').'>sedmá</option>
+	<option value="9"'.($fpow == 9 ? ' selected="selected"' : '').'>mimo kategorie</option>
 	</select></p>
 	
 	<table class="filter">
 	<tr class="filter">
 	<td class="filter"><input type="checkbox" name="sportraits" value="1"'.($sportraits ? ' checked="checked"' : '').'> Zobrazit portréty.</td>
-	<td class="filter"><input type="checkbox" name="fdead" value="1"'.($fdead === 1 ? ' checked="checked"' : '').'> Zobrazit i mrtvé.</td>
-        <td class="filter"><input type="checkbox" name="new" value="1"'.($fNew === 1 ? ' checked="checked"' : '').'> Zobrazit jen nové.</td>
+	<td class="filter"><input type="checkbox" name="fdead" value="1"'.($fdead == 1 ? ' checked="checked"' : '').'> Zobrazit i mrtvé.</td>
+        <td class="filter"><input type="checkbox" name="new" value="1"'.($fNew == 1 ? ' checked="checked"' : '').'> Zobrazit jen nové.</td>
 	</tr>
         <tr class="filter">
 	<td class="filter"><input type="checkbox" name="ssymbols" value="1"'.($ssymbols ? ' checked="checked"' : '').'> Zobrazit symboly.</td>
-	<td class="filter"><input type="checkbox" name="farchiv" value="1"'.($farchiv === 1 ? ' checked="checked"' : '').'> Zobrazit i archiv.</td>';
+	<td class="filter"><input type="checkbox" name="farchiv" value="1"'.($farchiv == 1 ? ' checked="checked"' : '').'> Zobrazit i archiv.</td>';
         if ($user['aclDirector']) {
-            echo '<td class="filter"><input type="checkbox" name="sec" value="sec" class="checkbox"'.($filterSec === 1 ? ' checked="checked"' : '').' /> Jen tajné.</td></tr></table>';
+            echo '<td class="filter"><input type="checkbox" name="sec" value="sec" class="checkbox"'.($filterSec == 1 ? ' checked="checked"' : '').' /> Jen tajné.</td></tr></table>';
         } else {
             echo '</tr></table>';
         }
@@ -198,14 +198,14 @@ if (isset($_GET['sort'])) {
 ';
         $even = 0;
         while ($rec = mysqli_fetch_assoc($res)) {
-            if ($fNew === 0 || ($fNew === 1 && searchRecord(1,$rec['id']))) {
-                echo '<tr class="'.(searchRecord(1,$rec['id']) ? ' unread_record' : ($even % 2 === 0 ? 'even' : 'odd')).'">
+            if ($fNew == 0 || ($fNew == 1 && searchRecord(1,$rec['id']))) {
+                echo '<tr class="'.(searchRecord(1,$rec['id']) ? ' unread_record' : ($even % 2 == 0 ? 'even' : 'odd')).'">
                         '.($sportraits ? '<td><img src="file/portrait/'.$rec['id'].'" alt="" /></td>' : '').'
                         '.($ssymbols ? '<td><img src="file/symbol/'.$rec['symbol'].'" alt="" /></td>' : '').'
                         <td>'.($rec['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ',[stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a></span>' : '<a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ',[stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a>').'</td>
 						<td><a href="tel:'.str_replace(' ', '',$rec['phone']).'">'.$rec['phone'].'</a></td>
 						<td>'.webdate($rec['date_created']).' / '.webdate($rec['date_changed']).'</td>
-                        <td>'.($rec['archiv'] === 1 ? 'Archivovaný' : '').''.($rec['dead'] === 1 ? ' Mrtvý' : '').''.($rec['secret'] === 1 ? ' Tajný' : '').'</td>
+                        <td>'.($rec['archiv'] == 1 ? 'Archivovaný' : '').''.($rec['dead'] == 1 ? ' Mrtvý' : '').''.($rec['secret'] == 1 ? ' Tajný' : '').'</td>
                         '.($usrinfo['right_text'] ? '	<td><a href="editperson.php?rid='.$rec['id'].'">upravit</a> | <a href="procperson.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat osobu &quot;".implode(', ',[stripslashes($rec['surname']), stripslashes($rec['name'])])."&quot;?');".'">smazat</a></td>' : '<td><a href="newnote.php?rid='.$rec['id'].'&idtable=5">přidat poznámku</a>').'
                         </tr>';
                 $even++;
