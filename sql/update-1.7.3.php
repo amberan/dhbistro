@@ -193,6 +193,10 @@ $counterUPdateRight = bistroMigratePermissions($rightsToUpdate);
 $counterColumnDrop = bistroDBColumnDrop($columnDrop);
 $counterTableDrop = bistroDBTableDrop($tableDrop);
 
+// #98 insert new value to audit enum
+$update98 = 'INSERT INTO '.DB_PREFIX.'nw_operation_type (id,name) VALUES ("15","neopravněný pokus o řístup k tajnému") ON DUPLICATE KEY UPDATE id="15", name="neopravněný pokus o řístup k tajnému"';
+mysqli_query($database,$update98);
+
 //pokud zmeny probehly, prejmenovat tento soubor
 if ($counterColumnAdd + $counterColumnAlter + $counterColumnMarkdown + $counterFulltextAdd + $counterPasswordEncrypt
     + $counterTableRename + $counterTableDrop + $counterTableCreate + $counterIndexAdd + $counterUPdateRight
