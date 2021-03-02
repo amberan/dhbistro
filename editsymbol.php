@@ -20,7 +20,7 @@ $latteParameters['title'] = 'Úprava symbolu';
 <fieldset><legend><strong>Úprava symbolu:</strong></legend>
 	<p id="top-text">Symboly nahrávejte pokud možno ve velikosti 100x100 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen symboly jasně rozeznatelné, rozmazané fotky použijte třeba jako přílohu. <br />
 	Pokud zadáváte hodnoty pro čáry, křivky, body, geometrické tvary, písma a speciální znaky, hodnota nabývá velikosti 0 až 10</p>
-	<form action="procother.php" method="post" id="inputform" enctype="multipart/form-data">
+	<form action="symbols.php" method="post" id="inputform" enctype="multipart/form-data">
 	    	<datalist id=hodnoty>
 				<option>0</option>
 				<option>1</option>
