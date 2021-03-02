@@ -1,6 +1,6 @@
 <?php
 
-$config['version'] = '1.7.3';  // version
+$config['version'] = '1.7.4';  // version
 $config['dbpass'] = SERVER_ROOT.'/inc/important.php'; // database password - second line of the file
 $config['page_prefix'] = ''; // uri cesta mezi domenou a adresarem bistra
 $config['page_free'] = ['', 'favicon.ico']; // to be removed

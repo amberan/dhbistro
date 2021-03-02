@@ -1,5 +1,9 @@
 # BISTRO changelog 
 
+**1.7.4**
+- archivovatelne symboly [#22](https://gitlab.alembiq.net/larp/bistro/issues/22)
+- modal window pro notifikace dostupny v starem UI
+
 **1.7.3** 
 - nasazeni trideni na stare formulare [#87](https://gitlab.alembiq.net/larp/bistro/issues/87)
 - WIP filtrovani - pripady [#59](https://gitlab.alembiq.net/larp/bistro/issues/59)
