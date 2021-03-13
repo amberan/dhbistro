@@ -110,10 +110,6 @@ if (sizeof($_POST['filter']) > 0) {
 }
 $filter = filterGet('group');
 $sqlFilter = DB_PREFIX."group.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."group.secret<=".$user['aclSecret'];
-
-if (isset($filter['secret']) and $filter['secret'] == 'on') {
-    $sqlFilter .= ' AND '.DB_PREFIX.'group.secret>0 ';
-}
 switch (@$filter['archived']) {
     case 'on': $sqlFilter .= ' AND '.DB_PREFIX.'group.archived in (0,1)'; break;
     default: $sqlFilter .= ' AND '.DB_PREFIX.'group.archived=0 ';
