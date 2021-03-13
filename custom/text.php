@@ -18,6 +18,8 @@ $text['zapis'] = 'Zápis';
 $text['cteni'] = 'Čtení';
 $text['skryt'] = 'Skrýt';
 $text['zpristupnit'] = 'Zpřístupnit';
+$text['neznamo'] = 'Neznámo';
+$text['smazane'] = 'Smazané';
 
 // LOGIN
 $text['jmeno'] = 'Jméno';
