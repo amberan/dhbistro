@@ -22,6 +22,8 @@ if (isset($_POST['userid'], $_POST['edituser']) && $user['aclDirector'] && !preg
         $data['aclPerson'] = $_POST['aclPerson'];
         $data['aclCase'] = $_POST['aclCase'];
         $data['aclHunt'] = $_POST['aclHunt'];
+        $data['aclReport'] = $_POST['aclReport'];
+        $data['aclSymbol'] = $_POST['aclSymbol'];
         $data['aclGamemaster'] = $_POST['aclGamemaster'];
         $data['aclAPI'] = $_POST['aclAPI'];
         if (validate_mail($_POST['userEmail'])) {

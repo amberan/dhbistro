@@ -182,6 +182,36 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                {$text[aclReport]}
+                            </span>
+                        </div>
+                        <div class="input-group-append" style="flex-grow: 1;">
+                            <select class="w-100" name="aclReport" id="aclReport">
+                                <option value="0" {if $userEdit['aclReport'] == 0 } selected="selected"{/if}>{$text['cteni']}</option>
+                                <option value="1" {if $userEdit['aclReport'] == 1} selected="selected"{/if}>{$text['zapis']}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                {$text[aclSymbol]}
+                            </span>
+                        </div>
+                        <div class="input-group-append" style="flex-grow: 1;">
+                            <select class="w-100" name="aclSymbol" id="aclSymbol">
+                                <option value="0" {if $userEdit['aclSymbol'] == 0 } selected="selected"{/if}>{$text['cteni']}</option>
+                                <option value="1" {if $userEdit['aclSymbol'] == 1} selected="selected"{/if}>{$text['zapis']}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 {if $user['aclRoot'] > 0 }
                     <div class="col-3">
                         <div class="input-group">

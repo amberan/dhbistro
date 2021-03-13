@@ -118,6 +118,8 @@ $text['aclGroup'] = 'Skupiny';
 $text['aclPerson'] = 'Osoby';
 $text['aclCase'] = 'Případy';
 $text['aclHunt'] = 'Lovenky';
+$text['aclReport'] = 'Reporty';
+$text['aclSymbol'] = 'Symboly';
 $text['aclGamemaster'] = 'Organizátor';
 $text['aclAPI'] = 'API';
 
