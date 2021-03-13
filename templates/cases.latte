@@ -17,7 +17,7 @@
             {else}
 
 <form action="{$website_link}{$URL[1]}/" method="POST" id="filter"> 
-<input type="hidden" name="placeholder"  />
+<input type="hidden" name="filter[placeholder]"  />
 <input type="checkbox" name="filter[stat]" {if (isset($filter['stat']) AND $filter['stat'] == 'on') } checked {/if} onchange="this.form.submit()"/>{$text['iuzavrene']} 
 <input type="checkbox" name="filter[new]" {if (isset($filter['new']) AND $filter['new'] == 'on') } checked{/if} onchange="this.form.submit()"/> {$text['jennove']}
 {if ($user['aclSecret'])}
@@ -47,7 +47,7 @@
     {if $cases['status']} {$text['uzavreny']} {else} {$text['otevreny']} {/if} 
     {if $cases['deleted']} {$text['smazany']} {/if}
     </td>
-    <td>{$cases['date_created']|date:'%d.%m.%Y'}</td>
+    <td>{if $cases['caseCreated']} {$cases['caseCreated']|date:'%d.%m.%Y'}{else}{$text['neznamo']}{/if}</td>
     <td>{$cases['date_changed']|date:'%d.%m.%Y'}</td>
     <td>
     {if $user['aclCase']} <a href="/editcase.php?rid={$cases['id']}">{$text['upravit']}</a>{/if}

@@ -1,5 +1,13 @@
 # BISTRO changelog 
 
+
+**1.7.6**
+- pripad nema datum vytvoreni [#51](https://gitlab.alembiq.net/larp/bistro/issues/51)
+- skupina nema datum vytvoreni [#52](https://gitlab.alembiq.net/larp/bistro/issues/52)
+
+**1.7.5**
+- chybi prava pro reporty a symboly [#132](https://gitlab.alembiq.net/larp/bistro/issues/132)
+
 **1.7.4**
 - archivovatelne symboly [#22](https://gitlab.alembiq.net/larp/bistro/issues/22)
 - modal window pro notifikace dostupny v starem UI
