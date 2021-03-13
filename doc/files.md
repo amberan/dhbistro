@@ -100,7 +100,6 @@ orgperson.php           | ORG uprava osoby                          | osoby
 persons.php             | LIST osoby                                | osoby
 procactrep.php          | zpracovani reportu                        | reporty
 proccase.php            | zpracovani pripadu                        | pripady
-procgroup.php           | zpracovani skupiny                        | skupiny
 procnews.php            | zpracovani novinek                        | novinky
 procnote.php            | zpracovani poznamek                       | poznamky
 procother.php           | zpracovani ukolu                          | ukoly
