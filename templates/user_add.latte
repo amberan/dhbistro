@@ -179,6 +179,36 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                {$text[aclReport]}
+                            </span>
+                        </div>
+                        <div class="input-group-append" style="flex-grow: 1;">
+                            <select class="w-100" name="aclReport" id="aclReport">
+                                <option value="0">{$text['cteni']}</option>
+                                <option value="1">{$text['zapis']}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                {$text[aclSymbol]}
+                            </span>
+                        </div>
+                        <div class="input-group-append" style="flex-grow: 1;">
+                            <select class="w-100" name="aclSymbol" id="aclSymbol">
+                                <option value="0">{$text['cteni']}</option>
+                                <option value="1">{$text['zapis']}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>                                
             {if $user['aclRoot'] > 0 }
                 <div class="col-3">
                     <div class="input-group">

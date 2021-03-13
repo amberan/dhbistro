@@ -73,6 +73,8 @@ elseif (isset($_POST['insertuser']) && $user['aclDirector'] && !preg_match('/^[[
             $data['aclCase'] = $_POST['aclCase'];
             $data['aclHunt'] = $_POST['aclHunt'];
             $data['aclGamemaster'] = $_POST['aclGamemaster'];
+            $data['aclReport'] = $_POST['aclReport'];
+            $data['aclSymbol'] = $_POST['aclSymbol'];
             $data['aclAPI'] = $_POST['aclAPI'];
             if (validate_mail($_POST['email'])) {
                 $data['userEmail'] = $_POST['email'];
