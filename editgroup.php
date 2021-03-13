@@ -66,7 +66,7 @@ latteDrawTemplate("header");
             while ($perc = mysqli_fetch_assoc($pers)) {
                 $persons[] = '<a href="readperson.php?rid='.$perc['id'].'">'.$perc['surname'].', '.$perc['name'].'</a>';
             }
-            echo implode($persons, '; ') != "" ? implode($persons, '; ') : '<em>Nejsou připojeny žádné osoby.</em>'; ?></p>
+            echo implode('; ', $persons) != "" ? implode('; ', $persons) : '<em>Nejsou připojeny žádné osoby.</em>'; ?></p>
 	</fieldset>
 	
 	<!-- následuje seznam přiložených souborů -->

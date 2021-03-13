@@ -1,7 +1,7 @@
 # BISTRO changelog 
 
-
 **1.7.6**
+- drobne upravy pro odstraneni PHP warningu
 - zobrazovani data vytvoreni u vyhledavani
 - zobrazovany flagy utajeni a archivace u vyhledavani
 - pripad nema datum vytvoreni [#51](https://gitlab.alembiq.net/larp/bistro/issues/51)

@@ -105,7 +105,7 @@ sparklets('<strong>skupiny</strong>','<a href="newgroup.php">přidat skupinu</a>
 if (isset($_GET['sort'])) {
     sortingSet('group',$_GET['sort'],'group');
 }
-if (sizeof($_POST['filter']) > 0) {
+if (isset($_POST['filter'])) {
     filterSet('group',@$_POST['filter']);
 }
 $filter = filterGet('group');
@@ -119,7 +119,7 @@ $latteParameters['filter'] = $filter;
 ?>
 
 
-<form action="<?php echo $website_link; ?>/groups.php" method="POST" id="filter"> 
+<form action="/groups.php" method="POST" id="filter"> 
 <input type="hidden" name="filter[placeholder]"  />
 <input type="checkbox" name="filter[archived]" <?php if (isset($filter['archived']) and $filter['archived'] == 'on') {
     echo " checked";
@@ -153,7 +153,7 @@ $latteParameters['filter'] = $filter;
 ';
         $even = 0;
         while ($rec = mysqli_fetch_assoc($res)) {
-            if ($fNew == 0 || ($fNew == 1 && searchRecord(2,$rec['id']))) {
+            if (@$filter['new'] == 0 || (isset($filter['new']) && $filter['new'] == 'on' && searchRecord(2,$rec['id']))) { //TODO fNew = filter NEW
                 echo '<tr class="'.(searchRecord(2,$rec['id']) ? ' unread_record' : ($even % 2 == 0 ? 'even' : 'odd')).'">
                         <td>'.($rec['secret'] ? '<span class="secret"><a href="readgroup.php?rid='.$rec['id'].'&amp;hidenotes=0">'.stripslashes($rec['title']).'</a></span>' : '<a href="readgroup.php?rid='.$rec['id'].'&amp;hidenotes=0">'.stripslashes($rec['title']).'</a>').'</td>';
                 echo '<td>';

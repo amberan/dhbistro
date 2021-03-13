@@ -82,7 +82,7 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 if (isset($_GET['sort'])) {
     sortingSet('case',$_GET['sort'],'case');
 }
-if (sizeof($_POST['filter']) > 0) {
+if (isset($_POST['filter']) && sizeof($_POST['filter']) > 0) {
     filterSet('case',@$_POST['filter']);
 }
 $filter = filterGet('case');
