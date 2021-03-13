@@ -19,7 +19,6 @@ $text['cteni'] = 'Čtení';
 $text['skryt'] = 'Skrýt';
 $text['zpristupnit'] = 'Zpřístupnit';
 $text['neznamo'] = 'Neznámo';
-$text['smazane'] = 'Smazané';
 
 // LOGIN
 $text['jmeno'] = 'Jméno';
@@ -160,6 +159,11 @@ $text['aktualitaneobnovena'] = 'Aktualitu se nepodařilo obnovit';
 $text['iuzavrene'] = 'I uzavřené.';
 $text['jennove'] = 'Jen nové.';
 $text['jentajne'] = 'Jen tajné.';
+$text['iarchiv'] = 'I archiv.';
+$text['archivovano'] = 'archivováno';
+$text['utajeno'] = 'utajeno';
+$text['smazany'] = 'smazáný';
+$text['smazane'] = 'Smazané';
 
 // CASES
 $text['pridatpripad'] = 'Přidat případ';
@@ -168,9 +172,7 @@ $text['stav'] = 'Stav';
 $text['zmeneno'] = 'Změněno';
 $text['uzavreny'] = 'uzavřený';
 $text['otevreny'] = 'otevřený';
-$text['smazany'] = 'smazáný';
 $text['pridatpoznamku'] = '';
 $text['opravdusmazatpripad'] = 'Opravdu smazat případ';
 $text['opravduobnovitpripad'] = 'Opravdu obnovit případ';
 $text['vytvoreno'] = 'Vytvořeno';
-$text['utajeno'] = 'utajeno';

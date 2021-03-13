@@ -12,8 +12,8 @@ latteDrawTemplate("header");
                 unauthorizedAccess(1, $rec['secret'], $rec['deleted'], $_REQUEST['rid']);
             }
             auditTrail(1, 1, $_REQUEST['rid']);
-            $sides = ['', 'světlý', 'temný', 'člověk', 'neznámá'];
-            $powers = ['', 'neznámá', 'člověk', 'mimo kategorie', '1. kategorie', '2. kategorie', '3. kategorie', '4. kategorie'];
+            //   $sides = ['', 'světlý', 'temný', 'člověk', 'neznámá'];
+            //   $powers = ['', 'neznámá', 'člověk', 'mimo kategorie', '1. kategorie', '2. kategorie', '3. kategorie', '4. kategorie'];
 
             $latteParameters['title'] = stripslashes($rec['surname']).', '.stripslashes($rec['name']);
             mainMenu();
@@ -24,10 +24,10 @@ latteDrawTemplate("header");
             }
             if ($hn == 0) {
                 $hidenotes = '&amp;hidenotes=1">skrýt poznámky</a>';
-                $backurl = 'readperson.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
+            //     $backurl = 'readperson.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
             } else {
                 $hidenotes = '&amp;hidenotes=0">zobrazit poznámky</a>';
-                $backurl = 'readperson.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
+                //        $backurl = 'readperson.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
             }
             if ($user['aclGamemaster']) {
                 $editbutton = '; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>; číslo osoby: '.$rec['id'].'; <a href="orgperson.php?rid='.$_REQUEST['rid'].'">organizačně upravit osobu</a>;';
@@ -132,7 +132,7 @@ latteDrawTemplate("header");
                 while ($rec_g = mysqli_fetch_assoc($res_g)) {
                     $groups[] = '<a href="./readgroup.php?rid='.$rec_g['id'].'">'.stripslashes($rec_g['title']).'</a>';
                 }
-                echo implode($groups,', ');
+                echo implode(', ',$groups);
             } else {
                 echo '&mdash;';
             } ?></p>
@@ -188,7 +188,7 @@ latteDrawTemplate("header");
                 while ($rec_r = mysqli_fetch_assoc($res_r)) {
                     $reports[] = '<a href="./readactrep.php?rid='.$rec_r['id'].'&hidenotes=0&truenames=0">'.stripslashes($rec_r['label']).'</a> | vytvořeno: '.webdate($rec_r['date_created']).' | změněno: '.webdate($rec_r['date_changed']);
                 }
-                echo implode($reports,'<br />');
+                echo implode('<br />',$reports);
             } else {
                 echo 'Osoba nefiguruje v žádném hlášení.';
             } ?></p>

@@ -20,9 +20,6 @@
 <input type="hidden" name="filter[placeholder]"  />
 <input type="checkbox" name="filter[stat]" {if (isset($filter['stat']) AND $filter['stat'] == 'on') } checked {/if} onchange="this.form.submit()"/>{$text['iuzavrene']} 
 <input type="checkbox" name="filter[new]" {if (isset($filter['new']) AND $filter['new'] == 'on') } checked{/if} onchange="this.form.submit()"/> {$text['jennove']}
-{if ($user['aclSecret'])}
-    <input type="checkbox" name="filter[sec]" {if (isset($filter['sec']) AND $filter['sec'] == 'on') } checked{/if}  onchange="this.form.submit()"/>{$text['jentajne']}
-{/if}
 </form>
 
 <div id="obsah">
@@ -38,7 +35,7 @@
 </thead>
 <tbody>
                         {foreach $case_record as $cases}
-<tr class="{if $cases['new']} unread_record{/if}{if $cases['status']} solved{/if}">
+<tr class="{if @$cases['new']} unread_record{/if}{if $cases['status']} solved{/if}">
     <td>
         <a href="/readcase.php?rid={$cases['id']}&amp;hidenotes=0">{$cases['title']}</a>     
         {if $cases['secret']} {$text['utajeno']|upper} {/if}
