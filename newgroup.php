@@ -1,16 +1,17 @@
 <?php
-require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 use Tracy\Debugger;
+
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Nová skupina';
 
-	mainMenu ();
-	sparklets ('<a href="./groups.php">skupiny</a> &raquo; <strong>nová skupina</strong>');
+    mainMenu();
+    sparklets('<a href="./groups.php">skupiny</a> &raquo; <strong>nová skupina</strong>');
 ?>
 <div id="obsah">
-<form action="procgroup.php" method="post" id="inputform">
+<form action="groups.php" method="post" id="inputform">
 <fieldset><legend><strong>Nová skupina</strong></legend>
 	<div id="info">
 		<h3><label for="title">Název:</label></h3>
@@ -40,5 +41,5 @@ $latteParameters['title'] = 'Nová skupina';
 </div>
 <!-- end of #obsah -->
 <?php
-	latteDrawTemplate("footer");
+    latteDrawTemplate("footer");
 ?>

@@ -17,7 +17,7 @@ latteDrawTemplate("header");
             sparklets('<a href="./groups.php">skupiny</a> &raquo; <strong>úprava skupiny</strong>'); ?>
 <div id="obsah">
 <fieldset><legend><strong>Úprava skupiny: <?php echo stripslashes($rec_g['title']); ?></strong></legend>
-<form action="procgroup.php" method="post" id="inputform">
+<form action="groups.php" method="post" id="inputform">
 	<div id="info"><?php
         if ($rec_g['secret'] == 1) { ?>
 	 	<h2>TAJNÉ</h2><?php }
@@ -87,7 +87,7 @@ latteDrawTemplate("header");
 				<?php } ?>
 			<li class="soubor"><a href="file/attachement/<?php echo $rec_f['id']; ?>" title=""><?php echo stripslashes($rec_f['title']); ?></a><?php if ($rec_f['secret'] == 1) { ?> (TAJNÝ)<?php } ?><span class="poznamka-edit-buttons"><?php
                 if (($rec_f['iduser'] == $user['userId']) || ($user['aclDirector'])) {
-                    echo '<a class="delete" title="smazat" href="procgroup.php?deletefile='.$rec_f['id'].'&amp;groupid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editgroup.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat soubor &quot;'.stripslashes($rec_f['title']).'&quot; náležící ke skupině?\')"><span class="button-text">smazat soubor</span></a>';
+                    echo '<a class="delete" title="smazat" href="groups.php?deletefile='.$rec_f['id'].'&amp;groupid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editgroup.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat soubor &quot;'.stripslashes($rec_f['title']).'&quot; náležící ke skupině?\')"><span class="button-text">smazat soubor</span></a>';
                 } ?>
 				</span></li><?php
             }
@@ -103,7 +103,7 @@ latteDrawTemplate("header");
 
 	<div id="new-file" class="otherform-wrap">
 		<fieldset><legend><strong>Nový soubor</strong></legend>
-		<form action="procgroup.php" method="post" enctype="multipart/form-data" class="otherform">
+		<form action="groups.php" method="post" enctype="multipart/form-data" class="otherform">
 			<div>
 				<strong><label for="attachment">Soubor:</label></strong>
 				<input type="file" name="attachment" id="attachment" />
