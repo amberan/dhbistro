@@ -145,10 +145,10 @@ $rightsToUpdate['rightTextOld'] = ['aclTask', 'aclGroup', 'aclPerson', 'aclCase'
  * COLUMNS TO DROP
  */
 $columnDrop['case'][] = 'contents_md'; //bugfix
-$columnDrop['dashboard'][] = 'content';
+//$columnDrop['dashboard'][] = 'content';
 $columnDrop['group'][] = 'contents_md'; //bugfix
 $columnDrop['news'][] = 'obsah';
-$columnDrop['news'][] = 'obsah_md'; //bugfix
+//$columnDrop['news'][] = 'obsah_md'; //bugfix
 $columnDrop['note'][] = 'note_md'; //bugfix
 $columnDrop['person'][] = 'contents_md'; //bugfix
 $columnDrop['report'][] = 'details_md'; //bugfix
@@ -160,7 +160,7 @@ $columnDrop['symbol'][] = 'desc_md'; //bugfix
 $columnDrop['task'][] = 'task_md'; //bugfix
 //$columnDrop['test2'][] = "test2";
 $columnDrop['user'][] = 'email';
-$columnDrop['user'][] = 'plan';
+//$columnDrop['user'][] = 'plan';
 $columnDrop['user'][] = 'plan_md'; //bugfix
 $columnDrop['user'][] = 'rightAudOld';
 $columnDrop['user'][] = 'rightOrgOld';
