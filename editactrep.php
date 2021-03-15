@@ -9,7 +9,8 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 
 $reportarray = mysqli_fetch_assoc(mysqli_query($database,"SELECT * FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid'])); // načte data z DB
 $type = intval($reportarray['type']); // určuje typ hlášení
-    $typestring = $type == 1 ? 'výjezd' : ($type == 2 ? 'výslech' : '?'); //odvozuje slovní typ hlášení
+//$typestring =
+$type == 1 ? 'výjezd' : ($type == 2 ? 'výslech' : '?'); //odvozuje slovní typ hlášení
 $author = $reportarray['iduser']; // určuje autora hlášení
 
 if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($user['userId'] == $author && $reportarray['status'] < 1))) {
@@ -46,9 +47,9 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($user['userId'] 
         mainMenu();
         sparklets('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení'.$type == 1 ? ' z výjezdu' : ($type == 2 ? ' z výslechu' : '').'</strong>','<a href="symbols.php">přiřadit symboly</a>');
 
-        $aday = date('j',$rec_actr['adatum']);
-        $amonth = date('n',$rec_actr['adatum']);
-        $ayear = date('Y',$rec_actr['adatum']); ?>
+        //   $aday = date('j',$rec_actr['adatum']);
+        //   $amonth = date('n',$rec_actr['adatum']);
+        //   $ayear = date('Y',$rec_actr['adatum']);?>
 <div id="obsah">
     <form action="procactrep.php" method="post" id="inputform">
         <fieldset id="ramecek">
@@ -157,7 +158,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($user['userId'] 
         while ($perc = mysqli_fetch_assoc($pers)) {
             $persons[] = '<a href="readperson.php?rid='.$perc['id'].'">'.$perc['surname'].', '.$perc['name'].'</a>';
         }
-        echo implode($persons, '; ') != "" ? implode($persons, '; ') : '<em>Nejsou připojeny žádné osoby.</em>'; ?></p>
+        echo implode('; ', $persons) != "" ? implode('; ', $persons) : '<em>Nejsou připojeny žádné osoby.</em>'; ?></p>
     </fieldset>
 
     <fieldset>

@@ -84,7 +84,7 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
             while ($perc = mysqli_fetch_assoc($pers)) {
                 $solvers[] = $perc['login'];
             }
-            echo implode($solvers, '; ') != "" ? implode($solvers, '; ') : '<em>Případ nemá přiřazené řešitele.</em>'; ?></p>		
+            echo implode('; ',$solvers) != "" ? implode('; ',$solvers) : '<em>Případ nemá přiřazené řešitele.</em>'; ?></p>		
 	</fieldset>
 
 	<fieldset><legend><strong>Osoby přiřazené k případu: </strong></legend>
@@ -104,7 +104,7 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
             while ($perc = mysqli_fetch_assoc($pers)) {
                 $persons[] = '<a href="readperson.php?rid='.$perc['id'].'">'.$perc['surname'].', '.$perc['name'].'</a>';
             }
-            echo implode($persons, '; ') != "" ? implode($persons, '; ') : '<em>Nejsou připojeny žádné osoby.</em>'; ?></p>		
+            echo implode('; ',$solvers) != "" ? implode('; ',$solvers) : '<em>Nejsou připojeny žádné osoby.</em>'; ?></p>		
 	</fieldset>
 	
 	
@@ -125,7 +125,7 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
             while ($perc = mysqli_fetch_assoc($pers)) {
                 $reports[] = '<li><a href="readactrep.php?rid='.$perc['id'].'">'.$perc['label'].'</a> - '.$perc['task'].' - <b>'.$perc['user'].'</b>';
             }
-            echo implode($reports, '; ') != "" ? implode($reports, '; ') : '<em>Nejsou připojena žádná hlášení.</em>'; ?>
+            echo implode('; ',$reports) != "" ? implode('; ',$reports) : '<em>Nejsou připojena žádná hlášení.</em>'; ?>
 		</ul>
 	</fieldset>
 

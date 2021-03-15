@@ -79,7 +79,7 @@ if (is_numeric($_REQUEST['rid'])) {
             while ($perc = mysqli_fetch_assoc($pers)) {
                 $solvers[] = $perc['login'];
             }
-            echo implode($solvers, '; ') != "" ? implode($solvers, '; ') : '<em>Případ nemá přiřazené řešitele.</em>'; ?>
+            echo implode('; ',$solvers) != "" ? implode('; ', $solvers) : '<em>Případ nemá přiřazené řešitele.</em>'; ?>
 			</p>
 			<div class="clear">&nbsp;</div>
 			<h3>Osoby spojené s případem: </h3>
@@ -128,7 +128,7 @@ if (is_numeric($_REQUEST['rid'])) {
 				<p>	
 					<strong>Datum poslední změny:</strong> <?php echo webdate($rec['datum']); ?>
 					<strong>Změnil:</strong> 
-					<?php echo 	$name = getAuthor($rec['iduser'],1); ?> 
+					<?php echo  getAuthor($rec['iduser'],1); // $name =?> 
 				</p>
 			<div class="clear">&nbsp;</div>
 		</div>

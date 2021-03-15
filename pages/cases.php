@@ -10,16 +10,11 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
         auditTrail(3, 11, $_REQUEST['delete']);
         mysqli_query($database,"UPDATE ".DB_PREFIX."case SET deleted=1 WHERE id=".$_REQUEST['delete']);
         deleteAllUnread(3,$_REQUEST['delete']);
-        //	    Header ('Location: /cases/');
     }
     if (isset($_POST['insertcase']) && !preg_match('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret']) && is_numeric($_POST['status'])) {
-        // $latteParameters['title'] = 'Přidán případ';
-
-        // mainMenu ();
         $ures = mysqli_query($database,"SELECT id FROM ".DB_PREFIX."case WHERE UCASE(title)=UCASE('".$_POST['title']."')");
         if (mysqli_num_rows($ures)) {
-            //        sparklets ('<a href="/cases/">případy</a> &raquo; <a href="./newcase.php">nový případ</a> &raquo; <strong>duplicita jména</strong>');
-            echo '<div id="obsah"><p>Případ již existuje, změňte jeho jméno.</p></div>';
+            $_SESSION['message'] = 'Případ již existuje, změňte jeho jméno.';
         } else {
             mysqli_query($database,"INSERT INTO ".DB_PREFIX."case  (caseCreated, title, datum, iduser, contents, secret, deleted, status) VALUES(CURRENT_TIMESTAMP, '".$_POST['title']."','".time()."','".$user['userId']."','".$_POST['contents']."','".$_POST['secret']."','0','".$_POST['status']."')");
             $cidarray = mysqli_fetch_assoc(mysqli_query($database,"SELECT id FROM ".DB_PREFIX."case WHERE UCASE(title)=UCASE('".$_POST['title']."')"));
@@ -28,18 +23,11 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
             if (!isset($_POST['notnew'])) {
                 unreadRecords(3,$cid);
             }
-            //        sparklets ('<a href="/cases/">případy</a> &raquo; <a href="./newcase.php">nový případ</a> &raquo; <strong>přidán případ</strong>','<a href="./readcase.php?rid='.$cid.'">zobrazit vytvořené</a> &raquo; <a href="./editcase.php?rid='.$cid.'">úprava případu</a>');
-            echo '<div id="obsah"><p>Případ vytvořen.</p></div>';
+            $_SESSION['message'] = 'Případ vytvořen.';
         }
-        //    latteDrawTemplate("footer");
     } else {
         if (isset($_POST['insertcase'])) {
-            //        $latteParameters['title'] = 'Přidán případ';
-
-            //        mainMenu ();
-            //       sparklets ('<a href="/cases/">případy</a> &raquo; <a href="./newcase.php">nový případ</a> &raquo; <strong>přidání případu neúspěšné</strong>');
-            echo '<div id="obsah"><p>Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
-            //     latteDrawTemplate("footer");
+            $_SESSION['message'] = 'Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.';
         }
     }
     if (isset($_POST['caseid'], $_POST['editcase']) && $user['aclCase'] && !preg_match('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret']) && is_numeric($_POST['status'])) {
@@ -49,7 +37,7 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
         }
         $ures = mysqli_query($database,"SELECT id FROM ".DB_PREFIX."case WHERE UCASE(title)=UCASE('".$_POST['title']."') AND id<>".$_POST['caseid']);
         if (mysqli_num_rows($ures)) {
-            echo '<div id="obsah"><p>Případ již existuje, změňte jeho jméno.</p></div>';
+            $_SESSION['message'] = 'Případ již existuje, změňte jeho jméno.';
         } else {
             if ($user['aclGamemaster'] == 1) {
                 $sqlCaseUpdate = "UPDATE ".DB_PREFIX."case SET title='".$_POST['title']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', status='".$_POST['status']."' WHERE id=".$_POST['caseid'];
@@ -58,11 +46,11 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
                 $sqlCaseUpdate = "UPDATE ".DB_PREFIX."case SET title='".$_POST['title']."', datum='".time()."', iduser='".$user['userId']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', status='".$_POST['status']."' WHERE id=".$_POST['caseid'];
                 mysqli_query($database,$sqlCaseUpdate);
             }
-            echo '<div id="obsah"><p>Případ upraven.</p></div>';
+            $_SESSION['message'] = 'Případ upraven.';
         }
     } else {
         if (isset($_POST['editcase'])) {
-            echo '<div id="obsah"><p>Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
+            $_SESSION['message'] = 'Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva.';
         }
     }
     if (isset($_POST['uploadfile']) && is_uploaded_file($_FILES['attachment']['tmp_name']) && is_numeric($_POST['caseid']) && is_numeric($_POST['secret'])) {
@@ -74,14 +62,9 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
         if (!isset($_POST['fnotnew'])) {
             unreadRecords(3,$_POST['caseid']);
         }
-        //    Header ('Location: '.$_POST['backurl']);
     } else {
         if (isset($_POST['uploadfile'])) {
-            //     $latteParameters['title'] = 'Přiložení souboru';
-            //      mainMenu ();
-            //      sparklets ('<a href="/cases/">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>přiložení souboru neúspěšné</strong>');
-            echo '<div id="obsah"><p>Soubor nebyl přiložen, něco se nepodařilo. Možná nebyl zvolen přikládaný soubor.</p></div>';
-            //     latteDrawTemplate("footer");
+            $_SESSION['message'] = 'Soubor nebyl přiložen, něco se nepodařilo. Možná nebyl zvolen přikládaný soubor.';
         }
     }
     if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {
@@ -92,22 +75,18 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
             unlink('./files/'.$frec['uniquename']);
             mysqli_query($database,"DELETE FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
         }
-        //   Header ('Location: editcase.php?rid='.$_GET['caseid']);
+        header('Location: editcase.php?rid='.$_GET['caseid']);
     }
 
 //FILTER
 if (isset($_GET['sort'])) {
     sortingSet('case',$_GET['sort'],'case');
 }
-if (sizeof($_POST['filter']) > 0) {
+if (isset($_POST['filter']) && sizeof($_POST['filter']) > 0) {
     filterSet('case',@$_POST['filter']);
 }
 $filter = filterGet('case');
 $sqlFilter = DB_PREFIX."case.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."case.secret<=".$user['aclSecret'];
-
-if (isset($filter['sec']) and $filter['sec'] == 'on') {
-    $sqlFilter .= ' AND '.DB_PREFIX.'case.secret>0 ';
-}
 switch (@$filter['stat']) {
     case 'on': $sqlFilter .= ' AND '.DB_PREFIX.'case.status in (0,1)'; break;
     default: $sqlFilter .= ' AND '.DB_PREFIX.'case.status=0 ';

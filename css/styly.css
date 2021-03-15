@@ -486,9 +486,8 @@ div.otherform-wrap {width:475px;}
 
 #obsah {
 	position: relative;
-	margin: 0px;
+	margin: 20px;
 	padding:20px;
-	width:980px;
 }
 #obsah .top {
 	font-size: 0.8em;
