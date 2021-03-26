@@ -20,7 +20,7 @@ if (isset($_POST['editdashboard']) and ($user['aclDirector'] > 0 or $user['aclDe
 // BOARD MEMO
 $sql_dashboard = mysqli_query($database,"SELECT * FROM ".DB_PREFIX."dashboard ORDER BY id DESC LIMIT 1");
 $dashboard = mysqli_fetch_assoc($sql_dashboard);
-if (isset($dashboard['content'])) {
+if (isset($dashboard['contentMD']) && strlen($dashboard['contenttMD']) > 0) {
     $latteParameters['board'] = $converter->convertToHtml($dashboard['contentMD']);
     $latteParameters['board_created'] = webdate($dashboard['created']);
     $latteParameters['board_author'] = getAuthor($dashboard['iduser'],0);
