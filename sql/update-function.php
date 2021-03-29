@@ -153,14 +153,12 @@ function bistroDBColumnMarkdown($data): int
     $alter = 0;
     $converter = new HtmlConverter(['strip_tags' => true]); //https://github.com/thephpleague/html-to-markdown
     foreach ($data as $value) { //$data as $key => $value
-            $preMarkdownSql = "SELECT ".$value[1].", ".$value[2]." FROM ".$config['dbdatabase'].".".DB_PREFIX.$value[0]." WHERE (length(".$value[3].") = 0  or length(".$value[3].") is null) and length(".$value[2].") > 0";
-        Debugger::log('DEBUG: empty-'.$value[0].".".$value[3].':'.DBcolumntNotEmpty($value[0],$value[3]).'  exist-'.$value[0].".".$value[2].':'.DBcolumnExist($value[0],$value[2]).'  exist-'.$value[0].".".$value[3].':'.DBcolumnExist($value[0],$value[3]));
+        $preMarkdownSql = "SELECT ".$value[1].", ".$value[2]." FROM ".$config['dbdatabase'].".".DB_PREFIX.$value[0]." WHERE (length(".$value[3].") = 0  or length(".$value[3].") is null) and length(".$value[2].") > 0";
         if (DBcolumntNotEmpty($value[0],$value[3]) == 0 && DBcolumnExist($value[0],$value[2]) > 0 && DBcolumnExist($value[0],$value[3]) > 0) {
-            Debugger::log('DEBUG:notempty');
             $preMarkdownQuery = mysqli_query($database,$preMarkdownSql);
             while ($preMarkdown = mysqli_fetch_array($preMarkdownQuery)) {
                 $markdownColumn = $converter->convert(str_replace('\'', '', $preMarkdown[$value[2]]));
-                Debugger::log('UPDATER '.$config['version'].' CONVERTING '.DB_PREFIX.$value[0].'.'.$value[2].'.'.$preMarkdown[$value[1]].'] TO MARKDOWN '.$value[3]);
+                Debugger::log('UPDATER '.$config['version'].' CONVERTING '.DB_PREFIX.$value[0].'.'.$value[2].'.'.$preMarkdown[$value[1]].' TO MARKDOWN '.$value[3]);
                 mysqli_query($database,"UPDATE ".DB_PREFIX.$value[0]." SET ".$value[3]."='".$markdownColumn."' WHERE ".$value[1]."=".$preMarkdown[$value[1]]);
                 $alter++;
             }

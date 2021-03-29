@@ -52,14 +52,16 @@ WHERE ".$user['sqlDeleted']." ORDER BY ".DB_PREFIX."news.datum DESC LIMIT 10";
 $news_query = mysqli_query($database,$sql_news);
 if (mysqli_num_rows($news_query)) {
     while ($news_record = mysqli_fetch_assoc($news_query)) {
-        $news_record['datum'] = webdatetime($news_record['datum']);
-        $news_record['id'] = $news_record['id'];
-        $news_record['nadpis'] = $news_record['nadpis'];
-        $news_record['obsahMD'] = $converter->convertToHtml($news_record['obsahMD']);
-        $news_record['category'] = $news_record['kategorie'];
-        $news_record['author'] = $news_record['author'];
-        $news_record['deleted'] = $news_record['deleted'];
-        $news_array[] = $news_record;
+        if (isset($news_record['obsahMD']) && strlen($news_record['obsahMD']) > 0) {
+            $news_record['datum'] = webdatetime($news_record['datum']);
+            //$news_record['id'] = $news_record['id'];
+            //$news_record['nadpis'] = $news_record['nadpis'];
+            $news_record['obsahMD'] = $converter->convertToHtml($news_record['obsahMD']);
+            $news_record['category'] = $news_record['kategorie'];
+            //$news_record['author'] = $news_record['author'];
+            //$news_record['deleted'] = $news_record['deleted'];
+            $news_array[] = $news_record;
+        }
     }
     $latteParameters['news_array'] = $news_array;
 } else {
