@@ -1,18 +1,19 @@
 <?php
-require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 use Tracy\Debugger;
+
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Nová osoba';
 
-mainMenu ();
-	sparklets ('<a href="./persons.php">osoby</a> &raquo; <strong>nová osoba</strong>');
+mainMenu();
+    sparklets('<a href="./persons.php">osoby</a> &raquo; <strong>nová osoba</strong>');
 ?>
 <div id="obsah">
 	<fieldset><legend><strong>Nová osoba</strong></legend>
 	<p id="top-text">Portréty nahrávejte pokud možno ve velikosti 100x130 bodů, symboly ve velikosti 100x100 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen portréty, o rozmazané postavy nebude nouze v přílohách. Symboly rovněž nahrávejte jasně rozeznatelné.</p>
-	<form action="procperson.php" method="post" id="inputform" enctype="multipart/form-data">
+	<form action="persons.php" method="post" id="inputform" enctype="multipart/form-data">
 		<fieldset><legend><strong>Základní údaje</strong></legend>
 			<div id="info">
 				<h3><label for="name" class="required">Jméno:</label></h3><input type="text" name="name" id="name" />	
@@ -73,6 +74,7 @@ mainMenu ();
 }
 ?>					
 			</div>
+            <input type="checkbox" name="personRoof" /> strop
 			<!-- end of #info -->
 		</fieldset>
 		<!-- náseduje popis osoby -->
@@ -87,5 +89,5 @@ mainMenu ();
 </div>
 <!-- end of #obsah -->
 <?php
-	latteDrawTemplate("footer");
+    latteDrawTemplate("footer");
 ?>
