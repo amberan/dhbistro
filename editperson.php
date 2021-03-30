@@ -20,7 +20,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 <div id="obsah">
 <fieldset id="ramecek"><legend><strong>Úprava osoby: <?php echo stripslashes($rec_p['surname']).', '.stripslashes($rec_p['name']); ?></strong></legend>
 	<p id="top-text">Portréty nahrávejte pokud možno ve velikosti 100x130 bodů, symboly ve velikosti 100x100 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen portréty, o rozmazané postavy nebude nouze v přílohách. Symboly rovněž nahrávejte jasně rozeznatelné.</p>
-	<form action="procperson.php" method="post" id="inputform" enctype="multipart/form-data">
+	<form action="persons.php" method="post" id="inputform" enctype="multipart/form-data">
 		<fieldset><legend><strong>Základní údaje</strong></legend>
 		<?php if ($rec_p['portrait'] == null) { ?><img src="#" alt="portrét chybí" title="portrét chybí" id="portraitimg" class="noname"/>
 		<?php } else { ?><img src="file/portrait/<?php echo $_REQUEST['rid']; ?>" alt="<?php echo stripslashes($rec_p['name']).' '.stripslashes($rec_p['surname']); ?>" id="portraitimg" />
@@ -29,7 +29,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 		<?php } else { ?><a href="readsymbol.php?rid=<?php echo $rec_p['symbol']; ?>"><img src="file/symbol/<?php echo $rec_p['symbol']; ?>" alt="<?php echo stripslashes($rec_p['name']).' '.stripslashes($rec_p['surname']); ?>" id="symbolimg" /></a>
 		<?php } ?>
 		<?php if ($rec_p['symbol'] == null) { ?>
-		<?php } else { ?><span class="info-delete-symbol"><a class="delete" title="odpojit" href="procperson.php?deletesymbol=<?php echo $rec_p['symbol']; ?>&amp;personid=<?php echo $_REQUEST['rid']; ?>&amp;backurl=<?php echo urlencode('editperson.php?rid='.$_REQUEST['rid']); ?>" onclick="return confirm('Opravdu odpojit symbol?')"><span class="button-text">smazat soubor</span></a></span>
+		<?php } else { ?><span class="info-delete-symbol"><a class="delete" title="odpojit" href="persons.php?deletesymbol=<?php echo $rec_p['symbol']; ?>&amp;personid=<?php echo $_REQUEST['rid']; ?>&amp;backurl=<?php echo urlencode('editperson.php?rid='.$_REQUEST['rid']); ?>" onclick="return confirm('Opravdu odpojit symbol?')"><span class="button-text">smazat soubor</span></a></span>
 		<?php } ?>
 			<div id="info">
 				<h3><label for="name">Jméno:</label></h3>
@@ -147,6 +147,9 @@ $latteParameters['title'] = 'Zobrazení symbolu';
                                 <h3><label for="archiv">Archiv:</label></h3>
 					<input type="checkbox" name="archiv" value=1 <?php if ($rec_p['archiv'] == 1) { ?>checked="checked"<?php } ?>/><br/>
 				<div class="clear">&nbsp;</div>
+                        <input type="checkbox" name="personRoof" <?php if ($rec_p['roof'] > null) {
+                echo "CHECKED";
+            } ?>/> Strop
 <?php 			if ($user['aclGamemaster'] == 1) {
                 echo '
                                 <h3><label for="notnew">Není nové</label></h3>
@@ -172,7 +175,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	<div id="change-groups" class="otherform-wrap">
 		<fieldset><legend><strong>Přiřazení skupiny</strong></legend>
 		<p>Osobě můžete přiřadit skupiny, do kterých patří. Opačnou akci lze provést u skupiny, kde přiřazujete pro změnu osoby dané skupině. Akce jsou si rovnocenné a je tedy nutná pouze jedna z nich.</p>
-		<form action="procperson.php" method="post" class="otherform">
+		<form action="persons.php" method="post" class="otherform">
 		<?php
             $sql = "SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."group LEFT JOIN ".DB_PREFIX."g2p ON ".DB_PREFIX."g2p.idgroup=".DB_PREFIX."group.id AND ".DB_PREFIX."g2p.idperson=".$_REQUEST['rid']." WHERE ".DB_PREFIX."group.deleted=0 ORDER BY ".DB_PREFIX."group.title ASC";
             if ($user['aclDirector']) {
@@ -219,7 +222,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 				<?php } ?>
 			<li class="soubor"><a href="file/attachement/<?php echo $rec_f['id']; ?>" title=""><?php echo stripslashes($rec_f['title']); ?></a><?php if ($rec_f['secret'] == 1) { ?> (TAJNÝ)<?php } ?><span class="poznamka-edit-buttons"><?php
                 if (($rec_f['iduser'] == $user['userId']) || ($user['aclDirector'])) {
-                    echo '<a class="delete" title="smazat" href="procperson.php?deletefile='.$rec_f['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editperson.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat soubor &quot;'.stripslashes($rec_f['title']).'&quot; náležící k osobě?\')"><span class="button-text">smazat soubor</span></a>';
+                    echo '<a class="delete" title="smazat" href="persons.php?deletefile='.$rec_f['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editperson.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat soubor &quot;'.stripslashes($rec_f['title']).'&quot; náležící k osobě?\')"><span class="button-text">smazat soubor</span></a>';
                 } ?>
 				</span></li><?php
             }
@@ -235,7 +238,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 
 	<div id="new-file" class="otherform-wrap">
 		<fieldset><legend><strong>Nový soubor</strong></legend>
-		<form action="procperson.php" method="post" enctype="multipart/form-data" class="otherform">
+		<form action="persons.php" method="post" enctype="multipart/form-data" class="otherform">
 			<div>
 				<strong><label for="attachment">Soubor:</label></strong>
 				<input type="file" name="attachment" id="attachment" />
