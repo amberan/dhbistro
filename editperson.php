@@ -144,12 +144,14 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 				<h3><label for="dead">Mrtvá:</label></h3>
 					<input type="checkbox" name="dead" value=1 <?php if ($rec_p['dead'] == 1) { ?>checked="checked"<?php } ?>/><br/>
 				<div class="clear">&nbsp;</div>
-                                <h3><label for="archiv">Archiv:</label></h3>
+                <h3><label for="archiv">Archiv:</label></h3>
 					<input type="checkbox" name="archiv" value=1 <?php if ($rec_p['archiv'] == 1) { ?>checked="checked"<?php } ?>/><br/>
 				<div class="clear">&nbsp;</div>
-                        <input type="checkbox" name="personRoof" <?php if ($rec_p['roof'] > null) {
+				<h3><label for="dead">Strop:</label></h3>
+                    <input type="checkbox" name="personRoof" <?php if ($rec_p['roof'] > null) {
                 echo "CHECKED";
-            } ?>/> Strop
+            } ?>/></br>
+				<div class="clear">&nbsp;</div>
 <?php 			if ($user['aclGamemaster'] == 1) {
                 echo '
                                 <h3><label for="notnew">Není nové</label></h3>
