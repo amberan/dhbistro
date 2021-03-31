@@ -93,7 +93,7 @@ function getAuthor($recid, $trn)
 {
     global $database;
     if (1 == $trn) { //person
-        $getAuthorSql = 'SELECT '.DB_PREFIX."person.name as 'name', ".DB_PREFIX."person.surname as 'surname', ".DB_PREFIX."user.userName as 'nick' FROM ".DB_PREFIX.'person, '.DB_PREFIX.'user WHERE '.DB_PREFIX.'user.userId='.$recid.' AND '.DB_PREFIX.'person.id='.DB_PREFIX.'user.idperson';
+        $getAuthorSql = 'SELECT '.DB_PREFIX."person.name as 'name', ".DB_PREFIX."person.surname as 'surname', ".DB_PREFIX."user.userName as 'nick' FROM ".DB_PREFIX.'person, '.DB_PREFIX.'user WHERE '.DB_PREFIX.'user.userId='.$recid.' AND '.DB_PREFIX.'person.id='.DB_PREFIX.'user.personId';
         $getAuthorQuery = mysqli_query($database, $getAuthorSql);
         if (!is_bool($getAuthorQuery)) {
             $getAuthorResult = mysqli_fetch_assoc($getAuthorQuery);
