@@ -81,7 +81,6 @@ function personRoofUpdate($id,$checkbox): void
         $sql = 'select roof from '.DB_PREFIX.'person where id='.$id;
         $sqlQuery = mysqli_query($database,$sql);
         $sqlRoof = mysqli_fetch_assoc($sqlQuery);
-        echo "xxxxxxxxxx";
         print_r($sqlRoof);
         if ($sqlRoof['roof'] == null) {
             $sqlUpdate = 'update '.DB_PREFIX.'person set roof=CURRENT_TIMESTAMP where id='.$id;
