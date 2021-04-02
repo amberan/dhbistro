@@ -178,3 +178,11 @@ input[type='submit'] {
   width: 14px;
   height: 14px;
 }
+
+.btn-brick {
+  padding: 0.46875rem;
+}
+
+.mr-1 {
+  margin-right: 0.25rem !important;
+}
