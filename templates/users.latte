@@ -114,7 +114,7 @@
                                             <a class="btn btn-sm btn-brick btn-danger mb-1" href="/users/delete/{$users['userId']}" onclick="return confirm('{$text['opravdusmazat']} {$users['userName']}?')">
                                             {php  echo file_get_contents($website_link."images/icons/trash-solid.svg")}
                                         {elseif $user['userDeleted'] == 1}
-                                            <a class="btn btn-sm btn-brick btn-restore mb-1" href="/users/restore/{$users['userId']}" onclick="return confirm('{$text['opravduobnovit']} {$users['userName']}?')">
+                                            <a class="btn btn-sm btn-brick btn-success mb-1" href="/users/restore/{$users['userId']}" onclick="return confirm('{$text['opravduobnovit']} {$users['userName']}?')">
                                             {php  echo file_get_contents($website_link."images/icons/trash-solid.svg")}
                                         {/if}
                                     {/if}
