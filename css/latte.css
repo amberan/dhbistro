@@ -255,3 +255,6 @@ input[type='submit'] {
   background: white;
   transition: left 0.15s ease-in-out;
 }
+.min-w-user-edit {
+  min-width: 125px;
+}
