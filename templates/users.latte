@@ -39,55 +39,84 @@
                         {foreach $user_record as $users}
                             <tr>
                                 <td>
-                                     {$users['surname']}{$users['surname'] ? ',' } {$users['name']}
+                                     <p>{$users['surname']}{$users['surname'] ? ',' } {$users['name']}</p>
                                 </td>
                                 <td>
-                                    {$users['userName']}
+                                    <strong>{$users['userName']}</strong>
                                 </td>
                                 <td>
-                                    {if $users['aclRoot']} {$text['aclRoot']}  {/if}
-                                    {if $users['aclGamemaster']} {$text['aclGamemaster']} {/if}
-                                    {if $users['aclDirector']} {$text['aclDirector']} {/if}
-                                    {if $users['aclDeputy']} {$text['aclDeputy']} {/if}
-                                    {if $users['aclTask']} {$text['aclTask']} {/if}
-                                    {if $users['aclSecret']} {$text['aclSecret']} {/if}
-                                    {if $users['aclAudit']} {$text['aclAudit']} {/if}
-                                    {if $users['aclGroup']} {$text['aclGroup']} {/if}
-                                    {if $users['aclPerson']} {$text['aclPerson']} {/if}
-                                    {if $users['aclCase']} {$text['aclCase']} {/if}
-                                    {if $users['aclHunt']} {$text['aclHunt']} {/if}
-                                    {if $users['aclReport']} {$text['aclReport']} {/if}
-                                    {if $users['aclSymbol']} {$text['aclSymbol']} {/if}
-                                    {if $users['aclAPI']} {$text['aclAPI']} {/if}
+                                    {if $users['aclRoot']}
+                                        <span class="badge rounded-pill bg-danger">{$text['aclRoot']}</span>
+                                    {/if}
+                                    {if $users['aclGamemaster']}
+                                        <span class="badge rounded-pill bg-primary">{$text['aclGamemaster']}</span>
+                                    {/if}
+                                    {if $users['aclDirector']}
+                                        <span class="badge rounded-pill bg-success">{$text['aclDirector']}</span>
+                                    {/if}
+                                    {if $users['aclDeputy']}
+                                        <span class="badge rounded-pill bg-warning text-dark">{$text['aclDeputy']}</span>
+                                    {/if}
+                                    {if $users['aclTask']}
+                                        <span class="badge rounded-pill bg-light text-dark">{$text['aclTask']}</span>
+                                    {/if}
+                                    {if $users['aclSecret']}
+                                        <span class="badge rounded-pill bg-dark text-light">{$text['aclSecret']}</span>
+                                    {/if}
+                                    {if $users['aclAudit']}
+                                        <span class="badge rounded-pill bg-secondary text-light">{$text['aclAudit']}</span>
+                                    {/if}
+                                    {if $users['aclGroup']}
+                                        <span class="badge rounded-pill bg-light text-dark">{$text['aclGroup']}</span>
+                                    {/if}
+                                    {if $users['aclPerson']}
+                                        <span class="badge rounded-pill bg-light text-dark">{$text['aclPerson']}</span>
+                                    {/if}
+                                    {if $users['aclCase']}
+                                        <span class="badge rounded-pill bg-light text-dark">{$text['aclCase']}</span>
+                                    {/if}
+                                    {if $users['aclHunt']}
+                                        <span class="badge rounded-pill bg-light text-dark">{$text['aclHunt']}</span>
+                                    {/if}
+                                    {if $users['aclReport']}
+                                        <span class="badge rounded-pill bg-light text-dark">{$text['aclReport']}</span>
+                                    {/if}
+                                    {if $users['aclSymbol']}
+                                        <span class="badge rounded-pill bg-light text-dark">{$text['aclSymbol']}</span>
+                                    {/if}
+                                    {if $users['aclAPI']}
+                                        <span class="badge rounded-pill bg-info text-dark">{$text['aclAPI']}</span>
+                                    {/if}
                                 </td>
                                 <td>
                                     {$text['naposledy']}:
                                     {if $users['lastLogin']}
-                                        {$users['lastLogin']}
+                                        <em>{$users['lastLogin']}</em>
                                     {else}
-                                        {$text[nikdy]}
+                                        <em>{$text[nikdy]}</em>
                                     {/if}
                                 </td>
                                 <td>
-                                    <a class="btn btn-sm  btn-info" href="/users/edit/{$users['userId']}">
+                                    <a class="btn btn-sm btn-brick btn-info mb-1" href="/users/edit/{$users['userId']}">
                                         {php  echo file_get_contents($website_link."images/icons/edit-solid.svg")}
                                     </a>
 
                                     {if $users['userId'] != $user['userId']}
-                                        <a class="btn btn-sm  btn-info" href="/users/reset/{$users['userId']}" onclick="return confirm('{$text['opravdugenerovatheslo']} {$users['userName']}?')">{$text[noveheslo]}</a>
+                                        <a class="btn btn-sm  btn-info mb-1" href="/users/reset/{$users['userId']}" onclick="return confirm('{$text['opravdugenerovatheslo']} {$users['userName']}?')">{$text[noveheslo]}</a>
                                         {if $users['userSuspended'] == "1"}
-                                            <a class="btn btn-sm  btn-success" href="/users/unlock/{$users['userId']}" onclick="return confirm('{$text['opravduodemnkout']} {$users['userName']}?')">
+                                            <a class="btn btn-sm btn-brick btn-success mb-1 mr-1" href="/users/unlock/{$users['userId']}" onclick="return confirm('{$text['opravduodemnkout']} {$users['userName']}?')">
                                             {php  echo file_get_contents($website_link."images/icons/lock-open-solid.svg")}
                                         {else}
-                                            <a class="btn btn-sm  btn-warning" href="/users/lock/{$users['userId']}" onclick="return confirm('{$text['opravduzamknout']} {$users['userName']}?')">
+                                            <a class="btn btn-sm btn-brick btn-warning mb-1 mr-1" href="/users/lock/{$users['userId']}" onclick="return confirm('{$text['opravduzamknout']} {$users['userName']}?')">
                                             {php  echo file_get_contents($website_link."images/icons/lock-solid.svg")}
                                         {/if}
                                         {if $users[userDeleted] == 0}
-                                            <a class="btn btn-sm  btn-danger" href="/users/delete/{$users['userId']}" onclick="return confirm('{$text['opravdusmazat']} {$users['userName']}?')">
+                                            <a class="btn btn-sm btn-brick btn-danger mb-1" href="/users/delete/{$users['userId']}" onclick="return confirm('{$text['opravdusmazat']} {$users['userName']}?')">
+                                            {php  echo file_get_contents($website_link."images/icons/trash-solid.svg")}
                                         {elseif $user['userDeleted'] == 1}
-                                            <a class="btn btn-sm  btn-restore" href="/users/restore/{$users['userId']}" onclick="return confirm('{$text['opravduobnovit']} {$users['userName']}?')">
+                                            <a class="btn btn-sm btn-brick btn-success mb-1" href="/users/restore/{$users['userId']}" onclick="return confirm('{$text['opravduobnovit']} {$users['userName']}?')">
+                                            {php  echo file_get_contents($website_link."images/icons/trash-solid.svg")}
                                         {/if}
-                                        {php  echo file_get_contents($website_link."images/icons/trash-solid.svg")}
                                     {/if}
                                 </td>
                             </tr>

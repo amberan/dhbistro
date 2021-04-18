@@ -178,3 +178,83 @@ input[type='submit'] {
   width: 14px;
   height: 14px;
 }
+
+.btn-brick {
+  padding: 0.46875rem;
+}
+
+.mr-1 {
+  margin-right: 0.25rem !important;
+}
+
+.header-form-wrapper {
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: nowrap;
+  font-size: 1rem;
+}
+
+/* ----- SWITCH ----- */
+
+.header-switch {
+  margin-right: 16px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: nowrap;
+  font-size: 1rem;
+}
+
+.toggle-control {
+  display: block;
+  position: relative;
+  padding-left: 32px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  font-size: 22px;
+  user-select: none;
+  margin-right: 5px;
+}
+
+.toggle-control input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.toggle-control input:checked ~ .control {
+  background-color: dodgerblue;
+}
+
+.toggle-control input:checked ~ .control:after {
+  left: 18px;
+}
+
+.toggle-control .control {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 15px;
+  width: 32px;
+  border-radius: 15px;
+  background-color: darkgray;
+  transition: background-color 0.15s ease-in-out;
+}
+.toggle-control .control:after {
+  content: "";
+  position: absolute;
+  left: 1px;
+  top: 1px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: white;
+  transition: left 0.15s ease-in-out;
+}
+.min-w-user-edit {
+  min-width: 125px;
+}
