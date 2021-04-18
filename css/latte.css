@@ -186,3 +186,7 @@ input[type='submit'] {
 .mr-1 {
   margin-right: 0.25rem !important;
 }
+
+.min-w-user-edit {
+  min-width: 125px;
+}
