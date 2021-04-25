@@ -13,7 +13,7 @@ switch ($_SERVER["SERVER_NAME"]) {
         $config['barva'] = 'local';
         $config['custom'] = 'NH';
         $config['theme_bg'] = 'warning';
-        $config['theme_navbar'] = 'secondary';
+        $config['theme_navbar'] = 'light';
         break;
     case 'dhbistro.cz';
     case 'www.dhbistro.cz':
@@ -32,21 +32,21 @@ switch ($_SERVER["SERVER_NAME"]) {
         $config['barva'] = 'test';
         $config['custom'] = 'DH';
         $config['theme_bg'] = 'warning';
-        $config['theme_navbar'] = 'secondary';
+        $config['theme_navbar'] = 'light';
     break;
     case 'org.dhbistro.cz':
         $config['dbuser'] = $config['dbdatabase'] = 'orgbistro';
         $config['barva'] = 'org';
         $config['custom'] = 'DH';
         $config['theme_bg'] = 'dark';
-        $config['theme_navbar'] = 'secondary';
+        $config['theme_navbar'] = 'light';
         break;
     case 'enigma.dhbistro.cz':
         $config['dbuser'] = $config['dbdatabase'] = 'enigmabistro';
         $config['barva'] = 'enigma';
         $config['custom'] = 'enigma';
         $config['theme_bg'] = 'dark';
-        $config['theme_navbar'] = 'secondary';
+        $config['theme_navbar'] = 'light';
         break;
     case 'nhtest.dhbistro.cz':
         $config['dbuser'] = $config['dbdatabase'] = 'nhtestbistro';
@@ -59,7 +59,7 @@ switch ($_SERVER["SERVER_NAME"]) {
         $config['barva'] = 'test';
         $config['custom'] = 'NH';
         $config['theme_bg'] = 'warning';
-        $config['theme_navbar'] = 'secondary';
+        $config['theme_navbar'] = 'light';
         break;
     case 'nhtestbistro.talmahera.eu':
         $config['dbuser'] = $config['dbdatabase'] = 'nhtestbistro';
@@ -72,7 +72,7 @@ switch ($_SERVER["SERVER_NAME"]) {
         $config['barva'] = 'test';
         $config['custom'] = 'DB';
         $config['theme_bg'] = 'dark';
-        $config['theme_navbar'] = 'secondary';
+        $config['theme_navbar'] = 'light';
         break;
     case 'dhtestbistro.talmahera.eu':
         $config['dbuser'] = $config['dbdatabase'] = 'dhtestbistro';
@@ -85,7 +85,7 @@ switch ($_SERVER["SERVER_NAME"]) {
         $config['custom'] = 'DH';
         $config['barva'] = 'local';
         $config['theme_bg'] = 'warning';
-        $config['theme_navbar'] = 'secondary';
+        $config['theme_navbar'] = 'light';
     break;
 }
 
