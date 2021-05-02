@@ -10,10 +10,6 @@ label {
   font-family: 'Trebuchet MS', sans-serif;
 }
 
-body {
-  min-height: 100vh;
-}
-
 html,
 body,
 div,
@@ -113,6 +109,17 @@ video {
   padding-inline-start: 0;
   -webkit-padding-inline-end: 0;
   padding-inline-end: 0;
+}
+
+body {
+  min-height: 100vh;
+  padding-top: 70px;
+}
+
+@media only screen and (min-width: 992px) {
+  body {
+    padding-top: 95px;
+  }
 }
 
 *,
@@ -257,4 +264,30 @@ input[type='submit'] {
 }
 .min-w-user-edit {
   min-width: 125px;
+}
+
+/* FIXED NAVIGATION */
+
+.navbar-fixed-top {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1030;
+  border-width: 0 0 1px;
+}
+
+.breadcrumbs-fixed-top {
+  display: block;
+}
+
+@media only screen and (min-width: 992px) {
+  .breadcrumbs-fixed-top {
+    position: fixed;
+    top: 54px;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+    background-color: white;
+  }
 }
