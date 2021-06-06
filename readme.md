@@ -1,3 +1,8 @@
+[![pipeline status](https://gitlab.alembiq.net/larp/bistro/badges/master/pipeline.svg)](https://gitlab.alembiq.net/larp/bistro/commits/master)
+[![license](https://img.shields.io/github/license/amberan/dhbistro.svg)](https://gitlab.alembiq.net/larp/bistro/blob/master/LICENSE)
+[![lines of code](https://tokei.rs/b1/github/amberan/dhbistro)](https://tokei.rs/b1/github/amberan/dhbistro)
+
+
 # [BISTRO](https://github.com/amberan/dhbistro)
 
 Tato webovka byla vyvynuta pro potřeby LARPu [Pražská Hlídka](http://www.prazskahlidka.cz/).  

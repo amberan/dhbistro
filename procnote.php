@@ -14,7 +14,7 @@ $latteParameters['title'] = 'Uložení změn';
 	    switch ($_POST['idtable']) {
 			case 1: $sourceurl = "persons.php"; $sourcename = "osoby"; break;
 			case 2: $sourceurl = "groups.php"; $sourcename = "skupiny"; break;
-			case 3: $sourceurl = "cases.php"; $sourcename = "případy"; break;
+			case 3: $sourceurl = "/cases/"; $sourcename = "případy"; break;
 			case 4: $sourceurl = "reports.php"; $sourcename = "hlášení"; break;
 			default: $sourceurl = ""; $sourcename = ""; break;
 		}
@@ -31,7 +31,7 @@ $latteParameters['title'] = 'Uložení změn';
 	        switch ($_REQUEST['idtable']) {
 			case 1: $sourceurl = "persons.php"; $sourcename = "osoby"; break;
 			case 2: $sourceurl = "groups.php"; $sourcename = "skupiny"; break;
-			case 3: $sourceurl = "cases.php"; $sourcename = "případy"; break;
+			case 3: $sourceurl = "/cases/"; $sourcename = "případy"; break;
 			case 4: $sourceurl = "reports.php"; $sourcename = "hlášení"; break;
 			default: $sourceurl = ""; $sourcename = ""; break;
 		}
@@ -47,7 +47,7 @@ $latteParameters['title'] = 'Uložení změn';
 	if (isset($_POST['setnote'])) {
 	    if (!preg_match ('/^[[:blank:]]*$/i',$_POST['note']) /*&& !preg_match ('/^[[:blank:]]*$/i',$_POST['title'])*/ && is_numeric($_POST['secret'])) {
 	        auditTrail($_POST['tableid'], 7, $_POST['itemid']);
-	        mysqli_query ($database,"INSERT INTO ".DB_PREFIX."note (note, title, datum, iduser, idtable, iditem, secret, deleted) VALUES('".$_POST['note']."','".$_POST['title']."','".Time()."','".$usrinfo['id']."','".$_POST['tableid']."','".$_POST['itemid']."','".$_POST['secret']."','0')");
+	        mysqli_query ($database,"INSERT INTO ".DB_PREFIX."note (note, title, datum, iduser, idtable, iditem, secret, deleted) VALUES('".$_POST['note']."','".$_POST['title']."','".Time()."','".$user['userId']."','".$_POST['tableid']."','".$_POST['itemid']."','".$_POST['secret']."','0')");
 	        $_SESSION['message'] = "Poznámka uložena";
 	        if (!isset($_POST['nnotnew'])) {
 	            unreadRecords ($_POST['tableid'],$_POST['itemid']);

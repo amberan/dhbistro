@@ -2,10 +2,9 @@
 
 // pridat imagemagic manipulaci se symboly
 
-
-function imageResize ($img,$maxWidth,$maxHeight)
+function imageResize($img,$maxWidth,$maxHeight)
 {
-    $size = GetImageSize($img);
+    $size = getimagesize($img);
     $width = $size[0];
     $height = $size[1];
     $ratioX = $maxWidth / $width;
@@ -14,7 +13,7 @@ function imageResize ($img,$maxWidth,$maxHeight)
         $widthTn = $width;
         $heightTn = $height;
     } else {
-        if (($ratioX * $height) < $maxHeight) {
+        if ($ratioX * $height < $maxHeight) {
             $heightTn = ceil($ratioX * $height);
             $widthTn = $maxWidth;
         } else {
@@ -23,20 +22,18 @@ function imageResize ($img,$maxWidth,$maxHeight)
         }
     }
     if ($size[2] == 1) {
-        $src = ImageCreateFromGIF($img);
+        $src = imagecreatefromgif($img);
     }
     if ($size[2] == 2) {
-        $src = ImageCreateFromJPEG($img);
+        $src = imagecreatefromjpeg($img);
     }
     if ($size[2] == 3) {
-        $src = ImageCreateFromPNG($img);
+        $src = imagecreatefrompng($img);
     }
-    $dst = ImageCreateTrueColor($widthTn,$heightTn);
-    ImageCopyResampled ($dst,$src,0,0,0,0,$widthTn,$heightTn,$width,$height);
-    Imageinterlace($dst, 1);
-    ImageDestroy($src);
+    $dst = imagecreatetruecolor($widthTn,$heightTn);
+    imagecopyresampled($dst,$src,0,0,0,0,$widthTn,$heightTn,$width,$height);
+    imageinterlace($dst, 1);
+    imagedestroy($src);
 
     return $dst;
 }
-
-?>

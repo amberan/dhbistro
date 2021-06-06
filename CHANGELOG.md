@@ -1,7 +1,25 @@
 # BISTRO changelog 
 
+**1.7.6**
+- drobne upravy pro odstraneni PHP warningu
+- zobrazovani data vytvoreni u vyhledavani
+- zobrazovany flagy utajeni a archivace u vyhledavani
+- pripad nema datum vytvoreni [#51](https://gitlab.alembiq.net/larp/bistro/issues/51)
+- skupina nema datum vytvoreni [#52](https://gitlab.alembiq.net/larp/bistro/issues/52)
+
+**1.7.5**
+- chybi prava pro reporty a symboly [#132](https://gitlab.alembiq.net/larp/bistro/issues/132)
+
+**1.7.4**
+- archivovatelne symboly [#22](https://gitlab.alembiq.net/larp/bistro/issues/22)
+- modal window pro notifikace dostupny v starem UI
+
 **1.7.3** 
 - nasazeni trideni na stare formulare [#87](https://gitlab.alembiq.net/larp/bistro/issues/87)
+- WIP filtrovani - pripady [#59](https://gitlab.alembiq.net/larp/bistro/issues/59)
+- WIP redesign pripady [#118](https://gitlab.alembiq.net/larp/bistro/issues/118)
+- WIP odstaneni proccase.php [#106](https://gitlab.alembiq.net/larp/bistro/issues/106)
+- CI rework nasazeni na test [#127](https://gitlab.alembiq.net/larp/bistro/issues/127)
 
 **1.7.2** Access 2.0
 - nova prava [#49](https://gitlab.alembiq.net/larp/bistro/issues/49)

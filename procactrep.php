@@ -33,7 +33,7 @@ if (isset($_POST['reportid'])) {
 
 
 	        mainMenu ();
-	        mysqli_query ($database,"INSERT INTO ".DB_PREFIX."report (label, datum, iduser, task, summary, impacts, details, secret, deleted, status, type, adatum, start, end, energy, inputs) VALUES('".$_POST['label']."','".Time()."','".$usrinfo['id']."','".$_POST['task']."','".$_POST['summary']."','".$_POST['impact']."','".$_POST['details']."','".$_POST['secret']."','0','".$_POST['status']."','".$_POST['type']."','".$adatum."','".$_POST['start']."','".$_POST['end']."','".$_POST['energy']."','".$_POST['inputs']."')");
+	        mysqli_query ($database,"INSERT INTO ".DB_PREFIX."report (label, datum, iduser, task, summary, impacts, details, secret, deleted, status, type, adatum, start, end, energy, inputs) VALUES('".$_POST['label']."','".Time()."','".$user['userId']."','".$_POST['task']."','".$_POST['summary']."','".$_POST['impact']."','".$_POST['details']."','".$_POST['secret']."','0','".$_POST['status']."','".$_POST['type']."','".$adatum."','".$_POST['start']."','".$_POST['end']."','".$_POST['energy']."','".$_POST['inputs']."')");
 	        $ridarray = mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."report WHERE UCASE(label)=UCASE('".$_POST['label']."')"));
 	        $rid = $ridarray['id'];
 	        auditTrail(4, 3, $rid);
@@ -62,7 +62,7 @@ if (isset($_POST['reportid'])) {
 	        latteDrawTemplate("footer");
 	    }
 	}
-	if (isset($_POST['reportid'], $_POST['editactrep']) && ($usrinfo['right_text'] || $usrinfo['id'] == $author) && !preg_match ('/^[[:blank:]]*$/i',$_POST['label']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['task']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['summary']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['impacts']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['details']) && is_numeric($_POST['secret']) && is_numeric($_POST['status'])) {
+	if (isset($_POST['reportid'], $_POST['editactrep']) && ($usrinfo['right_text'] || $user['userId'] == $author) && !preg_match ('/^[[:blank:]]*$/i',$_POST['label']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['task']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['summary']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['impacts']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['details']) && is_numeric($_POST['secret']) && is_numeric($_POST['status'])) {
 	    auditTrail(4, 2, $_POST['reportid']);
 	    $latteParameters['title'] = 'Uložení změn';
 
@@ -87,7 +87,7 @@ if (isset($_POST['reportid'])) {
 
 
 	        mainMenu ();
-	        sparklets ('<a href="./cases.php">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>uložení změn neúspěšné</strong>');
+	        sparklets ('<a href="/cases/">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>uložení změn neúspěšné</strong>');
 	        echo '<div id="obsah"><p>Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva. Pamatujte, že žádné pole nesmí být prázdné.</p></div>';
 	        latteDrawTemplate("footer");
 	    }
@@ -96,7 +96,7 @@ if (isset($_POST['reportid'])) {
 	    auditTrail(4, 4, $_POST['reportid']);
 	    $newname = Time().MD5(uniqid(Time().Rand()));
 	    move_uploaded_file ($_FILES['attachment']['tmp_name'],'./files/'.$newname);
-	    $sql = "INSERT INTO ".DB_PREFIX."file (uniquename,originalname,mime,size,datum,iduser,idtable,iditem,secret) VALUES('".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','4','".$_POST['reportid']."','".$_POST['secret']."')";
+	    $sql = "INSERT INTO ".DB_PREFIX."file (uniquename,originalname,mime,size,datum,iduser,idtable,iditem,secret) VALUES('".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".Time()."','".$user['userId']."','4','".$_POST['reportid']."','".$_POST['secret']."')";
 	    mysqli_query ($database,$sql);
 	    unreadRecords (4,$_POST['reportid']);
 	    Header ('Location: '.$_POST['backurl']);
@@ -106,7 +106,7 @@ if (isset($_POST['reportid'])) {
 
 
 	        mainMenu ();
-	        sparklets ('<a href="./cases.php">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>přiložení souboru</strong>');
+	        sparklets ('<a href="/cases/">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>přiložení souboru</strong>');
 	        echo '<div id="obsah"><p>Soubor nebyl přiložen, něco se nepodařilo. Možná nebyl zvolen přikládaný soubor.</p></div>';
 	        latteDrawTemplate("footer");
 	    }

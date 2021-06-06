@@ -12,13 +12,12 @@ if (isset($_POST['addpoints'])) {
     auditTrail(9, 1, 0);
 }
 	mainMenu ();
-        $customFilter = custom_Filter(9);
-	sparklets ('<strong>'.$text['point'].'y</strong>',(($usrinfo['right_power']) ? 'aktuální stav' : ''));
+	sparklets ('<strong>'.$text['point'].'y</strong>',(($user['aclDirector']) ? 'aktuální stav' : ''));
 	//Přidání zlobodů
 	if (isset($_POST['addpoints'])) {
 	    if (is_numeric($_POST['plus'])) {
 	        $ep_result = $_POST['oldpoints'] + $_POST['plus'];
-            mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET zlobod=".$ep_result." WHERE userId=".$_POST['usrid']."");
+	        mysqli_query ($database,"UPDATE ".DB_PREFIX."user SET zlobod=".$ep_result." WHERE userId=".$_POST['usrid']."");
 	        echo '<div id="obsah"><p>Zlobody přidány.</p></div>';
 	    } else {
 	        echo '<div id="obsah"><p>Přidané '.$text['point'].'y musí být číselné.</p></div>';
@@ -38,7 +37,7 @@ if (isset($_POST['addpoints'])) {
 	<tr>
 	  <th>Kódové označení <a href="evilpoints.php?sort=userName">&#8661;</a></th>
 	  <th>Aktuální počet '.$text['point'].'ů <a href="evilpoints.php?sort=zlobod">&#8661;</a></th>
-	  '.(($usrinfo['right_power']) ? '	  <th>Akce</th>' : '').'
+	  '.(($user['aclDirector']) ? '	  <th>Akce</th>' : '').'
 	</tr>
 </thead>
 <tbody>
@@ -48,7 +47,7 @@ if (isset($_POST['addpoints'])) {
 	        echo '<tr class="'.(($even % 2 == 0) ? 'even' : 'odd').'">
 	<td>'.getAuthor($rec['userId'],0).'</td>
 	<td>'.($rec['zlobod']).'</td>
-	'.(($usrinfo['right_power']) ? '<td>
+	'.(($user['aclDirector']) ? '<td>
 			<form action="evilpoints.php" method="post" id="inputform" class="evilform">
 			<input class="plus" type="text" name="plus" id="plus" />
 			<input type="hidden" name="usrid" value="'.($rec['userId']).'" />

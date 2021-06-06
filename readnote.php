@@ -19,13 +19,13 @@ latteDrawTemplate("header");
 				 WHERE ".DB_PREFIX."note.id=".$_REQUEST['rid']." 
 				AND ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId");
 	    if ($rec = mysqli_fetch_assoc ($res)) {
-	        if ((($rec['secret'] <= $usrinfo['right_power']) || $rec['iduser'] == $usrinfo['id']) && !$rec['deleted'] == 1) {
+	        if ((($rec['secret'] <= $user['aclDirector']) || $rec['iduser'] == $user['userId']) && !$rec['deleted'] == 1) {
 	            $latteParameters['title'] = StripSlashes($rec['title']);
 	            mainMenu (0);
 	            switch ($_REQUEST['idtable']) {
 					case 1: $sourceurl = "persons.php"; $sourcename = "osoby"; break;
 					case 2: $sourceurl = "groups.php"; $sourcename = "skupiny"; break;
-					case 3: $sourceurl = "cases.php"; $sourcename = "případy"; break;
+					case 3: $sourceurl = "/cases/"; $sourcename = "případy"; break;
 					case 4: $sourceurl = "reports.php"; $sourcename = "hlášení"; break;
 					default: $sourceurl = ""; $sourcename = ""; break;
 				}

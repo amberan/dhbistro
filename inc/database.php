@@ -3,14 +3,17 @@
 $lines = file($config['dbpass'],FILE_IGNORE_NEW_LINES) or die("fail pwd");
 $password = $lines[2];
 
-$database = mysqli_connect ('localhost',$config['dbuser'],$password,$config['dbdatabase']) or die ($_SERVER["SERVER_NAME"].":".mysqli_connect_errno()." ".mysqli_connect_error());
+$database = mysqli_connect('localhost',$config['dbuser'],$password,$config['dbdatabase']) or die($_SERVER["SERVER_NAME"].":".mysqli_connect_errno()." ".mysqli_connect_error());
 
-mysqli_query ($database,"SET NAMES 'utf8'");
+mysqli_query($database,"SET NAMES 'utf8'");
 
 require_once SERVER_ROOT.'/inc/installer.php';
 
-/** 
- * Check existence of $column in $table
+/**
+ * Check existence of $column in $table.
+ *
+ * @param mixed $table
+ * @param mixed $column
  */
 function DBcolumnExist($table,$column)
 {
@@ -20,9 +23,11 @@ function DBcolumnExist($table,$column)
 
     return mysqli_num_rows($checkColumn);
 }
- 
-/** 
- * Check existence of $table
+
+/**
+ * Check existence of $table.
+ *
+ * @param mixed $table
  */
 function DBtableExist($table)
 {
@@ -34,10 +39,31 @@ function DBtableExist($table)
 }
 
 /**
-* SQL injection mitigation
-* @param array array 
-* @return array escaped/slashed array
-*/
+ * Returns number of not empty $table.$column.
+ *
+ * @param mixed $table
+ * @param mixed $column
+ */
+function DBcolumntNotEmpty($table,$column)
+{
+    global $config,$database;
+    $result[] = '1';
+    if (DBcolumnExist($table,$column) == true) {
+        $query = "select count(*) from ".$config['dbdatabase'].".".DB_PREFIX.$table." where length($column) is not null;";
+        $result = mysqli_fetch_array(mysqli_query($database,$query));
+    }
+
+    return $result[0];
+}
+
+/**
+ * SQL injection mitigation.
+ *
+ * @param array array
+ * @param mixed $array
+ *
+ * @return array escaped/slashed array
+ */
 function escape_array($array): array
 {
     global $database;
@@ -45,18 +71,12 @@ function escape_array($array): array
         if (is_array($value)) {
             escape_array($value);
         } else {
-            $array[$key] = mysqli_real_escape_string($database, addslashes( $value));
+            $array[$key] = mysqli_real_escape_string($database, addslashes($value));
         }
     }
 
     return $array;
 }
-$_REQUEST = escape_array ($_REQUEST);
-$_POST = escape_array ($_POST);
-$_GET = escape_array ($_GET);
-
-
-
-
-
-?>
+$_REQUEST = escape_array($_REQUEST);
+$_POST = escape_array($_POST);
+$_GET = escape_array($_GET);

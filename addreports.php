@@ -8,7 +8,7 @@ latteDrawTemplate("header");
 $latteParameters['title'] = 'Úprava hlášení';
 	if (isset($_POST['addtoareport'])) {
 	    auditTrail(4, 6, $_POST['reportid']);
-	    if ($usrinfo['right_power'] == 1) {
+	    if ($user['aclDirector'] == 1) {
 	        mysqli_query ($database,"DELETE FROM ".DB_PREFIX."ar2c WHERE ".DB_PREFIX."ar2c.idreport=".$_POST['reportid']);
 	    } else {
 	        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2c as c, ".DB_PREFIX."case as p WHERE c.idcase=p.id AND p.secret=0 AND c.idreport=".$_POST['reportid']);
@@ -21,7 +21,7 @@ $latteParameters['title'] = 'Úprava hlášení';
 	    echo '<div id="obsah"><p>Hlášení přiřazeno k příslušným případům.</p></div>';
 	    if (isset($_POST['case'])) {
 	        for ($i = 0;$i < Count($case);$i++) {
-	            mysqli_query ($database,"INSERT INTO ".DB_PREFIX."ar2c VALUES('".$_POST['reportid']."','".$case[$i]."','".$usrinfo['id']."')");
+	            mysqli_query ($database,"INSERT INTO ".DB_PREFIX."ar2c VALUES('".$_POST['reportid']."','".$case[$i]."','".$user['userId']."')");
 	        }
 	    }
 	    latteDrawTemplate("footer");
@@ -29,7 +29,7 @@ $latteParameters['title'] = 'Úprava hlášení';
 	
 	if (isset($_POST['addcasetoareport'])) {
 	    auditTrail(3, 6, $_POST['caseid']);
-	    if ($usrinfo['right_power'] == 1) {
+	    if ($user['aclDirector'] == 1) {
 	        mysqli_query ($database,"DELETE FROM ".DB_PREFIX."ar2c WHERE ".DB_PREFIX."ar2c.idcase=".$_POST['caseid']);
 	    } else {
 	        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2c as c, ".DB_PREFIX."report as p WHERE c.idreport=p.id AND p.secret=0 AND c.idcase=".$_POST['caseid']);
@@ -38,11 +38,11 @@ $latteParameters['title'] = 'Úprava hlášení';
 	        $report = $_POST['report'];
 	    }
 	    mainMenu ();
-	    sparklets ('<a href="./cases.php">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>uložení změn</strong>','<a href="readcase.php?rid='.$_POST['caseid'].'&hidenotes=0">zobrazit upravené</a>');
+	    sparklets ('<a href="/cases/">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>uložení změn</strong>','<a href="readcase.php?rid='.$_POST['caseid'].'&hidenotes=0">zobrazit upravené</a>');
 	    echo '<div id="obsah"><p>Hlášení k případu přiložena či odebrána.</p></div>';
 	    if (isset($_POST['report'])) {
 	        for ($i = 0;$i < Count($report);$i++) {
-	            mysqli_query ($database,"INSERT INTO ".DB_PREFIX."ar2c VALUES('".$report[$i]."','".$_POST['caseid']."','".$usrinfo['id']."')");
+	            mysqli_query ($database,"INSERT INTO ".DB_PREFIX."ar2c VALUES('".$report[$i]."','".$_POST['caseid']."','".$user['userId']."')");
 	        }
 	    }
 	    latteDrawTemplate("footer");

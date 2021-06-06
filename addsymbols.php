@@ -8,7 +8,7 @@ latteDrawTemplate("header");
 $latteParameters['title'] = 'Uložení změn';
 	if (isset($_POST['addsymbol2c'])) {
 	    auditTrail(7, 6, $_POST['symbolid']);
-	    if ($usrinfo['right_power'] == 1) {
+	    if ($user['aclDirector'] == 1) {
 	        $sql = "DELETE FROM ".DB_PREFIX."symbol2all WHERE ".DB_PREFIX."symbol2all.idsymbol=".$_POST['symbolid']." AND ".DB_PREFIX."symbol2all.table=3";
 	        mysqli_query ($database,$sql);
 	    } else {
@@ -23,7 +23,7 @@ $latteParameters['title'] = 'Uložení změn';
 	    echo '<div id="obsah"><p>Symbol přiřazen k příslušným případům.</p></div>';
 	    if (isset($_POST['case'])) {
 	        for ($i = 0;$i < Count($case);$i++) {
-	            $sql = "INSERT INTO ".DB_PREFIX."symbol2all VALUES('".$_POST['symbolid']."','".$case[$i]."','".$usrinfo['id']."','3')";
+	            $sql = "INSERT INTO ".DB_PREFIX."symbol2all VALUES('".$_POST['symbolid']."','".$case[$i]."','".$user['userId']."','3')";
 	            mysqli_query ($database,$sql);
 	        }
 	    }
@@ -32,7 +32,7 @@ $latteParameters['title'] = 'Uložení změn';
 	
 	if (isset($_POST['addsymbol2ar'])) {
 	    auditTrail(7, 6, $_POST['symbolid']);
-	    if ($usrinfo['right_power'] == 1) {
+	    if ($user['aclDirector'] == 1) {
 	        $sql = "DELETE FROM ".DB_PREFIX."symbol2all WHERE ".DB_PREFIX."symbol2all.idsymbol=".$_POST['symbolid']." AND ".DB_PREFIX."symbol2all.table=4";
 	        mysqli_query ($database,$sql);
 	    } else {
@@ -48,7 +48,7 @@ $latteParameters['title'] = 'Uložení změn';
 	    echo '<div id="obsah"><p>Symbol přiřazen k příslušným hlášení.</p></div>';
 	    if (isset($_POST['report'])) {
 	        for ($i = 0;$i < Count($report);$i++) {
-	            mysqli_query ($database,"INSERT INTO ".DB_PREFIX."symbol2all VALUES('".$_POST['symbolid']."','".$report[$i]."','".$usrinfo['id']."','4')");
+	            mysqli_query ($database,"INSERT INTO ".DB_PREFIX."symbol2all VALUES('".$_POST['symbolid']."','".$report[$i]."','".$user['userId']."','4')");
 	        }
 	    }
 	    latteDrawTemplate("footer");
@@ -70,7 +70,7 @@ $latteParameters['title'] = 'Uložení změn';
                     SELECT idreport FROM `".DB_PREFIX."ar2p` WHERE `idperson` =".$_POST['person'].")";
             $res_ar = mysqli_query ($database,$sql_ar);
             while ($rec_ar = mysqli_fetch_assoc ($res_ar)) {
-                $sql_i = "INSERT INTO ".DB_PREFIX."ar2p VALUES (".$_POST['person'].",".$rec_ar['idrecord'].",".$usrinfo['id'].",0)";
+                $sql_i = "INSERT INTO ".DB_PREFIX."ar2p VALUES (".$_POST['person'].",".$rec_ar['idrecord'].",".$user['userId'].",0)";
                 mysqli_query ($database,$sql_i);
             }
             // Pripady - priradit osobu tam, kde neni
@@ -78,14 +78,14 @@ $latteParameters['title'] = 'Uložení změn';
                     SELECT idcase FROM `".DB_PREFIX."c2p` WHERE `idperson` =".$_POST['person'].")";
             $res_c = mysqli_query ($database,$sql_c);
             while ($rec_c = mysqli_fetch_assoc ($res_c)) {
-                $sql_i = "INSERT INTO ".DB_PREFIX."c2p VALUES (".$_POST['person'].",".$rec_c['idrecord'].",".$usrinfo['id'].")";
+                $sql_i = "INSERT INTO ".DB_PREFIX."c2p VALUES (".$_POST['person'].",".$rec_c['idrecord'].",".$user['userId'].")";
                 mysqli_query ($database,$sql_i);
             }
             // Preneseni popisu symbolu do poznamky k osobe
             $sql_d = "SELECT `desc` FROM ".DB_PREFIX."symbol WHERE id=".$_POST['symbolid'];
             $res_d = mysqli_query ($database,$sql_d);
             $rec_d = mysqli_fetch_assoc ($res_d);
-            mysqli_query ($database,"INSERT INTO ".DB_PREFIX."note ( note, title, datum, iduser, idtable, iditem, secret, deleted) VALUES(".$rec_d['desc']."','Popis symbolu přiřazeného ".Date("j/m/Y H:i:s", Time())."','".Time()."','".$usrinfo['id']."','1','".$_POST['person']."','0','0')");
+            mysqli_query ($database,"INSERT INTO ".DB_PREFIX."note ( note, title, datum, iduser, idtable, iditem, secret, deleted) VALUES(".$rec_d['desc']."','Popis symbolu přiřazeného ".Date("j/m/Y H:i:s", Time())."','".Time()."','".$user['userId']."','1','".$_POST['person']."','0','0')");
             
             // Kopie poznamek k symbolu priradit k osobe
             $sql_n = "SELECT * FROM ".DB_PREFIX."note WHERE iditem=".$_POST['symbolid']." AND idtable=7 AND deleted=0";

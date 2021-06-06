@@ -1,11 +1,11 @@
 <?php
 
-
 use Tracy\Debugger;
-    Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+
+Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
 // smazat uzivatele
-if (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] == 'delete') {
+if (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] == 'delete') {
     if (!$user['aclDirector']) {
         unauthorizedAccess(8, 1, 0, 0);
     } else {
@@ -14,7 +14,7 @@ if (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] == 'delete') {
         userChange($URL[3],$data,$text['uzivatelodstranen'],$text['akcinelzeprovest']);
     }
 } // obnovit uzivatele
-elseif (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] == 'restore') {
+elseif (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] == 'restore') {
     if (!$user['aclDirector']) {
         unauthorizedAccess(8, 1, 0, 0);
     } else {
@@ -23,7 +23,7 @@ elseif (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] == 'restore') {
         userChange($URL[3],$data,$text['uzivatelobnoven'],$text['akcinelzeprovest']);
     }
 } // zamknout uzivatele
-elseif (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] == 'lock') {
+elseif (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] == 'lock') {
     if (!$user['aclDirector']) {
         unauthorizedAccess(8, 2, 0, 0);
     } else {
@@ -32,7 +32,7 @@ elseif (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] == 'lock') {
         userChange($URL[3],$data,$text['uzivatelzablokovan'],$text['akcinelzeprovest']);
     }
 } // odemknout uzivatele
-elseif (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] == 'unlock') {
+elseif (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] == 'unlock') {
     if (!$user['aclDirector']) {
         unauthorizedAccess(8, 2, 0, 0);
     } else {
@@ -41,7 +41,7 @@ elseif (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] == 'unlock') {
         userChange($URL[3],$data,$text['uzivatelodblokovan'],$text['akcinelzeprovest']);
     }
 } // reset hesla uzivatele
-elseif (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] = 'reset') {
+elseif (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] = 'reset') {
     if (!$user['aclDirector']) {
         unauthorizedAccess(8, 11, 0, 0);
     } else {
@@ -51,17 +51,17 @@ elseif (isset($URL[3]) AND is_numeric($URL[3]) AND $URL[2] = 'reset') {
         userChange($URL[3],$data,$text['heslonastaveno'].$passwordNew,$text['akcinelzeprovest']);
     }
 }  // vytvorit uzivatele
-elseif (isset($_POST['insertuser']) && $user['aclDirector'] && !preg_match ('/^[[:blank:]]*$/i',$_POST['login']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['heslo'])) {
-    $userExist = mysqli_query ($database,"SELECT userId FROM ".DB_PREFIX."user WHERE UCASE(userName)=UCASE('".$_POST['login']."')");
-    if (mysqli_num_rows ($userExist)) {
+elseif (isset($_POST['insertuser']) && $user['aclDirector'] && !preg_match('/^[[:blank:]]*$/i',$_POST['login']) && !preg_match('/^[[:blank:]]*$/i',$_POST['heslo'])) {
+    $userExist = mysqli_query($database,"SELECT userId FROM ".DB_PREFIX."user WHERE UCASE(userName)=UCASE('".$_POST['login']."')");
+    if (mysqli_num_rows($userExist)) {
         $latteParameters['message'] = $text['uzivatelexistuje'];
     } else {
         //TODO add validate_email
         auditTrail(8, 3, $uidarray['id']);
         $userCreate = "INSERT INTO ".DB_PREFIX."user (userName,userPassword) VALUES('".$_POST['login']."','".md5($_POST['heslo'])."')";
-        mysqli_query ($database,$userCreate);
+        mysqli_query($database,$userCreate);
         if (mysqli_affected_rows($database) > 0) {
-            $uidarray = mysqli_fetch_assoc (mysqli_query ($database,"SELECT userId FROM ".DB_PREFIX."user WHERE UCASE(userName)=UCASE('".$_POST['login']."')"));
+            $uidarray = mysqli_fetch_assoc(mysqli_query($database,"SELECT userId FROM ".DB_PREFIX."user WHERE UCASE(userName)=UCASE('".$_POST['login']."')"));
             $data['aclRoot'] = $_POST['aclRoot'];
             $data['aclDirector'] = $_POST['aclDirector'];
             $data['aclDeputy'] = $_POST['aclDeputy'];
@@ -73,6 +73,8 @@ elseif (isset($_POST['insertuser']) && $user['aclDirector'] && !preg_match ('/^[
             $data['aclCase'] = $_POST['aclCase'];
             $data['aclHunt'] = $_POST['aclHunt'];
             $data['aclGamemaster'] = $_POST['aclGamemaster'];
+            $data['aclReport'] = $_POST['aclReport'];
+            $data['aclSymbol'] = $_POST['aclSymbol'];
             $data['aclAPI'] = $_POST['aclAPI'];
             if (validate_mail($_POST['email'])) {
                 $data['userEmail'] = $_POST['email'];
@@ -100,5 +102,3 @@ if (count($userList) > 0) {
 latteDrawTemplate('sparklet');
 //TODO DODELAT FILTROVANI PODLE PRAV
 latteDrawTemplate('users');
-
-?>

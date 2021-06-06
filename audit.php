@@ -5,7 +5,7 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Audit';
-        if (!$usrinfo['right_aud']) {
+        if (!$user['aclAudit']) {
             unauthorizedAccess(11, 1, 0, 0);
         }
 	
@@ -103,7 +103,8 @@ $latteParameters['title'] = 'Audit';
 						    $name = 'neznámý';
 						}
 						break;
-				case 10: $name = $idrecord; break;
+                case 10: $name = $idrecord; break;
+                default: break;
 			}
 
 	        return $name;
@@ -124,7 +125,8 @@ $latteParameters['title'] = 'Audit';
 				case 4: $link = 'readactrep.php?rid='.$recid.'&hidenotes=0&truenames=0'; break;
 				case 7: $link = 'readsymbol.php?rid='.$recid; break;
 				case 8: $link = 'edituser.php?rid='.$recid; break;
-				case 10: $link = 'tasks.php'; break;
+                case 10: $link = 'tasks.php'; break;
+                default: break;
 			}
 
 	        return $link;
@@ -199,7 +201,7 @@ $latteParameters['title'] = 'Audit';
 	    $filterSqlOrg = ' ';
 	}
 	if ($filterMine == 0) {
-	    $filterSqlMine = ' AND '.DB_PREFIX.'audit_trail.iduser<>'.$usrinfo['id'];
+	    $filterSqlMine = ' AND '.DB_PREFIX.'audit_trail.iduser<>'.$user['userId'];
 	} else {
 	    $filterSqlMine = ' ';
 	}
@@ -219,7 +221,7 @@ $latteParameters['title'] = 'Audit';
 	// filtr
 	function filter ()
 	{
-	    global $database,$filterCat,$filterSort,$filterUser,$filterType,$usrinfo,$filterOrg,$filterMine,$filterGlob,$filterCount;
+	    global $database,$filterCat,$filterUser,$filterType,$user,$filterOrg,$filterMine,$filterGlob,$filterCount;
 	    echo '<div id="filter-wrapper"><form action="audit.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -242,12 +244,12 @@ $latteParameters['title'] = 'Audit';
 	  	<option value=0 '.(($filterUser == 0) ? ' selected="selected"' : '').'>všemi</option>';
  	
 	    $sqlU = "SELECT userId, userName FROM ".DB_PREFIX."user WHERE userDeleted=0 ORDER BY username ASC";
-        $resU = mysqli_query ($database,$sqlU);
+	    $resU = mysqli_query ($database,$sqlU);
 	    while ($recU = mysqli_fetch_assoc ($resU)) {
 	        echo '<option value="'.$recU['userId'].'"'.(($recU['userId'] == $filterUser) ? ' selected="selected"' : '').'>'.$recU['userName'].'</option>';
-        };
+	    };
 	    echo '</select></p>';
-	    if ($usrinfo['right_org'] == 1) {
+	    if ($user['aclGamemaster'] == 1) {
 	        echo '					
 		<label for="org">Zobrazit i zásahy organizátorů</label>
 		<input type="checkbox" name="org" '.(($filterOrg == 1) ? ' checked="checked"' : '').'/><br/>

@@ -30,7 +30,7 @@ latteDrawTemplate("header");
 	        $sdst = imageResize ('./files/'.$sfile.'tmp',100,130);
 	        imagejpeg($sdst,'./files/symbols/'.$sfile);
 	        unlink('./files/'.$sfile.'tmp');
-	        $sql_sy = "INSERT INTO ".DB_PREFIX."symbol  ( symbol, `desc`, deleted, created, created_by, modified, modified_by, archiv, assigned, search_lines, search_curves, search_points, search_geometricals, search_alphabets, search_specialchars, secret) VALUES( '".$sfile."', '', 0, '".Time()."', '".$usrinfo['id']."', '".Time()."', '".$usrinfo['id']."', 0, 1, 0, 0, 0, 0, 0, 0, 0)";
+	        $sql_sy = "INSERT INTO ".DB_PREFIX."symbol  ( symbol, `desc`, deleted, created, created_by, modified, modified_by, archiv, assigned, search_lines, search_curves, search_points, search_geometricals, search_alphabets, search_specialchars, secret) VALUES( '".$sfile."', '', 0, '".Time()."', '".$user['userId']."', '".Time()."', '".$user['userId']."', 0, 1, 0, 0, 0, 0, 0, 0, 0)";
 	        mysqli_query ($database,$sql_sy);
 	        $syidarray = mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."symbol WHERE symbol = '".$sfile."'"));
 	        $syid = $syidarray['id'];
@@ -38,7 +38,7 @@ latteDrawTemplate("header");
 	        $sfile = '';
 	        $syid = '';
 	    }
-	    $sql_p = "INSERT INTO ".DB_PREFIX."person (name, surname, phone, datum, iduser, contents, secret, deleted, portrait, side, power, spec, symbol, dead, archiv, regdate, regid) VALUES('".$_POST['name']."','".$_POST['surname']."','".$_POST['phone']."','".Time()."','".$usrinfo['id']."','".$_POST['contents']."','".$_POST['secret']."','0','".$file."', '".$_POST['side']."', '".$_POST['power']."', '".$_POST['spec']."', '".$syid."','0','0','".Time()."','".$usrinfo['id']."')";
+	    $sql_p = "INSERT INTO ".DB_PREFIX."person (name, surname, phone, datum, iduser, contents, secret, deleted, portrait, side, power, spec, symbol, dead, archiv, regdate, regid) VALUES('".$_POST['name']."','".$_POST['surname']."','".$_POST['phone']."','".Time()."','".$user['userId']."','".$_POST['contents']."','".$_POST['secret']."','0','".$file."', '".$_POST['side']."', '".$_POST['power']."', '".$_POST['spec']."', '".$syid."','0','0','".Time()."','".$user['userId']."')";
 	    mysqli_query ($database,$sql_p);
 	    $pidarray = mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."person WHERE UCASE(surname)=UCASE('".$_POST['surname']."') AND UCASE(name)=UCASE('".$_POST['name']."') AND side='".$_POST['side']."'"));
 	    $pid = $pidarray['id'];
@@ -93,16 +93,16 @@ latteDrawTemplate("header");
 	        $sdst = imageResize ('./files/'.$sfile.'tmp',100,100);
 	        imagejpeg($sdst,'./files/symbols/'.$sfile);
 	        unlink('./files/'.$sfile.'tmp');
-	        $sql_sy = "INSERT INTO ".DB_PREFIX."symbol  ( symbol, `desc`, deleted, created, created_by, modified, modified_by, archiv, assigned, search_lines, search_curves, search_points, search_geometricals, search_alphabets, search_specialchars, secret) VALUES( '".$sfile."', '', 0, '".Time()."', '".$usrinfo['id']."', '".Time()."', '".$usrinfo['id']."', 0, 1, 0, 0, 0, 0, 0, 0, 0)";
+	        $sql_sy = "INSERT INTO ".DB_PREFIX."symbol  ( symbol, `desc`, deleted, created, created_by, modified, modified_by, archiv, assigned, search_lines, search_curves, search_points, search_geometricals, search_alphabets, search_specialchars, secret) VALUES( '".$sfile."', '', 0, '".Time()."', '".$user['userId']."', '".Time()."', '".$user['userId']."', 0, 1, 0, 0, 0, 0, 0, 0, 0)";
 	        mysqli_query ($database,$sql_sy);
 	        $syidarray = mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."symbol WHERE symbol = '".$sfile."'"));
 	        $syid = $syidarray['id'];
 	        mysqli_query ($database,"UPDATE ".DB_PREFIX."person SET symbol='".$syid."' WHERE id=".$_POST['personid']);
 	    }
-	    if ($usrinfo['right_org'] == 1) {
+	    if ($user['aclGamemaster'] == 1) {
 	        mysqli_query ($database,"UPDATE ".DB_PREFIX."person SET name='".$_POST['name']."', surname='".$_POST['surname']."', phone='".$_POST['phone']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead']) ? '1' : '0')."', archiv='".(isset($_POST['archiv']) ? '1' : '0')."' WHERE id=".$_POST['personid']);
 	    } else {
-	        mysqli_query ($database,"UPDATE ".DB_PREFIX."person SET name='".$_POST['name']."', surname='".$_POST['surname']."', phone='".$_POST['phone']."', datum='".Time()."', iduser='".$usrinfo['id']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead']) ? '1' : '0')."', archiv='".(isset($_POST['archiv']) ? '1' : '0')."' WHERE id=".$_POST['personid']);
+	        mysqli_query ($database,"UPDATE ".DB_PREFIX."person SET name='".$_POST['name']."', surname='".$_POST['surname']."', phone='".$_POST['phone']."', datum='".Time()."', iduser='".$user['userId']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead']) ? '1' : '0')."', archiv='".(isset($_POST['archiv']) ? '1' : '0')."' WHERE id=".$_POST['personid']);
 	    }
 	    echo '<div id="obsah"><p>Osoba upravena.</p></div>';
 	    latteDrawTemplate("footer");
@@ -151,7 +151,7 @@ latteDrawTemplate("header");
 	    sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="./editperson.php?rid='.$_POST['personid'].'">úprava osoby</a> &raquo; <strong>uložení změn</strong>','<a href="./readperson.php?rid='.$_POST['personid'].'">zobrazit upravené</a>');
 	    echo '<div id="obsah"><p>Skupiny pro uživatele uloženy.</p></div>';
 	    for ($i = 0;$i < Count($group);$i++) {
-	        mysqli_query ($database,"INSERT INTO ".DB_PREFIX."g2p VALUES('".$_POST['personid']."','".$group[$i]."','".$usrinfo['id']."')");
+	        mysqli_query ($database,"INSERT INTO ".DB_PREFIX."g2p VALUES('".$_POST['personid']."','".$group[$i]."','".$user['userId']."')");
 	    }
 	    latteDrawTemplate("footer");
 	}
@@ -159,7 +159,7 @@ latteDrawTemplate("header");
 	    auditTrail(1, 4, $_POST['personid']);
 	    $newname = Time().MD5(uniqid(Time().Rand()));
 	    move_uploaded_file ($_FILES['attachment']['tmp_name'],'./files/'.$newname);
-	    $sql = "INSERT INTO ".DB_PREFIX."file (uniquename,originalname,mime,size,datum,iduser,idtable,iditem,secret) VALUES('".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".Time()."','".$usrinfo['id']."','1','".$_POST['personid']."','".$_POST['secret']."')";
+	    $sql = "INSERT INTO ".DB_PREFIX."file (uniquename,originalname,mime,size,datum,iduser,idtable,iditem,secret) VALUES('".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".Time()."','".$user['userId']."','1','".$_POST['personid']."','".$_POST['secret']."')";
 	    mysqli_query ($database,$sql);
 	    if (!isset($_POST['fnotnew'])) {
 	        unreadRecords (1,$_POST['personid']);

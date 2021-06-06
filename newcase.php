@@ -7,10 +7,10 @@ latteDrawTemplate("header");
 $latteParameters['title'] = 'Nový případ';
 
 mainMenu ();
-	sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>nový případ</strong>');
+	sparklets ('<a href="/cases/">případy</a> &raquo; <strong>nový případ</strong>');
 ?>
 <div id="obsah">	
-<form action="proccase.php" method="post" id="inputform">
+<form action="/cases/" method="post" id="inputform">
 <fieldset><legend><strong>Nový případ</strong></legend>
 	<div id="info">
 		<h3><label for="title">Název:</label></h3>
@@ -26,7 +26,7 @@ mainMenu ();
 		<option value="1">uzavřený</option>
 		</select>
 		<div class="clear">&nbsp;</div>
-<?php 			if ($usrinfo['right_power'] == 1) {
+<?php 			if ($user['aclDirector'] == 1) {
     echo '					
 				<h3><label for="notnew">Není&nbsp;nové</label><h3>
 					<input type="checkbox" name="notnew"/>

@@ -48,9 +48,9 @@
                     {$text['prava']}
                 </div>
                 <div class="col-3">
-                    <div class="input-group">
+                    <div class="input-group mb-1">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">
+                            <span class="input-group-text min-w-user-edit">
                                 {$text[aclDirector]}
                             </span>
                         </div>
@@ -63,9 +63,9 @@
                         </div>
                     </div>
                 <div class="col-3">
-                    <div class="input-group">
+                    <div class="input-group mb-1">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">
+                            <span class="input-group-text min-w-user-edit">
                                 {$text[aclDeputy]}
                             </span>
                         </div>
@@ -78,9 +78,9 @@
                     </div>
                 </div>
                 <div class="col-3">
-                    <div class="input-group">
+                    <div class="input-group mb-1">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">
+                            <span class="input-group-text min-w-user-edit">
                                 {$text[aclTask]}
                             </span>
                         </div>
@@ -93,9 +93,9 @@
                     </div>
                 </div>
                 <div class="col-3">
-                    <div class="input-group">
+                    <div class="input-group mb-1">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">
+                            <span class="input-group-text min-w-user-edit">
                                 {$text[aclSecret]}
                             </span>
                         </div>
@@ -108,9 +108,9 @@
                     </div>
                 </div>
                 <div class="col-3">
-                    <div class="input-group">
+                    <div class="input-group mb-1">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">
+                            <span class="input-group-text min-w-user-edit">
                                 {$text[aclAudit]}
                             </span>
                         </div>
@@ -123,9 +123,9 @@
                     </div>
                 </div>
                 <div class="col-3">
-                    <div class="input-group">
+                    <div class="input-group mb-1">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">
+                            <span class="input-group-text min-w-user-edit">
                                 {$text[aclGroup]}
                             </span>
                         </div>
@@ -138,9 +138,9 @@
                     </div>
                 </div>
                 <div class="col-3">
-                    <div class="input-group">
+                    <div class="input-group mb-1">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">
+                            <span class="input-group-text min-w-user-edit">
                                 {$text[aclPerson]}
                             </span>
                         </div>
@@ -153,9 +153,9 @@
                     </div>
                 </div>
                 <div class="col-3">
-                    <div class="input-group">
+                    <div class="input-group mb-1">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">
+                            <span class="input-group-text min-w-user-edit">
                                 {$text[aclCase]}
                             </span>
                         </div>
@@ -168,9 +168,9 @@
                     </div>
                 </div>
                 <div class="col-3">
-                    <div class="input-group">
+                    <div class="input-group mb-1">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">
+                            <span class="input-group-text min-w-user-edit">
                                 {$text[aclHunt]}
                             </span>
                         </div>
@@ -182,11 +182,41 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-3">
+                    <div class="input-group mb-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text min-w-user-edit">
+                                {$text[aclReport]}
+                            </span>
+                        </div>
+                        <div class="input-group-append" style="flex-grow: 1;">
+                            <select class="w-100" name="aclReport" id="aclReport">
+                                <option value="0" {if $userEdit['aclReport'] == 0 } selected="selected"{/if}>{$text['cteni']}</option>
+                                <option value="1" {if $userEdit['aclReport'] == 1} selected="selected"{/if}>{$text['zapis']}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="input-group mb-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text min-w-user-edit">
+                                {$text[aclSymbol]}
+                            </span>
+                        </div>
+                        <div class="input-group-append" style="flex-grow: 1;">
+                            <select class="w-100" name="aclSymbol" id="aclSymbol">
+                                <option value="0" {if $userEdit['aclSymbol'] == 0 } selected="selected"{/if}>{$text['cteni']}</option>
+                                <option value="1" {if $userEdit['aclSymbol'] == 1} selected="selected"{/if}>{$text['zapis']}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 {if $user['aclRoot'] > 0 }
                     <div class="col-3">
-                        <div class="input-group">
+                        <div class="input-group mb-1">
                             <div class="input-group-prepend">
-                                <span class="input-group-text">
+                                <span class="input-group-text min-w-user-edit">
                                     {$text[aclRoot]}
                                 </span>
                             </div>
@@ -201,9 +231,9 @@
                 {/if}
                 {if $user['aclGamemaster'] > 0 }
                     <div class="col-3">
-                        <div class="input-group">
+                        <div class="input-group mb-1">
                             <div class="input-group-prepend">
-                                <span class="input-group-text">
+                                <span class="input-group-text min-w-user-edit">
                                     {$text[aclGamemaster]}
                                 </span>
                             </div>
@@ -218,9 +248,9 @@
                 {/if}
                 {if $user['aclAPI'] > 0 }
                     <div class="col-3">
-                        <div class="input-group">
+                        <div class="input-group mb-1">
                             <div class="input-group-prepend">
-                                <span class="input-group-text">
+                                <span class="input-group-text min-w-user-edit">
                                     {$text[aclAPI]}
                                 </span>
                             </div>

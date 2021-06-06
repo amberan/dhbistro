@@ -18,6 +18,8 @@ record type                                | operation type        | idrecord
 12, 'jiné')                                |	12, 'pokus o neoprávněný přístup' | 
 13, 'pokus o přístup ke smazanému záznamu' | |
 14, 'vyhledávání'                          | |
+15, 'neopravněný pokus o řístup k tajnému'| |
+
 
 ### unauthorizedAccess
 record type | secret | deleted

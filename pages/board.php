@@ -1,27 +1,27 @@
 <?php
 
 use Tracy\Debugger;
-    Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+
+Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
 $latteParameters['title'] = $text['nastenka'];
 auditTrail(6, 1, 0);
-deleteUnread (6,0);
+deleteUnread(6,0);
 
 // BOARD MEMO SAVE
-if (isset($_POST['editdashboard']) AND ($user['aclDirector'] > 0 or $user['aclDeputy'] > 0)) {
+if (isset($_POST['editdashboard']) and ($user['aclDirector'] > 0 or $user['aclDeputy'] > 0)) {
     auditTrail(6, 2, 0);
-    $sql = "INSERT INTO ".DB_PREFIX."dashboard ( created, iduser, content,  content_md) VALUES('".Time()."','".$user['userId']."','','".$_REQUEST['dashboard']."')";
-    mysqli_query ($database,$sql);
-    unreadRecords (6,0);
+    $sql = "INSERT INTO ".DB_PREFIX."dashboard ( created, iduser, content,  contentMD) VALUES('".time()."','".$user['userId']."','','".$_REQUEST['dashboard']."')";
+    mysqli_query($database,$sql);
+    unreadRecords(6,0);
     $latteParameters['message'] = $text['nastenkaupravena'];
 }
 
-
 // BOARD MEMO
-$sql_dashboard = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."dashboard ORDER BY id DESC LIMIT 1");
-$dashboard = mysqli_fetch_assoc ($sql_dashboard);
-if (isset($dashboard['content'])) {
-    $latteParameters['board'] = $converter->convertToHtml($dashboard['content_md']);
+$sql_dashboard = mysqli_query($database,"SELECT * FROM ".DB_PREFIX."dashboard ORDER BY id DESC LIMIT 1");
+$dashboard = mysqli_fetch_assoc($sql_dashboard);
+if (isset($dashboard['contentMD']) && strlen($dashboard['contenttMD']) > 0) {
+    $latteParameters['board'] = $converter->convertToHtml($dashboard['contentMD']);
     $latteParameters['board_created'] = webdate($dashboard['created']);
     $latteParameters['board_author'] = getAuthor($dashboard['iduser'],0);
 } else {
@@ -31,5 +31,3 @@ if (isset($dashboard['content'])) {
 latteDrawTemplate('sparklet');
 latteDrawTemplate('dashboard');
 latteDrawTemplate('board');
-
-?>

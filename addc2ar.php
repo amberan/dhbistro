@@ -8,7 +8,7 @@ $latteParameters['title'] = 'Úprava hlášení';
 mainMenu ();
 
 $customFilter = custom_Filter(16);
-	sparklets ('<a href="./cases.php">případy</a> &raquo; <strong>úprava případu</strong> &raquo; <strong>přidání hlášení</strong>');
+	sparklets ('<a href="/cases/">případy</a> &raquo; <strong>úprava případu</strong> &raquo; <strong>přidání hlášení</strong>');
 	if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
 	    $res = mysqli_query ($database,"SELECT * FROM ".DB_PREFIX."case WHERE id=".$_REQUEST['rid']);
 	    if ($rec = mysqli_fetch_assoc ($res)) {
@@ -105,7 +105,7 @@ seřadit je podle <select name="sort">
 	        }
 	        filter();
 	        // vypis hlášení
-	        if ($usrinfo['right_power']) {
+	        if ($user['aclDirector']) {
 	            $sql = "SELECT
 			".DB_PREFIX."report.id AS 'id',
 	        ".DB_PREFIX."report.datum AS 'datum',

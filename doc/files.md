@@ -83,8 +83,6 @@ editnote.php            | uprava poznamek                           | poznamky
 editperson.php          | uprava osoby                              | osoby
 editsymbol.php          | uprava symbolu                            | symboly
 evilpoints.php          | zlobody
-getfile.php             | stazeni prilohy
-getportrait.php         | zobrazeni fotografie
 groups.php              | LIST skupiny                              | skupiny
 index.php               | sdilena nastenka
 login.php               | prihlasovaci stranka
@@ -102,10 +100,9 @@ orgperson.php           | ORG uprava osoby                          | osoby
 persons.php             | LIST osoby                                | osoby
 procactrep.php          | zpracovani reportu                        | reporty
 proccase.php            | zpracovani pripadu                        | pripady
-procgroup.php           | zpracovani skupiny                        | skupiny
 procnews.php            | zpracovani novinek                        | novinky
 procnote.php            | zpracovani poznamek                       | poznamky
-procother.php           | zpracovani 
+procother.php           | zpracovani ukolu                          | ukoly
 procperson.php          | zpracovani osob                           | osoby
 readactrep.php          | DETAIL reportu                            | reporty
 readcase.php            | DETAIL pripadu                            | pripady

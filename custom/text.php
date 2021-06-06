@@ -18,6 +18,7 @@ $text['zapis'] = 'Zápis';
 $text['cteni'] = 'Čtení';
 $text['skryt'] = 'Skrýt';
 $text['zpristupnit'] = 'Zpřístupnit';
+$text['neznamo'] = 'Neznámo';
 
 // LOGIN
 $text['jmeno'] = 'Jméno';
@@ -118,9 +119,10 @@ $text['aclGroup'] = 'Skupiny';
 $text['aclPerson'] = 'Osoby';
 $text['aclCase'] = 'Případy';
 $text['aclHunt'] = 'Lovenky';
+$text['aclReport'] = 'Reporty';
+$text['aclSymbol'] = 'Symboly';
 $text['aclGamemaster'] = 'Organizátor';
 $text['aclAPI'] = 'API';
-
 
 // BACKUP
 $text['existujicizalohy'] = 'Existující zálohy';
@@ -152,4 +154,25 @@ $text['kategorieherni'] = 'herní';
 $text['kategoriesystemova'] = 'systémová';
 $text['aktualitaobnovena'] = 'Aktualita obnovena';
 $text['aktualitaneobnovena'] = 'Aktualitu se nepodařilo obnovit';
-?>
+
+// FILTERS
+$text['iuzavrene'] = 'I uzavřené.';
+$text['jennove'] = 'Jen nové.';
+$text['jentajne'] = 'Jen tajné.';
+$text['iarchiv'] = 'I archiv.';
+$text['archivovano'] = 'archivováno';
+$text['utajeno'] = 'utajeno';
+$text['smazany'] = 'smazáný';
+$text['smazane'] = 'Smazané';
+
+// CASES
+$text['pridatpripad'] = 'Přidat případ';
+$text['nazev'] = 'Název';
+$text['stav'] = 'Stav';
+$text['zmeneno'] = 'Změněno';
+$text['uzavreny'] = 'uzavřený';
+$text['otevreny'] = 'otevřený';
+$text['pridatpoznamku'] = '';
+$text['opravdusmazatpripad'] = 'Opravdu smazat případ';
+$text['opravduobnovitpripad'] = 'Opravdu obnovit případ';
+$text['vytvoreno'] = 'Vytvořeno';
