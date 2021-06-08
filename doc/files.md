@@ -103,7 +103,6 @@ proccase.php            | zpracovani pripadu                        | pripady
 procnews.php            | zpracovani novinek                        | novinky
 procnote.php            | zpracovani poznamek                       | poznamky
 procother.php           | zpracovani ukolu                          | ukoly
-procperson.php          | zpracovani osob                           | osoby
 readactrep.php          | DETAIL reportu                            | reporty
 readcase.php            | DETAIL pripadu                            | pripady
 readgroup.php           | DETAIL skupiny                            | skupiny
