@@ -6,10 +6,17 @@ use Tracy\Debugger;
 
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
-    if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete'])) { //delete case
-        auditTrail(3, 11, $_REQUEST['delete']);
-        mysqli_query($database,"UPDATE ".DB_PREFIX."case SET deleted=1 WHERE id=".$_REQUEST['delete']);
-        deleteAllUnread(3,$_REQUEST['delete']);
+    if (isset($URL[2], $URL[3]) && $URL[2] == 'delete' && is_numeric($URL[3]) && $user['aclCase'] > 0) { //delete case
+        auditTrail(3, 11, $URL[3]);
+        mysqli_query($database,"UPDATE ".DB_PREFIX."case SET deleted=1 WHERE id=".$URL['3']);
+        deleteAllUnread(3,$URL[3]);
+        $_SESSION['message'] = 'Případ smazán.';
+    }
+    if (isset($URL[2], $URL[3]) && $URL[2] == 'restore' && is_numeric($URL[3]) && $user['aclRoot'] > 0) { //delete case
+        auditTrail(3, 11, $URL[3]);
+        mysqli_query($database,"UPDATE ".DB_PREFIX."case SET deleted=0 WHERE id=".$URL[3]);
+        deleteAllUnread(3,$URL[3]);
+        $_SESSION['message'] = 'Případ obnoven.';
     }
     if (isset($_POST['insertcase']) && !preg_match('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret']) && is_numeric($_POST['status'])) {
         $ures = mysqli_query($database,"SELECT id FROM ".DB_PREFIX."case WHERE UCASE(title)=UCASE('".$_POST['title']."')");
@@ -95,7 +102,7 @@ $latteParameters['filter'] = $filter;
 
 //CASE LIST
 $sql = "SELECT ".DB_PREFIX."case.datum as date_changed, ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.deleted AS 'deleted' , ".DB_PREFIX."case.caseCreated
-FROM ".DB_PREFIX."case 
+FROM ".DB_PREFIX."case
 WHERE ".$sqlFilter.sortingGet('case');
 $caseList = mysqli_query($database,$sql);
 
