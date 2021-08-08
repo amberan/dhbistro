@@ -1,88 +1,95 @@
+# You can override the included template(s) by including variable overrides
+# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
+# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
+# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
+# Note that environment variables can be set in several places
+# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 include:
-  - template: Code-Quality.gitlab-ci.yml
-  - template: Security/SAST.gitlab-ci.yml
-  - template: Security/Secret-Detection.gitlab-ci.yml
-
+- template: Code-Quality.gitlab-ci.yml
+- template: Security/SAST.gitlab-ci.yml
+- template: Security/Secret-Detection.gitlab-ci.yml
 variables:
-  SAST_EXPERIMENTAL_FEATURES: "true"
-  SAST_DEFAULT_ANALYZERS: "nodejs-scan,eslint,phpcs-security-audit"
+  SAST_EXPERIMENTAL_FEATURES: 'true'
+  SAST_DEFAULT_ANALYZERS: nodejs-scan,eslint,phpcs-security-audit
   SEARCH_MAX_DEPTH: 10
-
 stages:
-  - build
-  - test 
-  - deploy
-
+- build
+- test
+- deploy
 build:
   stage: build
   image: alpine
   before_script:
-    - apk add gzip
+  - apk add gzip
   script:
-    - tar czf build.tgz --exclude .git --exclude bistro.tmp .
+  - tar czf build.tgz --exclude .git --exclude bistro.tmp .
   artifacts:
-    paths: [build.tgz]
+    paths:
+    - build.tgz
     expire_in: 1 days
   rules:
-    - when: always
-
-# https://docs.gitlab.com/ee/user/project/merge_requests/code_quality.html  
+  - when: always
 code_quality:
   stage: test
   interruptible: true
-  resource_group: $CI_COMMIT_SHA
+  resource_group: "$CI_COMMIT_SHA"
   artifacts:
     reports:
       codequality: gl-code-quality-report.json
-    paths: [gl-code-quality-report.json]
+    paths:
+    - gl-code-quality-report.json
   rules:
-    - if: '$CI_PIPELINE_SOURCE ==  "merge_request_event"' 
-
+  - if: $CI_PIPELINE_SOURCE ==  "merge_request_event"
 code_quality_html:
   stage: test
   interruptible: true
-  resource_group: $CI_COMMIT_SHA
+  resource_group: "$CI_COMMIT_SHA"
   extends: code_quality
-  needs: [build]
+  needs:
+  - build
   allow_failure: true
   variables:
     REPORT_FORMAT: html
-    CI_DEBUG_TRACE: "true"
+    CI_DEBUG_TRACE: 'true'
   artifacts:
-    paths: [gl-code-quality-report.html] 
+    paths:
+    - gl-code-quality-report.html
     expire_in: 3 months
   rules:
-    - if: '$CODE_QUALITY_DISABLED'
-      when: never
-    - if: '$CI_PIPELINE_SOURCE ==  "merge_request_event"' 
-      when : never
-    - when: always
-
-# https://docs.gitlab.com/ee/user/application_security/sast/index.html#configure-sast-manually
+  - if: "$CODE_QUALITY_DISABLED"
+    when: never
+  - if: $CI_PIPELINE_SOURCE ==  "merge_request_event"
+    when: never
+  - when: always
 phpcs-security-audit-sast:
   interruptible: true
-
-# https://gitlab.alembiq.net/help/user/application_security/secret_detection/index.md
 secret_detection:
   interruptible: true
   variables:
-    SECRET_DETECTION_HISTORIC_SCAN: "true"
-
-deploy test:  
+    SECRET_DETECTION_HISTORIC_SCAN: 'true'
+deploy test:
   stage: deploy
   image: alpine
-  needs: [build]
+  needs:
+  - build
   allow_failure: true
   before_script:
-    - apk add openssh-client
-    - eval $(ssh-agent -s)
-    - cat $SSH_KEY | tr -d '\r' | ssh-add -
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-#    - export
-    - ssh-keyscan alembiq.net >> ~/.ssh/known_hosts
+  - apk add openssh-client
+  - eval $(ssh-agent -s)
+  - cat $SSH_KEY | tr -d '\r' | ssh-add -
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - ssh-keyscan alembiq.net >> ~/.ssh/known_hosts
   script:
-    - scp build.tgz gitlab-ci@alembiq.net:.
-    - ssh gitlab-ci@alembiq.net "mkdir $DEPLOY_FOLDER/$CI_JOB_ID && tar zxf build.tgz -C $DEPLOY_FOLDER/$CI_JOB_ID/ && cp $DEPLOY_FOLDER/htdocs/inc/important.php $DEPLOY_FOLDER/$CI_JOB_ID/inc/ && rsync -au --remove-source-files $DEPLOY_FOLDER/htdocs/files/ $DEPLOY_FOLDER/$CI_JOB_ID/files/ && tar zcf $DEPLOY_FOLDER/backup-$CI_JOB_ID.tgz --exclude $DEPLOY_FOLDER/htdocs/cache --exclude $DEPLOY_FOLDER/htdocs/.git $DEPLOY_FOLDER/htdocs/ && mv $DEPLOY_FOLDER/htdocs $DEPLOY_FOLDER/backup && mv $DEPLOY_FOLDER/$CI_JOB_ID $DEPLOY_FOLDER/htdocs && rm -rf $DEPLOY_FOLDER/backup && rm build.tgz"
-  rules: 
-    - when: manual
+  - scp build.tgz gitlab-ci@alembiq.net:.
+  - ssh gitlab-ci@alembiq.net "mkdir $DEPLOY_FOLDER/$CI_JOB_ID && tar zxf build.tgz
+    -C $DEPLOY_FOLDER/$CI_JOB_ID/ && cp $DEPLOY_FOLDER/htdocs/inc/important.php $DEPLOY_FOLDER/$CI_JOB_ID/inc/
+    && rsync -au --remove-source-files $DEPLOY_FOLDER/htdocs/files/ $DEPLOY_FOLDER/$CI_JOB_ID/files/
+    && tar zcf $DEPLOY_FOLDER/backup-$CI_JOB_ID.tgz --exclude $DEPLOY_FOLDER/htdocs/cache
+    --exclude $DEPLOY_FOLDER/htdocs/.git $DEPLOY_FOLDER/htdocs/ && mv $DEPLOY_FOLDER/htdocs
+    $DEPLOY_FOLDER/backup && mv $DEPLOY_FOLDER/$CI_JOB_ID $DEPLOY_FOLDER/htdocs &&
+    rm -rf $DEPLOY_FOLDER/backup && rm build.tgz"
+  rules:
+  - when: manual
+sast:
+  stage: test
