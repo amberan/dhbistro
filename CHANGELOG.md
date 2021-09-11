@@ -1,10 +1,14 @@
 # BISTRO changelog
 
 
-<!-- git log --no-merges 1.5.. | unexpand -a | sed -e 's/\s\s*$$//'  -->
+<!-- git log --no-merges 1.5.. | unexpand -a | sed -e 's/\s\s*$$//' | head -n 2070 | grep -v "Date\|commit\|Author\|typo\|.gitlab-ci.yml\|.codeclimate.yml" | sed -r '/^\s*$/d' | uniq
+  -->
 
 
 **1.8.1**
+- update knihoven
+- filtrovani - skupiny [#59](https://gitlab.alembiq.net/larp/bistro/issues/59)
+- zmena databazoveho engine na InnoDB [#150](https://gitlab.alembiq.net/larp/bistro/issues/150)
 - konverze archive(int) na archived(timestamp) pro osoby [#140](https://gitlab.alembiq.net/larp/bistro/issues/140)
 - smazani uzivatele systemu nejdou pridat jako ucastnici udalosti [#149](https://gitlab.alembiq.net/larp/bistro/issues/149)
 - pridani udaje `strop` pro `osoba` [#40](https://gitlab.alembiq.net/larp/bistro/issues/40)
