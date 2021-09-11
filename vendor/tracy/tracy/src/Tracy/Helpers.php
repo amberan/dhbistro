@@ -28,7 +28,7 @@ class Helpers
 			}
 			$file = strtr($file, '/', DIRECTORY_SEPARATOR);
 			return self::formatHtml(
-				'<a href="%" title="%">%<b>%</b>%</a>',
+				'<a href="%" title="%" class="tracy-editor">%<b>%</b>%</a>',
 				$editor,
 				$origFile . ($line ? ":$line" : ''),
 				rtrim(dirname($file), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR,
@@ -70,14 +70,14 @@ class Helpers
 	{
 		$args = func_get_args();
 		return preg_replace_callback('#%#', function () use (&$args, &$count): string {
-			return self::escapeHtml($args[++$count]);
+			return str_replace("\n", '&#10;', self::escapeHtml($args[++$count]));
 		}, $mask);
 	}
 
 
 	public static function escapeHtml($s): string
 	{
-		return htmlspecialchars((string) $s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+		return htmlspecialchars((string) $s, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5, 'UTF-8');
 	}
 
 
@@ -110,7 +110,9 @@ class Helpers
 	{
 		if (function_exists('xdebug_get_function_stack')) {
 			$stack = [];
-			foreach (array_slice(array_reverse(xdebug_get_function_stack()), 2, -1) as $row) {
+			$trace = @xdebug_get_function_stack(); // @ xdebug compatibility warning
+			$trace = array_slice(array_reverse($trace), 2, -1);
+			foreach ($trace as $row) {
 				$frame = [
 					'file' => $row['file'],
 					'line' => $row['line'],
@@ -128,13 +130,6 @@ class Helpers
 			$ref->setValue($exception, $stack);
 		}
 		return $exception;
-	}
-
-
-	/** @internal */
-	public static function fixEncoding(string $s): string
-	{
-		return htmlspecialchars_decode(htmlspecialchars($s, ENT_NOQUOTES | ENT_IGNORE, 'UTF-8'), ENT_NOQUOTES);
 	}
 
 
@@ -180,7 +175,11 @@ class Helpers
 	public static function improveException(\Throwable $e): void
 	{
 		$message = $e->getMessage();
-		if ((!$e instanceof \Error && !$e instanceof \ErrorException) || strpos($e->getMessage(), 'did you mean')) {
+		if (
+			(!$e instanceof \Error && !$e instanceof \ErrorException)
+			|| $e instanceof \Nette\MemberAccessException
+			|| strpos($e->getMessage(), 'did you mean')
+		) {
 			// do nothing
 		} elseif (preg_match('#^Call to undefined function (\S+\\\\)?(\w+)\(#', $message, $m)) {
 			$funcs = array_merge(get_defined_functions()['internal'], get_defined_functions()['user']);
@@ -200,14 +199,14 @@ class Helpers
 
 		} elseif (preg_match('#^Undefined property: ([\w\\\\]+)::\$(\w+)#', $message, $m)) {
 			$rc = new \ReflectionClass($m[1]);
-			$items = array_diff($rc->getProperties(\ReflectionProperty::IS_PUBLIC), $rc->getProperties(\ReflectionProperty::IS_STATIC));
+			$items = array_filter($rc->getProperties(\ReflectionProperty::IS_PUBLIC), function ($prop) { return !$prop->isStatic(); });
 			$hint = self::getSuggestion($items, $m[2]);
 			$message .= ", did you mean $$hint?";
 			$replace = ["->$m[2]", "->$hint"];
 
 		} elseif (preg_match('#^Access to undeclared static property:? ([\w\\\\]+)::\$(\w+)#', $message, $m)) {
 			$rc = new \ReflectionClass($m[1]);
-			$items = array_intersect($rc->getProperties(\ReflectionProperty::IS_PUBLIC), $rc->getProperties(\ReflectionProperty::IS_STATIC));
+			$items = array_filter($rc->getProperties(\ReflectionProperty::IS_STATIC), function ($prop) { return $prop->isPublic(); });
 			$hint = self::getSuggestion($items, $m[2]);
 			$message .= ", did you mean $$hint?";
 			$replace = ["::$$m[2]", "::$$hint"];
@@ -236,7 +235,7 @@ class Helpers
 
 		} elseif (preg_match('#^Undefined property: ([\w\\\\]+)::\$(\w+)#', $message, $m)) {
 			$rc = new \ReflectionClass($m[1]);
-			$items = array_diff($rc->getProperties(\ReflectionProperty::IS_PUBLIC), $rc->getProperties(\ReflectionProperty::IS_STATIC));
+			$items = array_filter($rc->getProperties(\ReflectionProperty::IS_PUBLIC), function ($prop) { return !$prop->isStatic(); });
 			$hint = self::getSuggestion($items, $m[2]);
 			return $hint ? $message . ", did you mean $$hint?" : $message;
 		}
@@ -341,5 +340,186 @@ class Helpers
 			ob_end_clean();
 			throw $e;
 		}
+	}
+
+
+	/** @internal */
+	public static function encodeString(string $s, int $maxLength = null, bool $showWhitespaces = true): string
+	{
+		static $tableU, $tableB;
+		if ($tableU === null) {
+			foreach (range("\x00", "\x1F") as $ch) {
+				$tableU[$ch] = '<i>\x' . str_pad(strtoupper(dechex(ord($ch))), 2, '0', STR_PAD_LEFT) . '</i>';
+			}
+			$tableB = $tableU = [
+				"\r" => '<i>\r</i>',
+				"\n" => "<i>\\n</i>\n",
+				"\t" => '<i>\t</i>    ',
+				"\e" => '<i>\e</i>',
+				'<' => '&lt;',
+				'&' => '&amp;',
+			] + $tableU;
+			foreach (range("\x7F", "\xFF") as $ch) {
+				$tableB[$ch] = '<i>\x' . str_pad(strtoupper(dechex(ord($ch))), 2, '0', STR_PAD_LEFT) . '</i>';
+			}
+		}
+
+		$utf = self::isUtf8($s);
+		$table = $utf ? $tableU : $tableB;
+		if (!$showWhitespaces) {
+			unset($table["\r"], $table["\n"], $table["\t"]);
+		}
+
+		$len = $utf ? self::utf8Length($s) : strlen($s);
+		$s = $maxLength && $len > $maxLength + 20
+			? strtr(self::truncateString($s, $maxLength, $utf), $table)
+				. ' <span>…</span> '
+				. strtr(self::truncateString($s, -10, $utf), $table)
+			: strtr($s, $table);
+
+		$s = str_replace('</i><i>', '', $s);
+		$s = preg_replace('~\n$~D', '', $s);
+		return $s;
+	}
+
+
+	/** @internal */
+	public static function utf8Length(string $s): int
+	{
+		return strlen(utf8_decode($s));
+	}
+
+
+	/** @internal */
+	public static function isUtf8(string $s): bool
+	{
+		return (bool) preg_match('##u', $s);
+	}
+
+
+	/** @internal */
+	public static function truncateString(string $s, int $len, bool $utf): string
+	{
+		if (!$utf) {
+			return $len < 0 ? substr($s, $len) : substr($s, 0, $len);
+		} elseif (function_exists('mb_substr')) {
+			return $len < 0
+				? mb_substr($s, $len, -$len, 'UTF-8')
+				: mb_substr($s, 0, $len, 'UTF-8');
+		} else {
+			$len < 0
+				? preg_match('#.{0,' . -$len . '}\z#us', $s, $m)
+				: preg_match("#^.{0,$len}#us", $s, $m);
+			return $m[0];
+		}
+	}
+
+
+	/** @internal */
+	public static function minifyJs(string $s): string
+	{
+		// author: Jakub Vrana https://php.vrana.cz/minifikace-javascriptu.php
+		$last = '';
+		return preg_replace_callback(
+			<<<'XX'
+			(
+				(?:
+					(^|[-+\([{}=,:;!%^&*|?~]|/(?![/*])|return|throw) # context before regexp
+					(?:\s|//[^\n]*+\n|/\*(?:[^*]|\*(?!/))*+\*/)* # optional space
+					(/(?![/*])(?:\\[^\n]|[^[\n/\\]|\[(?:\\[^\n]|[^]])++)+/) # regexp
+					|(^
+						|'(?:\\.|[^\n'\\])*'
+						|"(?:\\.|[^\n"\\])*"
+						|([0-9A-Za-z_$]+)
+						|([-+]+)
+						|.
+					)
+				)(?:\s|//[^\n]*+\n|/\*(?:[^*]|\*(?!/))*+\*/)* # optional space
+			())sx
+XX
+,
+			function ($match) use (&$last) {
+				[, $context, $regexp, $result, $word, $operator] = $match;
+				if ($word !== '') {
+					$result = ($last === 'word' ? ' ' : ($last === 'return' ? ' ' : '')) . $result;
+					$last = ($word === 'return' || $word === 'throw' || $word === 'break' ? 'return' : 'word');
+				} elseif ($operator) {
+					$result = ($last === $operator[0] ? ' ' : '') . $result;
+					$last = $operator[0];
+				} else {
+					if ($regexp) {
+						$result = $context . ($context === '/' ? ' ' : '') . $regexp;
+					}
+					$last = '';
+				}
+				return $result;
+			},
+			$s . "\n"
+		);
+	}
+
+
+	/** @internal */
+	public static function minifyCss(string $s): string
+	{
+		$last = '';
+		return preg_replace_callback(
+			<<<'XX'
+			(
+				(^
+					|'(?:\\.|[^\n'\\])*'
+					|"(?:\\.|[^\n"\\])*"
+					|([0-9A-Za-z_*#.%:()[\]-]+)
+					|.
+				)(?:\s|/\*(?:[^*]|\*(?!/))*+\*/)* # optional space
+			())sx
+XX
+,
+			function ($match) use (&$last) {
+				[, $result, $word] = $match;
+				if ($last === ';') {
+					$result = $result === '}' ? '}' : ';' . $result;
+					$last = '';
+				}
+				if ($word !== '') {
+					$result = ($last === 'word' ? ' ' : '') . $result;
+					$last = 'word';
+				} elseif ($result === ';') {
+					$last = ';';
+					$result = '';
+				} else {
+					$last = '';
+				}
+				return $result;
+			},
+			$s . "\n"
+		);
+	}
+
+
+	public static function detectColors(): bool
+	{
+		return (PHP_SAPI === 'cli' || PHP_SAPI === 'phpdbg')
+			&& getenv('NO_COLOR') === false // https://no-color.org
+			&& (getenv('FORCE_COLOR')
+				|| @stream_isatty(STDOUT) // @ may trigger error 'cannot cast a filtered stream on this system'
+				|| (defined('PHP_WINDOWS_VERSION_BUILD')
+					&& (function_exists('sapi_windows_vt100_support') && sapi_windows_vt100_support(STDOUT))
+						|| getenv('ConEmuANSI') === 'ON' // ConEmu
+						|| getenv('ANSICON') !== false // ANSICON
+						|| getenv('term') === 'xterm' // MSYS
+						|| getenv('term') === 'xterm-256color' // MSYS
+					)
+			);
+	}
+
+
+	public static function getExceptionChain(\Throwable $ex): array
+	{
+		$res = [$ex];
+		while (($ex = $ex->getPrevious()) && !in_array($ex, $res, true)) {
+			$res[] = $ex;
+		}
+		return $res;
 	}
 }

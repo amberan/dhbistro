@@ -6,6 +6,11 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'Latte\\Attributes\\TemplateFilter' => $vendorDir . '/latte/latte/src/Latte/attributes.php',
+    'Latte\\Attributes\\TemplateFunction' => $vendorDir . '/latte/latte/src/Latte/attributes.php',
+    'Latte\\Bridges\\Tracy\\BlueScreenPanel' => $vendorDir . '/latte/latte/src/Bridges/Tracy/BlueScreenPanel.php',
+    'Latte\\Bridges\\Tracy\\LattePanel' => $vendorDir . '/latte/latte/src/Bridges/Tracy/LattePanel.php',
     'Latte\\CompileException' => $vendorDir . '/latte/latte/src/Latte/exceptions.php',
     'Latte\\Compiler' => $vendorDir . '/latte/latte/src/Latte/Compiler/Compiler.php',
     'Latte\\Engine' => $vendorDir . '/latte/latte/src/Latte/Engine.php',
@@ -43,6 +48,7 @@ return array(
     'Latte\\Runtime\\SnippetBridge' => $vendorDir . '/latte/latte/src/Latte/Runtime/SnippetBridge.php',
     'Latte\\Runtime\\SnippetDriver' => $vendorDir . '/latte/latte/src/Latte/Runtime/SnippetDriver.php',
     'Latte\\Runtime\\Template' => $vendorDir . '/latte/latte/src/Latte/Runtime/Template.php',
+    'Latte\\Runtime\\Tracer' => $vendorDir . '/latte/latte/src/Latte/Runtime/Tracer.php',
     'Latte\\Sandbox\\SecurityPolicy' => $vendorDir . '/latte/latte/src/Latte/Sandbox/SecurityPolicy.php',
     'Latte\\SecurityViolationException' => $vendorDir . '/latte/latte/src/Latte/exceptions.php',
     'Latte\\Strict' => $vendorDir . '/latte/latte/src/Latte/Strict.php',
@@ -59,6 +65,10 @@ return array(
     'Tracy\\Debugger' => $vendorDir . '/tracy/tracy/src/Tracy/Debugger/Debugger.php',
     'Tracy\\DefaultBarPanel' => $vendorDir . '/tracy/tracy/src/Tracy/Bar/DefaultBarPanel.php',
     'Tracy\\Dumper' => $vendorDir . '/tracy/tracy/src/Tracy/Dumper/Dumper.php',
+    'Tracy\\Dumper\\Describer' => $vendorDir . '/tracy/tracy/src/Tracy/Dumper/Describer.php',
+    'Tracy\\Dumper\\Exposer' => $vendorDir . '/tracy/tracy/src/Tracy/Dumper/Exposer.php',
+    'Tracy\\Dumper\\Renderer' => $vendorDir . '/tracy/tracy/src/Tracy/Dumper/Renderer.php',
+    'Tracy\\Dumper\\Value' => $vendorDir . '/tracy/tracy/src/Tracy/Dumper/Value.php',
     'Tracy\\FireLogger' => $vendorDir . '/tracy/tracy/src/Tracy/Logger/FireLogger.php',
     'Tracy\\Helpers' => $vendorDir . '/tracy/tracy/src/Tracy/Helpers.php',
     'Tracy\\IBarPanel' => $vendorDir . '/tracy/tracy/src/Tracy/Bar/IBarPanel.php',

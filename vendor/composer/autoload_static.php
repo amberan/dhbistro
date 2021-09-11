@@ -7,7 +7,7 @@ namespace Composer\Autoload;
 class ComposerStaticInit6db1c36b45f379dc0212516dfd0b3bec
 {
     public static $files = array (
-        '19a7e2c3b1d506dcdc1b60aab8e102e4' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/shortcuts.php',
+        'd507e002f7fce7f0c6dbf1f22edcb902' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -30,6 +30,11 @@ class ComposerStaticInit6db1c36b45f379dc0212516dfd0b3bec
     );
 
     public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Latte\\Attributes\\TemplateFilter' => __DIR__ . '/..' . '/latte/latte/src/Latte/attributes.php',
+        'Latte\\Attributes\\TemplateFunction' => __DIR__ . '/..' . '/latte/latte/src/Latte/attributes.php',
+        'Latte\\Bridges\\Tracy\\BlueScreenPanel' => __DIR__ . '/..' . '/latte/latte/src/Bridges/Tracy/BlueScreenPanel.php',
+        'Latte\\Bridges\\Tracy\\LattePanel' => __DIR__ . '/..' . '/latte/latte/src/Bridges/Tracy/LattePanel.php',
         'Latte\\CompileException' => __DIR__ . '/..' . '/latte/latte/src/Latte/exceptions.php',
         'Latte\\Compiler' => __DIR__ . '/..' . '/latte/latte/src/Latte/Compiler/Compiler.php',
         'Latte\\Engine' => __DIR__ . '/..' . '/latte/latte/src/Latte/Engine.php',
@@ -67,6 +72,7 @@ class ComposerStaticInit6db1c36b45f379dc0212516dfd0b3bec
         'Latte\\Runtime\\SnippetBridge' => __DIR__ . '/..' . '/latte/latte/src/Latte/Runtime/SnippetBridge.php',
         'Latte\\Runtime\\SnippetDriver' => __DIR__ . '/..' . '/latte/latte/src/Latte/Runtime/SnippetDriver.php',
         'Latte\\Runtime\\Template' => __DIR__ . '/..' . '/latte/latte/src/Latte/Runtime/Template.php',
+        'Latte\\Runtime\\Tracer' => __DIR__ . '/..' . '/latte/latte/src/Latte/Runtime/Tracer.php',
         'Latte\\Sandbox\\SecurityPolicy' => __DIR__ . '/..' . '/latte/latte/src/Latte/Sandbox/SecurityPolicy.php',
         'Latte\\SecurityViolationException' => __DIR__ . '/..' . '/latte/latte/src/Latte/exceptions.php',
         'Latte\\Strict' => __DIR__ . '/..' . '/latte/latte/src/Latte/Strict.php',
@@ -83,6 +89,10 @@ class ComposerStaticInit6db1c36b45f379dc0212516dfd0b3bec
         'Tracy\\Debugger' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Debugger/Debugger.php',
         'Tracy\\DefaultBarPanel' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Bar/DefaultBarPanel.php',
         'Tracy\\Dumper' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Dumper/Dumper.php',
+        'Tracy\\Dumper\\Describer' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Dumper/Describer.php',
+        'Tracy\\Dumper\\Exposer' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Dumper/Exposer.php',
+        'Tracy\\Dumper\\Renderer' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Dumper/Renderer.php',
+        'Tracy\\Dumper\\Value' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Dumper/Value.php',
         'Tracy\\FireLogger' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Logger/FireLogger.php',
         'Tracy\\Helpers' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Helpers.php',
         'Tracy\\IBarPanel' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Bar/IBarPanel.php',

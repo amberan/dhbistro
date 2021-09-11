@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "latte/latte",
-            "version": "v2.9.1",
+            "version": "v2.10.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/latte.git",
-                "reference": "fa7bc18569d716d1efffde14ac4ff65ddf1dc132"
+                "reference": "dd2c58863e830c22a2c6b85af63f37b829d255df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/latte/zipball/fa7bc18569d716d1efffde14ac4ff65ddf1dc132",
-                "reference": "fa7bc18569d716d1efffde14ac4ff65ddf1dc132",
+                "url": "https://api.github.com/repos/nette/latte/zipball/dd2c58863e830c22a2c6b85af63f37b829d255df",
+                "reference": "dd2c58863e830c22a2c6b85af63f37b829d255df",
                 "shasum": ""
             },
             "require": {
@@ -45,7 +45,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.9-dev"
+                    "dev-master": "2.10-dev"
                 }
             },
             "autoload": {
@@ -81,20 +81,24 @@
                 "template",
                 "twig"
             ],
-            "time": "2020-11-24T00:57:37+00:00"
+            "support": {
+                "issues": "https://github.com/nette/latte/issues",
+                "source": "https://github.com/nette/latte/tree/v2.10.3"
+            },
+            "time": "2021-02-22T11:17:13+00:00"
         },
         {
             "name": "league/commonmark",
-            "version": "1.5.7",
+            "version": "1.6.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "11df9b36fd4f1d2b727a73bf14931d81373b9a54"
+                "reference": "c4228d11e30d7493c6836d20872f9582d8ba6dcf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/11df9b36fd4f1d2b727a73bf14931d81373b9a54",
-                "reference": "11df9b36fd4f1d2b727a73bf14931d81373b9a54",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/c4228d11e30d7493c6836d20872f9582d8ba6dcf",
+                "reference": "c4228d11e30d7493c6836d20872f9582d8ba6dcf",
                 "shasum": ""
             },
             "require": {
@@ -112,7 +116,7 @@
                 "github/gfm": "0.29.0",
                 "michelf/php-markdown": "~1.4",
                 "mikehaertl/php-shellcommand": "^1.4",
-                "phpstan/phpstan": "^0.12",
+                "phpstan/phpstan": "^0.12.90",
                 "phpunit/phpunit": "^7.5 || ^8.5 || ^9.2",
                 "scrutinizer/ocular": "^1.5",
                 "symfony/finder": "^4.2"
@@ -150,6 +154,12 @@
                 "md",
                 "parser"
             ],
+            "support": {
+                "docs": "https://commonmark.thephpleague.com/",
+                "issues": "https://github.com/thephpleague/commonmark/issues",
+                "rss": "https://github.com/thephpleague/commonmark/releases.atom",
+                "source": "https://github.com/thephpleague/commonmark"
+            },
             "funding": [
                 {
                     "url": "https://enjoy.gitstore.app/repositories/thephpleague/commonmark",
@@ -176,7 +186,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-31T13:49:32+00:00"
+            "time": "2021-07-17T17:13:23+00:00"
         },
         {
             "name": "league/html-to-markdown",
@@ -240,6 +250,10 @@
                 "html",
                 "markdown"
             ],
+            "support": {
+                "issues": "https://github.com/thephpleague/html-to-markdown/issues",
+                "source": "https://github.com/thephpleague/html-to-markdown/tree/4.10.0"
+            },
             "funding": [
                 {
                     "url": "https://www.colinodell.com/sponsor",
@@ -262,22 +276,22 @@
         },
         {
             "name": "tracy/tracy",
-            "version": "v2.7.6",
+            "version": "v2.8.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/tracy.git",
-                "reference": "7e7e73d52c7e9ff0fd29dbd5b1cfdc03f3947942"
+                "reference": "8e708de7c611f626c8792d43f1c78812ea24e6f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/tracy/zipball/7e7e73d52c7e9ff0fd29dbd5b1cfdc03f3947942",
-                "reference": "7e7e73d52c7e9ff0fd29dbd5b1cfdc03f3947942",
+                "url": "https://api.github.com/repos/nette/tracy/zipball/8e708de7c611f626c8792d43f1c78812ea24e6f6",
+                "reference": "8e708de7c611f626c8792d43f1c78812ea24e6f6",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "ext-session": "*",
-                "php": ">=7.1"
+                "php": ">=7.2 <8.2"
             },
             "conflict": {
                 "nette/di": "<3.0"
@@ -291,13 +305,10 @@
                 "phpstan/phpstan": "^0.12",
                 "psr/log": "^1.0"
             },
-            "suggest": {
-                "https://nette.org/donate": "Please support Tracy via a donation"
-            },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.7-dev"
+                    "dev-master": "2.8-dev"
                 }
             },
             "autoload": {
@@ -305,7 +316,7 @@
                     "src"
                 ],
                 "files": [
-                    "src/Tracy/shortcuts.php"
+                    "src/Tracy/functions.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -322,7 +333,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "😎 Tracy: the addictive tool to ease debugging PHP code for cool developers. Friendly design, logging, profiler, advanced features like debugging AJAX calls or CLI support. You will love it.",
+            "description": "😎  Tracy: the addictive tool to ease debugging PHP code for cool developers. Friendly design, logging, profiler, advanced features like debugging AJAX calls or CLI support. You will love it.",
             "homepage": "https://tracy.nette.org",
             "keywords": [
                 "Xdebug",
@@ -331,7 +342,11 @@
                 "nette",
                 "profiler"
             ],
-            "time": "2020-11-02T17:06:27+00:00"
+            "support": {
+                "issues": "https://github.com/nette/tracy/issues",
+                "source": "https://github.com/nette/tracy/tree/v2.8.7"
+            },
+            "time": "2021-08-24T16:26:27+00:00"
         }
     ],
     "packages-dev": [],
@@ -342,5 +357,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.0.0"
 }

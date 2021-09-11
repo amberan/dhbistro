@@ -32,6 +32,9 @@ class PhpWriter
 	/** @var string[] */
 	private $functions = [];
 
+	/** @var int|null */
+	private $line;
+
 
 	public static function using(MacroNode $node, Compiler $compiler = null): self
 	{
@@ -39,6 +42,7 @@ class PhpWriter
 		$me->modifiers = &$node->modifiers;
 		$me->functions = $compiler ? $compiler->getFunctions() : [];
 		$me->policy = $compiler ? $compiler->getPolicy() : null;
+		$me->line = $node->startLine;
 		return $me;
 	}
 
@@ -55,7 +59,7 @@ class PhpWriter
 
 
 	/**
-	 * Expands %node.word, %node.array, %node.args, %escape(), %modify(), %var, %raw, %word in code.
+	 * Expands %node.word, %node.array, %node.args, %node.line, %escape(), %modify(), %var, %raw, %word in code.
 	 * @param  mixed  ...$args
 	 */
 	public function write(string $mask, ...$args): string
@@ -78,7 +82,7 @@ class PhpWriter
 		}
 
 		$code = preg_replace_callback(
-			'#([,+]\s*)?%(node_|\d+_|)(word|var|raw|array|args)(\?)?(\s*\+\s*)?()#',
+			'#([,+]?\s*)?%(node_|\d+_|)(word|var|raw|array|args|line)(\?)?(\s*\+\s*)?()#',
 			function ($m) use ($word, &$args) {
 				[, $l, $source, $format, $cond, $r] = $m;
 
@@ -103,6 +107,9 @@ class PhpWriter
 						$code = PhpHelpers::dump($arg); break;
 					case 'raw':
 						$code = (string) $arg; break;
+					case 'line':
+						$l = trim($l);
+						$code = $this->line ? " /* line $this->line */" : ''; break;
 				}
 
 				if ($cond && $code === '') {
@@ -190,6 +197,7 @@ class PhpWriter
 		$tokens = $this->sandboxPass($tokens);
 		$tokens = $this->replaceFunctionsPass($tokens);
 		$tokens = $this->inlineModifierPass($tokens);
+		$tokens = $this->modernArraySyntax($tokens);
 		return $tokens;
 	}
 
@@ -212,15 +220,11 @@ class PhpWriter
 				throw new CompileException('Unexpected ' . $tokenValue);
 
 			} elseif ($tokens->isCurrent('`')) {
-				if ($this->policy) {
-					throw new CompileException('Forbidden backtick operator.');
-				} else {
-					trigger_error('Backtick operator is deprecated in Latte.', E_USER_DEPRECATED);
-				}
+				throw new CompileException('Backtick operator is forbidden in Latte.');
 
 			} elseif (
-				substr($tokenValue, 0, 3) === '$__'
-				|| ($this->policy && ($tokens->isCurrent('$this') || substr($tokenValue, 0, 2) === '$_'))
+				Helpers::startsWith($tokenValue, '$ʟ_')
+				|| ($this->policy && $tokens->isCurrent('$this'))
 			) {
 				throw new CompileException("Forbidden variable {$tokenValue}.");
 			}
@@ -372,10 +376,10 @@ class PhpWriter
 					}
 
 					trigger_error("Syntax '$var?::' is deprecated.", E_USER_DEPRECATED);
-					$expr->prepend('(($__tmp = ');
+					$expr->prepend('(($ʟ_tmp = ');
 					$expr->append(' ?? null) === null ? null : ');
 					$res->tokens = array_merge($res->tokens, $expr->tokens);
-					$expr = new MacroTokens('$__tmp');
+					$expr = new MacroTokens('$ʟ_tmp');
 					$addBraces .= ')';
 
 				} elseif ($tokens->nextToken('?->')) {
@@ -385,11 +389,11 @@ class PhpWriter
 						continue;
 					}
 
-					$expr->prepend('(($__tmp = ');
+					$expr->prepend('(($ʟ_tmp = ');
 					$expr->append(') === null ? null : ');
 					$res->tokens = array_merge($res->tokens, $expr->tokens);
 					$addBraces .= ')';
-					$expr = new MacroTokens('$__tmp->');
+					$expr = new MacroTokens('$ʟ_tmp->');
 					if (!$tokens->nextToken($tokens::T_SYMBOL, $tokens::T_VARIABLE)) {
 						$expr->append($addBraces);
 						break;
@@ -397,11 +401,11 @@ class PhpWriter
 					$expr->append($tokens->currentToken());
 
 				} elseif ($tokens->nextToken('??->')) {
-					$expr->prepend('(($__tmp = ');
+					$expr->prepend('(($ʟ_tmp = ');
 					$expr->append(' ?? null) === null ? null : ');
 					$res->tokens = array_merge($res->tokens, $expr->tokens);
 					$addBraces .= ')';
-					$expr = new MacroTokens('$__tmp->');
+					$expr = new MacroTokens('$ʟ_tmp->');
 					if (!$tokens->nextToken($tokens::T_SYMBOL, $tokens::T_VARIABLE)) {
 						$expr->append($addBraces);
 						break;
@@ -471,7 +475,7 @@ class PhpWriter
 				$tokens->isCurrent($tokens::T_SYMBOL)
 				&& (!$tokens->isPrev() || $tokens->isPrev(',', '(', '[', '=>', ':', '?', '.', '<', '>', '<=', '>=', '===', '!==', '==', '!=', '<>', '&&', '||', '=', 'and', 'or', 'xor', '??'))
 				&& (!$tokens->isNext() || $tokens->isNext(',', ';', ')', ']', '=>', ':', '?', '.', '<', '>', '<=', '>=', '===', '!==', '==', '!=', '<>', '&&', '||', 'and', 'or', 'xor', '??'))
-				&& !($tokens->isPrev('(', ',') && $tokens->isNext(':'))
+				&& !((!$tokens->isPrev() || $tokens->isPrev('(', ',')) && $tokens->isNext(':'))
 				&& !preg_match('#^[A-Z_][A-Z0-9_]{2,}$#', $tokens->currentValue())
 					? "'" . $tokens->currentValue() . "'"
 					: $tokens->currentToken()
@@ -492,6 +496,35 @@ class PhpWriter
 				$tokens->depth === 0
 				&& $tokens->isCurrent($tokens::T_SYMBOL)
 				&& (!$tokens->isPrev() || $tokens->isPrev(','))
+				&& $tokens->isNext(':')
+			) {
+				$res->append("'" . $tokens->currentValue() . "' =>");
+				$tokens->nextToken(':');
+			} else {
+				$res->append($tokens->currentToken());
+			}
+		}
+		return $res;
+	}
+
+
+	/**
+	 * Converts [name: value] to ['name' => value]
+	 */
+	public function modernArraySyntax(MacroTokens $tokens): MacroTokens
+	{
+		$res = new MacroTokens;
+		$brackets = [];
+		while ($tokens->nextToken()) {
+			if ($tokens->isCurrent('[', '(', '{')) {
+				$brackets[] = $tokens->currentValue();
+			} elseif ($tokens->isCurrent(']', ')', '}')) {
+				array_pop($brackets);
+			}
+
+			if (end($brackets) === '['
+				&& $tokens->isCurrent($tokens::T_SYMBOL)
+				&& ($tokens->isPrev('[', ','))
 				&& $tokens->isNext(':')
 			) {
 				$res->append("'" . $tokens->currentValue() . "' =>");
@@ -764,7 +797,7 @@ class PhpWriter
 			} elseif ($tokens->isCurrent($tokens::T_SYMBOL)) {
 				if ($tokens->isCurrent('escape')) {
 					if ($isContent) {
-						$res->prepend('LR\Filters::convertTo($__fi, ' . PhpHelpers::dump(implode($this->context)) . ', ')
+						$res->prepend('LR\Filters::convertTo($ʟ_fi, ' . PhpHelpers::dump(implode($this->context)) . ', ')
 							->append(')');
 					} else {
 						$res = $this->escapePass($res);
@@ -786,7 +819,7 @@ class PhpWriter
 					$name = strtolower($name);
 					$res->prepend(
 						$isContent
-							? '$this->filters->filterContent(' . PhpHelpers::dump($name) . ', $__fi, '
+							? '$this->filters->filterContent(' . PhpHelpers::dump($name) . ', $ʟ_fi, '
 							: '($this->filters->' . $name . ')('
 					);
 					$inside = true;

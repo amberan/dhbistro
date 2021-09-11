@@ -18,6 +18,7 @@ namespace Tracy;
 
 $code = $exception->getCode() ? ' #' . $exception->getCode() : '';
 $nonceAttr = $nonce ? ' nonce="' . Helpers::escapeHtml($nonce) . '"' : '';
+$exceptions = Helpers::getExceptionChain($exception);
 ?><!DOCTYPE html><!-- "' --></textarea></script></style></pre></xmp></a></iframe></noembed></noframes></noscript></option></select></template></title></table>
 <html>
 <head>
@@ -27,14 +28,13 @@ $nonceAttr = $nonce ? ' nonce="' . Helpers::escapeHtml($nonce) . '"' : '';
 
 	<title><?= Helpers::escapeHtml($title . ': ' . $exception->getMessage() . $code) ?></title>
 	<!-- in <?= str_replace('--', '- ', Helpers::escapeHtml($exception->getFile() . ':' . $exception->getLine())) ?> -->
-	<?php if ($ex = $exception->getPrevious()): ?>
-<!--<?php do { echo str_replace('--', '- ', Helpers::escapeHtml("\n\tcaused by " . Helpers::getClass($ex) . ': ' . $ex->getMessage() . ($ex->getCode() ? ' #' . $ex->getCode() : ''))); } while ($ex = $ex->getPrevious()); ?> -->
+	<?php if (count($exceptions) > 1): ?>
+<!--<?php foreach (array_slice($exceptions, 1) as $ex) { echo str_replace('--', '- ', Helpers::escapeHtml("\n\tcaused by " . Helpers::getClass($ex) . ': ' . $ex->getMessage() . ($ex->getCode() ? ' #' . $ex->getCode() : ''))); } ?> -->
 	<?php endif ?>
 
 	<style class="tracy-debug">
 	<?= str_replace('</', '<\/', $css) ?>
 	</style>
-	<script<?= $nonceAttr ?>>document.documentElement.className+=' tracy-js'</script>
 </head>
 
 
@@ -42,13 +42,15 @@ $nonceAttr = $nonce ? ' nonce="' . Helpers::escapeHtml($nonce) . '"' : '';
 <?php require __DIR__ . '/content.phtml' ?>
 
 <script<?= $nonceAttr ?>>
-(function() {
-	<?php readfile(__DIR__ . '/../../Toggle/toggle.js') ?>
-	<?php readfile(__DIR__ . '/../../TableSort/table-sort.js') ?>
-	<?php readfile(__DIR__ . '/../../Dumper/assets/dumper.js') ?>
-	<?php readfile(__DIR__ . '/bluescreen.js') ?>
-})();
-Tracy.Dumper.init();
+'use strict';
+<?php
+array_map(function ($file) { echo '(function(){', str_replace(['<!--', '</s'], ['<\!--', '<\/s'], Helpers::minifyJs(file_get_contents($file))), '})();'; }, [
+	__DIR__ . '/../../Toggle/toggle.js',
+	__DIR__ . '/../../TableSort/table-sort.js',
+	__DIR__ . '/../../Dumper/assets/dumper.js',
+	__DIR__ . '/bluescreen.js',
+]);
+?>
 Tracy.BlueScreen.init();
 </script>
 </body>
