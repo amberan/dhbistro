@@ -8,27 +8,27 @@ latteDrawTemplate("header");
 $latteParameters['title'] = 'Úprava hlášení';
 if (isset($_POST['addtocase'])) {
     auditTrail(3, 6, $_POST['caseid']);
-    mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=0 AND p.dead=0 AND c.idcase=".$_POST['caseid']);
+    mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archived is null AND p.dead=0 AND c.idcase=".$_POST['caseid']);
     if ($user['aclDirector'] == 1 && $_POST['farchiv'] == 0 && $_POST['fdead'] == 0) {
-        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=0 AND p.dead=0 AND c.idcase=".$_POST['caseid']);
+        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archived is null AND p.dead=0 AND c.idcase=".$_POST['caseid']);
     }
     if ($user['aclDirector'] == 0 && $_POST['farchiv'] == 1 && $_POST['fdead'] == 0) {
-        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=1 AND p.dead=0 AND c.idcase=".$_POST['caseid']);
+        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archived is not null AND p.dead=0 AND c.idcase=".$_POST['caseid']);
     }
     if ($user['aclDirector'] == 0 && $_POST['farchiv'] == 0 && $_POST['fdead'] == 1) {
-        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=0 AND p.dead=1 AND c.idcase=".$_POST['caseid']);
+        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archived is null AND p.dead=1 AND c.idcase=".$_POST['caseid']);
     }
     if ($user['aclDirector'] == 1 && $_POST['farchiv'] == 1 && $_POST['fdead'] == 0) {
-        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=1 AND p.dead=0 AND c.idcase=".$_POST['caseid']);
+        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archived is not null AND p.dead=0 AND c.idcase=".$_POST['caseid']);
     }
     if ($user['aclDirector'] == 0 && $_POST['farchiv'] == 1 && $_POST['fdead'] == 1) {
-        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=1 AND p.dead=1 AND c.idcase=".$_POST['caseid']);
+        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archived is not null AND p.dead=1 AND c.idcase=".$_POST['caseid']);
     }
     if ($user['aclDirector'] == 1 && $_POST['farchiv'] == 0 && $_POST['fdead'] == 1) {
-        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=0 AND p.dead=1 AND c.idcase=".$_POST['caseid']);
+        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archived is null AND p.dead=1 AND c.idcase=".$_POST['caseid']);
     }
     if ($user['aclDirector'] == 1 && $_POST['farchiv'] == 1 && $_POST['fdead'] == 1) {
-        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=1 AND p.dead=1 AND c.idcase=".$_POST['caseid']);
+        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archived is not null AND p.dead=1 AND c.idcase=".$_POST['caseid']);
     }
     if (isset($_POST['person'])) {
         $person = $_POST['person'];
@@ -46,27 +46,27 @@ if (isset($_POST['addtocase'])) {
 
 if (isset($_POST['addtogroup'])) {
     auditTrail(2, 6, $_POST['groupid']);
-    mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=0 AND p.dead=0 AND c.idgroup=".$_POST['groupid']);
+    mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archived is null AND p.dead=0 AND c.idgroup=".$_POST['groupid']);
     if ($user['aclDirector'] == 1 && $_POST['farchiv'] == 0 && $_POST['fdead'] == 0) {
-        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=0 AND p.dead=0 AND c.idgroup=".$_POST['groupid']);
+        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archived is null AND p.dead=0 AND c.idgroup=".$_POST['groupid']);
     }
     if ($user['aclDirector'] == 0 && $_POST['farchiv'] == 1 && $_POST['fdead'] == 0) {
-        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=1 AND p.dead=0 AND c.idgroup=".$_POST['groupid']);
+        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archived is not null AND p.dead=0 AND c.idgroup=".$_POST['groupid']);
     }
     if ($user['aclDirector'] == 0 && $_POST['farchiv'] == 0 && $_POST['fdead'] == 1) {
-        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=0 AND p.dead=1 AND c.idgroup=".$_POST['groupid']);
+        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archived is null AND p.dead=1 AND c.idgroup=".$_POST['groupid']);
     }
     if ($user['aclDirector'] == 1 && $_POST['farchiv'] == 1 && $_POST['fdead'] == 0) {
-        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=1 AND p.dead=0 AND c.idgroup=".$_POST['groupid']);
+        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archived is not null AND p.dead=0 AND c.idgroup=".$_POST['groupid']);
     }
     if ($user['aclDirector'] == 0 && $_POST['farchiv'] == 1 && $_POST['fdead'] == 1) {
-        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=1 AND p.dead=1 AND c.idgroup=".$_POST['groupid']);
+        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archived is not null AND p.dead=1 AND c.idgroup=".$_POST['groupid']);
     }
     if ($user['aclDirector'] == 1 && $_POST['farchiv'] == 0 && $_POST['fdead'] == 1) {
-        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=0 AND p.dead=1 AND c.idgroup=".$_POST['groupid']);
+        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archived is null AND p.dead=1 AND c.idgroup=".$_POST['groupid']);
     }
     if ($user['aclDirector'] == 1 && $_POST['farchiv'] == 1 && $_POST['fdead'] == 1) {
-        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=1 AND p.dead=1 AND c.idgroup=".$_POST['groupid']);
+        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archived is not null AND p.dead=1 AND c.idgroup=".$_POST['groupid']);
     }
     if (isset($_POST['person'])) {
         $person = $_POST['person'];
@@ -84,27 +84,27 @@ if (isset($_POST['addtogroup'])) {
 
 if (isset($_POST['addtoareport'])) {
     auditTrail(4, 6, $_POST['reportid']);
-    mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=0 AND p.dead=0 AND c.idreport=".$_POST['reportid']);
+    mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archived is null AND p.dead=0 AND c.idreport=".$_POST['reportid']);
     if ($user['aclDirector'] == 1 && $_POST['farchiv'] == 0 && $_POST['fdead'] == 0) {
-        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=0 AND p.dead=0 AND c.idreport=".$_POST['reportid']);
+        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archived is null AND p.dead=0 AND c.idreport=".$_POST['reportid']);
     }
     if ($user['aclDirector'] == 0 && $_POST['farchiv'] == 1 && $_POST['fdead'] == 0) {
-        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=1 AND p.dead=0 AND c.idreport=".$_POST['reportid']);
+        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archived is not null AND p.dead=0 AND c.idreport=".$_POST['reportid']);
     }
     if ($user['aclDirector'] == 0 && $_POST['farchiv'] == 0 && $_POST['fdead'] == 1) {
-        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=0 AND p.dead=1 AND c.idreport=".$_POST['reportid']);
+        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archived is null AND p.dead=1 AND c.idreport=".$_POST['reportid']);
     }
     if ($user['aclDirector'] == 1 && $_POST['farchiv'] == 1 && $_POST['fdead'] == 0) {
-        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=1 AND p.dead=0 AND c.idreport=".$_POST['reportid']);
+        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archived is not null AND p.dead=0 AND c.idreport=".$_POST['reportid']);
     }
     if ($user['aclDirector'] == 0 && $_POST['farchiv'] == 1 && $_POST['fdead'] == 1) {
-        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archiv=1 AND p.dead=1 AND c.idreport=".$_POST['reportid']);
+        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archived is not null AND p.dead=1 AND c.idreport=".$_POST['reportid']);
     }
     if ($user['aclDirector'] == 1 && $_POST['farchiv'] == 0 && $_POST['fdead'] == 1) {
-        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=0 AND p.dead=1 AND c.idreport=".$_POST['reportid']);
+        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archived is null AND p.dead=1 AND c.idreport=".$_POST['reportid']);
     }
     if ($user['aclDirector'] == 1 && $_POST['farchiv'] == 1 && $_POST['fdead'] == 1) {
-        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archiv=1 AND p.dead=1 AND c.idreport=".$_POST['reportid']);
+        mysqli_query ($database,"DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archived is not null AND p.dead=1 AND c.idreport=".$_POST['reportid']);
     }
     if (isset($_POST['person'])) {
         $person = $_POST['person'];

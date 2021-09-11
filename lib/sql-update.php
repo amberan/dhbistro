@@ -42,10 +42,10 @@ function bistroDBTableRename($data): int
     global $database,$config;
     $alter = 0;
     foreach ($data as $old => $new) {
-        if (DBtableExist($new) == 0 and DBtableExist($old) != 0) {
+        if (DBtableExist($new) == 0 && DBtableExist($old) != 0) {
             $renameSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$old RENAME TO ".$config['dbdatabase'].".".DB_PREFIX."$new";
             mysqli_query($database,$renameSql);
-            if (DBtableExist($new) != 0 and DBtableExist($old) == 0) {
+            if (DBtableExist($new) != 0 && DBtableExist($old) == 0) {
                 Debugger::log('UPDATER '.$config['version'].': '.$renameSql);
                 $alter++;
             }
@@ -68,7 +68,7 @@ function bistroDBColumnAdd($data): int
     $alter = 0;
     foreach (array_keys($data) as $table) {
         foreach (array_keys($data[$table]) as $column) {
-            if (DBtableExist($table) != 0 and DBcolumnExist($table,$column) == 0) {
+            if (DBtableExist($table) != 0 && DBcolumnExist($table,$column) == 0) {
                 $alterSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table ADD COLUMN $column ".$data[$table][$column];
                 mysqli_query($database,$alterSql);
                 if (DBcolumnExist($table,$column) != 0) {
@@ -179,7 +179,7 @@ function bistroMigratePermissions($data): int
     $alter = 0;
     foreach (array_keys($data) as $old) {
         foreach ($data[$old] as $new) {
-            if (DBcolumnExist('user',$new) and DBcolumnExist('user',$old)) {
+            if (DBcolumnExist('user',$new) && DBcolumnExist('user',$old)) {
                 $alterSql = "UPDATE ".$config['dbdatabase'].".".DB_PREFIX."user SET $new=$old;";
                 mysqli_query($database,$alterSql);
                 if (mysqli_affected_rows($database) > 0) {
@@ -192,6 +192,28 @@ function bistroMigratePermissions($data): int
 
     return $alter;
 }
+
+/**
+ * CONVERT int to timestamp
+ */
+function bistroIntToTimestamp($data): int
+{
+    global $database,$config;
+    $alter = 0;
+    foreach ($data as $change) {
+        if (DBcolumnExist($change[0],$change[1]) && DBcolumnExist($change[0],$change[2])) {
+            $alterSql = "UPDATE ".$config['dbdatabase'].".".DB_PREFIX.$change[0]." SET ".$change[2]."=FROM_UNIXTIME(".$change[1].") where ".$change[1].">0 ;";
+            mysqli_query($database,$alterSql);
+            if (mysqli_affected_rows($database) > 0) {
+                Debugger::log('UPDATER '.$config['version'].': nw'.$change[0].':  '.$change[1].' => '.$change[2]);
+                $alter++;
+            }
+        }
+    }
+    return $alter;
+}
+
+
 
 /**
  * ALTER TABLE database.table ADD FULLTEXT (column)".
@@ -207,7 +229,7 @@ function bistroDBFulltextAdd($data): int
     foreach (array_keys($data) as $table) {
         foreach ($data[$table] as $value) {
             $checkSql = "SHOW INDEX FROM ".$config['dbdatabase'].".".DB_PREFIX."$table WHERE index_type = 'FULLTEXT' and column_name='$value'";
-            if (DBtableExist($table) != 0 and (mysqli_num_rows(mysqli_query($database,$checkSql)) == 0)) {
+            if (DBtableExist($table) != 0 && (mysqli_num_rows(mysqli_query($database,$checkSql)) == 0)) {
                 $alterSql = "ALTER TABLE ".$config['dbdatabase'].".".DB_PREFIX."$table ADD FULLTEXT ($value)";
                 mysqli_query($database,$alterSql);
                 Debugger::log('UPDATER '.$config['version'].': '.$alterSql);
@@ -228,7 +250,6 @@ function bistroDBFulltextAdd($data): int
 // {
 //     global $database, $config;
 //     $alter = 0;
-
 //     return $alter++;
 // }
 

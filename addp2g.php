@@ -57,9 +57,9 @@ mainMenu();
         default: $fsql_dead = ' AND '.DB_PREFIX.'person.dead=0 ';
     }
             switch ($farchiv) {
-        case 0: $fsql_archiv = ' AND '.DB_PREFIX.'person.archiv=0 '; break;
+        case 0: $fsql_archiv = ' AND '.DB_PREFIX.'person.archived is null '; break;
         case 1: $fsql_archiv = ''; break;
-        default: $fsql_archiv = ' AND '.DB_PREFIX.'person.archiv=0 ';
+        default: $fsql_archiv = ' AND '.DB_PREFIX.'person.archived is null ';
     }
             // formular filtru
             function filter(): void

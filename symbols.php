@@ -100,8 +100,8 @@ $filter = filterGet('symbol');
 $sqlFilter = DB_PREFIX.'symbol.deleted in (0,'.$user['aclRoot'].') '; // AND ".DB_PREFIX."case.secret<=".$user['aclSecret'];
 
 switch (@$filter['archived']) {
-   case 'on': $sqlFilter .= ' AND '.DB_PREFIX.'symbol.archived>=0 '; break;
-   default: $sqlFilter .= ' AND '.DB_PREFIX.'symbol.archived=0 ';
+   case 'on': $sqlFilter .= ' AND '.DB_PREFIX.'symbol.archived is not null '; break;
+   default: $sqlFilter .= ' AND '.DB_PREFIX.'symbol.archived is null ';
 }
 switch (@$filter['deleted']) {
    case 'on': $sqlFilter .= ' AND '.DB_PREFIX.'symbol.deleted>=0 '; break;
@@ -117,8 +117,8 @@ switch (@$filter['deleted']) {
 </form>
 <?php
 
-    $sql = "SELECT * FROM ".DB_PREFIX."symbol 
-        WHERE ".$sqlFilter." AND ".DB_PREFIX."symbol.assigned=0 
+    $sql = "SELECT * FROM ".DB_PREFIX."symbol
+        WHERE ".$sqlFilter." AND ".DB_PREFIX."symbol.assigned=0
         ORDER BY ".DB_PREFIX."symbol.created DESC";
     $res = mysqli_query($database,$sql);
     if (mysqli_num_rows($res)) {
