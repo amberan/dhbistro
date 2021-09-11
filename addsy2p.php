@@ -59,9 +59,9 @@ $latteParameters['title'] = 'Přiřazení symbolu osobě';
         default: $fsql_dead = ' AND '.DB_PREFIX.'person.dead=0 ';
     }
             switch ($farchiv) {
-        case 0: $fsql_archiv = ' AND '.DB_PREFIX.'person.archiv=0 '; break;
+        case 0: $fsql_archiv = ' AND '.DB_PREFIX.'person.archived is null '; break;
         case 1: $fsql_archiv = ''; break;
-        default: $fsql_archiv = ' AND '.DB_PREFIX.'person.archiv=0 ';
+        default: $fsql_archiv = ' AND '.DB_PREFIX.'person.archived is null ';
     }
             // formular filtru
             function filter(): void
@@ -85,7 +85,7 @@ $latteParameters['title'] = 'Přiřazení symbolu osobě';
 	<div id="filtersubmit"><input type="hidden" name="rid" value="'.$_REQUEST['rid'].'" /><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
         </form>
-                
+
         <form action="addsymbols.php" method="post" class="otherform">';
             }
             filter();

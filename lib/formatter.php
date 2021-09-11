@@ -9,8 +9,9 @@
  */
 function webDate($date): string
 {
-    if ($date < '1') {
-        $value = 'někdy dávno';
+    global $text;
+    if ($date < '100') {
+        $value = $text['nekdydavno'];
     } else {
         $value = date('d. m. Y', $date);
     }
@@ -28,8 +29,9 @@ function webDate($date): string
  */
 function webDateTime($date): string
 {
-    if ($date < '1') {
-        $value = 'někdy dávno';
+    global $text;
+    if ($date < '100') {
+        $value = $text['nekdydavno'];
     } else {
         $value = date('d. m. Y - H:i:s', $date);
     }

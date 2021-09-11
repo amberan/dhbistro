@@ -42,8 +42,8 @@ $latteParameters['title'] = 'Osoby';
         } else {
             $updateRoof = 'null';
         }
-        $sql_p = "INSERT INTO ".DB_PREFIX."person (roof, name, surname, phone, datum, iduser, contents, secret, deleted, portrait, side, power, spec, symbol, dead, archiv, regdate, regid) 
-            VALUES(".$updateRoof.",'".$_POST['name']."','".$_POST['surname']."','".$_POST['phone']."','".time()."','".$user['userId']."','".$_POST['contents']."','".$_POST['secret']."','0','".$file."', '".$_POST['side']."', '".$_POST['power']."', '".$_POST['spec']."', '".$syid."','0','0','".time()."','".$user['userId']."')";
+        $sql_p = "INSERT INTO ".DB_PREFIX."person (roof, name, surname, phone, datum, iduser, contents, secret, deleted, portrait, side, power, spec, symbol, dead, archived, regdate, regid)
+            VALUES(".$updateRoof.",'".$_POST['name']."','".$_POST['surname']."','".$_POST['phone']."','".time()."','".$user['userId']."','".$_POST['contents']."','".$_POST['secret']."','0','".$file."', '".$_POST['side']."', '".$_POST['power']."', '".$_POST['spec']."', '".$syid."','0',null,'".time()."','".$user['userId']."')";
         mysqli_query($database,$sql_p);
         $pidarray = mysqli_fetch_assoc(mysqli_query($database,"SELECT id FROM ".DB_PREFIX."person WHERE UCASE(surname)=UCASE('".$_POST['surname']."') AND UCASE(name)=UCASE('".$_POST['name']."') AND side='".$_POST['side']."'"));
         $pid = $pidarray['id'];
@@ -95,9 +95,9 @@ $latteParameters['title'] = 'Osoby';
             mysqli_query($database,"UPDATE ".DB_PREFIX."person SET symbol='".$syid."' WHERE id=".$_POST['personid']);
         }
         if ($user['aclGamemaster'] == 1) {
-            mysqli_query($database,"UPDATE ".DB_PREFIX."person SET name='".$_POST['name']."', surname='".$_POST['surname']."', phone='".$_POST['phone']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead']) ? '1' : '0')."', archiv='".(isset($_POST['archiv']) ? '1' : '0')."' WHERE id=".$_POST['personid']);
+            mysqli_query($database,"UPDATE ".DB_PREFIX."person SET name='".$_POST['name']."', surname='".$_POST['surname']."', phone='".$_POST['phone']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead']) ? '1' : '0')."', archived='".(isset($_POST['archiv']) ? 'FROM_UNIXTIME(1)' : 'null')."' WHERE id=".$_POST['personid']);
         } else {
-            mysqli_query($database,"UPDATE ".DB_PREFIX."person SET name='".$_POST['name']."', surname='".$_POST['surname']."', phone='".$_POST['phone']."', datum='".time()."', iduser='".$user['userId']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead']) ? '1' : '0')."', archiv='".(isset($_POST['archiv']) ? '1' : '0')."' WHERE id=".$_POST['personid']);
+            mysqli_query($database,"UPDATE ".DB_PREFIX."person SET name='".$_POST['name']."', surname='".$_POST['surname']."', phone='".$_POST['phone']."', datum='".time()."', iduser='".$user['userId']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead']) ? '1' : '0')."', archived='".(isset($_POST['archiv']) ? 'FROM_UNIXTIME(1)' : 'null')."' WHERE id=".$_POST['personid']);
         }
         $_SESSION['message'] = 'Osoba upravena.';
         header('Location: readperson.php?rid='.$_POST['personid'].'&amp;hidenotes=0');
@@ -226,9 +226,9 @@ $latteParameters['title'] = 'Osoby';
         default: $fsql_dead = ' AND '.DB_PREFIX.'person.dead=0 ';
     }
     switch ($farchiv) {
-        case 0: $fsql_archiv = ' AND '.DB_PREFIX.'person.archiv=0 '; break;
+        case 0: $fsql_archiv = ' AND '.DB_PREFIX.'person.archived is null '; break;
         case 1: $fsql_archiv = ''; break;
-        default: $fsql_archiv = ' AND '.DB_PREFIX.'person.archiv=0 ';
+        default: $fsql_archiv = ' AND '.DB_PREFIX.'person.archived is null ';
     }
         switch ($fspec) {
         case 0: $fsql_fspec = ''; break;
@@ -273,7 +273,7 @@ $latteParameters['title'] = 'Osoby';
         echo '<div id="filter-wrapper"><form action="persons.php" method="get" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
-	<p> Strana: 
+	<p> Strana:
 	<select name="fside">
 	<option value="0"'.($fside == 0 ? ' selected="selected"' : '').'>vše</option>
 	<option value="1"'.($fside == 1 ? ' selected="selected"' : '').'>neznámá</option>
@@ -281,7 +281,7 @@ $latteParameters['title'] = 'Osoby';
 	<option value="3"'.($fside == 3 ? ' selected="selected"' : '').'>tma</option>
 	<option value="4"'.($fside == 4 ? ' selected="selected"' : '').'>člověk</option>
 	</select>
-	 Specializace: 
+	 Specializace:
 	<select name="fspec">
 	<option value="0"'.($fspec == 0 ? ' selected="selected"' : '').'>vše</option>
 	<option value="1"'.($fspec == 1 ? ' selected="selected"' : '').'>neznámá</option>
@@ -296,7 +296,7 @@ $latteParameters['title'] = 'Osoby';
 	<option value="10"'.($fspec == 10 ? ' selected="selected"' : '').'>vykladač</option>
 	<option value="11"'.($fspec == 11 ? ' selected="selected"' : '').'>jasnovidec</option>
 	</select>
-	 Kategorie: 
+	 Kategorie:
 	<select name="fpow">
 	<option value="0"'.($fpow == 0 ? ' selected="selected"' : '').'>vše</option>
 	<option value="1"'.($fpow == 1 ? ' selected="selected"' : '').'>neznámá</option>
@@ -309,7 +309,7 @@ $latteParameters['title'] = 'Osoby';
 	<option value="8"'.($fpow == 8 ? ' selected="selected"' : '').'>sedmá</option>
 	<option value="9"'.($fpow == 9 ? ' selected="selected"' : '').'>mimo kategorie</option>
 	</select></p>
-	
+
 	<table class="filter">
 	<tr class="filter">
 	<td class="filter"><input type="checkbox" name="sportraits" value="1"'.($sportraits ? ' checked="checked"' : '').'> Zobrazit portréty.</td>
@@ -318,7 +318,7 @@ $latteParameters['title'] = 'Osoby';
 	</tr>
         <tr class="filter">
 	<td class="filter"><input type="checkbox" name="ssymbols" value="1"'.($ssymbols ? ' checked="checked"' : '').'> Zobrazit symboly.</td>
-	<td class="filter"><input type="checkbox" name="farchiv" value="1"'.($farchiv == 1 ? ' checked="checked"' : '').'> Zobrazit i archiv.</td>';
+	<td class="filter"><input type="checkbox" name="farchiv" value="1"'.($farchiv != null ? ' checked="checked"' : '').'> Zobrazit i archiv.</td>';
         if ($user['aclDirector']) {
             echo '<td class="filter"><input type="checkbox" name="sec" value="sec" class="checkbox"'.($filterSec == 1 ? ' checked="checked"' : '').' /> Jen tajné.</td></tr></table>';
         } else {
@@ -335,8 +335,8 @@ if (isset($_GET['sort'])) {
     sortingSet('person',$_GET['sort'],'person');
 }
 
-    $sql = "SELECT  ".DB_PREFIX."person.regdate as date_created, ".DB_PREFIX."person.datum as date_changed, ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.archiv AS 'archiv', ".DB_PREFIX."person.dead AS 'dead', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol' 
-    FROM ".DB_PREFIX."person 
+    $sql = "SELECT  ".DB_PREFIX."person.regdate as date_created, ".DB_PREFIX."person.datum as date_changed, ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.archived, ".DB_PREFIX."person.dead AS 'dead', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol'
+    FROM ".DB_PREFIX."person
     WHERE ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret<=".$user['aclDirector'].$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow.sortingGet('person');
     $res = mysqli_query($database,$sql);
     if (mysqli_num_rows($res)) {
@@ -364,7 +364,7 @@ if (isset($_GET['sort'])) {
                         <td>'.($rec['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ',[stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a></span>' : '<a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ',[stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a>').'</td>
 						<td><a href="tel:'.str_replace(' ', '',$rec['phone']).'">'.$rec['phone'].'</a></td>
 						<td>'.webdate($rec['date_created']).' / '.webdate($rec['date_changed']).'</td>
-                        <td>'.($rec['archiv'] == 1 ? 'Archivovaný' : '').''.($rec['dead'] == 1 ? ' Mrtvý' : '').''.($rec['secret'] == 1 ? ' Tajný' : '').'</td>
+                        <td>'.($rec['archived'] != null ? 'Archivovaný' : '').''.($rec['dead'] == 1 ? ' Mrtvý' : '').''.($rec['secret'] == 1 ? ' Tajný' : '').'</td>
                         '.($usrinfo['right_text'] ? '	<td><a href="editperson.php?rid='.$rec['id'].'">upravit</a> | <a href="persons.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat osobu &quot;".implode(', ',[stripslashes($rec['surname']), stripslashes($rec['name'])])."&quot;?');".'">smazat</a></td>' : '<td><a href="newnote.php?rid='.$rec['id'].'&idtable=5">přidat poznámku</a>').'
                         </tr>';
                 $even++;

@@ -178,7 +178,7 @@ $tableDrop[] = 'map_deleted';
 /**
  * UPDATING.
  */
-require_once 'update-function.php';
+require_once '../lib/sql-update.php';
 
 $counterTableCreate = bistroDBTableCreate($tableCreate);
 $counterTableRename = bistroDBTableRename($tableRename);

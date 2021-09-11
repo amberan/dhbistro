@@ -30,7 +30,7 @@ if ($_GET['search']) {
 $latteParameters['filter'] = $filter;
 ?>
 <div id="filter-wrapper">
-<form action="/search.php" method="POST" id="filter"> 
+<form action="/search.php" method="POST" id="filter">
 <input type="hidden" name="filter[placeholder]"  />
 	<fieldset>
 	  <legend>Vyhledávání</legend>
@@ -66,7 +66,7 @@ $latteParameters['filter'] = $filter;
                 $fsql_archiv = ' AND '.DB_PREFIX.'case.status=0 ';
             }
             $sql = "
-	SELECT ".DB_PREFIX."case.datum as date_changed, ".DB_PREFIX."case.title , ".DB_PREFIX."case.id , ".DB_PREFIX."case.status , ".DB_PREFIX."case.secret , ".DB_PREFIX."case.deleted , 
+	SELECT ".DB_PREFIX."case.datum as date_changed, ".DB_PREFIX."case.title , ".DB_PREFIX."case.id , ".DB_PREFIX."case.status , ".DB_PREFIX."case.secret , ".DB_PREFIX."case.deleted ,
     ".DB_PREFIX."case.caseCreated
     FROM ".DB_PREFIX."case
 	WHERE ".$sqlFilter." AND (title LIKE '%$searchedfor%' or contents LIKE  '%$searchedfor%')
@@ -166,14 +166,14 @@ $latteParameters['filter'] = $filter;
             /* Osoby */
             $fsql_archiv = '';
             if ($filter['archived'] != 'on') {
-                $fsql_archiv = ' AND '.DB_PREFIX.'person.archiv=0 AND '.DB_PREFIX.'person.dead=0';
+                $fsql_archiv = ' AND '.DB_PREFIX.'person.archived is null AND '.DB_PREFIX.'person.dead=0';
             }
             $sql = "
-        SELECT ".DB_PREFIX."person.regdate as date_created, ".DB_PREFIX."person.datum as date_changed, ".DB_PREFIX."person.surname , ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.name , ".DB_PREFIX."person.archiv , ".DB_PREFIX."person.dead , ".DB_PREFIX."person.secret , ".DB_PREFIX."person.deleted
+        SELECT ".DB_PREFIX."person.regdate as date_created, ".DB_PREFIX."person.datum as date_changed, ".DB_PREFIX."person.surname , ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.name , ".DB_PREFIX."person.archived , ".DB_PREFIX."person.dead , ".DB_PREFIX."person.secret , ".DB_PREFIX."person.deleted
         FROM ".DB_PREFIX."person
 		WHERE ".$sqlFilter." AND (surname LIKE '%$searchedfor%' or name LIKE  '%$searchedfor%' or contents LIKE  '%$searchedfor%')
         ".$searchContitions.$fsql_archiv."
-        ORDER BY 5 * MATCH(surname)   AGAINST ('+(>$searchedfor)' IN BOOLEAN MODE) 
+        ORDER BY 5 * MATCH(surname)   AGAINST ('+(>$searchedfor)' IN BOOLEAN MODE)
         + 3 * MATCH(name) AGAINST ('$searchedfor')
         + MATCH(contents) AGAINST ('$searchedfor') DESC
 	";
@@ -198,7 +198,7 @@ $latteParameters['filter'] = $filter;
 	<td>'.webdate($rec['date_created']).'</td>
 	<td>'.webdate($rec['date_changed']).'</td>
 
-    <td>'.($rec['archiv'] === 1 ? 'Archivovaný' : 'Aktivní').''.($rec['dead'] === 1 ? ', Mrtvý' : '').' '.($rec['secret'] > 0 ? ', Tajný ['.$rec['secret'].']' : '').' '.($rec['deleted'] > 0 ? ', Smazané' : '').($rec['archiv'] > 0 ? ', archiv' : '').'</td>
+    <td>'.($rec['archived'] === 1 ? 'Archivovaný' : 'Aktivní').''.($rec['dead'] === 1 ? ', Mrtvý' : '').' '.($rec['secret'] > 0 ? ', Tajný ['.$rec['secret'].']' : '').' '.($rec['deleted'] > 0 ? ', Smazané' : '').($rec['archived'] > 0 ? ', archiv' : '').'</td>
         </tr>';
                 $even++;
             }
@@ -209,7 +209,7 @@ $latteParameters['filter'] = $filter;
             //TODO skupiny nemaji timestamp pro vytvoreni
             $fsql_archiv = '';
             if ($filter['archived'] != 'on') {
-                $fsql_archiv = ' AND '.DB_PREFIX.'group.archived=0';
+                $fsql_archiv = ' AND '.DB_PREFIX.'group.archived is null';
             }
             $sql = "
     SELECT  ".DB_PREFIX."group.datum as date_changed, ".DB_PREFIX."group.title, ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.secret, ".DB_PREFIX."group.archived,".DB_PREFIX."group.deleted, ".DB_PREFIX."group.groupCreated
@@ -285,9 +285,9 @@ $latteParameters['filter'] = $filter;
 
             /* Poznámky */
             /* POZOR, tady bude hrozny opich udelat ten join pro zobrazeni jen poznamek k nearchivovanym vecem */
-            $sql = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.title , ".DB_PREFIX."note.id AS 'id', ".DB_PREFIX."note.idtable , ".DB_PREFIX."note.iditem , ".DB_PREFIX."note.secret , ".DB_PREFIX."note.deleted 
+            $sql = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.title , ".DB_PREFIX."note.id AS 'id', ".DB_PREFIX."note.idtable , ".DB_PREFIX."note.iditem , ".DB_PREFIX."note.secret , ".DB_PREFIX."note.deleted
 		FROM ".DB_PREFIX."note
-		WHERE ".$sqlFilter." AND (title LIKE '%$searchedfor%' or note LIKE '%$searchedfor%')		
+		WHERE ".$sqlFilter." AND (title LIKE '%$searchedfor%' or note LIKE '%$searchedfor%')
 		".$searchContitions."
 		ORDER BY 5 * MATCH(title) AGAINST ('$searchedfor')
         + MATCH(note) AGAINST ('$searchedfor') DESC

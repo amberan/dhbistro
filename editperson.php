@@ -147,7 +147,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
                 <h3><label for="archiv">Archiv:</label></h3>
 					<input type="checkbox" name="archiv" value=1 <?php if ($rec_p['archiv'] == 1) { ?>checked="checked"<?php } ?>/><br/>
 				<div class="clear">&nbsp;</div>
-				<h3><label for="dead">Strop:</label></h3>
+				<h3><label for="personRoof">Strop:</label></h3>
                     <input type="checkbox" name="personRoof" <?php if ($rec_p['roof'] > null) {
                 echo "CHECKED";
             } ?>/></br>
@@ -157,7 +157,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
                                 <h3><label for="notnew">Není nové</label></h3>
 					<input type="checkbox" name="notnew"/><br/>
 				<div class="clear">&nbsp;</div>';
-            } ?>				
+            } ?>
 			</div>
 			<!-- end of #info -->
 		</fieldset>
@@ -251,22 +251,22 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 				&nbsp;<input type="radio" name="secret" value="1" <?php if ($rec_p['secret'] == 1) { ?>checked="checked"<?php } ?>/>ano
 			</div>
 <?php 			if ($user['aclGamemaster'] == 1) {
-                echo '					
+                echo '
 				<div>
 				<strong><label for="fnotnew">Není nové</label></strong>
 					<input type="checkbox" name="fnotnew"/><br/>
 				</div>';
-            } ?>			
+            } ?>
 			<div>
 				<input type="hidden" name="personid" value="<?php echo $_REQUEST['rid']; ?>" />
 				<input type="hidden" name="backurl" value="<?php echo 'editperson.php?rid='.$_REQUEST['rid']; ?>" />
-				<input type="submit" name="uploadfile" value="Nahrát soubor k osobě" class="submitbutton" title="Uložit"/> 
+				<input type="submit" name="uploadfile" value="Nahrát soubor k osobě" class="submitbutton" title="Uložit"/>
 			</div>
 		</form>
 		</fieldset>
 	</div>
 	<!-- end of #new-file .otherform-wrap -->
-	
+
 	<fieldset><legend><strong>Poznámky</strong></legend>
 		<span class="poznamka-edit-buttons"><a class="new" href="newnote.php?rid=<?php echo $_REQUEST['rid']; ?>&amp;idtable=1&amp;s=<?php echo $rec_p['secret']; ?>" title="nová poznámka"><span class="button-text">nová poznámka</span></a><em style="font-size:smaller;"> (K případu si můžete připsat kolik chcete poznámek.)</em></span>
 		<!-- následuje seznam poznámek -->
@@ -334,7 +334,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 				&nbsp;<input type="radio" name="secret" value="2" />soukromá
 			</div>
 <?php 			if ($user['aclGamemaster'] == 1) {
-                echo '					
+                echo '
 				<div>
 				<strong><label for="nnotnew">Není nové</label></strong>
 					<input type="checkbox" name="nnotnew"/><br/>

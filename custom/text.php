@@ -19,6 +19,7 @@ $text['cteni'] = 'Čtení';
 $text['skryt'] = 'Skrýt';
 $text['zpristupnit'] = 'Zpřístupnit';
 $text['neznamo'] = 'Neznámo';
+$text['nekdydavno'] = 'někdy dávno';
 
 // LOGIN
 $text['jmeno'] = 'Jméno';

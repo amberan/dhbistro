@@ -9,7 +9,6 @@ Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
  */
 $tableCreate['filter'] = 'filterId';
 $tableCreate['sort'] = 'sortId';
-//$tableCreate['test'] = 'testId';
 
 /*
  * RENAME TABLE
@@ -25,7 +24,6 @@ $tableRename['persons'] = "person";
 $tableRename['reports'] = "report";
 $tableRename['symbols'] = "symbol";
 $tableRename['tasks'] = "task";
-//$tableRename['test'] = "test2";
 $tableRename['users'] = "user";
 
 /*
@@ -53,7 +51,6 @@ $columnAdd['sort']['sortColumn'] = "varchar(100) NULL AFTER objectType";
 $columnAdd['sort']['sortDirection'] = "varchar(4) NULL AFTER sortColumn";
 $columnAdd['symbol']['descriptionMD'] = "TEXT NULL";
 $columnAdd['task']['taskMD'] = "TEXT NULL";
-//$columnAdd['test2']['test'] = "int NULL after testId";
 $columnAdd['user']['aclAPI'] = "int(3) NOT NULL DEFAULT '0'";
 $columnAdd['user']['aclAudit'] = "int(3) NOT NULL DEFAULT '0'";
 $columnAdd['user']['aclCase'] = "int(3) NOT NULL DEFAULT '0'";
@@ -71,7 +68,12 @@ $columnAdd['user']['planMD'] = "TEXT NULL";
 $columnAdd['user']['sid'] = "VARCHAR(32) NOT NULL AFTER id";
 $columnAdd['user']['userSuspended'] = "INT NOT NULL DEFAULT '0' AFTER deleted";
 $columnAdd['user']['userAgent'] = "VARCHAR(256) NULL AFTER ip";
-
+$columnAdd['user']['aclReport'] = "int(3) NOT NULL DEFAULT '0' AFTER aclTask";
+$columnAdd['user']['aclSymbol'] = "int(3) NOT NULL DEFAULT '0' AFTER aclReport";
+$columnAdd['case']['caseCreated'] = "timestamp NULL";
+$columnAdd['group']['groupCreated'] = "timestamp NULL";
+$columnAdd['person']['roof'] = 'timestamp NULL AFTER power';
+$columnAdd['person']['archived'] = 'timestamp NULL AFTER deleted';
 /*
  * ALTER COLUMN
  */
@@ -79,8 +81,6 @@ $columnAlter['dashboard']['content_md'] = " contentMD text COLLATE 'utf8_general
 $columnAlter['news']['obsah_md'] = " obsahMD text COLLATE 'utf8_general_ci' NULL "; //bugfix
 $columnAlter['task']['modified_by'] = " `modified_by` int(4) NULL AFTER `modified`";
 $columnAlter['task']['modified'] = " `modified` int(11) NULL AFTER `created_by`";
-//$columnAlter['test2']['test'] = "test2 TEXT NOT NULL DEFAULT 'random string'";
-//$columnAlter['test2']['test'] = "test3 TEXT NULL";
 $columnAlter['user']['id'] = "userId int(6) NOT NULL AUTO_INCREMENT FIRST"; //already exist?
 $columnAlter['user']['sid'] = "sid varchar(32) NULL AFTER userId"; //already exist?
 $columnAlter['user']['login'] = "userName varchar(40) NOT NULL AFTER sid"; //already exist?
@@ -101,11 +101,13 @@ $columnAlter['user']['right_org'] = "rightOrgOld int(3) NOT NULL DEFAULT '0' aft
 $columnAlter['user']['right_power'] = "rightPowerOld int(3) NOT NULL DEFAULT '0' after planMD"; //already exist?
 $columnAlter['user']['right_super'] = "rightSuperOld int(3) NOT NULL DEFAULT '0' after planMD"; //already exist?
 $columnAlter['user']['right_text'] = "rightTextOld int(3) NOT NULL DEFAULT '0' after planMD"; //already exist?
+$columnAlter['symbol']['archiv'] = 'archived timestamp NULL AFTER deleted;';
+$columnAlter['person']['archiv'] = 'archived timestamp NULL AFTER deleted;';
+
 
 /*
  * ADD FULLTEXT INDEX
  */
-//$columnAddFulltext['test2'] = ['test2'];
 $columnAddFulltext['case'] = ['contentMD'];
 $columnAddFulltext['dashboard'] = ['contentMD'];
 $columnAddFulltext['group'] = ['contentMD'];
@@ -120,7 +122,6 @@ $columnAddFulltext['symbol'] = ['descriptionMD'];
  */
 $columnToMD[] = ['dashboard', 'id', 'content', 'contentMD'];
 $columnToMD[] = ['news', 'id', 'obsah', 'obsahMD'];
-//$columnToMD[] = ['test2','testId','test2','test3'];
 $columnToMD[] = ['user', 'userId', 'plan', 'planMD'];
 
 /*
@@ -132,6 +133,13 @@ $rightsToUpdate['rightPowerOld'] = ['aclDirector', 'aclDeputy', 'aclSecret', 'ac
 $rightsToUpdate['rightSuperOld'] = ['aclRoot'];
 $rightsToUpdate['rightTextOld'] = ['aclTask', 'aclGroup', 'aclPerson', 'aclCase'];
 
+
+/*
+ * TIME TO CONVERT
+ */
+$convertTime[] = ['person','archiv','archived'];
+
+
 /*
  * ADD INDEX
  */
@@ -141,10 +149,10 @@ $rightsToUpdate['rightTextOld'] = ['aclTask', 'aclGroup', 'aclPerson', 'aclCase'
  * COLUMNS TO DROP
  */
 $columnDrop['case'][] = 'contents_md'; //bugfix
-$columnDrop['dashboard'][] = 'content';
+//$columnDrop['dashboard'][] = 'content';
 $columnDrop['group'][] = 'contents_md'; //bugfix
 $columnDrop['news'][] = 'obsah';
-$columnDrop['news'][] = 'obsah_md'; //bugfix
+//$columnDrop['news'][] = 'obsah_md'; //bugfix
 $columnDrop['note'][] = 'note_md'; //bugfix
 $columnDrop['person'][] = 'contents_md'; //bugfix
 $columnDrop['report'][] = 'details_md'; //bugfix
@@ -156,7 +164,7 @@ $columnDrop['symbol'][] = 'desc_md'; //bugfix
 $columnDrop['task'][] = 'task_md'; //bugfix
 //$columnDrop['test2'][] = "test2";
 $columnDrop['user'][] = 'email';
-$columnDrop['user'][] = 'plan';
+//$columnDrop['user'][] = 'plan';
 $columnDrop['user'][] = 'plan_md'; //bugfix
 $columnDrop['user'][] = 'rightAudOld';
 $columnDrop['user'][] = 'rightOrgOld';
@@ -165,18 +173,18 @@ $columnDrop['user'][] = 'rightSuperOld';
 $columnDrop['user'][] = 'rightTextOld';
 $columnDrop['user'][] = 'suspended';
 $columnDrop['user'][] = 'user_agent';
+$columnDrop['person'][] = 'archiv';
 
 /*
  * DROP TABLE
  */
 $tableDrop[] = 'loggedin_deleted';
 $tableDrop[] = 'map_deleted';
-//$tableDrop[] = 'test2';
 
 /**
  * UPDATING.
  */
-require_once '../lib/sql-update.php';
+require_once 'lib/sql-update.php';
 
 $counterTableCreate = bistroDBTableCreate($tableCreate);
 $counterTableRename = bistroDBTableRename($tableRename);
@@ -188,7 +196,8 @@ $counterIndexAdd = 0;
 
 $counterColumnMarkdown = bistroDBColumnMarkdown($columnToMD);
 $counterPasswordEncrypt = bistroDBPasswordEncrypt();
-$counterUPdateRight = bistroMigratePermissions($rightsToUpdate);
+$counterUpdateRight = bistroMigratePermissions($rightsToUpdate);
+$counterConvertTime = bistroIntToTimestamp($convertTime);
 
 $counterColumnDrop = bistroDBColumnDrop($columnDrop);
 $counterTableDrop = bistroDBTableDrop($tableDrop);
@@ -199,7 +208,7 @@ mysqli_query($database,$update98);
 
 //pokud zmeny probehly, prejmenovat tento soubor
 if ($counterColumnAdd + $counterColumnAlter + $counterColumnMarkdown + $counterFulltextAdd + $counterPasswordEncrypt
-    + $counterTableRename + $counterTableDrop + $counterTableCreate + $counterIndexAdd + $counterUPdateRight
-    + $counterColumnDrop > 0) {
+    + $counterTableRename + $counterTableDrop + $counterTableCreate + $counterIndexAdd + $counterUpdateRight
+    + $counterColumnDrop + $counterConvertTime> 0) {
     rename(__FILE__,__FILE__.".old");
 }

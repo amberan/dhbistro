@@ -71,7 +71,11 @@ $columnAdd['user']['planMD'] = "TEXT NULL";
 $columnAdd['user']['sid'] = "VARCHAR(32) NOT NULL AFTER id";
 $columnAdd['user']['userSuspended'] = "INT NOT NULL DEFAULT '0' AFTER deleted";
 $columnAdd['user']['userAgent'] = "VARCHAR(256) NULL AFTER ip";
-
+$columnAdd['user']['aclReport'] = "int(3) NOT NULL DEFAULT '0' AFTER aclTask";
+$columnAdd['user']['aclSymbol'] = "int(3) NOT NULL DEFAULT '0' AFTER aclReport";
+$columnAdd['case']['caseCreated'] = "timestamp NULL";
+$columnAdd['group']['groupCreated'] = "timestamp NULL";
+$columnAdd['person']['roof'] = 'timestamp NULL AFTER power';
 /*
  * ALTER COLUMN
  */
@@ -101,6 +105,7 @@ $columnAlter['user']['right_org'] = "rightOrgOld int(3) NOT NULL DEFAULT '0' aft
 $columnAlter['user']['right_power'] = "rightPowerOld int(3) NOT NULL DEFAULT '0' after planMD"; //already exist?
 $columnAlter['user']['right_super'] = "rightSuperOld int(3) NOT NULL DEFAULT '0' after planMD"; //already exist?
 $columnAlter['user']['right_text'] = "rightTextOld int(3) NOT NULL DEFAULT '0' after planMD"; //already exist?
+$columnAlter['symbol']['archiv'] = 'archived timestamp NULL AFTER deleted;';
 
 /*
  * ADD FULLTEXT INDEX
@@ -141,10 +146,10 @@ $rightsToUpdate['rightTextOld'] = ['aclTask', 'aclGroup', 'aclPerson', 'aclCase'
  * COLUMNS TO DROP
  */
 $columnDrop['case'][] = 'contents_md'; //bugfix
-$columnDrop['dashboard'][] = 'content';
+//$columnDrop['dashboard'][] = 'content';
 $columnDrop['group'][] = 'contents_md'; //bugfix
 $columnDrop['news'][] = 'obsah';
-$columnDrop['news'][] = 'obsah_md'; //bugfix
+//$columnDrop['news'][] = 'obsah_md'; //bugfix
 $columnDrop['note'][] = 'note_md'; //bugfix
 $columnDrop['person'][] = 'contents_md'; //bugfix
 $columnDrop['report'][] = 'details_md'; //bugfix
@@ -156,7 +161,7 @@ $columnDrop['symbol'][] = 'desc_md'; //bugfix
 $columnDrop['task'][] = 'task_md'; //bugfix
 //$columnDrop['test2'][] = "test2";
 $columnDrop['user'][] = 'email';
-$columnDrop['user'][] = 'plan';
+//$columnDrop['user'][] = 'plan';
 $columnDrop['user'][] = 'plan_md'; //bugfix
 $columnDrop['user'][] = 'rightAudOld';
 $columnDrop['user'][] = 'rightOrgOld';
