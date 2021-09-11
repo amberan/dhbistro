@@ -213,7 +213,22 @@ function bistroIntToTimestamp($data): int
     return $alter;
 }
 
-
+function bistroMyisamToInnodb(): int
+{
+    global $database,$config;
+    $alter =0;
+    $myisamDbsql = "select table_name from information_schema.tables tab
+    where engine = 'MyISAM' and table_type = 'BASE TABLE' and table_schema not in ('information_schema', 'sys', 'performance_schema','mysql')
+    and table_schema = 'bistro' order by table_schema, table_name";
+    $myisamDbQuery = mysqli_query($database,$myisamDbsql);
+    while ($mysqisamDb = mysqli_fetch_assoc($myisamDbQuery)) {
+        $innoDbQuery = "ALTER TABLE ".$mysqisamDb['table_name']." engine='InnoDB'";
+        Debugger::log('UPDATER '.$config['version'].': '.$mysqisamDb['table_name'].' converted from MyISAM to InnoDB');
+        mysqli_query($database,$innoDbQuery);
+        $alter++;
+    }
+    return $alter;
+}
 
 /**
  * ALTER TABLE database.table ADD FULLTEXT (column)".
