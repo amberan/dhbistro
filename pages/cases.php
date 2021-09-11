@@ -106,7 +106,7 @@ $latteParameters['filter'] = $filter;
 //CASE LIST
 $sql = "SELECT ".DB_PREFIX."case.datum as date_changed, ".DB_PREFIX."case.status, ".DB_PREFIX."case.secret, ".DB_PREFIX."case.title, ".DB_PREFIX."case.id, ".DB_PREFIX."case.deleted, ".DB_PREFIX."case.caseCreated,  ".DB_PREFIX."unread.id as unread
 FROM ".DB_PREFIX."case
-LEFT JOIN  ".DB_PREFIX."unread on  ".DB_PREFIX."case.id =  ".DB_PREFIX."unread.idrecord AND  ".DB_PREFIX."unread.idtable = 3 and  ".DB_PREFIX."unread.iduser=".$user[userId]."
+LEFT JOIN  ".DB_PREFIX."unread on  ".DB_PREFIX."case.id =  ".DB_PREFIX."unread.idrecord AND  ".DB_PREFIX."unread.idtable = 3 and  ".DB_PREFIX."unread.iduser=".$user['userId']."
 WHERE ".$sqlFilter.sortingGet('case');
 
 $caseList = mysqli_query($database,$sql);
