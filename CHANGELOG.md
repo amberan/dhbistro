@@ -12,6 +12,7 @@
 - konverze archive(int) na archived(timestamp) pro osoby [#140](https://gitlab.alembiq.net/larp/bistro/issues/140)
 - smazani uzivatele systemu nejdou pridat jako ucastnici udalosti [#149](https://gitlab.alembiq.net/larp/bistro/issues/149)
 - pridani udaje `strop` pro `osoba` [#40](https://gitlab.alembiq.net/larp/bistro/issues/40)
+- WIP redesign skupiny [#118](https://gitlab.alembiq.net/larp/bistro/issues/117)
 
 **1.8**
 - release...

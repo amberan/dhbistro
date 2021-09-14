@@ -8,10 +8,10 @@ function mainMenu ()
     echo '<div id="menu">
   <ul class="'.$config['barva'].'">
 	  <li '.((searchTable(5)) ? ' class="unread"' : ((searchTable(6)) ? ' class="unread"' : '')).'><a href="/">Aktuality</a></li>
-	  <li '.((searchTable(4)) ? ' class="unread"' : '').'><a href="reports.php">'.$text['hlaseniV'].' '.searchTable(4).'</a></li>	
+	  <li '.((searchTable(4)) ? ' class="unread"' : '').'><a href="reports.php">'.$text['hlaseniV'].' '.searchTable(4).'</a></li>
 	  <li '.((searchTable(1)) ? ' class="unread"' : ((searchTable(7)) ? ' class="unread"' : '')).'><a href="persons.php">Osoby '.searchTable(1).'</a></li>
 	  <li '.((searchTable(3)) ? ' class="unread"' : '').'><a href="/cases/">Případy '.searchTable(3).'</a></li>
-	  <li '.((searchTable(2)) ? ' class="unread"' : '').'><a href="groups.php">Skupiny '.searchTable(2).'</a></li>
+	  <li '.((searchTable(2)) ? ' class="unread"' : '').'><a href="groups/">Skupiny '.searchTable(2).'</a></li>
 	  '/*Docasne odstranena mapa agentu, stejne to nikdo nepouziva
 	  .(($user['aclDirector'])?'<li><a href="mapagents.php">Mapa agentů</a></li>':'')*/.'
 	  '.(($user['aclDirector'] > 0) ? '<li><a href="doodle.php">Časová dostupnost</a></li>' : '<li><a href="'.$dlink['link'].'" target="_blank">Časová dostupnost</a></li>').'

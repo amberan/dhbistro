@@ -8,7 +8,7 @@ latteDrawTemplate("header");
 $latteParameters['title'] = 'Úprava hlášení';
 mainMenu();
         $customFilter = custom_Filter(19);
-    sparklets('<a href="./groups.php">skupiny</a> &raquo; <strong>úprava skupiny</strong> &raquo; <strong>přidání osob</strong>');
+    sparklets('<a href="./groups/">skupiny</a> &raquo; <strong>úprava skupiny</strong> &raquo; <strong>přidání osob</strong>');
     if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
         $res = mysqli_query($database,"SELECT * FROM ".DB_PREFIX."group WHERE id=".$_REQUEST['rid']);
         if ($rec = mysqli_fetch_assoc($res)) {

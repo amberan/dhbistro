@@ -96,8 +96,14 @@ if (isset($user)) {
         auditTrail(3, 1, 0);
         $latteParameters['title'] = $text['pripady'];
         $latteParameters['actions'][] = ["/newcase.php", $text['pridatpripad']];
-        //TODO view case, edit case
+        //TODO view case, edit case, new case
         require_once SERVER_ROOT.'/pages/cases.php';
+    } elseif ($URL[1] == 'groups') { // GROUPS (nastenka)
+        auditTrail(3, 1, 0);
+        $latteParameters['title'] = $text['skupiny'];
+        $latteParameters['actions'][] = ["/newgroup.php", $text['pridatskupinu']];
+        //TODO view group, edit group, new group
+        require_once SERVER_ROOT.'/pages/groups.php';
     } else { // NEWS - DEFAULT
         auditTrail(5, 1, 0);
         $latteParameters['title'] = 'Aktuality';

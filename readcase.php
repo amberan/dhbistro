@@ -48,14 +48,14 @@ if (is_numeric($_REQUEST['rid'])) {
                 }
             }
         }
-        if ($usrinfo['right_text'] && (($rec['secret'] == 0) || ($user['aclDirector']) || ($rec_a['iduser']))) {
+        if (($rec['secret'] <= $user['aclSecret']) || (!$rec_a['iduser'])) {
             $editbutton = '; <a href="editcase.php?rid='.$_REQUEST['rid'].'">upravit případ</a>';
         } else {
             $editbutton = '';
         }
         deleteUnread(3,$_REQUEST['rid']);
         sparklets('<a href="/cases/">případy</a> &raquo; <strong>'.stripslashes($rec['title']).'</strong>',$spaction.$editbutton);
-        if (($rec['secret'] == 1) && (!$user['aclDirector']) && (!$rec_a['iduser'])) {
+        if (($rec['secret'] > $user['aclSecret']) && (!$rec_a['iduser'])) {
             echo '<div id="obsah"><p>Hezký pokus.</p></div>';
         } else {
             ?>
@@ -125,16 +125,16 @@ if (is_numeric($_REQUEST['rid'])) {
                 echo "<p><em>K případu není přiřazeno žádné hlášení.</em></p>";
             } ?>
 				<div class="clear">&nbsp;</div>
-				<p>	
+				<p>
 					<strong>Datum poslední změny:</strong> <?php echo webdate($rec['datum']); ?>
-					<strong>Změnil:</strong> 
-					<?php echo  getAuthor($rec['iduser'],1); // $name =?> 
+					<strong>Změnil:</strong>
+					<?php echo  getAuthor($rec['iduser'],1); // $name =?>
 				</p>
 			<div class="clear">&nbsp;</div>
 		</div>
 		<!-- end of #info -->
 	</fieldset>
-	
+
 	<fieldset><legend><strong>Popis</strong></legend>
 		<div class="field-text"><?php echo stripslashes($rec['contents']); ?></div>
 	</fieldset>
@@ -166,8 +166,8 @@ if (is_numeric($_REQUEST['rid'])) {
         } ?>
 	</fieldset>
 	<!-- konec seznamu přiložených symbolů -->
-	<?php } ?>	
-	
+	<?php } ?>
+
 	<!-- následuje seznam přiložených souborů -->
 	<?php //generování seznamu přiložených souborů
         if ($user['aclDirector']) {
@@ -247,18 +247,18 @@ if (is_numeric($_REQUEST['rid'])) {
 	</fieldset>
 	<?php 	}
     // konec poznámek
-        } ?>	
+        } ?>
 </div>
 <!-- end of #obsah -->
 <?php
         }
     } else {
-        $_SESSION['message'] = "Případ neexistuje!";
-        header('location: index.php');
+  echo      $_SESSION['message'] = "Případ neexistuje!";
+//        header('location: index.php');
     }
 } else {
-    $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
-    header('location: index.php');
+    echo $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+//    header('location: index.php');
 }
 latteDrawTemplate("footer");
 ?>

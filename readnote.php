@@ -6,17 +6,17 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 latteDrawTemplate("header");
 
 	if (is_numeric($_REQUEST['rid'])) {
-	    $res = mysqli_query ($database,"SELECT 
+	    $res = mysqli_query ($database,"SELECT
 				".DB_PREFIX."note.id AS 'id',
 				".DB_PREFIX."note.title AS 'title',
 				".DB_PREFIX."note.note AS 'note',
 				".DB_PREFIX."note.secret AS 'secret',
 				".DB_PREFIX."note.iduser AS 'iduser',
 				".DB_PREFIX."note.deleted AS 'deleted',
-				".DB_PREFIX."note.datum as date_created, 
-				".DB_PREFIX."user.userName AS 'nuser' 	
+				".DB_PREFIX."note.datum as date_created,
+				".DB_PREFIX."user.userName AS 'nuser'
 				 FROM ".DB_PREFIX."note, ".DB_PREFIX."user
-				 WHERE ".DB_PREFIX."note.id=".$_REQUEST['rid']." 
+				 WHERE ".DB_PREFIX."note.id=".$_REQUEST['rid']."
 				AND ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId");
 	    if ($rec = mysqli_fetch_assoc ($res)) {
 	        if ((($rec['secret'] <= $user['aclDirector']) || $rec['iduser'] == $user['userId']) && !$rec['deleted'] == 1) {
@@ -24,7 +24,7 @@ latteDrawTemplate("header");
 	            mainMenu (0);
 	            switch ($_REQUEST['idtable']) {
 					case 1: $sourceurl = "persons.php"; $sourcename = "osoby"; break;
-					case 2: $sourceurl = "groups.php"; $sourcename = "skupiny"; break;
+					case 2: $sourceurl = "groups/"; $sourcename = "skupiny"; break;
 					case 3: $sourceurl = "/cases/"; $sourcename = "případy"; break;
 					case 4: $sourceurl = "reports.php"; $sourcename = "hlášení"; break;
 					default: $sourceurl = ""; $sourcename = ""; break;

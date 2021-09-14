@@ -83,7 +83,6 @@ editnote.php            | uprava poznamek                           | poznamky
 editperson.php          | uprava osoby                              | osoby
 editsymbol.php          | uprava symbolu                            | symboly
 evilpoints.php          | zlobody
-groups.php              | LIST skupiny                              | skupiny
 index.php               | sdilena nastenka
 login.php               | prihlasovaci stranka
 logout.php              |

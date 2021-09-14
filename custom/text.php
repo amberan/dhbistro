@@ -177,3 +177,6 @@ $text['pridatpoznamku'] = '';
 $text['opravdusmazatpripad'] = 'Opravdu smazat případ';
 $text['opravduobnovitpripad'] = 'Opravdu obnovit případ';
 $text['vytvoreno'] = 'Vytvořeno';
+
+//GROUPS
+$text['pridatskupinu'] = 'Přidat skupinu';

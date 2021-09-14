@@ -13,7 +13,7 @@ switch ($_REQUEST['idtable']) {
 				case 3: $sourceurl1 = "editcase.php"; $sourceurl2 = "editcase.php"; $sourcename = "případ"; $idtable = 3; $typ = ' případu'; break;
 				case 4: $sourceurl1 = "editactrep.php"; $sourceurl2 = "editactrep.php"; $sourcename = "hlášení"; $idtable = 4; $typ = ' hlášení'; break;
 				case 5: $sourceurl1 = "readperson.php?rid=".$_REQUEST['rid']."&hidenotes=0"; $sourceurl2 = "persons.php"; $sourcename = "osoby"; $idtable = 1; $typ = ' osobě'; break;
-				case 6: $sourceurl1 = "readgroup.php?rid=".$_REQUEST['rid']."&hidenotes=0"; $sourceurl2 = "groups.php"; $sourcename = "skupiny"; $idtable = 2; $typ = 'e skupině'; break;
+				case 6: $sourceurl1 = "readgroup.php?rid=".$_REQUEST['rid']."&hidenotes=0"; $sourceurl2 = "groups/"; $sourcename = "skupiny"; $idtable = 2; $typ = 'e skupině'; break;
 				case 7: $sourceurl1 = "readcase.php?rid=".$_REQUEST['rid']."&hidenotes=0"; $sourceurl2 = "/cases/"; $sourcename = "případy"; $idtable = 3; $typ = ' případu'; break;
 				case 8: $sourceurl1 = "readactrep.php?rid=".$_REQUEST['rid']."&hidenotes=0"; $sourceurl2 = "reports.php"; $sourcename = "hlášení"; $idtable = 4; $typ = ' hlášení'; break;
 				case 9: $sourceurl1 = "editsymbol.php"; $sourceurl2 = "editsymbol.php"; $sourcename = "symbol"; $idtable = 7; $typ = ' symbolu'; break;
@@ -41,12 +41,12 @@ if (is_numeric($_REQUEST['rid'])) {
 			</select>
 		</div>
 <?php 			if ($user['aclGamemaster'] == 1) {
-        echo '					
+        echo '
 				<div>
 				<label for="nnotnew">Není nové</label>
 					<input type="checkbox" name="nnotnew"/><br/>
 				</div>';
-    } ?>		
+    } ?>
 		<div>
 			<label for="notebody">Tělo poznámka:</label>
 			<textarea cols="80" rows="7" name="note" id="notebody"></textarea>
