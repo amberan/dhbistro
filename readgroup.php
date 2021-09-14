@@ -8,7 +8,7 @@ latteDrawTemplate("header");
     if (is_numeric($_REQUEST['rid'])) {
         $res = mysqli_query($database,"SELECT * FROM ".DB_PREFIX."group WHERE id=".$_REQUEST['rid']);
         if ($rec_g = mysqli_fetch_assoc($res)) {
-            if (($rec_g['secret'] > $user['aclDirector']) || $rec_g['deleted'] == 1) {
+            if (($rec_g['secret'] > $user['aclSecret']) || $rec_g['deleted'] == 1) {
                 unauthorizedAccess(2, $rec_g['secret'], $rec_g['deleted'], $_REQUEST['rid']);
             }
             auditTrail(2, 1, $_REQUEST['rid']);
@@ -35,7 +35,7 @@ latteDrawTemplate("header");
                 $editbutton = '';
             }
             deleteUnread(2,$_REQUEST['rid']);
-            sparklets('<a href="./groups.php">skupiny</a> &raquo; <strong>'.stripslashes($rec_g['title']).'</strong>','<a href="readgroup.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton); ?>
+            sparklets('<a href="./groups/">skupiny</a> &raquo; <strong>'.stripslashes($rec_g['title']).'</strong>','<a href="readgroup.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton); ?>
 <?php // zpracovani filtru
             if (!isset($customFilter['sportraits'])) {
                 $sportraits = false;

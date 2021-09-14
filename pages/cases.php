@@ -1,7 +1,5 @@
 <?php
 
-//TODO DODELAT FILTROVANI PODLE PRAV
-
 use Tracy\Debugger;
 
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);

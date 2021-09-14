@@ -9,7 +9,7 @@ $latteParameters['title'] = 'Úprava poznámky';
 mainMenu ();
 	switch ($_REQUEST['idtable']) {
 		case 1: $sourceurl = "persons.php"; $sourcename = "osoby"; break;
-		case 2: $sourceurl = "groups.php"; $sourcename = "skupiny"; break;
+		case 2: $sourceurl = "groups/"; $sourcename = "skupiny"; break;
 		case 3: $sourceurl = "/cases/"; $sourcename = "případy"; break;
 		case 4: $sourceurl = "reports.php"; $sourcename = "hlášení"; break;
 		case 7: $sourceurl = "symbols.php"; $sourcename = "symboly"; break;
@@ -57,7 +57,7 @@ mainMenu ();
 	    echo '<input type="hidden" name="nowner" value="'.$rec['iduser'].'" />';
 	} ?>
 <?php 			if ($user['aclGamemaster'] == 1) {
-	    echo '					
+	    echo '
 				<div>
 				<label for="nnotnew">Není nové</label>
 					<input type="checkbox" name="nnotnew"/><br/>

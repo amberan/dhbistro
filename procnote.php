@@ -13,7 +13,7 @@ $latteParameters['title'] = 'Uložení změn';
 	    mainMenu ();
 	    switch ($_POST['idtable']) {
 			case 1: $sourceurl = "persons.php"; $sourcename = "osoby"; break;
-			case 2: $sourceurl = "groups.php"; $sourcename = "skupiny"; break;
+			case 2: $sourceurl = "groups/"; $sourcename = "skupiny"; break;
 			case 3: $sourceurl = "/cases/"; $sourcename = "případy"; break;
 			case 4: $sourceurl = "reports.php"; $sourcename = "hlášení"; break;
 			default: $sourceurl = ""; $sourcename = ""; break;
@@ -30,7 +30,7 @@ $latteParameters['title'] = 'Uložení změn';
 	        mainMenu ();
 	        switch ($_REQUEST['idtable']) {
 			case 1: $sourceurl = "persons.php"; $sourcename = "osoby"; break;
-			case 2: $sourceurl = "groups.php"; $sourcename = "skupiny"; break;
+			case 2: $sourceurl = "groups/"; $sourcename = "skupiny"; break;
 			case 3: $sourceurl = "/cases/"; $sourcename = "případy"; break;
 			case 4: $sourceurl = "reports.php"; $sourcename = "hlášení"; break;
 			default: $sourceurl = ""; $sourcename = ""; break;
@@ -40,8 +40,8 @@ $latteParameters['title'] = 'Uložení změn';
 	        latteDrawTemplate("footer");
 	    }
 	}
-	
-	
+
+
 
 	// nová poznámka
 	if (isset($_POST['setnote'])) {
@@ -55,7 +55,7 @@ $latteParameters['title'] = 'Uložení změn';
 	    }
 	    Header ('Location: '.$_POST['backurl']);
 	}
-	
+
 	// vymazání poznámky
 	if (isset($_GET['deletenote'])) {
 	    mysqli_query ($database,"UPDATE ".DB_PREFIX."note SET deleted=1 WHERE ".DB_PREFIX."note.id=".$_GET['deletenote']);

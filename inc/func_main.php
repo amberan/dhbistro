@@ -97,7 +97,7 @@ function getAuthor($recid, $trn)
         $getAuthorQuery = mysqli_query($database, $getAuthorSql);
         if (!is_bool($getAuthorQuery)) {
             $getAuthorResult = mysqli_fetch_assoc($getAuthorQuery);
-            $name = stripslashes($getAuthorResult['surname']).', '.stripslashes($getAuthorResult['name']);
+            $name = stripslashes(@$getAuthorResult['surname']).', '.stripslashes(@$getAuthorResult['name']);
         } else {
             $name = 'Uživatel není přiřazen.';
         }

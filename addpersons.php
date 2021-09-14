@@ -72,7 +72,7 @@ if (isset($_POST['addtogroup'])) {
         $person = $_POST['person'];
     }
     mainMenu ();
-    sparklets ('<a href="./groups.php">skupiny</a> &raquo; <a href="./editgroup.php?rid='.$_POST['groupid'].'">úprava skupiny</a> &raquo; <strong>uložení změn</strong>','<a href="readgroup.php?rid='.$_POST['groupid'].'&hidenotes=0">zobrazit upravené</a>');
+    sparklets ('<a href="./groups/">skupiny</a> &raquo; <a href="./editgroup.php?rid='.$_POST['groupid'].'">úprava skupiny</a> &raquo; <strong>uložení změn</strong>','<a href="readgroup.php?rid='.$_POST['groupid'].'&hidenotes=0">zobrazit upravené</a>');
     echo '<div id="obsah"><p>Osoby příslušné ke skupině uloženy.</p></div>';
     if (isset($_POST['person'])) {
         for ($i = 0;$i < Count($person);$i++) {

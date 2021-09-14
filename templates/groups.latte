@@ -1,0 +1,90 @@
+<div class="container-fluid mt-3 mb-3 mr-2 w-100">
+    <div class="row mb-1">
+	    <div class="col-6 text-left">
+	        <h4>
+                {$text[skupiny]}
+            </h4>
+	    </div>
+        <div class="col-6 text-right">
+        </div>
+	</div>
+    <div class="row mb-1">
+        <div class="col-12">
+                <form action="{$website_link}{$URL[1]}/" method="POST" id="filter" class="header-form-wrapper">
+                    <input type="hidden" name="filter[placeholder]" />
+                    <div class="header-switch">
+                        <label class="toggle-control">
+                            <input type="checkbox" name="filter[archived]" {if (isset($filter['archived']) AND $filter['archived'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                            <span class="control"></span>
+                        </label>
+                        {$text['iarchiv']}
+                    </div>
+                    <div class="header-switch">
+                        <label class="toggle-control">
+                            <input type="checkbox" name="filter[new]" {if (isset($filter['new']) AND $filter['new'] == 'on') } checked{/if} onchange="this.form.submit()" />
+                            <span class="control"></span>
+                        </label>
+                        {$text['jennove']}
+                    </div>
+                </form>
+
+
+            {if @$warning}
+                <div>
+                    {$warning}
+                </div>
+            {else}
+                <div id="obsah">
+
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                {$text['nazev']} <a href="{$website_link}{$URL[1]}/?sort=title">&#8661;</a>
+                            </th>
+                            <th>
+                                {$text['vytvoreno']}  <a href="{$website_link}{$URL[1]}/?sort=created">&#8661;</a>
+                            </th>
+                            <th>
+                                {$text['zmeneno']}  <a href="{$website_link}{$URL[1]}/?sort=datum">&#8661;</a>
+                            </th>
+                            <th>{$text['akce']}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $group_record as $groups}
+                            <tr class="{if @$groups['unread']} unread_record{/if}">
+                                <td>
+                                    <a href="/readgroup.php?rid={$groups['id']}&amp;hidenotes=0">{$groups['title']}</a>
+                                    {if $groups['secret']}
+                                        <span class="badge rounded-pill bg-danger text-light">{$text['utajeno']|upper}</span>
+                                    {/if}
+                                </td>
+                                <td>
+                                    {if $groups['groupCreated']} {$groups['groupCreated']|date:'%d.%m.%Y'}{else}<em>{$text['neznamo']}</em>{/if}
+                                </td>
+                                <td><em>{$groups['date_changed']|date:'%d.%m.%Y'}</em></td>
+                                <td>
+                                    {if $user['aclCase'] AND !$groups['deleted']}
+                                        <a class="btn btn-sm btn-info btn-brick mb-1" href="/editgroup.php?rid={$groups['id']}">
+                                            {php  echo file_get_contents($website_link."images/icons/edit-solid.svg")}
+                                        </a>
+                                    {/if}
+                                    {if !$groups['deleted']}
+                                        <a class="btn btn-sm  btn-info mb-1" href="/newnote.php?rid={$groups['id']}&idtable=6">přidat poznámku</a>
+                                    {/if}
+                                    {if $user['aclRoot'] AND !$groups['deleted']}
+                                        <a class="btn btn-sm btn-brick btn-danger mb-1" href="/groups/delete/{$groups['id']}" onclick="return confirm('{$text['opravdusmazatpripad']} &quot; {$groups['title']|stripHtml}&quot;?');">{php echo file_get_contents($website_link."images/icons/trash-solid.svg")}</a>
+                                    {/if}
+                                    {if $user['aclRoot'] AND $groups['deleted']}
+                                        <a class="btn btn-sm btn-success mb-1" href="/groups/restore/{$groups['id']}" onclick="return confirm('{$text['opravduobnovitpripad']} &quot; {$groups['title']|stripHtml}&quot;?');">{$text['obnovit']}</a>
+                                    {/if}
+                                </td>
+                            </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            {/if}
+        </div>
+    </div>
+</div>

@@ -1,12 +1,8 @@
 <?php
 
-require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 use Tracy\Debugger;
 
 Debugger::enable(Debugger::DETECT,$config['folder_logs']);
-latteDrawTemplate("header");
-
-$latteParameters['title'] = 'Skupiny';
 
    if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
        auditTrail(2, 11, $_GET['delete']);
@@ -97,11 +93,7 @@ $latteParameters['title'] = 'Skupiny';
         header('Location: editgroup.php?rid='.$_GET['groupid']);
     }
 
-auditTrail(3, 1, 0);
-mainMenu();
-
-sparklets('<strong>skupiny</strong>','<a href="newgroup.php">přidat skupinu</a>');
-
+//FILTER
 if (isset($_GET['sort'])) {
     sortingSet('group',$_GET['sort'],'group');
 }
@@ -119,89 +111,18 @@ if (@$filter['new']) {
 }
 $latteParameters['filter'] = $filter;
 
-?>
-
-
-<form action="/groups.php" method="POST" id="filter">
-<input type="hidden" name="filter[placeholder]"  />
-<input type="checkbox" name="filter[archived]" <?php if (isset($filter['archived']) and $filter['archived'] == 'on') {
-    echo " checked";
-}?> onchange="this.form.submit()"/><?php echo $text['iarchiv']; ?>
-<input type="checkbox" name="filter[new]" <?php if (isset($filter['new']) and $filter['new'] == 'on') {
-    echo " checked";
-}?> onchange="this.form.submit()"/><?php echo $text['jennove']; ?>
-</form>
-
-
-
-<?php
-
-    $sql = "SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title , ".DB_PREFIX."group.id , ".DB_PREFIX."group.archived , ".DB_PREFIX."group.datum as groupEdited, ".DB_PREFIX."group.groupCreated, ".DB_PREFIX."group.deleted,  ".DB_PREFIX."unread.id as unread
+//GROUP LIST
+    $sql = "SELECT ".DB_PREFIX."group.secret, ".DB_PREFIX."group.title , ".DB_PREFIX."group.id , ".DB_PREFIX."group.archived , ".DB_PREFIX."group.datum as date_changed, ".DB_PREFIX."group.groupCreated, ".DB_PREFIX."group.deleted,  ".DB_PREFIX."unread.id as unread
     FROM ".DB_PREFIX."group
     LEFT JOIN  ".DB_PREFIX."unread on  ".DB_PREFIX."group.id =  ".DB_PREFIX."unread.idrecord AND  ".DB_PREFIX."unread.idtable = 2 and  ".DB_PREFIX."unread.iduser=".$user['userId']."
     WHERE ".$sqlFilter.sortingGet('group');
-    $res = mysqli_query($database,$sql);
-    if (mysqli_num_rows($res)) {
-        echo '<div id="obsah">
-<table>
-<thead>
-	<tr>
-	  <th>Název <a href="groups.php?sort=title">&#8661;</a></th>
-      <th>Status</th>
-      <th>Vytvoreno <a href="groups.php?sort=groupCreated">&#8661;</a></th>
-      <th>Zmeneno <a href="groups.php?sort=datum">&#8661;</a></th>
-	  <th>Akce</th>
-	</tr>
-</thead>
-<tbody>
-';
-        $even = 0;
-        while ($rec = mysqli_fetch_assoc($res)) {
-            if (@$filter['new'] == 0 || (isset($filter['new']) && $filter['new'] == 'on' && searchRecord(2,$rec['id']))) { //TODO fNew = filter NEW
-                echo '<tr class="'.(searchRecord(2,$rec['id']) ? ' unread_record' : ($even % 2 == 0 ? 'even' : 'odd')).'">
-                        <td>'.($rec['secret'] ? '<span class="secret"><a href="readgroup.php?rid='.$rec['id'].'&amp;hidenotes=0">'.stripslashes($rec['title']).'</a></span>' : '<a href="readgroup.php?rid='.$rec['id'].'&amp;hidenotes=0">'.stripslashes($rec['title']).'</a>').'</td>';
-                echo '<td>';
-                if ($rec['deleted']) {
-                    echo $text['smazany'];
-                }
-                if ($rec['secret']) {
-                    echo $text['utajeno'];
-                }
-                if ($rec['archived']) {
-                    echo $text['archivovano'];
-                }
-                echo '</td><td>';
-                if ($rec['groupCreated']) {
-                    echo $rec['groupCreated'];
-                } else {
-                    echo $text['neznamo'];
-                }
-                echo '</td><td>'.webDateTime($rec['groupEdited']).'</td>';
-                if ($usrinfo['right_text']) {
-                    echo '<td><a href="editgroup.php?rid='.$rec['id'].'">upravit</a> | ';
-                    if ($rec['archived']) {
-                        echo '<a href="groups.php?dearchive='.$rec['id'].'" onclick="'."return confirm('Opravdu vyjmout z archivu skupinu &quot;".stripslashes($rec['title'])."&quot;?');".'">z archivu</a>';
-                    } else {
-                        echo '<a href="groups.php?archive='.$rec['id'].'" onclick="'."return confirm('Opravdu archivovat skupinu &quot;".stripslashes($rec['title'])."&quot;?');".'">archivovat</a>';
-                    }
-                    echo ' | ';
-                    if ($rec['deleted'] && $user['aclRoot']) {
-                        echo '<a href="groups.php?undelete='.$rec['id'].'" onclick="'."return confirm('Opravdu obnovit smazanou skupinu &quot;".stripslashes($rec['title'])."&quot;?');".'">obnovit</a>';
-                    } elseif ($rec['deleted'] == 0) {
-                        echo '<a href="groups.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat skupinu &quot;".stripslashes($rec['title'])."&quot;?');".'">smazat</a>';
-                    }
-                    echo ' | <a href="newnote.php?rid='.$rec['id'].'&idtable=6">přidat poznámku</a></td>';
-                }
-                echo '</tr>';
+    $groupList = mysqli_query($database,$sql);
 
-                $even++;
-            }
-        }
-        echo '</tbody>
-</table>
-</div>
-';
-    } else {
-        echo '<div id="obsah"><p>Žádné skupiny neodpovídají výběru.</p></div>';
-    }
-latteDrawTemplate("footer");
+if (mysqli_num_rows($groupList) > 0) {
+    $latteParameters['group_record'] = $groupList;
+} else {
+    $latteParameters['warning'] = $text['prazdnyvypis'];
+}
+
+latteDrawTemplate('sparklet');
+latteDrawTemplate('groups');
