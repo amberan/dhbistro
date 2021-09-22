@@ -46,7 +46,7 @@
                                 </td>
                                 <td>
                                     {if $users['aclRoot']}
-                                        <span class="badge rounded-pill bg-danger">{$text['aclRoot']}</span>
+                                        <span class="badge rounded-pill bg-dark text-light">{$text['aclRoot']}</span>
                                     {/if}
                                     {if $users['aclGamemaster']}
                                         <span class="badge rounded-pill bg-primary">{$text['aclGamemaster']}</span>
@@ -61,7 +61,7 @@
                                         <span class="badge rounded-pill bg-light text-dark">{$text['aclTask']}</span>
                                     {/if}
                                     {if $users['aclSecret']}
-                                        <span class="badge rounded-pill bg-dark text-light">{$text['aclSecret']}</span>
+                                        <span class="badge rounded-pill bg-danger text-light">{$text['aclSecret']}</span>
                                     {/if}
                                     {if $users['aclAudit']}
                                         <span class="badge rounded-pill bg-secondary text-light">{$text['aclAudit']}</span>
