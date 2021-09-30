@@ -43,15 +43,22 @@ latteDrawTemplate("header");
                 }
             }
             deleteUnread(1,$_REQUEST['rid']);
-            sparklets('<a href="./persons.php">osoby</a> &raquo; <strong>'.stripslashes($rec['surname']).', '.stripslashes($rec['name']).'</strong>','<a href="readperson.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton); ?>			
+            sparklets('<a href="./persons.php">osoby</a> &raquo; <strong>'.stripslashes($rec['surname']).', '.stripslashes($rec['name']).'</strong>','<a href="readperson.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton); ?>
 <div id="obsah">
 	<h1><?php echo stripslashes($rec['surname']).', '.stripslashes($rec['name']); ?></h1>
-	<fieldset><legend><strong>Základní údaje</strong></legend>
-		<?php if ($rec['portrait'] == null) { ?><img src="#" alt="portrét chybí" title="portrét chybí" id="portraitimg" class="noname"/>
-		<?php } else { ?><img src="file/portrait/<?php echo $_REQUEST['rid']; ?>" alt="<?php echo stripslashes($rec['name']).' '.stripslashes($rec['surname']); ?>" id="portraitimg" />
+	<fieldset>
+        <legend>
+            <strong>Základní údaje</strong>
+        </legend>
+		<?php if ($rec['portrait'] == null) { ?>
+            <img src="#" alt="portrét chybí" title="portrét chybí" id="portraitimg" class="noname"/>
+		<?php } else { ?>
+            <img src="file/portrait/<?php echo $_REQUEST['rid']; ?>" alt="<?php echo stripslashes($rec['name']).' '.stripslashes($rec['surname']); ?>" id="portraitimg" />
 		<?php } ?>
-		<?php if ($rec['symbol'] == null) { ?><img src="#" alt="symbol chybí" title="symbol chybí" id="symbolimg" class="noname"/>
-		<?php } else { ?><a href="readsymbol.php?rid=<?php echo $rec['symbol']; ?>"><img src="file/symbol/<?php echo $rec['symbol']; ?>" alt="<?php echo stripslashes($rec['name']).' '.stripslashes($rec['surname']); ?>" id="symbolimg" /></a>
+		<?php if ($rec['symbol'] == null) { ?>
+            <img src="#" alt="symbol chybí" title="symbol chybí" id="symbolimg" class="noname"/>
+		<?php } else { ?>
+            <a href="readsymbol.php?rid=<?php echo $rec['symbol']; ?>"><img src="file/symbol/<?php echo $rec['symbol']; ?>" alt="<?php echo stripslashes($rec['name']).' '.stripslashes($rec['surname']); ?>" id="symbolimg" /></a>
 		<?php } ?>
 		<div id="info">
 			<?php
@@ -76,7 +83,7 @@ latteDrawTemplate("header");
 			<h3>Jméno: </h3><p><?php echo stripslashes($rec['name']); ?></p>
 			<div class="clear">&nbsp;</div>
 			<h3>Příjmení: </h3><p><?php echo stripslashes($rec['surname']); ?></p>
-			<div class="clear">&nbsp;</div> 
+			<div class="clear">&nbsp;</div>
 			<h3>Strana: </h3><p><?php
                 switch ($rec['side']) {
                     case 1: $side = 'světlo'; break;
@@ -101,9 +108,10 @@ latteDrawTemplate("header");
                     default: $power = 'neznámá'; break;
                 }
             echo $power; ?></p>
+			<div class="clear">&nbsp;</div>
             <?php
             if ($rec['roof'] > null) {
-                echo '<h3>Dosažení stropu zaznamenáno: '.$rec['roof'].'</h3><div class="clear">&nbsp;</div>';
+                echo '<h3>Dosažení stropu zaznamenáno: </h3><p>'.$rec['roof'].'</p><div class="clear">&nbsp;</div>';
             } ?>
 			<div class="clear">&nbsp;</div>
 			<h3>Specializace: </h3><p><?php
@@ -159,7 +167,7 @@ latteDrawTemplate("header");
 		<legend><strong>Popis osoby</strong></legend>
 		<div class="field-text"><?php echo stripslashes($rec['contents']); ?></div>
 	</fieldset>
-	
+
 <!-- násedují přiřazené případy a hlášení -->
 	<fieldset>
 		<legend><strong>Hlášení a případy</strong></legend>
@@ -198,7 +206,7 @@ latteDrawTemplate("header");
             } ?></p>
 		<div class="clear">&nbsp;</div>
 	</fieldset>
-	
+
 <!-- následuje seznam přiložených souborů -->
 	<?php //generování seznamu přiložených souborů
         if ($user['aclDirector']) {
@@ -278,7 +286,7 @@ if ($hn != 1) { ?>
 	</fieldset>
 	<?php }
     // konec poznámek?>
-<?php } ?>	
+<?php } ?>
 
 </div>
 <!-- end of #obsah -->
