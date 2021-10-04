@@ -7,5 +7,4 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'League\\HTMLToMarkdown\\' => array($vendorDir . '/league/html-to-markdown/src'),
-    'League\\CommonMark\\' => array($vendorDir . '/league/commonmark/src'),
 );

@@ -56,7 +56,7 @@ if (mysqli_num_rows($news_query)) {
             $news_record['datum'] = webdatetime($news_record['datum']);
             //$news_record['id'] = $news_record['id'];
             //$news_record['nadpis'] = $news_record['nadpis'];
-            $news_record['obsahMD'] = $converter->convertToHtml($news_record['obsahMD']);
+//            $news_record['obsahMD'] = $converter->convertToHtml($news_record['obsahMD']);
             $news_record['category'] = $news_record['kategorie'];
             //$news_record['author'] = $news_record['author'];
             //$news_record['deleted'] = $news_record['deleted'];

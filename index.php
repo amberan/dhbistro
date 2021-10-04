@@ -19,15 +19,10 @@ require_once SERVER_ROOT."/lib/user.php";
 require_once SERVER_ROOT."/lib/report.php";
 require_once SERVER_ROOT."/lib/case.php";
 require_once SERVER_ROOT."/lib/task.php";
-use League\CommonMark\CommonMarkConverter;
 
-$converter = new CommonMarkConverter([
-    'html_input' => 'strip',
-    'allow_unsafe_links' => false,
-]);
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 //$latte = new Latte\Engine();
 //$latte->setTempDirectory($config['folder_cache']);
 

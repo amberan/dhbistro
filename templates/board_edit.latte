@@ -30,29 +30,21 @@
 	</form>
 </div>
 <script>
-    var editor = new tui.Editor({
-        el: document.querySelector('#editSection'),
-        previewStyle: 'vertical',
-        height: '400px',
-        initialEditType: 'wysiwyg',
-        initialValue: {$dashboard},
-        useCommandShortcut: true,
-        exts: [{
-                name: 'chart',
-                minWidth: 100,
-                maxWidth: 600,
-                minHeight: 100,
-                maxHeight: 300
-            },
-            'scrollSync',
-            'colorSyntax',
-            'uml',
-            'mark',
-            'table'
-        ]
+    const editor = new toastui.Editor({
+    el: document.querySelector('#editSection'),
+    height: '400px',
+    initialEditType: 'wysiwyg',
+    previewStyle: 'vertical',
+    initialValue:   `{$dashboard|noescape} `,
+    toolbarItems: [
+          ['heading', 'bold', 'italic', 'strike'],
+          ['hr', 'quote'],
+          ['ul', 'ol', 'task', 'indent', 'outdent'],
+          ['table', 'image', 'link'],
+    ],
     });
 
     setInterval(function() {
-        document.getElementById("dashboard").value = editor.getValue();
+        document.getElementById("dashboard").value = editor.getMarkdown();
     }, 5);
 </script>

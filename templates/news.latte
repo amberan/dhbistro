@@ -5,9 +5,14 @@
             <div class="alert {if $news[category] == 1}alert-info{/if}{if $news[category] == 2}alert-warning{/if} mb-1 ml-2 mr-2 w-100">
                 <h5>{$news[nadpis]}</h5>
                 <div class="row">
-                    <div class="col-12">
-                        {$news[obsahMD]|noescape}
-                    </div>
+                    <div class="col-12" id="viewer{$news[id]|noescape}"></div>
+                    <script>
+                    const editor{$news[id]|noescape} = new toastui.Editor.factory({
+                            el: document.querySelector('#viewer{$news[id]|noescape}'),
+                            initialValue: `{$news[obsahMD]|noescape}`,
+                            viewer: true,
+                        });
+                    </script>
                 </div>
                 <hr>
                 <div class="row">
