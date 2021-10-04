@@ -9,6 +9,7 @@
 - oprava ukladani novinek [#156](https://gitlab.alembiq.net/larp/bistro/issues/156)
 - odstraneni prebytecnych sloupcu z tabulky dashboard [#160](https://gitlab.alembiq.net/larp/bistro/issues/160)
 - odstraneni `commonmark` a kompletni nahrada pomoci `TUI editor` [#163](https://gitlab.alembiq.net/larp/bistro/issues/163)
+- filtrovani symbolu opraveno [#154](https://gitlab.alembiq.net/larp/bistro/issues/154)
 
 
 **1.8.1**
