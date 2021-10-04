@@ -30,7 +30,7 @@ class InstalledVersions
     'aliases' => 
     array (
     ),
-    'reference' => 'b4099c2f87bc6edfe6a2fc6b6afdd0fb8573e420',
+    'reference' => '72db4f406f7df7f0b30c4796eeb22072c3558f6c',
     'name' => '__root__',
   ),
   'versions' => 
@@ -42,25 +42,16 @@ class InstalledVersions
       'aliases' => 
       array (
       ),
-      'reference' => 'b4099c2f87bc6edfe6a2fc6b6afdd0fb8573e420',
+      'reference' => '72db4f406f7df7f0b30c4796eeb22072c3558f6c',
     ),
     'latte/latte' => 
     array (
-      'pretty_version' => 'v2.10.3',
-      'version' => '2.10.3.0',
+      'pretty_version' => 'v2.10.4',
+      'version' => '2.10.4.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'dd2c58863e830c22a2c6b85af63f37b829d255df',
-    ),
-    'league/commonmark' => 
-    array (
-      'pretty_version' => '1.6.6',
-      'version' => '1.6.6.0',
-      'aliases' => 
-      array (
-      ),
-      'reference' => 'c4228d11e30d7493c6836d20872f9582d8ba6dcf',
+      'reference' => '6e0540c60805b33148dc95db2602a087fb2ef9fb',
     ),
     'league/html-to-markdown' => 
     array (
