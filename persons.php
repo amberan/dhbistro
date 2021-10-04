@@ -3,35 +3,35 @@
 require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Osoby';
 
     if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete']) && $usrinfo['right_text']) {
         auditTrail(1, 11, $_REQUEST['delete']);
-        mysqli_query($database,"UPDATE ".DB_PREFIX."person SET deleted=1 WHERE id=".$_REQUEST['delete']);
-        deleteAllUnread(1,$_REQUEST['delete']);
+        mysqli_query($database, "UPDATE ".DB_PREFIX."person SET deleted=1 WHERE id=".$_REQUEST['delete']);
+        deleteAllUnread(1, $_REQUEST['delete']);
     }
-    if (isset($_POST['insertperson']) && !preg_match('/^[[:blank:]]*$/i',$_POST['name']) && !preg_match('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['secret']) && is_numeric($_POST['side']) && is_numeric($_POST['power']) && is_numeric($_POST['spec'])) {
+    if (isset($_POST['insertperson']) && !preg_match('/^[[:blank:]]*$/i', $_POST['name']) && !preg_match('/^[[:blank:]]*$/i', $_POST['contents']) && is_numeric($_POST['secret']) && is_numeric($_POST['side']) && is_numeric($_POST['power']) && is_numeric($_POST['spec'])) {
         if (is_uploaded_file($_FILES['portrait']['tmp_name'])) {
             $file = time().md5(uniqid(time().random_int(0, getrandmax())));
-            move_uploaded_file($_FILES['portrait']['tmp_name'],'./files/'.$file.'tmp');
-            $sdst = imageResize('./files/'.$file.'tmp',100,130);
-            imagejpeg($sdst,'./files/portraits/'.$file);
+            move_uploaded_file($_FILES['portrait']['tmp_name'], './files/'.$file.'tmp');
+            $sdst = imageResize('./files/'.$file.'tmp', 100, 130);
+            imagejpeg($sdst, './files/portraits/'.$file);
             unlink('./files/'.$file.'tmp');
         } else {
             $file = '';
         }
         if (is_uploaded_file($_FILES['symbol']['tmp_name'])) {
             $sfile = time().md5(uniqid(time().random_int(0, getrandmax())));
-            move_uploaded_file($_FILES['symbol']['tmp_name'],'./files/'.$sfile.'tmp');
-            $sdst = imageResize('./files/'.$sfile.'tmp',100,130);
-            imagejpeg($sdst,'./files/symbols/'.$sfile);
+            move_uploaded_file($_FILES['symbol']['tmp_name'], './files/'.$sfile.'tmp');
+            $sdst = imageResize('./files/'.$sfile.'tmp', 100, 130);
+            imagejpeg($sdst, './files/symbols/'.$sfile);
             unlink('./files/'.$sfile.'tmp');
             $sql_sy = "INSERT INTO ".DB_PREFIX."symbol  ( symbol, `desc`, deleted, created, created_by, modified, modified_by, archived, assigned, search_lines, search_curves, search_points, search_geometricals, search_alphabets, search_specialchars, secret) VALUES( '".$sfile."', '', 0, '".time()."', '".$user['userId']."', '".time()."', '".$user['userId']."', 0, 1, 0, 0, 0, 0, 0, 0, 0)";
-            mysqli_query($database,$sql_sy);
-            $syidarray = mysqli_fetch_assoc(mysqli_query($database,"SELECT id FROM ".DB_PREFIX."symbol WHERE symbol = '".$sfile."'"));
+            mysqli_query($database, $sql_sy);
+            $syidarray = mysqli_fetch_assoc(mysqli_query($database, "SELECT id FROM ".DB_PREFIX."symbol WHERE symbol = '".$sfile."'"));
             $syid = $syidarray['id'];
         } else {
             $sfile = '';
@@ -44,11 +44,11 @@ $latteParameters['title'] = 'Osoby';
         }
         $sql_p = "INSERT INTO ".DB_PREFIX."person (roof, name, surname, phone, datum, iduser, contents, secret, deleted, portrait, side, power, spec, symbol, dead, archived, regdate, regid)
             VALUES(".$updateRoof.",'".$_POST['name']."','".$_POST['surname']."','".$_POST['phone']."','".time()."','".$user['userId']."','".$_POST['contents']."','".$_POST['secret']."','0','".$file."', '".$_POST['side']."', '".$_POST['power']."', '".$_POST['spec']."', '".$syid."','0',null,'".time()."','".$user['userId']."')";
-        mysqli_query($database,$sql_p);
-        $pidarray = mysqli_fetch_assoc(mysqli_query($database,"SELECT id FROM ".DB_PREFIX."person WHERE UCASE(surname)=UCASE('".$_POST['surname']."') AND UCASE(name)=UCASE('".$_POST['name']."') AND side='".$_POST['side']."'"));
+        mysqli_query($database, $sql_p);
+        $pidarray = mysqli_fetch_assoc(mysqli_query($database, "SELECT id FROM ".DB_PREFIX."person WHERE UCASE(surname)=UCASE('".$_POST['surname']."') AND UCASE(name)=UCASE('".$_POST['name']."') AND side='".$_POST['side']."'"));
         $pid = $pidarray['id'];
         if (!isset($_POST['notnew'])) {
-            unreadRecords(1,$pid);
+            unreadRecords(1, $pid);
         }
         auditTrail(1, 3, $pid);
         $_SESSION['message'] = 'Osoba vytvořena.';
@@ -57,47 +57,47 @@ $latteParameters['title'] = 'Osoby';
             $_SESSION['message'] = 'Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.';
         }
     }
-    if (isset($_POST['personid'], $_POST['editperson']) && $usrinfo['right_text'] && !preg_match('/^[[:blank:]]*$/i',$_POST['name']) && !preg_match('/^[[:blank:]]*$/i',$_POST['contents']) && is_numeric($_POST['side']) && is_numeric($_POST['power']) && is_numeric($_POST['spec'])) {
+    if (isset($_POST['personid'], $_POST['editperson']) && $usrinfo['right_text'] && !preg_match('/^[[:blank:]]*$/i', $_POST['name']) && !preg_match('/^[[:blank:]]*$/i', $_POST['contents']) && is_numeric($_POST['side']) && is_numeric($_POST['power']) && is_numeric($_POST['spec'])) {
         auditTrail(1, 2, $_POST['personid']);
-        personRoofUpdate($_POST['personid'],$_POST['personRoof']);
+        personRoofUpdate($_POST['personid'], $_POST['personRoof']);
         if (!isset($_POST['notnew'])) {
-            unreadRecords(1,$_POST['personid']);
+            unreadRecords(1, $_POST['personid']);
         }
         if (is_uploaded_file($_FILES['portrait']['tmp_name'])) {
-            $ps = mysqli_query($database,"SELECT portrait FROM ".DB_PREFIX."person WHERE id=".$_POST['personid']);
+            $ps = mysqli_query($database, "SELECT portrait FROM ".DB_PREFIX."person WHERE id=".$_POST['personid']);
             if ($pc = mysqli_fetch_assoc($ps)) {
                 unlink('./files/portraits/'.$pc['portrait']);
             }
             $file = time().md5(uniqid(time().random_int(0, getrandmax())));
-            move_uploaded_file($_FILES['portrait']['tmp_name'],'./files/'.$file.'tmp');
-            $dst = imageResize('./files/'.$file.'tmp',100,130);
-            imagejpeg($dst,'./files/portraits/'.$file);
+            move_uploaded_file($_FILES['portrait']['tmp_name'], './files/'.$file.'tmp');
+            $dst = imageResize('./files/'.$file.'tmp', 100, 130);
+            imagejpeg($dst, './files/portraits/'.$file);
             unlink('./files/'.$file.'tmp');
-            mysqli_query($database,"UPDATE ".DB_PREFIX."person SET portrait='".$file."' WHERE id=".$_POST['personid']);
+            mysqli_query($database, "UPDATE ".DB_PREFIX."person SET portrait='".$file."' WHERE id=".$_POST['personid']);
         }
         if (is_uploaded_file($_FILES['symbol']['tmp_name'])) {
-            $sps = mysqli_query($database,"SELECT symbol FROM ".DB_PREFIX."person WHERE id=".$_POST['personid']);
+            $sps = mysqli_query($database, "SELECT symbol FROM ".DB_PREFIX."person WHERE id=".$_POST['personid']);
             if ($spc = mysqli_fetch_assoc($sps)) {
-                $prsn_res = mysqli_query($database,"SELECT name, surname FROM ".DB_PREFIX."person WHERE id=".$_POST['personid']);
+                $prsn_res = mysqli_query($database, "SELECT name, surname FROM ".DB_PREFIX."person WHERE id=".$_POST['personid']);
                 $prsn_rec = mysqli_fetch_assoc($prsn_res);
                 $sdate = "<p>".date("j/m/Y H:i:s", time())." Odpojeno od ".$prsn_rec['name']." ".$prsn_rec['surname']."</p>";
-                mysqli_query($database,"UPDATE ".DB_PREFIX."symbol SET `desc` = concat('".$sdate."', `desc`), assigned=0 WHERE id=".$spc['symbol']);
+                mysqli_query($database, "UPDATE ".DB_PREFIX."symbol SET `desc` = concat('".$sdate."', `desc`), assigned=0 WHERE id=".$spc['symbol']);
             }
             $sfile = time().md5(uniqid(time().random_int(0, getrandmax())));
-            move_uploaded_file($_FILES['symbol']['tmp_name'],'./files/'.$sfile.'tmp');
-            $sdst = imageResize('./files/'.$sfile.'tmp',100,100);
-            imagejpeg($sdst,'./files/symbols/'.$sfile);
+            move_uploaded_file($_FILES['symbol']['tmp_name'], './files/'.$sfile.'tmp');
+            $sdst = imageResize('./files/'.$sfile.'tmp', 100, 100);
+            imagejpeg($sdst, './files/symbols/'.$sfile);
             unlink('./files/'.$sfile.'tmp');
             $sql_sy = "INSERT INTO ".DB_PREFIX."symbol  ( symbol, `desc`, deleted, created, created_by, modified, modified_by, archived, assigned, search_lines, search_curves, search_points, search_geometricals, search_alphabets, search_specialchars, secret) VALUES( '".$sfile."', '', 0, '".time()."', '".$user['userId']."', '".time()."', '".$user['userId']."', 0, 1, 0, 0, 0, 0, 0, 0, 0)";
-            mysqli_query($database,$sql_sy);
-            $syidarray = mysqli_fetch_assoc(mysqli_query($database,"SELECT id FROM ".DB_PREFIX."symbol WHERE symbol = '".$sfile."'"));
+            mysqli_query($database, $sql_sy);
+            $syidarray = mysqli_fetch_assoc(mysqli_query($database, "SELECT id FROM ".DB_PREFIX."symbol WHERE symbol = '".$sfile."'"));
             $syid = $syidarray['id'];
-            mysqli_query($database,"UPDATE ".DB_PREFIX."person SET symbol='".$syid."' WHERE id=".$_POST['personid']);
+            mysqli_query($database, "UPDATE ".DB_PREFIX."person SET symbol='".$syid."' WHERE id=".$_POST['personid']);
         }
         if ($user['aclGamemaster'] == 1) {
-            mysqli_query($database,"UPDATE ".DB_PREFIX."person SET name='".$_POST['name']."', surname='".$_POST['surname']."', phone='".$_POST['phone']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead']) ? '1' : '0')."', archived='".(isset($_POST['archiv']) ? 'FROM_UNIXTIME(1)' : 'null')."' WHERE id=".$_POST['personid']);
+            mysqli_query($database, "UPDATE ".DB_PREFIX."person SET name='".$_POST['name']."', surname='".$_POST['surname']."', phone='".$_POST['phone']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead']) ? '1' : '0')."', archived='".(isset($_POST['archiv']) ? 'FROM_UNIXTIME(1)' : 'null')."' WHERE id=".$_POST['personid']);
         } else {
-            mysqli_query($database,"UPDATE ".DB_PREFIX."person SET name='".$_POST['name']."', surname='".$_POST['surname']."', phone='".$_POST['phone']."', datum='".time()."', iduser='".$user['userId']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead']) ? '1' : '0')."', archived='".(isset($_POST['archiv']) ? 'FROM_UNIXTIME(1)' : 'null')."' WHERE id=".$_POST['personid']);
+            mysqli_query($database, "UPDATE ".DB_PREFIX."person SET name='".$_POST['name']."', surname='".$_POST['surname']."', phone='".$_POST['phone']."', datum='".time()."', iduser='".$user['userId']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead']) ? '1' : '0')."', archived='".(isset($_POST['archiv']) ? 'FROM_UNIXTIME(1)' : 'null')."' WHERE id=".$_POST['personid']);
         }
         $_SESSION['message'] = 'Osoba upravena.';
         header('Location: readperson.php?rid='.$_POST['personid'].'&amp;hidenotes=0');
@@ -108,8 +108,8 @@ $latteParameters['title'] = 'Osoby';
     }
     if (isset($_POST['personid'], $_POST['orgperson']) && is_numeric($_POST['rdatumday']) && is_numeric($_POST['regusr'])) {
         auditTrail(1, 10, $_POST['personid']);
-        $rdatum = mktime(0,0,0,$_POST['rdatummonth'],$_POST['rdatumday'],$_POST['rdatumyear']);
-        mysqli_query($database,"UPDATE ".DB_PREFIX."person SET regdate='".$rdatum."', regid='".$_POST['regusr']."' WHERE id=".$_POST['personid']);
+        $rdatum = mktime(0, 0, 0, $_POST['rdatummonth'], $_POST['rdatumday'], $_POST['rdatumyear']);
+        mysqli_query($database, "UPDATE ".DB_PREFIX."person SET regdate='".$rdatum."', regid='".$_POST['regusr']."' WHERE id=".$_POST['personid']);
         $_SESSION['message'] = 'Osoba upravena.';
         header('Location: readperson.php?rid='.$_POST['personid'].'&amp;hidenotes=0');
     } else {
@@ -119,22 +119,22 @@ $latteParameters['title'] = 'Osoby';
     }
     if (isset($_POST['setgroups'])) {
         auditTrail(1, 6, $_POST['personid']);
-        mysqli_query($database,"DELETE FROM ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".$_POST['personid']);
+        mysqli_query($database, "DELETE FROM ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".$_POST['personid']);
         $group = $_POST['group'];
         $_SESSION['message'] = 'Skupiny pro uživatele uloženy.';
         for ($i = 0; $i < count($group); $i++) {
-            mysqli_query($database,"INSERT INTO ".DB_PREFIX."g2p VALUES('".$_POST['personid']."','".$group[$i]."','".$user['userId']."')");
+            mysqli_query($database, "INSERT INTO ".DB_PREFIX."g2p VALUES('".$_POST['personid']."','".$group[$i]."','".$user['userId']."')");
         }
         header('Location: readperson.php?rid='.$_POST['personid'].'&amp;hidenotes=0');
     }
     if (isset($_POST['uploadfile']) && is_uploaded_file($_FILES['attachment']['tmp_name']) && is_numeric($_POST['personid']) && is_numeric($_POST['secret'])) {
         auditTrail(1, 4, $_POST['personid']);
         $newname = time().md5(uniqid(time().random_int(0, getrandmax())));
-        move_uploaded_file($_FILES['attachment']['tmp_name'],'./files/'.$newname);
+        move_uploaded_file($_FILES['attachment']['tmp_name'], './files/'.$newname);
         $sql = "INSERT INTO ".DB_PREFIX."file (uniquename,originalname,mime,size,datum,iduser,idtable,iditem,secret) VALUES('".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".time()."','".$user['userId']."','1','".$_POST['personid']."','".$_POST['secret']."')";
-        mysqli_query($database,$sql);
+        mysqli_query($database, $sql);
         if (!isset($_POST['fnotnew'])) {
-            unreadRecords(1,$_POST['personid']);
+            unreadRecords(1, $_POST['personid']);
         }
     } else {
         if (isset($_POST['uploadfile'])) {
@@ -144,23 +144,23 @@ $latteParameters['title'] = 'Osoby';
     if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {
         auditTrail(1, 5, $_POST['personid']);
         if ($usrinfo['right_text']) {
-            $fres = mysqli_query($database,"SELECT uniquename FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
+            $fres = mysqli_query($database, "SELECT uniquename FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
             $frec = mysqli_fetch_assoc($fres);
             unlink('./files/'.$frec['uniquename']);
-            mysqli_query($database,"DELETE FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
+            mysqli_query($database, "DELETE FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
         }
         header('Location: editperson.php?rid='.$_GET['personid']);
     }
     if (isset($_GET['deletesymbol'])) {
         auditTrail(1, 2, $_GET['personid']);
         if ($usrinfo['right_text']) {
-            $sps = mysqli_query($database,"SELECT symbol FROM ".DB_PREFIX."person WHERE id=".$_GET['personid']);
+            $sps = mysqli_query($database, "SELECT symbol FROM ".DB_PREFIX."person WHERE id=".$_GET['personid']);
             $spc = mysqli_fetch_assoc($sps);
-            $prsn_res = mysqli_query($database,"SELECT name, surname FROM ".DB_PREFIX."person WHERE id=".$_GET['personid']);
+            $prsn_res = mysqli_query($database, "SELECT name, surname FROM ".DB_PREFIX."person WHERE id=".$_GET['personid']);
             $prsn_rec = mysqli_fetch_assoc($prsn_res);
             $sdate = "<p>".date("j/m/Y H:i:s", time())." Odpojeno od ".$prsn_rec['name']." ".$prsn_rec['surname']."</p>";
-            mysqli_query($database,"UPDATE ".DB_PREFIX."symbol SET `desc` = concat('".$sdate."', `desc`), assigned=0 WHERE id=".$spc['symbol']);
-            mysqli_query($database,"UPDATE ".DB_PREFIX."person SET symbol='' WHERE id=".$_GET['personid']);
+            mysqli_query($database, "UPDATE ".DB_PREFIX."symbol SET `desc` = concat('".$sdate."', `desc`), assigned=0 WHERE id=".$spc['symbol']);
+            mysqli_query($database, "UPDATE ".DB_PREFIX."person SET symbol='' WHERE id=".$_GET['personid']);
         }
         header('Location: editperson.php?rid='.$_GET['personid']);
     }
@@ -168,7 +168,7 @@ $latteParameters['title'] = 'Osoby';
     auditTrail(1, 1, 0);
     mainMenu();
         $customFilter = custom_Filter(1);
-    sparklets('<strong>osoby</strong>','<a href="newperson.php">přidat osobu</a>; <a href="symbols.php" '.(searchTable(7) ? ' class="unread"' : '').'>nepřiřazené symboly</a>; <a href="symbol_search.php">vyhledat symbol</a>');
+    sparklets('<strong>osoby</strong>', '<a href="newperson.php">přidat osobu</a>; <a href="symbols.php" '.(searchTable(7) ? ' class="unread"' : '').'>nepřiřazené symboly</a>; <a href="symbol_search.php">vyhledat symbol</a>');
     // zpracovani filtru
     if (!isset($customFilter['sportraits'])) {
         $sportraits = false;
@@ -199,6 +199,7 @@ $latteParameters['title'] = 'Osoby';
             $fNew = 0;
         } else {
             $fNew = 1;
+            $filterUnread = ' AND '.DB_PREFIX.'unread.id is not null ';
         }
     if (!isset($customFilter['fspec'])) {
         $fspec = 0;
@@ -332,13 +333,14 @@ $latteParameters['title'] = 'Osoby';
     filter();
 
 if (isset($_GET['sort'])) {
-    sortingSet('person',$_GET['sort'],'person');
+    sortingSet('person', $_GET['sort'], 'person');
 }
 
-    $sql = "SELECT  ".DB_PREFIX."person.regdate as date_created, ".DB_PREFIX."person.datum as date_changed, ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.archived, ".DB_PREFIX."person.dead AS 'dead', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol'
+    $sql = "SELECT ".DB_PREFIX."unread.id as unread, ".DB_PREFIX."person.regdate as date_created, ".DB_PREFIX."person.datum as date_changed, ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.archived, ".DB_PREFIX."person.dead AS 'dead', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol'
     FROM ".DB_PREFIX."person
-    WHERE ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret<=".$user['aclDirector'].$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow.sortingGet('person');
-    $res = mysqli_query($database,$sql);
+    LEFT JOIN  ".DB_PREFIX."unread on  ".DB_PREFIX."person.id =  ".DB_PREFIX."unread.idrecord AND  ".DB_PREFIX."unread.idtable = 1 and  ".DB_PREFIX."unread.iduser=".$user['userId']."
+    WHERE ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret<=".$user['aclDirector'].$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow.$filterUnread.sortingGet('person');
+    $res = mysqli_query($database, $sql);
     if (mysqli_num_rows($res)) {
         echo '<div id="obsah">
 <table>
@@ -357,19 +359,19 @@ if (isset($_GET['sort'])) {
 ';
         $even = 0;
         while ($rec = mysqli_fetch_assoc($res)) {
-            if ($fNew == 0 || ($fNew == 1 && searchRecord(1,$rec['id']))) {
-                echo '<tr class="'.(searchRecord(1,$rec['id']) ? ' unread_record' : ($even % 2 == 0 ? 'even' : 'odd')).'">
+//            if ($fNew == 0 || ($fNew == 1 && searchRecord(1, $rec['id']))) {
+            echo '<tr class="'.($rec['unread'] ? ' unread_record' : ($even % 2 == 0 ? 'even' : 'odd')).'">
                         '.($sportraits ? '<td><img src="file/portrait/'.$rec['id'].'" alt="" /></td>' : '').'
                         '.($ssymbols ? '<td><img src="file/symbol/'.$rec['symbol'].'" alt="" /></td>' : '').'
-                        <td>'.($rec['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ',[stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a></span>' : '<a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ',[stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a>').'</td>
-						<td><a href="tel:'.str_replace(' ', '',$rec['phone']).'">'.$rec['phone'].'</a></td>
+                        <td>'.($rec['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a></span>' : '<a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a>').'</td>
+						<td><a href="tel:'.str_replace(' ', '', $rec['phone']).'">'.$rec['phone'].'</a></td>
 						<td>'.webdate($rec['date_created']).' / '.webdate($rec['date_changed']).'</td>
                         <td>'.($rec['archived'] != null ? 'Archivovaný' : '').''.($rec['dead'] == 1 ? ' Mrtvý' : '').''.($rec['secret'] == 1 ? ' Tajný' : '').'</td>
-                        '.($usrinfo['right_text'] ? '	<td><a href="editperson.php?rid='.$rec['id'].'">upravit</a> | <a href="persons.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat osobu &quot;".implode(', ',[stripslashes($rec['surname']), stripslashes($rec['name'])])."&quot;?');".'">smazat</a></td>' : '<td><a href="newnote.php?rid='.$rec['id'].'&idtable=5">přidat poznámku</a>').'
+                        '.($usrinfo['right_text'] ? '	<td><a href="editperson.php?rid='.$rec['id'].'">upravit</a> | <a href="persons.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat osobu &quot;".implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])])."&quot;?');".'">smazat</a></td>' : '<td><a href="newnote.php?rid='.$rec['id'].'&idtable=5">přidat poznámku</a>').'
                         </tr>';
-                $even++;
-            }
+            $even++;
         }
+//        }
         echo '</tbody>
 </table>
 </div>';

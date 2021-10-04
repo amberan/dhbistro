@@ -4,6 +4,12 @@
 <!-- git log --no-merges 1.5.. | unexpand -a | sed -e 's/\s\s*$$//' | head -n 2070 | grep -v "Date\|commit\|Author\|typo\|.gitlab-ci.yml\|.codeclimate.yml" | sed -r '/^\s*$/d' | uniq
   -->
 
+**1.8.2**
+- zrychleni vypisu reportu a oprava trideni [#158](https://gitlab.alembiq.net/larp/bistro/issues/158)
+- oprava ukladani novinek [#156](https://gitlab.alembiq.net/larp/bistro/issues/156)
+- odstraneni prebytecnych sloupcu z tabulky dashboard [#160](https://gitlab.alembiq.net/larp/bistro/issues/160)
+- odstraneni `commonmark` a kompletni nahrada pomoci `TUI editor` [#163](https://gitlab.alembiq.net/larp/bistro/issues/163)
+
 
 **1.8.1**
 - update knihoven
