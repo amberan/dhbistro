@@ -181,8 +181,8 @@ break;
     $resCf = mysqli_query($database, $sqlCf);
     $filter = $_REQUEST;
     // pokud přichází nový filtr a nejedná se o zadání úkolu či přidání zlobodů, případně pokud se jedná o konkrétní záznam a je nově filtrovaný, !$_GET['sort']
-    // použij nový filtr a ulož ho do databáze
-    if ((!empty($filter) && !isset($_GET['sort']) && !isset($_POST['inserttask']) && !isset($_POST['addpoints']) && !isset($filter['rid'])) || (isset($filter['sort'], $filter['rid']))) {
+    // použij nový filtr a ulož ho do databáze && !isset($_GET['sort'])
+    if ((!empty($filter)  && !isset($_POST['inserttask']) && !isset($_POST['addpoints']) && !isset($filter['rid'])) || (isset($filter['sort'], $filter['rid']))) {
         if ($resCf) {
             $recCf = mysqli_fetch_assoc($resCf);
             $filters = unserialize($recCf['filter']);
