@@ -7,7 +7,7 @@
                 <ul class="navbar-nav mr-auto">
 {foreach $menu as $menuItem}
                     <li class="nav-item mr-2{if $menuItem[2]>0} unread{/if}">
-                        <a class="nav-link" href="{$menuItem[1]}">{$menuItem[0]}{if $menuItem[2]>0} (<span class="unread-number">{$menuItem[2]}</span>){/if}</a>
+                        <a class="nav-link{if ($menuItem[1]|slice: 1, -1) == $URL[1]} nav-link-active{/if}" href="{$menuItem[1]}">{$menuItem[0]}{if $menuItem[2]>0} (<span class="unread-number">{$menuItem[2]}</span>){/if}</a>
                     </li>
 {/foreach}
                 </ul>

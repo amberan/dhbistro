@@ -277,6 +277,10 @@ input[type='submit'] {
   border-width: 0 0 1px;
 }
 
+.nav-link-active {
+    font-weight: bold;
+}
+
 .breadcrumbs-fixed-top {
   display: block;
 }
