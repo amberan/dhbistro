@@ -165,6 +165,8 @@ $text['archivovano'] = 'archivováno';
 $text['utajeno'] = 'utajeno';
 $text['smazany'] = 'smazáný';
 $text['smazane'] = 'Smazané';
+$text['portrety'] = 'Portréty';
+$text['poznamky'] = 'Poznámky';
 
 // CASES
 $text['pridatpripad'] = 'Přidat případ';
