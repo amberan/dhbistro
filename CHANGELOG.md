@@ -11,6 +11,7 @@
 - odstraneni `commonmark` a kompletni nahrada pomoci `TUI editor` [#163](https://gitlab.alembiq.net/larp/bistro/issues/163)
 - filtrovani symbolu opraveno [#154](https://gitlab.alembiq.net/larp/bistro/issues/154)
 - zobrazeni osob u reportu [#161](https://gitlab.alembiq.net/larp/bistro/issues/161)
+- rework filtru uvnitr skupin [#164](https://gitlab.alembiq.net/larp/bistro/issues/164)
 
 **1.8.1**
 - update knihoven
