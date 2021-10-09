@@ -2,13 +2,13 @@
 require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
     if (is_numeric($_REQUEST['rid'])) {
-        $res = mysqli_query($database,"SELECT * FROM ".DB_PREFIX."person WHERE id=".$_REQUEST['rid']);
+        $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."person WHERE id=".$_REQUEST['rid']);
         if ($rec = mysqli_fetch_assoc($res)) {
-            if (($rec['secret'] > $user['aclDirector']) || $rec['deleted'] == 1) {
+            if (($rec['secret'] > $user['aclSecret']) || $rec['deleted'] == 1) {
                 unauthorizedAccess(1, $rec['secret'], $rec['deleted'], $_REQUEST['rid']);
             }
             auditTrail(1, 1, $_REQUEST['rid']);
@@ -42,8 +42,8 @@ latteDrawTemplate("header");
                     }
                 }
             }
-            deleteUnread(1,$_REQUEST['rid']);
-            sparklets('<a href="./persons.php">osoby</a> &raquo; <strong>'.stripslashes($rec['surname']).', '.stripslashes($rec['name']).'</strong>','<a href="readperson.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton); ?>
+            deleteUnread(1, $_REQUEST['rid']);
+            sparklets('<a href="./persons.php">osoby</a> &raquo; <strong>'.stripslashes($rec['surname']).', '.stripslashes($rec['name']).'</strong>', '<a href="readperson.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton); ?>
 <div id="obsah">
 	<h1><?php echo stripslashes($rec['surname']).', '.stripslashes($rec['name']); ?></h1>
 	<fieldset>
@@ -130,33 +130,33 @@ latteDrawTemplate("header");
                 }
             echo $side; ?></p>
 			<div class="clear">&nbsp;</div>
-			<h3>Telefon: </h3><p><a href ="tel:<?php echo str_replace(' ', '',$rec['phone']); ?>"><?php echo $rec['phone']; ?></a></p>
+			<h3>Telefon: </h3><p><a href ="tel:<?php echo str_replace(' ', '', $rec['phone']); ?>"><?php echo $rec['phone']; ?></a></p>
 			<div class="clear">&nbsp;</div>
 			<h3>Patří do skupin: </h3><p><?php
-                if ($user['aclDirector']) {
-                    $sql = "SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."group, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idgroup=".DB_PREFIX."group.id AND ".DB_PREFIX."g2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."group.deleted=0 ORDER BY ".DB_PREFIX."group.title ASC";
-                } else {
-                    $sql = "SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."group, ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idgroup=".DB_PREFIX."group.id AND ".DB_PREFIX."g2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."group.deleted=0 AND ".DB_PREFIX."group.secret=0 ORDER BY ".DB_PREFIX."group.title ASC";
-                }
-            $res_g = mysqli_query($database,$sql);
+            $sqlFilter = DB_PREFIX."group.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."group.secret<=".$user['aclSecret'];
+            $sql = "SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."g2p.iduser
+            FROM ".DB_PREFIX."group, ".DB_PREFIX."g2p
+            WHERE $sqlFilter AND ".DB_PREFIX."g2p.idgroup=".DB_PREFIX."group.id AND ".DB_PREFIX."g2p.idperson=".$_REQUEST['rid']."
+            ORDER BY ".DB_PREFIX."group.title ASC";
+            $res_g = mysqli_query($database, $sql);
             if (mysqli_num_rows($res_g)) {
                 $groups = [];
                 while ($rec_g = mysqli_fetch_assoc($res_g)) {
                     $groups[] = '<a href="./readgroup.php?rid='.$rec_g['id'].'">'.stripslashes($rec_g['title']).'</a>';
                 }
-                echo implode(', ',$groups);
+                echo implode(', ', $groups);
             } else {
                 echo '&mdash;';
             } ?></p>
 			<div class="clear">&nbsp;</div>
 			<p><strong>Datum vytvoření:</strong> <?php echo webdate($rec['regdate']); ?>
 				<strong>Vytvořil:</strong> <?php
-                $name = getAuthor($rec['regid'],1);
+                $name = getAuthor($rec['regid'], 1);
             echo $rec['regid'] == 0 ? 'asi Krauz' : $name; ?> </p>
 			<div class="clear">&nbsp;</div>
 			<p><strong>Datum poslední změny:</strong> <?php echo webdate($rec['datum']); ?>
 				<strong>Změnil:</strong> <?php
-                $name = getAuthor($rec['iduser'],1);
+                $name = getAuthor($rec['iduser'], 1);
             echo $name; ?> </p>
 			<div class="clear">&nbsp;</div>
 		</div>
@@ -172,35 +172,35 @@ latteDrawTemplate("header");
 	<fieldset>
 		<legend><strong>Hlášení a případy</strong></legend>
 		<h3>Figuruje v těchto případech: </h3><p><?php
-                if ($user['aclDirector']) {
-                    $sql_c = "SELECT ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."c2p.iduser FROM ".DB_PREFIX."case, ".DB_PREFIX."c2p WHERE ".DB_PREFIX."c2p.idcase=".DB_PREFIX."case.id AND ".DB_PREFIX."c2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."case.deleted=0 ORDER BY ".DB_PREFIX."case.title ASC";
-                } else {
-                    $sql_c = "SELECT ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."c2p.iduser FROM ".DB_PREFIX."case, ".DB_PREFIX."c2p WHERE ".DB_PREFIX."c2p.idcase=".DB_PREFIX."case.id AND ".DB_PREFIX."c2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."case.deleted=0 AND ".DB_PREFIX."case.secret=0 ORDER BY ".DB_PREFIX."case.title ASC";
-                }
-            $res_c = mysqli_query($database,$sql_c);
+            $sqlFilter = DB_PREFIX."case.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."case.secret<=".$user['aclSecret'];
+            $sql_c = "SELECT ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."c2p.iduser
+            FROM ".DB_PREFIX."case, ".DB_PREFIX."c2p
+            WHERE $sqlFilter AND ".DB_PREFIX."c2p.idcase=".DB_PREFIX."case.id AND ".DB_PREFIX."c2p.idperson=".$_REQUEST['rid']."
+            ORDER BY ".DB_PREFIX."case.title ASC";
+            $res_c = mysqli_query($database, $sql_c);
             if (mysqli_num_rows($res_c)) {
                 $cases = [];
                 while ($rec_c = mysqli_fetch_assoc($res_c)) {
                     $cases[] = '<a href="./readcase.php?rid='.$rec_c['id'].'">'.stripslashes($rec_c['title']).'</a>';
                 }
-                echo implode($cases,'<br />');
+                echo implode($cases, '<br />');
             } else {
                 echo 'Osoba nefiguruje v žádném případu.';
             } ?></p>
 		<div class="clear">&nbsp;</div>
                 <h3>Figuruje v těchto hlášení: </h3><p><?php
-                if ($user['aclDirector']) {
-                    $sql_r = "SELECT ".DB_PREFIX."report.adatum as date_created, ".DB_PREFIX."report.datum as date_changed, ".DB_PREFIX."report.secret AS 'secret', ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."report, ".DB_PREFIX."ar2p WHERE ".DB_PREFIX."ar2p.idreport=".DB_PREFIX."report.id AND ".DB_PREFIX."ar2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."report.deleted=0 ORDER BY ".DB_PREFIX."report.label ASC";
-                } else {
-                    $sql_r = "SELECT ".DB_PREFIX."report.adatum as date_created, ".DB_PREFIX."report.datum as date_changed, ".DB_PREFIX."report.secret AS 'secret', ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."ar2p.iduser FROM ".DB_PREFIX."report, ".DB_PREFIX."ar2p WHERE ".DB_PREFIX."ar2p.idreport=".DB_PREFIX."report.id AND ".DB_PREFIX."ar2p.idperson=".$_REQUEST['rid']." AND ".DB_PREFIX."report.deleted=0 AND ".DB_PREFIX."report.secret=0 ORDER BY ".DB_PREFIX."report.label ASC";
-                }
-            $res_r = mysqli_query($database,$sql_r);
+                $sqlFilter = DB_PREFIX."report.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."report.secret<=".$user['aclSecret'];
+            $sql_r = "SELECT ".DB_PREFIX."report.adatum as date_created, ".DB_PREFIX."report.datum as date_changed, ".DB_PREFIX."report.secret AS 'secret', ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."ar2p.iduser
+                FROM ".DB_PREFIX."report, ".DB_PREFIX."ar2p
+                WHERE $sqlFilter AND ".DB_PREFIX."ar2p.idreport=".DB_PREFIX."report.id AND ".DB_PREFIX."ar2p.idperson=".$_REQUEST['rid']."
+                ORDER BY ".DB_PREFIX."report.label ASC";
+            $res_r = mysqli_query($database, $sql_r);
             if (mysqli_num_rows($res_r)) {
                 $reports = [];
                 while ($rec_r = mysqli_fetch_assoc($res_r)) {
                     $reports[] = '<a href="./readactrep.php?rid='.$rec_r['id'].'&hidenotes=0&truenames=0">'.stripslashes($rec_r['label']).'</a> | vytvořeno: '.webdate($rec_r['date_created']).' | změněno: '.webdate($rec_r['date_changed']);
                 }
-                echo implode('<br />',$reports);
+                echo implode('<br />', $reports);
             } else {
                 echo 'Osoba nefiguruje v žádném hlášení.';
             } ?></p>
@@ -209,12 +209,12 @@ latteDrawTemplate("header");
 
 <!-- následuje seznam přiložených souborů -->
 	<?php //generování seznamu přiložených souborů
-        if ($user['aclDirector']) {
-            $sql = "SELECT ".DB_PREFIX."file.mime as mime, ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.id AS 'id' FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=1 ORDER BY ".DB_PREFIX."file.originalname ASC";
-        } else {
-            $sql = "SELECT ".DB_PREFIX."file.mime as mime, ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.id AS 'id' FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=1 AND ".DB_PREFIX."file.secret=0 ORDER BY ".DB_PREFIX."file.originalname ASC";
-        }
-            $res = mysqli_query($database,$sql);
+            $sqlFilter = DB_PREFIX."file.secret<=".$user['aclSecret']; //DB_PREFIX."case.deleted in (0,".$user['aclRoot'].") AND ".
+            $sql = "SELECT ".DB_PREFIX."file.mime as mime, ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.id AS 'id'
+            FROM ".DB_PREFIX."file
+            WHERE $sqlFilter AND".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=1
+            ORDER BY ".DB_PREFIX."file.originalname ASC";
+            $res = mysqli_query($database, $sql);
             $i = 0;
             while ($rec = mysqli_fetch_assoc($res)) {
                 $i++;
@@ -222,7 +222,7 @@ latteDrawTemplate("header");
 	<fieldset><legend><strong>Přiložené soubory</strong></legend>
 	<ul id="prilozenadata">
 			<?php }
-                if (in_array($rec['mime'],$config['mime-image'], true)) { ?>
+                if (in_array($rec['mime'], $config['mime-image'], true)) { ?>
 							<li><a href="file/attachement/<?php echo $rec['id']; ?>"><img  width="300px" alt="<?php echo stripslashes($rec['title']); ?>" src="file/attachement/<?php echo $rec['id']; ?>"></a></li>
 			<?php		} else { ?>
 							<li><a href="file/attachement/<?php echo $rec['id']; ?>"><?php echo stripslashes($rec['title']); ?></a></li>
@@ -240,12 +240,12 @@ latteDrawTemplate("header");
 if ($hn != 1) { ?>
 <!-- následuje seznam poznámek -->
 	<?php // generování poznámek
-        if ($user['aclDirector']) {
-            $sql = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=1 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret<2 OR ".DB_PREFIX."note.iduser=".$user['userId'].") ORDER BY ".DB_PREFIX."note.datum DESC";
-        } else {
-            $sql = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=1 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret=0 OR ".DB_PREFIX."note.iduser=".$user['userId'].") ORDER BY ".DB_PREFIX."note.datum DESC";
-        }
-        $res = mysqli_query($database,$sql);
+        $sqlFilter = DB_PREFIX."note.deleted in (0,".$user['aclRoot'].") AND (".DB_PREFIX."note.secret<=".$user['aclSecret'].' OR '.DB_PREFIX.'note.iduser='.$user['userId'].' )';
+        $sql = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id'
+        FROM ".DB_PREFIX."note, ".DB_PREFIX."user
+        WHERE $sqlFilter AND ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=1
+        ORDER BY ".DB_PREFIX."note.datum DESC";
+        $res = mysqli_query($database, $sql);
         $i = 0;
         while ($rec = mysqli_fetch_assoc($res)) {
             $i++;

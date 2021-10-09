@@ -2,7 +2,7 @@
 require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Nový symbol';
@@ -29,7 +29,7 @@ $latteParameters['title'] = 'Nový symbol';
 			</datalist>
 		<fieldset><legend><strong>Základní údaje</strong></legend>
 			<div id="info">
-				<h3><label for="symbol">Symbol:</label></h3><input type="file" name="symbol" id="symbol" /><br />	        	
+				<h3><label for="symbol">Symbol:</label></h3><input type="file" name="symbol" id="symbol" /><br />
 				<h3><label for="liner">Čáry:</label></h3><input type="range" value="0" min="0" max="10" step="1" name="liner" id="liner" list=hodnoty /><br />
 				<h3><label for="curver">Křivky:</label></h3><input type="range" value="0" min="0" max="10" step="1" name="curver" id="curver" list=hodnoty /><br />
 				<h3><label for="pointer">Body:</label></h3><input type="range" value="0" min="0" max="10" step="1" name="pointer" id="pointer" list=hodnoty /><br />
@@ -37,13 +37,13 @@ $latteParameters['title'] = 'Nový symbol';
 				<h3><label for="alphabeter">Písma:</label></h3><input type="range" value="0" min="0" max="10" step="1" name="alphabeter" id="alphabeter" list=hodnoty /><br />
 				<h3><label for="specialchar">Spec. znaky:</label></h3><input type="range" value="0" min="0" max="10" step="1" name="specialchar" id="specialchar" list=hodnoty /><br />
 	        <div class="clear">&nbsp;</div>
-<?php 			if ($user['aclDirector'] == 1) {
-    echo '					
+<?php 			if ($user['aclGamemaster'] == 1) {
+    echo '
 				<h3><label for="notnew">Není nové</label></h3>
 					<input type="checkbox" name="notnew"/><br/>
 				<div class="clear">&nbsp;</div>';
 }
-?>					
+?>
 			</div>
 			<!-- end of #info -->
 		</fieldset>

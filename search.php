@@ -2,21 +2,21 @@
 require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Vyhledávání';
 auditTrail(12, 1, 0);
 mainMenu();
-sparklets('<strong>vyhledávání</strong>','<a href="symbol_search.php">vyhledat symbol</a>');
+sparklets('<strong>vyhledávání</strong>', '<a href="symbol_search.php">vyhledat symbol</a>');
 
 // default SQL filters
-$searchContitions = " AND secret<=".$user['aclDirector']."  AND deleted<=".$user['aclGamemaster']." ";
+$searchContitions = " AND secret<=".$user['aclSecret']."  AND deleted<=".$user['aclGamemaster']." ";
 
 //TODO SORTING created/modified/title/status/type
 
 if (sizeof($_POST['filter']) > 0) {
-    filterSet('search',@$_POST['filter']);
+    filterSet('search', @$_POST['filter']);
 }
 $filter = filterGet('search');
 $sqlFilter = "deleted in (0,".$user['aclRoot'].") AND secret<=".$user['aclSecret'];
@@ -72,7 +72,7 @@ $latteParameters['filter'] = $filter;
 	WHERE ".$sqlFilter." AND (title LIKE '%$searchedfor%' or contents LIKE  '%$searchedfor%')
     ".$fsql_archiv.$searchContitions."
 	ORDER BY 5 * MATCH(title) AGAINST ('$searchedfor') + MATCH(contents) AGAINST ('$searchedfor') DESC"; //fsql_archiv
-            $res = mysqli_query($database,$sql); ?>
+            $res = mysqli_query($database, $sql); ?>
     <h3>Případy</h3>
     <table>
         <thead>
@@ -113,7 +113,7 @@ $latteParameters['filter'] = $filter;
     + 2 * MATCH(task) AGAINST ('$searchedfor')
     + 2 * MATCH(impacts) AGAINST ('$searchedfor')
 	+ MATCH(details) AGAINST ('$searchedfor') DESC";
-            $res = mysqli_query($database,$sql); ?>
+            $res = mysqli_query($database, $sql); ?>
             <h3>Hlášení</h3>
             <table>
                 <thead>
@@ -177,7 +177,7 @@ $latteParameters['filter'] = $filter;
         + 3 * MATCH(name) AGAINST ('$searchedfor')
         + MATCH(contents) AGAINST ('$searchedfor') DESC
 	";
-            $res = mysqli_query($database,$sql); ?>
+            $res = mysqli_query($database, $sql); ?>
                     <h3>Osoby</h3>
                     <table>
                         <thead>
@@ -219,7 +219,7 @@ $latteParameters['filter'] = $filter;
     ORDER BY 5 * MATCH(title) AGAINST ('$searchedfor')
     + MATCH(contents) AGAINST ('$searchedfor') DESC
     ";
-            $res = mysqli_query($database,$sql); ?>
+            $res = mysqli_query($database, $sql); ?>
                             <h3>Skupiny</h3>
                             <table>
                                 <thead>
@@ -255,7 +255,7 @@ $latteParameters['filter'] = $filter;
         ".$searchContitions."
         ORDER BY 5 * MATCH(`desc`) AGAINST ('$searchedfor') DESC
     ";
-            $res = mysqli_query($database,$sql); ?>
+            $res = mysqli_query($database, $sql); ?>
                                     <h3>Symboly</h3>
                                     <table>
                                         <thead>
@@ -293,7 +293,7 @@ $latteParameters['filter'] = $filter;
         + MATCH(note) AGAINST ('$searchedfor') DESC
     ";
 
-            $res = mysqli_query($database,$sql); ?>
+            $res = mysqli_query($database, $sql); ?>
                                             <h3>Poznámky</h3>
                                             <table>
                                                 <thead>
@@ -313,7 +313,7 @@ $latteParameters['filter'] = $filter;
             while ($rec = mysqli_fetch_assoc($res)) {
                 switch ($rec['idtable']) {
                         case 1:
-                            $res_note = mysqli_query($database,"
+                            $res_note = mysqli_query($database, "
                                 SELECT ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.secret AS 'secret'
                                 FROM ".DB_PREFIX."person
                                 WHERE id = ".$rec['iditem']);
@@ -326,7 +326,7 @@ $latteParameters['filter'] = $filter;
                             }
                             break;
                         case 2:
-                            $res_note = mysqli_query($database,"
+                            $res_note = mysqli_query($database, "
                                 SELECT ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."group.secret AS 'secret'
                                 FROM ".DB_PREFIX."group
                                 WHERE id = ".$rec['iditem']);
@@ -339,7 +339,7 @@ $latteParameters['filter'] = $filter;
                             }
                             break;
                         case 3:
-                            $res_note = mysqli_query($database,"
+                            $res_note = mysqli_query($database, "
                                 SELECT ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.secret AS 'secret'
                                 FROM ".DB_PREFIX."case
                                 WHERE id = ".$rec['iditem']);
@@ -352,7 +352,7 @@ $latteParameters['filter'] = $filter;
                             }
                             break;
                         case 4:
-                            $res_note = mysqli_query($database,"
+                            $res_note = mysqli_query($database, "
                                 SELECT ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.secret AS 'secret'
                                 FROM ".DB_PREFIX."report
                                 WHERE id = ".$rec['iditem']);

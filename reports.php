@@ -131,7 +131,7 @@ $latteParameters['title'] = 'Hlášení';
         </tr>
         <tr class="filter">
         <td class="filter"><input type="checkbox" name="archiv" value="archiv" class="checkbox"'.($filterArchiv == 1 ? ' checked="checked"' : '').' /> I archiv.</td>';
-        if ($user['aclDirector']) {
+        if ($user['aclSecret']) {
             echo '<td class="filter"><input type="checkbox" name="sec" value="sec" class="checkbox"'.($filterSec == 1 ? ' checked="checked"' : '').' /> Jen tajné.</td></tr></table>';
         } else {
             echo '</tr></table>';
@@ -145,6 +145,7 @@ $latteParameters['title'] = 'Hlášení';
     // if (isset($_GET['sort'])) {
     //     sortingSet('report', $_GET['sort'], 'report');
     // }
+            $sqlFilter = DB_PREFIX."report.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."report.secret<=".$user['aclSecret'];
 
     $sql = "SELECT
                 ".DB_PREFIX."unread.id AS 'unread',
@@ -162,7 +163,7 @@ $latteParameters['title'] = 'Hlášení';
                     FROM ".DB_PREFIX."report ".$fsql_conn2."
                     JOIN ".DB_PREFIX."user ON ".DB_PREFIX."report.iduser = ".DB_PREFIX."user.userId
                     LEFT JOIN  ".DB_PREFIX."unread on  ".DB_PREFIX."report.id =  ".DB_PREFIX."unread.idrecord AND  ".DB_PREFIX."unread.idtable = 4 and  ".DB_PREFIX."unread.iduser=".$user['userId']."
-                    WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."report.deleted=0 AND ".DB_PREFIX."report.secret<=".$user['aclDirector'].$filterSqlCat.$fsql_sec.$fsql_stat.$filterSqlMine.$fsql_conn.$filterUnread.
+                    WHERE $sqlFilter AND ".DB_PREFIX."report.iduser=".DB_PREFIX."user.userId ".$filterSqlCat.$fsql_sec.$fsql_stat.$filterSqlMine.$fsql_conn.$filterUnread.
                     $fsql_archiv." ORDER BY ".$filterSqlSort;
                     //sortingGet('report');
 

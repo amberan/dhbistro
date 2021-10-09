@@ -40,7 +40,7 @@ latteDrawTemplate("header");
 			AND ".DB_PREFIX."report.id=".$_REQUEST['rid'].$connector;
         $res = mysqli_query($database, $sql);
         if ($rec_ar = mysqli_fetch_assoc($res)) {
-            if (($rec_ar['secret'] > $user['aclDirector']) || $rec_ar['deleted'] == 1) {
+            if (($rec_ar['secret'] > $user['aclSecret']) || $rec_ar['deleted'] == 1) {
                 unauthorizedAccess(4, $rec_ar['secret'], $rec_ar['deleted'], $_REQUEST['rid']);
             }
             if (isset($_SESSION['sid'])) {
@@ -65,32 +65,32 @@ latteDrawTemplate("header");
             } else {
                 $tn = $_REQUEST['truenames'];
             }
-            if ($user['aclDirector'] && ($hn == 0) && ($tn == 0)) {
+            if ($user['aclReport'] && ($hn == 0) && ($tn == 0)) {
                 $spaction = '<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=0">skrýt poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=1">zobrazit celá jména</a>';
                 $author = $rec_ar['autor'];
                 $backurl = 'readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=0&truenames=0';
             } else {
-                if ($user['aclDirector'] && ($hn == 1) && ($tn == 0)) {
+                if ($user['aclReport'] && ($hn == 1) && ($tn == 0)) {
                     $spaction = '<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=0">zobrazit poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=1">zobrazit celá jména</a>';
                     $author = $rec_ar['autor'];
                     $backurl = 'readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=1&truenames=0';
                 } else {
-                    if ($user['aclDirector'] && ($notconnected == 0) && ($hn == 1) && ($tn == 1)) {
+                    if ($user['aclReport'] && ($notconnected == 0) && ($hn == 1) && ($tn == 1)) {
                         $spaction = '<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=1">zobrazit poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=0">zobrazit volací znaky</a>';
                         $author = $rec_ar['surname'].' '.$rec_ar['name'];
                         $backurl = 'readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=1&truenames=1';
                     } else {
-                        if ($user['aclDirector'] && ($notconnected == 0) && ($hn == 0) && ($tn == 1)) {
+                        if ($user['aclReport'] && ($notconnected == 0) && ($hn == 0) && ($tn == 1)) {
                             $spaction = '<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=1">skrýt poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=0">zobrazit volací znaky</a>';
                             $author = $rec_ar['surname'].' '.$rec_ar['name'];
                             $backurl = 'readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=0&truenames=1';
                         } else {
-                            if ($user['aclDirector'] && ($notconnected == 1) && ($hn == 1) && ($tn == 1)) {
+                            if ($user['aclReport'] && ($notconnected == 1) && ($hn == 1) && ($tn == 1)) {
                                 $spaction = '<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=1">zobrazit poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=0">zobrazit volací znaky</a>';
                                 $author = 'NENÍ NAPOJEN';
                                 $backurl = 'readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=1&truenames=1';
                             } else {
-                                if ($user['aclDirector'] && ($notconnected == 1) && ($hn == 0) && ($tn == 1)) {
+                                if ($user['aclReport'] && ($notconnected == 1) && ($hn == 0) && ($tn == 1)) {
                                     $spaction = '<a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=1&amp;truenames=1">skrýt poznámky</a>; <a href="readactrep.php?rid='.$_REQUEST['rid'].'&amp;hidenotes=0&amp;truenames=0">zobrazit volací znaky</a>';
                                     $author = 'NENÍ NAPOJEN';
                                     $backurl = 'readactrep.php?rid='.$_REQUEST['rid'].'&hidenotes=0&truenames=1';
@@ -193,11 +193,11 @@ latteDrawTemplate("header");
 		<div class="clear">&nbsp;</div>
 		<h3>Osoby přítomné: </h3>
 		<p><?php
-        if ($user['aclDirector']) {
-            $sql = "SELECT ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."ar2p.iduser, ".DB_PREFIX."ar2p.role FROM ".DB_PREFIX."person, ".DB_PREFIX."ar2p WHERE ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." AND ".DB_PREFIX."ar2p.role=0 AND ".DB_PREFIX."person.deleted=0 ORDER BY ".DB_PREFIX."person.surname, ".DB_PREFIX."person.name ASC";
-        } else {
-            $sql = "SELECT ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."ar2p.iduser, ".DB_PREFIX."ar2p.role FROM ".DB_PREFIX."person, ".DB_PREFIX."ar2p WHERE ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." AND ".DB_PREFIX."ar2p.role=0 AND ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret=0 ORDER BY ".DB_PREFIX."person.surname, ".DB_PREFIX."person.name ASC";
-        }
+        $sqlFilter = DB_PREFIX."person.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."person.secret<=".$user['aclSecret'];
+            $sql = "SELECT ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."ar2p.iduser, ".DB_PREFIX."ar2p.role
+        FROM ".DB_PREFIX."person, ".DB_PREFIX."ar2p
+        WHERE $sqlFilter AND ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']." AND ".DB_PREFIX."ar2p.role=0
+        ORDER BY ".DB_PREFIX."person.surname, ".DB_PREFIX."person.name ASC";
             $res = mysqli_query($database, $sql);
             if (mysqli_num_rows($res)) {
                 $groups = [];
@@ -211,11 +211,11 @@ latteDrawTemplate("header");
 		<div class="clear">&nbsp;</div>
 		<h3>Přiřazené případy:</h3>
 		<?php
-        if ($user['aclDirector']) {
-            $sql = "SELECT ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.title AS 'title' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."case WHERE ".DB_PREFIX."case.id=".DB_PREFIX."ar2c.idcase AND ".DB_PREFIX."ar2c.idreport=".$_REQUEST['rid']." ORDER BY ".DB_PREFIX."case.title ASC";
-        } else {
-            $sql = "SELECT ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.title AS 'title' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."case WHERE ".DB_PREFIX."case.id=".DB_PREFIX."ar2c.idcase AND ".DB_PREFIX."ar2c.idreport=".$_REQUEST['rid']." AND ".DB_PREFIX."case.secret=0 ORDER BY ".DB_PREFIX."case.title ASC";
-        }
+            $sqlFilter = DB_PREFIX."case.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."case.secret<=".$user['aclSecret'];
+            $sql = "SELECT ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."case.title AS 'title'
+            FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."case
+            WHERE $sqlFilter AND ".DB_PREFIX."case.id=".DB_PREFIX."ar2c.idcase AND ".DB_PREFIX."ar2c.idreport=".$_REQUEST['rid']."
+            ORDER BY ".DB_PREFIX."case.title ASC";
             $pers = mysqli_query($database, $sql);
             $i = 0;
             while ($perc = mysqli_fetch_assoc($pers)) {
@@ -293,11 +293,11 @@ latteDrawTemplate("header");
 
 <!-- následuje seznam přiložených souborů -->
 	<?php //generování seznamu přiložených souborů
-        if ($user['aclDirector']) {
-            $sql = "SELECT ".DB_PREFIX."file.mime as mime, ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.id AS 'id' FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=4 ORDER BY ".DB_PREFIX."file.originalname ASC";
-        } else {
-            $sql = "SELECT ".DB_PREFIX."file.mime as mime, ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.id AS 'id' FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=4 AND ".DB_PREFIX."file.secret=0 ORDER BY ".DB_PREFIX."file.originalname ASC";
-        }
+        $sqlFilter = DB_PREFIX."file.secret<=".$user['aclSecret']; //DB_PREFIX."case.deleted in (0,".$user['aclRoot'].") AND ".
+        $sql = "SELECT ".DB_PREFIX."file.mime as mime, ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.id AS 'id'
+        FROM ".DB_PREFIX."file
+        WHERE $ sqlFilter AND ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=4
+        ORDER BY ".DB_PREFIX."file.originalname ASC";
             $res = mysqli_query($database, $sql);
             $i = 0;
             while ($rec = mysqli_fetch_assoc($res)) {
@@ -324,11 +324,11 @@ latteDrawTemplate("header");
 if ($hn != 1) { ?>
 <!-- následuje seznam poznámek -->
 	<?php // generování poznámek
-        if ($user['aclDirector']) {
-            $sql = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=4 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret<2 OR ".DB_PREFIX."note.iduser=".$user['userId'].") ORDER BY ".DB_PREFIX."note.datum DESC";
-        } else {
-            $sql = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=4 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret=0 OR ".DB_PREFIX."note.iduser=".$user['userId'].") ORDER BY ".DB_PREFIX."note.datum DESC";
-        }
+        $sqlFilter = DB_PREFIX."note.deleted in (0,".$user['aclRoot'].") AND (".DB_PREFIX."note.secret<=".$user['aclSecret'].' OR '.DB_PREFIX.'note.iduser='.$user['userId'].' )';
+        $sql = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id'
+        FROM ".DB_PREFIX."note, ".DB_PREFIX."user
+        WHERE $sqlFilter AND ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=4
+        ORDER BY ".DB_PREFIX."note.datum DESC";
         $res = mysqli_query($database, $sql);
         $i = 0;
         while ($rec = mysqli_fetch_assoc($res)) {

@@ -2,7 +2,7 @@
 require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Přiřazení symbolu osobě';
@@ -11,7 +11,7 @@ $latteParameters['title'] = 'Přiřazení symbolu osobě';
     sparklets('<a href="./persons.php">osoby</a> &raquo; <a href="./symbols.php">nepřiřazené symboly</a>');
 // Overeni, zda dany symbol existuje, a uzivatel ma dostatecna prava na jeho upravu
     if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
-        $res = mysqli_query($database,"SELECT * FROM ".DB_PREFIX."symbol WHERE id=".$_REQUEST['rid']);
+        $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."symbol WHERE id=".$_REQUEST['rid']);
         if ($rec = mysqli_fetch_assoc($res)) {
             ?>
 
@@ -90,12 +90,12 @@ $latteParameters['title'] = 'Přiřazení symbolu osobě';
             }
             filter();
             // vypis osob
-            if ($user['aclDirector']) {
-                $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol', ".DB_PREFIX."c2p.iduser FROM ".DB_PREFIX."person LEFT JOIN ".DB_PREFIX."c2p ON ".DB_PREFIX."c2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']." WHERE ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.symbol='' ".$fsql_dead.$fsql_archiv." ORDER BY ".$filterSqlSort;
-            } else {
-                $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol', ".DB_PREFIX."c2p.iduser FROM ".DB_PREFIX."person LEFT JOIN ".DB_PREFIX."c2p ON ".DB_PREFIX."c2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']." WHERE ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.symbol='' ".$fsql_dead.$fsql_archiv." AND ".DB_PREFIX."person.secret=0 ORDER BY ".$filterSqlSort;
-            }
-            $res = mysqli_query($database,$sql); ?>
+            $sqlFilter = DB_PREFIX."person.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."person.secret<=".$user['aclSecret'];
+            $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol', ".DB_PREFIX."c2p.iduser
+                FROM ".DB_PREFIX."person
+                LEFT JOIN ".DB_PREFIX."c2p ON ".DB_PREFIX."c2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']."
+                WHERE $sqlFilter AND ".DB_PREFIX."person.symbol is null ".$fsql_dead.$fsql_archiv." ORDER BY ".$filterSqlSort;
+            $res = mysqli_query($database, $sql); ?>
     <div id="in-form-table">
         <?php
     if (mysqli_num_rows($res)) {
@@ -113,7 +113,7 @@ $latteParameters['title'] = 'Přiřazení symbolu osobě';
         while ($rec = mysqli_fetch_assoc($res)) {
             echo '<tr class="'.($even % 2 == 0 ? 'even' : 'odd').'"><td><input type="radio" name="person" value="'.$rec['id'].'" class="checkbox"'.($rec['iduser'] ? ' checked="checked"' : '').' /></td>
 '.($sportraits ? '<td><img src="file/portrait/'.$rec['id'].'" alt="portrét chybí" /></td>' : '').($ssymbols ? '<td><img src="file/symbol/'.$rec['symbol'].'" alt="symbol chybí" /></td>' : '').'
-	<td>'.($rec['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$rec['id'].'">'.implode(', ',[stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a></span>' : '<a href="readperson.php?rid='.$rec['id'].'">'.implode(', ',[stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a>').'</td>
+	<td>'.($rec['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$rec['id'].'">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a></span>' : '<a href="readperson.php?rid='.$rec['id'].'">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a>').'</td>
 	</tr>';
             $even++;
         }
