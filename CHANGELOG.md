@@ -12,6 +12,7 @@
 - filtrovani symbolu opraveno [#154](https://gitlab.alembiq.net/larp/bistro/issues/154)
 - zobrazeni osob u reportu [#161](https://gitlab.alembiq.net/larp/bistro/issues/161)
 - rework filtru uvnitr skupin [#164](https://gitlab.alembiq.net/larp/bistro/issues/164)
+- rework validaci prav pro utajeni [#165](https://gitlab.alembiq.net/larp/bistro/issues/165)
 
 **1.8.1**
 - update knihoven

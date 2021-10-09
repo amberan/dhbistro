@@ -2,7 +2,7 @@
 require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Nová skupina';
@@ -21,7 +21,7 @@ $latteParameters['title'] = 'Nová skupina';
 			<input type="radio" name="secret" value="0" checked="checked"/>ne<br />
 			<h3><label>&nbsp;</label></h3><input type="radio" name="secret" value="1"/>ano
 		<div class="clear">&nbsp;</div>
-<?php 			if ($user['aclDirector'] == 1) {
+<?php 			if ($user['aclGamemaster'] == 1) {
     echo '
 				<h3><label for="notnew">Není&nbsp;nové</label></h3>
 					<input type="checkbox" name="notnew"/>

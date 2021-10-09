@@ -2,15 +2,15 @@
 require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Zobrazení symbolu';
 
     if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
-        $res = mysqli_query($database,"SELECT * FROM ".DB_PREFIX."person WHERE id=".$_REQUEST['rid']);
+        $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."person WHERE id=".$_REQUEST['rid']);
         if ($rec_p = mysqli_fetch_assoc($res)) {
-            if (($rec_p['secret'] > $user['aclDirector']) || $rec_p['deleted'] == 1) {
+            if (($rec_p['secret'] > $user['aclSecret']) || $rec_p['deleted'] == 1) {
                 unauthorizedAccess(1, $rec_p['secret'], $rec_p['deleted'], $_REQUEST['rid']);
             }
             auditTrail(1, 1, $_REQUEST['rid']);
@@ -180,20 +180,12 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 		<form action="persons.php" method="post" class="otherform">
 		<?php
             $sql = "SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."group LEFT JOIN ".DB_PREFIX."g2p ON ".DB_PREFIX."g2p.idgroup=".DB_PREFIX."group.id AND ".DB_PREFIX."g2p.idperson=".$_REQUEST['rid']." WHERE ".DB_PREFIX."group.deleted=0 ORDER BY ".DB_PREFIX."group.title ASC";
-            if ($user['aclDirector']) {
-                $res = mysqli_query($database,$sql);
+            if ($user['aclDirector'] || $user['aclSecret']) {
+                $res = mysqli_query($database, $sql);
                 while ($rec = mysqli_fetch_assoc($res)) {
                     echo '<div>
 					<input type="checkbox" name="group[]" value="'.$rec['id'].'" class="checkbox"'.($rec['iduser'] ? ' checked="checked"' : '').' />
 					<label>'.stripslashes($rec['title']).'</label>
-				</div>';
-                }
-            } else {
-                $res = mysqli_query($database,$sql);
-                while ($rec = mysqli_fetch_assoc($res)) {
-                    echo '<div>'.
-                    (!$rec['secret'] ? '<input type="checkbox" name="group[]" value="'.$rec['id'].'" class="checkbox"'.($rec['iduser'] ? ' checked="checked"' : '').' />
-					<label>'.$rec['title'].'</label>' : ($rec['iduser'] ? '<input type="hidden" name="group[]" value="'.$rec['id'].'" />' : '')).'
 				</div>';
                 }
             } ?>
@@ -210,12 +202,13 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	<fieldset><legend><strong>Přiložené soubory</strong></legend>
 		<strong><em>K osobě je možné nahrát neomezené množství souborů, ale velikost jednoho souboru je omezena na 2 MB.</em></strong>
 		<?php //generování seznamu přiložených souborů
-            if ($user['aclDirector']) {
-                $sql = "SELECT ".DB_PREFIX."file.iduser AS 'iduser', ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.secret AS 'secret', ".DB_PREFIX."file.id AS 'id' FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=1 ORDER BY ".DB_PREFIX."file.originalname ASC";
-            } else {
-                $sql = "SELECT ".DB_PREFIX."file.iduser AS 'iduser', ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.secret AS 'secret', ".DB_PREFIX."file.id AS 'id' FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=1 AND ".DB_PREFIX."file.secret=0 ORDER BY ".DB_PREFIX."file.originalname ASC";
-            }
-            $res = mysqli_query($database,$sql);
+                    $sqlFilter = DB_PREFIX."file.secret<=".$user['aclSecret']; //DB_PREFIX."case.deleted in (0,".$user['aclRoot'].") AND ".
+
+                $sql = "SELECT ".DB_PREFIX."file.iduser AS 'iduser', ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.secret AS 'secret', ".DB_PREFIX."file.id AS 'id'
+                FROM ".DB_PREFIX."file
+                WHERE $sqlFilter AND ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=1
+                ORDER BY ".DB_PREFIX."file.originalname ASC";
+            $res = mysqli_query($database, $sql);
             $i = 0;
             while ($rec_f = mysqli_fetch_assoc($res)) {
                 $i++;
@@ -271,12 +264,12 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 		<span class="poznamka-edit-buttons"><a class="new" href="newnote.php?rid=<?php echo $_REQUEST['rid']; ?>&amp;idtable=1&amp;s=<?php echo $rec_p['secret']; ?>" title="nová poznámka"><span class="button-text">nová poznámka</span></a><em style="font-size:smaller;"> (K případu si můžete připsat kolik chcete poznámek.)</em></span>
 		<!-- následuje seznam poznámek -->
 		<?php // generování poznámek
-            if ($user['aclDirector']) {
-                $sql = "SELECT ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=1 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret<2 OR ".DB_PREFIX."note.iduser=".$user['userId'].") ORDER BY ".DB_PREFIX."note.datum DESC";
-            } else {
-                $sql = "SELECT ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=1 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret=0 OR ".DB_PREFIX."note.iduser=".$user['userId'].") ORDER BY ".DB_PREFIX."note.datum DESC";
-            }
-            $res = mysqli_query($database,$sql);
+                $sqlFilter = DB_PREFIX."note.deleted in (0,".$user['aclRoot'].") AND (".DB_PREFIX."note.secret<=".$user['aclSecret'].' OR '.DB_PREFIX.'note.iduser='.$user['userId'].' )';
+            $sql = "SELECT ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id'
+                FROM ".DB_PREFIX."note, ".DB_PREFIX."user
+                WHERE $sqlFilter AND ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=1
+                ORDER BY ".DB_PREFIX."note.datum DESC";
+            $res = mysqli_query($database, $sql);
             $i = 0;
             while ($rec_n = mysqli_fetch_assoc($res)) {
                 $i++;

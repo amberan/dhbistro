@@ -2,14 +2,14 @@
 require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
 if (is_numeric($_REQUEST['rid'])) {
     $sql_a = "SELECT * FROM ".DB_PREFIX."c2s WHERE ".DB_PREFIX."c2s.idsolver=".$user['userId']." AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid'];
-    $res_a = mysqli_query($database,$sql_a);
+    $res_a = mysqli_query($database, $sql_a);
     $rec_a = mysqli_fetch_array($res_a);
-    $res = mysqli_query($database,"SELECT * FROM ".DB_PREFIX."case WHERE id=".$_REQUEST['rid']);
+    $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."case WHERE id=".$_REQUEST['rid']);
     if ($rec = mysqli_fetch_assoc($res)) {
         if ((($rec['secret'] > $user['aclSecret']) && $user['userId'] != $rec_a['idsolver']) || $rec['deleted'] == 1) {
             unauthorizedAccess(3, $rec['secret'], $rec['deleted'], $_REQUEST['rid']);
@@ -53,8 +53,8 @@ if (is_numeric($_REQUEST['rid'])) {
         } else {
             $editbutton = '';
         }
-        deleteUnread(3,$_REQUEST['rid']);
-        sparklets('<a href="/cases/">případy</a> &raquo; <strong>'.stripslashes($rec['title']).'</strong>',$spaction.$editbutton);
+        deleteUnread(3, $_REQUEST['rid']);
+        sparklets('<a href="/cases/">případy</a> &raquo; <strong>'.stripslashes($rec['title']).'</strong>', $spaction.$editbutton);
         if (($rec['secret'] > $user['aclSecret']) && (!$rec_a['iduser'])) {
             echo '<div id="obsah"><p>Hezký pokus.</p></div>';
         } else {
@@ -74,29 +74,29 @@ if (is_numeric($_REQUEST['rid'])) {
 			<p>
 			<?php
             $sql = "SELECT ".DB_PREFIX."user.userId AS 'id', ".DB_PREFIX."user.userName AS 'login' FROM ".DB_PREFIX."c2s, ".DB_PREFIX."user WHERE ".DB_PREFIX."user.userId=".DB_PREFIX."c2s.idsolver AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userDeleted=0 ORDER BY ".DB_PREFIX."user.userName ASC";
-            $pers = mysqli_query($database,$sql);
+            $pers = mysqli_query($database, $sql);
             $solvers = [];
             while ($perc = mysqli_fetch_assoc($pers)) {
                 $solvers[] = $perc['login'];
             }
-            echo implode('; ',$solvers) != "" ? implode('; ', $solvers) : '<em>Případ nemá přiřazené řešitele.</em>'; ?>
+            echo implode('; ', $solvers) != "" ? implode('; ', $solvers) : '<em>Případ nemá přiřazené řešitele.</em>'; ?>
 			</p>
 			<div class="clear">&nbsp;</div>
 			<h3>Osoby spojené s případem: </h3>
 			<p>
 			<?php
-            if ($user['aclDirector']) {
-                $sql = "SELECT ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."c2p.iduser FROM ".DB_PREFIX."person, ".DB_PREFIX."c2p WHERE ".DB_PREFIX."c2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."person.deleted=0 ORDER BY ".DB_PREFIX."person.surname, ".DB_PREFIX."person.name ASC";
-            } else {
-                $sql = "SELECT ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."c2p.iduser FROM ".DB_PREFIX."person, ".DB_PREFIX."c2p WHERE ".DB_PREFIX."c2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret=0 ORDER BY ".DB_PREFIX."person.surname, ".DB_PREFIX."person.name ASC";
-            }
-            $res = mysqli_query($database,$sql);
+            $sqlFilter = DB_PREFIX."person.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."person.secret<=".$user['aclSecret'];
+            $sql = "SELECT ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."c2p.iduser
+            FROM ".DB_PREFIX."person, ".DB_PREFIX."c2p
+            WHERE $sqlFilter AND ".DB_PREFIX."c2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']."
+            ORDER BY ".DB_PREFIX."person.surname, ".DB_PREFIX."person.name ASC";
+            $res = mysqli_query($database, $sql);
             if (mysqli_num_rows($res)) {
                 $groups = [];
                 while ($rec_p = mysqli_fetch_assoc($res)) {
                     $groups[] = '<a href="./readperson.php?rid='.$rec_p['id'].'">'.stripslashes($rec_p['surname']).', '.stripslashes($rec_p['name']).'</a>';
                 }
-                echo implode($groups,', ');
+                echo implode($groups, ', ');
             } else {
                 echo "<em>K případu nejsou připojeny žádné osoby.</em>";
             } ?>
@@ -104,19 +104,19 @@ if (is_numeric($_REQUEST['rid'])) {
 			<div class="clear">&nbsp;</div>
 			<h3>Hlášení přiřazená k případu:</h3>
 				<?php
-                if ($user['aclDirector']) {
-                    $sql = "SELECT ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.task AS 'task', ".DB_PREFIX."report.type AS 'type', ".DB_PREFIX."report.adatum AS 'adatum', ".DB_PREFIX."user.userName AS 'user' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."report, ".DB_PREFIX."user WHERE ".DB_PREFIX."report.id=".DB_PREFIX."ar2c.idreport AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userId=".DB_PREFIX."report.iduser ORDER BY ".DB_PREFIX."report.label ASC";
-                } else {
-                    $sql = "SELECT ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.task AS 'task', ".DB_PREFIX."report.type AS 'type', ".DB_PREFIX."report.adatum AS 'adatum', ".DB_PREFIX."user.userName AS 'user' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."report, ".DB_PREFIX."user WHERE ".DB_PREFIX."report.id=".DB_PREFIX."ar2c.idreport AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userId=".DB_PREFIX."report.iduser AND ".DB_PREFIX."report.secret=0 ORDER BY ".DB_PREFIX."report.label ASC";
-                }
-            $pers = mysqli_query($database,$sql);
+            $sqlFilter = DB_PREFIX."report.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."report.secret<=".$user['aclSecret'];
+            $sql = "SELECT ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.task AS 'task', ".DB_PREFIX."report.type AS 'type', ".DB_PREFIX."report.adatum AS 'adatum', ".DB_PREFIX."user.userName AS 'user'
+            FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."report, ".DB_PREFIX."user
+            WHERE $sqlFilter AND ".DB_PREFIX."report.id=".DB_PREFIX."ar2c.idreport AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userId=".DB_PREFIX."report.iduser
+            ORDER BY ".DB_PREFIX."report.label ASC";
+            $pers = mysqli_query($database, $sql);
             $i = 0;
             while ($perc = mysqli_fetch_assoc($pers)) {
                 $i++;
                 if ($i == 1) {
                     echo '<ul id="pripady">';
                 } ?>
-					<li><a href="readactrep.php?rid=<?php echo $perc['id']; ?>&hidenotes=0&truenames=0"><?php echo $perc['label']; ?></a> <span class="top">[ <strong><?php echo $perc['type'] == 1 ? 'Výjezd' : ($perc['type'] == 2 ? 'Výslech' : 'Hlášení'); ?></strong> | <strong>Ze dne:</strong> <?php echo date('d.m.Y',$perc['adatum']); ?> | <strong>Vyhotovil:</strong> <?php echo $perc['user']; ?> ]</span> - <?php echo $perc['task']; ?></li>
+					<li><a href="readactrep.php?rid=<?php echo $perc['id']; ?>&hidenotes=0&truenames=0"><?php echo $perc['label']; ?></a> <span class="top">[ <strong><?php echo $perc['type'] == 1 ? 'Výjezd' : ($perc['type'] == 2 ? 'Výslech' : 'Hlášení'); ?></strong> | <strong>Ze dne:</strong> <?php echo date('d.m.Y', $perc['adatum']); ?> | <strong>Vyhotovil:</strong> <?php echo $perc['user']; ?> ]</span> - <?php echo $perc['task']; ?></li>
 				<?php
             }
             if ($i != 0) {
@@ -128,7 +128,7 @@ if (is_numeric($_REQUEST['rid'])) {
 				<p>
 					<strong>Datum poslední změny:</strong> <?php echo webdate($rec['datum']); ?>
 					<strong>Změnil:</strong>
-					<?php echo  getAuthor($rec['iduser'],1); // $name =?>
+					<?php echo  getAuthor($rec['iduser'], 1); // $name =?>
 				</p>
 			<div class="clear">&nbsp;</div>
 		</div>
@@ -145,7 +145,7 @@ if (is_numeric($_REQUEST['rid'])) {
 	<fieldset><legend><strong>Přiložené symboly</strong></legend>
 	<?php //generování seznamu přiložených symbolů
         $sql_s = "SELECT ".DB_PREFIX."symbol2all.idsymbol AS 'id' FROM ".DB_PREFIX."symbol2all, ".DB_PREFIX."symbol WHERE ".DB_PREFIX."symbol2all.idsymbol = ".DB_PREFIX."symbol.id AND ".DB_PREFIX."symbol.assigned=0 AND ".DB_PREFIX."symbol2all.idrecord=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=3 AND ".DB_PREFIX."symbol.deleted=0";
-        $res_s = mysqli_query($database,$sql_s);
+        $res_s = mysqli_query($database, $sql_s);
         if (mysqli_num_rows($res_s)) {
             $inc = 0; ?>
 		<div id="symbols">
@@ -169,13 +169,13 @@ if (is_numeric($_REQUEST['rid'])) {
 	<?php } ?>
 
 	<!-- následuje seznam přiložených souborů -->
-	<?php //generování seznamu přiložených souborů
-        if ($user['aclDirector']) {
-            $sql = "SELECT ".DB_PREFIX."file.mime as mime,  ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.id AS 'id' FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=3 ORDER BY ".DB_PREFIX."file.originalname ASC";
-        } else {
-            $sql = "SELECT ".DB_PREFIX."file.mime as mime,  ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.id AS 'id' FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=3 AND ".DB_PREFIX."file.secret=0 ORDER BY ".DB_PREFIX."file.originalname ASC";
-        }
-            $res_f = mysqli_query($database,$sql);
+<?php //generování seznamu přiložených souborů
+    $sqlFilter = DB_PREFIX."file.secret<=".$user['aclSecret']; //DB_PREFIX."case.deleted in (0,".$user['aclRoot'].") AND ".
+    $sql = "SELECT ".DB_PREFIX."file.mime as mime,  ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.id AS 'id'
+    FROM ".DB_PREFIX."file
+    WHERE $sqlFilter AND ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=3
+    ORDER BY ".DB_PREFIX."file.originalname ASC";
+            $res_f = mysqli_query($database, $sql);
             $i = 0;
             while ($rec_f = mysqli_fetch_assoc($res_f)) {
                 $i++;
@@ -183,7 +183,7 @@ if (is_numeric($_REQUEST['rid'])) {
 	<fieldset><legend><strong>Přiložené soubory</strong></legend>
 	<ul id="prilozenadata">
 		<?php }
-                if (in_array($rec_f['mime'],$config['mime-image'], true)) { ?>
+                if (in_array($rec_f['mime'], $config['mime-image'], true)) { ?>
 							<li><a href="file/attachement/<?php echo $rec_f['id']; ?>"><img  width="300px" alt="<?php echo stripslashes($rec_f['title']); ?>" src="file/attachement/<?php echo $rec_f['id']; ?>"></a></li>
 			<?php		} else { ?>
 							<li><a href="file/attachement/<?php echo $rec_f['id']; ?>"><?php echo stripslashes($rec_f['title']); ?></a></li>
@@ -198,12 +198,12 @@ if (is_numeric($_REQUEST['rid'])) {
     if ($hn != 1) { ?>
 	<!-- následuje seznam poznámek -->
 	<?php // generování poznámek
-        if ($user['aclDirector']) {
-            $sql_n = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=3 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret<2 OR ".DB_PREFIX."note.iduser=".$user['userId'].") ORDER BY ".DB_PREFIX."note.datum DESC";
-        } else {
-            $sql_n = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=3 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret=0 OR ".DB_PREFIX."note.iduser=".$user['userId'].") ORDER BY ".DB_PREFIX."note.datum DESC";
-        }
-        $res_n = mysqli_query($database,$sql_n);
+        $sqlFilter = DB_PREFIX."note.deleted in (0,".$user['aclRoot'].") AND (".DB_PREFIX."note.secret<=".$user['aclSecret'].' OR '.DB_PREFIX.'note.iduser='.$user['userId'].' )';
+        $sql_n = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id'
+        FROM ".DB_PREFIX."note, ".DB_PREFIX."user
+        WHERE $sqlFilter AND ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=3
+        ORDER BY ".DB_PREFIX."note.datum DESC";
+        $res_n = mysqli_query($database, $sql_n);
         $i = 0;
             while ($rec_n = mysqli_fetch_assoc($res_n)) {
                 $i++;
@@ -253,7 +253,7 @@ if (is_numeric($_REQUEST['rid'])) {
 <?php
         }
     } else {
-  echo      $_SESSION['message'] = "Případ neexistuje!";
+        echo      $_SESSION['message'] = "Případ neexistuje!";
 //        header('location: index.php');
     }
 } else {
