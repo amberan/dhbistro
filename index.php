@@ -52,7 +52,7 @@ if (isset($user)) {
         $latteParameters['title'] = $text['zalohovani'];
         require_once SERVER_ROOT.'/pages/backup.php';
     } elseif ($URL[1] == 'users') { // USER MANAGEMENT
-        if ($user['aclDirector'] < 1 || $user['aclGamemaster']) {
+        if ($user['aclDirector'] < 1 && $user['aclGamemaster'] < 1) {
             unauthorizedAccess(8, 1, 0, 0);
         } else {
             $latteParameters['title'] = $text['spravauzivatelu'];
