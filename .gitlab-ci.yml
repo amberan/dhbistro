@@ -93,3 +93,5 @@ deploy test:
   - when: manual
 sast:
   stage: test
+  variables:
+    SAST_EXCLUDED_PATHS: vendor
