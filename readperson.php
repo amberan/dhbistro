@@ -108,6 +108,10 @@ latteDrawTemplate("header");
                     default: $power = 'neznámá'; break;
                 }
             echo $power; ?></p>
+            <?php
+            if ($rec['roof'] > null) {
+                echo '<h3>Dosažení stropu zaznamenáno: '.$rec['roof'].'</h3><div class="clear">&nbsp;</div>';
+            } ?>
 			<div class="clear">&nbsp;</div>
             <?php
             if ($rec['roof'] > null) {
