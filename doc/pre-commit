@@ -16,7 +16,7 @@ FILES=` git status --porcelain | grep -e '^[AM]\(.*\).php\|^[AM]\(.*\).md$' | cu
 function install_tools()
 {
         read -p "No validation tools found, should I install them? y/n " -n 1 -r </dev/tty
-        if [[ $REPLY =~ ^[Yy]$ ]]; then 
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
 		sudo apt -qq -y install composer
 		composer require symplify/easy-coding-standard --dev
 	fi
@@ -38,9 +38,9 @@ function ecs_fix_php()
 echo "easy coding standard pre-commit hook start"
 if [ -t 2 ]; then # interactive
 	if [[ ! -x $ECS  ]]; then install_tools; fi
-	if [ -x $ECS ]  && [ -n "$FILES" ]; then 
+	if [ -x $ECS ]  && [ -n "$FILES" ]; then
 
-		ecs_validate_php 
+		ecs_validate_php
 		if [ $? != 0 ]; then
 			read -p "Do you want to fix this? y/n " -n 1 -r </dev/tty
 			if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -51,9 +51,9 @@ if [ -t 2 ]; then # interactive
 				printf "\n\nThen fix it yourself ;P\n\n"
 				exit 1
 			fi
-		fi 
+		fi
 	fi
-else 
+else
        if [ -x $ECS ] && [ -n "$FILES" ]; then
 		ecs_fix_php
 	fi
