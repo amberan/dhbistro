@@ -306,7 +306,5 @@
         }
     ],
     "dev": true,
-    "dev-package-names": [
-        "symplify/easy-coding-standard"
-    ]
+    "dev-package-names": []
 }
