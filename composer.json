@@ -2,6 +2,7 @@
     "require": {
         "tracy/tracy": "^2.5",
         "latte/latte": "^2.4",
-        "league/html-to-markdown": "^4.8"
+        "league/html-to-markdown": "^4.8",
+        "symplify/easy-coding-standard": "^9.4.70"
     }
 }

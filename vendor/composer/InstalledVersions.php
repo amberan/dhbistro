@@ -30,7 +30,7 @@ class InstalledVersions
     'aliases' => 
     array (
     ),
-    'reference' => '72db4f406f7df7f0b30c4796eeb22072c3558f6c',
+    'reference' => 'f90ec9d7ad214187943593f2ce3033f78d3819ef',
     'name' => '__root__',
   ),
   'versions' => 
@@ -42,7 +42,7 @@ class InstalledVersions
       'aliases' => 
       array (
       ),
-      'reference' => '72db4f406f7df7f0b30c4796eeb22072c3558f6c',
+      'reference' => 'f90ec9d7ad214187943593f2ce3033f78d3819ef',
     ),
     'latte/latte' => 
     array (
@@ -61,6 +61,15 @@ class InstalledVersions
       array (
       ),
       'reference' => '0868ae7a552e809e5cd8f93ba022071640408e88',
+    ),
+    'symplify/easy-coding-standard' => 
+    array (
+      'pretty_version' => '9.4.70',
+      'version' => '9.4.70.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '9276b0c7a1a5671fc4a067656ab40d0aea42aaca',
     ),
     'tracy/tracy' => 
     array (

@@ -11,7 +11,7 @@ if (isset($_GET[sessionID])) { # verify user
 
 if ($user == null) { //invalid user
     http_response_code(401);
-    echo json_encode(array( 'error' => $text['http401']));
+    echo json_encode([ 'error' => $text['http401']]);
 } else { //valid user
     if (isset($_GET[personID])) {
         $output = personRead($_GET['personID']);

@@ -106,6 +106,10 @@ $text['noveheslo'] = 'nové heslo';
 $text['odemknout'] = 'odemknout';
 $text['zamknout'] = 'zamknout';
 $text['opravdugenerovatheslo'] = 'Opravdu vygenerovat nové heslo pro uživatele';
+$text['odemnkoutuzivatele'] = 'Odemknout uživatele';
+$text['zamknoutuzivatele'] = 'Zamknout uživatele';
+$text['smazatuzivatele'] = 'Smazat uživatele';
+$text['obnovituzivatele'] = 'Obnovit uživatele';
 $text['opravduodemnkout'] = 'Opravdu odemknout uživatele';
 $text['opravduzamknout'] = 'Opravdu zamknout uživatele';
 $text['opravdusmazat'] = 'Opravdu smazat uživatele';
@@ -129,6 +133,7 @@ $text['aclAPI'] = 'API';
 $text['existujicizalohy'] = 'Existující zálohy';
 $text['zalohovatrucne'] = 'Vytvořit zálohu ručně';
 $text['zalohavytvorena'] = 'Záloha vytvořena!';
+$text['stahnoutzalohu'] = 'Stáhnout zálohu';
 
 // NASTENKA / AKTUALITY
 $text['obsahnastenky'] = 'Obsah nástěnky';
@@ -179,6 +184,14 @@ $text['pridatpoznamku'] = '';
 $text['opravdusmazatpripad'] = 'Opravdu smazat případ';
 $text['opravduobnovitpripad'] = 'Opravdu obnovit případ';
 $text['vytvoreno'] = 'Vytvořeno';
+$text['editpripad'] = 'Upravit případ';
+$text['smazatpripad'] = 'Smazat případ';
+$text['obnovitpripad'] = 'Obnovit případ';
 
 //GROUPS
 $text['pridatskupinu'] = 'Přidat skupinu';
+$text['upravitskupinu'] = 'Upravit skupinu';
+$text['smazatskupinu'] = 'Smazat skupinu';
+$text['obnovitskupinu'] = 'Obnovit skupinu';
+$text['opravdusmazatskupinu'] = 'Opravdu smazat skupinu?';
+$text['opravduobnovitskupinu'] = 'Opravdu obnovit skupinu?';

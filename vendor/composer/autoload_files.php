@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'd507e002f7fce7f0c6dbf1f22edcb902' => $vendorDir . '/tracy/tracy/src/Tracy/functions.php',
+    '5bf57f5eebf62cf90c3fc03a259adc34' => $vendorDir . '/symplify/easy-coding-standard/bootstrap.php',
 );

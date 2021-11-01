@@ -16,8 +16,8 @@ mainMenu();
 	<form action="persons.php" method="post" id="inputform" enctype="multipart/form-data">
 		<fieldset><legend><strong>Základní údaje</strong></legend>
 			<div id="info">
-				<h3><label for="name" class="required">Jméno:</label></h3><input type="text" name="name" id="name" />	
-				<div class="clear">&nbsp;</div>	
+				<h3><label for="name" class="required">Jméno:</label></h3><input type="text" name="name" id="name" />
+				<div class="clear">&nbsp;</div>
 				<h3><label for="surname">Příjmení:</label></h3><input type="text" name="surname" id="surname" />
 				<div class="clear">&nbsp;</div>
 				<h3><label for="side">Strana:</label></h3>
@@ -64,17 +64,18 @@ mainMenu();
 				<div class="clear">&nbsp;</div>
 				<h3><label for="secret">Přísně&nbsp;tajné:</label></h3>
 					<input type="radio" name="secret" value="0" checked="checked"/>ne<br/>
-					<h3><label>&nbsp;</label></h3><input type="radio" name="secret" value="1">ano					
+					<h3><label>&nbsp;</label></h3><input type="radio" name="secret" value="1">ano
 				<div class="clear">&nbsp;</div>
-<?php 			if ($user['aclGamemaster'] == 1) {
-    echo '					
-				<h3><label for="notnew">Není nové</label></h3>
-					<input type="checkbox" name="notnew"/><br/>
-				<div class="clear">&nbsp;</div>';
-}
-?>					
+				<?php 			if ($user['aclGamemaster'] == 1) {
+					echo '
+								<h3><label for="notnew">Není nové</label></h3>
+									<input type="checkbox" name="notnew"/><br/>
+								<div class="clear">&nbsp;</div>';
+				}
+				?>
+				<div class="clear">&nbsp;</div>
+				<h3><label for="personRoof">strop</label></h3><input type="checkbox" name="personRoof"/>
 			</div>
-            <input type="checkbox" name="personRoof" /> strop
 			<!-- end of #info -->
 		</fieldset>
 		<!-- náseduje popis osoby -->

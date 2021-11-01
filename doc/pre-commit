@@ -1,16 +1,16 @@
 #!/usr/bin/env -S bash -i
+# https://github.com/symplify/easy-coding-standard
+
 # https://gist.github.com/jwage/b1614c96ea22ccaf68b7
 # https://tsh.io/blog/tips-on-keeping-php-code-under-control/
 # $ECS check --config=.ecs.php * --match-git-diff
 # $ECS check-markdown --config=.ecs.php * --match-git-diff
 # possible improvements https://github.com/BernardoSilva/git-hooks-php/blob/master/pre-commit
 
-ECS="/home/$(whoami)/.config/composer/vendor/bin/ecs"
+ECS="./vendor/bin/ecs"
 ECS_CONFIG=".ecs.php"
-LINT="/home/$(whoami)/.config/composer/vendor/bin/parallel-lint"
 
-FILES_PHP=` git status --porcelain | grep -e '^[AM]\(.*\).php$' | cut -c 3- | tr '\n' ' '`
-FILES_MD=` git status --porcelain | grep -e '^[AM]\(.*\).md$' | cut -c 3- | tr '\n' ' '`
+FILES=` git status --porcelain | grep -e '^[AM]\(.*\).php\|^[AM]\(.*\).md$' | cut -c 3- | tr '\n' ' '`
 
 
 function install_tools()
@@ -18,25 +18,28 @@ function install_tools()
         read -p "No validation tools found, should I install them? y/n " -n 1 -r </dev/tty
         if [[ $REPLY =~ ^[Yy]$ ]]; then 
 		sudo apt -qq -y install composer
-		composer global require symplify/easy-coding-standard symplify/coding-standard
-		composer global require php-parallel-lint/php-parallel-lint php-parallel-lint/php-console-highlighter
+		composer require symplify/easy-coding-standard --dev
 	fi
 }
 
 function ecs_validate_php()
 {
-	 $ECS check --config=$ECS_CONFIG ${FILES_PHP}
+	 $ECS check --config=$ECS_CONFIG ${FILES}
+	 $ECS check-markdown --config=$ECS_CONFIG ${FILES}
 }
 
 function ecs_fix_php()
 {
-	$ECS check --config=$ECS_CONFIG --fix ${FILES_PHP}
-	git add ${FILES_PHP}
+	$ECS check --config=$ECS_CONFIG --fix ${FILES}
+	$ECS check-markdown --config=$ECS_CONFIG --fix ${FILES}
+	git add ${FILES}
 }
 
+echo "easy coding standard pre-commit hook start"
 if [ -t 2 ]; then # interactive
-	if [[ ! -x $ECS || ! -x $LINT ]]; then install_tools; fi
-	if { [ -x $ECS ] || [ -x $LINT ]; } && [ -n "$FILES_PHP" ]; then 
+	if [[ ! -x $ECS  ]]; then install_tools; fi
+	if [ -x $ECS ]  && [ -n "$FILES" ]; then 
+
 		ecs_validate_php 
 		if [ $? != 0 ]; then
 			read -p "Do you want to fix this? y/n " -n 1 -r </dev/tty
@@ -49,11 +52,10 @@ if [ -t 2 ]; then # interactive
 				exit 1
 			fi
 		fi 
-		$LINT ${FILES_PHP}
 	fi
 else 
-	if { [ -x $ECS ] || [ -x $LINT ]; } && [ -n "$FILES_PHP" ]; then
+       if [ -x $ECS ] && [ -n "$FILES" ]; then
 		ecs_fix_php
-		$LINT ${FILES_PHP}
 	fi
 fi
+echo "easy coding standard pre-commit hook finish"
