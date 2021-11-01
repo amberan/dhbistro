@@ -8,6 +8,7 @@ class ComposerStaticInit6db1c36b45f379dc0212516dfd0b3bec
 {
     public static $files = array (
         'd507e002f7fce7f0c6dbf1f22edcb902' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/functions.php',
+        '5bf57f5eebf62cf90c3fc03a259adc34' => __DIR__ . '/..' . '/symplify/easy-coding-standard/bootstrap.php',
     );
 
     public static $prefixLengthsPsr4 = array (

@@ -1,4 +1,4 @@
-.vscode/ 
+/vendor/
 /files/
 /inc/important.php
 /sql/*old

@@ -1,196 +1,192 @@
 # BISTRO changelog
 
 
-<!-- git log --no-merges 1.5.. | unexpand -a | sed -e 's/\s\s*$$//' | head -n 2070 | grep -v "Date\|commit\|Author\|typo\|.gitlab-ci.yml\|.codeclimate.yml" | sed -r '/^\s*$/d' | uniq
+<!--
+git log --no-merges 1.5.. | unexpand -a | sed -e 's/\s\s*$$//' | head -n 2070 | grep -v "Date\|commit\|Author\|typo\|.gitlab-ci.yml\|.codeclimate.yml" | sed -r '/^\s*$/d' | uniq
+
+https://github.com/orhun/git-cliff
+git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
+
   -->
 
-**1.8.2**
-- zrychleni vypisu reportu a oprava trideni [#158](https://gitlab.alembiq.net/larp/bistro/issues/158)
-- oprava ukladani novinek [#156](https://gitlab.alembiq.net/larp/bistro/issues/156)
-- odstraneni prebytecnych sloupcu z tabulky dashboard [#160](https://gitlab.alembiq.net/larp/bistro/issues/160)
-- odstraneni `commonmark` a kompletni nahrada pomoci `TUI editor` [#163](https://gitlab.alembiq.net/larp/bistro/issues/163)
-- filtrovani symbolu opraveno [#154](https://gitlab.alembiq.net/larp/bistro/issues/154)
-- zobrazeni osob u reportu [#161](https://gitlab.alembiq.net/larp/bistro/issues/161)
-- rework filtru uvnitr skupin [#164](https://gitlab.alembiq.net/larp/bistro/issues/164)
-- rework validaci prav pro utajeni [#165](https://gitlab.alembiq.net/larp/bistro/issues/165)
+**1.8.2 HLIDKY november 2021 release**
+- style: cases listing [#118](https://gitlab.com/alembiq/bistro/issues/118)
+- refactor: faster report listing and fixed sortingkikot [#158](https://gitlab.com/alembiq/bistro/issues/158)
+- fix: saving news [#156](https://gitlab.com/alembiq/bistro/issues/156)
+- database: removal of old columns from dashboard table [#160](https://gitlab.com/alembiq/bistro/issues/160)
+- refactor: `commonmark` replaced with `TUI editor` [#163](https://gitlab.com/alembiq/bistro/issues/163)
+- fix: filtering symbols [#154](https://gitlab.com/alembiq/bistro/issues/154)
+- fix: person listing on report [#161](https://gitlab.com/alembiq/bistro/issues/161)
+- refactor: group detail filtering [#164](https://gitlab.com/alembiq/bistro/issues/164)
+- refactor: validation of permission secret [#165](https://gitlab.com/alembiq/bistro/issues/165)
+- ci: moved to gitlab.com [#166](https://gitlab.com/alembiq/bistro/issues/166)
+- ci: reconfigured easy coding standard [#151](https://gitlab.com/alembiq/bistro/issues/151)
 
 **1.8.1**
-- update knihoven
-- filtrovani - skupiny [#59](https://gitlab.alembiq.net/larp/bistro/issues/59)
-- zmena databazoveho engine na InnoDB [#150](https://gitlab.alembiq.net/larp/bistro/issues/150)
-- konverze archive(int) na archived(timestamp) pro osoby [#140](https://gitlab.alembiq.net/larp/bistro/issues/140)
-- smazani uzivatele systemu nejdou pridat jako ucastnici udalosti [#149](https://gitlab.alembiq.net/larp/bistro/issues/149)
-- pridani udaje `strop` pro `osoba` [#40](https://gitlab.alembiq.net/larp/bistro/issues/40)
-- WIP redesign skupiny [#118](https://gitlab.alembiq.net/larp/bistro/issues/117)
-
-**1.8**
-- release...
+- refactor: groups filtering [#59](https://gitlab.com/alembiq/bistro/issues/59)
+- database: change all tables to InnoDB [#150](https://gitlab.com/alembiq/bistro/issues/150)
+- database: persons archived flag changed from int to timestamp [#140](https://gitlab.com/alembiq/bistro/issues/140)
+- fix: adding removed persons to report [#149](https://gitlab.com/alembiq/bistro/issues/149)
+- feature: persons `roof` [#40](https://gitlab.com/alembiq/bistro/issues/40)
+- style: groups listing [#118](https://gitlab.com/alembiq/bistro/issues/117)
 
 **1.7.6**
-- drobne upravy pro odstraneni PHP warningu
-- zobrazovani data vytvoreni u vyhledavani
-- zobrazovany flagy utajeni a archivace u vyhledavani
-- pripad nema datum vytvoreni [#51](https://gitlab.alembiq.net/larp/bistro/issues/51)
-- skupina nema datum vytvoreni [#52](https://gitlab.alembiq.net/larp/bistro/issues/52)
+- refactoring: PHP warnings cleanup
+- feature: displaying date of creation in search
+- feature: showing flags in search
+- feature: case date of creation [#51](https://gitlab.com/alembiq/bistro/issues/51)
+- feature: group date of creation [#52](https://gitlab.com/alembiq/bistro/issues/52)
 
 **1.7.5**
-- chybi prava pro reporty a symboly [#132](https://gitlab.alembiq.net/larp/bistro/issues/132)
+- feature: new permissions for reports and symbols [#132](https://gitlab.com/alembiq/bistro/issues/132)
 
 **1.7.4**
-- archivovatelne symboly [#22](https://gitlab.alembiq.net/larp/bistro/issues/22)
-- modal window pro notifikace dostupny v starem UI
+- deature: symbols can be archived [#22](https://gitlab.com/alembiq/bistro/issues/22)
 
 **1.7.3**
-- nasazeni trideni na stare formulare [#87](https://gitlab.alembiq.net/larp/bistro/issues/87)
-- WIP filtrovani - pripady [#59](https://gitlab.alembiq.net/larp/bistro/issues/59)
-- WIP redesign pripady [#118](https://gitlab.alembiq.net/larp/bistro/issues/118)
-- WIP odstaneni proccase.php [#106](https://gitlab.alembiq.net/larp/bistro/issues/106)
-- CI rework nasazeni na test [#127](https://gitlab.alembiq.net/larp/bistro/issues/127)
+- feature: sorting on object listings [#87](https://gitlab.com/alembiq/bistro/issues/87)
+- refactor: WIP cases filtering [#59](https://gitlab.com/alembiq/bistro/issues/59)
+- style: cases listing [#118](https://gitlab.com/alembiq/bistro/issues/118)
+- refactor: WIP removal of proccase.php [#106](https://gitlab.com/alembiq/bistro/issues/106)
+- ci: new test deployment [#127](https://gitlab.com/alembiq/bistro/issues/127)
 
-**1.7.2** Access 2.0
-- nova prava [#49](https://gitlab.alembiq.net/larp/bistro/issues/49)
-- uprava spravy uzivatelu podle [#49](https://gitlab.alembiq.net/larp/bistro/issues/49) [#101](https://gitlab.alembiq.net/larp/bistro/issues/101)
-- sessions overhelm [#89](https://gitlab.alembiq.net/larp/bistro/issues/89)
-- THE LOOP podle [#49](https://gitlab.alembiq.net/larp/bistro/issues/49) a [#89](https://gitlab.alembiq.net/larp/bistro/issues/89)
-- vypis nauzavrenych hlaseni/pripadu/ukolu uzivatele jako funkce [#104](https://gitlab.alembiq.net/larp/bistro/issues/104)
+**1.7.2 Access 2.0**
+- refactor: new permissions [#49](https://gitlab.com/alembiq/bistro/issues/49)
+- refactor: updated user management [#49](https://gitlab.com/alembiq/bistro/issues/49) [#101](https://gitlab.com/alembiq/bistro/issues/101)
+- refactor: sessions [#89](https://gitlab.com/alembiq/bistro/issues/89)
+- feature: THE LOOP [#49](https://gitlab.com/alembiq/bistro/issues/49) [#89](https://gitlab.com/alembiq/bistro/issues/89)
+- refactor: dashboard listing [#104](https://gitlab.com/alembiq/bistro/issues/104)
 
 **1.7.1**
-- trideni [#87](https://gitlab.alembiq.net/larp/bistro/issues/87)
+- feature: sorting [#87](https://gitlab.com/alembiq/bistro/issues/87)
 
-**1.7.0** HLIDKY BREZEN 2020
+**1.7.0 HLIDKY march 2020 release**
 
 **1.6.7**
-- CODECLIMATE cleanup
-- ve vyhledavani se zobrazuji flagy utajeni a smazani (s ohledem na prava uzivatele)[#53](https://gitlab.alembiq.net/larp/bistro/issues/53)[#85](https://gitlab.alembiq.net/larp/bistro/issues/85)
-- sprava uzivatelu uz zobrazuje pouze neuzavrene pripady [#84](https://gitlab.alembiq.net/larp/bistro/issues/84)
-- nastaveni nevyzaduje k ulozeni email [#83](https://gitlab.alembiq.net/larp/bistro/issues/83)
-- oprava pridavani priloh [#86](https://gitlab.alembiq.net/larp/bistro/issues/86)
-- prihlasovaci obrazovka v bootstrapu [#75](https://gitlab.alembiq.net/larp/bistro/issues/75)
-- bootstrap zobrazeni zprav [#17](https://gitlab.alembiq.net/larp/bistro/issues/17)
-- prepinani temat [#72](https://gitlab.alembiq.net/larp/bistro/issues/72)
+- ci: CODECLIMATE cleanup
+- feature: search displays flags[#53](https://gitlab.com/alembiq/bistro/issues/53) [#85](https://gitlab.com/alembiq/bistro/issues/85)
+- fix: user management displayes only unclosed cases [#84](https://gitlab.com/alembiq/bistro/issues/84)
+- fix: email not mandatory in settings [#83](https://gitlab.com/alembiq/bistro/issues/83)
+- fix: adding attachements [#86](https://gitlab.com/alembiq/bistro/issues/86)
+- style: login screen[#75](https://gitlab.com/alembiq/bistro/issues/75)
+- style: notifications [#17](https://gitlab.com/alembiq/bistro/issues/17)
+- feature: themes [#72](https://gitlab.com/alembiq/bistro/issues/72)
 
 **1.6.6**
-- BUGFIX databaze
+- db: minor fix
 
 **1.6.5**
-- v nastaveni link na sebe [#46](https://gitlab.alembiq.net/larp/bistro/issues/46)
-- installer [#70] (https://gitlab.alembiq.net/larp/bistro/issues/70)
-- BUGFIX pretikajici menu [#9](https://gitlab.alembiq.net/larp/bistro/issues/9)
-- LATTE aktuality [#56](https://gitlab.alembiq.net/larp/bistro/issues/56)
-- LATTE nastenka [#55](https://gitlab.alembiq.net/larp/bistro/issues/55)
-- osobni nastaveni - odkaz na svoji kartu [#46](https://gitlab.alembiq.net/larp/bistro/issues/46)
-- osobni nastaveni - email [#57](https://gitlab.alembiq.net/larp/bistro/issues/57)
-- LATTE zalohovani [#58](https://gitlab.alembiq.net/larp/bistro/issues/58)
+- feature: self link in settings [#46](https://gitlab.com/alembiq/bistro/issues/46)
+- feature: installer [#70] (https://gitlab.com/alembiq/bistro/issues/70)
+- fix: overflowing menu [#9](https://gitlab.com/alembiq/bistro/issues/9)
+- style: news [#56](https://gitlab.com/alembiq/bistro/issues/56)
+- style: board [#55](https://gitlab.com/alembiq/bistro/issues/55)
+- feature: email in settings [#57](https://gitlab.com/alembiq/bistro/issues/57)
+- style: backups [#58](https://gitlab.com/alembiq/bistro/issues/58)
 
 **1.6.4**
-- oprava zobrazovani Tracy [#8](https://gitlab.alembiq.net/larp/bistro/issues/8)
-- email uzivatele [#44](https://gitlab.alembiq.net/larp/bistro/issues/44)
+- fix: displaying Tracy [#8](https://gitlab.com/alembiq/bistro/issues/8)
+- feature: user email [#44](https://gitlab.com/alembiq/bistro/issues/44)
 
 **1.6.3**
-- aktuality > MD (potrebuje dostylovat)
-- novinky > MD (potrebuje dostylovat)
-- [thephpleague/commonmark] (https://github.com/thephpleague/commonmark) markdown2html convertor
-- ukladani nastenky [#13](https://gitlab.alembiq.net/larp/bistro/issues/13)
+- refactor: news, board to MD
+- ci: added [thephpleague/commonmark] (https://github.com/thephpleague/commonmark) markdown2html convertor
+- fix: saving board [#13](https://gitlab.com/alembiq/bistro/issues/13)
 
 **1.6.2**
-- uprava vyhledavani (odstraneni diakritiky z klice)
-- .htaccess
-- THE LOOP: nastaveni, uzivatele, zalohovani
-- LATTE manualni zalohovani
-- LATTE sprava uzivatelu
-- editace uzivatelu nabizi jmeny seznam osob k napojeni
-- konfigurace pro easy coding standard
-- konfigurace pro gitlab ci
-- aktualizace knihoven prez composer
-- update databaze preveden na funkce
-- mazani starych tabulek
+- refactor: search
+- feature: .htaccess
+- feature: THE LOOP: settings, user management, backup
+- style: manual backup
+- style: user management
+- feature: linking users to people
+- ci: easy coding standard
+- ci: gitlab ci
+- database: removal of unused tables
 
 **1.6.1**
-- [TUI.editor](https://github.com/nhn/tui.editor) CDN verze
-- Latte - Nastaveni
-- [html-to-markdown](https://github.com/thephpleague/html-to-markdown) DB_PREFIX."users".plan > DB_PREFIX."users".plan_md
-- vyhledavani v top menu
-- skupiny zobrazuji prilozene obrazky
+- feature: CDN [TUI.editor](https://github.com/nhn/tui.editor)
+- style: settings
+- refactor: user plans to MD[html-to-markdown](https://github.com/thephpleague/html-to-markdown)
+- feature: search in menu
+- feature: groups display attached pictures
 
 **1.6.0**
-- funkce pro nacitani osob  (processing/person.php)
-- automaticky pull z gitlabu
-- promazani duplicitnich zaznamu v tabulce neprectenych
-- zobrazovani poctu neprectenych polozek v menu
-- obrazky presunuty do adresare images
-- improved backup (fast restore)
-- API login, logout, personRead
-- rozepsani dokumentace
-- SoapUI testsuite pro API
-- updater - table rename - loggedin, map, backups, cases, data, groups, notes, persons, reports, tasks, symbols, users
+- feature: functions for reading persons  (processing/person.php)
+- feature: pull trigger
+- refactoring: unread duplicity cleanup
+- feature: unread numbers in menu
+- refactoring: style images to /images/
+- refactoring: backup
+- feature: API login, logout, personRead
+- doc: init
+- test: SoapUI testsuite
+- database: table rename - loggedin, map, backups, cases, data, groups, notes, persons, reports, tasks, symbols, users
 
-
-**1.5.8 HLIDKY 3/2019**
-- LATTE template - login, header, footer
-- HTMLtoMD convertor
-- update script - alter table funkcionalita
-- BUGFIX vytvoreni noveho uzivatele
-- sjednoceni zpracovani uzivatelu a sama sebe
-- presmerovani vseho logovani do Tracy ./log/info.log
-- unifikované formátování datumů
-- BUGFIX nehleda ve smazanych poznamkach
-- LATTE nahrazeni funkci PageStart a PageEnd
+**1.5.8 HLIDKY march 2019 release**
+- style: login, header, footer
+- feature: HTMLtoMD convertor
+- feature: updater: alter table func
+- fix: new user
+- refactor: same func for users and myself
+- feature: Tracy logging /log/info.log
+- refactor: unified datum formating
+- fix: search in deleted notes
+- style: replacement of PageStart and PageEnd
 
 **1.5.7**
-- rework vyhledavani - ignoruje diakritiku, mala/velka pismena, hleda casti slov
-- BUGFIX injection vylepseni
-- odstraneni fallbacku - pokud existuje update script, udela se zaloha a pak hned update
-- TinyMCE 5.0
-- jQuery 3.3.1
-- Latte 2.4
-- Tracy 2.5 - nahrazuje puvodni debug
-- oddeleni db konektoru a konfigurace platformy
-- nacitani custom textu
-- priprava MD v databazi (*_md)
+- refactor: search - ignore national characters, lowercase/uppercase
+- security: sql injection
+- refactor: backup & update
+- ci: latte, tracy, jquery, tinyMCE
+- refactor: separation of db connetion and login
+- refactor: custom texts
+- database: markdown columns
 
-**1.5.6 HLIDKY 11/2018**
-- nove nastylovani loginu, spravy uzivatelu
-- moznost editace vsech typu prav
-- mazani unread pro smazane uzivatele
-- zobrazovani data vytvoreni a zmeny u jednotlivych objektu (osoby, vyhledavani, pripadu)
-- zobrazovani priloh u hlaseni, osob, pripadu
-- telefonni cisla jsou zobrazovany jako aktivni linky - volani mobilem primo z bistra
-- mazani novinek
-- zobrazovani datumu u poznamek
-- BUGFIX: $_REQUEST,$_POST,$_GET vicerozmerne pole osetrejeni SQL injection
-- BUGFIX: generovani hesel novych uzivatelu
-- BUGFIX razeni reportu podle data/casu vyjezdu
+**1.5.6 HLIDKY november 2018**
+- style: login
+- style: user management
+- feature: user mangement permissions editable
+- performance: removal od unread for deleted users
+- feature: date of creation and modification of person, search, case displayed
+- fix: showing attachements to report, person, case
+- feature: phone numbers as active links
+- feature: news delete
+- feature: creation date of news
+- security: sql injection $_REQUEST,$_POST,$_GET
+- fix: genarating new passwords
+- fix: sorting reports by time
 
 **1.5.5 SUSPEND USER**
-- novinky vytazeny z indexu
-- ukladaji se i poznamky bez nazvu
-- reset hesla, zamknuti a odemknuti uzivatele  -
+- refactor: news extracted from index.php
+- fix: saving notes with empty name
+- feature: password reset
+- feature: user lock, unlock
 
 **1.5.4 MD5 PASSWORD**
-- md5 hesla
-- odstraneni vsech GOTO
-- html validni
-- presunuti vsech css souboru do css adresare
-- backup fallback na starou db
-- odstraneni debug dat z priloh
-- zaloha je komprimovana
-- zpracovani nastaveni nove
+- security: md5 password
+- refactor: `goto` removed
+- refactor: valid html
+- refactor: css files to /css/
+- refactor: backup fallback for older db
+- refactor: debug data on attachements
+- refactor: backup compression
+- refactor: settings
 
 **1.5.3 SESSION MANAGEMENT REWORK**
-- prepsan session management (odpojena tabulka loggedin)
-    vsechny inputy $_REQUEST osetreny na injection
-- konfigurace db presunuta do $conf[]
-- debug
+- refactor: session management
+- security: sql injection for $_REQUEST
+- refactor: configurations to $conf[]
+- feature: debug mode
 
-**1.5.2 DATABASE UPDATE SCRIPT**
-    $config[]
-    oprava pocitadla delky zpracovani stranky
-    procisteni HEAD
-    zaznam o zaloze do db pouze pokud se povede, nasledne kontrola na update script
+**1.5.2 database UPDATE SCRIPT**
+- fix: page processing timer
+- refactor: <head /> cleanup
+- feature: db updater
 
 **1.5.1 BACKUP UPDATE**
-    trhani func_main na kusy
-    backup (INDEX>FULLTEXT)
+- refactor: separation of /inc/func_main.php
+- refactor: backup (INDEX>FULLTEXT)
 
 **1.5 PHP7**
-    PHP7 + MySQLi
+- refactor: PHP7 + MySQLi
