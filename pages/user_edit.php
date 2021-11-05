@@ -2,12 +2,12 @@
 
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 
 // upravit uzivatele
-if (isset($_POST['userid'], $_POST['edituser']) && $user['aclDirector'] && !preg_match('/^[[:blank:]]*$/i',$_POST['login'])) {
+if (isset($_POST['userid'], $_POST['edituser']) && $user['aclDirector'] && !preg_match('/^[[:blank:]]*$/i', $_POST['login'])) {
     auditTrail(8, 2, $_POST['userid']);
-    $usernameConflict = mysqli_query($database,"SELECT userId FROM ".DB_PREFIX."user WHERE UCASE(userName)=UCASE('".$_POST['login']."') AND userId<>".$_POST['userid']);
+    $usernameConflict = mysqli_query($database, "SELECT userId FROM ".DB_PREFIX."user WHERE UCASE(userName)=UCASE('".$_POST['login']."') AND userId<>".$_POST['userid']);
     if (mysqli_num_rows($usernameConflict)) {
         $latteParameters['message'] = "Uživatel již existuje, změňte jeho jméno.";
     } else {
@@ -30,12 +30,12 @@ if (isset($_POST['userid'], $_POST['edituser']) && $user['aclDirector'] && !preg
             $data['userEmail'] = $_POST['userEmail'];
         }
         $data['personId'] = $_POST['idperson'];
-        userChange($_POST['userid'],$data);
+        userChange($_POST['userid'], $data);
         $latteParameters['message'] = "Uživatel ".$_POST['login']." upraven.";
     }
 }
 
-    $personList = personList('deleted=0 and archiv=0 and dead=0','surname');
+    $personList = personList('deleted=0 and archived < from_unixtime(2) and dead=0', 'surname');
     if (count($personList) > 1) {
         foreach ($personList as $personList) {
             $persons[] = [$personList['id'], $personList['surname'], $personList['name']];
@@ -43,7 +43,7 @@ if (isset($_POST['userid'], $_POST['edituser']) && $user['aclDirector'] && !preg
         $latteParameters['persons'] = $persons;
     }
 
-    $res = mysqli_query($database,"SELECT * FROM ".DB_PREFIX."user WHERE userId=".$URL[3]);
+    $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."user WHERE userId=".$URL[3]);
     if ($rec = mysqli_fetch_assoc($res)) {
         $latteParameters['userEdit'] = $rec;
 
