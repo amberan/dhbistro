@@ -67,14 +67,14 @@
                                 <td>
                                     {if $user['aclCase'] AND !$groups['deleted']}
                                         <a class="btn btn-sm btn-info btn-brick mb-1" href="/editgroup.php?rid={$groups['id']}" alt="{$text[upravitskupinu]}">
-                                            {php  echo file_get_contents($website_link."images/icons/edit-solid.svg")}
+                                            {php  echo file_get_contents("images/icons/edit-solid.svg")}
                                         </a>
                                     {/if}
                                     {if !$groups['deleted']}
                                         <a class="btn btn-sm  btn-info mb-1" href="/newnote.php?rid={$groups['id']}&idtable=6">přidat poznámku</a>
                                     {/if}
                                     {if $user['aclRoot'] AND !$groups['deleted']}
-                                        <a class="btn btn-sm btn-brick btn-danger mb-1" href="/groups/delete/{$groups['id']}" onclick="return confirm('{$text['opravdusmazatskupinu']} &quot; {$groups['title']|stripHtml}&quot;?');" alt="{$text[smazatskupinu]}">{php echo file_get_contents($website_link."images/icons/trash-solid.svg")}</a>
+                                        <a class="btn btn-sm btn-brick btn-danger mb-1" href="/groups/delete/{$groups['id']}" onclick="return confirm('{$text['opravdusmazatskupinu']} &quot; {$groups['title']|stripHtml}&quot;?');" alt="{$text[smazatskupinu]}">{php echo file_get_contents("images/icons/trash-solid.svg")}</a>
                                     {/if}
                                     {if $user['aclRoot'] AND $groups['deleted']}
                                         <a class="btn btn-sm btn-success mb-1" href="/groups/restore/{$groups['id']}" onclick="return confirm('{$text['opravduobnovitskupinu']} &quot; {$groups['title']|stripHtml}&quot;?');">{$text['obnovit']}</a>

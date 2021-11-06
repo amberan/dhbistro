@@ -79,14 +79,14 @@
                                 <td>
                                     {if $user['aclCase'] AND !$cases['deleted']}
                                         <a class="btn btn-sm btn-info btn-brick mb-1" href="/editcase.php?rid={$cases['id']}" alt="{$text[editpripad]}">
-                                            {php  echo file_get_contents($website_link."images/icons/edit-solid.svg")}
+                                            {php  echo file_get_contents("images/icons/edit-solid.svg")}
                                         </a>
                                     {/if}
                                     {if !$cases['deleted']}
                                         <a class="btn btn-sm  btn-info mb-1" href="/newnote.php?rid={$cases['id']}&idtable=7">přidat poznámku</a>
                                     {/if}
                                     {if $user['aclRoot'] AND !$cases['deleted']}
-                                        <a class="btn btn-sm btn-brick btn-danger mb-1" href="/cases/delete/{$cases['id']}" onclick="return confirm('{$text['opravdusmazatpripad']} &quot; {$cases['title']|stripHtml}&quot;?');" alt="{$text[smazatpripad]}">{php echo file_get_contents($website_link."images/icons/trash-solid.svg")}</a>
+                                        <a class="btn btn-sm btn-brick btn-danger mb-1" href="/cases/delete/{$cases['id']}" onclick="return confirm('{$text['opravdusmazatpripad']} &quot; {$cases['title']|stripHtml}&quot;?');" alt="{$text[smazatpripad]}">{php echo file_get_contents("images/icons/trash-solid.svg")}</a>
                                     {/if}
                                     {if $user['aclRoot'] AND $cases['deleted']}
                                         <a class="btn btn-sm btn-success mb-1" href="/cases/restore/{$cases['id']}" onclick="return confirm('{$text['opravduobnovitpripad']} &quot; {$cases['title']|stripHtml}&quot;?');" alt="{$text[obnovitpripad]}">{$text['obnovit']}</a>
