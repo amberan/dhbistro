@@ -6,7 +6,7 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 
 // smazat uzivatele
 if (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] == 'delete') {
-    if (!$user['aclDirector']) {
+    if (!$user['aclUser']) {
         unauthorizedAccess(8, 1, 0, 0);
     } else {
         auditTrail(8, 11, $URL[3]);
@@ -15,7 +15,7 @@ if (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] == 'delete') {
     }
 } // obnovit uzivatele
 elseif (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] == 'restore') {
-    if (!$user['aclDirector']) {
+    if (!$user['aclUser']) {
         unauthorizedAccess(8, 1, 0, 0);
     } else {
         auditTrail(8, 11, $URL[3]);
@@ -24,7 +24,7 @@ elseif (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] == 'restore') {
     }
 } // zamknout uzivatele
 elseif (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] == 'lock') {
-    if (!$user['aclDirector']) {
+    if (!$user['aclUser']) {
         unauthorizedAccess(8, 2, 0, 0);
     } else {
         auditTrail(8, 11, $URL[3]);
@@ -33,7 +33,7 @@ elseif (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] == 'lock') {
     }
 } // odemknout uzivatele
 elseif (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] == 'unlock') {
-    if (!$user['aclDirector']) {
+    if (!$user['aclUser']) {
         unauthorizedAccess(8, 2, 0, 0);
     } else {
         auditTrail(8, 11, $URL[3]);
@@ -42,7 +42,7 @@ elseif (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] == 'unlock') {
     }
 } // reset hesla uzivatele
 elseif (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] = 'reset') {
-    if (!$user['aclDirector']) {
+    if (!$user['aclUser']) {
         unauthorizedAccess(8, 11, 0, 0);
     } else {
         auditTrail(8, 11, @$URL[3]);
@@ -51,7 +51,7 @@ elseif (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] = 'reset') {
         userChange($URL[3],$data,$text['heslonastaveno'].$passwordNew,$text['akcinelzeprovest']);
     }
 }  // vytvorit uzivatele
-elseif (isset($_POST['insertuser']) && $user['aclDirector'] && !preg_match('/^[[:blank:]]*$/i',$_POST['login']) && !preg_match('/^[[:blank:]]*$/i',$_POST['heslo'])) {
+elseif (isset($_POST['insertuser']) && $user['aclUser'] && !preg_match('/^[[:blank:]]*$/i',$_POST['login']) && !preg_match('/^[[:blank:]]*$/i',$_POST['heslo'])) {
     $userExist = mysqli_query($database,"SELECT userId FROM ".DB_PREFIX."user WHERE UCASE(userName)=UCASE('".$_POST['login']."')");
     if (mysqli_num_rows($userExist)) {
         $latteParameters['message'] = $text['uzivatelexistuje'];
@@ -63,7 +63,7 @@ elseif (isset($_POST['insertuser']) && $user['aclDirector'] && !preg_match('/^[[
         if (mysqli_affected_rows($database) > 0) {
             $uidarray = mysqli_fetch_assoc(mysqli_query($database,"SELECT userId FROM ".DB_PREFIX."user WHERE UCASE(userName)=UCASE('".$_POST['login']."')"));
             $data['aclRoot'] = $_POST['aclRoot'];
-            $data['aclDirector'] = $_POST['aclDirector'];
+            $data['aclUser'] = $_POST['aclUser'];
             $data['aclDeputy'] = $_POST['aclDeputy'];
             $data['aclTask'] = $_POST['aclTask'];
             $data['aclSecret'] = $_POST['aclSecret'];

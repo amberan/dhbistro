@@ -103,7 +103,7 @@ $columnAlter['user']['right_super'] = "rightSuperOld int(3) NOT NULL DEFAULT '0'
 $columnAlter['user']['right_text'] = "rightTextOld int(3) NOT NULL DEFAULT '0' after planMD"; //already exist?
 $columnAlter['symbol']['archiv'] = 'archived timestamp NULL AFTER deleted;';
 $columnAlter['person']['archiv'] = 'archived timestamp NULL AFTER deleted;';
-
+$columnAlter['user']['aclDirector'] = "aclUser int(3) NOT NULL DEFAULT '0'";
 
 /*
  * ADD FULLTEXT INDEX
@@ -129,7 +129,7 @@ $columnToMD[] = ['user', 'userId', 'plan', 'planMD'];
  */
 $rightsToUpdate['rightAudOld'] = ['aclAudit'];
 $rightsToUpdate['rightOrgOld'] = ['aclGamemaster'];
-$rightsToUpdate['rightPowerOld'] = ['aclDirector', 'aclDeputy', 'aclSecret', 'aclHunt'];
+$rightsToUpdate['rightPowerOld'] = ['aclUser', 'aclDeputy', 'aclSecret', 'aclHunt'];
 $rightsToUpdate['rightSuperOld'] = ['aclRoot'];
 $rightsToUpdate['rightTextOld'] = ['aclTask', 'aclGroup', 'aclPerson', 'aclCase'];
 

@@ -233,7 +233,7 @@ if (is_numeric($_REQUEST['rid'])) {
                 if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
                     echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;idtable=3" title="upravit"><span class="button-text">upravit</span></a> ';
                 }
-                if (($rec_n['iduser'] == $user['userId']) || ($user['aclDirector'])) {
+                if (($rec_n['iduser'] == $user['userId']) || ($user['aclDeputy'])) {
                     echo '<a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.urlencode($backurl).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec_n['title'])."&quot; náležící k osobě?');".'" title="smazat"><span class="button-text">smazat</span></a>';
                 } ?>
 			</span>

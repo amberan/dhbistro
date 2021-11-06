@@ -180,7 +180,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 		<form action="persons.php" method="post" class="otherform">
 		<?php
             $sql = "SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."group LEFT JOIN ".DB_PREFIX."g2p ON ".DB_PREFIX."g2p.idgroup=".DB_PREFIX."group.id AND ".DB_PREFIX."g2p.idperson=".$_REQUEST['rid']." WHERE ".DB_PREFIX."group.deleted=0 ORDER BY ".DB_PREFIX."group.title ASC";
-            if ($user['aclDirector'] || $user['aclSecret']) {
+            if ($user['aclDeputy'] || $user['aclSecret']) {
                 $res = mysqli_query($database, $sql);
                 while ($rec = mysqli_fetch_assoc($res)) {
                     echo '<div>
@@ -216,7 +216,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 		<ul id="prilozenadata">
 				<?php } ?>
 			<li class="soubor"><a href="file/attachement/<?php echo $rec_f['id']; ?>" title=""><?php echo stripslashes($rec_f['title']); ?></a><?php if ($rec_f['secret'] == 1) { ?> (TAJNÝ)<?php } ?><span class="poznamka-edit-buttons"><?php
-                if (($rec_f['iduser'] == $user['userId']) || ($user['aclDirector'])) {
+                if (($rec_f['iduser'] == $user['userId']) || ($user['aclDeputy'])) {
                     echo '<a class="delete" title="smazat" href="persons.php?deletefile='.$rec_f['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editperson.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat soubor &quot;'.stripslashes($rec_f['title']).'&quot; náležící k osobě?\')"><span class="button-text">smazat soubor</span></a>';
                 } ?>
 				</span></li><?php
@@ -295,7 +295,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
                 if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
                     echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=1" title="upravit"><span class="button-text">upravit</span></a> ';
                 }
-                if (($rec_n['iduser'] == $user['userId']) || ($user['aclDirector'])) {
+                if (($rec_n['iduser'] == $user['userId']) || ($user['aclDeputy'])) {
                     echo '<a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec_n['title'])."&quot; náležící k osobě?');".'" title="smazat"><span class="button-text">smazat</span></a>';
                 } ?>
 				</span>

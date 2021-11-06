@@ -4,7 +4,7 @@ use Tracy\Debugger;
 
 Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 
-if (isset($URL['3']) and $URL['1'] == "news" and ($user['aclDeputy'] > 0 or $user['aclDirector']) and $URL['2'] == "delete") { // DELETE
+if (isset($URL['3']) and $URL['1'] == "news" and ($user['aclDeputy'] > 0) and $URL['2'] == "delete") { // DELETE
     mysqli_query($database, "UPDATE ".DB_PREFIX."news set deleted=1 where id='".$URL['3']."'");
     if (mysqli_affected_rows($database) == 1) {
         auditTrail(5, 11, $URL['3']);
@@ -17,7 +17,7 @@ if (isset($URL['3']) and $URL['1'] == "news" and ($user['aclDeputy'] > 0 or $use
     unauthorizedAccess(5, 0, 0, $URL[3]);
 }
 
-if (isset($URL['3']) and $URL['1'] == "news" and ($user['aclDeputy'] > 0 or $user['aclDirector']) and $URL['2'] == "restore") { // DELETE
+if (isset($URL['3']) and $URL['1'] == "news" and ($user['aclDeputy'] > 0) and $URL['2'] == "restore") { // DELETE
     mysqli_query($database, "UPDATE ".DB_PREFIX."news set deleted=0 where id='".$URL['3']."'");
     if (mysqli_affected_rows($database) == 1) {
         auditTrail(5, 11, $URL['3']);
@@ -30,7 +30,7 @@ if (isset($URL['3']) and $URL['1'] == "news" and ($user['aclDeputy'] > 0 or $use
     unauthorizedAccess(5, 0, 0, $URL[3]);
 }
 
-if ($URL['1'] == "news" and ($user['aclDeputy'] > 0 or $user['aclDirector']) and isset($_POST['news_new'])) { // ADD
+if ($URL['1'] == "news" and ($user['aclDeputy'] > 0) and isset($_POST['news_new'])) { // ADD
     if ($_POST['insertnews'] && !preg_match('/^[[:blank:]]*$/i', $_POST['nadpis']) && !preg_match('/^[[:blank:]]*$/i', $_POST['news_new']) && is_numeric($_POST['kategorie'])) {
         mysqli_query($database, "INSERT INTO ".DB_PREFIX."news ( datum, iduser, kategorie, nadpis, obsahMD, deleted) VALUES('".time()."','".$user['userId']."','".$_POST['kategorie']."','".$_POST['nadpis']."','".$_POST['news_new']."',0)");
         if (mysqli_affected_rows($database) == 1) {
