@@ -32,7 +32,7 @@ latteDrawTemplate("header");
             if ($user['aclGamemaster']) {
                 $editbutton = '; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>; číslo osoby: '.$rec['id'].'; <a href="orgperson.php?rid='.$_REQUEST['rid'].'">organizačně upravit osobu</a>;';
             } else {
-                if ($user['aclDirector'] > 0) {
+                if ($user['aclDeputy'] > 0) {
                     $editbutton = '; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>; číslo osoby: '.$rec['id'].'';
                 } else {
                     if ($usrinfo['right_text']) {
@@ -277,7 +277,7 @@ if ($hn != 1) { ?>
             if (($rec['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
                 echo '<a class="edit" href="editnote.php?rid='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=1" title="upravit"><span class="button-text">upravit</span></a> ';
             }
-            if (($rec['iduser'] == $user['userId']) || ($user['aclDirector'])) {
+            if (($rec['iduser'] == $user['userId']) || ($user['aclDeputy'])) {
                 echo '<a class="delete" href="procnote.php?deletenote='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('readperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec['title'])."&quot; náležící k osobě?');".'" title="smazat"><span class="button-text">smazat</span></a>';
             } ?>
 			</span>

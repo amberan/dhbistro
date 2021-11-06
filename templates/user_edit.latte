@@ -51,13 +51,13 @@
                     <div class="input-group mb-1">
                         <div class="input-group-prepend">
                             <span class="input-group-text min-w-user-edit">
-                                {$text[aclDirector]}
+                                {$text[aclUser]}
                             </span>
                         </div>
                         <div class="input-group-append" style="flex-grow: 1;">
-                            <select class="w-100" name="aclDirector" id="aclDirector">
-                                <option value="0" {if $userEdit['aclDirector'] == 0} selected="selected"{/if}>{$text['ne']}</option>
-                                <option value="1" {if $userEdit['aclDirector'] == 1} selected="selected"{/if}>{$text['ano']}</option>
+                            <select class="w-100" name="aclUser" id="aclUser">
+                                <option value="0" {if $userEdit['aclUser'] == 0} selected="selected"{/if}>{$text['ne']}</option>
+                                <option value="1" {if $userEdit['aclUser'] == 1} selected="selected"{/if}>{$text['ano']}</option>
                                 </select>
                             </div>
                         </div>

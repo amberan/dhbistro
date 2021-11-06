@@ -197,7 +197,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
                 if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
                     echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=7" title="upravit"><span class="button-text">upravit</span></a> ';
                 }
-                if (($rec_n['iduser'] == $user['userId']) || ($user['aclDirector'])) {
+                if (($rec_n['iduser'] == $user['userId']) || ($user['aclDeputy'])) {
                     echo '<a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('readperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec_n['title'])."&quot; náležící k symbolu?');".'" title="smazat"><span class="button-text">smazat</span></a>';
                 } ?>
 				</span>

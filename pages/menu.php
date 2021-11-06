@@ -10,13 +10,13 @@ $menu2[] = [$text['menu-zlobody'], "/evilpoints.php", 0];
 if (isset($user) and $user['aclTask'] > 0) {
     $menu2[] = [$text['ukoly'], "/tasks.php", 0];
 }
-if (isset($user) and $user['aclDirector'] > 0) {
+if (isset($user) and $user['aclUser'] > 0) {
     $menu2[] = [$text['spravauzivatelu'], "/users", 0];
 }
-if (isset($user) and ($user['aclDeputy'] > 0 or $user['aclDirector'] > 0)) {
+if (isset($user) and $user['aclDeputy'] > 0) {
     $menu2[] = [$text['casovadostupnost'], "/doodle.php", 0];
 } elseif (isset($user)) {
-    $doodle = mysqli_fetch_assoc(mysqli_query($database,"SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1"));
+    $doodle = mysqli_fetch_assoc(mysqli_query($database, "SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1"));
     $menu2[] = [$text['casovadostupnost'], $doodle['link'], 0];
 }
 if (isset($user) and $user['aclAudit'] > 0) {

@@ -48,11 +48,11 @@
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">
-                                {$text[aclDirector]}
+                                {$text[aclUser]}
                             </span>
                         </div>
                         <div class="input-group-append" style="flex-grow: 1;">
-                            <select class="w-100" name="aclDirector" id="aclDirector">
+                            <select class="w-100" name="aclUser" id="aclUser">
                                 <option value="0">{$text['ne']}</option>
                                 <option value="1">{$text['ano']}</option>
                             </select>
@@ -208,7 +208,7 @@
                             </select>
                         </div>
                     </div>
-                </div>                                
+                </div>
             {if $user['aclRoot'] > 0 }
                 <div class="col-3">
                     <div class="input-group">
