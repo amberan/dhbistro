@@ -65,28 +65,28 @@ function personList($where = 1, $order = 1): array
 }
 
 /**
- * if unchecked null roof, if checked and db null update to current timestamp.
+ * if unchecked null $field, if checked and db null update to current timestamp.
  *
  * @param int id of person
  * @param bool checked/unchecked
  * @param mixed $id
  * @param mixed $checkbox
  */
-function personRoofUpdate($id, $checkbox): void
+function personCheckboxUpdate($id, $field, $checkbox): void
 {
     global $database;
     if ($checkbox == null) {
-        $sqlUpdate = 'update '.DB_PREFIX.'person set roof=null where id='.$id;
+        $sqlUpdate = 'update '.DB_PREFIX.'person set '.$field.'=null where id='.$id;
     }
-    if ($checkbox == 'on') {
-        $sql = 'select roof from '.DB_PREFIX.'person where id='.$id;
+    if ($checkbox != null) {
+        $sql = 'select '.$field.' from '.DB_PREFIX.'person where id='.$id;
         $sqlQuery = mysqli_query($database, $sql);
-        $sqlRoof = mysqli_fetch_assoc($sqlQuery);
-        print_r($sqlRoof);
-        if ($sqlRoof['roof'] == null) {
-            $sqlUpdate = 'update '.DB_PREFIX.'person set roof=CURRENT_TIMESTAMP where id='.$id;
+        $sqlField = mysqli_fetch_assoc($sqlQuery);
+        print_r($sqlField);
+        if ($sqlField['roof'] == null) {
+            $sqlUpdate = 'update '.DB_PREFIX.'person set '.$field.'=CURRENT_TIMESTAMP where id='.$id;
         }
     }
-    Debugger::log($checkbox.'ROOF '.$sqlUpdate);
+    Debugger::log('PERSON.'.$field."=".$checkbox." >> ".$sqlUpdate);
     mysqli_query($database, $sqlUpdate);
 }

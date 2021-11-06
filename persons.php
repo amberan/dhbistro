@@ -59,7 +59,6 @@ $latteParameters['title'] = 'Osoby';
     }
     if (isset($_POST['personid'], $_POST['editperson']) && $usrinfo['right_text'] && !preg_match('/^[[:blank:]]*$/i', $_POST['name']) && !preg_match('/^[[:blank:]]*$/i', $_POST['contents']) && is_numeric($_POST['side']) && is_numeric($_POST['power']) && is_numeric($_POST['spec'])) {
         auditTrail(1, 2, $_POST['personid']);
-        personRoofUpdate($_POST['personid'], $_POST['personRoof']);
         if (!isset($_POST['notnew'])) {
             unreadRecords(1, $_POST['personid']);
         }
@@ -94,11 +93,16 @@ $latteParameters['title'] = 'Osoby';
             $syid = $syidarray['id'];
             mysqli_query($database, "UPDATE ".DB_PREFIX."person SET symbol='".$syid."' WHERE id=".$_POST['personid']);
         }
-        if ($user['aclGamemaster'] == 1) {
-            $update =  "UPDATE ".DB_PREFIX."person SET name='".$_POST['name']."', surname='".$_POST['surname']."', phone='".$_POST['phone']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead']) ? '1' : '0')."', archived=".(isset($_POST['archiv']) ? 'now()' : 'null')." WHERE id=".$_POST['personid'];
-        } else {
-            $update = "UPDATE ".DB_PREFIX."person SET name='".$_POST['name']."', surname='".$_POST['surname']."', phone='".$_POST['phone']."', datum='".time()."', iduser='".$user['userId']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead']) ? '1' : '0')."', archived=".(isset($_POST['archiv']) ? 'now()' : 'null')." WHERE id=".$_POST['personid'];
+        personCheckboxUpdate($_POST['personid'], 'archived', $_POST['archiv']);
+        personCheckboxUpdate($_POST['personid'], 'roof', $_POST['personRoof']);
+        $sqlPlayer = '';
+        if ($user['aclGamemaster'] != 1) {
+            $sqlPlayer = "datum='".time()."', iduser='".$user['userId']."',";
         }
+        $update = "UPDATE ".DB_PREFIX."person SET name='".$_POST['name']."', surname='".$_POST['surname']."', phone='".$_POST['phone']."', ".$sqlPlayer."
+        contents='".$_POST['contents']."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."',
+        dead='".(isset($_POST['dead']) ? '1' : '0')."' WHERE id=".$_POST['personid'];
+
         Debugger::log('DEBUG '.$config['version'].': '.$update);
 
         mysqli_query($database, $update);
