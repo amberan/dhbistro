@@ -51,6 +51,7 @@ function personList($where = 1, $order = 1): array
     }
     $sql = "SELECT * FROM ".DB_PREFIX."person WHERE ($where) AND ".$user['sqlDeleted']." AND ".$user['sqlSecret']." ORDER BY $order";
     $query = mysqli_query($database, $sql);
+    //echo mysqli_num_rows($query);
     if (mysqli_num_rows($query) > 0) {
         while ($person = mysqli_fetch_assoc($query)) {
             unset($person['deleted']);

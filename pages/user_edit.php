@@ -35,7 +35,7 @@ if (isset($_POST['userid'], $_POST['edituser']) && $user['aclDirector'] && !preg
     }
 }
 
-    $personList = personList('deleted=0 and archived < from_unixtime(2) and dead=0', 'surname');
+    $personList = personList('deleted=0 and (archived is null OR archived  < from_unixtime(1)) and dead=0', 'surname');
     if (count($personList) > 1) {
         foreach ($personList as $personList) {
             $persons[] = [$personList['id'], $personList['surname'], $personList['name']];
