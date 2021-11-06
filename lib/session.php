@@ -2,7 +2,7 @@
 
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 
 /**
  * GET USER INFO.
@@ -16,9 +16,9 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 function sessionUser($sid): array
 {
     global $database, $_SESSION;
-    $usersql = "SELECT * FROM ".DB_PREFIX."user 
+    $usersql = "SELECT * FROM ".DB_PREFIX."user
     WHERE userDeleted=0 AND userSuspended=0 AND ".DB_PREFIX."user.sid ='$sid' AND userAgent='".$_SERVER['HTTP_USER_AGENT']."'";
-    if ($user = mysqli_fetch_assoc(mysqli_query($database,$usersql))) {
+    if ($user = mysqli_fetch_assoc(mysqli_query($database, $usersql))) {
         $usrinfo['userId'] = $user['userId'];
         $usrinfo['login'] = $user['userName'];
         $usrinfo['idperson'] = $user['personId'];
@@ -29,8 +29,8 @@ function sessionUser($sid): array
         $usrinfo['deleted'] = $user['userDeleted'];
         $usrinfo['suspended'] = $user['userSuspended'];
         $usrinfo['zlobody'] = $user['zlobod'];
-        $user['aclDirector'] = $user['aclDirector'];
-        //TODO remove right_text ???missing aclReport???
+        $user['aclUser'] = $user['aclUser'];
+        //TODO remove right_text
         $user['right_text'] = $usrinfo['right_text'] = $user['aclPerson'];
         $user['aclGamemaster'] = $user['aclGamemaster'];
         $user['aclAudit'] = $user['aclAudit'];
@@ -55,7 +55,7 @@ function sessionUser($sid): array
 function sessionDBwipe($sid): void
 {
     global $database;
-    mysqli_query($database,"UPDATE ".DB_PREFIX."user set sid=null WHERE sid='$sid'");
+    mysqli_query($database, "UPDATE ".DB_PREFIX."user set sid=null WHERE sid='$sid'");
 }
 
 /**
@@ -84,12 +84,12 @@ function logout_forced($msg): void
  */
 if (isset($_POST['logmein']) and mb_strlen($_POST['loginname']) and mb_strlen($_POST['loginpwd'])) {
     $logonSql = "SELECT userId FROM ".DB_PREFIX."user WHERE userName='".$_POST['loginname']."' AND userPassword='".md5($_POST['loginpwd'])."' and userDeleted=0 and userSuspended=0";
-    $logon = mysqli_query($database,$logonSql);
+    $logon = mysqli_query($database, $logonSql);
     if ($logonUser = mysqli_fetch_array($logon)) {
         $_SESSION['sid'] = session_id();
         sessionDBwipe($_SESSION['sid']);
         $logonUpdateSql = "UPDATE ".DB_PREFIX."user SET sid='".$_SESSION['sid']."', lastLogin=".time().", ipv4='".$_SERVER['REMOTE_ADDR']."', userAgent='".$_SERVER['HTTP_USER_AGENT']."' WHERE userId=".$logonUser['userId'];
-        mysqli_query($database,$logonUpdateSql);
+        mysqli_query($database, $logonUpdateSql);
         Debugger::log("LOGIN SUCCESS: ".$_POST['loginname']);
     } else {
         Debugger::log("LOGIN FAILED: ".$_POST['loginname']);
@@ -107,7 +107,7 @@ if (isset($_SESSION['sid'])) {
 /*
  * LOGOUT
  */
-if (!isset($_SESSION['sid']) and (in_array($URL[1],$config['page_free'], true) == false)) { //neprihlaseny, zkousi
+if (!isset($_SESSION['sid']) and (in_array($URL[1], $config['page_free'], true) == false)) { //neprihlaseny, zkousi
     logout_forced($text['http401']);
 }
 if (isset($user) and (@$user['userTimeout'] + @$_SESSION['timestamp'] < time()) and !isset($_POST['logmein'])) { //neprihlasuje se, je prihlaseny, ale vyprsel timeout

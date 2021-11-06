@@ -1,6 +1,6 @@
 # BISTRO user permissions >v1.7.0
 
-||aclRoot|aclGamemaster|aclDirector|aclDeputy|aclTask|aclSecret|aclAudit|aclAPI|aclGroup|aclPerson|aclCase|aclHunt|aclReport|aclSymbol|
+||aclRoot|aclGamemaster|aclUser|aclDeputy|aclTask|aclSecret|aclAudit|aclAPI|aclGroup|aclPerson|aclCase|aclHunt|aclReport|aclSymbol|
 --- |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:
 audit                                           |||||||0/1
 group                                           |||||||||0/1
@@ -46,5 +46,5 @@ zálohování                                      | | | | | | X
 - right_text > aclTask + aclGroup + aclPerson + aclCase
 - right_audit > aclAudit
 - right_org > aclGamemaster
-- right_power > aclDirector + aclDeputy + aclSecret + aclHunt
+- right_power > aclUser + aclDeputy + aclSecret + aclHunt
 - right_super > aclRoot

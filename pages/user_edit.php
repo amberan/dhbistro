@@ -5,7 +5,7 @@ use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 
 // upravit uzivatele
-if (isset($_POST['userid'], $_POST['edituser']) && $user['aclDirector'] && !preg_match('/^[[:blank:]]*$/i', $_POST['login'])) {
+if (isset($_POST['userid'], $_POST['edituser']) && $user['aclUser'] && !preg_match('/^[[:blank:]]*$/i', $_POST['login'])) {
     auditTrail(8, 2, $_POST['userid']);
     $usernameConflict = mysqli_query($database, "SELECT userId FROM ".DB_PREFIX."user WHERE UCASE(userName)=UCASE('".$_POST['login']."') AND userId<>".$_POST['userid']);
     if (mysqli_num_rows($usernameConflict)) {
@@ -13,7 +13,7 @@ if (isset($_POST['userid'], $_POST['edituser']) && $user['aclDirector'] && !preg
     } else {
         $data['userName'] = $_POST['login'];
         $data['aclRoot'] = $_POST['aclRoot'];
-        $data['aclDirector'] = $_POST['aclDirector'];
+        $data['aclUser'] = $_POST['aclUser'];
         $data['aclDeputy'] = $_POST['aclDeputy'];
         $data['aclTask'] = $_POST['aclTask'];
         $data['aclSecret'] = $_POST['aclSecret'];

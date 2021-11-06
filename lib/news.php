@@ -2,12 +2,12 @@
 
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 
 /* function newsRead($newsid) {
     //vraci jednu osobu; aplikuje prava podle uzivatele
     global $database, $user;
-    $sqlwhere = " id = $personid AND secret <=".$user['aclDirector'];
+    $sqlwhere = " id = $personid AND secret <=".$user['aclDeputy'];
     if (isset($user['aclDeputy']) AND $user['aclDeputy'] > 0) {
         $sqlwhere .= " AND deleted = 1";
     } else {
