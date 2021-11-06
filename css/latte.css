@@ -167,7 +167,9 @@ input[type='submit'] {
 .unread span.unread-number {
   color: lightcoral;
 }
-
+.unread_record {
+    background-color:moccasin !important;
+}
 .writable-section {
   display: block;
   width: 100%;

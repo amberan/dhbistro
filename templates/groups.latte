@@ -42,6 +42,7 @@
                             <th>
                                 {$text['nazev']} <a href="{$website_link}{$URL[1]}/?sort=title">&#8661;</a>
                             </th>
+                            <th>{$text['stav']}</th>
                             <th>
                                 {$text['vytvoreno']}  <a href="{$website_link}{$URL[1]}/?sort=created">&#8661;</a>
                             </th>
@@ -58,6 +59,16 @@
                                     <a href="/readgroup.php?rid={$groups['id']}&amp;hidenotes=0">{$groups['title']}</a>
                                     {if $groups['secret']}
                                         <span class="badge rounded-pill bg-danger text-light">{$text['utajeno']|upper}</span>
+                                    {/if}
+                                </td>
+                                <td>
+                                    {if $groups['archived']}
+                                        <span class="badge rounded-pill bg-secondary text-light mb-1">{$text['archivovano']}</span>
+                                    {else}
+                                        <span class="badge rounded-pill bg-success text-light mb-1">{$text['aktivni']}</span>
+                                    {/if}
+                                    {if $groups['deleted']}
+                                        <span class="badge rounded-pill bg-warning text-dark mb-1">{$text['smazany']}</span>
                                     {/if}
                                 </td>
                                 <td>

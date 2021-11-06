@@ -10,6 +10,8 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
   -->
 
 **1.8.3**
+- feature: groups status [#174](https://gitlab.com/alembiq/bistro/issues/175)
+- style: marking of unread items [#173](https://gitlab.com/alembiq/bistro/issues/173)
 - fix: showing archived flag on persons [#171](https://gitlab.com/alembiq/bistro/issues/171)
 - fix: assigning persons to users [#172](https://gitlab.com/alembiq/bistro/issues/172)
 
