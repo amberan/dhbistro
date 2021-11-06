@@ -195,3 +195,4 @@ $text['smazatskupinu'] = 'Smazat skupinu';
 $text['obnovitskupinu'] = 'Obnovit skupinu';
 $text['opravdusmazatskupinu'] = 'Opravdu smazat skupinu?';
 $text['opravduobnovitskupinu'] = 'Opravdu obnovit skupinu?';
+$text['aktivni'] = 'aktivní';
