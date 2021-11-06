@@ -227,9 +227,9 @@ $latteParameters['title'] = 'Osoby';
         default: $fsql_dead = ' AND '.DB_PREFIX.'person.dead=0 ';
     }
     switch ($farchiv) {
-        case 0: $fsql_archiv = ' AND '.DB_PREFIX.'person.archived is null '; break;
+        case 0: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1))  '; break;
         case 1: $fsql_archiv = ''; break;
-        default: $fsql_archiv = ' AND '.DB_PREFIX.'person.archived is null ';
+        default: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1)) ';
     }
         switch ($fspec) {
         case 0: $fsql_fspec = ''; break;
@@ -342,6 +342,7 @@ if (isset($_GET['sort'])) {
     WHERE ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret<=".$user['aclSecret'].$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow.$filterUnread.sortingGet('person');
 
     $res = mysqli_query($database, $sql);
+    //echo mysqli_num_rows($res);
     if (mysqli_num_rows($res)) {
         echo '<div id="obsah">
 <table>

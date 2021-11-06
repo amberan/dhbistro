@@ -14,7 +14,7 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
     }
 
     //seznam osob
-    $personList = personList('deleted=0 and archived < from_unixtime(2) and dead=0', 'surname');
+    $personList = personList('deleted=0 and  (archived is null OR archived  < from_unixtime(1))  and dead=0', 'surname');
     //odecteni napojenych od vsech
     foreach ($personList as $personList) {
         if (!in_array($personList['id'], $personLinked, true)) {
