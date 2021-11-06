@@ -8,6 +8,7 @@ include:
 - template: Code-Quality.gitlab-ci.yml
 - template: Security/SAST.gitlab-ci.yml
 - template: Security/Secret-Detection.gitlab-ci.yml
+- template: Security/Dependency-Scanning.gitlab-ci.yml
 variables:
   SAST_EXPERIMENTAL_FEATURES: 'true'
   SAST_DEFAULT_ANALYZERS: nodejs-scan,eslint,phpcs-security-audit

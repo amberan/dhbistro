@@ -145,7 +145,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 					<input type="checkbox" name="dead" value=1 <?php if ($rec_p['dead'] == 1) { ?>checked="checked"<?php } ?>/><br/>
 				<div class="clear">&nbsp;</div>
                 <h3><label for="archiv">Archiv:</label></h3>
-					<input type="checkbox" name="archiv" value=1 <?php if ($rec_p['archiv'] == 1) { ?>checked="checked"<?php } ?>/><br/>
+					<input type="checkbox" name="archiv" value=1 <?php if ($rec_p['archived'] > 1) { ?>checked="checked"<?php } ?>/><br/>
 				<div class="clear">&nbsp;</div>
 				<h3><label for="personRoof">Strop:</label></h3>
                     <input type="checkbox" name="personRoof" <?php if ($rec_p['roof'] > null) {

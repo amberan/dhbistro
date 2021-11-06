@@ -9,9 +9,13 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 
   -->
 
+**1.8.3**
+- fix: showing archived flag on persons [#171](https://gitlab.com/alembiq/bistro/issues/171)
+- fix: assigning persons to users [#172](https://gitlab.com/alembiq/bistro/issues/172)
+
 **1.8.2 HLIDKY november 2021 release**
 - style: cases listing [#118](https://gitlab.com/alembiq/bistro/issues/118)
-- refactor: faster report listing and fixed sortingkikot [#158](https://gitlab.com/alembiq/bistro/issues/158)
+- refactor: faster report listing and fixed sorting [#158](https://gitlab.com/alembiq/bistro/issues/158)
 - fix: saving news [#156](https://gitlab.com/alembiq/bistro/issues/156)
 - database: removal of old columns from dashboard table [#160](https://gitlab.com/alembiq/bistro/issues/160)
 - refactor: `commonmark` replaced with `TUI editor` [#163](https://gitlab.com/alembiq/bistro/issues/163)
@@ -41,7 +45,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - feature: new permissions for reports and symbols [#132](https://gitlab.com/alembiq/bistro/issues/132)
 
 **1.7.4**
-- deature: symbols can be archived [#22](https://gitlab.com/alembiq/bistro/issues/22)
+- feature: symbols can be archived [#22](https://gitlab.com/alembiq/bistro/issues/22)
 
 **1.7.3**
 - feature: sorting on object listings [#87](https://gitlab.com/alembiq/bistro/issues/87)

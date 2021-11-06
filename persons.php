@@ -367,7 +367,7 @@ if (isset($_GET['sort'])) {
                         <td>'.($rec['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a></span>' : '<a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a>').'</td>
 						<td><a href="tel:'.str_replace(' ', '', $rec['phone']).'">'.$rec['phone'].'</a></td>
 						<td>'.webdate($rec['date_created']).' / '.webdate($rec['date_changed']).'</td>
-                        <td>'.($rec['archived'] != null ? 'Archivovaný' : '').''.($rec['dead'] == 1 ? ' Mrtvý' : '').''.($rec['secret'] == 1 ? ' Tajný' : '').'</td>
+                        <td>'.($rec['archived'] > 2 ? 'Archivovaný' : '').''.($rec['dead'] == 1 ? ' Mrtvý' : '').''.($rec['secret'] == 1 ? ' Tajný' : '').'</td>
                         '.($usrinfo['right_text'] ? '	<td><a href="editperson.php?rid='.$rec['id'].'">upravit</a> | <a href="persons.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat osobu &quot;".implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])])."&quot;?');".'">smazat</a></td>' : '<td><a href="newnote.php?rid='.$rec['id'].'&idtable=5">přidat poznámku</a>').'
                         </tr>';
             $even++;

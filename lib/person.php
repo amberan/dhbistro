@@ -2,7 +2,7 @@
 
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 
 //TODO funkce pro prevod id fotek s symbolu na odkazy
 
@@ -18,7 +18,7 @@ function personRead($personId): array
 {
     global $database, $user, $text;
     $sql = "SELECT * FROM ".DB_PREFIX."person WHERE id = $personId AND ".$user['sqlDeleted']." AND ".$user['sqlDeleted'];
-    $query = mysqli_query($database,$sql);
+    $query = mysqli_query($database, $sql);
     if (mysqli_num_rows($query) > 0) {
         $person = mysqli_fetch_assoc($query);
         unset($person['deleted']);
@@ -49,8 +49,8 @@ function personList($where = 1, $order = 1): array
     if (mb_strlen($order) < 1) {
         $order = 1;
     }
-    $sql = "SELECT * FROM ".DB_PREFIX."person WHERE ($where) AND ".$user['sqlDeleted']." AND ".$user['sqlDeleted']." ORDER BY $order";
-    $query = mysqli_query($database,$sql);
+    $sql = "SELECT * FROM ".DB_PREFIX."person WHERE ($where) AND ".$user['sqlDeleted']." AND ".$user['sqlSecret']." ORDER BY $order";
+    $query = mysqli_query($database, $sql);
     if (mysqli_num_rows($query) > 0) {
         while ($person = mysqli_fetch_assoc($query)) {
             unset($person['deleted']);
@@ -71,7 +71,7 @@ function personList($where = 1, $order = 1): array
  * @param mixed $id
  * @param mixed $checkbox
  */
-function personRoofUpdate($id,$checkbox): void
+function personRoofUpdate($id, $checkbox): void
 {
     global $database;
     if ($checkbox == null) {
@@ -79,7 +79,7 @@ function personRoofUpdate($id,$checkbox): void
     }
     if ($checkbox == 'on') {
         $sql = 'select roof from '.DB_PREFIX.'person where id='.$id;
-        $sqlQuery = mysqli_query($database,$sql);
+        $sqlQuery = mysqli_query($database, $sql);
         $sqlRoof = mysqli_fetch_assoc($sqlQuery);
         print_r($sqlRoof);
         if ($sqlRoof['roof'] == null) {
@@ -87,5 +87,5 @@ function personRoofUpdate($id,$checkbox): void
         }
     }
     Debugger::log($checkbox.'ROOF '.$sqlUpdate);
-    mysqli_query($database,$sqlUpdate);
+    mysqli_query($database, $sqlUpdate);
 }
