@@ -95,10 +95,14 @@ $latteParameters['title'] = 'Osoby';
             mysqli_query($database, "UPDATE ".DB_PREFIX."person SET symbol='".$syid."' WHERE id=".$_POST['personid']);
         }
         if ($user['aclGamemaster'] == 1) {
-            mysqli_query($database, "UPDATE ".DB_PREFIX."person SET name='".$_POST['name']."', surname='".$_POST['surname']."', phone='".$_POST['phone']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead']) ? '1' : '0')."', archived='".(isset($_POST['archiv']) ? 'FROM_UNIXTIME(1)' : 'null')."' WHERE id=".$_POST['personid']);
+            $update =  "UPDATE ".DB_PREFIX."person SET name='".$_POST['name']."', surname='".$_POST['surname']."', phone='".$_POST['phone']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead']) ? '1' : '0')."', archived=".(isset($_POST['archiv']) ? 'now()' : 'null')." WHERE id=".$_POST['personid'];
         } else {
-            mysqli_query($database, "UPDATE ".DB_PREFIX."person SET name='".$_POST['name']."', surname='".$_POST['surname']."', phone='".$_POST['phone']."', datum='".time()."', iduser='".$user['userId']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead']) ? '1' : '0')."', archived='".(isset($_POST['archiv']) ? 'FROM_UNIXTIME(1)' : 'null')."' WHERE id=".$_POST['personid']);
+            $update = "UPDATE ".DB_PREFIX."person SET name='".$_POST['name']."', surname='".$_POST['surname']."', phone='".$_POST['phone']."', datum='".time()."', iduser='".$user['userId']."', contents='".$_POST['contents']."', secret='".$_POST['secret']."', side='".$_POST['side']."', power='".$_POST['power']."', spec='".$_POST['spec']."', dead='".(isset($_POST['dead']) ? '1' : '0')."', archived=".(isset($_POST['archiv']) ? 'now()' : 'null')." WHERE id=".$_POST['personid'];
         }
+        Debugger::log('DEBUG '.$config['version'].': '.$update);
+
+        mysqli_query($database, $update);
+
         $_SESSION['message'] = 'Osoba upravena.';
         header('Location: readperson.php?rid='.$_POST['personid'].'&amp;hidenotes=0');
     } else {
