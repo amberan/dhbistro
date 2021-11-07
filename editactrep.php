@@ -45,11 +45,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($user['userId'] 
         // následuje generování hlavičky
         $latteParameters['title'] = 'Úprava hlášení'.$type == 1 ? ' z výjezdu' : ($type == 2 ? ' z výslechu' : '');
         mainMenu();
-        sparklets('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení'.$type == 1 ? ' z výjezdu' : ($type == 2 ? ' z výslechu' : '').'</strong>', '<a href="symbols.php">přiřadit symboly</a>');
-
-        //   $aday = date('j',$rec_actr['adatum']);
-        //   $amonth = date('n',$rec_actr['adatum']);
-        //   $ayear = date('Y',$rec_actr['adatum']);?>
+        sparklets('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení'.$type == 1 ? ' z výjezdu' : ($type == 2 ? ' z výslechu' : '').'</strong>', '<a href="symbols.php">přiřadit symboly</a>'); ?>
 <div id="obsah">
     <form action="procactrep.php" method="post" id="inputform">
         <fieldset id="ramecek">

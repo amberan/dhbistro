@@ -8,11 +8,13 @@ latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Osoby';
 
+    // DELETE
     if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete']) && $usrinfo['right_text']) {
         auditTrail(1, 11, $_REQUEST['delete']);
         mysqli_query($database, "UPDATE ".DB_PREFIX."person SET deleted=1 WHERE id=".$_REQUEST['delete']);
         deleteAllUnread(1, $_REQUEST['delete']);
     }
+    // NEW
     if (isset($_POST['insertperson']) && !preg_match('/^[[:blank:]]*$/i', $_POST['name']) && !preg_match('/^[[:blank:]]*$/i', $_POST['contents']) && is_numeric($_POST['secret']) && is_numeric($_POST['side']) && is_numeric($_POST['power']) && is_numeric($_POST['spec'])) {
         if (is_uploaded_file($_FILES['portrait']['tmp_name'])) {
             $file = time().md5(uniqid(time().random_int(0, getrandmax())));
@@ -42,8 +44,15 @@ $latteParameters['title'] = 'Osoby';
         } else {
             $updateRoof = 'null';
         }
+        $updateDate = $rdatum = time();
+        if ($user['aclGamemaster'] == 1) {
+            $rdatum = mktime(0, 0, 0, $_POST['rdatummonth'], $_POST['rdatumday'], $_POST['rdatumyear']);
+            $updateDate = rand($rdatum, time());
+        }
+
+
         $sql_p = "INSERT INTO ".DB_PREFIX."person (roof, name, surname, phone, datum, iduser, contents, secret, deleted, portrait, side, power, spec, symbol, dead, archived, regdate, regid)
-            VALUES(".$updateRoof.",'".$_POST['name']."','".$_POST['surname']."','".$_POST['phone']."','".time()."','".$user['userId']."','".$_POST['contents']."','".$_POST['secret']."','0','".$file."', '".$_POST['side']."', '".$_POST['power']."', '".$_POST['spec']."', '".$syid."','0',null,'".time()."','".$user['userId']."')";
+            VALUES(".$updateRoof.",'".$_POST['name']."','".$_POST['surname']."','".$_POST['phone']."','".$updateDate."','".$user['userId']."','".$_POST['contents']."','".$_POST['secret']."','0','".$file."', '".$_POST['side']."', '".$_POST['power']."', '".$_POST['spec']."', '".$syid."','0',null,'".$rdatum."','".$user['userId']."')";
         mysqli_query($database, $sql_p);
         $pidarray = mysqli_fetch_assoc(mysqli_query($database, "SELECT id FROM ".DB_PREFIX."person WHERE UCASE(surname)=UCASE('".$_POST['surname']."') AND UCASE(name)=UCASE('".$_POST['name']."') AND side='".$_POST['side']."'"));
         $pid = $pidarray['id'];
@@ -57,6 +66,7 @@ $latteParameters['title'] = 'Osoby';
             $_SESSION['message'] = 'Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.';
         }
     }
+    //EDIT
     if (isset($_POST['personid'], $_POST['editperson']) && $usrinfo['right_text'] && !preg_match('/^[[:blank:]]*$/i', $_POST['name']) && !preg_match('/^[[:blank:]]*$/i', $_POST['contents']) && is_numeric($_POST['side']) && is_numeric($_POST['power']) && is_numeric($_POST['spec'])) {
         auditTrail(1, 2, $_POST['personid']);
         if (!isset($_POST['notnew'])) {
@@ -114,7 +124,8 @@ $latteParameters['title'] = 'Osoby';
             $_SESSION['message'] = 'Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva.';
         }
     }
-    if (isset($_POST['personid'], $_POST['orgperson']) && is_numeric($_POST['rdatumday']) && is_numeric($_POST['regusr'])) {
+    //ANTIDATING registration
+    if ((isset($_POST['personid'])) && $user['aclGamemaster'] == 1 && is_numeric($_POST['rdatumday']) && is_numeric($_POST['regusr'])) {
         auditTrail(1, 10, $_POST['personid']);
         $rdatum = mktime(0, 0, 0, $_POST['rdatummonth'], $_POST['rdatumday'], $_POST['rdatumyear']);
         mysqli_query($database, "UPDATE ".DB_PREFIX."person SET regdate='".$rdatum."', regid='".$_POST['regusr']."' WHERE id=".$_POST['personid']);

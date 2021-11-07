@@ -2,7 +2,7 @@
 require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Nová osoba';
@@ -12,9 +12,43 @@ mainMenu();
 ?>
 <div id="obsah">
 	<fieldset><legend><strong>Nová osoba</strong></legend>
-	<p id="top-text">Portréty nahrávejte pokud možno ve velikosti 100x130 bodů, symboly ve velikosti 100x100 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen portréty, o rozmazané postavy nebude nouze v přílohách. Symboly rovněž nahrávejte jasně rozeznatelné.</p>
 	<form action="persons.php" method="post" id="inputform" enctype="multipart/form-data">
-		<fieldset><legend><strong>Základní údaje</strong></legend>
+<?php  if ($user['aclGamemaster'] == 1) {
+    $sql = 'SELECT '.DB_PREFIX.'person.name, '.DB_PREFIX.'person.surname, '.DB_PREFIX.'user.userName , '.DB_PREFIX.'user.userId
+                    FROM '.DB_PREFIX.'user
+                    JOIN '.DB_PREFIX.'person ON '.DB_PREFIX.'user.personId = '.DB_PREFIX.'person.id
+                    ORDER BY '.DB_PREFIX.'user.userName ASC';
+    $res = mysqli_query($database, $sql); ?>
+    <fieldset><legend><strong>Organizační úprava osoby</strong></legend>
+			<div id="info">
+				<div class="clear">&nbsp;</div>
+                    <div>
+                    <h3><label for="rdatum">Vytvořeno:</label></h3>
+
+				<?php echo date_picker("rdatum", 1970); ?>
+                    </div>
+                <div class="clear">&nbsp;</div>
+				<div>
+				<h3><label for="regusr">Vytvořil:</label></h3>
+				<select name="regusr" id="regusr">
+<?php           while ($rec = mysqli_fetch_assoc($res)) {
+        echo '<option value="'.$rec['userId'].'" '.($rec['userId'] == $rec_p['regid'] ? ' selected' : '').'>'.stripslashes($rec['userName']).'       -      '.stripslashes($rec['surname']).', '.stripslashes($rec['name']).'</option>';
+    } ?>
+				</select>
+				</div>
+				<div class="clear">&nbsp;</div>
+  				<div>
+	  			<h3><label for="notnew">organizační změna: <br> (není nové)</label></h3>
+                  <input type=checkbox name=notnew" checked >
+	  			</div>
+
+			</div>
+		</fieldset>
+<?php
+} ?>
+	<p id="top-text">Portréty nahrávejte pokud možno ve velikosti 100x130 bodů, symboly ve velikosti 100x100 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen portréty, o rozmazané postavy nebude nouze v přílohách. Symboly rovněž nahrávejte jasně rozeznatelné.</p>
+
+    <fieldset><legend><strong>Základní údaje</strong></legend>
 			<div id="info">
 				<h3><label for="name" class="required">Jméno:</label></h3><input type="text" name="name" id="name" />
 				<div class="clear">&nbsp;</div>
@@ -66,13 +100,6 @@ mainMenu();
 					<input type="radio" name="secret" value="0" checked="checked"/>ne<br/>
 					<h3><label>&nbsp;</label></h3><input type="radio" name="secret" value="1">ano
 				<div class="clear">&nbsp;</div>
-				<?php 			if ($user['aclGamemaster'] == 1) {
-					echo '
-								<h3><label for="notnew">Není nové</label></h3>
-									<input type="checkbox" name="notnew"/><br/>
-								<div class="clear">&nbsp;</div>';
-				}
-				?>
 				<div class="clear">&nbsp;</div>
 				<h3><label for="personRoof">strop</label></h3><input type="checkbox" name="personRoof"/>
 			</div>

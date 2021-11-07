@@ -10,6 +10,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
   -->
 
 **1.8.3**
+- refactor: antidating person #183
 - refactor: Director permission to User [#178] (https://gitlab.com/alembiq/bistro/issues/178)
 - feature: groups status [#174](https://gitlab.com/alembiq/bistro/issues/175)
 - style: marking of unread items [#173](https://gitlab.com/alembiq/bistro/issues/173)
