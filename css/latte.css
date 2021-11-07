@@ -136,6 +136,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 .login-image-wrapper {
@@ -296,4 +297,31 @@ input[type='submit'] {
     z-index: 1030;
     background-color: white;
   }
+}
+
+/* ---- HEADER HELP ---- */
+
+.help-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+	padding: 5px 15px;
+	margin-top: 10px;
+}
+
+.help-card > p {
+  text-transform: uppercase;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 15px;
+  text-align: center;
+}
+
+.help-card > img {
+  border: 5px solid #0D0D0D;
+  margin: 5px auto;
+  width: 100px;
+  height: auto;
+  display: block;
 }

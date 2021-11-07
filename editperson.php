@@ -44,7 +44,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 				<div class="clear">&nbsp;</div>
   				<div>
 	  			<h3><label for="notnew">organizační změna: <br> (není nové)</label></h3>
-                  <input type=checkbox name=notnew" checked >
+                  <input type=checkbox name=notnew checked >
 	  			</div>
 
 			</div>
