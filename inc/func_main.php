@@ -43,20 +43,21 @@ if (isset($user)) {
     $latteParameters['user'] = $user;
 }
 
-function date_picker($name, $startyear = null, $endyear = null)
+function date_picker($name, $startyear = null, $endyear = null, $preset = null)
 {
-    global $aday,$amonth,$ayear,$user;
+    global $user;
     if ($user['aclGamemaster'] == 1) {
         if ($startyear == null) {
-            $startyear = date("Y") - 40;
-        }
-    } else {
-        if ($startyear == null) {
-            $startyear = date("Y") - 10;
+            echo $startyear = date("Y") - 40;
         }
     }
     if ($endyear == null) {
-        $endyear = date("Y") + 5;
+        $endyear = date("Y") ; //+ 5;
+    }
+    if ($preset != null) {
+        $presetDay = date('j', $preset);
+        $presetMonth = date('n', $preset);
+        $presetYear = date('Y', $preset);
     }
 
     $months = ['', 'Leden', 'Únor', 'Březen', 'Duben', 'Květen',
@@ -65,7 +66,7 @@ function date_picker($name, $startyear = null, $endyear = null)
     // roletka dnů
     $html = "<select class=\"day\" name=\"".$name."day\">";
     for ($i = 1; $i <= 31; $i++) {
-        $html .= "<option ".($i == $aday ? ' selected' : '')." value='$i'>$i</option>";
+        $html .= "<option ".($i == $presetDay ? ' selected' : '')." value='$i'>$i</option>";
     }
     $html .= "</select> ";
 
@@ -73,7 +74,7 @@ function date_picker($name, $startyear = null, $endyear = null)
     $html .= "<select class=\"month\" name=\"".$name."month\">";
 
     for ($i = 1; $i <= 12; $i++) {
-        $html .= "<option ".($i == $amonth ? ' selected' : '')." value='$i'>$months[$i]</option>";
+        $html .= "<option ".($i == $presetMonth ? ' selected' : '')." value='$i'>$months[$i]</option>";
     }
     $html .= "</select> ";
 
@@ -81,7 +82,7 @@ function date_picker($name, $startyear = null, $endyear = null)
     $html .= "<select class=\"year\" name=\"".$name."year\">";
 
     for ($i = $startyear; $i <= $endyear; $i++) {
-        $html .= "<option ".($i == $ayear ? ' selected' : '')." value='$i'>$i</option>";
+        $html .= "<option ".($i == $presetYear ? ' selected' : '')." value='$i'>$i</option>";
     }
     $html .= "</select> ";
 

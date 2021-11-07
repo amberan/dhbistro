@@ -18,10 +18,42 @@ $latteParameters['title'] = 'Zobrazení symbolu';
             mainMenu();
             sparklets('<a href="./persons.php">osoby</a> &raquo; <strong>úprava osoby</strong>'); ?>
 <div id="obsah">
-<fieldset id="ramecek"><legend><strong>Úprava osoby: <?php echo stripslashes($rec_p['surname']).', '.stripslashes($rec_p['name']); ?></strong></legend>
-	<p id="top-text">Portréty nahrávejte pokud možno ve velikosti 100x130 bodů, symboly ve velikosti 100x100 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen portréty, o rozmazané postavy nebude nouze v přílohách. Symboly rovněž nahrávejte jasně rozeznatelné.</p>
 	<form action="persons.php" method="post" id="inputform" enctype="multipart/form-data">
-		<fieldset><legend><strong>Základní údaje</strong></legend>
+<?php  if ($user['aclGamemaster'] == 1) {
+                $sql = 'SELECT '.DB_PREFIX.'person.name, '.DB_PREFIX.'person.surname, '.DB_PREFIX.'user.userName , '.DB_PREFIX.'user.userId
+                    FROM '.DB_PREFIX.'user
+                    JOIN '.DB_PREFIX.'person ON '.DB_PREFIX.'user.personId = '.DB_PREFIX.'person.id
+                    ORDER BY '.DB_PREFIX.'user.userName ASC';
+                $res = mysqli_query($database, $sql); ?>
+    <fieldset><legend><strong>Organizační úprava osoby</strong></legend>
+			<div id="info">
+				<div class="clear">&nbsp;</div>
+				<div>
+	  			<h3><label for="rdatum">Vytvořeno:</label></h3>
+	  			</div>
+				<?php echo date_picker("rdatum", 1970, null, $rec_p['regdate']); ?>
+				<div class="clear">&nbsp;</div>
+				<div>
+				<h3><label for="regusr">Vytvořil:</label></h3>
+				<select name="regusr" id="regusr">
+<?php           while ($rec = mysqli_fetch_assoc($res)) {
+                    echo '<option value="'.$rec['userId'].'" '.($rec['userId'] == $rec_p['regid'] ? ' selected' : '').'>'.stripslashes($rec['userName']).'       -      '.stripslashes($rec['surname']).', '.stripslashes($rec['name']).'</option>';
+                } ?>
+				</select>
+				</div>
+				<div class="clear">&nbsp;</div>
+  				<div>
+	  			<h3><label for="notnew">organizační změna: <br> (není nové)</label></h3>
+                  <input type=checkbox name=notnew" checked >
+	  			</div>
+
+			</div>
+		</fieldset>
+<?php
+            } ?>
+    <fieldset id="ramecek"><legend><strong>Úprava osoby: <?php echo stripslashes($rec_p['surname']).', '.stripslashes($rec_p['name']); ?></strong></legend>
+	<p id="top-text">Portréty nahrávejte pokud možno ve velikosti 100x130 bodů, symboly ve velikosti 100x100 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen portréty, o rozmazané postavy nebude nouze v přílohách. Symboly rovněž nahrávejte jasně rozeznatelné.</p>
+    	<fieldset><legend><strong>Základní údaje</strong></legend>
 		<?php if ($rec_p['portrait'] == null) { ?><img src="#" alt="portrét chybí" title="portrét chybí" id="portraitimg" class="noname"/>
 		<?php } else { ?><img src="file/portrait/<?php echo $_REQUEST['rid']; ?>" alt="<?php echo stripslashes($rec_p['name']).' '.stripslashes($rec_p['surname']); ?>" id="portraitimg" />
 		<?php } ?>
@@ -152,12 +184,6 @@ $latteParameters['title'] = 'Zobrazení symbolu';
                 echo "CHECKED";
             } ?>/></br>
 				<div class="clear">&nbsp;</div>
-<?php 			if ($user['aclGamemaster'] == 1) {
-                echo '
-                                <h3><label for="notnew">Není nové</label></h3>
-					<input type="checkbox" name="notnew"/><br/>
-				<div class="clear">&nbsp;</div>';
-            } ?>
 			</div>
 			<!-- end of #info -->
 		</fieldset>
@@ -247,7 +273,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
                 echo '
 				<div>
 				<strong><label for="fnotnew">Není nové</label></strong>
-					<input type="checkbox" name="fnotnew"/><br/>
+					<input type="checkbox" name="fnotnew" checked/><br/>
 				</div>';
             } ?>
 			<div>
@@ -330,7 +356,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
                 echo '
 				<div>
 				<strong><label for="nnotnew">Není nové</label></strong>
-					<input type="checkbox" name="nnotnew"/><br/>
+					<input type="checkbox" name="nnotnew" checked/><br/>
 				</div>';
             } ?>
 			<div>

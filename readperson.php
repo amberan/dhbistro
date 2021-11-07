@@ -30,7 +30,7 @@ latteDrawTemplate("header");
                 //        $backurl = 'readperson.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
             }
             if ($user['aclGamemaster']) {
-                $editbutton = '; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>; číslo osoby: '.$rec['id'].'; <a href="orgperson.php?rid='.$_REQUEST['rid'].'">organizačně upravit osobu</a>;';
+                $editbutton = '; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>; číslo osoby: '.$rec['id'];
             } else {
                 if ($user['aclDeputy'] > 0) {
                     $editbutton = '; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>; číslo osoby: '.$rec['id'].'';
