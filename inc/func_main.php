@@ -46,10 +46,8 @@ if (isset($user)) {
 function date_picker($name, $startyear = null, $endyear = null, $preset = null)
 {
     global $user;
-    if ($user['aclGamemaster'] == 1) {
-        if ($startyear == null) {
-            echo $startyear = date("Y") - 40;
-        }
+    if ($startyear == null) {
+        echo $startyear = date("Y")-10;
     }
     if ($endyear == null) {
         $endyear = date("Y") ; //+ 5;

@@ -25,7 +25,7 @@ mainMenu();
                     <div>
                     <h3><label for="rdatum">Vytvořeno:</label></h3>
 
-				<?php echo date_picker("rdatum", 1970); ?>
+				<?php echo date_picker("rdatum", 1970); //org?>
                     </div>
                 <div class="clear">&nbsp;</div>
 				<div>

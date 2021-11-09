@@ -9,8 +9,9 @@ $latteParameters['title'] = 'Úprava hlášení';
 mainMenu();
         $customFilter = custom_Filter(15);
     sparklets('<a href="/cases/">případy</a> &raquo; <strong>úprava případu</strong> &raquo; <strong>přidání osob</strong>');
-    if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
-        $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."case WHERE id=".$_REQUEST['rid']);
+    if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
+        $sql = "SELECT * FROM ".DB_PREFIX."case WHERE id=".$_REQUEST['rid'];
+        $res = mysqli_query($database, $sql);
         if ($rec = mysqli_fetch_assoc($res)) {
             ?>
 
@@ -87,13 +88,14 @@ mainMenu();
             }
             filter();
             // vypis osob
-
-
             $sqlFilter = DB_PREFIX."person.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."person.secret<=".$user['aclSecret'];
-            $sql = "SELECT ".DB_PREFIX."person.phone, ".DB_PREFIX."person.secret, ".DB_PREFIX."person.name, ".DB_PREFIX."person.surname, ".DB_PREFIX."person.id, ".DB_PREFIX."person.symbol, ".DB_PREFIX."c2p.iduser
+            $sql = "SELECT ".DB_PREFIX."unread.id as unread, ".DB_PREFIX."person.regdate as date_created, ".DB_PREFIX."person.datum as date_changed, ".DB_PREFIX."person.phone AS 'phone',
+                            ".DB_PREFIX."person.archived, ".DB_PREFIX."person.dead AS 'dead', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname',
+                            ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol', ".DB_PREFIX."c2p.iduser
             FROM ".DB_PREFIX."person
+            LEFT JOIN  ".DB_PREFIX."unread on  ".DB_PREFIX."person.id =  ".DB_PREFIX."unread.idrecord AND  ".DB_PREFIX."unread.idtable = 1 and  ".DB_PREFIX."unread.iduser=".$user['userId']."
             LEFT JOIN ".DB_PREFIX."c2p ON ".DB_PREFIX."c2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']."
-            WHERE ".$sqlFilter." AND ".$fsql_dead.$fsql_archiv." ORDER BY ".$filterSqlSort;
+            WHERE ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret<=".$user['aclSecret'].$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow.$filterUnread.sortingGet('person');
 
 
             $res = mysqli_query($database, $sql); ?>
@@ -102,6 +104,39 @@ mainMenu();
 
         <?php
     if (mysqli_num_rows($res)) {
+        echo '
+<table>
+<thead>
+	<tr>
+        <th>#</th>
+'.($sportraits ? '<th>Portrét</th>' : '').
+($ssymbols ? '<th>Symbol</th>' : '').'
+        <th>Jméno <a href="persons.php?sort=surname">&#8661;</a></th>
+        <th>Telefon</th>
+        <th>Vytvořeno <a href="persons.php?sort=regdate">&#8661;</a>/ Změněno <a href="persons.php?sort=datum">&#8661;</a></th>
+        <th style="min-width:100px">Status</th>
+	</tr>
+</thead>
+<tbody>
+';
+        $even = 0;
+        while ($person = mysqli_fetch_assoc($res)) {
+            echo '<tr class="'.($person['unread'] ? ' unread_record' : ($even % 2 == 0 ? 'even' : 'odd')).'">
+                        <td><input type="checkbox" name="person[]" value="'.$person['id'].'" class="checkbox"'.($person['iduser'] ? ' checked="checked"' : '').' /></td>
+                        '.($sportraits ? '<td><img src="file/portrait/'.$person['id'].'" alt="" /></td>' : '').'
+                        '.($ssymbols ? '<td><img src="file/symbol/'.$person['symbol'].'" alt="" /></td>' : '').'
+                        <td>'.($person['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$person['id'].'&amp;hidenotes=0">'.implode(', ', [stripslashes($person['surname']), stripslashes($person['name'])]).'</a></span>' : '<a href="readperson.php?rid='.$person['id'].'&amp;hidenotes=0">'.implode(', ', [stripslashes($person['surname']), stripslashes($person['name'])]).'</a>').'</td>
+						<td><a href="tel:'.str_replace(' ', '', $person['phone']).'">'.$person['phone'].'</a></td>
+						<td>'.webdate($person['date_created']).' / '.webdate($person['date_changed']).'</td>
+                        <td>'.($person['archived'] > 2 ? 'Archivovaný' : '').''.($person['dead'] == 1 ? ' Mrtvý' : '').''.($person['secret'] == 1 ? ' Tajný' : '').'</td>
+                        </tr>';
+            $even++;
+        }
+        echo '</tbody>
+</table>
+';
+
+
         echo '<table>
 <thead>
 	<tr>
@@ -115,7 +150,7 @@ mainMenu();
         $even = 0;
         while ($rec = mysqli_fetch_assoc($res)) {
             echo '<tr class="'.($even % 2 == 0 ? 'even' : 'odd').'"><td><input type="checkbox" name="person[]" value="'.$rec['id'].'" class="checkbox"'.($rec['iduser'] ? ' checked="checked"' : '').' /></td>
-'.($sportraits ? '<td><img src="file/portrait/'.$rec['id'].'" alt="portrét chybí" /></td>' : '').($ssymbols ? '<td><img src="file/symbol/'.$rec['symbol'].'" alt="symbol chybí" /></td>' : '').'
+            '.($sportraits ? '<td><img src="file/portrait/'.$rec['id'].'" alt="portrét chybí" /></td>' : '').($ssymbols ? '<td><img src="file/symbol/'.$rec['symbol'].'" alt="symbol chybí" /></td>' : '').'
 	<td>'.($rec['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$rec['id'].'">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a></span>' : '<a href="readperson.php?rid='.$rec['id'].'">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a>').'</td>
 	</tr>';
             $even++;

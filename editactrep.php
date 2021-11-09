@@ -62,7 +62,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($user['userId'] 
                     <h3><label for="adatum"><?php if ($type == '1') { ?>Datum&nbsp;akce<?php } else {
             if ($type == '2') { ?>Datum&nbsp;výslechu<?php }
         } ?>:</label></h3>
-                    <?php echo date_picker("adatum"); ?>
+                    <?php echo date_picker("adatum", 2006, null, $rec_actr['adatum']); ?>
                     <div class="clear">&nbsp;</div>
                     <h3><label for="start">Začátek:</label></h3>
                     <input type="text" name="start" id="start" value="<?php echo stripslashes($rec_actr['start']); ?>" />

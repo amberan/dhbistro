@@ -94,15 +94,15 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
 			<input type="submit" value="Upravit osoby" name="setperson" class="submitbutton editbutton" title="Upravit osoby přiřazené" />
 		</form>
 		<p><?php
-            if ($user['aclSecret']) {
-                $sql = "SELECT ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname' FROM ".DB_PREFIX."c2p, ".DB_PREFIX."person WHERE ".DB_PREFIX."person.id=".DB_PREFIX."c2p.idperson AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']." ORDER BY ".DB_PREFIX."person.surname, ".DB_PREFIX."person.name ASC";
-            } else {
-                $sql = "SELECT ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname' FROM ".DB_PREFIX."c2p, ".DB_PREFIX."person WHERE ".DB_PREFIX."person.id=".DB_PREFIX."c2p.idperson AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."person.secret=0 ORDER BY ".DB_PREFIX."person.surname, ".DB_PREFIX."person.name ASC";
-            }
+                $sql = "SELECT ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname'
+                FROM ".DB_PREFIX."c2p, ".DB_PREFIX."person
+                WHERE ".DB_PREFIX."person.id=".DB_PREFIX."c2p.idperson AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret<=".$user['aclSecret']."
+                ORDER BY ".DB_PREFIX."person.surname, ".DB_PREFIX."person.name ASC";
             $pers = mysqli_query($database, $sql);
-            $persons = [];
+//            $persons = [];
             while ($perc = mysqli_fetch_assoc($pers)) {
-                $persons[] = '<a href="readperson.php?rid='.$perc['id'].'">'.$perc['surname'].', '.$perc['name'].'</a>';
+                //$persons[] =
+                echo '<a href="readperson.php?rid='.$perc['id'].'">'.$perc['surname'].', '.$perc['name'].'</a>, ';
             }
             echo implode('; ', $solvers) != "" ? implode('; ', $solvers) : '<em>Nejsou připojeny žádné osoby.</em>'; ?></p>
 	</fieldset>

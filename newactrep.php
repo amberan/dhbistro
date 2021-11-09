@@ -2,7 +2,7 @@
 require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Nové hlášení';
@@ -43,7 +43,7 @@ $latteParameters['title'] = 'Nové hlášení';
 			<h3><label for="adatum"><?php if ($type == '1') { ?>Datum akce<?php } else {
             if ($type == '2') { ?>Datum výslechu<?php }
         }?>:</label></h3>
-	  		<?php echo date_picker("adatum"); ?>
+	  		<?php echo date_picker("adatum", 2006, null, time()); ?>
 	  		<div class="clear">&nbsp;</div>
 			<h3><label for="start">Začátek:</label></h3>
 	  		<input type="text" name="start" id="start" />
@@ -62,7 +62,7 @@ $latteParameters['title'] = 'Nové hlášení';
 				<option value="0">rozpracované</option>
 				<option value="1">dokončené</option>
 			</select>
-			<div class="clear">&nbsp;</div>			
+			<div class="clear">&nbsp;</div>
 		</div>
 		<!-- end of #info -->
 	</fieldset>
@@ -70,23 +70,23 @@ $latteParameters['title'] = 'Nové hlášení';
 	<fieldset><legend><strong>Shrnutí:</strong></legend>
 		<textarea cols="80" rows="7" name="summary" id="summary">doplnit</textarea>
 	</fieldset>
-	
+
 	<fieldset><legend><strong>Možné dopady:</strong></legend>
 		<textarea cols="80" rows="7" name="impact" id="impact">doplnit</textarea>
 	</fieldset>
-	
+
 	<fieldset><legend><strong>Podrobný popis průběhu:</strong></legend>
 		<textarea cols="80" rows="30" name="details" id="details">doplnit</textarea>
 	</fieldset>
-	
+
 	<fieldset><legend><strong>Energetická náročnost:</strong></legend>
 		<textarea cols="80" rows="7" name="energy" id="energy">kouzla, vstupy do Šera, amulety, artefakty</textarea>
 	</fieldset>
-	
+
 	<fieldset><legend><strong>Počáteční vstupy:</strong></legend>
 		<textarea cols="80" rows="7" name="inputs" id="inputs">info z analytického atd.</textarea>
 	</fieldset>
-	
+
 	<input type="submit" name="insertrep" id="submitbutton" value="Vložit" title="Vložit" />
 
 </fieldset>
