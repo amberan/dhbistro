@@ -31,7 +31,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 				<div>
 	  			<h3><label for="rdatum">Vytvořeno:</label></h3>
 	  			</div>
-				<?php echo date_picker("rdatum", 1970, null, $rec_p['regdate']); ?>
+				<?php echo date_picker("rdatum", 1970, null, $rec_p['regdate']); //org?>
 				<div class="clear">&nbsp;</div>
 				<div>
 				<h3><label for="regusr">Vytvořil:</label></h3>

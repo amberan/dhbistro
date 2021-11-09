@@ -10,9 +10,11 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
   -->
 
 **1.8.3**
-- feature: help wanted #175
-- refactor: antidating person #183
-- refactor: Director permission to User [#178] (https://gitlab.com/alembiq/bistro/issues/178)
+- fix: edit report date [#196](https://gitlab.com/alembiq/bistro/issues/196)
+- fix: assigning people to case [#195](https://gitlab.com/alembiq/bistro/issues/195)
+- feature: help wanted [#175](https://gitlab.com/alembiq/bistro/issues/175)
+- refactor: antidating person [#183](https://gitlab.com/alembiq/bistro/issues/183)
+- refactor: Director permission to User [#178](https://gitlab.com/alembiq/bistro/issues/178)
 - feature: groups status [#174](https://gitlab.com/alembiq/bistro/issues/175)
 - style: marking of unread items [#173](https://gitlab.com/alembiq/bistro/issues/173)
 - fix: archived flag on persons [#171](https://gitlab.com/alembiq/bistro/issues/171)
@@ -86,7 +88,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 
 **1.6.5**
 - feature: self link in settings [#46](https://gitlab.com/alembiq/bistro/issues/46)
-- feature: installer [#70] (https://gitlab.com/alembiq/bistro/issues/70)
+- feature: installer [#70](https://gitlab.com/alembiq/bistro/issues/70)
 - fix: overflowing menu [#9](https://gitlab.com/alembiq/bistro/issues/9)
 - style: news [#56](https://gitlab.com/alembiq/bistro/issues/56)
 - style: board [#55](https://gitlab.com/alembiq/bistro/issues/55)
@@ -99,7 +101,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 
 **1.6.3**
 - refactor: news, board to MD
-- ci: added [thephpleague/commonmark] (https://github.com/thephpleague/commonmark) markdown2html convertor
+- ci: added [thephpleague/commonmark](https://github.com/thephpleague/commonmark) markdown2html convertor
 - fix: saving board [#13](https://gitlab.com/alembiq/bistro/issues/13)
 
 **1.6.2**
@@ -116,7 +118,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 **1.6.1**
 - feature: CDN [TUI.editor](https://github.com/nhn/tui.editor)
 - style: settings
-- refactor: user plans to MD[html-to-markdown](https://github.com/thephpleague/html-to-markdown)
+- refactor: user plans to MD [html-to-markdown](https://github.com/thephpleague/html-to-markdown)
 - feature: search in menu
 - feature: groups display attached pictures
 
