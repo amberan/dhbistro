@@ -298,9 +298,8 @@ $latteParameters['filter'] = $filter;
                                             <table>
                                                 <thead>
                                                     <tr>
-                                                        <th width="30%">Název poznámky</th>
+                                                        <th width="40%">Název poznámky</th>
                                                         <th width="30%">Komentuje</th>
-                                                        <th width="15%">Typ</th>
                                                         <th width="15%">Vytvořeno</th>
                                                         <th width="15%">Status</th>
                                                     </tr>
@@ -373,8 +372,7 @@ $latteParameters['filter'] = $filter;
 
                 echo '<tr class="'.($even % 2 === 0 ? 'even' : 'odd').'">
                 <td><a href="readnote.php?rid='.$rec['id'].'&idtable='.$rec['idtable'].'">'.stripslashes($rec['title']).'</a></td>
-                <td><a href="'.$linktype.'">'.stripslashes($notetitle).'</a></td>
-				<td>'.stripslashes($type).'</td>
+                <td>'.stripslashes($type).': <a href="'.$linktype.'">'.stripslashes($notetitle).'</a></td>
 				<td>'.webdate($rec['date_created']).'</td>
                 <td>'.($rec['secret'] > 0 ? 'Tajná ['.$rec['secret'].']' : '').($rec['deleted'] > 0 ? ' Smazané' : '').'</td>
                 </tr>';
