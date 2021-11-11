@@ -15,7 +15,9 @@ latteDrawTemplate("header");
 				".DB_PREFIX."note.iduser AS 'iduser',
 				".DB_PREFIX."note.deleted AS 'deleted',
 				".DB_PREFIX."note.datum as date_created,
-				".DB_PREFIX."user.userName AS 'nuser'
+				".DB_PREFIX."user.userName AS 'nuser',
+                ".DB_PREFIX."note.idtable,
+                ".DB_PREFIX."note.iditem
 				 FROM ".DB_PREFIX."note, ".DB_PREFIX."user
 				 WHERE ".DB_PREFIX."note.id=".$_REQUEST['rid']."
 				AND ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId");
@@ -24,10 +26,10 @@ latteDrawTemplate("header");
                 $latteParameters['title'] = StripSlashes($rec['title']);
                 mainMenu(0);
                 switch ($_REQUEST['idtable']) {
-                    case 1: $sourceurl = "persons.php"; $sourcename = "osoby"; break;
-                    case 2: $sourceurl = "groups/"; $sourcename = "skupiny"; break;
-                    case 3: $sourceurl = "/cases/"; $sourcename = "případy"; break;
-                    case 4: $sourceurl = "reports.php"; $sourcename = "hlášení"; break;
+                    case 1: $sourceurl = "readperson.php?rid=".$rec['iditem']."&hidenotes=0"; $sourcename = "osoby"; break;
+                    case 2: $sourceurl = "readgroup.php?rid=".$rec['iditem']."&hidenotes=0"; $sourcename = "skupiny"; break;
+                    case 3: $sourceurl = "readcase.php?rid=".$rec['iditem']."&hidenotes=0"; $sourcename = "případy"; break;
+                    case 4: $sourceurl = "readactrep.php?rid=".$rec['iditem']."&hidenotes=0&truenames=0"; $sourcename = "hlášení"; break;
                     default: $sourceurl = ""; $sourcename = ""; break;
                 }
                 if ($usrinfo['right_text']) {

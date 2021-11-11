@@ -133,11 +133,11 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
 	<fieldset><legend><strong>Přiložené soubory</strong></legend>
 		<strong><em>K osobě je možné nahrát neomezené množství souborů, ale velikost jednoho souboru je omezena na 2 MB.</em></strong>
 		<?php //generování seznamu přiložených souborů
-            if ($user['aclSecret']) {
-                $sql = "SELECT ".DB_PREFIX."file.iduser AS 'iduser', ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.secret AS 'secret', ".DB_PREFIX."file.id AS 'id' FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=3 ORDER BY ".DB_PREFIX."file.originalname ASC";
-            } else {
-                $sql = "SELECT ".DB_PREFIX."file.iduser AS 'iduser', ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.secret AS 'secret', ".DB_PREFIX."file.id AS 'id' FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=3 AND ".DB_PREFIX."file.secret=0 ORDER BY ".DB_PREFIX."file.originalname ASC";
-            }
+            $sql = "SELECT ".DB_PREFIX."file.iduser AS 'iduser', ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.secret AS 'secret', ".DB_PREFIX."file.id AS 'id'
+            FROM ".DB_PREFIX."file
+            WHERE ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=3 AND ".DB_PREFIX."file.secret <= ".$user[aclSecret]."
+            ORDER BY ".DB_PREFIX."file.originalname ASC";
+
             $res = mysqli_query($database, $sql);
             $i = 0;
             while ($rec_f = mysqli_fetch_assoc($res)) {
@@ -163,17 +163,22 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
 
 	<div id="new-file" class="otherform-wrap">
 		<fieldset><legend><strong>Nový soubor</strong></legend>
-		<form action="/cases/" method="post" enctype="multipart/form-data" class="otherform">
+		<form action="/editcase.php?rid=<?php echo $_GET['rid']; ?>" method="post" enctype="multipart/form-data" class="otherform">
 			<div>
 				<strong><label for="attachment">Soubor:</label></strong>
 				<input type="file" name="attachment" id="attachment" />
 			</div>
-			<div>
+<?php
+        if ($user['aclSecret'] > 0) {
+            ?>
+            <div>
 				<strong><label for="usecret">Přísně tajné:</label></strong>
 			  	<?php if ($rec_c['secret'] != 1) { ?>&nbsp;<input type="radio" name="secret" value="0" checked="checked"/>ne&nbsp;/<?php } ?>
 				&nbsp;<input type="radio" name="secret" value="1" <?php if ($rec_c['secret'] == 1) { ?>checked="checked"<?php } ?>/>ano
 			</div>
-<?php 			if ($user['aclGamemaster'] == 1) {
+<?php
+        }
+            if ($user['aclGamemaster'] == 1) {
                 echo '
 				<div>
 				<strong><label for="fnotnew">Není nové</label></strong>
