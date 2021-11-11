@@ -12,7 +12,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 **1.8.3**
 - fix: unread listed for every unread record [#204](https://gitlab.com/alembiq/bistro/issues/204)
 - feature: link from note to parent [#201](https://gitlab.com/alembiq/bistro/issues/201)
-- fix: files on cases SQL [#197](https://gitlab.com/alembiq/bistro/issues/197)
+- fix: files on case SQL [#197](https://gitlab.com/alembiq/bistro/issues/197)
 - fix: edit report date [#196](https://gitlab.com/alembiq/bistro/issues/196)
 - fix: assigning people to case [#195](https://gitlab.com/alembiq/bistro/issues/195)
 - feature: help wanted [#175](https://gitlab.com/alembiq/bistro/issues/175)
