@@ -164,7 +164,7 @@ $latteParameters['title'] = 'Hlášení';
                     JOIN ".DB_PREFIX."user ON ".DB_PREFIX."report.iduser = ".DB_PREFIX."user.userId
                     LEFT JOIN  ".DB_PREFIX."unread on  ".DB_PREFIX."report.id =  ".DB_PREFIX."unread.idrecord AND  ".DB_PREFIX."unread.idtable = 4 and  ".DB_PREFIX."unread.iduser=".$user['userId']."
                     WHERE $sqlFilter AND ".DB_PREFIX."report.iduser=".DB_PREFIX."user.userId ".$filterSqlCat.$fsql_sec.$fsql_stat.$filterSqlMine.$fsql_conn.$filterUnread.
-                    $fsql_archiv." ORDER BY ".$filterSqlSort;
+                    $fsql_archiv." GROUP BY ".DB_PREFIX."report.id ORDER BY ".$filterSqlSort;
                     //sortingGet('report');
 
     $res = mysqli_query($database, $sql);
