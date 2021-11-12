@@ -198,7 +198,7 @@ $latteParameters['filter'] = $filter;
 	<td>'.webdate($rec['date_created']).'</td>
 	<td>'.webdate($rec['date_changed']).'</td>
 
-    <td>'.($rec['archived'] === 1 ? 'Archivovaný' : 'Aktivní').''.($rec['dead'] === 1 ? ', Mrtvý' : '').' '.($rec['secret'] > 0 ? ', Tajný ['.$rec['secret'].']' : '').' '.($rec['deleted'] > 0 ? ', Smazané' : '').($rec['archived'] > 0 ? ', archiv' : '').'</td>
+    <td>'.($rec['archived'] > 1 ? 'Archivovaný' : 'Aktivní').''.($rec['dead'] == 1 ? ', Mrtvý' : '').' '.($rec['secret'] > 0 ? ', Tajný ['.$rec['secret'].']' : '').' '.($rec['deleted'] > 0 ? ', Smazané' : '').'</td>
         </tr>';
                 $even++;
             }
