@@ -10,6 +10,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
   -->
 
 **1.8.3**
+- fix: listing groups on edit person [#206](https://gitlab.com/alembiq/bistro/issues/206)
 - feature: search polish special characters [#205](https://gitlab.com/alembiq/bistro/issues/205)
 - fix: unread listed for every unread record [#204](https://gitlab.com/alembiq/bistro/issues/204)
 - feature: link from note to parent [#201](https://gitlab.com/alembiq/bistro/issues/201)
