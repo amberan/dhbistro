@@ -8,7 +8,7 @@ latteDrawTemplate("header");
 $latteParameters['title'] = 'Časová dostupnost';
         mainMenu();
         sparklets('<a href="./doode.php">Časová dostupnost</a>');
-if ($user['aclDeputy']) { ?>
+if ($user['aclNews']) { ?>
 <div id="obsah">
 <?php
     //Přidání nového doodlu

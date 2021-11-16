@@ -1,26 +1,26 @@
 # BISTRO user permissions >v1.7.0
 
-||aclRoot|aclGamemaster|aclUser|aclDeputy|aclTask|aclSecret|aclAudit|aclAPI|aclGroup|aclPerson|aclCase|aclHunt|aclReport|aclSymbol|
---- |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:
-audit                                           |||||||0/1
-group                                           |||||||||0/1
-person                                          ||||||||||0/1
-case                                            |||||||||||0/1
+||aclRoot|aclGamemaster|aclUser|aclNews|aclBoard|aclTask|aclSecret|aclAudit|aclAPI|aclGroup|aclPerson|aclCase|aclHunt|aclReport|aclSymbol|
+--- |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:
+audit                                           ||||||||0/1
+group                                           ||||||||||0/1
+person                                          |||||||||||0/1
+case                                            ||||||||||||0/1
 audit trail of gamemasters                      ||0/1
 antidation                                      ||0/1
 mark as `not new`                               ||0/1
 user management                                 |||0/1
-secret                                          ||||||n-m
-time capacity doodle                            ||||0/1
-points assignement                              ||||0/1
-task                                            |||||r/w
+secret                                          |||||||n-m
+time capacity doodle                            |||0/1
+points assignement                              |||0/1
+task                                            ||||||r/w
 news                                            ||||0/1
-board                                           ||||0/1
+board                                           |||||0/1
 backup                                          |0/1
-API                                             ||||||||0/r/w
-hunt licenses                                   ||||||||||||0/r/w
-report                                          |||||||||||||0/1
-symbol                                          ||||||||||||||0/1
+API                                             |||||||||0/r/w
+hunt licenses                                   |||||||||||||0/r/w
+report                                          ||||||||||||||0/1
+symbol                                          |||||||||||||||0/1
 
 # BISTRO user permissions <v1.6.7
 
@@ -48,3 +48,4 @@ zálohování                                      | | | | | | X
 - right_org > aclGamemaster
 - right_power > aclUser + aclDeputy + aclSecret + aclHunt
 - right_super > aclRoot
+- aclDeputy > aclNews + aclBoard

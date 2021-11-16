@@ -74,15 +74,14 @@ if (isset($user)) {
     } elseif ($URL[1] == 'board') { // BOARD
         auditTrail(6, 1, 0);
         $latteParameters['title'] = $text['nastenka'];
-//        $latteParameters['actions'][] = ["/news", $text['zobrazitaktuality']];
-        if (isset($URL[2]) and $URL[2] == 'edit' and $user['aclDeputy'] < 1) {
+        if (isset($URL[2]) and $URL[2] == 'edit' and $user['aclBoard'] < 1) {
             unauthorizedAccess(6, 2, 0, 0);
-        } elseif ((isset($URL[2]) and $URL[2] == 'edit' and ($user['aclDeputy'] > 0))) { // BOARD > EDIT
+        } elseif ((isset($URL[2]) and $URL[2] == 'edit' and ($user['aclBoard'] > 0))) { // BOARD > EDIT
             $latteParameters['subtitle'] = $text['upravitnastenku'];
             $latteParameters['actions'][] = ["/board", $text['zobrazitnastenku']];
             require_once SERVER_ROOT.'/pages/board_edit.php';
         } else { // BOARD > SHOW
-            if ($user['aclDeputy'] > 0) {
+            if ($user['aclBoard'] > 0) {
                 $latteParameters['actions'][] = ["/board/edit", $text['upravitnastenku']];
             }
             require_once SERVER_ROOT.'/pages/dashboard.php';
@@ -103,13 +102,12 @@ if (isset($user)) {
     } else { // NEWS - DEFAULT
         auditTrail(5, 1, 0);
         $latteParameters['title'] = 'Aktuality';
-        //$latteParameters['actions'][] = ["/board", $text['zobrazitnastenku']];
-        if (isset($URL[2]) and $URL[2] == 'new' and ($user['aclDeputy'] > 0) and $URL[1] == 'news') { // NEWS > NEW
+        if (isset($URL[2]) and $URL[2] == 'new' and ($user['aclNews'] > 0) and $URL[1] == 'news') { // NEWS > NEW
             $latteParameters['subtitle'] = $text['pridataktualitu'];
             $latteParameters['actions'][] = ["/news", $text['zobrazitaktuality']];
             require_once SERVER_ROOT.'/pages/news_add.php';
         } else { // NEWS > SHOW
-            if ($user['aclDeputy'] > 0) {
+            if ($user['aclNews'] > 0) {
                 $latteParameters['actions'][] = ["/news/new", $text['pridataktualitu']];
             }
             require_once SERVER_ROOT.'/pages/dashboard.php';
