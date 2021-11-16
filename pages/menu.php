@@ -16,7 +16,7 @@ if (isset($user) and $user['aclUser'] > 0) {
 }
 if (isset($user) and $user['aclUser'] > 0) {
     $menu2[] = [$text['casovadostupnost'], "/doodle.php", 0];
-} elseif (isset($user)) {
+} else {
     $doodle = mysqli_fetch_assoc(mysqli_query($database, "SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1"));
     $menu2[] = [$text['casovadostupnost'], $doodle['link'], 0];
 }
