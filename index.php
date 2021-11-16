@@ -62,6 +62,7 @@ if (isset($user)) {
                 $latteParameters['subtitle'] = $text['vytvorituzivatele'];
                 require_once SERVER_ROOT.'/pages/user_add.php';
             } elseif (isset($URL[2]) and $URL[2] == 'edit') { // USER MANAGEMENT >EDIT USER
+                $latteParameters['actions'][] = ["/users", $text['spravauzivatelu']];
                 $latteParameters['actions'][] = ["/users/new", $text['vytvorituzivatele']];
                 $latteParameters['subtitle'] = $text['upravituzivatele'];
                 require_once SERVER_ROOT.'/pages/user_edit.php';
@@ -70,10 +71,10 @@ if (isset($user)) {
                 require_once SERVER_ROOT.'/pages/users.php';
             }
         }
-    } elseif ($URL[1] == 'board') { // BOARD (nastenka)
+    } elseif ($URL[1] == 'board') { // BOARD
         auditTrail(6, 1, 0);
         $latteParameters['title'] = $text['nastenka'];
-        $latteParameters['actions'][] = ["/news", $text['zobrazitaktuality']];
+//        $latteParameters['actions'][] = ["/news", $text['zobrazitaktuality']];
         if (isset($URL[2]) and $URL[2] == 'edit' and $user['aclDeputy'] < 1) {
             unauthorizedAccess(6, 2, 0, 0);
         } elseif ((isset($URL[2]) and $URL[2] == 'edit' and ($user['aclDeputy'] > 0))) { // BOARD > EDIT
@@ -87,13 +88,13 @@ if (isset($user)) {
             require_once SERVER_ROOT.'/pages/dashboard.php';
             require_once SERVER_ROOT.'/pages/board.php';
         }
-    } elseif ($URL[1] == 'cases') { // CASES (nastenka)
+    } elseif ($URL[1] == 'cases') { // CASES
         auditTrail(3, 1, 0);
         $latteParameters['title'] = $text['pripady'];
         $latteParameters['actions'][] = ["/newcase.php", $text['pridatpripad']];
         //TODO view case, edit case, new case
         require_once SERVER_ROOT.'/pages/cases.php';
-    } elseif ($URL[1] == 'groups') { // GROUPS (nastenka)
+    } elseif ($URL[1] == 'groups') { // GROUPS
         auditTrail(3, 1, 0);
         $latteParameters['title'] = $text['skupiny'];
         $latteParameters['actions'][] = ["/newgroup.php", $text['pridatskupinu']];
@@ -102,7 +103,7 @@ if (isset($user)) {
     } else { // NEWS - DEFAULT
         auditTrail(5, 1, 0);
         $latteParameters['title'] = 'Aktuality';
-        $latteParameters['actions'][] = ["/board", $text['zobrazitnastenku']];
+        //$latteParameters['actions'][] = ["/board", $text['zobrazitnastenku']];
         if (isset($URL[2]) and $URL[2] == 'new' and ($user['aclDeputy'] > 0) and $URL[1] == 'news') { // NEWS > NEW
             $latteParameters['subtitle'] = $text['pridataktualitu'];
             $latteParameters['actions'][] = ["/news", $text['zobrazitaktuality']];
