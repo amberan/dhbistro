@@ -2,12 +2,12 @@
 require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Přidán úkol';
 
-    if ($usrinfo['right_text']) {
+    if ($user['aclTask']) {
         if (isset($_POST['inserttask'])) {
             auditTrail(10, 2, 0);
         } else {
@@ -19,7 +19,7 @@ $latteParameters['title'] = 'Přidán úkol';
             mainMenu();
             $customFilter = custom_Filter(10);
             $sql_t = "INSERT INTO ".DB_PREFIX."task (task,iduser,status,created,created_by) VALUES('".$_POST['task']."','".$_POST['target']."','0','".time()."','".$user['userId']."')";
-            mysqli_query($database,$sql_t);
+            mysqli_query($database, $sql_t);
             // Ukládání do novinek zakomentováno, protože nevím, jestli se použije. Kdyžtak SMAZAT.
             //		$gidarray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT id FROM ".DB_PREFIX."group WHERE UCASE(title)=UCASE('".mysqli_real_escape_string ($database,$_POST['title'])."')"));
             //		$gid=$gidarray['id'];
@@ -85,7 +85,7 @@ $latteParameters['title'] = 'Přidán úkol';
                 <input type="text" name="task" id="task" />
                 <?php
     $sql = "SELECT userId as id, userName as login FROM ".DB_PREFIX."user WHERE userDeleted=0 ORDER BY login ASC";
-        $res_n = mysqli_query($database,$sql);
+        $res_n = mysqli_query($database, $sql);
         echo '<label for="target">Uživatel:</label>
 		<select name="target" id="target">';
         while ($rec_n = mysqli_fetch_assoc($res_n)) {
@@ -118,11 +118,11 @@ $latteParameters['title'] = 'Přidán úkol';
     }
         filter();
         if (isset($_GET['sort'])) {
-            sortingSet('task',$_GET['sort'],'task');
+            sortingSet('task', $_GET['sort'], 'task');
         }
         // vypis uživatelů
         $sql = "SELECT * FROM ".DB_PREFIX."task".$filterSqlCat.sortingGet('task');
-        $res = mysqli_query($database,$sql);
+        $res = mysqli_query($database, $sql);
         if (mysqli_num_rows($res)) {
             echo '<div id="obsah">
 <table>
@@ -146,12 +146,12 @@ $latteParameters['title'] = 'Přidán úkol';
                 echo '<tr class="'.($even % 2 === 0 ? 'even' : 'odd').'">
 	<td>'.$rec['id'].'</td>
 	<td>'.stripslashes($rec['task']).'</td>
-	<td>'.getAuthor($rec['iduser'],0).'</td>
+	<td>'.getAuthor($rec['iduser'], 0).'</td>
 	<td>'.status($rec['status']).'</td>
 	<td>'.($rec['created'] ? webdate($rec['created']) : 'nikdy').'</td>
-	<td>'.getAuthor($rec['created_by'],0).'</td>
+	<td>'.getAuthor($rec['created_by'], 0).'</td>
 	<td>'.($rec['modified'] ? webdatetime($rec['modified']) : 'nikdy').'</td>
-	<td>'.($rec['modified_by'] ? getAuthor($rec['modified_by'],0) : 'nikdo').'</td>
+	<td>'.($rec['modified_by'] ? getAuthor($rec['modified_by'], 0) : 'nikdo').'</td>
 	<td>'.($rec['status'] !== 2 ? '<a href="procother.php?acctask='.$rec['id'].'">uzavřít</a> ' : '').($rec['status'] !== 0 ? '| <a href="procother.php?rtrntask='.$rec['id'].'">vrátit</a> ' : '').($rec['status'] !== 3 ? '| <a href="procother.php?cncltask='.$rec['id'].'">zrušit</a>' : '').'</td>
 </tr>';
                 $even++;

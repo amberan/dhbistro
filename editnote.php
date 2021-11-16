@@ -43,7 +43,7 @@ mainMenu();
 		</select>
 	</div>
 	<?php
-    if ($user['aclDeputy']) {
+    if ($user['aclUser']) { //TODO PERMISSION NOTE?
         $sql = "SELECT id, login FROM ".DB_PREFIX."user WHERE deleted=0 ORDER BY login ASC";
         $res_n = mysqli_query($database, $sql);
         echo '<div>

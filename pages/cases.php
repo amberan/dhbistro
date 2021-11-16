@@ -74,7 +74,7 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
     }
     if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {
         auditTrail(3, 5, $_GET['caseid']);
-        if ($user['right_text']) {
+        if ($user['aclCase']) {
             $fres = mysqli_query($database, "SELECT uniquename FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
             $frec = mysqli_fetch_assoc($fres);
             unlink('./files/'.$frec['uniquename']);

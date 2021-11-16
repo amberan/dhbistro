@@ -16,6 +16,7 @@ $text['zavrit'] = 'Zavřít';
 $text['notifikace'] = 'Notifikace';
 $text['zapis'] = 'Zápis';
 $text['cteni'] = 'Čtení';
+$text['spravce'] = 'Správce';
 $text['skryt'] = 'Skrýt';
 $text['zpristupnit'] = 'Zpřístupnit';
 $text['neznamo'] = 'Neznámo';
@@ -116,7 +117,6 @@ $text['opravdusmazat'] = 'Opravdu smazat uživatele';
 $text['opravduobnovit'] = 'Opravdu obnovit uživatele';
 $text['aclRoot'] = 'Administrátor';
 $text['aclUser'] = 'Uživatelé';
-$text['aclDeputy'] = 'Zástupce';
 $text['aclTask'] = 'Úkoly';
 $text['aclSecret'] = 'Tajné';
 $text['aclAudit'] = 'Audit';
@@ -128,6 +128,9 @@ $text['aclReport'] = 'Reporty';
 $text['aclSymbol'] = 'Symboly';
 $text['aclGamemaster'] = 'Organizátor';
 $text['aclAPI'] = 'API';
+$text['aclNews'] = 'Aktuality';
+$text['aclBoard'] = 'Nástěnka';
+
 
 // BACKUP
 $text['existujicizalohy'] = 'Existující zálohy';

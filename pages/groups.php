@@ -41,7 +41,7 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
                 echo '<div id="obsah"><p>Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.</p></div>';
             }
         }
-    if (isset($_POST['groupid'], $_POST['editgroup']) && $usrinfo['right_text'] && !preg_match('/^[[:blank:]]*$/i', $_POST['title']) && !preg_match('/i^[[:blank:]]*$/i', $_POST['contents'])) {
+    if (isset($_POST['groupid'], $_POST['editgroup']) && $user['aclGroup'] && !preg_match('/^[[:blank:]]*$/i', $_POST['title']) && !preg_match('/i^[[:blank:]]*$/i', $_POST['contents'])) {
         auditTrail(2, 2, $_POST['groupid']);
         $ures = mysqli_query($database, "SELECT id FROM ".DB_PREFIX."group WHERE UCASE(title)=UCASE('".$_POST['title']."') AND id<>".$_POST['groupid']);
         if (mysqli_num_rows($ures)) {
@@ -84,7 +84,7 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
     }
     if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {
         auditTrail(2, 5, $_GET['groupid']);
-        if ($usrinfo['right_text']) {
+        if ($user['aclGroup']) {
             $fres = mysqli_query($database, "SELECT uniquename FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
             $frec = mysqli_fetch_assoc($fres);
             unlink('./files/'.$frec['uniquename']);

@@ -166,7 +166,7 @@ $latteParameters['filter'] = $filter;
             /* Osoby */
             $fsql_archiv = '';
             if ($filter['archived'] != 'on') {
-                $fsql_archiv = ' AND '.DB_PREFIX.'person.archived is null AND '.DB_PREFIX.'person.dead=0';
+                $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1)) ';
             }
             $sql = "
         SELECT ".DB_PREFIX."person.regdate as date_created, ".DB_PREFIX."person.datum as date_changed, ".DB_PREFIX."person.surname , ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.name , ".DB_PREFIX."person.archived , ".DB_PREFIX."person.dead , ".DB_PREFIX."person.secret , ".DB_PREFIX."person.deleted

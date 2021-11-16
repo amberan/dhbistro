@@ -14,7 +14,7 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
     $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."case WHERE id=".$_REQUEST['rid']);
     $rec = mysqli_fetch_assoc($res);
 
-    if ($usrinfo['right_text'] && (($rec['secret'] == 0) || ($user['aclSecret']) || ($rec_a['iduser']))) {
+    if ($user['aclCase'] && (($rec['secret'] == 0) || ($user['aclSecret']) || ($rec_a['iduser']))) {
         $symbolbutton = ' <a href="symbols.php">přiřadit symboly</a>';
     } else {
         $symbolbutton = '';
@@ -213,10 +213,10 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
             if ($rec_n['secret'] == 1) { ?> (tajná)<?php }
             if ($rec_n['secret'] == 2) { ?> (soukromá)<?php }
             ?><span class="poznamka-edit-buttons"><?php
-            if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
+            if (($rec_n['iduser'] == $user['userId']) || ($user['aclCase']>0)) {
                 echo ' <a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=3" title="upravit"><span class="button-text">upravit poznámku</span></a>';
             }
-            if (($rec_n['iduser'] == $user['userId']) || ($user['aclDeputy'])) {
+            if (($rec_n['iduser'] == $user['userId']) || ($user['aclCase'] > 1)) {
                 echo ' <a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editgroup.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec_n['title'])."&quot; náležící k hlášení?');".'" title="smazat"><span class="button-text">smazat poznámku</span></a>';
             }
             ?></span></li><?php

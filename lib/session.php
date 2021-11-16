@@ -30,8 +30,6 @@ function sessionUser($sid): array
         $usrinfo['suspended'] = $user['userSuspended'];
         $usrinfo['zlobody'] = $user['zlobod'];
         $user['aclUser'] = $user['aclUser'];
-        //TODO remove right_text
-        $user['right_text'] = $usrinfo['right_text'] = $user['aclPerson'];
         $user['aclGamemaster'] = $user['aclGamemaster'];
         $user['aclAudit'] = $user['aclAudit'];
         $user['aclRoot'] = $user['aclRoot'];

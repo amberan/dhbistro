@@ -7,14 +7,13 @@ function mainMenu()
     $dlink = mysqli_fetch_assoc(mysqli_query($database, "SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1"));
     echo '<div id="menu">
   <ul class="'.$config['barva'].'">
-	  <li '.((searchTable(5)) ? ' class="unread"' : ((searchTable(6)) ? ' class="unread"' : '')).'><a href="/">Aktuality</a></li>
-	  <li '.((searchTable(4)) ? ' class="unread"' : '').'><a href="reports.php">'.$text['hlaseniV'].' '.searchTable(4).'</a></li>
+	  <li '.((searchTable(5)) ? ' class="unread"' : ((searchTable(5)) ? ' class="unread"' : '')).'><a href="/">Aktuality</a></li>
+	  <li '.((searchTable(6)) ? ' class="unread"' : ((searchTable(6)) ? ' class="unread"' : '')).'><a href="/board/">Nástěnka</a></li>
+      <li '.((searchTable(4)) ? ' class="unread"' : '').'><a href="reports.php">'.$text['hlaseniV'].' '.searchTable(4).'</a></li>
 	  <li '.((searchTable(1)) ? ' class="unread"' : ((searchTable(7)) ? ' class="unread"' : '')).'><a href="persons.php">Osoby '.searchTable(1).'</a></li>
 	  <li '.((searchTable(3)) ? ' class="unread"' : '').'><a href="/cases/">Případy '.searchTable(3).'</a></li>
 	  <li '.((searchTable(2)) ? ' class="unread"' : '').'><a href="groups/">Skupiny '.searchTable(2).'</a></li>
-	  '/*Docasne odstranena mapa agentu, stejne to nikdo nepouziva
-      .(($user['aclDeputy'])?'<li><a href="mapagents.php">Mapa agentů</a></li>':'')*/.'
-	  '.(($user['aclDeputy'] > 0) ? '<li><a href="doodle.php">Časová dostupnost</a></li>' : '<li><a href="'.$dlink['link'].'" target="_blank">Časová dostupnost</a></li>').'
+	  '.(($user['aclUser'] > 0) ? '<li><a href="doodle.php">Časová dostupnost</a></li>' : '<li><a href="'.$dlink['link'].'" target="_blank">Časová dostupnost</a></li>').'
 	  <li><a href="http://www.prazskahlidka.cz/forums/index.php" target="_blank">Fórum</a></li>
 	  <li><a href="evilpoints.php">'.$text['menu-zlobody'].'</a></li>
 	  <li><a href="/settings">Nastavení</a></li>

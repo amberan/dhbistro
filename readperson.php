@@ -29,18 +29,12 @@ latteDrawTemplate("header");
                 $hidenotes = '&amp;hidenotes=0">zobrazit poznámky</a>';
                 //        $backurl = 'readperson.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
             }
-            if ($user['aclGamemaster']) {
+            if ($user['aclGamemaster'] || $user['aclUser']) {
                 $editbutton = '; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>; číslo osoby: '.$rec['id'];
+            } elseif ($user['aclperson']) {
+                $editbutton = '; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>';
             } else {
-                if ($user['aclDeputy'] > 0) {
-                    $editbutton = '; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>; číslo osoby: '.$rec['id'].'';
-                } else {
-                    if ($usrinfo['right_text']) {
-                        $editbutton = '; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>';
-                    } else {
-                        $editbutton = '';
-                    }
-                }
+                $editbutton = '';
             }
             deleteUnread(1, $_REQUEST['rid']);
             sparklets('<a href="./persons.php">osoby</a> &raquo; <strong>'.stripslashes($rec['surname']).', '.stripslashes($rec['name']).'</strong>', '<a href="readperson.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton); ?>
@@ -274,10 +268,10 @@ if ($hn != 1) { ?>
             } ?></h4>
 			<div><?php echo stripslashes($rec['note']); ?></div>
 			<span class="poznamka-edit-buttons"><?php
-            if (($rec['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
+            if (($rec['iduser'] == $user['userId']) || ($user['aclPerson'])) {
                 echo '<a class="edit" href="editnote.php?rid='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=1" title="upravit"><span class="button-text">upravit</span></a> ';
             }
-            if (($rec['iduser'] == $user['userId']) || ($user['aclDeputy'])) {
+            if (($rec['iduser'] == $user['userId']) || ($user['aclPerson'] > 1)) {
                 echo '<a class="delete" href="procnote.php?deletenote='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('readperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec['title'])."&quot; náležící k osobě?');".'" title="smazat"><span class="button-text">smazat</span></a>';
             } ?>
 			</span>

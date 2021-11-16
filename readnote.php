@@ -32,7 +32,7 @@ latteDrawTemplate("header");
                     case 4: $sourceurl = "readactrep.php?rid=".$rec['iditem']."&hidenotes=0&truenames=0"; $sourcename = "hlášení"; break;
                     default: $sourceurl = ""; $sourcename = ""; break;
                 }
-                if ($usrinfo['right_text']) {
+                if ($user['aclUser']) { //TODO NOTE permission
                     $editbutton = '; <a href="editnote.php?rid='.$_REQUEST['rid'].'&amp;idtable='.$_REQUEST['idtable'].'">upravit poznámku</a>';
                 } else {
                     $editbutton = '';

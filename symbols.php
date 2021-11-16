@@ -30,7 +30,7 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
         $_SESSION['message'] = 'Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.';
     }
         // Vymazani symbolu
-    if (isset($_REQUEST['sdelete']) && is_numeric($_REQUEST['sdelete']) && $usrinfo['right_text']) {
+    if (isset($_REQUEST['sdelete']) && is_numeric($_REQUEST['sdelete']) && $user['aclSymbol']>1) {
         auditTrail(7, 11, $_REQUEST['sdelete']);
         mysqli_query($database, "UPDATE ".DB_PREFIX."symbol SET deleted=1 WHERE id=".$_REQUEST['sdelete']);
         deleteAllUnread(7, $_REQUEST['sdelete']);
@@ -44,7 +44,7 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
     }
 
         // Uprava symbolu
-    if (isset($_POST['symbolid'], $_POST['editsymbol']) && $usrinfo['right_text']) {
+    if (isset($_POST['symbolid'], $_POST['editsymbol']) && $user['aclSymbol']) {
         auditTrail(7, 2, $_POST['symbolid']);
         if (!isset($_POST['notnew'])) {
             unreadRecords(7, $_POST['symbolid']);
@@ -73,13 +73,13 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
         $_SESSION['message'] = 'Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva.';
     }
       // archivace symbolu
-    if (isset($_GET['archive']) && is_numeric($_GET['archive']) && $usrinfo['right_text']) {
+    if (isset($_GET['archive']) && is_numeric($_GET['archive']) && $user['aclSymbol']) {
         auditTrail(7, 11, $_GET['archive']);
         mysqli_query($database, 'UPDATE '.DB_PREFIX.'symbol SET archived=CURRENT_TIMESTAMP WHERE id='.$_GET['archive']);
         $_SESSION['message'] = 'Symbol archivovan.';
     }
       // odarchivace symbolu
-    if (isset($_GET['unarchive']) && is_numeric($_GET['unarchive']) && $usrinfo['right_text']) {
+    if (isset($_GET['unarchive']) && is_numeric($_GET['unarchive']) && $user['aclSymbol']) {
         auditTrail(7, 11, $_GET['unarchive']);
         mysqli_query($database, 'UPDATE '.DB_PREFIX.'symbol SET archived=0 WHERE id='.$_GET['unarchive']);
         $_SESSION['message'] = 'Symbol odarchivovan.';
@@ -233,7 +233,7 @@ switch (@$filter['deleted']) {
 		   	</td>
             <td>
 			<?php
-if ($usrinfo['right_text']) {
+if ($user['aclSymbol']) {
                 echo '	<a href="addsy2p.php?rid='.$rec['id'].'">přiřadit </a> <a href="editsymbol.php?rid='.$rec['id'].'">upravit </a> <a href="newnote.php?rid='.$rec['id'].'&idtable=7">přidat poznámku </a>';
                 if ($rec['archived'] > 0) {
                     echo '<a href="symbols.php?unarchive='.$rec['id'].'" onclick="'."return confirm('Opravdu vyjmout z archivu tento symbol?');".'">odarchivovat </a>';
