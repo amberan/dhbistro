@@ -16,7 +16,7 @@ if ($label != '') {
     $latteParameters['title'] .= $label.' ('.$typestring.')'; // specifikace TITLE
 }
 
-$latteParameters['title'] = 'Úprava hlášení';
+$latteParameters['title'] = 'Prirazeni osob k  hlášení';
 mainMenu();
         $customFilter = custom_Filter(17);
     sparklets('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení</strong>'.($label != '' ? ' - "'.$label.' ('.$typestring.')"' : ''));
@@ -24,7 +24,7 @@ mainMenu();
     //$autharray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT iduser FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']));
     //$author=$autharray['iduser'];
     // --- původní načítání autora ***
-    if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || $user['userId'] == $author)) {
+    if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || $user['userId'] == $author)) {
         $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']);
         if ($rec = mysqli_fetch_assoc($res)) {
             ?>

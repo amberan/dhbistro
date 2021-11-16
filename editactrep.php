@@ -5,7 +5,7 @@ use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
-$latteParameters['title'] = 'Zobrazení symbolu';
+$latteParameters['title'] = 'Zobrazení Reportu';
 
 $reportarray = mysqli_fetch_assoc(mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid'])); // načte data z DB
 $type = intval($reportarray['type']); // určuje typ hlášení
@@ -13,7 +13,7 @@ $type = intval($reportarray['type']); // určuje typ hlášení
 $type == 1 ? 'výjezd' : ($type == 2 ? 'výslech' : '?'); //odvozuje slovní typ hlášení
 $author = $reportarray['iduser']; // určuje autora hlášení
 
-if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($user['userId'] == $author && $reportarray['status'] < 1))) {
+if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || ($user['userId'] == $author && $reportarray['status'] < 1))) {
     $sql = "SELECT
 		".DB_PREFIX."report.id AS 'id',
 		".DB_PREFIX."report.datum AS 'datum',
@@ -89,7 +89,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($user['userId'] 
                         <option value="1" <?php if ($rec_actr['status'] == 1) {
             echo ' selected="selected"';
         } ?>>dokončené</option>
-                        <?php if ($usrinfo['right_text']) {
+                        <?php if ($user['aclReport'] > 0) {
             echo '<option value="2"';
             if ($rec_actr['status'] == 2) {
                 echo ' selected="selected"';
@@ -294,7 +294,7 @@ if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || ($user['userId'] 
                 <div><?php echo stripslashes($rec_n['note']); ?></div>
                 <span
                       class="poznamka-edit-buttons"><?php
-                if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
+                if (($rec_n['iduser'] == $user['userId']) || ($user['aclReport'])) {
                     echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=4" title="upravit"><span class="button-text">upravit</span></a> ';
                 }
             if (($rec_n['iduser'] == $user['userId']) || ($user['aclReport'] > 1)) {

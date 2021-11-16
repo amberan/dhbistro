@@ -172,7 +172,7 @@ $latteParameters['title'] = 'Hlášení';
     while ($rec = mysqli_fetch_assoc($res)) {
         echo '<div class="news_div '.($rec['type'] == 1 ? 'game_news' : 'system_news').($rec['unread'] ? ' unread_record' : '').'">
                 <div class="news_head"><strong><a href="readactrep.php?rid='.$rec['id'].'&amp;hidenotes=0&amp;truenames=0">'.stripslashes($rec['label']).'</a></strong>';
-        if ($usrinfo['right_text'] || ($user['userId'] == $rec['riduser'] && $rec['status'] < 1)) {
+        if ($user['aclReport'] || ($user['userId'] == $rec['riduser'] && $rec['status'] < 1)) {
             echo '	 | <td><a href="editactrep.php?rid='.$rec['id'].'">upravit</a> | <a href="procactrep.php?delete='.$rec['id'].'&amp;table=4" onclick="'."return confirm('Opravdu smazat &quot;".$text['hlaseniM']."&quot; &quot;".stripslashes($rec['label'])."&quot;?');".'">smazat</a></td>';
         } else {
             echo '   | <td><a href="newnote.php?rid='.$rec['id'].'&idtable=8">přidat poznámku</a></td>';

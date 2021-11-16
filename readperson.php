@@ -268,7 +268,7 @@ if ($hn != 1) { ?>
             } ?></h4>
 			<div><?php echo stripslashes($rec['note']); ?></div>
 			<span class="poznamka-edit-buttons"><?php
-            if (($rec['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
+            if (($rec['iduser'] == $user['userId']) || ($user['aclPerson'])) {
                 echo '<a class="edit" href="editnote.php?rid='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=1" title="upravit"><span class="button-text">upravit</span></a> ';
             }
             if (($rec['iduser'] == $user['userId']) || ($user['aclPerson'] > 1)) {

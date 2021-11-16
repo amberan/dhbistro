@@ -18,7 +18,7 @@ latteDrawTemplate("header");
             $latteParameters['title'] = stripslashes($rec_g['title']);
 
             mainMenu();
-            if ($usrinfo['right_text']) {
+            if ($user['aclGroup']) {
                 $editbutton = ' <a href="editgroup.php?rid='.$_GET['rid'].'">upravit skupinu</a>';
             } else {
                 $editbutton = '';
@@ -191,7 +191,7 @@ if ((isset($filter['notes']) and $filter['notes'] == 'on')) { ?>
                 <div><?php echo stripslashes($rec_n['note']); ?></div>
                 <span
                       class="poznamka-edit-buttons"><?php
-            if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
+            if (($rec_n['iduser'] == $user['userId']) || ($user['aclGroup'])) {
                 echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;idtable=2" title="upravit"><span class="button-text">upravit</span></a> ';
             }
             if (($rec_n['iduser'] == $user['userId']) || ($user['aclGroup'] > 1)) {

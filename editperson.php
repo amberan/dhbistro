@@ -7,7 +7,7 @@ latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Zobrazení symbolu';
 
-    if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
+    if (is_numeric($_REQUEST['rid']) && $user['aclPerson']) {
         $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."person WHERE id=".$_REQUEST['rid']);
         if ($rec_p = mysqli_fetch_assoc($res)) {
             if (($rec_p['secret'] > $user['aclSecret']) || $rec_p['deleted'] == 1) {
@@ -322,7 +322,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
                 } ?></h4>
 				<div><?php echo stripslashes($rec_n['note']); ?></div>
 				<span class="poznamka-edit-buttons"><?php
-                if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
+                if (($rec_n['iduser'] == $user['userId']) || ($user['aclPerson'])) {
                     echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=1" title="upravit"><span class="button-text">upravit</span></a> ';
                 }
                 if (($rec_n['iduser'] == $user['userId']) || ($user['aclPerson'] > 1)) {

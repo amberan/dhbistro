@@ -30,7 +30,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
             if ($user['aclSymbol']) {
                 $editbutton = '; <a href="editsymbol.php?rid='.$_REQUEST['rid'].'">upravit symbol</a>; číslo symbolu: '.$rec['id'].'';
             } else {
-                if ($usrinfo['right_text']) {
+                if ($user['aclSymbol']) {
                     $editbutton = '; <a href="editsymbol.php?rid='.$_REQUEST['rid'].'">upravit symbol</a>';
                 } else {
                     $editbutton = '';
@@ -194,7 +194,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
                 } ?></h4>
 				<div><?php echo stripslashes($rec_n['note']); ?></div>
 				<span class="poznamka-edit-buttons"><?php
-                if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
+                if (($rec_n['iduser'] == $user['userId']) || ($user['aclSymbol'])) {
                     echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=7" title="upravit"><span class="button-text">upravit</span></a> ';
                 }
                 if (($rec_n['iduser'] == $user['userId']) || ($user['aclSymbol'] > 1)) {

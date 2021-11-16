@@ -9,7 +9,7 @@ latteDrawTemplate("header");
 $latteParameters['title'] = 'Osoby';
 
     // DELETE
-    if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete']) && $usrinfo['right_text']) {
+    if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete']) && $user['aclPerson']>1) {
         auditTrail(1, 11, $_REQUEST['delete']);
         mysqli_query($database, "UPDATE ".DB_PREFIX."person SET deleted=1 WHERE id=".$_REQUEST['delete']);
         deleteAllUnread(1, $_REQUEST['delete']);
@@ -67,7 +67,7 @@ $latteParameters['title'] = 'Osoby';
         }
     }
     //EDIT
-    if (isset($_POST['personid'], $_POST['editperson']) && $usrinfo['right_text'] && !preg_match('/^[[:blank:]]*$/i', $_POST['name']) && !preg_match('/^[[:blank:]]*$/i', $_POST['contents']) && is_numeric($_POST['side']) && is_numeric($_POST['power']) && is_numeric($_POST['spec'])) {
+    if (isset($_POST['personid'], $_POST['editperson']) && $user['aclPerson'] && !preg_match('/^[[:blank:]]*$/i', $_POST['name']) && !preg_match('/^[[:blank:]]*$/i', $_POST['contents']) && is_numeric($_POST['side']) && is_numeric($_POST['power']) && is_numeric($_POST['spec'])) {
         auditTrail(1, 2, $_POST['personid']);
         if (!isset($_POST['notnew'])) {
             unreadRecords(1, $_POST['personid']);
@@ -162,7 +162,7 @@ $latteParameters['title'] = 'Osoby';
     }
     if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {
         auditTrail(1, 5, $_POST['personid']);
-        if ($usrinfo['right_text']) {
+        if ($user['aclPerson']) {
             $fres = mysqli_query($database, "SELECT uniquename FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
             $frec = mysqli_fetch_assoc($fres);
             unlink('./files/'.$frec['uniquename']);
@@ -172,7 +172,7 @@ $latteParameters['title'] = 'Osoby';
     }
     if (isset($_GET['deletesymbol'])) {
         auditTrail(1, 2, $_GET['personid']);
-        if ($usrinfo['right_text']) {
+        if ($user['aclPerson']) {
             $sps = mysqli_query($database, "SELECT symbol FROM ".DB_PREFIX."person WHERE id=".$_GET['personid']);
             $spc = mysqli_fetch_assoc($sps);
             $prsn_res = mysqli_query($database, "SELECT name, surname FROM ".DB_PREFIX."person WHERE id=".$_GET['personid']);
@@ -388,7 +388,7 @@ if (isset($_GET['sort'])) {
 						<td><a href="tel:'.str_replace(' ', '', $rec['phone']).'">'.$rec['phone'].'</a></td>
 						<td>'.webdate($rec['date_created']).' / '.webdate($rec['date_changed']).'</td>
                         <td>'.($rec['archived'] > 2 ? 'Archivovaný' : '').''.($rec['dead'] == 1 ? ' Mrtvý' : '').''.($rec['secret'] == 1 ? ' Tajný' : '').'</td>
-                        '.($usrinfo['right_text'] ? '	<td><a href="editperson.php?rid='.$rec['id'].'">upravit</a> | <a href="persons.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat osobu &quot;".implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])])."&quot;?');".'">smazat</a></td>' : '<td><a href="newnote.php?rid='.$rec['id'].'&idtable=5">přidat poznámku</a>').'
+                        '.($user['aclPerson'] ? '	<td><a href="editperson.php?rid='.$rec['id'].'">upravit</a> | <a href="persons.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat osobu &quot;".implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])])."&quot;?');".'">smazat</a></td>' : '<td><a href="newnote.php?rid='.$rec['id'].'&idtable=5">přidat poznámku</a>').'
                         </tr>';
             $even++;
         }

@@ -5,7 +5,7 @@ use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
-    if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
+    if (is_numeric($_REQUEST['rid']) && $user['aclGroup']) {
         $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."group WHERE id=".$_REQUEST['rid']);
         if ($rec_g = mysqli_fetch_assoc($res)) {
             if (($rec_g['secret'] > $user['aclSecret']) || $rec_g['deleted'] == 1) {
@@ -146,7 +146,7 @@ latteDrawTemplate("header");
             if ($rec_n['secret'] == 1) { ?> (tajná)<?php }
             if ($rec_n['secret'] == 2) { ?> (soukromá)<?php }
             ?><span class="poznamka-edit-buttons"><?php
-            if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
+            if (($rec_n['iduser'] == $user['userId']) || ($user['aclGroup'])) {
                 echo ' <a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=2" title="upravit"><span class="button-text">upravit poznámku</span></a>';
             }
             if (($rec_n['iduser'] == $user['userId']) || ($user['aclGroup'] > 1)) {

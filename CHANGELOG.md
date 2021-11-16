@@ -14,6 +14,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - fix: linking person to case [#211](https://gitlab.com/alembiq/bistro/issues/211)
 - style: news vs board separation #189
 - refactor: user edit page #181 #180 #179 #178 #177
+- refactor: cleanup from the old permissions #2121
 
 **1.8.3**
 - fix: listing groups on edit person [#206](https://gitlab.com/alembiq/bistro/issues/206)

@@ -230,7 +230,7 @@ if (is_numeric($_REQUEST['rid'])) {
 			</h4>
 			<div><?php echo stripslashes($rec_n['note']); ?></div>
 			<span class="poznamka-edit-buttons"><?php
-                if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
+                if (($rec_n['iduser'] == $user['userId']) || ($user['aclCase'])) {
                     echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;idtable=3" title="upravit"><span class="button-text">upravit</span></a> ';
                 }
                 if (($rec_n['iduser'] == $user['userId']) || ($user['aclCase'] > 1)) {
