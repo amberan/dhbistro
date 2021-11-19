@@ -83,7 +83,7 @@ function logout_forced($msg): void
 if (isset($_POST['logmein']) and mb_strlen($_POST['loginname']) and mb_strlen($_POST['loginpwd'])) {
     $logonSql = "SELECT userId FROM ".DB_PREFIX."user WHERE userName='".$_POST['loginname']."' AND userPassword='".md5($_POST['loginpwd'])."' and userDeleted=0 and userSuspended=0";
     $logon = mysqli_query($database, $logonSql);
-    if ($logonUser = mysqli_fetch_array($logon)) {
+    if (mysqli_num_rows($logon) && $logonUser = mysqli_fetch_array($logon)) {
         $_SESSION['sid'] = session_id();
         sessionDBwipe($_SESSION['sid']);
         $logonUpdateSql = "UPDATE ".DB_PREFIX."user SET sid='".$_SESSION['sid']."', lastLogin=".time().", ipv4='".$_SERVER['REMOTE_ADDR']."', userAgent='".$_SERVER['HTTP_USER_AGENT']."' WHERE userId=".$logonUser['userId'];

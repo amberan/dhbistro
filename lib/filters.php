@@ -10,19 +10,19 @@
  * @param mixed      $column
  * @param mixed|null $linkedTable
  */
-function sortingSet($object,$column,$linkedTable = null): void
+function sortingSet($object, $column, $linkedTable = null): void
 {
     global $database,$user;
-    $currentSorting = sortingGet($object,$linkedTable);
+    $currentSorting = sortingGet($object, $linkedTable);
     //TODO overeni ze bylo zapsano do db
-    if (mb_strpos($currentSorting,$column) and mb_strpos($currentSorting,'DESC')) {
-        mysqli_query($database,"UPDATE ".DB_PREFIX."sort set sortDirection='ASC' where objectType='$object' AND userId=".$user['userId']);
-    } elseif (mb_strpos($currentSorting,$column) and mb_strpos($currentSorting,'ASC')) {
-        mysqli_query($database,"UPDATE ".DB_PREFIX."sort set sortDirection='DESC' where objectType='$object' AND userId=".$user['userId']);
-    } elseif ((DBcolumnExist($object,$column) or DBcolumnExist($linkedTable,$column)) and mb_strlen($currentSorting) > 0) {
-        mysqli_query($database,"UPDATE ".DB_PREFIX."sort set sortColumn='$column' , sortDirection='ASC' where objectType='$object' AND userId=".$user['userId']);
-    } elseif (DBcolumnExist($object,$column) or DBcolumnExist($linkedTable,$column)) {
-        mysqli_query($database,"INSERT INTO ".DB_PREFIX."sort (userId,objectType,sortColumn,sortDirection) VALUES (".$user['userId'].",'$object','$column','ASC')");
+    if (mb_strpos($currentSorting, $column) and mb_strpos($currentSorting, 'DESC')) {
+        mysqli_query($database, "UPDATE ".DB_PREFIX."sort set sortDirection='ASC' where objectType='$object' AND userId=".$user['userId']);
+    } elseif (mb_strpos($currentSorting, $column) and mb_strpos($currentSorting, 'ASC')) {
+        mysqli_query($database, "UPDATE ".DB_PREFIX."sort set sortDirection='DESC' where objectType='$object' AND userId=".$user['userId']);
+    } elseif ((DBcolumnExist($object, $column) or DBcolumnExist($linkedTable, $column)) and mb_strlen($currentSorting) > 0) {
+        mysqli_query($database, "UPDATE ".DB_PREFIX."sort set sortColumn='$column' , sortDirection='ASC' where objectType='$object' AND userId=".$user['userId']);
+    } elseif (DBcolumnExist($object, $column) or DBcolumnExist($linkedTable, $column)) {
+        mysqli_query($database, "INSERT INTO ".DB_PREFIX."sort (userId,objectType,sortColumn,sortDirection) VALUES (".$user['userId'].",'$object','$column','ASC')");
     }
 }
 
@@ -34,14 +34,14 @@ function sortingSet($object,$column,$linkedTable = null): void
  * @param mixed      $object
  * @param mixed|null $linkedTable
  */
-function sortingGet($object,$linkedTable = null): string
+function sortingGet($object, $linkedTable = null): string
 {
     global $database,$user;
     $result = "";
-    $query = mysqli_query($database,"SELECT * FROM ".DB_PREFIX."sort where objectType='$object' AND userId=".$user['userId']);
+    $query = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."sort where objectType='$object' AND userId=".$user['userId']);
     if (mysqli_num_rows($query) > 0) {
         $sorter = mysqli_fetch_array($query);
-        if (DBcolumnExist($object,$sorter['sortColumn']) or DBcolumnExist($linkedTable,$sorter['sortColumn'])) {
+        if (DBcolumnExist($object, $sorter['sortColumn']) or DBcolumnExist($linkedTable, $sorter['sortColumn'])) {
             $result = " ORDER BY ".$sorter['sortColumn']." ".$sorter['sortDirection'];
         }
     }
@@ -57,7 +57,7 @@ function sortingGet($object,$linkedTable = null): string
  * @param mixed $object
  * @param mixed $data
  */
-function filterSet($object,$data): void
+function filterSet($object, $data): void
 {
     //TODO overeni ze bylo zapsano do db
     global $database,$user;
@@ -70,7 +70,7 @@ function filterSet($object,$data): void
     } else {
         $sql = "INSERT INTO ".DB_PREFIX."filter (userId,objectType,filterPreference) VALUES (".$user['userId'].",'".$object."','".$data."')";
     }
-    mysqli_query($database,$sql);
+    mysqli_query($database, $sql);
 }
 
 /**
@@ -82,11 +82,11 @@ function filterSet($object,$data): void
 function filterGet($object)//:array
 {
     global $database,$user;
-
-    $query = mysqli_query($database,"SELECT * FROM ".DB_PREFIX."filter where objectType='$object' AND userId=".$user['userId']);
+    $sql = "SELECT * FROM ".DB_PREFIX."filter where objectType='$object' AND userId=".$user['userId'];
+    $query = mysqli_query($database, $sql);
     if (mysqli_num_rows($query) > 0) {
         $result = mysqli_fetch_array($query);
-        $filter = json_decode($result['filterPreference'],true);
+        $filter = json_decode($result['filterPreference'], true);
     } else {
         $filter = ["id" => 'X'];
     }

@@ -116,7 +116,7 @@
                                         {if $users[userDeleted] == 0}
                                             <a class="btn btn-sm btn-brick btn-danger mb-1" href="/users/delete/{$users['userId']}" onclick="return confirm('{$text['opravdusmazat']} {$users['userName']}?')" alt="{$text[smazatuzivatele]}">
                                             {php  echo file_get_contents("images/icons/trash-solid.svg")}
-                                        {elseif $user['userDeleted'] == 1}
+                                        {elseif $users['userDeleted'] == 1 && $user['aclRoot']}
                                             <a class="btn btn-sm btn-brick btn-success mb-1" href="/users/restore/{$users['userId']}" onclick="return confirm('{$text['opravduobnovit']} {$users['userName']}?')" alt="{$text[obnovituzivatele]}">
                                             {php  echo file_get_contents("images/icons/trash-solid.svg")}
                                         {/if}
