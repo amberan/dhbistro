@@ -2,14 +2,14 @@
 
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 
 //vytvoreni zalohy
 
 function backupData($soubor = "")
 {
     global $database,$config;
-    function keys($prefix,$array)
+    function keys($prefix, $array)
     {
         if (empty($array)) {
             $pocet = 0;
@@ -40,14 +40,14 @@ function backupData($soubor = "")
     }
     //fast import
     $text = 'SET autocommit=0; SET unique_checks=0; SET foreign_key_checks=0;';
-    $sql = mysqli_query($database,"SHOW table status  FROM ".$config['dbdatabase']);
+    $sql = mysqli_query($database, "SHOW table status  FROM ".$config['dbdatabase']);
     while ($data = mysqli_fetch_row($sql)) {
         if (!isset($text)) {
             $text = '';
         }
         $text .= (empty($text) ? "" : "\n\n")."--\n-- Struktura tabulky ".$data[0]."\n--\n\n\n";
         $text .= "CREATE TABLE `".$data[0]."`(\n";
-        $sqll = mysqli_query($database,"SHOW columns  FROM ".$data[0]);
+        $sqll = mysqli_query($database, "SHOW columns  FROM ".$data[0]);
         $endline = true;
         while ($dataa = mysqli_fetch_row($sqll)) {
             if ($endline) {
@@ -81,17 +81,17 @@ function backupData($soubor = "")
         if (!isset($fulltext)) {
             $fulltext = '';
         }
-        $primarymary = keys("PRIMARY KEY",$primary);
-        $uniqueque = keys("UNIQUE KEY",$unique);
-        $fulltext = keys("FULLTEXT",$fulltext);
+        $primarymary = keys("PRIMARY KEY", $primary);
+        $uniqueque = keys("UNIQUE KEY", $unique);
+        $fulltext = keys("FULLTEXT", $fulltext);
         $text .= $primarymary.$uniqueque.$fulltext."\n) ENGINE=".$data[1]." COLLATE=".$data[14].";\n\n";
         unset($primary,$unique,$fulltext);
         $text .= "--\n-- Data tabulky ".$data[0]."\n--\n\n";
-        $query = mysqli_query($database,"SELECT  * FROM ".$data[0]."");
+        $query = mysqli_query($database, "SELECT  * FROM ".$data[0]."");
         while ($fetch = mysqli_fetch_row($query)) {
             $columnCount = count($fetch);
             for ($i = 0; $i < $columnCount; $i++) {
-                @$values .= "'".mysqli_escape_string($database,$fetch[$i])."'".($i < $columnCount - 1 ? "," : "");
+                @$values .= "'".mysqli_escape_string($database, $fetch[$i])."'".($i < $columnCount - 1 ? "," : "");
             }
             $text .= "\nINSERT INTO `".$data[0]."` VALUES(".$values.");";
             unset($values);
@@ -101,8 +101,8 @@ function backupData($soubor = "")
     $text .= 'COMMIT; SET unique_checks=1; SET foreign_key_checks=1;';
     if (!empty($soubor)) {
         $gztext = gzencode($text, 9);
-        $filePointer = @fopen($soubor,"w+");
-        @fwrite($filePointer,$gztext);
+        $filePointer = @fopen($soubor, "w+");
+        @fwrite($filePointer, $gztext);
         @fclose($filePointer);
     }
 
@@ -111,41 +111,90 @@ function backupData($soubor = "")
 
 function backup_process(): void
 {
-    global $_SERVER, $database, $config, $updateFile;
+    global $database, $config;
     $backupFile = $config['folder_backup']."backup".time().".sql.gz";
     backupData($backupFile);
-    //pouze pokud je zaloha vetsi 2kB
     if (filesize($backupFile) > 1024) {
         Debugger::log("BACKUP GENERATED: ".$config['folder_backup'].basename($backupFile)." [".round(filesize($backupFile) / 1024)." kB]");
-        $checkSql = mysqli_query($database,"SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$config['dbdatabase']."' AND table_name='".DB_PREFIX."user' and column_name='sid'");
-        if (mysqli_num_rows($checkSql) == 0) { //old backup 1.5.2>
-            $backupSql = "INSERT INTO ".DB_PREFIX."backups (time, file) VALUES(".time().",'".$backupFile."')";
-        } else { //new backup 1.5.2<
-            $backupSql = "INSERT INTO ".DB_PREFIX."backup (time, file, version) VALUES(".time().",'".$backupFile."','".$config['version']."')";
+        $backupTable = 'backup';
+        $backupColumns = 'time, file, version';
+        $backupValues = '"'.time().'","'.$backupFile.'","'.$config['version'].'"';
+        if (DBcolumnExist("backups", "version")) { // 1.5.2> && <1.7.3
+            $backupTable = 'backups';
+            $backupColumns = 'time, file, version';
+            $backupValues = '"'.time().'","'.$backupFile.'","'.$config['version'].'"';
+        } elseif (DBtableExist("backups") && !DBcolumnExist("backup", "version")) { // <1.5.2
+            $backupTable = 'backups';
+            $backupColumns = 'time, file';
+            $backupValues = '"'.time().'","'.$backupFile.'"';
         }
-        mysqli_query($database,$backupSql);
-        //optimizace tabulek
-        $tablelistSql = mysqli_query($database,"SHOW table status FROM ".$config['dbdatabase']);
+        $backupSql = 'INSERT INTO '.DB_PREFIX.$backupTable.' ('.$backupColumns.') VALUES('.$backupValues.')';
+        mysqli_query($database, $backupSql);
+        $tablelistSql = mysqli_query($database, "SHOW table status FROM ".$config['dbdatabase']);
         while ($tablelist = mysqli_fetch_row($tablelistSql)) {
-            mysqli_query($database,"OPTIMIZE TABLE ".$tablelist[0]);
-        }
-        // pokud existuje update soubor - spustit a prejmenovat
-        if (file_exists($updateFile)) {
-            Debugger::log("RUNNING UPDATE SCRIPT: /sql/".basename($updateFile));
-            require_once $updateFile;
+            mysqli_query($database, "OPTIMIZE TABLE ".$tablelist[0]);
         }
     }
 }
 
-if (DBtableExist("backups")) {
-    $checkSql = "SELECT time FROM ".DB_PREFIX."backups ORDER BY time DESC LIMIT 1";
-}
-if (DBtableExist("backup")) {
-    $checkSql = "SELECT time FROM ".DB_PREFIX."backup ORDER BY time DESC LIMIT 1";
-}
-    $checkFetch = mysqli_fetch_assoc(mysqli_query($database,$checkSql));
-    $backupLast = $checkFetch['time'];
-    $updateFile = $_SERVER['DOCUMENT_ROOT']."/sql/update-".$config['version'].".php";
-    if (round($backupLast,-5) < round(time(),-5) or file_exists($updateFile)) {
-        backup_process();
+function updatesToRun($file)
+{
+    global $lastBackup,$config;
+    if (!isset($lastBackup['version'])) {
+        $lastBackup['version']= '1.5.2';
     }
+    return (strpos($file, 'php') && "update-".$lastBackup['version'].".php" < $file && "update-".$config['version'].".php" >= $file) ;
+}
+
+if (DBtableExist("backup") || DBtableExist("backups")) {
+    $lastBackupSql = "SELECT time,version FROM ".DB_PREFIX."backup ORDER BY time DESC LIMIT 1";
+    if (DBcolumnExist("backups", "version")) { // 1.5.2> && <1.7.3
+        $lastBackupSql = "SELECT time,version FROM ".DB_PREFIX."backups ORDER BY time DESC LIMIT 1";
+    } elseif (DBtableExist("backups") && !DBcolumnExist("backup", "version")) { // <1.5.2
+        $lastBackupSql = "SELECT time FROM ".DB_PREFIX."backups ORDER BY time DESC LIMIT 1";
+    }
+    $lastBackup = mysqli_fetch_assoc(mysqli_query($database, $lastBackupSql));
+    $updatesToRun = (array_filter(array_diff(scandir($_SERVER['DOCUMENT_ROOT']."/sql"), array('.', '..')), "updatesToRun"));
+    if (round($lastBackup['time'], -5) < round(time(), -5) || sizeof($updatesToRun)>0) {
+        backup_process();
+        foreach ($updatesToRun as $key => $file) {
+            require_once 'lib/sql-update.php';
+            bistroMyisamToInnodb();
+            unset($tableCreate,$tableRename,$columnAdd,$columnAlter,$columnAddFulltext,$columnToMD,$rightsToUpdate,$convertTime,$columnDrop,$tableDrop);
+            require_once $_SERVER['DOCUMENT_ROOT']."/sql/".$file;
+            if (isset($tableCreate)) {
+                bistroDBTableCreate($tableCreate, substr($file, 7, -4));
+            }
+            if (isset($tableRename)) {
+                bistroDBTableRename($tableRename, substr($file, 7, -4));
+            }
+            if (isset($columnAdd)) {
+                bistroDBColumnAdd($columnAdd, substr($file, 7, -4));
+            }
+            if (isset($columnAlter)) {
+                bistroDBColumnAlter($columnAlter, substr($file, 7, -4));
+            }
+            if (isset($columnToMD)) {
+                bistroDBColumnMarkdown($columnToMD, substr($file, 7, -4));
+            }
+            if (isset($columnAddFulltext)) {
+                bistroDBFulltextAdd($columnAddFulltext, substr($file, 7, -4));
+            }
+            if (DBcolumnExist("user", "userPassword")) {
+                bistroDBPasswordEncrypt();
+            }
+            if (isset($rightsToUpdate)) {
+                bistroMigratePermissions($rightsToUpdate, substr($file, 7, -4));
+            }
+            if (isset($convertTime)) {
+                bistroIntToTimestamp($convertTime, substr($file, 7, -4));
+            }
+            if (isset($columnDrop)) {
+                bistroDBColumnDrop($columnDrop, substr($file, 7, -4));
+            }
+            if (isset($tableDrop)) {
+                bistroDBTableDrop($tableDrop, substr($file, 7, -4));
+            }
+        }
+    }
+}

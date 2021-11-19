@@ -44,9 +44,9 @@
                 </div>
 
             <div  class="col-12 col-md-3">
-                {if $users['userId'] != $user['userId']}
+                {if $userEdit['userId'] != $user['userId']}
                     <a class="btn btn-sm  btn-info mb-1" href="/users/reset/{$userEdit['userId']}" onclick="return confirm('{$text['opravdugenerovatheslo']} {$userEdit['userName']}?')">{$text[noveheslo]}</a>
-                    {if $users['userSuspended'] == "1"}
+                    {if $userEdit['userSuspended'] == "1"}
                         <a class="btn btn-sm btn-brick btn-success mb-1 mr-1" href="/users/unlock/{$userEdit['userId']}" onclick="return confirm('{$text['opravduodemnkout']} {$userEdit['userName']}?')" alt="{$text[odemnkoutuzivatele]}">
                         {php  echo file_get_contents("images/icons/lock-open-solid.svg")}
                     {else}
@@ -54,10 +54,10 @@
                         {php  echo file_get_contents("images/icons/lock-solid.svg")}
                     {/if}
                         </a>
-                    {if $users[userDeleted] == 0}
+                    {if $userEdit[userDeleted] == 0}
                         <a class="btn btn-sm btn-brick btn-danger mb-1" href="/users/delete/{$userEdit['userId']}" onclick="return confirm('{$text['opravdusmazat']} {$userEdit['userName']}?')" alt="{$text[smazatuzivatele]}">
                         {php  echo file_get_contents("images/icons/trash-solid.svg")}
-                    {elseif $user['userDeleted'] == 1}
+                    {elseif $userEdit['userDeleted'] == 1 && $user['aclRoot']}
                         <a class="btn btn-sm btn-brick btn-success mb-1" href="/users/restore/{$userEdit['userId']}" onclick="return confirm('{$text['opravduobnovit']} {$userEdit['userName']}?')" alt="{$text[obnovituzivatele]}">
                         {php  echo file_get_contents("images/icons/trash-solid.svg")}
                     {/if}

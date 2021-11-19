@@ -11,12 +11,13 @@ mainMenu();
 sparklets('<strong>vyhledávání</strong>', '<a href="symbol_search.php">vyhledat symbol</a>');
 
 // default SQL filters
-$searchContitions = " AND secret<=".$user['aclSecret']."  AND deleted<=".$user['aclGamemaster']." ";
+$searchContitions = " AND secret<=".$user['aclSecret'];
+$searchContitions .= "  AND deleted<=".$user['aclGamemaster']." ";
 
 //TODO SORTING created/modified/title/status/type
 
-if (sizeof($_POST['filter']) > 0) {
-    filterSet('search', @$_POST['filter']);
+if (sizeof(@$_POST['filter']) > 0) {
+    filterSet('search', $_POST['filter']);
 }
 $filter = filterGet('search');
 $sqlFilter = "deleted in (0,".$user['aclRoot'].") AND secret<=".$user['aclSecret'];
