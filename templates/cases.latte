@@ -89,7 +89,7 @@
                                         <a class="btn btn-sm btn-brick btn-danger mb-1" href="/cases/delete/{$cases['id']}" onclick="return confirm('{$text['opravdusmazatpripad']} &quot; {$cases['title']|stripHtml}&quot;?');" alt="{$text[smazatpripad]}">{php echo file_get_contents("images/icons/trash-solid.svg")}</a>
                                     {/if}
                                     {if $user['aclRoot'] AND $cases['deleted']}
-                                        <a class="btn btn-sm btn-success mb-1" href="/cases/restore/{$cases['id']}" onclick="return confirm('{$text['opravduobnovitpripad']} &quot; {$cases['title']|stripHtml}&quot;?');" alt="{$text[obnovitpripad]}">{$text['obnovit']}</a>
+                                        <a class="btn btn-sm btn-success mb-1" href="/cases/restore/{$cases['id']}" onclick="return confirm('{$text['opravduobnovitpripad']} &quot; {$cases['title']|stripHtml}&quot;?');" alt="{$text[obnovitpripad]}">{php echo file_get_contents("images/icons/recycle.svg")}</a>
                                     {/if}
                                 </td>
                             </tr>

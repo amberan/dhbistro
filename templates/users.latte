@@ -108,17 +108,17 @@
                                         <a class="btn btn-sm  btn-info mb-1" href="/users/reset/{$users['userId']}" onclick="return confirm('{$text['opravdugenerovatheslo']} {$users['userName']}?')">{$text[noveheslo]}</a>
                                         {if $users['userSuspended'] == "1"}
                                             <a class="btn btn-sm btn-brick btn-success mb-1 mr-1" href="/users/unlock/{$users['userId']}" onclick="return confirm('{$text['opravduodemnkout']} {$users['userName']}?')" alt="{$text[odemnkoutuzivatele]}">
-                                            {php  echo file_get_contents("images/icons/lock-open-solid.svg")}
+                                            {php  echo file_get_contents("images/icons/lock-open-solid.svg")}</a>
                                         {else}
                                             <a class="btn btn-sm btn-brick btn-warning mb-1 mr-1" href="/users/lock/{$users['userId']}" onclick="return confirm('{$text['opravduzamknout']} {$users['userName']}?')" alt="{$text[zamknoutuzivatele]}">
-                                            {php  echo file_get_contents("images/icons/lock-solid.svg")}
+                                            {php  echo file_get_contents("images/icons/lock-solid.svg")}</a>
                                         {/if}
                                         {if $users[userDeleted] == 0}
                                             <a class="btn btn-sm btn-brick btn-danger mb-1" href="/users/delete/{$users['userId']}" onclick="return confirm('{$text['opravdusmazat']} {$users['userName']}?')" alt="{$text[smazatuzivatele]}">
-                                            {php  echo file_get_contents("images/icons/trash-solid.svg")}
-                                        {elseif $users['userDeleted'] == 1 && $user['aclRoot']}
+                                            {php  echo file_get_contents("images/icons/trash-solid.svg")}</a>
+                                        {elseif $user['userDeleted'] == 1}
                                             <a class="btn btn-sm btn-brick btn-success mb-1" href="/users/restore/{$users['userId']}" onclick="return confirm('{$text['opravduobnovit']} {$users['userName']}?')" alt="{$text[obnovituzivatele]}">
-                                            {php  echo file_get_contents("images/icons/trash-solid.svg")}
+                                            {php echo file_get_contents("images/icons/recycle.svg")}</a>
                                         {/if}
                                     {/if}
                                 </td>
