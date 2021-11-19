@@ -11,6 +11,9 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 
 **1.8.5**
 - refactor: upgrade procesure #213
+- style: recover icon #191
+- style: unread icon #187
+- refactor: menu on mobile #190
 
 **1.8.4**
 - fix: archived person filtering #209
