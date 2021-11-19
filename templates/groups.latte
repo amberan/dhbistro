@@ -88,7 +88,7 @@
                                         <a class="btn btn-sm btn-brick btn-danger mb-1" href="/groups/delete/{$groups['id']}" onclick="return confirm('{$text['opravdusmazatskupinu']} &quot; {$groups['title']|stripHtml}&quot;?');" alt="{$text[smazatskupinu]}">{php echo file_get_contents("images/icons/trash-solid.svg")}</a>
                                     {/if}
                                     {if $user['aclRoot'] AND $groups['deleted']}
-                                        <a class="btn btn-sm btn-success mb-1" href="/groups/restore/{$groups['id']}" onclick="return confirm('{$text['opravduobnovitskupinu']} &quot; {$groups['title']|stripHtml}&quot;?');">{$text['obnovit']}</a>
+                                        <a class="btn btn-sm btn-success mb-1" href="/groups/restore/{$groups['id']}" onclick="return confirm('{$text['opravduobnovitskupinu']} &quot; {$groups['title']|stripHtml}&quot;?');">{php echo file_get_contents("images/icons/recycle.svg")}</a>
                                     {/if}
                                 </td>
                             </tr>

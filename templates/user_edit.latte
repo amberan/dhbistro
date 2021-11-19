@@ -59,7 +59,7 @@
                         {php  echo file_get_contents("images/icons/trash-solid.svg")}
                     {elseif $userEdit['userDeleted'] == 1 && $user['aclRoot']}
                         <a class="btn btn-sm btn-brick btn-success mb-1" href="/users/restore/{$userEdit['userId']}" onclick="return confirm('{$text['opravduobnovit']} {$userEdit['userName']}?')" alt="{$text[obnovituzivatele]}">
-                        {php  echo file_get_contents("images/icons/trash-solid.svg")}
+                        {php echo file_get_contents("images/icons/recycle.svg")}
                     {/if}
                         </a>
                 {/if}
