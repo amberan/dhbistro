@@ -198,7 +198,7 @@ input[type='submit'] {
 .header-form-wrapper {
   padding: 0.5rem 1rem;
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
   align-items: center;
   flex-wrap: nowrap;
   font-size: 1rem;
@@ -207,7 +207,7 @@ input[type='submit'] {
 /* ----- SWITCH ----- */
 
 .header-switch {
-  margin-right: 16px;
+  margin-left: 16px;
   display: flex;
   justify-content: flex-start;
   align-items: center;

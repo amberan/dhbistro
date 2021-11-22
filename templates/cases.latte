@@ -1,35 +1,32 @@
 <div class="container-fluid mt-3 mb-3 mr-2 w-100">
     <div class="row mb-1">
-	    <div class="col-6 text-left">
+	    <div class="col-12 col-sm-6 text-left">
 	        <h4>
                 {$text[pripady]}
             </h4>
 	    </div>
-        <div class="col-6 text-right">
+        <div class="col-12 col-sm-6 text-right">
+            <form action="{$website_link}{$URL[1]}/" method="POST" id="filter" class="header-form-wrapper">
+                <input type="hidden" name="filter[placeholder]" />
+                <div class="header-switch">
+                    <label class="toggle-control">
+                        <input type="checkbox" name="filter[stat]" {if (isset($filter['stat']) AND $filter['stat'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                        <span class="control"></span>
+                    </label>
+                    {$text['iuzavrene']}
+                </div>
+                <div class="header-switch">
+                    <label class="toggle-control">
+                        <input type="checkbox" name="filter[new]" {if (isset($filter['new']) AND $filter['new'] == 'on') } checked{/if} onchange="this.form.submit()" />
+                        <span class="control"></span>
+                    </label>
+                    {$text['jennove']}
+                </div>
+            </form>
         </div>
 	</div>
     <div class="row mb-1">
         <div class="col-12">
-
-                <form action="{$website_link}{$URL[1]}/" method="POST" id="filter" class="header-form-wrapper">
-                    <input type="hidden" name="filter[placeholder]" />
-                    <div class="header-switch">
-                        <label class="toggle-control">
-                            <input type="checkbox" name="filter[stat]" {if (isset($filter['stat']) AND $filter['stat'] == 'on') } checked {/if} onchange="this.form.submit()" />
-                            <span class="control"></span>
-                        </label>
-                        {$text['iuzavrene']}
-                    </div>
-                    <div class="header-switch">
-                        <label class="toggle-control">
-                            <input type="checkbox" name="filter[new]" {if (isset($filter['new']) AND $filter['new'] == 'on') } checked{/if} onchange="this.form.submit()" />
-                            <span class="control"></span>
-                        </label>
-                        {$text['jennove']}
-                    </div>
-                </form>
-
-
             {if @$warning}
                 <div>
                     {$warning}
