@@ -335,7 +335,7 @@
                 <p class="h6">
                     {$text['nedokoncenahlaseni']}:
                 </p>
-                {if @$userEdit['hlaseni'][0][0]}
+                {if @$userEdit['hlaseni']}
                     {foreach $userEdit['hlaseni'] as $hlaseni}
                         <p class="h6">
                             <a href="/readactrep.php?rid={$hlaseni[0]}&hidenotes=0&truenames=0">{$hlaseni[1]}</a>
@@ -351,7 +351,7 @@
                 <p class="h6">
                     {$text['neuzavrenepripady']}:
                 </p>
-                {if @$userEdit['pripady'][0][0]}
+                {if @$userEdit['pripady']}
                     {foreach $userEdit['pripady'] as $pripady}
                         <p class="h6">
                             <a href="/readcase.php?rid={$pripady[0]}&hidenotes=0">{$pripady[1]}</a>
@@ -367,7 +367,7 @@
                 <p class="h6">
                     {$text['nedokonceneukoly']}:
                 </p>
-                {if @$userEdit['ukoly'][0][0]}
+                {if @$userEdit['ukoly']}
                     {foreach $userEdit['ukoly'] as $ukoly}
                         <p class="h6">
                             <a href="/readcase.php?rid={$ukoly[0]}&hidenotes=0">{$ukoly[1]}</a>
