@@ -2,11 +2,11 @@
 
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 
 // REPORTS
 $reportsAssigned = reportsAssignedTo($user['userId']);
-if (isset($reportsAssigned[0][0])) {
+if (sizeof($reportsAssigned) > 1) {
     $latteParameters['reports'] = $reportsAssigned;
 } else {
     $latteParameters['reportsnone'] = $text['zadnanedokoncenahlaseni'];
@@ -14,7 +14,7 @@ if (isset($reportsAssigned[0][0])) {
 
 // CASES
 $casesAssigned = casesAssignedTo($user['userId']);
-if (isset($casesAssigned[0][0])) {
+if (sizeof($casesAssigned)> 1) {
     $latteParameters['cases'] = $casesAssigned;
 } else {
     $latteParameters['casesnone'] = $text['zadnenadokoncenepripady'];
@@ -22,7 +22,7 @@ if (isset($casesAssigned[0][0])) {
 
 // TASKS
 $tasksAssigned = tasksAssignedTo($user['userId']);
-if (isset($tasksAssigned[0][0])) {
+if (sizeof($tasksAssigned) > 1) {
     $latteParameters['tasks'] = $tasksAssigned;
 } else {
     $latteParameters['tasksnone'] = $text['zadnenedokonceneukoly'];

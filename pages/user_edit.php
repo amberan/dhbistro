@@ -67,17 +67,17 @@ if (isset($_POST['userid'], $_POST['edituser']) && $user['aclUser'] && !preg_mat
         $latteParameters['userEdit'] = $rec;
 
         $reportsAssignedToUser = reportsAssignedTo($rec['userId']);
-        if ($reportsAssignedToUser) {
+        if (sizeof($reportsAssignedToUser)>1) {
             $latteParameters['userEdit']['hlaseni'] = $reportsAssignedToUser;
         }
 
         $casesAssignedToUser = casesAssignedTo($rec['userId']);
-        if ($casesAssignedToUser) {
+        if (sizeof($casesAssignedToUser)>1) {
             $latteParameters['userEdit']['pripady'] = $casesAssignedToUser;
         }
 
         $tasksAssignedToUser = tasksAssignedTo($rec['userId']);
-        if ($tasksAssignedToUser) {
+        if (sizeof($tasksAssignedToUser)>1) {
             $latteParameters['userEdit']['ukoly'] = $tasksAssignedToUser;
         }
     } else {
