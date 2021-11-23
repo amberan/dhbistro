@@ -3,35 +3,60 @@
  * INITialisatin
  * parts commented out until removal od func_main.php.
  */
-require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
-//session_start();
-//define('SERVER_ROOT', $_SERVER['DOCUMENT_ROOT']);
-//require_once SERVER_ROOT."/config.php";
-//require_once SERVER_ROOT.'/vendor/autoload.php';
-//require_once SERVER_ROOT."/lib/gui.php";
-//require_once SERVER_ROOT."/lib/security.php";
-//require_once SERVER_ROOT.'/lib/file.php';
-//require_once SERVER_ROOT."/lib/image.php";
-//require_once SERVER_ROOT."/lib/formatter.php";
-//require_once SERVER_ROOT."/lib/filters.php";
-//require_once SERVER_ROOT."/lib/session.php";
+//require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
+session_start();
+define('SERVER_ROOT', $_SERVER['DOCUMENT_ROOT']);
+require_once SERVER_ROOT."/config.php";
+require_once SERVER_ROOT.'/vendor/autoload.php';
+
+use Tracy\Debugger;
+
+Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+$latte = new Latte\Engine();
+$latte->setTempDirectory($config['folder_cache']);
+
+
+require_once $config['folder_custom'].'text.php';
+$config['platformConfigFile'] = SERVER_ROOT.'/inc/platform.php';
+if (file_exists('.env.php')) {
+    $config['platformConfigFile'] = SERVER_ROOT.'.env.php';
+}
+require_once $config['platformConfigFile'];
+if (isset($config['custom'])) {
+    require_once $config['folder_custom'].'/text-'.$config['custom'].'.php';
+}
+
+require_once SERVER_ROOT.'/lib/security.php';
+require_once SERVER_ROOT.'/inc/database.php';
+require_once SERVER_ROOT.'/lib/gui.php';
+require_once SERVER_ROOT.'/lib/formatter.php';
+require_once SERVER_ROOT.'/lib/filters.php';
+require_once SERVER_ROOT.'/lib/file.php';
+require_once SERVER_ROOT.'/inc/backup.php';
+require_once SERVER_ROOT.'/lib/session.php';
+require_once SERVER_ROOT.'/inc/audit_trail.php';
+require_once SERVER_ROOT.'/lib/image.php';
+require_once SERVER_ROOT.'/inc/unread.php';
+
 require_once SERVER_ROOT."/lib/user.php";
 require_once SERVER_ROOT."/lib/report.php";
 require_once SERVER_ROOT."/lib/case.php";
 require_once SERVER_ROOT."/lib/task.php";
 
-use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
-//$latte = new Latte\Engine();
-//$latte->setTempDirectory($config['folder_cache']);
-
+$URL = explode('/', $_SERVER['REQUEST_URI']); // for THE LOOP
 require_once SERVER_ROOT."/pages/menu.php";
 
 $latteParameters['current_location'] = $_SERVER["SCRIPT_URI"];
 $latteParameters['menu'] = $menu;
 $latteParameters['menu2'] = $menu2;
 $latteParameters['URL'] = $URL;
+$latteParameters['text'] = $text;
+$latteParameters['config'] = $config;
+if (isset($user)) {
+    $latteParameters['user'] = $user;
+}
+
 
 //echo "<xmp>"; print_r ($_SERVER); echo "</xmp>";
 /*

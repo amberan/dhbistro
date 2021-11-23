@@ -63,3 +63,9 @@ function siteURL(): string
 }
 
 $latteParameters['website_link'] = siteURL();
+
+
+/**
+ * get platform configuration from general file and store locally #84
+ * inc/platform.php inc/important.php > .env.php
+ */
