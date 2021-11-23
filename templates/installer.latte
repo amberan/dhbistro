@@ -1,0 +1,45 @@
+{import 'headerMD.latte'}
+
+<h1>BiStro Installer</h1>
+<form action="/" method="post" id="dbconfig">
+DB Hostname: <input name="dbHost" value="localhost" />
+<br/>
+DB User: <input name="dbUser" type="input" value="{@$config[dbUser]}" />
+<br/>
+DB Password: <input name="dbPassword" type="Password" />
+<br/>
+Database: <input name="dbDatabase" value="{@$config[dbDatabase]}" />
+<br/>
+Table prefix: <input name="dbPrefix" value="{if @$config[dbPrefix]}{$config[dbPrefix]}{else}nw_{/if}" />
+<br/>
+Theme Color: <select name="themeColor">
+<option value="local"{if @$config[themeColor] == "local"} selected {/if}>local</option>
+<option value="dh"{if @$config[themeColor] == "dh"} selected {/if}>dh</option>
+<option value="nh"{if @$config[themeColor] == "nh"} selected {/if}>nh</option>
+<option value="test"{if @$config[themeColor] == "test"} selected {/if}>test</option>
+<option value="org"{if @$config[themeColor] == "org"} selected {/if}>org</option>
+<option value="enigma"{if @$config[themeColor] == "enigma"} selected {/if}>enigma</option>
+</select>
+<br/>
+Theme Background: <select name="themeBackground">
+<option value="dark"{if @$config[themeBackground] == "dh"} selected {/if}>dark</option>
+<option value="warning"{if @$config[themeBackground] == "warning"} selected {/if}>warning</option>
+<option value="secondary"{if @$config[themeBackground] == "secondary"} selected {/if}>secondary</option>
+</select>
+<br/>
+Theme Navigation Bar: <select name="themeNavbar">
+<option value="dark"{if @$config[themeNavbar] == "dark"} selected {/if}>dark</option>
+<option value="light"{if @$config[themeNavbar] == "light"} selected {/if}>light</option>
+</select>
+<br/>
+Theme Custom: <select name="themeCustom">
+<option value="DH"{if @$config[themeCustom] == "DH"} selected {/if}>DH</option>
+<option value="NH"{if @$config[themeCustom] == "NH"} selected {/if}>NH</option>
+<option value="DB"{if @$config[themeCustom] == "DB"} selected {/if}>DB</option>
+<option value="enigma"{if @$config[themeCustom] == "enigma"} selected {/if}>enigma</option>
+</select>
+<br/>
+<input type="submit" value="Save" />
+</form>
+
+{import 'footerMD.latte'}

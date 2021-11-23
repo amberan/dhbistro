@@ -1,8 +1,11 @@
 <?php
 
 session_start();
-define('SERVER_ROOT', $_SERVER['DOCUMENT_ROOT']);
-require_once SERVER_ROOT.'/config.php';
+require_once $_SERVER['DOCUMENT_ROOT']."/config.php";
+if (!file_exists($config['platformConfig'])) {
+    Header('location: index.php');
+    die();
+}
 require_once SERVER_ROOT.'/vendor/autoload.php';
 use Tracy\Debugger;
 
@@ -11,32 +14,41 @@ $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 
 require_once $config['folder_custom'].'text.php';
-$config['platformConfigFile'] = SERVER_ROOT.'/inc/platform.php'; // to be removed after #82
-if (file_exists('.env.php')) {
-    $config['platformConfigFile'] = SERVER_ROOT.'.env.php';
-}
-require_once $config['platformConfigFile'];
-if (isset($config['custom'])) {
-    require_once $config['folder_custom'].'/text-'.$config['custom'].'.php';
+require_once $config['platformConfig'];
+if (isset($config['themeCustom'])) {
+    require_once $config['folder_custom'].'/text-'.$config['themeCustom'].'.php';
 }
 $URL = explode('/', $_SERVER['REQUEST_URI']);
 
 require_once SERVER_ROOT.'/lib/security.php';
-require_once SERVER_ROOT.'/inc/database.php';
+require_once SERVER_ROOT.'/lib/database.php';
+
+if (DBTest($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase'])) {
+    $database = mysqli_connect($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase']);
+    mysqli_query($database, "SET NAMES 'utf8'");
+}
+
+$database = mysqli_connect($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase']) or die($_SERVER["SERVER_NAME"].":".mysqli_connect_errno()." ".mysqli_connect_error());
+mysqli_query($database, "SET NAMES 'utf8'");
+
 require_once SERVER_ROOT.'/lib/gui.php';
 require_once SERVER_ROOT.'/lib/formatter.php';
 require_once SERVER_ROOT.'/lib/filters.php';
 require_once SERVER_ROOT.'/lib/file.php';
-require_once SERVER_ROOT.'/inc/backup.php';
-require_once SERVER_ROOT.'/lib/session.php';
-require_once SERVER_ROOT.'/inc/audit_trail.php';
+require_once SERVER_ROOT.'/lib/audit_trail.php';
 require_once SERVER_ROOT.'/lib/image.php';
-require_once SERVER_ROOT.'/inc/unread.php';
-// *** FUNCTIONS for objects
 require_once SERVER_ROOT.'/lib/person.php';
 require_once SERVER_ROOT.'/lib/news.php';
 require_once SERVER_ROOT.'/lib/user.php';
+require_once SERVER_ROOT.'/inc/backup.php';
+require_once SERVER_ROOT.'/inc/session.php';
+require_once SERVER_ROOT.'/inc/unread.php';
 require_once SERVER_ROOT.'/inc/menu.php';
+
+$_REQUEST = escape_array($_REQUEST);
+$_POST = escape_array($_POST);
+$_GET = escape_array($_GET);
+
 
 $latteParameters['text'] = $text;
 $latteParameters['config'] = $config;

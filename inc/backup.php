@@ -40,7 +40,7 @@ function backupData($soubor = "")
     }
     //fast import
     $text = 'SET autocommit=0; SET unique_checks=0; SET foreign_key_checks=0;';
-    $sql = mysqli_query($database, "SHOW table status  FROM ".$config['dbdatabase']);
+    $sql = mysqli_query($database, "SHOW table status  FROM ".$config['dbDatabase']);
     while ($data = mysqli_fetch_row($sql)) {
         if (!isset($text)) {
             $text = '';
@@ -130,7 +130,7 @@ function backup_process(): void
         }
         $backupSql = 'INSERT INTO '.DB_PREFIX.$backupTable.' ('.$backupColumns.') VALUES('.$backupValues.')';
         mysqli_query($database, $backupSql);
-        $tablelistSql = mysqli_query($database, "SHOW table status FROM ".$config['dbdatabase']);
+        $tablelistSql = mysqli_query($database, "SHOW table status FROM ".$config['dbDatabase']);
         while ($tablelist = mysqli_fetch_row($tablelistSql)) {
             mysqli_query($database, "OPTIMIZE TABLE ".$tablelist[0]);
         }
@@ -158,7 +158,7 @@ if (DBtableExist("backup") || DBtableExist("backups")) {
     if (round($lastBackup['time'], -5) < round(time(), -5) || sizeof($updatesToRun)>0) {
         backup_process();
         foreach ($updatesToRun as $key => $file) {
-            require_once 'lib/sql-update.php';
+            require_once 'lib/update.php';
             bistroMyisamToInnodb();
             unset($tableCreate,$tableRename,$columnAdd,$columnAlter,$columnAddFulltext,$columnToMD,$rightsToUpdate,$convertTime,$columnDrop,$tableDrop);
             require_once $_SERVER['DOCUMENT_ROOT']."/sql/".$file;

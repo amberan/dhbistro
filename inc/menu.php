@@ -6,7 +6,7 @@ function mainMenu()
     $currentfile = $_SERVER["PHP_SELF"];
     $dlink = mysqli_fetch_assoc(mysqli_query($database, "SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1"));
     echo '<div id="menu">
-  <ul class="'.$config['barva'].'">
+  <ul class="'.$config['themeColor'].'">
 	  <li '.((searchTable(5)) ? ' class="unread"' : ((searchTable(5)) ? ' class="unread"' : '')).'><a href="/">Aktuality</a></li>
 	  <li '.((searchTable(6)) ? ' class="unread"' : ((searchTable(6)) ? ' class="unread"' : '')).'><a href="/board/">Nástěnka</a></li>
       <li '.((searchTable(4)) ? ' class="unread"' : '').'><a href="reports.php">'.$text['hlaseniV'].' '.searchTable(4).'</a></li>
