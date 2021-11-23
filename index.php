@@ -1,12 +1,6 @@
 <?php
-/**
- * INITialisatin
- * parts commented out until removal od func_main.php.
- */
-//require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 session_start();
-define('SERVER_ROOT', $_SERVER['DOCUMENT_ROOT']);
-require_once SERVER_ROOT."/config.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/config.php";
 require_once SERVER_ROOT.'/vendor/autoload.php';
 
 use Tracy\Debugger;
@@ -14,38 +8,50 @@ use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
-
-
+$latteParameters = [];
 require_once $config['folder_custom'].'text.php';
-$config['platformConfigFile'] = SERVER_ROOT.'/inc/platform.php';
-if (file_exists('.env.php')) {
-    $config['platformConfigFile'] = SERVER_ROOT.'.env.php';
-}
-require_once $config['platformConfigFile'];
-if (isset($config['custom'])) {
-    require_once $config['folder_custom'].'/text-'.$config['custom'].'.php';
-}
-
-require_once SERVER_ROOT.'/lib/security.php';
-require_once SERVER_ROOT.'/inc/database.php';
-require_once SERVER_ROOT.'/lib/gui.php';
-require_once SERVER_ROOT.'/lib/formatter.php';
-require_once SERVER_ROOT.'/lib/filters.php';
-require_once SERVER_ROOT.'/lib/file.php';
-require_once SERVER_ROOT.'/inc/backup.php';
-require_once SERVER_ROOT.'/lib/session.php';
-require_once SERVER_ROOT.'/inc/audit_trail.php';
-require_once SERVER_ROOT.'/lib/image.php';
-require_once SERVER_ROOT.'/inc/unread.php';
-
-require_once SERVER_ROOT."/lib/user.php";
-require_once SERVER_ROOT."/lib/report.php";
+require_once SERVER_ROOT.'/lib/audit_trail.php';
 require_once SERVER_ROOT."/lib/case.php";
+require_once SERVER_ROOT.'/lib/database.php';
+require_once SERVER_ROOT.'/lib/file.php';
+require_once SERVER_ROOT.'/lib/filters.php';
+require_once SERVER_ROOT.'/lib/formatter.php';
+require_once SERVER_ROOT.'/lib/gui.php';
+require_once SERVER_ROOT.'/lib/image.php';
+require_once SERVER_ROOT.'/lib/news.php';
+require_once SERVER_ROOT.'/lib/person.php';
+require_once SERVER_ROOT."/lib/report.php";
+require_once SERVER_ROOT.'/lib/security.php';
 require_once SERVER_ROOT."/lib/task.php";
+require_once SERVER_ROOT.'/lib/update.php';
+require_once SERVER_ROOT."/lib/user.php";
 
+if (!file_exists($config['platformConfig']) || isset($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbDatabase'])) {
+    bistroConvertPlatform();
+}
+require_once $config['platformConfig'];
+if (isset($config['themeCustom'])) {
+    require_once $config['folder_custom'].'/text-'.$config['themeCustom'].'.php';
+}
+
+if (DBTest($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase'])) {
+    $database = mysqli_connect($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase']);
+    mysqli_query($database, "SET NAMES 'utf8'");
+}
+
+$database = mysqli_connect($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase']) or die($_SERVER["SERVER_NAME"].":".mysqli_connect_errno()." ".mysqli_connect_error());
+mysqli_query($database, "SET NAMES 'utf8'");
 
 $URL = explode('/', $_SERVER['REQUEST_URI']); // for THE LOOP
+require_once SERVER_ROOT.'/inc/installer.php';
+require_once SERVER_ROOT.'/inc/backup.php';
+require_once SERVER_ROOT.'/inc/session.php';
+require_once SERVER_ROOT.'/inc/unread.php';
+$_REQUEST = escape_array($_REQUEST);
+$_POST = escape_array($_POST);
+$_GET = escape_array($_GET);
 require_once SERVER_ROOT."/pages/menu.php";
+
 
 $latteParameters['current_location'] = $_SERVER["SCRIPT_URI"];
 $latteParameters['menu'] = $menu;
@@ -58,22 +64,29 @@ if (isset($user)) {
 }
 
 
+$latteParameters['text'] = $text;
+$latteParameters['config'] = $config;
+if (isset($user)) {
+    $latteParameters['user'] = $user;
+}
+
+
 //echo "<xmp>"; print_r ($_SERVER); echo "</xmp>";
 /*
  * THE LOOP
  * */
+if ($URL[1] == 'file' && isset($user)) { // GET FILE type:  attachement,portrait,symbol,backup
+    //TODO auditTrail
+    require_once SERVER_ROOT.'/file.php';
+    exit;
+}
+latteDrawTemplate('headerMD');
 if (isset($user)) {
-    if ($URL[1] == 'file') { // GET FILE type:  attachement,portrait,symbol,backup
-        //TODO auditTrail
-        require_once SERVER_ROOT.'/file.php';
-        exit;
-    }
-    latteDrawTemplate('headerMD');
     latteDrawTemplate('menu');
     if ($URL[1] == 'settings') { // SETTINGS
         $latteParameters['title'] = $text['nastaveni'];
         require_once SERVER_ROOT.'/pages/settings.php';
-    } elseif ($user['aclRoot'] > 0 and $URL[1] == 'backup') { // BACKUP
+    } elseif ($user['aclRoot'] > 0 && $URL[1] == 'backup') { // BACKUP
         $latteParameters['title'] = $text['zalohovani'];
         require_once SERVER_ROOT.'/pages/backup.php';
     } elseif ($URL[1] == 'users') { // USER MANAGEMENT
@@ -82,11 +95,11 @@ if (isset($user)) {
         } else {
             $latteParameters['title'] = $text['spravauzivatelu'];
             auditTrail(8, 1, 0);
-            if (isset($URL[2]) and $URL[2] == 'new') { // USER MANAGEMENT > ADD USER
+            if (isset($URL[2]) && $URL[2] == 'new') { // USER MANAGEMENT > ADD USER
                 $latteParameters['actions'][] = ["/users", $text['spravauzivatelu']];
                 $latteParameters['subtitle'] = $text['vytvorituzivatele'];
                 require_once SERVER_ROOT.'/pages/user_add.php';
-            } elseif (isset($URL[2]) and $URL[2] == 'edit') { // USER MANAGEMENT >EDIT USER
+            } elseif (isset($URL[2]) && $URL[2] == 'edit') { // USER MANAGEMENT >EDIT USER
                 $latteParameters['actions'][] = ["/users", $text['spravauzivatelu']];
                 $latteParameters['actions'][] = ["/users/new", $text['vytvorituzivatele']];
                 $latteParameters['subtitle'] = $text['upravituzivatele'];
@@ -99,9 +112,9 @@ if (isset($user)) {
     } elseif ($URL[1] == 'board') { // BOARD
         auditTrail(6, 1, 0);
         $latteParameters['title'] = $text['nastenka'];
-        if (isset($URL[2]) and $URL[2] == 'edit' and $user['aclBoard'] < 1) {
+        if (isset($URL[2]) && $URL[2] == 'edit' && $user['aclBoard'] < 1) {
             unauthorizedAccess(6, 2, 0, 0);
-        } elseif ((isset($URL[2]) and $URL[2] == 'edit' and ($user['aclBoard'] > 0))) { // BOARD > EDIT
+        } elseif (isset($URL[2]) && $URL[2] == 'edit' && $user['aclBoard'] > 0) { // BOARD > EDIT
             $latteParameters['subtitle'] = $text['upravitnastenku'];
             $latteParameters['actions'][] = ["/board", $text['zobrazitnastenku']];
             require_once SERVER_ROOT.'/pages/board_edit.php';
@@ -127,7 +140,7 @@ if (isset($user)) {
     } else { // NEWS - DEFAULT
         auditTrail(5, 1, 0);
         $latteParameters['title'] = 'Aktuality';
-        if (isset($URL[2]) and $URL[2] == 'new' and ($user['aclNews'] > 0) and $URL[1] == 'news') { // NEWS > NEW
+        if (isset($URL[2]) && $URL[2] == 'new' && ($user['aclNews'] > 0) && $URL[1] == 'news') { // NEWS > NEW
             $latteParameters['subtitle'] = $text['pridataktualitu'];
             $latteParameters['actions'][] = ["/news", $text['zobrazitaktuality']];
             require_once SERVER_ROOT.'/pages/news_add.php';
@@ -140,13 +153,9 @@ if (isset($user)) {
         }
     }
 } else {
-    latteDrawTemplate('headerMD');
     require_once SERVER_ROOT.'/pages/login.php';
 }
 
-//show tracy bar unless it's a sending a file (picture) to the user
-//if ( $URL[1] != 'file') {
     Debugger::barDump($_SESSION, 'session');
     Debugger::barDump($latteParameters, 'latte');
     latteDrawTemplate('footerMD');
-//}
