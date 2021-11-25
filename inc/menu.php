@@ -14,7 +14,6 @@ function mainMenu()
 	  <li '.((searchTable(3)) ? ' class="unread"' : '').'><a href="/cases/">Případy '.searchTable(3).'</a></li>
 	  <li '.((searchTable(2)) ? ' class="unread"' : '').'><a href="groups/">Skupiny '.searchTable(2).'</a></li>
 	  '.(($user['aclUser'] > 0) ? '<li><a href="doodle.php">Časová dostupnost</a></li>' : '<li><a href="'.$dlink['link'].'" target="_blank">Časová dostupnost</a></li>').'
-	  <li><a href="http://www.prazskahlidka.cz/forums/index.php" target="_blank">Fórum</a></li>
 	  <li><a href="evilpoints.php">'.$text['menu-zlobody'].'</a></li>
 	  <li><a href="/settings">Nastavení</a></li>
 			  <li><a href="search.php">Vyhledávání</a></li>

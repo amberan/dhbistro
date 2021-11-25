@@ -55,7 +55,8 @@ require_once SERVER_ROOT."/pages/menu.php";
 
 $latteParameters['current_location'] = $_SERVER["SCRIPT_URI"];
 $latteParameters['menu'] = $menu;
-$latteParameters['menu2'] = $menu2;
+$latteParameters['menuSub'] = $menuSub;
+$latteParameters['menuLinks'] = $menuLinks;
 $latteParameters['URL'] = $URL;
 $latteParameters['text'] = $text;
 $latteParameters['config'] = $config;

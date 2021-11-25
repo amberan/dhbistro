@@ -57,7 +57,7 @@ $text['audit'] = 'Audit';
 $text['spravauzivatelu'] = 'Správa uživatelů';
 $text['casovadostupnost'] = 'Časová dostupnost';
 $text['ukoly'] = 'Úkoly';
-$text['forum'] = 'Fórum';
+$text['forum'] = 'Fórum/Analytika';
 $text['skupiny'] = 'Skupiny';
 $text['pripady'] = 'Případy';
 $text['osoby'] = 'Osoby';
@@ -65,6 +65,8 @@ $text['aktuality'] = 'Aktuality';
 $text['cesta'] = 'Cesta';
 $text['akce'] = 'Akce';
 $text['nastenka'] = 'Nástěnka';
+$text['banka'] = 'BTB Banka';
+$text['prazskahlidka'] = 'Pražská Hlídka';
 
 // NASTAVENI
 $text['uzivatel'] = 'Uživatel';
