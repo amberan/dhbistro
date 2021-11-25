@@ -5,6 +5,9 @@
 
 # [BISTRO](https://gitlab.com/alembiq/bistro)
 
+**Are you one of the Others? A member of the Night Watch or Day Watch? Bistro is here for you and will try to keep you from getting lost in  all the gloom related informations!**
+
+
 [Bistro](https://github.com/amberan/dhbistro/) was originally created to help players of Czech LARP [Pražská Hlídka](http://www.prazskahlidka.cz/). This cyclical larp is inspired by [Sergei Lukyanenko Night Watch](https://en.wikipedia.org/wiki/Night_Watch_(Lukyanenko_novel)).
 In-game it's used by two teams (Day and Night watch) to keep tracks of characters and events especially between iterations of the game.
 
