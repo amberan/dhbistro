@@ -5,6 +5,68 @@
 
     Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 
+
+function restoreDB($file = null)
+{ //TODO move to backup library
+    global $database,$config;
+    require $_SERVER['DOCUMENT_ROOT']."/.env.php";
+    $database = mysqli_connect($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase']);
+    mysqli_query($database, "SET NAMES 'utf8'");
+    if (mysqli_num_rows(mysqli_query($database, "show tables")) == 0) {
+        populateDB($file);
+    }
+}
+
+/**
+ * populateDB from /sql/default*.sql or $sqlFile
+ */
+function populateDB($sqlFile = null)
+{//TODO move to backup library
+    global $config,$database,$_SESSION,$text;
+    if (!file_exists($sqlFile)) {
+        $dbScriptFileList = glob(SERVER_ROOT.'/sql/default*.sql');
+        $sqlFile = end($dbScriptFileList);
+        Debugger::log("DEBUG: creating new database from ".$sqlFile);
+        $defaultSql = true;
+    }
+    if (DBTest($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase']) && file_exists($sqlFile)) {
+        $database = mysqli_connect($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase']);
+        mysqli_query($database, "SET NAMES 'utf8'");
+
+        $tempLine = '';
+        $lines = file($sqlFile);
+        foreach ($lines as $line) {
+            if (substr($line, 0, 2) == '--' || $line == '') {
+                continue;
+            }
+            $tempLine .= $line;
+            if (substr(trim($line), -1, 1) == ';') {
+                mysqli_query($database, $tempLine) || print("Error in :" . $tempLine .":". mysqli_error($database));
+                $tempLine = '';
+            }
+        }
+        Debugger::log("DEBUG: Database EMPTY, populating based on ".$sqlFile);
+        if (isset($defaultSql)) {
+            $adminPassword = randomPassword();
+            Debugger::log("DEBUG: creating admin : ".$adminPassword);
+            $adminpassword_sql = 'UPDATE '.DB_PREFIX.'user SET
+            `userId` = "1",`sid` = "",`userName` = "admin",`userPassword` = md5("'.$adminPassword.'"),`userEmail` = "",
+            `userTimeout` = 600,`userSuspended` = 0,`userDeleted` = 0,`personId` = 0,`aclAPI` = 1,`aclAudit` = 1,
+            `aclCase` = 2,`aclNews` = 2,`aclUser` = 2,`aclBoard` = 2,`aclGamemaster` = 2,`aclGroup` = 2,`aclHunt` = 2,
+            `aclPerson` = 2,`aclRoot` = 2,`aclSecret` = 2,`aclTask` = 2,`aclReport` = 2,`aclSymbol` = 2,`aclDirector` = 2,
+            `aclDeputy` = 2,`planMD` = "",`filter` = "" WHERE `userId` = 1)';
+            mysqli_query($database, $adminpassword_sql);
+            $_SESSION['message'] = $text['vytvorenadmin'].$adminPassword;
+        }
+        mysqli_close($database);
+    } else {
+        die('unable to connect to db || $sqlFile does not exist');
+    }
+}
+
+
+
+
 /**
  * converts configuration from password file and platform definition to one
  */
@@ -25,6 +87,8 @@ function bistroConvertPlatform()
             $_POST['themeNavbar'],
             $_POST['themeCustom']
         );
+        require $_SERVER['DOCUMENT_ROOT']."/.env.php";
+        restoreDB($config['folder_backup'].$_POST['backupFile']);
     } elseif (file_exists(SERVER_ROOT.'/inc/platform.php')) {
         // convert old files
         $config['dbHost'] = 'localhost';
@@ -33,7 +97,8 @@ function bistroConvertPlatform()
             $lines = file($config['dbpass'], FILE_IGNORE_NEW_LINES) or die("fail pwd");
             $config['dbPassword'] = $lines[2];
         }
-        if (DBTest($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase'])) {
+        if (isset($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase']) &&
+        DBTest($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase'])) {
             //connection tested
             bistroConfigFile(
                 $config['dbHost'],
@@ -50,6 +115,8 @@ function bistroConvertPlatform()
             // old files, unable to connect to db
             $config['dbPrefix'] = DB_PREFIX;
             $latteParameters['config'] = $config;
+            $backupList = fileList($config['folder_backup']);
+            $latteParameters['backupList'] = $backupList;
             latteDrawTemplate('installer');
             die();
         }
@@ -67,7 +134,7 @@ function bistroConfigFile($dbHost, $dbUser, $dbPassword, $dbDatabase, $dbPrefix 
 {
     global $config;
     $newConfigFile = fopen($config['platformConfig'], "w") or die("Unable to write configuration file!");
-    echo $configList = '<?php
+    $configList = '<?php
         define(\'DB_PREFIX\', \''.$dbPrefix.'\');
         $'.'config[\'dbHost\']            = \''.$dbHost.'\';
         $'.'config[\'dbUser\']            = \''.$dbUser.'\';

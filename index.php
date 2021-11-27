@@ -15,7 +15,6 @@ require_once SERVER_ROOT."/lib/case.php";
 require_once SERVER_ROOT.'/lib/database.php';
 require_once SERVER_ROOT.'/lib/file.php';
 require_once SERVER_ROOT.'/lib/filters.php';
-require_once SERVER_ROOT.'/lib/formatter.php';
 require_once SERVER_ROOT.'/lib/gui.php';
 require_once SERVER_ROOT.'/lib/image.php';
 require_once SERVER_ROOT.'/lib/news.php';
@@ -26,37 +25,39 @@ require_once SERVER_ROOT."/lib/task.php";
 require_once SERVER_ROOT.'/lib/update.php';
 require_once SERVER_ROOT."/lib/user.php";
 
+
+//start page/installer
+//if there is no .env.php or we have POST data from installer.latte
 if (!file_exists($config['platformConfig']) || isset($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbDatabase'])) {
     bistroConvertPlatform();
 }
 require_once $config['platformConfig'];
-if (isset($config['themeCustom'])) {
-    require_once $config['folder_custom'].'/text-'.$config['themeCustom'].'.php';
-}
-
 if (DBTest($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase'])) {
     $database = mysqli_connect($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase']);
     mysqli_query($database, "SET NAMES 'utf8'");
 }
+if (isset($config['themeCustom'])) {
+    require_once $config['folder_custom'].'/text-'.$config['themeCustom'].'.php';
+}
+//include /inc/installer
+//end page/installer
+
 
 $database = mysqli_connect($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase']) or die($_SERVER["SERVER_NAME"].":".mysqli_connect_errno()." ".mysqli_connect_error());
 mysqli_query($database, "SET NAMES 'utf8'");
 
 $URL = explode('/', $_SERVER['REQUEST_URI']); // for THE LOOP
-require_once SERVER_ROOT.'/inc/installer.php';
 require_once SERVER_ROOT.'/inc/backup.php';
 require_once SERVER_ROOT.'/inc/session.php';
 require_once SERVER_ROOT.'/inc/unread.php';
 $_REQUEST = escape_array($_REQUEST);
 $_POST = escape_array($_POST);
 $_GET = escape_array($_GET);
-require_once SERVER_ROOT."/pages/menu.php";
+
 
 
 $latteParameters['current_location'] = $_SERVER["SCRIPT_URI"];
-$latteParameters['menu'] = $menu;
-$latteParameters['menuSub'] = $menuSub;
-$latteParameters['menuLinks'] = $menuLinks;
+
 $latteParameters['URL'] = $URL;
 $latteParameters['text'] = $text;
 $latteParameters['config'] = $config;
@@ -83,6 +84,11 @@ if ($URL[1] == 'file' && isset($user)) { // GET FILE type:  attachement,portrait
 }
 latteDrawTemplate('headerMD');
 if (isset($user)) {
+    require_once SERVER_ROOT."/pages/menu.php";
+    $latteParameters['menu'] = $menu;
+    $latteParameters['menuSub'] = $menuSub;
+    $latteParameters['menuLinks'] = $menuLinks;
+
     latteDrawTemplate('menu');
     if ($URL[1] == 'settings') { // SETTINGS
         $latteParameters['title'] = $text['nastaveni'];

@@ -1,9 +1,29 @@
 <?php
-
-//require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 use Tracy\Debugger;
 
 Debugger::enable(Debugger::PRODUCTION, $config['folder_logs']);
+
+function human_filesize($bytes, $decimals = 2)
+{
+    $size = 'BKMGTP';
+    $factor = floor((mb_strlen($bytes) - 1) / 3);
+    return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor];
+}
+
+/**
+ * returns array files and size
+ */
+function fileList($folder)
+{
+    $files = (array_diff(scandir($folder), array('.', '..', '.holder', '.htaccess')));
+    foreach (($files) as $value) {
+        $fileList[] = array(
+            basename($value),
+            human_filesize(filesize($folder.$value))
+        );
+    }
+    return $fileList;
+}
 
 /**
  * get fileName based on type.
