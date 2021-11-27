@@ -4,8 +4,37 @@ use Tracy\Debugger;
 
 Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 
-//vytvoreni zalohy
 
+/**
+ * list all the present backups in database
+ */
+function backupListDatabase($empty = null)
+{
+    global $config,$database,$text;
+    $backups_sql = "SELECT ".DB_PREFIX."backup.* FROM ".DB_PREFIX."backup ".sortingGet('backup');
+    $backups_query = mysqli_query($database, $backups_sql);
+    while (mysqli_num_rows($backups_query)> 0 && $backup_record = mysqli_fetch_assoc($backups_query)) {
+        unset($backup);
+        $file = end(explode("/", $backup_record['file']));
+        if (file_exists($config['folder_backup'].$file) && !$empty) {
+            $backup['file'] = "file/backup/".$backup_record['id'];
+            $backup['datetime'] = webDateTime($backup_record['time']);
+            $backup['version'] = $backup_record['version'];
+            if (file_exists($config['folder_backup'].$file)) {
+                $backup['filesize'] = human_filesize(filesize($config['folder_backup'].$file))."B";
+            } else {
+                $backup['filesize'] = $text['soubornenalezen'];
+            }
+        }
+        $backup_array[] = $backup;
+    }
+    if (sizeof($backup_array) < 1) {
+        $backup_array = false;
+    }
+    return $backup_array;
+}
+
+//vytvoreni zalohy
 function backupData($soubor = "")
 {
     global $database,$config;
@@ -90,8 +119,9 @@ function backupData($soubor = "")
         $query = mysqli_query($database, "SELECT  * FROM ".$data[0]."");
         while ($fetch = mysqli_fetch_row($query)) {
             $columnCount = count($fetch);
+            $values = null;
             for ($i = 0; $i < $columnCount; $i++) {
-                @$values .= "'".mysqli_escape_string($database, $fetch[$i])."'".($i < $columnCount - 1 ? "," : "");
+                $values .= "'".mysqli_escape_string($database, $fetch[$i])."'".($i < $columnCount - 1 ? "," : "");
             }
             $text .= "\nINSERT INTO `".$data[0]."` VALUES(".$values.");";
             unset($values);
@@ -146,6 +176,23 @@ function updatesToRun($file)
     return (strpos($file, 'php') && "update-".$lastBackup['version'].".php" < $file && "update-".$config['version'].".php" >= $file) ;
 }
 
+/**
+ * returns all update*php files in sql that are never than last backup but at most current version
+ */
+function updatesToApply($updateFiles, $lastBackup)
+{
+    global $config;
+    $files = array();
+    foreach ($updateFiles as $file) {
+        if (preg_match('/update-[0-9.]{1,}php/', $file) != null && version_compare($lastBackup, substr($file, 7, -4)) < 0
+        && version_compare($config['version'], substr($file, 7, -4)) >= 0) {
+            $files[] = $file;
+        }
+    }
+    return $files;
+}
+
+
 if (DBtableExist("backup") || DBtableExist("backups")) {
     $lastBackupSql = "SELECT time,version FROM ".DB_PREFIX."backup ORDER BY time DESC LIMIT 1";
     if (DBcolumnExist("backups", "version")) { // 1.5.2> && <1.7.3
@@ -154,7 +201,7 @@ if (DBtableExist("backup") || DBtableExist("backups")) {
         $lastBackupSql = "SELECT time FROM ".DB_PREFIX."backups ORDER BY time DESC LIMIT 1";
     }
     $lastBackup = mysqli_fetch_assoc(mysqli_query($database, $lastBackupSql));
-    $updatesToRun = (array_filter(array_diff(scandir($_SERVER['DOCUMENT_ROOT']."/sql"), array('.', '..')), "updatesToRun"));
+    $updatesToRun = updatesToApply(array_diff(scandir($_SERVER['DOCUMENT_ROOT']."/sql"), array('.', '..')), @$lastBackup['version']);
     if (round($lastBackup['time'], -5) < round(time(), -5) || sizeof($updatesToRun)>0) {
         backup_process();
         foreach ($updatesToRun as $key => $file) {

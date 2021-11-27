@@ -32,7 +32,6 @@ $database = mysqli_connect($config['dbHost'], $config['dbUser'], $config['dbPass
 mysqli_query($database, "SET NAMES 'utf8'");
 
 require_once SERVER_ROOT.'/lib/gui.php';
-require_once SERVER_ROOT.'/lib/formatter.php';
 require_once SERVER_ROOT.'/lib/filters.php';
 require_once SERVER_ROOT.'/lib/file.php';
 require_once SERVER_ROOT.'/lib/audit_trail.php';

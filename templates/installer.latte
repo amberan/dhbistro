@@ -1,6 +1,7 @@
 {import 'headerMD.latte'}
 
 <h1>BiStro Installer</h1>
+<a href="https://gitlab.com/alembiq/bistro/" target="_new"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Git_icon.svg/97px-Git_icon.svg.png" title="BiStro repository"  alt="BiStro repository"></a>
 <form action="/" method="post" id="dbconfig">
 DB Hostname: <input name="dbHost" value="localhost" />
 <br/>
@@ -39,7 +40,23 @@ Theme Custom: <select name="themeCustom">
 <option value="enigma"{if @$config[themeCustom] == "enigma"} selected {/if}>enigma</option>
 </select>
 <br/>
-<input type="submit" value="Save" />
+
+
+<h2> Backups present in {$config['folder_backup']}:</h2>
+{if !$backupList}
+no backups found in {$config['folder_backup']}
+{else}
+You can select one of them to fill new database (if it is empty). <br/>
+<h3 style="color:red">Can handle only unpacked sql files!</h3>
+<Select name="backupFile">
+<option value="">Do not restore from any backup</option>
+{foreach $backupList as $backupFile}
+<option value="{$backupFile[0]}">{$backupFile[0]}  ---      {$backupFile[1]} </option>
+{/foreach}
+</select>
+{/if}
+
+<br/><br/><input type="submit" value="Save" />
 </form>
 
 {import 'footerMD.latte'}

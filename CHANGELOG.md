@@ -9,6 +9,9 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 
   -->
 
+**1.8.7**
+- refactor: installer data restore #107
+
 **1.8.6**
 - fix: assigned items on dashboard #214
 - refactor: separation of index.php and func_main.php #217
