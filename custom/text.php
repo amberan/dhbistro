@@ -115,7 +115,6 @@ $text['opravdusmazat'] = 'Opravdu smazat uživatele';
 $text['opravduobnovit'] = 'Opravdu obnovit uživatele';
 $text['aclRoot'] = 'Administrátor';
 $text['aclUser'] = 'Uživatelé';
-$text['aclTask'] = 'Úkoly';
 $text['aclSecret'] = 'Tajné';
 $text['aclAudit'] = 'Audit';
 $text['aclGroup'] = 'Skupiny';

@@ -16,7 +16,6 @@ if (isset($_POST['userid'], $_POST['edituser']) && $user['aclUser'] && !preg_mat
         $data['aclPerson'] = $_POST['aclPerson'];
         $data['aclCase'] = $_POST['aclCase'];
         $data['aclGroup'] = $_POST['aclGroup'];
-        $data['aclTask'] = $_POST['aclTask'];
         $data['aclSymbol'] = $_POST['aclSymbol'];
         if ($user['aclHunt'] > 0) {
             $data['aclHunt'] = $_POST['aclHunt'];
@@ -74,11 +73,6 @@ if (isset($_POST['userid'], $_POST['edituser']) && $user['aclUser'] && !preg_mat
         $casesAssignedToUser = casesAssignedTo($rec['userId']);
         if (sizeof($casesAssignedToUser)>1) {
             $latteParameters['userEdit']['pripady'] = $casesAssignedToUser;
-        }
-
-        $tasksAssignedToUser = tasksAssignedTo($rec['userId']);
-        if (sizeof($tasksAssignedToUser)>1) {
-            $latteParameters['userEdit']['ukoly'] = $tasksAssignedToUser;
         }
     } else {
         $latteParameters['warning'] = $text['zaznamnenalezen'];
