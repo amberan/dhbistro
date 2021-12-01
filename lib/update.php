@@ -8,9 +8,9 @@
 
 function restoreDB($file = null)
 { //TODO move to backup library
-    global $database,$config;
+    global $database,$configDB;
     require $_SERVER['DOCUMENT_ROOT']."/.env.php";
-    $database = mysqli_connect($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase']);
+    $database = mysqli_connect($configDB['dbHost'], $configDB['dbUser'], $configDB['dbPassword'], $configDB['dbDatabase']);
     mysqli_query($database, "SET NAMES 'utf8'");
     if (mysqli_num_rows(mysqli_query($database, "show tables")) == 0) {
         populateDB($file);
@@ -22,15 +22,15 @@ function restoreDB($file = null)
  */
 function populateDB($sqlFile = null)
 {//TODO move to backup library
-    global $config,$database,$_SESSION,$text;
+    global $configDB,$database,$_SESSION,$text;
     if (!file_exists($sqlFile)) {
         $dbScriptFileList = glob(SERVER_ROOT.'/sql/default*.sql');
         $sqlFile = end($dbScriptFileList);
         Debugger::log("DEBUG: creating new database from ".$sqlFile);
         $defaultSql = true;
     }
-    if (DBTest($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase']) && file_exists($sqlFile)) {
-        $database = mysqli_connect($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase']);
+    if (DBTest($configDB['dbHost'], $configDB['dbUser'], $configDB['dbPassword'], $configDB['dbDatabase']) && file_exists($sqlFile)) {
+        $database = mysqli_connect($configDB['dbHost'], $configDB['dbUser'], $configDB['dbPassword'], $configDB['dbDatabase']);
         mysqli_query($database, "SET NAMES 'utf8'");
 
         $tempLine = '';
@@ -64,9 +64,6 @@ function populateDB($sqlFile = null)
     }
 }
 
-
-
-
 /**
  * converts configuration from password file and platform definition to one
  */
@@ -87,24 +84,24 @@ function bistroConvertPlatform()
             $_POST['themeNavbar'],
             $_POST['themeCustom']
         );
-        require $_SERVER['DOCUMENT_ROOT']."/.env.php";
+        require_once $config['platformConfig'];
         restoreDB($config['folder_backup'].$_POST['backupFile']);
     } elseif (file_exists(SERVER_ROOT.'/inc/platform.php')) {
         // convert old files
-        $config['dbHost'] = 'localhost';
+        $configDB['dbHost'] = 'localhost';
         require_once SERVER_ROOT.'/inc/platform.php';
         if (file_exists($config['dbpass'])) {
             $lines = file($config['dbpass'], FILE_IGNORE_NEW_LINES) or die("fail pwd");
             $config['dbPassword'] = $lines[2];
         }
-        if (isset($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase']) &&
-        DBTest($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase'])) {
+        if (isset($configDB['dbHost'], $configDB['dbUser'], $configDB['dbPassword'], $configDB['dbDatabase']) &&
+        DBTest($configDB['dbHost'], $configDB['dbUser'], $configDB['dbPassword'], $configDB['dbDatabase'])) {
             //connection tested
             bistroConfigFile(
-                $config['dbHost'],
-                $config['dbUser'],
-                $config['dbPassword'],
-                $config['dbDatabase'],
+                $configDB['dbHost'],
+                $configDB['dbUser'],
+                $configDB['dbPassword'],
+                $configDB['dbDatabase'],
                 DB_PREFIX,
                 $config['themeColor'],
                 $config['themeBg'],
@@ -136,10 +133,10 @@ function bistroConfigFile($dbHost, $dbUser, $dbPassword, $dbDatabase, $dbPrefix 
     $newConfigFile = fopen($config['platformConfig'], "w") or die("Unable to write configuration file!");
     $configList = '<?php
         define(\'DB_PREFIX\', \''.$dbPrefix.'\');
-        $'.'config[\'dbHost\']            = \''.$dbHost.'\';
-        $'.'config[\'dbUser\']            = \''.$dbUser.'\';
-        $'.'config[\'dbPassword\']          = \''.$dbPassword.'\';
-        $'.'config[\'dbDatabase\']        = \''.$dbDatabase.'\';
+        $'.'configDB[\'dbHost\']            = \''.$dbHost.'\';
+        $'.'configDB[\'dbUser\']            = \''.$dbUser.'\';
+        $'.'configDB[\'dbPassword\']          = \''.$dbPassword.'\';
+        $'.'configDB[\'dbDatabase\']        = \''.$dbDatabase.'\';
         $'.'config[\'themeColor\']             = \''.$themeColor.'\';
         $'.'config[\'themeCustom\']            = \''.$themeCustom.'\';
         $'.'config[\'themeBg\']          = \''.$themeBg.'\';
@@ -185,11 +182,11 @@ function bistroDBTableCreate($table, $file = null): int
  */
 function bistroDBTableRename($data, $file = null): int
 {
-    global $database,$config;
+    global $database,$configDB;
     $alter = 0;
     foreach ($data as $old => $new) {
         if (DBtableExist($new) == 0 && DBtableExist($old) != 0) {
-            $renameSql = "ALTER TABLE ".$config['dbDatabase'].".".DB_PREFIX."$old RENAME TO ".$config['dbDatabase'].".".DB_PREFIX."$new";
+            $renameSql = "ALTER TABLE ".$configDB['dbDatabase'].".".DB_PREFIX."$old RENAME TO ".$configDB['dbDatabase'].".".DB_PREFIX."$new";
             mysqli_query($database, $renameSql);
             if (DBtableExist($new) != 0 && DBtableExist($old) == 0) {
                 Debugger::log('UPDATER '.$file.': '.$renameSql);
@@ -212,12 +209,12 @@ function bistroDBTableRename($data, $file = null): int
  */
 function bistroDBColumnAdd($data, $file = null): int
 {
-    global $database,$config;
+    global $database,$configDB;
     $alter = 0;
     foreach (array_keys($data) as $table) {
         foreach (array_keys($data[$table]) as $column) {
             if (DBtableExist($table) != 0 && DBcolumnExist($table, $column) == 0) {
-                $alterSql = "ALTER TABLE ".$config['dbDatabase'].".".DB_PREFIX."$table ADD COLUMN $column ".$data[$table][$column];
+                $alterSql = "ALTER TABLE ".$configDB['dbDatabase'].".".DB_PREFIX."$table ADD COLUMN $column ".$data[$table][$column];
                 mysqli_query($database, $alterSql);
                 if (DBcolumnExist($table, $column) != 0) {
                     Debugger::log('UPDATER '.$file.': '.$alterSql);
@@ -241,12 +238,12 @@ function bistroDBColumnAdd($data, $file = null): int
  */
 function bistroDBColumnAlter($data, $file = null): int
 {
-    global $database,$config;
+    global $database,$configDB;
     $alter = 0;
     foreach (array_keys($data) as $table) {
         foreach (array_keys($data[$table]) as $column) {
             if (DBcolumnExist($table, $column) != 0) {  //existuje > updatnout
-                $alterSql = "ALTER TABLE ".$config['dbDatabase'].".".DB_PREFIX."$table CHANGE $column ".$data[$table][$column];
+                $alterSql = "ALTER TABLE ".$configDB['dbDatabase'].".".DB_PREFIX."$table CHANGE $column ".$data[$table][$column];
                 mysqli_query($database, $alterSql);
                 if (($column == explode(' ', trim($data[$table][$column]))[0]) || DBcolumnExist($table, $column) == 0 && DBcolumnExist($table, explode(' ', trim($data[$table][$column]))[0]) != 0) {
                     Debugger::log('UPDATER '.$file.': '.$alterSql);
@@ -269,9 +266,9 @@ function bistroDBColumnAlter($data, $file = null): int
  */
 function bistroDBPasswordEncrypt(): int
 {
-    global $database,$config;
+    global $database,$configDB,$config;
     $alterPassword = $alter = 0;
-    $passwordSql = "SELECT userPassword FROM ".$config['dbDatabase'].".".DB_PREFIX."user";
+    $passwordSql = "SELECT userPassword FROM ".$configDB['dbDatabase'].".".DB_PREFIX."user";
     $passwordQuery = mysqli_query($database, $passwordSql);
     if (mysqli_num_rows($passwordQuery) > 0) {
         while ($passwordData = mysqli_fetch_array($passwordQuery)) {
@@ -282,10 +279,10 @@ function bistroDBPasswordEncrypt(): int
     }
     unset($passwordSql);
     if ($alterPassword > 0) {
-        $passwordSql = "SELECT userPassword,userId,userName FROM ".$config['dbDatabase'].".".DB_PREFIX."user";
+        $passwordSql = "SELECT userPassword,userId,userName FROM ".$configDB['dbDatabase'].".".DB_PREFIX."user";
         $passwordQuery = mysqli_query($database, $passwordSql);
         while ($passwordData = mysqli_fetch_array($passwordQuery)) {
-            mysqli_query($database, "UPDATE ".$config['dbDatabase'].".".DB_PREFIX."user set userPassword=md5('".$passwordData['userPassword']."') where userId=".$passwordData['userId']);
+            mysqli_query($database, "UPDATE ".$configDB['dbDatabase'].".".DB_PREFIX."user set userPassword=md5('".$passwordData['userPassword']."') where userId=".$passwordData['userId']);
             Debugger::log('UPDATER '.$config['version'].': Hashing '.$passwordData['userName'].'.userPassword');
             $alter++;
         }
@@ -303,11 +300,11 @@ function bistroDBPasswordEncrypt(): int
  */
 function bistroDBColumnMarkdown($data, $file = null): int
 {
-    global $database,$config;
+    global $database,$configDB;
     $alter = 0;
     $converter = new HtmlConverter(['strip_tags' => true]); //https://github.com/thephpleague/html-to-markdown
     foreach ($data as $value) { //$data as $key => $value
-        $preMarkdownSql = "SELECT ".$value[1].", ".$value[2]." FROM ".$config['dbDatabase'].".".DB_PREFIX.$value[0]." WHERE (length(".$value[3].") = 0  or length(".$value[3].") is null) and length(".$value[2].") > 0";
+        $preMarkdownSql = "SELECT ".$value[1].", ".$value[2]." FROM ".$configDB['dbDatabase'].".".DB_PREFIX.$value[0]." WHERE (length(".$value[3].") = 0  or length(".$value[3].") is null) and length(".$value[2].") > 0";
         if (DBcolumntNotEmpty($value[0], $value[3]) == 0 && DBcolumnExist($value[0], $value[2]) > 0 && DBcolumnExist($value[0], $value[3]) > 0) {
             $preMarkdownQuery = mysqli_query($database, $preMarkdownSql);
             while ($preMarkdown = mysqli_fetch_array($preMarkdownQuery)) {
@@ -329,12 +326,12 @@ function bistroDBColumnMarkdown($data, $file = null): int
  */
 function bistroMigratePermissions($data, $file = null): int
 {
-    global $database,$config;
+    global $database,$configDB;
     $alter = 0;
     foreach (array_keys($data) as $old) {
         foreach ($data[$old] as $new) {
             if (DBcolumnExist('user', $new) && DBcolumnExist('user', $old)) {
-                $alterSql = "UPDATE ".$config['dbDatabase'].".".DB_PREFIX."user SET $new=$old;";
+                $alterSql = "UPDATE ".$configDB['dbDatabase'].".".DB_PREFIX."user SET $new=$old;";
                 mysqli_query($database, $alterSql);
                 if (mysqli_affected_rows($database) > 0) {
                     Debugger::log('UPDATER '.$file.': PERMISSIONS '.$old.' => '.$new);
@@ -352,11 +349,11 @@ function bistroMigratePermissions($data, $file = null): int
  */
 function bistroIntToTimestamp($data, $file = null): int
 {
-    global $database,$config;
+    global $database,$configDB;
     $alter = 0;
     foreach ($data as $change) {
         if (DBcolumnExist($change[0], $change[1]) && DBcolumnExist($change[0], $change[2])) {
-            $alterSql = "UPDATE ".$config['dbDatabase'].".".DB_PREFIX.$change[0]." SET ".$change[2]."=FROM_UNIXTIME(".$change[1].") where ".$change[1].">0 ;";
+            $alterSql = "UPDATE ".$configDB['dbDatabase'].".".DB_PREFIX.$change[0]." SET ".$change[2]."=FROM_UNIXTIME(".$change[1].") where ".$change[1].">0 ;";
             mysqli_query($database, $alterSql);
             if (mysqli_affected_rows($database) > 0) {
                 Debugger::log('UPDATER '.$file.': TIME CONVERSION nw'.$change[0].':  '.$change[1].' => '.$change[2]);
@@ -395,13 +392,13 @@ function bistroMyisamToInnodb(): int
  */
 function bistroDBFulltextAdd($data, $file = null): int
 {
-    global $database,$config;
+    global $database,$configDB;
     $alter = 0;
     foreach (array_keys($data) as $table) {
         foreach ($data[$table] as $value) {
-            $checkSql = "SHOW INDEX FROM ".$config['dbDatabase'].".".DB_PREFIX."$table WHERE index_type = 'FULLTEXT' and column_name='$value'";
+            $checkSql = "SHOW INDEX FROM ".$configDB['dbDatabase'].".".DB_PREFIX."$table WHERE index_type = 'FULLTEXT' and column_name='$value'";
             if (DBtableExist($table) != 0 && (mysqli_num_rows(mysqli_query($database, $checkSql)) == 0)) {
-                $alterSql = "ALTER TABLE ".$config['dbDatabase'].".".DB_PREFIX."$table ADD FULLTEXT ($value)";
+                $alterSql = "ALTER TABLE ".$configDB['dbDatabase'].".".DB_PREFIX."$table ADD FULLTEXT ($value)";
                 mysqli_query($database, $alterSql);
                 Debugger::log('UPDATER '.$file.': '.$alterSql);
                 $alter++;
@@ -419,12 +416,12 @@ function bistroDBFulltextAdd($data, $file = null): int
  */
 function bistroDBColumnDrop($data, $file = null): int
 {
-    global $database,$config;
+    global $database,$configDB;
     $alter = 0;
     foreach (array_keys($data) as $table) {
         foreach ($data[$table] as $column) {
             if (DBcolumnExist($table, $column) != 0) {
-                $dropSql = "ALTER TABLE ".$config['dbDatabase'].".".DB_PREFIX.$table." DROP $column";
+                $dropSql = "ALTER TABLE ".$configDB['dbDatabase'].".".DB_PREFIX.$table." DROP $column";
                 mysqli_query($database, $dropSql);
                 if (DBColumnExist($table, $column) == 0) {
                     Debugger::log('UPDATER '.$file.': '.$dropSql);
