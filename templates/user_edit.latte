@@ -138,21 +138,6 @@
                     <div class="input-group mb-1">
                         <div class="input-group-prepend">
                             <span class="input-group-text min-w-user-edit">
-                                {$text[aclTask]}
-                            </span>
-                        </div>
-                        <div class="input-group-append" style="flex-grow: 1;">
-                            <select class="w-100" name="aclTask" id="aclTask">
-                                <option value="0" {if $userEdit['aclTask'] == 0 } selected="selected"{/if}>{$text['cteni']}</option>
-                                <option value="1" {if $userEdit['aclTask'] == 1} selected="selected"{/if}>{$text['zapis']}</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="input-group mb-1">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text min-w-user-edit">
                                 {$text[aclSymbol]}
                             </span>
                         </div>
@@ -331,7 +316,7 @@
             </div>
         </form>
         <div class="row">
-            <div class="col-md-4 col-sm-12">
+            <div class="col-md-5 col-sm-12">
                 <p class="h6">
                     {$text['nedokoncenahlaseni']}:
                 </p>
@@ -347,7 +332,7 @@
                     </p>
                 {/if}
             </div>
-            <div class="col-md-4 col-sm-12">
+            <div class="col-md-5 col-sm-12">
                 <p class="h6">
                     {$text['neuzavrenepripady']}:
                 </p>
@@ -360,22 +345,6 @@
                 {else}
                     <p class="h6 small">
                         {$text['nemaneuzavrenepripady']}
-                    </p>
-                {/if}
-            </div>
-            <div class="col-md-4 col-sm-12">
-                <p class="h6">
-                    {$text['nedokonceneukoly']}:
-                </p>
-                {if @$userEdit['ukoly']}
-                    {foreach $userEdit['ukoly'] as $ukoly}
-                        <p class="h6">
-                            <a href="/readcase.php?rid={$ukoly[0]}&hidenotes=0">{$ukoly[1]}</a>
-                        </p>
-                    {/foreach}
-                {else}
-                    <p class="h6 small">
-                        {$text['nemanedokonceneukoly']}
                     </p>
                 {/if}
             </div>

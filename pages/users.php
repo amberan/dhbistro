@@ -66,7 +66,6 @@ elseif (isset($_POST['insertuser']) && $user['aclUser'] && !preg_match('/^[[:bla
             $data['aclUser'] = $_POST['aclUser'];
             $data['aclBoard'] = $_POST['aclBoard'];
             $data['aclNews'] = $_POST['aclNews'];
-            $data['aclTask'] = $_POST['aclTask'];
             $data['aclSecret'] = $_POST['aclSecret'];
             $data['aclAudit'] = $_POST['aclAudit'];
             $data['aclGroup'] = $_POST['aclGroup'];

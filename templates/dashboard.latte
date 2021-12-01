@@ -4,7 +4,7 @@
             <div class="card-body">
                 <h5 class="card-title">{$text[osobninastenka]}</h5>
                 <div class="row">
-                    <div class="col-md-4 col-sm-12">
+                    <div class="col-md-5 col-sm-12">
                         {if @$reportsnone}
                             <p class="card-text">{$reportsnone}</p>
                         {else}
@@ -16,7 +16,7 @@
                             {/foreach}
                         {/if}
                     </div>
-                    <div class="col-md-4 col-sm-12">
+                    <div class="col-md-5 col-sm-12">
                         {if @$casesnone}
                             <p class="card-text">{$casesnone}</p>
                         {else}
@@ -24,18 +24,6 @@
                             {foreach $cases as $case}
                                 <p>
                                     <a href="{$website_link}readcase.php?rid={$case[0]}&hidenotes=0">{$case[1]}</a>
-                                </p>
-                            {/foreach}
-                        {/if}
-                    </div>
-                    <div class="col-md-4 col-sm-12">
-                        {if @$tasksnone}
-                            <p class="card-text">{$tasksnone}</p>
-                        {else}
-                            <p class="card-text">{$text[nedokonceneukoly]}:</p>
-                            {foreach $tasks as $task}
-                                <p>
-                                    <a href="{$website_link}procother.php?fnshtask={$task[0]}">{$task[1]}</a>
                                 </p>
                             {/foreach}
                         {/if}

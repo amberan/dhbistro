@@ -21,7 +21,6 @@ require_once SERVER_ROOT.'/lib/news.php';
 require_once SERVER_ROOT.'/lib/person.php';
 require_once SERVER_ROOT."/lib/report.php";
 require_once SERVER_ROOT.'/lib/security.php';
-require_once SERVER_ROOT."/lib/task.php";
 require_once SERVER_ROOT.'/lib/update.php';
 require_once SERVER_ROOT."/lib/user.php";
 

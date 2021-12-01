@@ -112,21 +112,6 @@
                     <div class="input-group mb-1">
                         <div class="input-group-prepend">
                             <span class="input-group-text min-w-user-edit">
-                                {$text[aclTask]}
-                            </span>
-                        </div>
-                        <div class="input-group-append" style="flex-grow: 1;">
-                            <select class="w-100" name="aclTask" id="aclTask">
-                                <option value="0" {if $userEdit['aclTask'] == 0 } selected="selected"{/if}>{$text['cteni']}</option>
-                                <option value="1" {if $userEdit['aclTask'] == 1} selected="selected"{/if}>{$text['zapis']}</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <div class="input-group mb-1">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text min-w-user-edit">
                                 {$text[aclSymbol]}
                             </span>
                         </div>

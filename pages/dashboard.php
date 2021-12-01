@@ -19,11 +19,3 @@ if (sizeof($casesAssigned)> 1) {
 } else {
     $latteParameters['casesnone'] = $text['zadnenadokoncenepripady'];
 }
-
-// TASKS
-$tasksAssigned = tasksAssignedTo($user['userId']);
-if (sizeof($tasksAssigned) > 1) {
-    $latteParameters['tasks'] = $tasksAssigned;
-} else {
-    $latteParameters['tasksnone'] = $text['zadnenedokonceneukoly'];
-}
