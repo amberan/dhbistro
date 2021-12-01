@@ -85,11 +85,11 @@ plugins:
       NpathComplexity:
         minimum: 2000
       file_extensions: "php"
-      rulesets: "cleancode,design,unusedcode" #,codesize,controversial,naming 
+      rulesets: "cleancode,design,unusedcode" #,codesize,controversial,naming
 #https://github.com/myadmin-plugins/servers-module/blob/master/.codeclimate.yml
   pmd:
     enabled: false
-  radon: 
+  radon:
     enabled: false
   rubocop:
     enabled: false
@@ -113,8 +113,10 @@ plugins:
 
 exclude_patterns:
   - vendor/
-  - js/
+  - js/tiny*
+  - js/jquery*
   - cache/
+  - css/
   - files/
   - images/
   - log/

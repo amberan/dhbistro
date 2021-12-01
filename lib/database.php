@@ -7,7 +7,7 @@
 function DBTest($dbHost, $dbUser, $dbPassword, $dbDatabase)
 {
     $dbtest = mysqli_connect($dbHost, $dbUser, $dbPassword, $dbDatabase);
-    if (mysqli_connect_errno()) {
+    if (mysqli_connect_errno($dbtest)) {
         return false;
     }
     return true;
@@ -21,8 +21,8 @@ function DBTest($dbHost, $dbUser, $dbPassword, $dbDatabase)
  */
 function DBcolumnExist($table, $column)
 {
-    global $config,$database;
-    $query = "SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$config['dbDatabase']."' AND table_name='".DB_PREFIX."$table' and column_name='$column'";
+    global $configDB,$database;
+    $query = "SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$configDB['dbDatabase']."' AND table_name='".DB_PREFIX."$table' and column_name='$column'";
     $checkColumn = mysqli_query($database, $query);
 
     return mysqli_num_rows($checkColumn);
@@ -35,8 +35,8 @@ function DBcolumnExist($table, $column)
  */
 function DBtableExist($table)
 {
-    global $config,$database;
-    $query = "SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$config['dbDatabase']."' AND table_name='".DB_PREFIX."$table'";
+    global $configDB,$database;
+    $query = "SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$configDB['dbDatabase']."' AND table_name='".DB_PREFIX."$table'";
     $checkTable = mysqli_query($database, $query);
 
     return mysqli_num_rows($checkTable);
@@ -50,10 +50,10 @@ function DBtableExist($table)
  */
 function DBcolumntNotEmpty($table, $column)
 {
-    global $config,$database;
+    global $configDB,$database;
     $result[] = '1';
     if (DBcolumnExist($table, $column) == true) {
-        $query = "select count(*) from ".$config['dbDatabase'].".".DB_PREFIX.$table." where length($column) is not null;";
+        $query = "select count(*) from ".$configDB['dbDatabase'].".".DB_PREFIX.$table." where length($column) is not null;";
         $result = mysqli_fetch_array(mysqli_query($database, $query));
     }
 

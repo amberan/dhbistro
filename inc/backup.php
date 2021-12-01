@@ -37,7 +37,7 @@ function backupListDatabase($empty = null)
 //vytvoreni zalohy
 function backupData($soubor = "")
 {
-    global $database,$config;
+    global $database,$configDB;
     function keys($prefix, $array)
     {
         if (empty($array)) {
@@ -69,7 +69,7 @@ function backupData($soubor = "")
     }
     //fast import
     $text = 'SET autocommit=0; SET unique_checks=0; SET foreign_key_checks=0;';
-    $sql = mysqli_query($database, "SHOW table status  FROM ".$config['dbDatabase']);
+    $sql = mysqli_query($database, "SHOW table status  FROM ".$configDB['dbDatabase']);
     while ($data = mysqli_fetch_row($sql)) {
         if (!isset($text)) {
             $text = '';
@@ -141,7 +141,7 @@ function backupData($soubor = "")
 
 function backup_process(): void
 {
-    global $database, $config;
+    global $database, $configDB,$config;
     $backupFile = $config['folder_backup']."backup".time().".sql.gz";
     backupData($backupFile);
     if (filesize($backupFile) > 1024) {
@@ -160,7 +160,7 @@ function backup_process(): void
         }
         $backupSql = 'INSERT INTO '.DB_PREFIX.$backupTable.' ('.$backupColumns.') VALUES('.$backupValues.')';
         mysqli_query($database, $backupSql);
-        $tablelistSql = mysqli_query($database, "SHOW table status FROM ".$config['dbDatabase']);
+        $tablelistSql = mysqli_query($database, "SHOW table status FROM ".$configDB['dbDatabase']);
         while ($tablelist = mysqli_fetch_row($tablelistSql)) {
             mysqli_query($database, "OPTIMIZE TABLE ".$tablelist[0]);
         }

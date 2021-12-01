@@ -50,22 +50,6 @@ function validate_mail($addr): bool
 }
 
 /**
- * generate full domain name for this appliacation.
- *
- * @return string protocol://domainname
- */
-function siteURL(): string
-{
-    $protocol = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' || $_SERVER['SERVER_PORT'] == 443 ? "https://" : "http://";
-    $domainName = $_SERVER['HTTP_HOST'].'/';
-
-    return $protocol.$domainName;
-}
-
-$latteParameters['website_link'] = siteURL();
-
-
-/**
  * SQL injection mitigation.
  *
  * @param array array

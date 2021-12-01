@@ -64,7 +64,7 @@ function sessionDBwipe($sid): void
  */
 function logout_forced($msg): void
 {
-    global $_SESSION;
+    global $_SESSION,$URL;
     if (isset($_SESSION['sid'])) {
         sessionDBwipe($_SESSION['sid']);
     }
@@ -74,7 +74,7 @@ function logout_forced($msg): void
     if (isset($msg)) {
         @$_SESSION['message'] .= $msg;
     }
-    header('location: '.siteURL());
+    header('location: '.$URL[0]);
 }
 
 /*
@@ -105,7 +105,7 @@ if (isset($_SESSION['sid'])) {
 /*
  * LOGOUT
  */
-if (!isset($_SESSION['sid']) and (in_array($URL[1], $config['page_free'], true) == false)) { //neprihlaseny, zkousi
+if (!isset($_SESSION['sid']) and (in_array($URL[1], $config['page_free'], true) == false)) { //neprihlaseny, zkousi, legacy only
     logout_forced($text['http401']);
 }
 if (isset($user) and (@$user['userTimeout'] + @$_SESSION['timestamp'] < time()) and !isset($_POST['logmein'])) { //neprihlasuje se, je prihlaseny, ale vyprsel timeout

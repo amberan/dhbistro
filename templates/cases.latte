@@ -6,7 +6,7 @@
             </h4>
 	    </div>
         <div class="col-12 col-sm-6 text-right">
-            <form action="{$website_link}{$URL[1]}/" method="POST" id="filter" class="header-form-wrapper">
+            <form action="{$URL[0]}{$URL[1]}/" method="POST" id="filter" class="header-form-wrapper">
                 <input type="hidden" name="filter[placeholder]" />
                 <div class="header-switch">
                     <label class="toggle-control">
@@ -38,14 +38,14 @@
                     <thead>
                         <tr>
                             <th>
-                                {$text['nazev']} <a href="{$website_link}{$URL[1]}/?sort=title">&#8661;</a>
+                                {$text['nazev']} <a href="{$URL[0]}{$URL[1]}/?sort=title">&#8661;</a>
                             </th>
                             <th>{$text['stav']}</th>
                             <th>
-                                {$text['vytvoreno']}  <a href="{$website_link}{$URL[1]}/?sort=created">&#8661;</a>
+                                {$text['vytvoreno']}  <a href="{$URL[0]}{$URL[1]}/?sort=created">&#8661;</a>
                             </th>
                             <th>
-                                {$text['zmeneno']}  <a href="{$website_link}{$URL[1]}/?sort=datum">&#8661;</a>
+                                {$text['zmeneno']}  <a href="{$URL[0]}{$URL[1]}/?sort=datum">&#8661;</a>
                             </th>
                             <th>{$text['akce']}</th>
                         </tr>

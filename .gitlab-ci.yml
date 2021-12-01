@@ -7,7 +7,7 @@
 include:
 - template: Code-Quality.gitlab-ci.yml
 - template: Security/SAST.gitlab-ci.yml
-- template: Security/Secret-Detection.gitlab-ci.yml
+# - template: Security/Secret-Detection.gitlab-ci.yml
 - template: Security/Dependency-Scanning.gitlab-ci.yml
 variables:
   SAST_EXPERIMENTAL_FEATURES: 'true'
@@ -17,12 +17,16 @@ stages:
 - build
 - test
 - deploy
+
 build:
   stage: build
   image: alpine
   before_script:
   - apk add gzip
+  - apk add composer
   script:
+  - composer install --ignore-platform-reqs
+  - composer update --ignore-platform-reqs
   - tar czf build.tgz --exclude .git --exclude bistro.tmp .
   artifacts:
     paths:
@@ -30,44 +34,24 @@ build:
     expire_in: 1 days
   rules:
   - when: always
+
 code_quality:
   stage: test
   interruptible: true
-  resource_group: "$CI_COMMIT_SHA"
   artifacts:
-    reports:
-      codequality: gl-code-quality-report.json
-    paths:
-    - gl-code-quality-report.json
+    paths: [gl-code-quality-report.json]
   rules:
-  - if: $CI_PIPELINE_SOURCE ==  "merge_request_event"
-code_quality_html:
+    - if: '$CODE_QUALITY_DISABLED'
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"' # Run code quality job in merge request pipelines
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'      # Run code quality job in pipelines on the default branch (but not in other branch pipelines)
+    - if: '$CI_COMMIT_TAG'
+
+sast:
   stage: test
-  interruptible: true
-  resource_group: "$CI_COMMIT_SHA"
-  extends: code_quality
-  needs:
-  - build
-  allow_failure: true
   variables:
-    REPORT_FORMAT: html
-    CI_DEBUG_TRACE: 'true'
-  artifacts:
-    paths:
-    - gl-code-quality-report.html
-    expire_in: 3 months
-  rules:
-  - if: "$CODE_QUALITY_DISABLED"
-    when: never
-  - if: $CI_PIPELINE_SOURCE ==  "merge_request_event"
-    when: never
-  - when: always
-phpcs-security-audit-sast:
-  interruptible: true
-secret_detection:
-  interruptible: true
-  variables:
-    SECRET_DETECTION_HISTORIC_SCAN: 'true'
+    SAST_EXCLUDED_PATHS: vendor
+
 deploy test:
   stage: deploy
   image: alpine
@@ -83,16 +67,14 @@ deploy test:
   - ssh-keyscan alembiq.net >> ~/.ssh/known_hosts
   script:
   - scp build.tgz gitlab-ci@alembiq.net:.
-  - ssh gitlab-ci@alembiq.net "mkdir $DEPLOY_FOLDER/$CI_JOB_ID && tar zxf build.tgz
-    -C $DEPLOY_FOLDER/$CI_JOB_ID/ && cp $DEPLOY_FOLDER/htdocs/inc/important.php $DEPLOY_FOLDER/$CI_JOB_ID/inc/
+  - ssh gitlab-ci@alembiq.net "mkdir $DEPLOY_FOLDER/$CI_JOB_ID
+    && tar zxf build.tgz -C $DEPLOY_FOLDER/$CI_JOB_ID/
+    && cp $DEPLOY_FOLDER/htdocs/.env.php $DEPLOY_FOLDER/$CI_JOB_ID/
     && rsync -au --remove-source-files $DEPLOY_FOLDER/htdocs/files/ $DEPLOY_FOLDER/$CI_JOB_ID/files/
-    && tar zcf $DEPLOY_FOLDER/backup-$CI_JOB_ID.tgz --exclude $DEPLOY_FOLDER/htdocs/cache
-    --exclude $DEPLOY_FOLDER/htdocs/.git $DEPLOY_FOLDER/htdocs/ && mv $DEPLOY_FOLDER/htdocs
-    $DEPLOY_FOLDER/backup && mv $DEPLOY_FOLDER/$CI_JOB_ID $DEPLOY_FOLDER/htdocs &&
-    rm -rf $DEPLOY_FOLDER/backup && rm build.tgz"
+    && tar zcf $DEPLOY_FOLDER/backup-$CI_JOB_ID.tgz --exclude $DEPLOY_FOLDER/htdocs/cache --exclude $DEPLOY_FOLDER/htdocs/.git $DEPLOY_FOLDER/htdocs/
+    && mv $DEPLOY_FOLDER/htdocs $DEPLOY_FOLDER/backup
+    && mv $DEPLOY_FOLDER/$CI_JOB_ID $DEPLOY_FOLDER/htdocs
+    && rm -rf $DEPLOY_FOLDER/backup
+    && rm build.tgz"
   rules:
   - when: manual
-sast:
-  stage: test
-  variables:
-    SAST_EXCLUDED_PATHS: vendor

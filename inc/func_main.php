@@ -1,36 +1,33 @@
 <?php
 
 session_start();
+
 require_once $_SERVER['DOCUMENT_ROOT']."/config.php";
 if (!file_exists($config['platformConfig'])) {
+    echo $config['platformConfig'];
     Header('location: index.php');
     die();
 }
+require_once $config['platformConfig'];
+$latteParameters['config'] = $config;
 require_once SERVER_ROOT.'/vendor/autoload.php';
 use Tracy\Debugger;
 
 Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
+$latteParameters = [];
 
 require_once $config['folder_custom'].'text.php';
-require_once $config['platformConfig'];
 if (isset($config['themeCustom'])) {
     require_once $config['folder_custom'].'/text-'.$config['themeCustom'].'.php';
 }
+$latteParameters['text'] = $text;
+
 $URL = explode('/', $_SERVER['REQUEST_URI']);
 
 require_once SERVER_ROOT.'/lib/security.php';
 require_once SERVER_ROOT.'/lib/database.php';
-
-if (DBTest($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase'])) {
-    $database = mysqli_connect($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase']);
-    mysqli_query($database, "SET NAMES 'utf8'");
-}
-
-$database = mysqli_connect($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase']) or die($_SERVER["SERVER_NAME"].":".mysqli_connect_errno()." ".mysqli_connect_error());
-mysqli_query($database, "SET NAMES 'utf8'");
-
 require_once SERVER_ROOT.'/lib/gui.php';
 require_once SERVER_ROOT.'/lib/filters.php';
 require_once SERVER_ROOT.'/lib/file.php';
@@ -39,6 +36,10 @@ require_once SERVER_ROOT.'/lib/image.php';
 require_once SERVER_ROOT.'/lib/person.php';
 require_once SERVER_ROOT.'/lib/news.php';
 require_once SERVER_ROOT.'/lib/user.php';
+
+$database = mysqli_connect($configDB['dbHost'], $configDB['dbUser'], $configDB['dbPassword'], $configDB['dbDatabase']) or die($_SERVER["SERVER_NAME"].":".mysqli_connect_errno()." ".mysqli_connect_error());
+mysqli_query($database, "SET NAMES 'utf8'");
+
 require_once SERVER_ROOT.'/inc/backup.php';
 require_once SERVER_ROOT.'/inc/session.php';
 require_once SERVER_ROOT.'/inc/unread.php';
@@ -48,9 +49,6 @@ $_REQUEST = escape_array($_REQUEST);
 $_POST = escape_array($_POST);
 $_GET = escape_array($_GET);
 
-
-$latteParameters['text'] = $text;
-$latteParameters['config'] = $config;
 if (isset($user)) {
     $latteParameters['user'] = $user;
 }

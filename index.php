@@ -24,28 +24,29 @@ require_once SERVER_ROOT.'/lib/security.php';
 require_once SERVER_ROOT.'/lib/update.php';
 require_once SERVER_ROOT."/lib/user.php";
 
-
-//start page/installer
 //if there is no .env.php or we have POST data from installer.latte
 if (!file_exists($config['platformConfig']) || isset($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbDatabase'])) {
     bistroConvertPlatform();
 }
 require_once $config['platformConfig'];
-if (DBTest($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase'])) {
-    $database = mysqli_connect($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase']);
-    mysqli_query($database, "SET NAMES 'utf8'");
-}
+
+$database = @mysqli_connect($configDB['dbHost'], $configDB['dbUser'], $configDB['dbPassword'], $configDB['dbDatabase'])
+    or die($_SERVER["SERVER_NAME"].":".mysqli_connect_errno()." ".mysqli_connect_error());
+mysqli_query($database, "SET NAMES 'utf8'");
+
+//TODO refactor: if there are no tables in database && $_POST['backupFile'] > restoreDB($config['folder_backup'].$_POST['backupFile']);
+//elseif no tables > restoreDB();
+
+$latteParameters['config'] = $config;
 if (isset($config['themeCustom'])) {
     require_once $config['folder_custom'].'/text-'.$config['themeCustom'].'.php';
 }
-//include /inc/installer
-//end page/installer
-
-
-$database = mysqli_connect($config['dbHost'], $config['dbUser'], $config['dbPassword'], $config['dbDatabase']) or die($_SERVER["SERVER_NAME"].":".mysqli_connect_errno()." ".mysqli_connect_error());
-mysqli_query($database, "SET NAMES 'utf8'");
+$latteParameters['text'] = $text;
 
 $URL = explode('/', $_SERVER['REQUEST_URI']); // for THE LOOP
+$URL[0] = $_SERVER['REQUEST_SCHEME']."://".$_SERVER['SERVER_NAME']."/";
+$latteParameters['URL'] = $URL;
+
 require_once SERVER_ROOT.'/inc/backup.php';
 require_once SERVER_ROOT.'/inc/session.php';
 require_once SERVER_ROOT.'/inc/unread.php';
@@ -53,36 +54,18 @@ $_REQUEST = escape_array($_REQUEST);
 $_POST = escape_array($_POST);
 $_GET = escape_array($_GET);
 
-
-
-$latteParameters['current_location'] = $_SERVER["SCRIPT_URI"];
-
-$latteParameters['URL'] = $URL;
-$latteParameters['text'] = $text;
-$latteParameters['config'] = $config;
-if (isset($user)) {
-    $latteParameters['user'] = $user;
-}
-
-
-$latteParameters['text'] = $text;
-$latteParameters['config'] = $config;
-if (isset($user)) {
-    $latteParameters['user'] = $user;
-}
-
-
-//echo "<xmp>"; print_r ($_SERVER); echo "</xmp>";
 /*
  * THE LOOP
  * */
+//TODO auditTrail
 if ($URL[1] == 'file' && isset($user)) { // GET FILE type:  attachement,portrait,symbol,backup
-    //TODO auditTrail
+
     require_once SERVER_ROOT.'/file.php';
     exit;
 }
 latteDrawTemplate('headerMD');
 if (isset($user)) {
+    $latteParameters['user'] = $user;
     require_once SERVER_ROOT."/pages/menu.php";
     $latteParameters['menu'] = $menu;
     $latteParameters['menuSub'] = $menuSub;
@@ -165,3 +148,5 @@ if (isset($user)) {
     Debugger::barDump($_SESSION, 'session');
     Debugger::barDump($latteParameters, 'latte');
     latteDrawTemplate('footerMD');
+
+    mysqli_close($database);
