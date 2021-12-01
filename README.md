@@ -24,18 +24,13 @@ In-game it's used by two teams (Day and Night watch) to keep tracks of character
 
     P.S. pokud neumíš programovat, ale i tak chceš pomoci, vždycky nám můžeš pomoct s testováním.
 
-## Installation
+## running BiStro
 It's a simple php website, you need just the basics - LAMP :)
 ### Prerequisities
 - Apache2
     apache modules:
-    <!-- - proxy_fcgi
-    - expires -->
     - headers
     - rewrite
-    <!-- - ssl
-    - http2
-    - brotli -->
 - MariaDB
 - PHP7
     php modules:
@@ -46,6 +41,14 @@ It's a simple php website, you need just the basics - LAMP :)
     - php-curl
     - php-cli
     - php-mbstring
+### Installation
+- clone repository & run composer
+```bash
+git clone git@gitlab.com:alembiq/bistro.git && cd bistro && composer install && composer update
+```
+- point apache to the BiStro folder
+- create database & user
+- open BiStro in your browser - you'll get installer :)
 
 ## [Changelog](CHANGELOG.md)
 
