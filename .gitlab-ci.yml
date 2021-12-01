@@ -7,7 +7,6 @@
 include:
 - template: Code-Quality.gitlab-ci.yml
 - template: Security/SAST.gitlab-ci.yml
-# - template: Security/Secret-Detection.gitlab-ci.yml
 - template: Security/Dependency-Scanning.gitlab-ci.yml
 variables:
   SAST_EXPERIMENTAL_FEATURES: 'true'
@@ -17,7 +16,6 @@ stages:
 - build
 - test
 - deploy
-
 build:
   stage: build
   image: alpine
@@ -34,24 +32,24 @@ build:
     expire_in: 1 days
   rules:
   - when: always
-
 code_quality:
   stage: test
   interruptible: true
   artifacts:
-    paths: [gl-code-quality-report.json]
+    paths:
+    - gl-code-quality-report.json
   rules:
-    - if: '$CODE_QUALITY_DISABLED'
-      when: never
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"' # Run code quality job in merge request pipelines
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'      # Run code quality job in pipelines on the default branch (but not in other branch pipelines)
-    - if: '$CI_COMMIT_TAG'
-
+  - if: "$CODE_QUALITY_DISABLED"
+    when: never
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
+  - if: "$CI_COMMIT_TAG"
 sast:
   stage: test
   variables:
-    SAST_EXCLUDED_PATHS: vendor
-
+    SAST_EXCLUDED_PATHS: vendor, js/jquery*, js/tiny*
+    SAST_EXCLUDED_ANALYZERS: bandit, brakeman, flawfinder, gosec, kubesec, nodejs-scan,
+      pmd-apex, security-code-scan, sobelow, spotbugs
 deploy test:
   stage: deploy
   image: alpine
@@ -67,14 +65,12 @@ deploy test:
   - ssh-keyscan alembiq.net >> ~/.ssh/known_hosts
   script:
   - scp build.tgz gitlab-ci@alembiq.net:.
-  - ssh gitlab-ci@alembiq.net "mkdir $DEPLOY_FOLDER/$CI_JOB_ID
-    && tar zxf build.tgz -C $DEPLOY_FOLDER/$CI_JOB_ID/
-    && cp $DEPLOY_FOLDER/htdocs/.env.php $DEPLOY_FOLDER/$CI_JOB_ID/
+  - ssh gitlab-ci@alembiq.net "mkdir $DEPLOY_FOLDER/$CI_JOB_ID && tar zxf build.tgz
+    -C $DEPLOY_FOLDER/$CI_JOB_ID/ && cp $DEPLOY_FOLDER/htdocs/.env.php $DEPLOY_FOLDER/$CI_JOB_ID/
     && rsync -au --remove-source-files $DEPLOY_FOLDER/htdocs/files/ $DEPLOY_FOLDER/$CI_JOB_ID/files/
-    && tar zcf $DEPLOY_FOLDER/backup-$CI_JOB_ID.tgz --exclude $DEPLOY_FOLDER/htdocs/cache --exclude $DEPLOY_FOLDER/htdocs/.git $DEPLOY_FOLDER/htdocs/
-    && mv $DEPLOY_FOLDER/htdocs $DEPLOY_FOLDER/backup
-    && mv $DEPLOY_FOLDER/$CI_JOB_ID $DEPLOY_FOLDER/htdocs
-    && rm -rf $DEPLOY_FOLDER/backup
-    && rm build.tgz"
+    && tar zcf $DEPLOY_FOLDER/backup-$CI_JOB_ID.tgz --exclude $DEPLOY_FOLDER/htdocs/cache
+    --exclude $DEPLOY_FOLDER/htdocs/.git $DEPLOY_FOLDER/htdocs/ && mv $DEPLOY_FOLDER/htdocs
+    $DEPLOY_FOLDER/backup && mv $DEPLOY_FOLDER/$CI_JOB_ID $DEPLOY_FOLDER/htdocs &&
+    rm -rf $DEPLOY_FOLDER/backup && rm build.tgz"
   rules:
   - when: manual
