@@ -163,11 +163,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 
 
 ## 1.6.6 - 2020-02-15
-### Added
-### Changed
-### Deprecated
-### Removed
-### Fixed
+
 ### Security
 - db: minor fix
 
