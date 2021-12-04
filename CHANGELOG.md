@@ -20,9 +20,13 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 
 ## 1.8.7 - 2021-12-01
 ### Changed
-- Refactored:ed: installer data restore #107
+- Refactored: installer data restore #107
+- Refactored: index.php restructured #220
+- CI: refactor CI #130
 ### Removed
 - Removed: tasks #215
+- CI: removal of /vendor #167
+
 
 ## 1.8.6 - 2021-11-23
 ### Changed
@@ -146,8 +150,6 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Feature: sorting #87
 
 ## 1.7.0 - 2020-03-08
-
-## 1.6.7
 ### Added
 - Feature: search displays flags #53 #85
 - Styled: notifications #17
@@ -163,7 +165,6 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 
 
 ## 1.6.6 - 2020-02-15
-
 ### Security
 - db: minor fix
 
