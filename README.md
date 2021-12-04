@@ -67,3 +67,24 @@ There is none:( docs below are just notes created during reverse engeneering pha
 ```sql
 UPDATE nw_user SET pwd=md5('newpassword') WHERE id='1';
 ```
+- Prepare data for testing
+```sql
+DELETE FROM nw_case WHERE secret>0;
+DELETE FROM nw_file WHERE secret>0;
+DELETE FROM nw_group WHERE secret>0;
+DELETE FROM nw_note WHERE secret>0;
+DELETE FROM nw_person WHERE secret>0;
+DELETE FROM nw_report WHERE secret>0;
+DELETE FROM nw_symbol WHERE secret>0;
+
+UPDATE nw_case SET secret=1 WHERE deleted = 0 AND RAND() < 0.3;
+UPDATE nw_file SET secret=1 WHERE RAND() < 0.3;
+UPDATE nw_group SET secret=1 WHERE deleted = 0 AND RAND() < 0.3;
+UPDATE nw_note SET secret=1 WHERE deleted = 0 AND RAND() < 0.3;
+UPDATE nw_person SET secret=1 WHERE deleted = 0 AND RAND() < 0.3;
+UPDATE nw_report SET secret=1 WHERE deleted = 0 AND RAND() < 0.3;
+UPDATE nw_symbol SET secret=1 WHERE deleted = 0 AND RAND() < 0.3;
+
+UPDATE nw_user SET aclAPI=1, aclAudit=1, aclCase=2, aclUser=1, aclNews=1, aclBoard=1, aclGamemaster=1, aclGroup=2,
+aclHunt=1, aclPerson=2, aclRoot=1, aclSecret=2, aclReport=2, aclSymbol=2 where userSuspended=0 and userDeleted=0;
+```
