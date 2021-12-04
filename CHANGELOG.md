@@ -91,7 +91,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 ### Security
 - Refactored: validation of permission secret #165
 
-## 1.8.1]
+## 1.8.1
 ### Added
 - Feature: persons `roof` #40
 ### Changed
@@ -102,7 +102,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 ### Fixed
 - Fixed: adding removed persons to report #149
 
-## 1.7.6]
+## 1.7.6
 ### Added
 - Feature: displaying date of creation in search
 - Feature: showing flags in search
@@ -147,7 +147,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 
 ## 1.7.0 - 2020-03-08
 
-## 1.6.7]
+## 1.6.7
 ### Added
 - Feature: search displays flags #53 #85
 - Styled: notifications #17
@@ -171,7 +171,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 ### Security
 - db: minor fix
 
-## 1.6.5]
+## 1.6.5
 ### Added
 - Feature: installer #70
 - Feature: email in settings #57
@@ -323,7 +323,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Fixed: page processing timer
 
 
-## 1.5.1]
+## 1.5.1
 ### Changed
 - Refactored: separation of /inc/func_main.php
 - Refactored: backup (INDEX>FULLTEXT)
