@@ -156,24 +156,6 @@
                 "issues": "https://github.com/thephpleague/html-to-markdown/issues",
                 "source": "https://github.com/thephpleague/html-to-markdown/tree/4.10.0"
             },
-            "funding": [
-                {
-                    "url": "https://www.colinodell.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://www.paypal.me/colinpodell/10.00",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/colinodell",
-                    "type": "github"
-                },
-                {
-                    "url": "https://www.patreon.com/colinodell",
-                    "type": "patreon"
-                }
-            ],
             "time": "2020-07-01T00:34:03+00:00"
         },
         {
@@ -219,16 +201,6 @@
             "support": {
                 "source": "https://github.com/symplify/easy-coding-standard/tree/9.4.70"
             },
-            "funding": [
-                {
-                    "url": "https://www.paypal.me/rectorphp",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/tomasvotruba",
-                    "type": "github"
-                }
-            ],
             "time": "2021-10-02T16:09:04+00:00"
         },
         {
@@ -313,6 +285,5 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "platform-dev": []
 }

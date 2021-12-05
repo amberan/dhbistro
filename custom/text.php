@@ -50,6 +50,7 @@ $text['hlaseniM'] = 'hlášení';
 $text['precistvse'] = 'Přečíst vše';
 $text['opravduprecist'] = 'Opravdu označit vše jako přečtené?';
 $text['hledat'] = 'Hledat';
+$text['uzitecneodkazy'] = 'Odkazy';
 $text['dalsi'] = 'Další';
 $text['zalohovani'] = 'Zálohování';
 $text['nastaveni'] = 'Nastavení';
