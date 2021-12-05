@@ -23,6 +23,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Feature: new values for audit #221
 - Feature: participants on report list #39
 - Feature: audit can be run agains deleted users #26
+- Feature: links to app in header #169
 ### Changed
 - Refactored: unauthorizedAccess tracking #221
 ### Removed
