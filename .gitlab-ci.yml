@@ -12,10 +12,12 @@ variables:
   SAST_EXPERIMENTAL_FEATURES: 'true'
   SAST_DEFAULT_ANALYZERS: nodejs-scan,eslint,phpcs-security-audit
   SEARCH_MAX_DEPTH: 10
+
 stages:
 - build
 - test
 - deploy
+
 build:
   stage: build
   image: alpine
@@ -32,6 +34,7 @@ build:
     expire_in: 1 days
   rules:
   - when: always
+
 code_quality:
   stage: test
   interruptible: true
@@ -50,7 +53,8 @@ sast:
     SAST_EXCLUDED_PATHS: vendor, js/jquery*, js/tiny*
     SAST_EXCLUDED_ANALYZERS: bandit, brakeman, flawfinder, gosec, kubesec, nodejs-scan,
       pmd-apex, security-code-scan, sobelow, spotbugs
-deploy test:
+
+deploy alembiq:
   stage: deploy
   image: alpine
   needs:
@@ -59,18 +63,75 @@ deploy test:
   before_script:
   - apk add openssh-client
   - eval $(ssh-agent -s)
-  - cat $SSH_KEY | tr -d '\r' | ssh-add -
+  - cat $SSH_ALEMBIQ | tr -d '\r' | ssh-add -
   - mkdir -p ~/.ssh
   - chmod 700 ~/.ssh
   - ssh-keyscan alembiq.net >> ~/.ssh/known_hosts
   script:
   - scp build.tgz gitlab-ci@alembiq.net:.
-  - ssh gitlab-ci@alembiq.net "mkdir $DEPLOY_FOLDER/$CI_JOB_ID && tar zxf build.tgz
-    -C $DEPLOY_FOLDER/$CI_JOB_ID/ && cp $DEPLOY_FOLDER/htdocs/.env.php $DEPLOY_FOLDER/$CI_JOB_ID/
+  - ssh gitlab-ci@alembiq.net "mkdir $DEPLOY_FOLDER/$CI_JOB_ID
+    && tar zxf build.tgz -C $DEPLOY_FOLDER/$CI_JOB_ID/
+    && cp $DEPLOY_FOLDER/htdocs/.env.php $DEPLOY_FOLDER/$CI_JOB_ID/
     && rsync -au --remove-source-files $DEPLOY_FOLDER/htdocs/files/ $DEPLOY_FOLDER/$CI_JOB_ID/files/
-    && tar zcf $DEPLOY_FOLDER/backup-$CI_JOB_ID.tgz --exclude $DEPLOY_FOLDER/htdocs/cache
-    --exclude $DEPLOY_FOLDER/htdocs/.git $DEPLOY_FOLDER/htdocs/ && mv $DEPLOY_FOLDER/htdocs
-    $DEPLOY_FOLDER/backup && mv $DEPLOY_FOLDER/$CI_JOB_ID $DEPLOY_FOLDER/htdocs &&
-    rm -rf $DEPLOY_FOLDER/backup && rm build.tgz"
+    && tar zcf $DEPLOY_FOLDER/backup-$CI_JOB_ID.tgz --exclude $DEPLOY_FOLDER/htdocs/cache --exclude $DEPLOY_FOLDER/htdocs/.git $DEPLOY_FOLDER/htdocs/
+    && mv $DEPLOY_FOLDER/htdocs $DEPLOY_FOLDER/backup
+    && mv $DEPLOY_FOLDER/$CI_JOB_ID $DEPLOY_FOLDER/htdocs
+    && rm -rf $DEPLOY_FOLDER/backup
+    && rm build.tgz"
+  only:
+    - merge_requests
+
+deploy nh_text:
+  stage: deploy
+  image: alpine
+  needs:
+  - build
+  allow_failure: false
+  before_script:
+  - apk add openssh-client
+  - eval $(ssh-agent -s)
+  - cat $SSH_TEST | tr -d '\r' | ssh-add -
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - ssh-keyscan nh.test.prazskahlidka.cz >> ~/.ssh/known_hosts
+  script:
+  - scp build.tgz prazskahlidka@nh.test.prazskahlidka.cz:.
+  - ssh prazskahlidka@nh.test.prazskahlidka.cz "mkdir /srv/cz.prazskahlidka.test.nh/$CI_JOB_ID
+    && tar zxf build.tgz -C /srv/cz.prazskahlidka.test.nh/$CI_JOB_ID/
+    && cp /srv/cz.prazskahlidka.test.nh/htdocs/.env.php /srv/cz.prazskahlidka.test.nh/$CI_JOB_ID/
+    && rsync -au --remove-source-files /srv/cz.prazskahlidka.test.nh/htdocs/files/ /srv/cz.prazskahlidka.test.nh/$CI_JOB_ID/files/
+    && mv /srv/cz.prazskahlidka.test.nh/htdocs /srv/cz.prazskahlidka.test.nh/backup
+    && mv /srv/cz.prazskahlidka.test.nh/$CI_JOB_ID /srv/cz.prazskahlidka.test.nh/htdocs
+    && tar zcf /srv/cz.prazskahlidka.test.nh/backup-$CI_JOB_ID.tgz --exclude /srv/cz.prazskahlidka.test.nh/backup/cache /srv/cz.prazskahlidka.test.nh/backup/
+    && rm -rf /srv/cz.prazskahlidka.test.nh/backup
+    && rm build.tgz"
   rules:
-  - when: manual
+  - when: never
+  - if: "$CI_COMMIT_BRANCH == $CI_PROTECTED_BRANCH"
+
+deploy dh_text:
+  stage: deploy
+  image: alpine
+  needs:
+  - build
+  allow_failure: false
+  before_script:
+  - apk add openssh-client
+  - eval $(ssh-agent -s)
+  - cat $SSH_TEST | tr -d '\r' | ssh-add -
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - ssh-keyscan dh.test.prazskahlidka.cz >> ~/.ssh/known_hosts
+  script:
+  - scp build.tgz prazskahlidka@dh.test.prazskahlidka.cz:.
+  - ssh prazskahlidka@dh.test.prazskahlidka.cz "mkdir /srv/cz.prazskahlidka.test.dh/$CI_JOB_ID
+    && tar zxf build.tgz -C /srv/cz.prazskahlidka.test.dh/$CI_JOB_ID/
+    && cp /srv/cz.prazskahlidka.test.dh/htdocs/.env.php /srv/cz.prazskahlidka.test.dh/$CI_JOB_ID/
+    && rsync -au --remove-source-files /srv/cz.prazskahlidka.test.dh/htdocs/files/ /srv/cz.prazskahlidka.test.dh/$CI_JOB_ID/files/
+    && mv /srv/cz.prazskahlidka.test.dh/htdocs /srv/cz.prazskahlidka.test.dh/backup
+    && mv /srv/cz.prazskahlidka.test.dh/$CI_JOB_ID /srv/cz.prazskahlidka.test.dh/htdocs
+    && tar zcf /srv/cz.prazskahlidka.test.dh/backup-$CI_JOB_ID.tgz --exclude /srv/cz.prazskahlidka.test.dh/backup/cache /srv/cz.prazskahlidka.test.dh/backup/
+    && rm -rf /srv/cz.prazskahlidka.test.dh/backup
+    && rm build.tgz"
+  only:
+    - testing
