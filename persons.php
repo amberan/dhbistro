@@ -10,7 +10,7 @@ $latteParameters['title'] = 'Osoby';
 
     // DELETE
     if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete']) && $user['aclPerson']>1) {
-        auditTrail(1, 11, $_REQUEST['delete']);
+        authorizedAccess(1, 11, $_REQUEST['delete']);
         mysqli_query($database, "UPDATE ".DB_PREFIX."person SET deleted=1 WHERE id=".$_REQUEST['delete']);
         deleteAllUnread(1, $_REQUEST['delete']);
     }
@@ -59,7 +59,7 @@ $latteParameters['title'] = 'Osoby';
         if (!isset($_POST['notnew'])) {
             unreadRecords(1, $pid);
         }
-        auditTrail(1, 3, $pid);
+        authorizedAccess(1, 3, $pid);
         $_SESSION['message'] = 'Osoba vytvořena.';
     } else {
         if (isset($_POST['insertperson'])) {
@@ -68,7 +68,7 @@ $latteParameters['title'] = 'Osoby';
     }
     //EDIT
     if (isset($_POST['personid'], $_POST['editperson']) && $user['aclPerson'] && !preg_match('/^[[:blank:]]*$/i', $_POST['name']) && !preg_match('/^[[:blank:]]*$/i', $_POST['contents']) && is_numeric($_POST['side']) && is_numeric($_POST['power']) && is_numeric($_POST['spec'])) {
-        auditTrail(1, 2, $_POST['personid']);
+        authorizedAccess(1, 2, $_POST['personid']);
         if (!isset($_POST['notnew'])) {
             unreadRecords(1, $_POST['personid']);
         }
@@ -126,7 +126,7 @@ $latteParameters['title'] = 'Osoby';
     }
     //ANTIDATING registration
     if ((isset($_POST['personid'])) && $user['aclGamemaster'] == 1 && is_numeric($_POST['rdatumday']) && is_numeric($_POST['regusr'])) {
-        auditTrail(1, 10, $_POST['personid']);
+        authorizedAccess(1, 10, $_POST['personid']);
         $rdatum = mktime(0, 0, 0, $_POST['rdatummonth'], $_POST['rdatumday'], $_POST['rdatumyear']);
         mysqli_query($database, "UPDATE ".DB_PREFIX."person SET regdate='".$rdatum."', regid='".$_POST['regusr']."' WHERE id=".$_POST['personid']);
         $_SESSION['message'] = 'Osoba upravena.';
@@ -137,7 +137,7 @@ $latteParameters['title'] = 'Osoby';
         }
     }
     if (isset($_POST['setgroups'])) {
-        auditTrail(1, 6, $_POST['personid']);
+        authorizedAccess(1, 6, $_POST['personid']);
         mysqli_query($database, "DELETE FROM ".DB_PREFIX."g2p WHERE ".DB_PREFIX."g2p.idperson=".$_POST['personid']);
         $group = $_POST['group'];
         $_SESSION['message'] = 'Skupiny pro uživatele uloženy.';
@@ -147,7 +147,7 @@ $latteParameters['title'] = 'Osoby';
         header('Location: readperson.php?rid='.$_POST['personid'].'&amp;hidenotes=0');
     }
     if (isset($_POST['uploadfile']) && is_uploaded_file($_FILES['attachment']['tmp_name']) && is_numeric($_POST['personid']) && is_numeric($_POST['secret'])) {
-        auditTrail(1, 4, $_POST['personid']);
+        authorizedAccess(1, 4, $_POST['personid']);
         $newname = time().md5(uniqid(time().random_int(0, getrandmax())));
         move_uploaded_file($_FILES['attachment']['tmp_name'], './files/'.$newname);
         $sql = "INSERT INTO ".DB_PREFIX."file (uniquename,originalname,mime,size,datum,iduser,idtable,iditem,secret) VALUES('".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".time()."','".$user['userId']."','1','".$_POST['personid']."','".$_POST['secret']."')";
@@ -161,7 +161,7 @@ $latteParameters['title'] = 'Osoby';
         }
     }
     if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {
-        auditTrail(1, 5, $_POST['personid']);
+        authorizedAccess(1, 5, $_POST['personid']);
         if ($user['aclPerson']) {
             $fres = mysqli_query($database, "SELECT uniquename FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
             $frec = mysqli_fetch_assoc($fres);
@@ -171,7 +171,7 @@ $latteParameters['title'] = 'Osoby';
         header('Location: editperson.php?rid='.$_GET['personid']);
     }
     if (isset($_GET['deletesymbol'])) {
-        auditTrail(1, 2, $_GET['personid']);
+        authorizedAccess(1, 2, $_GET['personid']);
         if ($user['aclPerson']) {
             $sps = mysqli_query($database, "SELECT symbol FROM ".DB_PREFIX."person WHERE id=".$_GET['personid']);
             $spc = mysqli_fetch_assoc($sps);
@@ -184,7 +184,7 @@ $latteParameters['title'] = 'Osoby';
         header('Location: editperson.php?rid='.$_GET['personid']);
     }
 
-    auditTrail(1, 1, 0);
+    authorizedAccess(1, 1, 0);
     mainMenu();
         $customFilter = custom_Filter(1);
     sparklets('<strong>osoby</strong>', '<a href="newperson.php">přidat osobu</a>; <a href="symbols.php" '.(searchTable(7) ? ' class="unread"' : '').'>nepřiřazené symboly</a>; <a href="symbol_search.php">vyhledat symbol</a>');

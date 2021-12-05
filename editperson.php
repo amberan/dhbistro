@@ -11,9 +11,9 @@ $latteParameters['title'] = 'Zobrazení symbolu';
         $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."person WHERE id=".$_REQUEST['rid']);
         if ($rec_p = mysqli_fetch_assoc($res)) {
             if (($rec_p['secret'] > $user['aclSecret']) || $rec_p['deleted'] == 1) {
-                unauthorizedAccess(1, $rec_p['secret'], $rec_p['deleted'], $_REQUEST['rid']);
+                unauthorizedAccess(1, 1, $_REQUEST['rid']);
             }
-            auditTrail(1, 1, $_REQUEST['rid']);
+            authorizedAccess(1, 1, $_REQUEST['rid']);
             $latteParameters['title'] = 'Úprava osoby';
             mainMenu();
             sparklets('<a href="./persons.php">osoby</a> &raquo; <strong>úprava osoby</strong>'); ?>
@@ -385,7 +385,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
             header('location: index.php');
         }
     } else {
-        $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+        $_SESSION['message'] = $text['accessdeniedrecorded'];
         header('location: index.php');
     }
     latteDrawTemplate("footer");

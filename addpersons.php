@@ -8,7 +8,7 @@ latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Úprava hlášení';
 if (isset($_POST['addtocase'])) {
-    auditTrail(3, 6, $_POST['caseid']);
+    authorizedAccess(3, 6, $_POST['caseid']);
     mysqli_query($database, "DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archived is null AND p.dead=0 AND c.idcase=".$_POST['caseid']);
     if ($user['aclSecret'] == 1 && $_POST['farchiv'] == 0 && $_POST['fdead'] == 0) {
         mysqli_query($database, "DELETE c FROM ".DB_PREFIX."c2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archived is null AND p.dead=0 AND c.idcase=".$_POST['caseid']);
@@ -46,7 +46,7 @@ if (isset($_POST['addtocase'])) {
 }
 
 if (isset($_POST['addtogroup'])) {
-    auditTrail(2, 6, $_POST['groupid']);
+    authorizedAccess(2, 6, $_POST['groupid']);
     mysqli_query($database, "DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archived is null AND p.dead=0 AND c.idgroup=".$_POST['groupid']);
     if ($user['aclPerson'] == 1 && $_POST['farchiv'] == 0 && $_POST['fdead'] == 0) {
         mysqli_query($database, "DELETE c FROM ".DB_PREFIX."g2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archived is null AND p.dead=0 AND c.idgroup=".$_POST['groupid']);
@@ -84,7 +84,7 @@ if (isset($_POST['addtogroup'])) {
 }
 
 if (isset($_POST['addtoareport'])) {
-    auditTrail(4, 6, $_POST['reportid']);
+    authorizedAccess(4, 6, $_POST['reportid']);
     mysqli_query($database, "DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archived is null AND p.dead=0 AND c.idreport=".$_POST['reportid']);
     if ($user['aclSecret'] == 1 && $_POST['farchiv'] == 0 && $_POST['fdead'] == 0) {
         mysqli_query($database, "DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archived is null AND p.dead=0 AND c.idreport=".$_POST['reportid']);
@@ -133,7 +133,7 @@ if (isset($_POST['addtoareport'])) {
 }
 
 if (isset($_POST['addsolver'])) {
-    auditTrail(3, 6, $_POST['caseid']);
+    authorizedAccess(3, 6, $_POST['caseid']);
     mysqli_query($database, "DELETE c FROM ".DB_PREFIX."c2s as c, ".DB_PREFIX."user as p WHERE c.iduser=p.id AND c.idcase=".$_POST['caseid']);
     mainMenu();
     sparklets('<a href="/cases/">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>uložení změn</strong>', '<a href="readcase.php?rid='.$_POST['caseid'].'&hidenotes=0">zobrazit upravené</a>');

@@ -12,9 +12,9 @@ if (is_numeric($_REQUEST['rid'])) {
     $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."case WHERE id=".$_REQUEST['rid']);
     if ($rec = mysqli_fetch_assoc($res)) {
         if ((($rec['secret'] > $user['aclSecret']) && $user['userId'] != $rec_a['idsolver']) || $rec['deleted'] == 1) {
-            unauthorizedAccess(3, $rec['secret'], $rec['deleted'], $_REQUEST['rid']);
+            unauthorizedAccess(3, 1, $_REQUEST['rid']);
         }
-        auditTrail(3, 1, $_REQUEST['rid']);
+        authorizedAccess(3, 1, $_REQUEST['rid']);
 
         $latteParameters['title'] = stripslashes($rec['title']);
 
@@ -257,7 +257,7 @@ if (is_numeric($_REQUEST['rid'])) {
 //        header('location: index.php');
     }
 } else {
-    echo $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+    echo $_SESSION['message'] = $text['accessdeniedrecorded'];
 //    header('location: index.php');
 }
 latteDrawTemplate("footer");

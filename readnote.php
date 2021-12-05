@@ -51,7 +51,7 @@ latteDrawTemplate("header");
                 }
                 echo '<div id="obsah">'.StripSlashes($rec['note']).'</div>';
             } else {
-                $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+                $_SESSION['message'] = $text['accessdeniedrecorded'];
                 Header('location: index.php');
             }
         } else {

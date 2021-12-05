@@ -9,7 +9,7 @@ $latteParameters['title'] = 'Uložení změn';
 
 // úprava poznámky
 	if (isset($_POST['noteid'], $_POST['editnote']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['title']) && !preg_match ('/^[[:blank:]]*$/i',$_POST['note']) && is_numeric($_POST['nsecret'])) {
-	    auditTrail($_POST['idtable'], 9, $_POST['itemid']);
+	    authorizedAccess($_POST['idtable'], 9, $_POST['itemid']);
 	    mainMenu ();
 	    switch ($_POST['idtable']) {
 			case 1: $sourceurl = "persons.php"; $sourcename = "osoby"; break;
@@ -46,7 +46,7 @@ $latteParameters['title'] = 'Uložení změn';
 	// nová poznámka
 	if (isset($_POST['setnote'])) {
 	    if (!preg_match ('/^[[:blank:]]*$/i',$_POST['note']) /*&& !preg_match ('/^[[:blank:]]*$/i',$_POST['title'])*/ && is_numeric($_POST['secret'])) {
-	        auditTrail($_POST['tableid'], 7, $_POST['itemid']);
+	        authorizedAccess($_POST['tableid'], 7, $_POST['itemid']);
 	        mysqli_query ($database,"INSERT INTO ".DB_PREFIX."note (note, title, datum, iduser, idtable, iditem, secret, deleted) VALUES('".$_POST['note']."','".$_POST['title']."','".Time()."','".$user['userId']."','".$_POST['tableid']."','".$_POST['itemid']."','".$_POST['secret']."','0')");
 	        $_SESSION['message'] = "Poznámka uložena";
 	        if (!isset($_POST['nnotnew'])) {

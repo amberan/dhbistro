@@ -18,6 +18,12 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 ### Security
  -->
 
+## 1.8.8 - 2021-12-04
+### Added
+- Feature: new values for audit #221
+### Changed
+- Refactored: unauthorizedAccess tracking #221
+
 ## 1.8.7 - 2021-12-01
 ### Changed
 - Refactored: installer data restore #107

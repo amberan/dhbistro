@@ -8,7 +8,7 @@ latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Úprava hlášení';
     if (isset($_POST['addtoareport'])) {
-        auditTrail(4, 6, $_POST['reportid']);
+        authorizedAccess(4, 6, $_POST['reportid']);
         if ($user['aclSecret'] == 1) {
             mysqli_query($database, "DELETE FROM ".DB_PREFIX."ar2c WHERE ".DB_PREFIX."ar2c.idreport=".$_POST['reportid']);
         } else {
@@ -29,7 +29,7 @@ $latteParameters['title'] = 'Úprava hlášení';
     }
 
     if (isset($_POST['addcasetoareport'])) {
-        auditTrail(3, 6, $_POST['caseid']);
+        authorizedAccess(3, 6, $_POST['caseid']);
         if ($user['aclSecret'] == 1) {
             mysqli_query($database, "DELETE FROM ".DB_PREFIX."ar2c WHERE ".DB_PREFIX."ar2c.idcase=".$_POST['caseid']);
         } else {

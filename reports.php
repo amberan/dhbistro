@@ -7,7 +7,7 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Hlášení';
-    auditTrail(4, 1, 0);
+    authorizedAccess(4, 1, 0);
     mainMenu();
         $customFilter = custom_Filter(4);
         if ($_SERVER["SERVER_NAME"] == 'enigma.dhbistro.cz') {

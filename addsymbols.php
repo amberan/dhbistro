@@ -8,7 +8,7 @@ latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Uložení změn';
     if (isset($_POST['addsymbol2c'])) {
-        auditTrail(7, 6, $_POST['symbolid']);
+        authorizedAccess(7, 6, $_POST['symbolid']);
         if ($user['aclSecret'] == 1) {
             $sql = "DELETE FROM ".DB_PREFIX."symbol2all WHERE ".DB_PREFIX."symbol2all.idsymbol=".$_POST['symbolid']." AND ".DB_PREFIX."symbol2all.table=3";
             mysqli_query($database, $sql);
@@ -32,7 +32,7 @@ $latteParameters['title'] = 'Uložení změn';
     }
 
     if (isset($_POST['addsymbol2ar'])) {
-        auditTrail(7, 6, $_POST['symbolid']);
+        authorizedAccess(7, 6, $_POST['symbolid']);
         if ($user['aclSecret'] == 1) {
             $sql = "DELETE FROM ".DB_PREFIX."symbol2all WHERE ".DB_PREFIX."symbol2all.idsymbol=".$_POST['symbolid']." AND ".DB_PREFIX."symbol2all.table=4";
             mysqli_query($database, $sql);
@@ -56,7 +56,7 @@ $latteParameters['title'] = 'Uložení změn';
     }
 
         if (isset($_POST['addsymb2pers'])) {
-            auditTrail(7, 6, $_POST['symbolid']);
+            authorizedAccess(7, 6, $_POST['symbolid']);
             mysqli_query($database, "UPDATE ".DB_PREFIX."symbol SET assigned=1 WHERE id=".$_POST['symbolid']);
             mysqli_query($database, "UPDATE ".DB_PREFIX."person SET symbol=".$_POST['symbolid']." WHERE id=".$_POST['person']);
             mainMenu();

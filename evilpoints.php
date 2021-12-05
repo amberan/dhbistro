@@ -8,9 +8,9 @@ latteDrawTemplate("header");
 $latteParameters['title'] = $text['point'].'y';
 
 if (isset($_POST['addpoints'])) {
-    auditTrail(9, 2, 0);
+    authorizedAccess(9, 2, 0);
 } else {
-    auditTrail(9, 1, 0);
+    authorizedAccess(9, 1, 0);
 }
     mainMenu();
     sparklets('<strong>'.$text['point'].'y</strong>', (($user['aclUser']) ? 'aktuální stav' : ''));  //TODO permission points

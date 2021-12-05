@@ -31,7 +31,7 @@ require_once SERVER_ROOT.'/lib/database.php';
 require_once SERVER_ROOT.'/lib/gui.php';
 require_once SERVER_ROOT.'/lib/filters.php';
 require_once SERVER_ROOT.'/lib/file.php';
-require_once SERVER_ROOT.'/lib/audit_trail.php';
+require_once SERVER_ROOT.'/lib/audit.php';
 require_once SERVER_ROOT.'/lib/image.php';
 require_once SERVER_ROOT.'/lib/person.php';
 require_once SERVER_ROOT.'/lib/news.php';
