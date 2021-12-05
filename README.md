@@ -5,24 +5,22 @@
 
 # [BISTRO](https://gitlab.com/alembiq/bistro)
 
-**Are you one of the Others? A member of the Night Watch or Day Watch? Bistro is here for you and will try to keep you from getting lost in  all the gloom related informations!**
+**Are you one of the Others? A member of the Night Watch or Day Watch? BiStro is here for you and will try to keep you from getting lost in  all the gloom related informations!**
 
 
-[Bistro](https://github.com/amberan/dhbistro/) was originally created to help players of Czech LARP [Pražská Hlídka](http://www.prazskahlidka.cz/). This cyclical larp is inspired by [Sergei Lukyanenko Night Watch](https://en.wikipedia.org/wiki/Night_Watch_(Lukyanenko_novel)).
+[BiStro](https://github.com/amberan/dhbistro/) was originally created to help players of Czech LARP [Pražská Hlídka](http://www.prazskahlidka.cz/). This cyclical larp is inspired by [Sergei Lukyanenko Night Watch](https://en.wikipedia.org/wiki/Night_Watch_(Lukyanenko_novel)).
 In-game it's used by two teams (Day and Night watch) to keep tracks of characters and events especially between iterations of the game.
 
-    # Bistro tě potřebuje!
-    Jak sis určitě všiml Bistro není žádný ucelený profesionální produkt, navíc v tuto chvíli vypadají jednotlivé části úplně jinak než ostatní. To je způsobeno naší snahou přepsat grafické rozhraní do podoby použitelné i na mobilních telefonech. Snaha přepsat uživatelský interface nám ale ukázala, že spousta kódu potřebuje přepsat.
+## BiStro needs you!
+No doubt you've noticed BiStro is not a professional product, and at this moment individual components look quite different. This is due to ongoing refactoring of GUI to be usable also on mobile devices. However, our efforts to rewrite the user interface is much more complicated and time consuming that we expected.  
 
-    A to je přesně místo kde se ukazuje, že přepisovat Bistro ve dvou (jeden PHP, druhý HTML/CSS) trvá mnohem déle, než by se nám líbilo a výrazně to snižuje komfort uživatelů. Proto teď hledáme pomoc, hodili by se nám další programátoři ale i stálí testeři.
+Based on the current knowledge we know that rewriting BiStro in two people (one PHP, one HTML/CSS) is doable, but it would take too long and the user experience in the meantime would be greatly diminished. That's why we are looking for help, we could use more programmers but also some permanent testers.  
 
-    Počátek historie tohoto projektu leží někdy v roce 2006 pro první Hlídky, ještě jako Dies Irae larp. Tehdy Ethan napsal základ funkcionality v PHP (tehdy ve verzi 5). Když Bistro převzal Ambeřan začal verzovat zdrojový kód. Spolu s Atlanem přidal spoustu další funkcionality. O pár let později se přidal Ernedar. Koncem roku 2018 Charles upravil kód aby fungoval s PHP 7 a ve snaze pochopit fungování celého systému začal s refaktorizací celého kódu. S tím právě přišla i myšlenka na nové UI, na kterém se pomalu začalo pracovat a právě tam jsme teď.
+Just for the context - history of BiStro starts in 2006 - it was created for the first Watch game, part of Dies Irae. That's when Ethan wrote the core functionality in PHP (version 5 at the time). Years later Amberan took over and started using source code management tools. Together with Atlan they've added a lot of new functionality. A few years later, Ernedar joined. At the end of 2018 Charles updated the code to work with PHP 7 and started refactoring the whole system in an effort to understand how it works (and if we shouldn't just moved the data to some other system). While getting some understanding of the code an idea that came, idea of new UI. That's where we're now, slowly chewing up the old code and refactoring it while changing the UI.
 
-    V tuto chvílí cílíme na tyto technologie PHP 7, MariaDB, Bootstrap, Latte a tui.editor. Samozřejmě, že by šlo vše napsat na zelené louce s mobilní aplikací a vším, ale na to čas a energii opravdu nemáme.
+At the moment we are targeting the following technologies PHP 7, MariaDB, Bootstrap, Latte and tui.editor. Of course, everything could be written on the green field with a mobile app and everything, but we really don't have the time and energy for that.   
 
-    Umíš s PHP? Pomůžeš? Více informací o stavu projektu je k dohledání na GitLabu.
-
-    P.S. pokud neumíš programovat, ale i tak chceš pomoci, vždycky nám můžeš pomoct s testováním.
+P.S. If you don't know how to code but still want to help, you can always help us with testing or create user documentation.   
 
 ## running BiStro
 It's a simple php website, you need just the basics - LAMP :)
