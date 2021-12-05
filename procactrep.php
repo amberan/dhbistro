@@ -14,7 +14,7 @@ if (isset($_POST['reportid'])) {
     $author = $autharray['iduser'];
 }
     if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete'])) {
-        auditTrail(4, 11, $_REQUEST['delete']);
+        authorizedAccess(4, 11, $_REQUEST['delete']);
         mysqli_query($database, "UPDATE ".DB_PREFIX."report SET deleted=1 WHERE id=".$_REQUEST['delete']);
         deleteAllUnread($_REQUEST['table'], $_REQUEST['delete']);
         Header('Location: reports.php');
@@ -37,7 +37,7 @@ if (isset($_POST['reportid'])) {
             mysqli_query($database, "INSERT INTO ".DB_PREFIX."report (label, datum, iduser, task, summary, impacts, details, secret, deleted, status, type, adatum, start, end, energy, inputs) VALUES('".$_POST['label']."','".Time()."','".$user['userId']."','".$_POST['task']."','".$_POST['summary']."','".$_POST['impact']."','".$_POST['details']."','".$_POST['secret']."','0','".$_POST['status']."','".$_POST['type']."','".$adatum."','".$_POST['start']."','".$_POST['end']."','".$_POST['energy']."','".$_POST['inputs']."')");
             $ridarray = mysqli_fetch_assoc(mysqli_query($database, "SELECT id FROM ".DB_PREFIX."report WHERE UCASE(label)=UCASE('".$_POST['label']."')"));
             $rid = $ridarray['id'];
-            auditTrail(4, 3, $rid);
+            authorizedAccess(4, 3, $rid);
             if ($_POST['status'] <> 0) {
                 unreadRecords(4, $rid);
             }
@@ -64,7 +64,7 @@ if (isset($_POST['reportid'])) {
         }
     }
     if (isset($_POST['reportid'], $_POST['editactrep']) && ($user['aclReport'] || $user['userId'] == $author) && !preg_match('/^[[:blank:]]*$/i', $_POST['label']) && !preg_match('/^[[:blank:]]*$/i', $_POST['task']) && !preg_match('/^[[:blank:]]*$/i', $_POST['summary']) && !preg_match('/^[[:blank:]]*$/i', $_POST['impacts']) && !preg_match('/^[[:blank:]]*$/i', $_POST['details']) && is_numeric($_POST['secret']) && is_numeric($_POST['status'])) {
-        auditTrail(4, 2, $_POST['reportid']);
+        authorizedAccess(4, 2, $_POST['reportid']);
         $latteParameters['title'] = 'Uložení změn';
 
 
@@ -94,7 +94,7 @@ if (isset($_POST['reportid'])) {
         }
     }
     if (isset($_POST['uploadfile']) && is_uploaded_file($_FILES['attachment']['tmp_name']) && is_numeric($_POST['reportid']) && is_numeric($_POST['secret'])) {
-        auditTrail(4, 4, $_POST['reportid']);
+        authorizedAccess(4, 4, $_POST['reportid']);
         $newname = Time().MD5(uniqid(Time().Rand()));
         move_uploaded_file($_FILES['attachment']['tmp_name'], './files/'.$newname);
         $sql = "INSERT INTO ".DB_PREFIX."file (uniquename,originalname,mime,size,datum,iduser,idtable,iditem,secret) VALUES('".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".Time()."','".$user['userId']."','4','".$_POST['reportid']."','".$_POST['secret']."')";
@@ -113,7 +113,7 @@ if (isset($_POST['reportid'])) {
         }
     }
     if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {
-        auditTrail(4, 5, $_GET['reportid']);
+        authorizedAccess(4, 5, $_GET['reportid']);
         if ($user['aclReport']) {
             $fres = mysqli_query($database, "SELECT uniquename FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
             $frec = mysqli_fetch_assoc($fres);

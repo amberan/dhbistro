@@ -9,9 +9,9 @@ latteDrawTemplate("header");
         $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."person WHERE id=".$_REQUEST['rid']);
         if ($rec = mysqli_fetch_assoc($res)) {
             if (($rec['secret'] > $user['aclSecret']) || $rec['deleted'] == 1) {
-                unauthorizedAccess(1, $rec['secret'], $rec['deleted'], $_REQUEST['rid']);
+                unauthorizedAccess(1, 1, $_REQUEST['rid']);
             }
-            auditTrail(1, 1, $_REQUEST['rid']);
+            authorizedAccess(1, 1, $_REQUEST['rid']);
             //   $sides = ['', 'světlý', 'temný', 'člověk', 'neznámá'];
             //   $powers = ['', 'neznámá', 'člověk', 'mimo kategorie', '1. kategorie', '2. kategorie', '3. kategorie', '4. kategorie'];
 
@@ -296,7 +296,7 @@ if ($hn != 1) { ?>
             header('location: index.php');
         }
     } else {
-        $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+        $_SESSION['message'] = $text['accessdeniedrecorded'];
         header('location: index.php');
     }
         latteDrawTemplate("footer");

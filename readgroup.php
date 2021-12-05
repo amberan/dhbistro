@@ -11,9 +11,9 @@ latteDrawTemplate("header");
         $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."group WHERE id=".$_REQUEST['rid']);
         if ($rec_g = mysqli_fetch_assoc($res)) {
             if (($rec_g['secret'] > $user['aclSecret']) || $rec_g['deleted'] == 1) {
-                unauthorizedAccess(2, $rec_g['secret'], $rec_g['deleted'], $_REQUEST['rid']);
+                unauthorizedAccess(2, 1, $_REQUEST['rid']);
             }
-            auditTrail(2, 1, $_REQUEST['rid']);
+            authorizedAccess(2, 1, $_REQUEST['rid']);
 
             $latteParameters['title'] = stripslashes($rec_g['title']);
 
@@ -218,7 +218,7 @@ if ((isset($filter['notes']) and $filter['notes'] == 'on')) { ?>
             header('location: index.php');
         }
     } else {
-        $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+        $_SESSION['message'] = $text['accessdeniedrecorded'];
         header('location: index.php');
     }
     latteDrawTemplate("footer");

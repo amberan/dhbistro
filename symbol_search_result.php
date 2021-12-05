@@ -7,7 +7,7 @@ latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Vyhledané symboly';
 
-auditTrail(7, 1, 0);
+authorizedAccess(7, 1, 0);
 
     mainMenu();
     sparklets('<a href="./persons.php">osoby</a> &raquo; <a href="newperson.php">přidat osobu</a>; <a href="symbols.php">nepřiřazené symboly</a>; <a href="symbol_search.php">vyhledat symbol</a>');

@@ -5,13 +5,13 @@ use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 
     if (isset($URL[2], $URL[3]) && $URL[2] == 'delete' && is_numeric($URL[3]) && $user['aclCase'] > 0) { //delete case
-        auditTrail(3, 11, $URL[3]);
+        authorizedAccess(3, 11, $URL[3]);
         mysqli_query($database, "UPDATE ".DB_PREFIX."case SET deleted=1 WHERE id=".$URL['3']);
         deleteAllUnread(3, $URL[3]);
         $_SESSION['message'] = 'Případ smazán.';
     }
     if (isset($URL[2], $URL[3]) && $URL[2] == 'restore' && is_numeric($URL[3]) && $user['aclRoot'] > 0) { //delete case
-        auditTrail(3, 11, $URL[3]);
+        authorizedAccess(3, 11, $URL[3]);
         mysqli_query($database, "UPDATE ".DB_PREFIX."case SET deleted=0 WHERE id=".$URL[3]);
         deleteAllUnread(3, $URL[3]);
         $_SESSION['message'] = 'Případ obnoven.';
@@ -24,7 +24,7 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
             mysqli_query($database, "INSERT INTO ".DB_PREFIX."case  (caseCreated, title, datum, iduser, contents, secret, deleted, status) VALUES(CURRENT_TIMESTAMP, '".$_POST['title']."','".time()."','".$user['userId']."','".$_POST['contents']."','".$_POST['secret']."','0','".$_POST['status']."')");
             $cidarray = mysqli_fetch_assoc(mysqli_query($database, "SELECT id FROM ".DB_PREFIX."case WHERE UCASE(title)=UCASE('".$_POST['title']."')"));
             $cid = $cidarray['id'];
-            auditTrail(3, 3, $cid);
+            authorizedAccess(3, 3, $cid);
             if (!isset($_POST['notnew'])) {
                 unreadRecords(3, $cid);
             }
@@ -36,7 +36,7 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
         }
     }
     if (isset($_POST['caseid'], $_POST['editcase']) && $user['aclCase'] && !preg_match('/^[[:blank:]]*$/i', $_POST['title']) && !preg_match('/^[[:blank:]]*$/i', $_POST['contents']) && is_numeric($_POST['secret']) && is_numeric($_POST['status'])) {
-        auditTrail(3, 2, $_POST['caseid']);
+        authorizedAccess(3, 2, $_POST['caseid']);
         if (!isset($_POST['notnew'])) {
             unreadRecords(3, $_POST['caseid']);
         }
@@ -59,7 +59,7 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
         }
     }
     if (isset($_POST['uploadfile']) && is_uploaded_file($_FILES['attachment']['tmp_name']) && is_numeric($_POST['caseid']) && is_numeric($_POST['secret'])) {
-        auditTrail(3, 4, $_POST['caseid']);
+        authorizedAccess(3, 4, $_POST['caseid']);
         $newname = time().md5(uniqid(time().random_int(0, getrandmax())));
         move_uploaded_file($_FILES['attachment']['tmp_name'], './files/'.$newname);
         $sql = "INSERT INTO ".DB_PREFIX."file (uniquename,originalname,mime,size,datum,iduser,idtable,iditem,secret) VALUES('".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".time()."','".$user['userId']."','3','".$_POST['caseid']."','".$_POST['secret']."')";
@@ -73,7 +73,7 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
         }
     }
     if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {
-        auditTrail(3, 5, $_GET['caseid']);
+        authorizedAccess(3, 5, $_GET['caseid']);
         if ($user['aclCase']) {
             $fres = mysqli_query($database, "SELECT uniquename FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
             $frec = mysqli_fetch_assoc($fres);

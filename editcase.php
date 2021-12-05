@@ -22,9 +22,9 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
     $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."case WHERE id=".$_REQUEST['rid']);
     if ($rec_c = mysqli_fetch_assoc($res)) {
         if (($rec['secret'] > $user['aclSecret']) || $rec['deleted'] == 1) {
-            unauthorizedAccess(3, $rec_c['secret'], $rec_c['deleted'], $_REQUEST['rid']);
+            unauthorizedAccess(3, 1, $_REQUEST['rid']);
         }
-        auditTrail(3, 1, $_REQUEST['rid']);
+        authorizedAccess(3, 1, $_REQUEST['rid']);
         mainMenu();
         sparklets('<a href="/cases/">případy</a> &raquo; <strong>úprava případu</strong>', $symbolbutton); ?>
 <?php if (($rec['secret'] == 1) && (!$user['aclSecret']) && (!$rec_a['iduser'])) {
@@ -232,7 +232,7 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
         header('location: index.php');
     }
 } else {
-    $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+    $_SESSION['message'] = $text['accessdeniedrecorded'];
     header('location: index.php');
 }
     latteDrawTemplate("footer");

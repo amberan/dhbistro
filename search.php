@@ -6,7 +6,7 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Vyhledávání';
-auditTrail(12, 1, 0);
+authorizedAccess(12, 1, 0);
 mainMenu();
 sparklets('<strong>vyhledávání</strong>', '<a href="symbol_search.php">vyhledat symbol</a>');
 

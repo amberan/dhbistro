@@ -39,6 +39,8 @@ $text['vytvorenadmin'] = 'Vytvořen uživatel `admin` s heslem: ';
 $text['soubornenalezen'] = 'Soubor nenalezen!';
 $text['akcinelzeprovest'] = 'Požadovanou akci se nepodařilo uskutečnit!';
 $text['nuceneodhlaseni'] = 'Z bezpečnostních důvodů jste byl odhlášen!';
+$text['accessdeniedrecorded'] = 'Pokus o neoprávněný přístup zaznamenán!';
+
 
 // MENU
 $text['point'] = 'zlobod';
@@ -164,7 +166,7 @@ $text['aktualitaneobnovena'] = 'Aktualitu se nepodařilo obnovit';
 
 // FILTERS
 $text['iuzavrene'] = 'I uzavřené.';
-$text['jennove'] = 'Jen nové.';
+$text['jennove'] = 'Jen nepřečtené.';
 $text['jentajne'] = 'Jen tajné.';
 $text['iarchiv'] = 'I archiv.';
 $text['archivovano'] = 'archivováno';

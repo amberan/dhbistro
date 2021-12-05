@@ -5,20 +5,20 @@ use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 
    if (isset($URL[3]) && is_numeric($URL[3]) && $URL[2] == 'delete' && $user['aclGroup'] > 0) {
-       auditTrail(2, 11, $URL[3]);
+       authorizedAccess(2, 11, $URL[3]);
        mysqli_query($database, "UPDATE ".DB_PREFIX."group SET deleted=1 WHERE id=".$URL[3]);
        deleteAllUnread(2, $URL[3]);
    }
    if (isset($URL[3]) && is_numeric($URL[3]) && $URL[2] == 'restore'  && $user['aclGroup'] > 0) {
-       auditTrail(2, 11, $URL[3]);
+       authorizedAccess(2, 11, $URL[3]);
        mysqli_query($database, "UPDATE ".DB_PREFIX."group SET deleted=0 WHERE id=".$URL[3]);
    }
    if (isset($URL[3]) && is_numeric($URL[3]) && $URL[2] == 'archive'  && $user['aclGroup'] > 0) {
-       auditTrail(2, 2, $URL[3]);
+       authorizedAccess(2, 2, $URL[3]);
        mysqli_query($database, "UPDATE ".DB_PREFIX."group SET archived=1 WHERE id=".$URL[3]);
    }
    if (isset($URL[3]) && is_numeric($URL[3]) && $URL[2] == 'unarchive'  && $user['aclGroup'] > 0) {
-       auditTrail(2, 2, $URL[3]);
+       authorizedAccess(2, 2, $URL[3]);
        mysqli_query($database, "UPDATE ".DB_PREFIX."group SET archived=0 WHERE id=".$URL[3]);
    }
 
@@ -30,7 +30,7 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
                 mysqli_query($database, "INSERT INTO ".DB_PREFIX."group ( title, contents, datum, iduser, deleted, secret, archived, groupCreated) VALUES('".$_POST['title']."','".$_POST['contents']."','".time()."','".$user['userId']."','0','".$_POST['secret']."',0,CURRENT_TIMESTAMP)");
                 $gidarray = mysqli_fetch_assoc(mysqli_query($database, "SELECT id FROM ".DB_PREFIX."group WHERE UCASE(title)=UCASE('".$_POST['title']."')"));
                 $gid = $gidarray['id'];
-                auditTrail(2, 3, $gid);
+                authorizedAccess(2, 3, $gid);
                 if (!isset($_POST['notnew'])) {
                     unreadRecords(2, $gid);
                 }
@@ -42,7 +42,7 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
             }
         }
     if (isset($_POST['groupid'], $_POST['editgroup']) && $user['aclGroup'] && !preg_match('/^[[:blank:]]*$/i', $_POST['title']) && !preg_match('/i^[[:blank:]]*$/i', $_POST['contents'])) {
-        auditTrail(2, 2, $_POST['groupid']);
+        authorizedAccess(2, 2, $_POST['groupid']);
         $ures = mysqli_query($database, "SELECT id FROM ".DB_PREFIX."group WHERE UCASE(title)=UCASE('".$_POST['title']."') AND id<>".$_POST['groupid']);
         if (mysqli_num_rows($ures)) {
             echo '<div id="obsah"><p>Skupina již existuje, změňte její jméno.</p></div>';
@@ -67,7 +67,7 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
         header('Location: editgroup.php?rid='.$_GET['groupid']);
     }
     if (isset($_POST['uploadfile']) && is_uploaded_file($_FILES['attachment']['tmp_name']) && is_numeric($_POST['groupid']) && is_numeric($_POST['secret'])) {
-        auditTrail(2, 4, $_POST['groupid']);
+        authorizedAccess(2, 4, $_POST['groupid']);
         $newname = time().md5(uniqid(time().random_int(0, getrandmax())));
         move_uploaded_file($_FILES['attachment']['tmp_name'], './files/'.$newname);
         $sql = "INSERT INTO ".DB_PREFIX."file (uniquename,originalname,mime,size,datum,iduser,idtable,iditem,secret) VALUES('".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".time()."','".$user['userId']."','2','".$_POST['groupid']."','".$_POST['secret']."')";
@@ -83,7 +83,7 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
         }
     }
     if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {
-        auditTrail(2, 5, $_GET['groupid']);
+        authorizedAccess(2, 5, $_GET['groupid']);
         if ($user['aclGroup']) {
             $fres = mysqli_query($database, "SELECT uniquename FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
             $frec = mysqli_fetch_assoc($fres);

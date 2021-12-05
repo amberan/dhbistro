@@ -41,10 +41,10 @@ latteDrawTemplate("header");
         $res = mysqli_query($database, $sql);
         if ($rec_ar = mysqli_fetch_assoc($res)) {
             if (($rec_ar['secret'] > $user['aclSecret']) || $rec_ar['deleted'] == 1) {
-                unauthorizedAccess(4, $rec_ar['secret'], $rec_ar['deleted'], $_REQUEST['rid']);
+                unauthorizedAccess(4, 1, $_REQUEST['rid']);
             }
             if (isset($_SESSION['sid'])) {
-                auditTrail(4, 1, $_REQUEST['rid']);
+                authorizedAccess(4, 1, $_REQUEST['rid']);
             }
             $typestring = $rec_ar['type'] == 1 ? 'výjezd' : ($rec_ar['type'] == 2 ? 'výslech' : '?'); //odvozuje slovní typ hlášení
             $latteParameters['title'] = (stripslashes('Hlášení'.$rec_ar['type'] == 1 ? ' z výjezdu' : ($rec_ar['type'] == 2 ? ' z výslechu' : '').': '.$rec_ar['label']));
@@ -379,7 +379,7 @@ if ($hn != 1) { ?>
             header('location: index.php');
         }
     } else {
-        $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+        $_SESSION['message'] = $text['accessdeniedrecorded'];
         header('location: index.php');
     }
     latteDrawTemplate("footer");

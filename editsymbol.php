@@ -11,9 +11,9 @@ $latteParameters['title'] = 'Úprava symbolu';
         $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."symbol WHERE id=".$_REQUEST['rid']);
         if ($rec_s = mysqli_fetch_assoc($res)) {
             if ($rec_s['secret'] > $user['aclSecret'] || $rec_s['deleted'] == 1) {
-                unauthorizedAccess(7, $rec_s['secret'], $rec_s['deleted'], $_REQUEST['rid']);
+                unauthorizedAccess(7, 1, $_REQUEST['rid']);
             }
-            auditTrail(7, 1, $_REQUEST['rid']);
+            authorizedAccess(7, 1, $_REQUEST['rid']);
             mainMenu();
             sparklets('<a href="./symbols.php">symboly</a> &raquo; <strong>úprava symbolu</strong>'); ?>
 <div id="obsah">

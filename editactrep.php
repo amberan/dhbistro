@@ -38,10 +38,10 @@ if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || ($user['userId'] == $
     if ($rec_actr = mysqli_fetch_assoc($res)) {
         //test oprávněnosti přístupu
         if (($rec_actr['secret'] > $user['aclSecret']) || $rec_actr['deleted'] == 1) {
-            unauthorizedAccess(4, $rec_actr['secret'], $rec_actr['deleted'], $_REQUEST['rid']);
+            unauthorizedAccess(4, 1, $_REQUEST['rid']);
         }
         //auditní stopa
-        auditTrail(4, 1, $_REQUEST['rid']);
+        authorizedAccess(4, 1, $_REQUEST['rid']);
         // následuje generování hlavičky
         $latteParameters['title'] = 'Úprava hlášení'.$type == 1 ? ' z výjezdu' : ($type == 2 ? ' z výslechu' : '');
         mainMenu();
@@ -360,7 +360,7 @@ if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || ($user['userId'] == $
         header('location: index.php');
     }
 } else {
-    $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+    $_SESSION['message'] = $text['accessdeniedrecorded'];
     header('location: index.php');
 }
 latteDrawTemplate("footer");
