@@ -23,3 +23,27 @@ record type      | operation type        | idrecord
                     | 17 - obnovení |
                     | 18 - uzamknutí |
                     | 19 - odemknutí |
+
+
+### report type
+type | typeName
+--- | ---
+1 | vyjezd
+2 | vyslech
+
+### p2ar role
+role| roleName
+--- | ---
+0 | pritomen
+1 | vyslychany
+2 | vyslychajici
+3 | zatceny
+4 | velistel zasahu
+
+## report status
+status| statusName
+--- | ---
+0 | rozpracovane
+1 | dokoncene
+2 | analyzovane
+3 | archivovane

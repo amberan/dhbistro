@@ -199,3 +199,10 @@ $text['obnovitskupinu'] = 'Obnovit skupinu';
 $text['opravdusmazatskupinu'] = 'Opravdu smazat skupinu?';
 $text['opravduobnovitskupinu'] = 'Opravdu obnovit skupinu?';
 $text['aktivni'] = 'aktivní';
+
+//REPORTS
+$text['vyslychajici'] = 'vyslíchaný';
+$text['vyslychajici'] = 'vyslíchající';
+$text['velitel'] = 'velitel zásahu';
+$text['zatceny'] = 'zatčený';
+$text['pritomny'] = 'přítomný';
