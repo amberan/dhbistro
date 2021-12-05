@@ -241,7 +241,7 @@ $latteParameters['title'] = 'Audit';
 		<select name="user" id="user">
 	  	<option value=0 '.(($filterUser == 0) ? ' selected="selected"' : '').'>všemi</option>';
 
-        $sqlU = "SELECT userId, userName FROM ".DB_PREFIX."user WHERE userDeleted=0 ORDER BY username ASC";
+        $sqlU = "SELECT userId, userName FROM ".DB_PREFIX."user ORDER BY username ASC";
         $resU = mysqli_query($database, $sqlU);
         while ($recU = mysqli_fetch_assoc($resU)) {
             echo '<option value="'.$recU['userId'].'"'.(($recU['userId'] == $filterUser) ? ' selected="selected"' : '').'>'.$recU['userName'].'</option>';
