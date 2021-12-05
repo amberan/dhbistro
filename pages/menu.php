@@ -6,7 +6,6 @@ $menu[] = [$text['hlaseniV'], "/reports.php", searchTable(4)];
 $menu[] = [$text['osoby'], "/persons.php", searchTable(1) + searchTable(7)];
 $menu[] = [$text['pripady'], "/cases/", searchTable(3)];
 $menu[] = [$text['skupiny'], "/groups/", searchTable(2)];
-$menuSub[] = [$text['forum'], "http://www.prazskahlidka.cz/forums/", 0];
 $menuSub[] = [$text['menu-zlobody'], "/evilpoints.php", 0];
 if (isset($user) and $user['aclUser'] > 0) {
     $menuSub[] = [$text['spravauzivatelu'], "/users", 0];
