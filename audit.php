@@ -270,7 +270,6 @@ if (isset($_GET['sort'])) {
 }
     // vypis uživatelů
     $sql = "SELECT * FROM ".DB_PREFIX."audit_trail".$filterSqlCat.$filterSqlType.$filterSqlOrg.$filterSqlMine.$filterSqlGlob.$filterSqlUser.sortingGet('audit', 'audit_trail').$filterSqlCount;
-    //////" ORDER BY ".$filterSqlSort.$filterSqlCount;
     $res = mysqli_query($database, $sql);
     if (mysqli_num_rows($res)) {
         echo '<div id="obsah">

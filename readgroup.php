@@ -86,8 +86,6 @@ latteDrawTemplate("header");
             $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."g2p.iduser
             FROM ".DB_PREFIX."person, ".DB_PREFIX."g2p
             WHERE $sqlFilter AND ".DB_PREFIX."g2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." ".sortingGet('group-member', 'person');
-
-            // .$sqlFilter.sortingGet('group');
             $res = mysqli_query($database, $sql);
             if (mysqli_num_rows($res)) {
                 echo '<div id=""><!-- je treba dostylovat -->
@@ -127,7 +125,7 @@ latteDrawTemplate("header");
 
     <!-- následuje seznam přiložených souborů -->
     <?php //generování seznamu přiložených souborů
-            $sqlFilter = DB_PREFIX."file.secret<=".$user['aclSecret']; //DB_PREFIX."case.deleted in (0,".$user['aclRoot'].") AND ".
+            $sqlFilter = DB_PREFIX."file.secret<=".$user['aclSecret'];
             $sql = "SELECT mime,  ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.id AS 'id'
             FROM ".DB_PREFIX."file
             WHERE $sqlFilter AND ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=2

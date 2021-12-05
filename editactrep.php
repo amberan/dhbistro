@@ -9,7 +9,6 @@ $latteParameters['title'] = 'Zobrazení Reportu';
 
 $reportarray = mysqli_fetch_assoc(mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid'])); // načte data z DB
 $type = intval($reportarray['type']); // určuje typ hlášení
-//$typestring =
 $type == 1 ? 'výjezd' : ($type == 2 ? 'výslech' : '?'); //odvozuje slovní typ hlášení
 $author = $reportarray['iduser']; // určuje autora hlášení
 
@@ -36,13 +35,10 @@ if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || ($user['userId'] == $
 		WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."report.id=".$_REQUEST['rid'];
     $res = mysqli_query($database, $sql);
     if ($rec_actr = mysqli_fetch_assoc($res)) {
-        //test oprávněnosti přístupu
         if (($rec_actr['secret'] > $user['aclSecret']) || $rec_actr['deleted'] == 1) {
             unauthorizedAccess(4, 1, $_REQUEST['rid']);
         }
-        //auditní stopa
         authorizedAccess(4, 1, $_REQUEST['rid']);
-        // následuje generování hlavičky
         $latteParameters['title'] = 'Úprava hlášení'.$type == 1 ? ' z výjezdu' : ($type == 2 ? ' z výslechu' : '');
         mainMenu();
         sparklets('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení'.$type == 1 ? ' z výjezdu' : ($type == 2 ? ' z výslechu' : '').'</strong>', '<a href="symbols.php">přiřadit symboly</a>'); ?>
@@ -196,9 +192,9 @@ if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || ($user['userId'] == $
         <legend><strong>Přiložené soubory</strong></legend>
         <strong><em>K hlášení je možné nahrát neomezené množství souborů, ale velikost jednoho souboru je omezena na 2 MB.</em></strong>
         <?php //generování seznamu přiložených souborů
-            $sqlFilter = DB_PREFIX."file.secret<=".$user['aclSecret']; //DB_PREFIX."case.deleted in (0,".$user['aclRoot'].") AND ".
+            $sqlFilter = DB_PREFIX."file.secret<=".$user['aclSecret'];
 
-            $sql = "SELECT ".DB_PREFIX."file.iduser AS 'iduser', ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.secret AS 'secret', ".DB_PREFIX."file.id AS 'id'
+        $sql = "SELECT ".DB_PREFIX."file.iduser AS 'iduser', ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.secret AS 'secret', ".DB_PREFIX."file.id AS 'id'
             FROM ".DB_PREFIX."file
             WHERE $sqlFilter AND ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=4
             ORDER BY ".DB_PREFIX."file.originalname ASC";

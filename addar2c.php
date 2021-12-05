@@ -22,18 +22,16 @@ mainMenu();
     </p>
 
     <?php
-// zpracovani filtru
 if (!isset($customFilter['sort'])) {
-    $filterSort = 1;
-} else {
-    $filterSort = $customFilter['sort'];
-}
+                $filterSort = 1;
+            } else {
+                $filterSort = $customFilter['sort'];
+            }
             switch ($filterSort) {
     case 1: $filterSqlSort = ' '.DB_PREFIX.'case.title ASC '; break;
     case 2: $filterSqlSort = ' '.DB_PREFIX.'case.title DESC '; break;
     default: $filterSqlSort = ' '.DB_PREFIX.'case.title ASC ';
 }
-//
             function filter()
             {
                 global $filterSort;

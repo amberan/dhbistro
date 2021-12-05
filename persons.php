@@ -361,7 +361,6 @@ if (isset($_GET['sort'])) {
     WHERE ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret<=".$user['aclSecret'].$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow.$filterUnread." GROUP BY ".DB_PREFIX."person.id ".sortingGet('person');
 
     $res = mysqli_query($database, $sql);
-    //echo mysqli_num_rows($res);
     if (mysqli_num_rows($res)) {
         echo '<div id="obsah">
 <table>
@@ -380,7 +379,6 @@ if (isset($_GET['sort'])) {
 ';
         $even = 0;
         while ($rec = mysqli_fetch_assoc($res)) {
-//            if ($fNew == 0 || ($fNew == 1 && searchRecord(1, $rec['id']))) {
             echo '<tr class="'.($rec['unread'] ? ' unread_record' : ($even % 2 == 0 ? 'even' : 'odd')).'">
                         '.($sportraits ? '<td><img src="file/portrait/'.$rec['id'].'" alt="" /></td>' : '').'
                         '.($ssymbols ? '<td><img src="file/symbol/'.$rec['symbol'].'" alt="" /></td>' : '').'

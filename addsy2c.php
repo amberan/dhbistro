@@ -34,7 +34,6 @@ if (!isset($customFilter['sort'])) {
     case 2: $filterSqlSort = ' '.DB_PREFIX.'case.title DESC '; break;
     default: $filterSqlSort = ' '.DB_PREFIX.'case.title ASC ';
 }
-//
             function filter()
             {
                 global $filterSort;

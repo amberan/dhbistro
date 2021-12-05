@@ -110,22 +110,16 @@ if (isset($_POST['addtoareport'])) {
     if (isset($_POST['person'])) {
         $person = $_POST['person'];
     }
-    // podminka pro urceni ulohy osoby v hlaseni
     if (isset($_POST['role'])) {
         $role = $_POST['role'];
     }
-    // 0: osoba přítomná
-    // 1: vyslýchaný
-    // 2: vyslýchající
-    // 3: zatčený
-    // 4: velitel vyjezdu
+
 
     if (isset($_POST['person'])) {
         for ($i = 0;$i < Count($person);$i++) {
             mysqli_query($database, "INSERT INTO ".DB_PREFIX."ar2p VALUES('".$person[$i]."','".$_POST['reportid']."','".$user['userId']."','".$role[$i]."')");
         }
     }
-    // header('Location: ./editactrep.php?rid='.$_POST['reportid']); // přesměrování zpět na předchozí stránku
     mainMenu();
     sparklets('<a href="./reports.php">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>uložení změn</strong>', '<a href="readactrep.php?rid='.$_POST['reportid'].'&hidenotes=0&truenames=0">zobrazit upravené</a>');
     echo '<div id="obsah"><p>Osoby příslušné k hlášení uloženy.</p></div>';
