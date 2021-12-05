@@ -47,6 +47,7 @@ code_quality:
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
   - if: "$CI_COMMIT_TAG"
+
 sast:
   stage: test
   variables:
@@ -105,9 +106,8 @@ deploy nh_text:
     && tar zcf /srv/cz.prazskahlidka.test.nh/backup-$CI_JOB_ID.tgz --exclude /srv/cz.prazskahlidka.test.nh/backup/cache /srv/cz.prazskahlidka.test.nh/backup/
     && rm -rf /srv/cz.prazskahlidka.test.nh/backup
     && rm build.tgz"
-  rules:
-  - when: never
-  - if: "$CI_COMMIT_BRANCH == $CI_PROTECTED_BRANCH"
+  only:
+    - testing
 
 deploy dh_text:
   stage: deploy
