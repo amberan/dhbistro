@@ -123,7 +123,6 @@ switch ($filterMine) {
             echo '</tr></table>';
         }
 
-        //echo '<div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
         echo '</fieldset>
 </form></div><!-- end of #filter-wrapper -->';
 
@@ -170,7 +169,6 @@ function reportRole($role = null)
                     WHERE $sqlFilter  ".$filterSqlCat.$fsql_sec.$fsql_stat.$filterSqlMine.$fsql_conn.$filterUnread.
                     $fsql_archiv." GROUP BY ".DB_PREFIX."report.id ORDER BY ".$filterSqlSort;
                     //sortingGet('report');
-                    //AND ".DB_PREFIX."report.iduser=".DB_PREFIX."user.userId
 
     $res = mysqli_query($database, $sql);
 

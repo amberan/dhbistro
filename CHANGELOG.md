@@ -25,6 +25,8 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Feature: audit can be run agains deleted users #26
 ### Changed
 - Refactored: unauthorizedAccess tracking #221
+### Removed
+- Removed: unused variables #143
 
 ## 1.8.7 - 2021-12-01
 ### Changed

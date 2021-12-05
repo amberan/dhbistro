@@ -22,10 +22,8 @@ $latteParameters['title'] = 'Zobrazení symbolu';
             }
             if ($hn == 0) {
                 $hidenotes = '&amp;hidenotes=1">skrýt poznámky</a>';
-                $backurl = 'readsymbol.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
             } else {
                 $hidenotes = '&amp;hidenotes=0">zobrazit poznámky</a>';
-                $backurl = 'readsymbol.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
             }
             if ($user['aclSymbol']) {
                 $editbutton = '; <a href="editsymbol.php?rid='.$_REQUEST['rid'].'">upravit symbol</a>; číslo symbolu: '.$rec['id'].'';

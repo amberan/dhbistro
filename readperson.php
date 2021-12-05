@@ -12,8 +12,6 @@ latteDrawTemplate("header");
                 unauthorizedAccess(1, 1, $_REQUEST['rid']);
             }
             authorizedAccess(1, 1, $_REQUEST['rid']);
-            //   $sides = ['', 'světlý', 'temný', 'člověk', 'neznámá'];
-            //   $powers = ['', 'neznámá', 'člověk', 'mimo kategorie', '1. kategorie', '2. kategorie', '3. kategorie', '4. kategorie'];
 
             $latteParameters['title'] = stripslashes($rec['surname']).', '.stripslashes($rec['name']);
             mainMenu();
@@ -24,10 +22,8 @@ latteDrawTemplate("header");
             }
             if ($hn == 0) {
                 $hidenotes = '&amp;hidenotes=1">skrýt poznámky</a>';
-            //     $backurl = 'readperson.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
             } else {
                 $hidenotes = '&amp;hidenotes=0">zobrazit poznámky</a>';
-                //        $backurl = 'readperson.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
             }
             if ($user['aclGamemaster'] || $user['aclUser']) {
                 $editbutton = '; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>; číslo osoby: '.$rec['id'];
@@ -208,7 +204,7 @@ latteDrawTemplate("header");
 
 <!-- následuje seznam přiložených souborů -->
 	<?php //generování seznamu přiložených souborů
-            $sqlFilter = DB_PREFIX."file.secret<=".$user['aclSecret']; //DB_PREFIX."case.deleted in (0,".$user['aclRoot'].") AND ".
+            $sqlFilter = DB_PREFIX."file.secret<=".$user['aclSecret'];
             $sql = "SELECT ".DB_PREFIX."file.mime as mime, ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.id AS 'id'
             FROM ".DB_PREFIX."file
             WHERE $sqlFilter AND".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=1

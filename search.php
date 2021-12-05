@@ -72,7 +72,7 @@ $latteParameters['filter'] = $filter;
     FROM ".DB_PREFIX."case
 	WHERE ".$sqlFilter." AND (title LIKE '%$searchedfor%' or contents LIKE  '%$searchedfor%')
     ".$fsql_archiv.$searchContitions."
-	ORDER BY 5 * MATCH(title) AGAINST ('$searchedfor') + MATCH(contents) AGAINST ('$searchedfor') DESC"; //fsql_archiv
+	ORDER BY 5 * MATCH(title) AGAINST ('$searchedfor') + MATCH(contents) AGAINST ('$searchedfor') DESC";
             $res = mysqli_query($database, $sql); ?>
     <h3>Případy</h3>
     <table>
@@ -318,11 +318,9 @@ $latteParameters['filter'] = $filter;
                                 FROM ".DB_PREFIX."person
                                 WHERE id = ".$rec['iditem']);
                             while ($rec_note = mysqli_fetch_assoc($res_note)) {
-                                //$noteid = $rec_note['id'];
                                 $notetitle = $rec_note['surname']." ".$rec_note['name'];
                                 $type = "Osoba";
                                 $linktype = "readperson.php?rid=".$rec_note['id']."&amp;hidenotes=0";
-                                // $secret = $rec_note['secret'];
                             }
                             break;
                         case 2:
@@ -331,11 +329,9 @@ $latteParameters['filter'] = $filter;
                                 FROM ".DB_PREFIX."group
                                 WHERE id = ".$rec['iditem']);
                             while ($rec_note = mysqli_fetch_assoc($res_note)) {
-                                //$noteid = $rec_note['id'];
                                 $notetitle = $rec_note['title'];
                                 $type = "Skupina";
                                 $linktype = "readgroup.php?rid=".$rec_note['id']."&amp;hidenotes=0";
-                                // $secret = $rec_note['secret'];
                             }
                             break;
                         case 3:
@@ -344,11 +340,9 @@ $latteParameters['filter'] = $filter;
                                 FROM ".DB_PREFIX."case
                                 WHERE id = ".$rec['iditem']);
                             while ($rec_note = mysqli_fetch_assoc($res_note)) {
-                                //$noteid = $rec_note['id'];
                                 $notetitle = $rec_note['title'];
                                 $type = "Případ";
                                 $linktype = "readcase.php?rid=".$rec_note['id']."&amp;hidenotes=0";
-                                //$secret = $rec_note['secret'];
                             }
                             break;
                         case 4:
@@ -357,15 +351,12 @@ $latteParameters['filter'] = $filter;
                                 FROM ".DB_PREFIX."report
                                 WHERE id = ".$rec['iditem']);
                             while ($rec_note = mysqli_fetch_assoc($res_note)) {
-                                // $noteid = $rec_note['id'];
                                 $notetitle = $rec_note['label'];
                                 $type = "Hlášení";
                                 $linktype = "readactrep.php?rid=".$rec_note['id']."&amp;hidenotes=0&amp;truenames=0";
-                                //$secret = $rec_note['secret'];
                             }
                             break;
                         default:
-                                //$noteid = $rec['id'];
                                 $notetitle = $rec['title'];
                                 $type = "Jiná";
                             break;

@@ -97,7 +97,7 @@ $latteParameters['title'] = 'Symboly';
         filterSet('symbol', @$_POST['filter']);
     }
 $filter = filterGet('symbol');
-$sqlFilter = DB_PREFIX.'symbol.deleted in (0,'.$user['aclRoot'].') '; // AND ".DB_PREFIX."case.secret<=".$user['aclSecret'];
+$sqlFilter = DB_PREFIX.'symbol.deleted in (0,'.$user['aclRoot'].') ';
 
 switch (@$filter['archived']) {
    case 'on': $sqlFilter .= ' AND '.DB_PREFIX.'symbol.archived >= 0 '; break;

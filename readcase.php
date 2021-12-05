@@ -128,7 +128,7 @@ if (is_numeric($_REQUEST['rid'])) {
 				<p>
 					<strong>Datum poslední změny:</strong> <?php echo webdate($rec['datum']); ?>
 					<strong>Změnil:</strong>
-					<?php echo  getAuthor($rec['iduser'], 1); // $name =?>
+					<?php echo  getAuthor($rec['iduser'], 1); ?>
 				</p>
 			<div class="clear">&nbsp;</div>
 		</div>
@@ -170,8 +170,8 @@ if (is_numeric($_REQUEST['rid'])) {
 
 	<!-- následuje seznam přiložených souborů -->
 <?php //generování seznamu přiložených souborů
-    $sqlFilter = DB_PREFIX."file.secret<=".$user['aclSecret']; //DB_PREFIX."case.deleted in (0,".$user['aclRoot'].") AND ".
-    $sql = "SELECT ".DB_PREFIX."file.mime as mime,  ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.id AS 'id'
+    $sqlFilter = DB_PREFIX."file.secret<=".$user['aclSecret'];
+            $sql = "SELECT ".DB_PREFIX."file.mime as mime,  ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.id AS 'id'
     FROM ".DB_PREFIX."file
     WHERE $sqlFilter AND ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=3
     ORDER BY ".DB_PREFIX."file.originalname ASC";
@@ -254,11 +254,9 @@ if (is_numeric($_REQUEST['rid'])) {
         }
     } else {
         echo      $_SESSION['message'] = "Případ neexistuje!";
-//        header('location: index.php');
     }
 } else {
     echo $_SESSION['message'] = $text['accessdeniedrecorded'];
-//    header('location: index.php');
 }
 latteDrawTemplate("footer");
 ?>

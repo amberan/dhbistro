@@ -58,7 +58,6 @@ $latteParameters['title'] = 'Přiřazení k hlášení k pripadu';
         case 3: $fsql_stat = ' AND '.DB_PREFIX.'report.status=2 '; break;
         default: $fsql_stat = '';
     }
-            //
             function filter()
             {
                 global $filterCat,$filterSort,$filterStat;
