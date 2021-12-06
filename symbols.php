@@ -16,7 +16,7 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
             $sfile = '';
         }
         $time = time();
-        echo $sql_p = "INSERT INTO ".DB_PREFIX."symbol (symbol, `desc`, deleted, created, created_by, modified, modified_by, archived, assigned, search_lines, search_curves, search_points, search_geometricals, search_alphabets, search_specialchars, secret)  VALUES( '".$sfile."', '".$_POST['contents']."', '0', '".$time."', '".$user['userId']."', '".$time."', '".$user['userId']."', 0, '0', '".$_POST['liner']."', '".$_POST['curver']."', '".$_POST['pointer']."', '".$_POST['geometrical']."', '".$_POST['alphabeter']."', '".$_POST['specialchar']."', 0)";
+        $sql_p = "INSERT INTO ".DB_PREFIX."symbol (symbol, `desc`, deleted, created, created_by, modified, modified_by, archived, assigned, search_lines, search_curves, search_points, search_geometricals, search_alphabets, search_specialchars, secret)  VALUES( '".$sfile."', '".$_POST['contents']."', '0', '".$time."', '".$user['userId']."', '".$time."', '".$user['userId']."', 0, '0', '".$_POST['liner']."', '".$_POST['curver']."', '".$_POST['pointer']."', '".$_POST['geometrical']."', '".$_POST['alphabeter']."', '".$_POST['specialchar']."', 0)";
         mysqli_query($database, $sql_p);
         $sql_f = "SELECT id FROM ".DB_PREFIX."symbol WHERE created='".$time."' AND created_by='".$user['userId']."' AND modified='".$time."' AND modified_by='".$user['userId']."'";
         $pidarray = mysqli_fetch_assoc(mysqli_query($database, $sql_f));
@@ -93,7 +93,7 @@ $latteParameters['title'] = 'Symboly';
     deleteUnread(7, 'none');
     sparklets('<a href="persons.php">osoby</a> &raquo; <strong>nepřiřazené symboly</strong>', '<a href="newsymbol.php">nový symbol</a>; <a href="symbol_search.php">vyhledat symbol</a>');
 
-    if (sizeof($_POST['filter']) > 0) {
+    if (sizeof(@$_POST['filter']) > 0) {
         filterSet('symbol', @$_POST['filter']);
     }
 $filter = filterGet('symbol');

@@ -1,17 +1,61 @@
 <?php
 
-/**
- * testing database connection
- */
+use Tracy\Debugger;
 
-function DBTest($dbHost, $dbUser, $dbPassword, $dbDatabase)
+Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+
+
+function DBconnect($configDB)
 {
-    $dbtest = mysqli_connect($dbHost, $dbUser, $dbPassword, $dbDatabase);
+    $database = mysqli_connect($configDB['dbHost'], $configDB['dbUser'], $configDB['dbPassword'], $configDB['dbDatabase'])
+    or die($_SERVER["SERVER_NAME"].":".mysqli_connect_errno()." ".mysqli_connect_error());
+    mysqli_query($database, "SET NAMES 'utf8'");
+    return $database;
+}
+
+
+function DBTest($configDB)
+{
+    $dbtest = @mysqli_connect($configDB['dbHost'], $configDB['dbUser'], $configDB['dbPassword'], $configDB['dbDatabase']);
     if (mysqli_connect_errno($dbtest)) {
         return false;
     }
     return true;
 }
+
+/**
+ * populateDB - if $sqlFile not set search for latest /sql/default*sql
+ */
+function restoreDB($sqlFile = null)
+{
+    global $database;
+    require $_SERVER['DOCUMENT_ROOT']."/.env.php";
+    if (!file_exists($sqlFile)) {
+        $dbScriptFileList = glob(SERVER_ROOT.'/sql/default*.sql');
+        $sqlFile = end($dbScriptFileList);
+        Debugger::log("DEBUG: creating new database from ".$sqlFile);
+    }
+    if (file_exists($sqlFile)) {
+        Debugger::log("DEBUG: Database EMPTY, creating new from ".$sqlFile);
+        $tempLine = '';
+        $lines = file($sqlFile);
+        foreach ($lines as $line) {
+            if (substr($line, 0, 2) == '--' || $line == '') {
+                continue;
+            }
+            $tempLine .= $line;
+            if (substr(trim($line), -1, 1) == ';') {
+                mysqli_query($database, $tempLine) || Debugger::log("ERROR SQL IMPORT: " . $tempLine .":". mysqli_error($database));
+                $tempLine = '';
+            }
+        }
+
+        mysqli_close($database);
+    } else {
+        Debugger::log("ERROR: DB restore file ".$sqlFile." does not exist!");
+    }
+}
+
 
 /**
  * Check existence of $column in $table.
@@ -52,10 +96,23 @@ function DBcolumntNotEmpty($table, $column)
 {
     global $configDB,$database;
     $result[] = '1';
-    if (DBcolumnExist($table, $column) == true) {
+    if (DBcolumnExist($table, $column)) {
         $query = "select count(*) from ".$configDB['dbDatabase'].".".DB_PREFIX.$table." where length($column) is not null;";
         $result = mysqli_fetch_array(mysqli_query($database, $query));
     }
 
     return $result[0];
+}
+
+function DBListTables()
+{
+    global $database;
+    $tables = array();
+    $sql = "SHOW TABLES";
+    $result = mysqli_query($database, $sql);
+
+    while ($row = mysqli_fetch_row($result)) {
+        $tables[] = $row[0];
+    }
+    return $tables;
 }

@@ -26,6 +26,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Feature: links to app in header #169
 ### Changed
 - Refactored: unauthorizedAccess tracking #221
+- Refactored: backup #96 #219
 ### Removed
 - Removed: unused variables #143
 

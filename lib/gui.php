@@ -7,10 +7,13 @@
  */
 function latteDrawTemplate($template): void
 {
-    global $latte,$config,$latteParameters;
+    global $latte,$config,$latteParameters,$text,$URL;
     if ($template == 'footer' || $template == 'footerMD') {
         latteNotification();
     }
+    $latteParameters['text'] = $text;
+    $latteParameters['URL'] = $URL;
+    $latteParameters['config'] = $config;
     $latte->render($config['folder_templates'].$template.'.latte', $latteParameters);
 }
 

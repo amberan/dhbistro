@@ -169,6 +169,14 @@ input[type='submit'] {
   position: relative;
 }
 
+.underline-link {
+  text-decoration: underline;
+}
+
+.underline-link:hover {
+  text-decoration: none;
+}
+
 .writable-section {
   display: block;
   width: 100%;
