@@ -40,7 +40,6 @@ require_once SERVER_ROOT.'/lib/user.php';
 $database = mysqli_connect($configDB['dbHost'], $configDB['dbUser'], $configDB['dbPassword'], $configDB['dbDatabase']) or die($_SERVER["SERVER_NAME"].":".mysqli_connect_errno()." ".mysqli_connect_error());
 mysqli_query($database, "SET NAMES 'utf8'");
 
-require_once SERVER_ROOT.'/inc/backup.php';
 require_once SERVER_ROOT.'/inc/session.php';
 require_once SERVER_ROOT.'/inc/unread.php';
 require_once SERVER_ROOT.'/inc/menu.php';

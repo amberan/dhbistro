@@ -2,68 +2,74 @@
 session_start();
 require_once $_SERVER['DOCUMENT_ROOT']."/config.php";
 require_once SERVER_ROOT.'/vendor/autoload.php';
-
 use Tracy\Debugger;
 
 Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+
 $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 $latteParameters = [];
 require_once $config['folder_custom'].'text.php';
 require_once SERVER_ROOT.'/lib/audit.php';
-require_once SERVER_ROOT."/lib/case.php";
+require_once SERVER_ROOT.'/lib/case.php';
 require_once SERVER_ROOT.'/lib/database.php';
+require_once SERVER_ROOT.'/lib/backup.php';
 require_once SERVER_ROOT.'/lib/file.php';
 require_once SERVER_ROOT.'/lib/filters.php';
 require_once SERVER_ROOT.'/lib/gui.php';
 require_once SERVER_ROOT.'/lib/image.php';
 require_once SERVER_ROOT.'/lib/news.php';
 require_once SERVER_ROOT.'/lib/person.php';
-require_once SERVER_ROOT."/lib/report.php";
+require_once SERVER_ROOT.'/lib/report.php';
 require_once SERVER_ROOT.'/lib/security.php';
 require_once SERVER_ROOT.'/lib/update.php';
 require_once SERVER_ROOT."/lib/user.php";
 
-//if there is no .env.php or we have POST data from installer.latte
-if (!file_exists($config['platformConfig']) || isset($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbDatabase'])) {
-    bistroConvertPlatform();
-}
-require_once $config['platformConfig'];
-
-$database = @mysqli_connect($configDB['dbHost'], $configDB['dbUser'], $configDB['dbPassword'], $configDB['dbDatabase'])
-    or die($_SERVER["SERVER_NAME"].":".mysqli_connect_errno()." ".mysqli_connect_error());
-mysqli_query($database, "SET NAMES 'utf8'");
-
-//TODO refactor: if there are no tables in database && $_POST['backupFile'] > restoreDB($config['folder_backup'].$_POST['backupFile']);
-//elseif no tables > restoreDB();
-
-$latteParameters['config'] = $config;
-if (isset($config['themeCustom']) && file_exists($config['folder_custom'].'/text-'.$config['themeCustom'].'.php')) {
-    require_once $config['folder_custom'].'/text-'.$config['themeCustom'].'.php';
-}
-$latteParameters['text'] = $text;
 
 $URL = explode('/', $_SERVER['REQUEST_URI']); // for THE LOOP
 $URL[0] = $_SERVER['REQUEST_SCHEME']."://".$_SERVER['SERVER_NAME']."/";
-$latteParameters['URL'] = $URL;
 
-require_once SERVER_ROOT.'/inc/backup.php';
+if (!file_exists($config['platformConfig']) || isset($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbDatabase'])) {
+    bistroEnvConvert();
+}
+require_once $config['platformConfig'];
+
+if (DBTest($configDB)) {
+    $database = DBconnect($configDB);
+    mysqli_query($database, "SET NAMES 'utf8'");
+    if ($database && !sizeof(DBListTables()) > 0 && isset($_POST['backupFile'])) {
+        restoreDB($config['folder_backup'].$_POST['backupFile']);
+    } elseif ($database && !sizeof(DBListTables()) > 0 && !isset($_POST['backupFile'])) {
+        restoreDB();
+    } elseif (!$database) {
+        bistroEnvConvert();
+    }
+} else {
+    bistroEnvConvert();
+}
+
+if (isset($config['themeCustom']) && file_exists($config['folder_custom'].'/text-'.$config['themeCustom'].'.php')) {
+    require_once $config['folder_custom'].'/text-'.$config['themeCustom'].'.php';
+}
+
+// require_once SERVER_ROOT.'/inc/backup.php';
 require_once SERVER_ROOT.'/inc/session.php';
 require_once SERVER_ROOT.'/inc/unread.php';
 $_REQUEST = escape_array($_REQUEST);
 $_POST = escape_array($_POST);
 $_GET = escape_array($_GET);
-
+bistroBackup();
 /*
  * THE LOOP
  * */
+//TODO auditTrail
+if ($URL[1] == 'file' && isset($user)) { // GET FILE type:  attachement,portrait,symbol,backup
+
+    require_once SERVER_ROOT.'/file.php';
+    exit;
+}
+latteDrawTemplate('headerMD');
 if (isset($user)) {
-    if ($URL[1] == 'file') { // GET FILE type:  attachement,portrait,symbol,backup
-        require_once SERVER_ROOT.'/file.php';
-        authorizedAccess(13, 1, $URL[3]);
-        exit;
-    }
-    latteDrawTemplate('headerMD');
     $latteParameters['user'] = $user;
     require_once SERVER_ROOT."/pages/menu.php";
     $latteParameters['menu'] = $menu;
@@ -145,6 +151,7 @@ if (isset($user)) {
         }
     }
 } else {
+    $latteParameters['title'] = '';
     latteDrawTemplate('headerMD');
     require_once SERVER_ROOT.'/pages/login.php';
 }

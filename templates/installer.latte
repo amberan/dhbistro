@@ -1,18 +1,21 @@
-{import 'headerMD.latte'}
+{include 'headerMD.latte'}
+
+<div style="float:right; text-align: right; font-size: 8pt; font-weight: 700">
+<br/>
+Are you one of the Others?
+<br/>
+A member of the Night Watch, Day Watch or Inquisition?
+<br/>
+BiStro is here for you and will try to keep you from getting lost in  all the gloom related informations!
+<br/>
+<a href="https://gitlab.com/alembiq/bistro/" target="_new"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Git_icon.svg/97px-Git_icon.svg.png" title="BiStro repository"  alt="BiStro repository"></a>
+</div>
 
 <h1>BiStro Installer</h1>
-<a href="https://gitlab.com/alembiq/bistro/" target="_new"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Git_icon.svg/97px-Git_icon.svg.png" title="BiStro repository"  alt="BiStro repository"></a>
+
 <form action="/" method="post" id="dbconfig">
-DB Hostname: <input name="dbHost" value="localhost" />
-<br/>
-DB User: <input name="dbUser" type="input" value="{@$config[dbUser]}" />
-<br/>
-DB Password: <input name="dbPassword" type="Password" />
-<br/>
-Database: <input name="dbDatabase" value="{@$config[dbDatabase]}" />
-<br/>
-Table prefix: <input name="dbPrefix" value="{if @$config[dbPrefix]}{$config[dbPrefix]}{else}nw_{/if}" />
-<br/>
+
+<h3>Setting for this instance</h3>
 Theme Color: <select name="themeColor">
 <option value="local"{if @$config[themeColor] == "local"} selected {/if}>local</option>
 <option value="dh"{if @$config[themeColor] == "dh"} selected {/if}>dh</option>
@@ -40,23 +43,42 @@ Theme Custom: <select name="themeCustom">
 <option value="enigma"{if @$config[themeCustom] == "enigma"} selected {/if}>enigma</option>
 </select>
 <br/>
+<i>These settings will be stored in `.env.php`.</i><br/>
+
+<h3>Database connection configuration</h3>
+DB Hostname: <input name="dbHost" value="localhost" />
+<br/>
+DB User: <input name="dbUser" type="input" value="{@$config[dbUser]}" />
+<br/>
+DB Password: <input name="dbPassword" type="Password" />
+<br/>
+Database: <input name="dbDatabase" value="{@$config[dbDatabase]}" />
+<br/>
+Table prefix: <input name="dbPrefix" value="{if @$config[dbPrefix]}{$config[dbPrefix]}{else}nw_{/if}" />
+<br/>
+<i>These settings will be stored in `.env.php`.</i><br/>
 
 
-<h2> Backups present in {$config['folder_backup']}:</h2>
+<h3>Data for your BiStro</h3>
+<strong>If any data will be found in the database, database population will be skipped.</strong>
+<br/>
 {if !$backupList}
-no backups found in {$config['folder_backup']}
+No backups found in {$config['folder_backup']}, database will be populated by default script.<br/>
+Default user is `admin` his password is `kokot`.<br/>
 {else}
-You can select one of them to fill new database (if it is empty). <br/>
-<h3 style="color:red">Can handle only unpacked sql files!</h3>
-<Select name="backupFile">
-<option value="">Do not restore from any backup</option>
+You can select one of the backups listed below to fill the new database (if it is empty). <br/>
+If you wont select any backup to restore, database will be populated by default script (default user is `admin` with password `kokot`.).<br/>
+<strong style="color:red">Currently can handle only unpacked sql files!</strong>
+<br/>
+Files found: <Select name="backupFile">
+<option value=""></option>
 {foreach $backupList as $backupFile}
 <option value="{$backupFile[0]}">{$backupFile[0]}  ---      {$backupFile[1]} </option>
 {/foreach}
 </select>
 {/if}
 
-<br/><br/><input type="submit" value="Save" />
+<br/><br/><input type="submit" value="Do your magic!" />
 </form>
 
-{import 'footerMD.latte'}
+{include 'footerMD.latte'}
