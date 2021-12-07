@@ -130,6 +130,16 @@ body {
   box-sizing: border-box;
 }
 
+.flex {
+  display: flex;
+}
+
+.flex-center-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 #logincontent {
   height: 100%;
   width: 100%;
@@ -210,6 +220,10 @@ input[type='submit'] {
   align-items: center;
   flex-wrap: nowrap;
   font-size: 1rem;
+}
+
+.installer-header-wrapper {
+  margin-bottom: 1.5rem;
 }
 
 /* ----- SWITCH ----- */
