@@ -99,7 +99,7 @@ deploy nh_text:
   - scp build.tgz prazskahlidka@nh.test.prazskahlidka.cz:.
   - ssh prazskahlidka@nh.test.prazskahlidka.cz "mkdir /srv/cz.prazskahlidka.test.nh/$CI_JOB_ID
     && tar zxf build.tgz -C /srv/cz.prazskahlidka.test.nh/$CI_JOB_ID/
-    && find /srv/cz.prazskahlidka.test.nh/$CI_JOB_ID/ -type f  -not -regex '/srv/cz.prazskahlidka.test.nh/$CI_JOB_ID/\(vendor\|.git\|files\|js\|images\|custom\)/.*'' -exec sed -i -r 's+Debugger::(DETECT|PRODUCTION)+Debugger::DEVELOPMENT+g' {} \;
+    && find /srv/cz.prazskahlidka.test.nh/$CI_JOB_ID/ -type f  -not -regex '/srv/cz.prazskahlidka.test.nh/$CI_JOB_ID/\(vendor\|.git\|files\|js\|images\|custom\)/.*' -exec sed -i -r 's+Debugger::(DETECT|PRODUCTION)+Debugger::DEVELOPMENT+g' {} \;
     && cp /srv/cz.prazskahlidka.test.nh/htdocs/.env.php /srv/cz.prazskahlidka.test.nh/$CI_JOB_ID/
     && rsync -au --remove-source-files /srv/cz.prazskahlidka.test.nh/htdocs/files/ /srv/cz.prazskahlidka.test.nh/$CI_JOB_ID/files/
     && mv /srv/cz.prazskahlidka.test.nh/htdocs /srv/cz.prazskahlidka.test.nh/backup
