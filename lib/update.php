@@ -3,7 +3,7 @@
     use League\HTMLToMarkdown\HtmlConverter;
     use Tracy\Debugger;
 
-    Debugger::enable(Debugger::DEVELOPMENT, $config['folder_logs']);
+    Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 
 /**
  * returns all update*php files in sql that are never than last backup but at most current version
