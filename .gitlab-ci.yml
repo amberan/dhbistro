@@ -70,14 +70,14 @@ deploy alembiq:
   - ssh-keyscan alembiq.net >> ~/.ssh/known_hosts
   script:
   - scp build.tgz gitlab-ci@alembiq.net:.
-  - ssh gitlab-ci@alembiq.net "mkdir $DEPLOY_FOLDER/$CI_JOB_ID
-    && tar zxf build.tgz -C $DEPLOY_FOLDER/$CI_JOB_ID/
-    && cp $DEPLOY_FOLDER/htdocs/.env.php $DEPLOY_FOLDER/$CI_JOB_ID/
-    && rsync -au --remove-source-files $DEPLOY_FOLDER/htdocs/files/ $DEPLOY_FOLDER/$CI_JOB_ID/files/
-    && tar zcf $DEPLOY_FOLDER/backup-$CI_JOB_ID.tgz --exclude $DEPLOY_FOLDER/htdocs/cache --exclude $DEPLOY_FOLDER/htdocs/.git $DEPLOY_FOLDER/htdocs/
-    && mv $DEPLOY_FOLDER/htdocs $DEPLOY_FOLDER/backup
-    && mv $DEPLOY_FOLDER/$CI_JOB_ID $DEPLOY_FOLDER/htdocs
-    && rm -rf $DEPLOY_FOLDER/backup
+  - ssh gitlab-ci@alembiq.net "mkdir $ALEMBIQ_FOLDER/$CI_JOB_ID
+    && tar zxf build.tgz -C $ALEMBIQ_FOLDER/$CI_JOB_ID/
+    && cp $ALEMBIQ_FOLDER/htdocs/.env.php $ALEMBIQ_FOLDER/$CI_JOB_ID/
+    && rsync -au --remove-source-files $ALEMBIQ_FOLDER/htdocs/files/ $ALEMBIQ_FOLDER/$CI_JOB_ID/files/
+    && tar zcf $ALEMBIQ_FOLDER/backup-$CI_JOB_ID.tgz --exclude $ALEMBIQ_FOLDER/htdocs/cache --exclude $ALEMBIQ_FOLDER/htdocs/.git $ALEMBIQ_FOLDER/htdocs/
+    && mv $ALEMBIQ_FOLDER/htdocs $ALEMBIQ_FOLDER/backup
+    && mv $ALEMBIQ_FOLDER/$CI_JOB_ID $ALEMBIQ_FOLDER/htdocs
+    && rm -rf $ALEMBIQ_FOLDER/backup
     && rm build.tgz"
   only:
     - merge_requests
@@ -99,6 +99,7 @@ deploy nh_text:
   - scp build.tgz prazskahlidka@nh.test.prazskahlidka.cz:.
   - ssh prazskahlidka@nh.test.prazskahlidka.cz "mkdir /srv/cz.prazskahlidka.test.nh/$CI_JOB_ID
     && tar zxf build.tgz -C /srv/cz.prazskahlidka.test.nh/$CI_JOB_ID/
+    && find /srv/cz.prazskahlidka.test.nh/$CI_JOB_ID/ -type f  -not -regex "/srv/cz.prazskahlidka.test.nh/$CI_JOB_ID/\(vendor\|.git\|files\|js\|images\|custom\)/.*" -exec sed -i -r 's+Debugger::(DETECT|PRODUCTION)+Debugger::DEVELOPMENT+g' {} \;
     && cp /srv/cz.prazskahlidka.test.nh/htdocs/.env.php /srv/cz.prazskahlidka.test.nh/$CI_JOB_ID/
     && rsync -au --remove-source-files /srv/cz.prazskahlidka.test.nh/htdocs/files/ /srv/cz.prazskahlidka.test.nh/$CI_JOB_ID/files/
     && mv /srv/cz.prazskahlidka.test.nh/htdocs /srv/cz.prazskahlidka.test.nh/backup
@@ -126,6 +127,7 @@ deploy dh_text:
   - scp build.tgz prazskahlidka@dh.test.prazskahlidka.cz:.
   - ssh prazskahlidka@dh.test.prazskahlidka.cz "mkdir /srv/cz.prazskahlidka.test.dh/$CI_JOB_ID
     && tar zxf build.tgz -C /srv/cz.prazskahlidka.test.dh/$CI_JOB_ID/
+    && find /srv/cz.prazskahlidka.test.dh/$CI_JOB_ID/ -type f  -not -regex "/srv/cz.prazskahlidka.test.dh/$CI_JOB_ID/\(vendor\|.git\|files\|js\|images\|custom\)/.*" -exec sed -i -r 's+Debugger::(DETECT|PRODUCTION)+Debugger::DEVELOPMENT+g' {} \;
     && cp /srv/cz.prazskahlidka.test.dh/htdocs/.env.php /srv/cz.prazskahlidka.test.dh/$CI_JOB_ID/
     && rsync -au --remove-source-files /srv/cz.prazskahlidka.test.dh/htdocs/files/ /srv/cz.prazskahlidka.test.dh/$CI_JOB_ID/files/
     && mv /srv/cz.prazskahlidka.test.dh/htdocs /srv/cz.prazskahlidka.test.dh/backup
