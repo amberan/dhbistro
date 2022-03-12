@@ -19,9 +19,18 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
  -->
 
 ## 1.8.9 - 2022-03-12
+### Added
+- Feature: BiStro needs you #207
+- Feature: links to other apps #169
+- CI: Debug on testing #130
 ### Changed
 - Refactored: listing persons #115
 - Refactored: deployment to new server #198
+- Refactored: backups #96 #219 #107
+- Refactored: installer #107
+### Security
+- Feature: deny access to passwords #225
+
 
 ## 1.8.8 - 2021-12-04
 ### Added
