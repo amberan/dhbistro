@@ -74,7 +74,7 @@ deploy test:
       do
         ssh $TEST_REMOTE "mkdir $folder/$CI_PIPELINE_ID
         && tar zxf bistro-$CI_PIPELINE_ID.tgz -C $folder/$CI_PIPELINE_ID/
-        && find $folder/$CI_PIPELINE_ID/ -type f  -not -regex '$folder/$CI_PIPELINE_ID/\(vendor\|.git\|files\|js\|images\|custom\)/.*'' -exec sed -i -r 's+Debugger::(DETECT|PRODUCTION)+Debugger::DEVELOPMENT+g' {} \;
+        && find $folder/$CI_PIPELINE_ID/ -type f  -not -regex '$folder/$CI_PIPELINE_ID/\(vendor\|.git\|files\|js\|images\|custom\)/.*' -exec sed -i -r 's+Debugger::(DETECT|PRODUCTION)+Debugger::DEVELOPMENT+g' {} \;
         && cp $folder/htdocs/.env.php $folder/$CI_PIPELINE_ID/
         && rsync -au --remove-source-files $folder/htdocs/files/ $folder/$CI_PIPELINE_ID/files/
         && tar zcf $folder/backup-$CI_PIPELINE_ID.tgz --exclude $folder/htdocs/cache --exclude $folder/htdocs/.git $folder/htdocs/
@@ -107,7 +107,7 @@ deploy production:
         ssh $PROD_REMOTE "mkdir $folder/$CI_PIPELINE_ID
         && tar zxf bistro-$CI_PIPELINE_ID.tgz -C $folder/$CI_PIPELINE_ID/
         && cp $folder/htdocs/.env.php $folder/$CI_PIPELINE_ID/
-        && find $folder/$CI_PIPELINE_ID/ -type f  -not -regex '$folder/$CI_PIPELINE_ID/\(vendor\|.git\|files\|js\|images\|custom\)/.*'' -exec sed -i -r 's+Debugger::(DETECT|DEVELOPMENT)+Debugger::PRODUCTION+g' {} \;
+        && find $folder/$CI_PIPELINE_ID/ -type f  -not -regex '$folder/$CI_PIPELINE_ID/\(vendor\|.git\|files\|js\|images\|custom\)/.*' -exec sed -i -r 's+Debugger::(DETECT|DEVELOPMENT)+Debugger::PRODUCTION+g' {} \;
         && rsync -au --remove-source-files $folder/htdocs/files/ $folder/$CI_PIPELINE_ID/files/
         && tar zcf $folder/backup-$CI_PIPELINE_ID.tgz --exclude $folder/htdocs/cache --exclude $folder/htdocs/.git $folder/htdocs/
         && mv $folder/htdocs $folder/backup
