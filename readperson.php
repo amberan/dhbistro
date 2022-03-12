@@ -33,7 +33,7 @@ latteDrawTemplate("header");
                 $editbutton = '';
             }
             deleteUnread(1, $_REQUEST['rid']);
-            sparklets('<a href="./persons.php">osoby</a> &raquo; <strong>'.stripslashes($rec['surname']).', '.stripslashes($rec['name']).'</strong>', '<a href="readperson.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton); ?>
+            sparklets('<a href="/persons/">osoby</a> &raquo; <strong>'.stripslashes($rec['surname']).', '.stripslashes($rec['name']).'</strong>', '<a href="readperson.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton); ?>
 <div id="obsah">
 	<h1><?php echo stripslashes($rec['surname']).', '.stripslashes($rec['name']); ?></h1>
 	<fieldset>

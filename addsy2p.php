@@ -8,7 +8,7 @@ latteDrawTemplate("header");
 $latteParameters['title'] = 'Přiřazení symbolu osobě';
     mainMenu();
         $customFilter = custom_Filter(20);
-    sparklets('<a href="./persons.php">osoby</a> &raquo; <a href="./symbols.php">nepřiřazené symboly</a>');
+    sparklets('<a href="/persons/">osoby</a> &raquo; <a href="./symbols.php">nepřiřazené symboly</a>');
 // Overeni, zda dany symbol existuje, a uzivatel ma dostatecna prava na jeho upravu
     if (is_numeric($_REQUEST['rid']) && ($user['aclPerson'] || $user['aclSymbol'])) {
         $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."symbol WHERE id=".$_REQUEST['rid']);

@@ -16,9 +16,9 @@ $latteParameters['title'] = 'Zobrazení symbolu';
             authorizedAccess(1, 1, $_REQUEST['rid']);
             $latteParameters['title'] = 'Úprava osoby';
             mainMenu();
-            sparklets('<a href="./persons.php">osoby</a> &raquo; <strong>úprava osoby</strong>'); ?>
+            sparklets('<a href="/persons/">osoby</a> &raquo; <strong>úprava osoby</strong>'); ?>
 <div id="obsah">
-	<form action="persons.php" method="post" id="inputform" enctype="multipart/form-data">
+	<form action="/persons/" method="post" id="inputform" enctype="multipart/form-data">
 <?php  if ($user['aclGamemaster'] == 1) {
                 $sql = 'SELECT '.DB_PREFIX.'person.name, '.DB_PREFIX.'person.surname, '.DB_PREFIX.'user.userName , '.DB_PREFIX.'user.userId
                     FROM '.DB_PREFIX.'user
@@ -61,7 +61,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 		<?php } else { ?><a href="readsymbol.php?rid=<?php echo $rec_p['symbol']; ?>"><img src="file/symbol/<?php echo $rec_p['symbol']; ?>" alt="<?php echo stripslashes($rec_p['name']).' '.stripslashes($rec_p['surname']); ?>" id="symbolimg" /></a>
 		<?php } ?>
 		<?php if ($rec_p['symbol'] == null) { ?>
-		<?php } else { ?><span class="info-delete-symbol"><a class="delete" title="odpojit" href="persons.php?deletesymbol=<?php echo $rec_p['symbol']; ?>&amp;personid=<?php echo $_REQUEST['rid']; ?>&amp;backurl=<?php echo urlencode('editperson.php?rid='.$_REQUEST['rid']); ?>" onclick="return confirm('Opravdu odpojit symbol?')"><span class="button-text">smazat soubor</span></a></span>
+		<?php } else { ?><span class="info-delete-symbol"><a class="delete" title="odpojit" href="/persons/?deletesymbol=<?php echo $rec_p['symbol']; ?>&amp;personid=<?php echo $_REQUEST['rid']; ?>&amp;backurl=<?php echo urlencode('editperson.php?rid='.$_REQUEST['rid']); ?>" onclick="return confirm('Opravdu odpojit symbol?')"><span class="button-text">smazat soubor</span></a></span>
 		<?php } ?>
 			<div id="info">
 				<h3><label for="name">Jméno:</label></h3>
@@ -203,7 +203,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	<div id="change-groups" class="otherform-wrap">
 		<fieldset><legend><strong>Přiřazení skupiny</strong></legend>
 		<p>Osobě můžete přiřadit skupiny, do kterých patří. Opačnou akci lze provést u skupiny, kde přiřazujete pro změnu osoby dané skupině. Akce jsou si rovnocenné a je tedy nutná pouze jedna z nich.</p>
-		<form action="persons.php" method="post" class="otherform">
+		<form action="/persons/" method="post" class="otherform">
 		<?php
            $sql = "SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."g2p.iduser
            FROM ".DB_PREFIX."group
@@ -247,7 +247,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 				<?php } ?>
 			<li class="soubor"><a href="file/attachement/<?php echo $rec_f['id']; ?>" title=""><?php echo stripslashes($rec_f['title']); ?></a><?php if ($rec_f['secret'] == 1) { ?> (TAJNÝ)<?php } ?><span class="poznamka-edit-buttons"><?php
                 if (($rec_f['iduser'] == $user['userId']) || ($user['aclPerson'] > 1)) {
-                    echo '<a class="delete" title="smazat" href="persons.php?deletefile='.$rec_f['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editperson.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat soubor &quot;'.stripslashes($rec_f['title']).'&quot; náležící k osobě?\')"><span class="button-text">smazat soubor</span></a>';
+                    echo '<a class="delete" title="smazat" href="/persons/?deletefile='.$rec_f['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editperson.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat soubor &quot;'.stripslashes($rec_f['title']).'&quot; náležící k osobě?\')"><span class="button-text">smazat soubor</span></a>';
                 } ?>
 				</span></li><?php
             }
@@ -263,7 +263,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 
 	<div id="new-file" class="otherform-wrap">
 		<fieldset><legend><strong>Nový soubor</strong></legend>
-		<form action="persons.php" method="post" enctype="multipart/form-data" class="otherform">
+		<form action="/persons/" method="post" enctype="multipart/form-data" class="otherform">
 			<div>
 				<strong><label for="attachment">Soubor:</label></strong>
 				<input type="file" name="attachment" id="attachment" />

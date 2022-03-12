@@ -10,7 +10,7 @@ $latteParameters['title'] = 'Vyhledané symboly';
 authorizedAccess(7, 1, 0);
 
     mainMenu();
-    sparklets('<a href="./persons.php">osoby</a> &raquo; <a href="newperson.php">přidat osobu</a>; <a href="symbols.php">nepřiřazené symboly</a>; <a href="symbol_search.php">vyhledat symbol</a>');
+    sparklets('<a href="/persons/">osoby</a> &raquo; <a href="newperson.php">přidat osobu</a>; <a href="symbols.php">nepřiřazené symboly</a>; <a href="symbol_search.php">vyhledat symbol</a>');
 
 if (isset($_POST['searchit'])) {
     $input_liner = htmlspecialchars($_POST['l']);

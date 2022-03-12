@@ -8,11 +8,11 @@ latteDrawTemplate("header");
 $latteParameters['title'] = 'Nová osoba';
 
 mainMenu();
-    sparklets('<a href="./persons.php">osoby</a> &raquo; <strong>nová osoba</strong>');
+    sparklets('<a href="/persons/">osoby</a> &raquo; <strong>nová osoba</strong>');
 ?>
 <div id="obsah">
 	<fieldset><legend><strong>Nová osoba</strong></legend>
-	<form action="persons.php" method="post" id="inputform" enctype="multipart/form-data">
+	<form action="/persons/" method="post" id="inputform" enctype="multipart/form-data">
 <?php  if ($user['aclGamemaster'] == 1) {
     $sql = 'SELECT '.DB_PREFIX.'person.name, '.DB_PREFIX.'person.surname, '.DB_PREFIX.'user.userName , '.DB_PREFIX.'user.userId
                     FROM '.DB_PREFIX.'user

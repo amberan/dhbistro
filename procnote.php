@@ -13,7 +13,7 @@ $latteParameters['title'] = 'Uložení změn';
         authorizedAccess($_POST['idtable'], 9, $_POST['itemid']);
         mainMenu();
         switch ($_POST['idtable']) {
-            case 1: $sourceurl = "persons.php"; $sourcename = "osoby"; break;
+            case 1: $sourceurl = "/persons/"; $sourcename = "osoby"; break;
             case 2: $sourceurl = "groups/"; $sourcename = "skupiny"; break;
             case 3: $sourceurl = "/cases/"; $sourcename = "případy"; break;
             case 4: $sourceurl = "reports.php"; $sourcename = "hlášení"; break;
@@ -30,7 +30,7 @@ $latteParameters['title'] = 'Uložení změn';
         if (isset($_POST['editnote'])) {
             mainMenu();
             switch ($_REQUEST['idtable']) {
-            case 1: $sourceurl = "persons.php"; $sourcename = "osoby"; break;
+            case 1: $sourceurl = "/persons/"; $sourcename = "osoby"; break;
             case 2: $sourceurl = "groups/"; $sourcename = "skupiny"; break;
             case 3: $sourceurl = "/cases/"; $sourcename = "případy"; break;
             case 4: $sourceurl = "reports.php"; $sourcename = "hlášení"; break;

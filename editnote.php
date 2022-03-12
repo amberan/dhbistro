@@ -9,7 +9,7 @@ $latteParameters['title'] = 'Úprava poznámky';
 
 mainMenu();
     switch ($_REQUEST['idtable']) {
-        case 1: $sourceurl = "persons.php"; $sourcename = "osoby"; break;
+        case 1: $sourceurl = "/persons/"; $sourcename = "osoby"; break;
         case 2: $sourceurl = "groups/"; $sourcename = "skupiny"; break;
         case 3: $sourceurl = "/cases/"; $sourcename = "případy"; break;
         case 4: $sourceurl = "reports.php"; $sourcename = "hlášení"; break;

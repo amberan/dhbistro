@@ -111,6 +111,17 @@ video {
   padding-inline-end: 0;
 }
 
+.sticky-top {
+  position: sticky;
+  top: 0px;
+}
+
+.sticky-bottom {
+  position: sticky;
+  bottom: 0px;
+}
+
+
 body {
   min-height: 100vh;
   padding-top: 70px;
@@ -289,6 +300,10 @@ input[type='submit'] {
   min-width: 125px;
 }
 
+.header-switch-drop-label {
+  margin-left: 8px;
+}
+
 /* FIXED NAVIGATION */
 
 .navbar-fixed-top {
@@ -341,13 +356,46 @@ input[type='submit'] {
   }
 }
 
-.breadcrumb-side {
+.breadcrumb-side-left,
+.breadcrumb-side-right {
   -webkit-box-flex: 0;
-  -ms-flex: 0 0 50%;
-  flex: 0 0 50%;
-  max-width: 50%;
+  -ms-flex: 0 0 100%;
+  flex: 0 0 100%;
+  max-width: 100%;
   padding-left: 15px;
   padding-right: 15px;
+}
+
+@media only screen and (min-width: 768px) {
+  .breadcrumb-side-left {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 25%;
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+
+  .breadcrumb-side-right {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 75%;
+    flex: 0 0 75%;
+    max-width: 75%;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .breadcrumb-side-left,
+  .breadcrumb-side-right {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: '';
+  padding: 0;
+  color: transparent;
 }
 
 .breadcrumb-item {
@@ -420,5 +468,169 @@ input[type='submit'] {
   .unread-indicator {
     bottom: 20px;
     right: -8px;
+  }
+}
+
+/* ------ CATEGORY HEADER NAVIGATION ------ */
+
+.header-wrapper-left,
+.header-wrapper-right {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+@media only screen and (min-width: 768px) {
+
+  .header-wrapper-left,
+  .header-wrapper-right {
+    flex-wrap: nowrap;
+    margin-bottom: 0px;
+  }
+
+  .header-wrapper-left {
+    justify-content: flex-start;
+  }
+
+  .header-wrapper-right {
+    justify-content: flex-end;
+  }
+
+}
+
+/* ------ PERSONS ------ */
+
+.table-no-wrap,
+.table-no-wrap-left,
+.table-no-wrap-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 8px;
+}
+
+@media only screen and (min-width: 768px) {
+
+  .table-no-wrap-left {
+    justify-content: left;
+  }
+
+  .table-no-wrap-right {
+    justify-content: right;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .mobile-no-show {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .tablet-no-show {
+    display: none;
+  }
+}
+
+.persons-specs {
+  margin: 0;
+  font-size: 12px;
+}
+
+@media only screen and (min-width: 992px) {
+  .persons-specs {
+    font-size: 14px;
+  }
+}
+
+.persons-name {
+  margin: 0 0 6px;
+  font-size: 16px;
+}
+
+@media only screen and (max-width: 768px) {
+  .persons-name {
+    text-align: center;
+  }
+}
+
+.persons-badge-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+@media only screen and (min-width: 768px) {
+  .persons-badge-wrapper {
+    justify-content: flex-start;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .table-sticky-header {
+    background-color: #FFFFFF;
+    position: sticky;
+    top: 100px;
+  }
+}
+
+.identity-main-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+@media only screen and (max-width: 768px) {
+  .identity-main-wrapper {
+    display: block;
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .persons-table-cell {
+    display: block;
+    max-width: 100%;
+  }
+}
+
+.persons-image-wrapper > img {
+  width: auto;
+  height: auto;
+  max-height: 75px;
+}
+
+@media only screen and (max-width: 768px) {
+
+  .persons-image-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 16px;
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  .persons-image-wrapper > img {
+    max-height: 150px;
+    height: 150px;
+  }
+}
+
+.persons-identification-wrapper {
+  margin-left: 8px;
+  max-width: 250px;
+}
+
+@media only screen and (max-width: 768px) {
+  .persons-identification-wrapper {
+    display: block;
+    width: 100%;
+    margin: 0 auto;
   }
 }

@@ -17,7 +17,7 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 function personRead($personId): array
 {
     global $database, $user, $text;
-    $sql = "SELECT * FROM ".DB_PREFIX."person WHERE id = $personId AND ".$user['sqlDeleted']." AND ".$user['sqlDeleted'];
+    $sql = 'SELECT * FROM '.DB_PREFIX.'person WHERE id = $personId AND '.$user['sqlDeleted'].' AND '.$user['sqlDeleted'];
     $query = mysqli_query($database, $sql);
     if (mysqli_num_rows($query) > 0) {
         $person = mysqli_fetch_assoc($query);
@@ -49,7 +49,7 @@ function personList($where = 1, $order = 1): array
     if (mb_strlen($order) < 1) {
         $order = 1;
     }
-    $sql = "SELECT * FROM ".DB_PREFIX."person WHERE ($where) AND ".$user['sqlDeleted']." AND ".$user['sqlSecret']." ORDER BY $order";
+    $sql = 'SELECT * FROM '.DB_PREFIX.'person WHERE ($where) AND '.$user['sqlDeleted'].' AND '.$user['sqlSecret'].' ORDER BY $order';
     $query = mysqli_query($database, $sql);
     //echo mysqli_num_rows($query);
     if (mysqli_num_rows($query) > 0) {
@@ -87,6 +87,35 @@ function personCheckboxUpdate($id, $field, $checkbox): void
             $sqlUpdate = 'update '.DB_PREFIX.'person set '.$field.'=CURRENT_TIMESTAMP where id='.$id;
         }
     }
-    Debugger::log('PERSON.'.$field."=".$checkbox." >> ".$sqlUpdate);
+    Debugger::log('PERSON.'.$field.'='.$checkbox.' >> '.$sqlUpdate);
     mysqli_query($database, $sqlUpdate);
+}
+
+function personDelete($id): void
+{
+    global $database,$user;
+    if ($user['aclPerson']>0) {
+        authorizedAccess(1, 11, $id);
+        //TODO deleted to timestamp
+        $sqlUpdate = 'update '.DB_PREFIX.'person set deleted=1 where id='.$id;
+        mysqli_query($database, $sqlUpdate);
+        Debugger::log('PERSON.'.$id.' DELETED '.$sqlUpdate);
+        deleteAllUnread(1, $id);
+    } else {
+        unauthorizedAccess(1, 11, $id);
+    }
+}
+
+function personRestore($id): void
+{
+    global $database,$user;
+    if ($user['aclRoot']>0) {
+        authorizedAccess(1, 17, $id);
+        $sqlUpdate = 'update '.DB_PREFIX.'person set deleted=0 where id='.$id;
+        mysqli_query($database, $sqlUpdate);
+        Debugger::log('PERSON.'.$id.' RESTORED '.$sqlUpdate);
+        deleteAllUnread(1, $id);
+    } else {
+        unauthorizedAccess(1, 17, $id);
+    }
 }

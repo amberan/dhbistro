@@ -111,9 +111,9 @@ mainMenu();
         <th>#</th>
 '.($sportraits ? '<th>Portrét</th>' : '').
 ($ssymbols ? '<th>Symbol</th>' : '').'
-        <th>Jméno <a href="persons.php?sort=surname">&#8661;</a></th>
+        <th>Jméno </th>
         <th>Telefon</th>
-        <th>Vytvořeno <a href="persons.php?sort=regdate">&#8661;</a>/ Změněno <a href="persons.php?sort=datum">&#8661;</a></th>
+        <th>Vytvořeno / Změněno</th>
         <th style="min-width:100px">Status</th>
 	</tr>
 </thead>

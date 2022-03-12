@@ -166,16 +166,44 @@ $text['aktualitaobnovena'] = 'Aktualita obnovena';
 $text['aktualitaneobnovena'] = 'Aktualitu se nepodařilo obnovit';
 
 // FILTERS
-$text['iuzavrene'] = 'I uzavřené.';
-$text['jennove'] = 'Jen nepřečtené.';
-$text['jentajne'] = 'Jen tajné.';
-$text['iarchiv'] = 'I archiv.';
+$text['jennove'] = 'Jen nepřečtené';
+$text['iuzavrene'] = 'I uzavřené';
+$text['imrtve'] = 'I mrtvé';
+$text['iarchiv'] = 'I archiv';
+$text['itajne'] = 'I tajné';
 $text['archivovano'] = 'archivováno';
 $text['utajeno'] = 'utajeno';
 $text['smazany'] = 'smazáný';
 $text['smazane'] = 'Smazané';
 $text['portrety'] = 'Portréty';
 $text['poznamky'] = 'Poznámky';
+$text['symboly'] = 'Symboly';
+$text['strana'] = 'Strana';
+$text['specializace'] = 'Specializace';
+$text['vse'] = 'vše';
+$text['neznama'] = 'neznámá';
+$text['prvni'] = 'první';
+$text['druha'] = 'druhá';
+$text['treti'] = 'třetí';
+$text['ctvrta'] = 'čtvrtá';
+$text['pata'] = 'pátá';
+$text['sesta'] = 'šestá';
+$text['sedma'] = 'sedmá';
+$text['mimokategorie'] = 'mimo kategorie';
+$text['svetlo'] = 'světlo';
+$text['tma'] = 'tma';
+$text['clovek'] = 'člověk';
+$text['bilymag'] = 'bilý mág';
+$text['cernymag'] = 'černý mág';
+$text['lecitel'] = 'léčitel';
+$text['obraten'] = 'obrateň';
+$text['upir'] = 'upír';
+$text['vlkodlak'] = 'vlkodlak';
+$text['vedma'] = 'vědma';
+$text['zarikavac'] = 'zaříkávač';
+$text['vykladac'] = 'vykladač';
+$text['jasnovidec'] = 'jasnovidec';
+
 
 // CASES
 $text['pridatpripad'] = 'Přidat případ';
@@ -202,8 +230,29 @@ $text['opravduobnovitskupinu'] = 'Opravdu obnovit skupinu?';
 $text['aktivni'] = 'aktivní';
 
 //REPORTS
-$text['vyslychajici'] = 'vyslíchaný';
+$text['vyslychany'] = 'vyslíchaný';
 $text['vyslychajici'] = 'vyslíchající';
 $text['velitel'] = 'velitel zásahu';
 $text['zatceny'] = 'zatčený';
 $text['pritomny'] = 'přítomný';
+
+//PERSONS
+$text['mrtvy'] = 'mrtvý';
+$text['upravitosobu'] = 'Upravit osobu';
+$text['smazatosobu'] = 'Smazat osobu';
+$text['obnovitosobu'] = 'Obnovit osobu';
+$text['opravdusmazatosobu'] = 'Opravdu smazat osobu?';
+$text['opravduobnovitosobu'] = 'Opravdu obnovit osobu?';
+$text['pridatosobu'] = 'přidat osobu';
+
+//SYMBOLS
+$text['neprirazenesymboly'] = 'nepřiřazené symboly';
+$text['vyhledatsymbol'] = 'vyhledat symbol';
+
+//PERSONS
+$text['telefon'] = 'Telefon';
+$text['definitions'] = 'Zařazení';
+$text['kontakty'] = 'Kontakty';
+$text['kategorie'] = 'Kategorie';
+$text['strana'] = 'Strana';
+$text['specializace'] = 'Specializace';
