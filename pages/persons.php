@@ -1,12 +1,16 @@
 <?php
 
-require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 use Tracy\Debugger;
 
 Debugger::enable(Debugger::DETECT, $config['folder_logs']);
-latteDrawTemplate("header");
 
-$latteParameters['title'] = 'Osoby';
+
+if (isset($URL[2], $URL[3]) && $URL[2] == 'delete' && is_numeric($URL[3])) {
+    personDelete($URL[3]);
+}
+if (isset($URL[2], $URL[3]) && $URL[2] == 'restore' && is_numeric($URL[3])) {
+    personRestore($URL[3]);
+}
 
     // DELETE
     if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete']) && $user['aclPerson']>1) {
@@ -184,215 +188,55 @@ $latteParameters['title'] = 'Osoby';
         header('Location: editperson.php?rid='.$_GET['personid']);
     }
 
-    authorizedAccess(1, 1, 0);
-    mainMenu();
-        $customFilter = custom_Filter(1);
-    sparklets('<strong>osoby</strong>', '<a href="newperson.php">přidat osobu</a>; <a href="symbols.php" '.(searchTable(7) ? ' class="unread"' : '').'>nepřiřazené symboly</a>; <a href="symbol_search.php">vyhledat symbol</a>');
-    // zpracovani filtru
-    if (!isset($customFilter['sportraits'])) {
-        $sportraits = false;
-    } else {
-        $sportraits = $customFilter['sportraits'];
-    }
-    if (!isset($customFilter['ssymbols'])) {
-        $ssymbols = false;
-    } else {
-        $ssymbols = $customFilter['ssymbols'];
-    }
-    if (!isset($customFilter['fdead'])) {
-        $fdead = 0;
-    } else {
-        $fdead = 1;
-    }
-    if (!isset($customFilter['farchiv'])) {
-        $farchiv = 0;
-    } else {
-        $farchiv = 1;
-    }
-    if (!isset($customFilter['sec'])) {
-        $filterSec = 0;
-    } else {
-        $filterSec = 1;
-    }
-        if (!isset($customFilter['new'])) {
-            $fNew = 0;
-        } else {
-            $fNew = 1;
-            $filterUnread = ' AND '.DB_PREFIX.'unread.id is not null ';
-        }
-    if (!isset($customFilter['fspec'])) {
-        $fspec = 0;
-    } else {
-        $fspec = $customFilter['fspec'];
-    }
-    if (!isset($customFilter['fside'])) {
-        $fside = 0;
-    } else {
-        $fside = $customFilter['fside'];
-    }
-    if (!isset($customFilter['fpow'])) {
-        $fpow = 0;
-    } else {
-        $fpow = $customFilter['fpow'];
-    }
-    switch ($filterSec) {
-        case 0: $fsql_sec = ''; break;
-        case 1: $fsql_sec = ' AND '.DB_PREFIX.'person.secret>0 '; break;
-        default: $fsql_sec = '';
-    }
-    switch ($fdead) {
-        case 0: $fsql_dead = ' AND '.DB_PREFIX.'person.dead=0 '; break;
-        case 1: $fsql_dead = ''; break;
-        default: $fsql_dead = ' AND '.DB_PREFIX.'person.dead=0 ';
-    }
-    switch ($farchiv) {
-        case 0: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1))  '; break;
-        case 1: $fsql_archiv = ''; break;
-        default: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1)) ';
-    }
-        switch ($fspec) {
-        case 0: $fsql_fspec = ''; break;
-        case 1: $fsql_fspec = ' AND '.DB_PREFIX.'person.spec=0 '; break;
-        case 2: $fsql_fspec = ' AND '.DB_PREFIX.'person.spec=1 '; break;
-        case 3: $fsql_fspec = ' AND '.DB_PREFIX.'person.spec=2 '; break;
-        case 4: $fsql_fspec = ' AND '.DB_PREFIX.'person.spec=3 '; break;
-        case 5: $fsql_fspec = ' AND '.DB_PREFIX.'person.spec=4 '; break;
-        case 6: $fsql_fspec = ' AND '.DB_PREFIX.'person.spec=5 '; break;
-        case 7: $fsql_fspec = ' AND '.DB_PREFIX.'person.spec=6 '; break;
-        case 8: $fsql_fspec = ' AND '.DB_PREFIX.'person.spec=7 '; break;
-        case 9: $fsql_fspec = ' AND '.DB_PREFIX.'person.spec=8 '; break;
-        case 10: $fsql_fspec = ' AND '.DB_PREFIX.'person.spec=9 '; break;
-        case 11: $fsql_fspec = ' AND '.DB_PREFIX.'person.spec=10 '; break;
-        default: $fsql_fspec = '';
-    }
-    switch ($fside) {
-        case 0: $fsql_fside = ''; break;
-        case 1: $fsql_fside = ' AND '.DB_PREFIX.'person.side=0 '; break;
-        case 2: $fsql_fside = ' AND '.DB_PREFIX.'person.side=1 '; break;
-        case 3: $fsql_fside = ' AND '.DB_PREFIX.'person.side=2 '; break;
-        case 4: $fsql_fside = ' AND '.DB_PREFIX.'person.side=3 '; break;
-        default: $fsql_fside = '';
-    }
-    switch ($fpow) {
-        case 0: $fsql_fpow = ''; break;
-        case 1: $fsql_fpow = ' AND '.DB_PREFIX.'person.power=0 '; break;
-        case 2: $fsql_fpow = ' AND '.DB_PREFIX.'person.power=1 '; break;
-        case 3: $fsql_fpow = ' AND '.DB_PREFIX.'person.power=2 '; break;
-        case 4: $fsql_fpow = ' AND '.DB_PREFIX.'person.power=3 '; break;
-        case 5: $fsql_fpow = ' AND '.DB_PREFIX.'person.power=4 '; break;
-        case 6: $fsql_fpow = ' AND '.DB_PREFIX.'person.power=5 '; break;
-        case 7: $fsql_fpow = ' AND '.DB_PREFIX.'person.power=6 '; break;
-        case 8: $fsql_fpow = ' AND '.DB_PREFIX.'person.power=7 '; break;
-        case 9: $fsql_fpow = ' AND '.DB_PREFIX.'person.power=8 '; break;
-        default: $fsql_fpow = '';
-    }
-    // formular filtru
-    function filter(): void
-    {
-        global $sportraits, $ssymbols, $filterSec, $fNew, $fdead, $farchiv, $user, $fspec, $fside, $fpow;
-        echo '<div id="filter-wrapper"><form action="persons.php" method="get" id="filter">
-	<fieldset>
-	  <legend>Filtr</legend>
-	<p> Strana:
-	<select name="fside">
-	<option value="0"'.($fside == 0 ? ' selected="selected"' : '').'>vše</option>
-	<option value="1"'.($fside == 1 ? ' selected="selected"' : '').'>neznámá</option>
-	<option value="2"'.($fside == 2 ? ' selected="selected"' : '').'>světlo</option>
-	<option value="3"'.($fside == 3 ? ' selected="selected"' : '').'>tma</option>
-	<option value="4"'.($fside == 4 ? ' selected="selected"' : '').'>člověk</option>
-	</select>
-	 Specializace:
-	<select name="fspec">
-	<option value="0"'.($fspec == 0 ? ' selected="selected"' : '').'>vše</option>
-	<option value="1"'.($fspec == 1 ? ' selected="selected"' : '').'>neznámá</option>
-	<option value="2"'.($fspec == 2 ? ' selected="selected"' : '').'>bílý mág</option>
-	<option value="3"'.($fspec == 3 ? ' selected="selected"' : '').'>černý mág</option>
-	<option value="4"'.($fspec == 4 ? ' selected="selected"' : '').'>léčitel</option>
-	<option value="5"'.($fspec == 5 ? ' selected="selected"' : '').'>obrateň</option>
-	<option value="6"'.($fspec == 6 ? ' selected="selected"' : '').'>upír</option>
-	<option value="7"'.($fspec == 7 ? ' selected="selected"' : '').'>vlkodlak</option>
-	<option value="8"'.($fspec == 8 ? ' selected="selected"' : '').'>vědma</option>
-	<option value="9"'.($fspec == 9 ? ' selected="selected"' : '').'>zaříkávač</option>
-	<option value="10"'.($fspec == 10 ? ' selected="selected"' : '').'>vykladač</option>
-	<option value="11"'.($fspec == 11 ? ' selected="selected"' : '').'>jasnovidec</option>
-	</select>
-	 Kategorie:
-	<select name="fpow">
-	<option value="0"'.($fpow == 0 ? ' selected="selected"' : '').'>vše</option>
-	<option value="1"'.($fpow == 1 ? ' selected="selected"' : '').'>neznámá</option>
-	<option value="2"'.($fpow == 2 ? ' selected="selected"' : '').'>první</option>
-	<option value="3"'.($fpow == 3 ? ' selected="selected"' : '').'>druhá</option>
-	<option value="4"'.($fpow == 4 ? ' selected="selected"' : '').'>třetí</option>
-	<option value="5"'.($fpow == 5 ? ' selected="selected"' : '').'>čtvrtá</option>
-	<option value="6"'.($fpow == 6 ? ' selected="selected"' : '').'>pátá</option>
-	<option value="7"'.($fpow == 7 ? ' selected="selected"' : '').'>šestá</option>
-	<option value="8"'.($fpow == 8 ? ' selected="selected"' : '').'>sedmá</option>
-	<option value="9"'.($fpow == 9 ? ' selected="selected"' : '').'>mimo kategorie</option>
-	</select></p>
-
-	<table class="filter">
-	<tr class="filter">
-	<td class="filter"><input type="checkbox" name="sportraits" value="1"'.($sportraits ? ' checked="checked"' : '').'> Zobrazit portréty.</td>
-	<td class="filter"><input type="checkbox" name="fdead" value="1"'.($fdead == 1 ? ' checked="checked"' : '').'> Zobrazit i mrtvé.</td>
-        <td class="filter"><input type="checkbox" name="new" value="1"'.($fNew == 1 ? ' checked="checked"' : '').'> Zobrazit jen nové.</td>
-	</tr>
-        <tr class="filter">
-	<td class="filter"><input type="checkbox" name="ssymbols" value="1"'.($ssymbols ? ' checked="checked"' : '').'> Zobrazit symboly.</td>
-	<td class="filter"><input type="checkbox" name="farchiv" value="1"'.($farchiv != null ? ' checked="checked"' : '').'> Zobrazit i archiv.</td>';
-        if ($user['aclSecret']) {
-            echo '<td class="filter"><input type="checkbox" name="sec" value="sec" class="checkbox"'.($filterSec == 1 ? ' checked="checked"' : '').' /> Jen tajné.</td></tr></table>';
-        } else {
-            echo '</tr></table>';
-        }
-        echo '
-	  <div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
-	</fieldset>
-</form></div><!-- end of #filter-wrapper -->';
-    }
-    filter();
-
+//FILTER
 if (isset($_GET['sort'])) {
     sortingSet('person', $_GET['sort'], 'person');
 }
+if (isset($_POST['filter']) && sizeof($_POST['filter']) > 0) {
+    filterSet('person', @$_POST['filter']);
+}
+$filter = filterGet('person');
+$sqlFilter = DB_PREFIX."person.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."person.secret<=".$user['aclSecret'];
+if (!isset($filter['archived'])) {
+    $sqlFilter .= ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1))  ';
+}
+if (!isset($filter['dead'])) {
+    $sqlFilter .= ' AND '.DB_PREFIX.'person.dead = 0 ';
+}
+if (!isset($filter['secret'])) {
+    $sqlFilter .= ' AND '.DB_PREFIX.'person.secret = 0 ';
+}
+if (isset($filter['new'])) {
+    $sqlFilter .= ' AND '.DB_PREFIX.'unread.id is not null ';
+}
+if (@$filter['classSelect']) {
+    $sqlFilter .= ' AND '.DB_PREFIX.'person.spec = '.($filter['classSelect']-1);
+}
+if (@$filter['categorySelect']) {
+    $sqlFilter .= ' AND '.DB_PREFIX.'person.power = '.($filter['categorySelect']-1);
+}
+if (@$filter['sideSelect']) {
+    $sqlFilter .= ' AND '.DB_PREFIX.'person.side = '.($filter['sideSelect']-1);
+}
+$filter['side'] = filterSide();
+$filter['category'] = filterCategory();
+$filter['class'] = filterClass();
+$latteParameters['filter'] = $filter;
 
-    $sql = "SELECT ".DB_PREFIX."unread.id as unread, ".DB_PREFIX."person.regdate as date_created, ".DB_PREFIX."person.datum as date_changed, ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.archived, ".DB_PREFIX."person.dead AS 'dead', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol'
-    FROM ".DB_PREFIX."person
-    LEFT JOIN  ".DB_PREFIX."unread on  ".DB_PREFIX."person.id =  ".DB_PREFIX."unread.idrecord AND  ".DB_PREFIX."unread.idtable = 1 and  ".DB_PREFIX."unread.iduser=".$user['userId']."
-    WHERE ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret<=".$user['aclSecret'].$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow.$filterUnread." GROUP BY ".DB_PREFIX."person.id ".sortingGet('person');
 
-    $res = mysqli_query($database, $sql);
-    if (mysqli_num_rows($res)) {
-        echo '<div id="obsah">
-<table>
-<thead>
-	<tr>
-'.($sportraits ? '<th>Portrét</th>' : '').
-($ssymbols ? '<th>Symbol</th>' : '').'
-	  <th>Jméno <a href="persons.php?sort=surname">&#8661;</a></th>
-	  <th>Telefon</th>
-	  <th>Vytvořeno <a href="persons.php?sort=regdate">&#8661;</a>/ Změněno <a href="persons.php?sort=datum">&#8661;</a></th>
-      <th style="min-width:100px">Status</th>
-	  <th>Akce</th>
-	</tr>
-</thead>
-<tbody>
-';
-        $even = 0;
-        while ($rec = mysqli_fetch_assoc($res)) {
-            echo '<tr class="'.($rec['unread'] ? ' unread_record' : ($even % 2 == 0 ? 'even' : 'odd')).'">
-                        '.($sportraits ? '<td><img src="file/portrait/'.$rec['id'].'" alt="" /></td>' : '').'
-                        '.($ssymbols ? '<td><img src="file/symbol/'.$rec['symbol'].'" alt="" /></td>' : '').'
-                        <td>'.($rec['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a></span>' : '<a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a>').'</td>
-						<td><a href="tel:'.str_replace(' ', '', $rec['phone']).'">'.$rec['phone'].'</a></td>
-						<td>'.webdate($rec['date_created']).' / '.webdate($rec['date_changed']).'</td>
-                        <td>'.($rec['archived'] > 2 ? 'Archivovaný' : '').''.($rec['dead'] == 1 ? ' Mrtvý' : '').''.($rec['secret'] == 1 ? ' Tajný' : '').'</td>
-                        '.($user['aclPerson'] ? '	<td><a href="editperson.php?rid='.$rec['id'].'">upravit</a> | <a href="persons.php?delete='.$rec['id'].'" onclick="'."return confirm('Opravdu smazat osobu &quot;".implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])])."&quot;?');".'">smazat</a></td>' : '<td><a href="newnote.php?rid='.$rec['id'].'&idtable=5">přidat poznámku</a>').'
-                        </tr>';
-            $even++;
-        }
-//        }
-        echo '</tbody>
-</table>
-</div>';
-    }
-    latteDrawTemplate("footer");
+$sql = "SELECT ".DB_PREFIX."person.deleted, ".DB_PREFIX."person.spec, ".DB_PREFIX."person.power, ".DB_PREFIX."person.side,".DB_PREFIX."unread.id as unread, ".DB_PREFIX."person.regdate as date_created, ".DB_PREFIX."person.datum as date_changed, ".DB_PREFIX."person.phone, ".DB_PREFIX."person.archived, ".DB_PREFIX."person.dead , ".DB_PREFIX."person.secret , ".DB_PREFIX."person.name , ".DB_PREFIX."person.surname , ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol
+FROM ".DB_PREFIX."person
+LEFT JOIN  ".DB_PREFIX."unread on  ".DB_PREFIX."person.id =  ".DB_PREFIX."unread.idrecord AND  ".DB_PREFIX."unread.idtable = 1 and  ".DB_PREFIX."unread.iduser=".$user['userId']."
+WHERE ".$sqlFilter."
+GROUP BY ".DB_PREFIX."person.id ".sortingGet('person');
+
+$personList = mysqli_query($database, $sql);
+
+if (mysqli_num_rows($personList) > 0) {
+    $latteParameters['person_record'] = $personList;
+} else {
+    $latteParameters['warning'] = $text['prazdnyvypis'];
+}
+
+latteDrawTemplate('sparklet');
+latteDrawTemplate('persons');

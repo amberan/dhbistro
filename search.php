@@ -21,6 +21,9 @@ if (sizeof(@$_POST['filter']) > 0) {
 }
 $filter = filterGet('search');
 $sqlFilter = "deleted in (0,".$user['aclRoot'].") AND secret<=".$user['aclSecret'];
+if (!isset($filter['secret'])) {
+    $sqlFilter .= ' AND secret = 0 ';
+}
 
 //TODO search legacy overload
 $searchedfor = $filter['search'];
@@ -40,7 +43,11 @@ $latteParameters['filter'] = $filter;
 <input type="checkbox" name="filter[archived]" <?php if (isset($filter['archived']) and $filter['archived'] == 'on') {
     echo " checked";
 } ?> onchange="this.form.submit()"/>Zobrazit i archiv (uzavřené případy, archivovaná hlášení, mrtvé a archivované osoby).
-	  <div id="filtersubmit"><input type="submit" name="filter[submit]" value="Vyhledat" onclick="this.form.submit()"/></div>
+<input type="checkbox" name="filter[secret]" <?php if (isset($filter['secret']) and $filter['secret'] == 'on') {
+    echo " checked";
+} ?> onchange="this.form.submit()"/>Zobrazit i tajné.
+
+<div id="filtersubmit"><input type="submit" name="filter[submit]" value="Vyhledat" onclick="this.form.submit()"/></div>
 	</fieldset>
 </form>
 </div>

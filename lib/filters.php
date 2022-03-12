@@ -29,10 +29,8 @@ function sortingSet($object, $column, $linkedTable = null): void
 /**
  * get current preference for sorting output for current user.
  *
- * @param string object - type of object to be sorted
- * @param string linkedTable - db name of table where the sorting column is located
- * @param mixed      $object
- * @param mixed|null $linkedTable
+ * @param mixed $object - type of object to be sorted
+ * @param mixed|null $linkedTable - db name of table where the sorting column is located
  */
 function sortingGet($object, $linkedTable = null): string
 {
@@ -52,10 +50,8 @@ function sortingGet($object, $linkedTable = null): string
 /**
  * saves filter preference for "object" in serialized field of "data" for current user.
  *
- * @param string object - type of object to be filtered
- * @param array data - array of key/value for specific filter
- * @param mixed $object
- * @param mixed $data
+ * @param mixed $object - type of object to be filtered
+ * @param mixed $data - array of key/value for specific filter
  */
 function filterSet($object, $data): void
 {
@@ -76,8 +72,7 @@ function filterSet($object, $data): void
 /**
  * get value for "object" type of filter for current user.
  *
- * @param string object - type of object to be filtered
- * @param mixed $object
+ * @param mixed $object - type of object to be filtered
  */
 function filterGet($object)//:array
 {
@@ -92,4 +87,67 @@ function filterGet($object)//:array
     }
 
     return $filter;
+}
+
+function filterSide($side = null)
+{
+    global $text;
+    $list[0] = $text['vse'];
+    $list[1] = $text['neznama'];
+    $list[2] = $text['svetlo'];
+    $list[3] = $text['tma'];
+    $list[4] = $text['clovek'];
+    $return = $list;
+    if (isset($side) && is_numeric($side)) {
+        $return = $list[$side];
+    } elseif (isset($side) && is_string($side)) {
+        $return = array_search($side, $list);
+    }
+    return $return;
+}
+
+function filterCategory($category = null)
+{
+    global $text;
+    $list[0] = $text['vse'];
+    $list[1] = $text['neznama'];
+    $list[2] = $text['prvni'];
+    $list[3] = $text['druha'];
+    $list[4] = $text['treti'];
+    $list[5] = $text['ctvrta'];
+    $list[6] = $text['pata'];
+    $list[7] = $text['sesta'];
+    $list[8] = $text['sedma'];
+    $list[9] = $text['mimokategorie'];
+    $return = $list;
+    if (isset($category) && is_numeric($category)) {
+        $return = $list[$category];
+    } elseif (isset($category) && is_string($category)) {
+        $return = array_search($category, $list);
+    }
+    return $return;
+}
+
+function filterClass($class = null)
+{
+    global $text;
+    $list[0] = $text['vse'];
+    $list[1] = $text['neznama'];
+    $list[2] = $text['bilymag'];
+    $list[3] = $text['cernymag'];
+    $list[4] = $text['lecitel'];
+    $list[5] = $text['obraten'];
+    $list[6] = $text['upir'];
+    $list[7] = $text['vlkodlak'];
+    $list[8] = $text['vedma'];
+    $list[9] = $text['zarikavac'];
+    $list[10] = $text['vykladac'];
+    $list[11] = $text['jasnovidec'];
+    $return = $list;
+    if (isset($class) && is_numeric($class)) {
+        $return = $list[$class];
+    } elseif (isset($class) && is_string($class)) {
+        $return = array_search($class, $list);
+    }
+    return $return;
 }

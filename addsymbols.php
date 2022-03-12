@@ -60,7 +60,7 @@ $latteParameters['title'] = 'Uložení změn';
             mysqli_query($database, "UPDATE ".DB_PREFIX."symbol SET assigned=1 WHERE id=".$_POST['symbolid']);
             mysqli_query($database, "UPDATE ".DB_PREFIX."person SET symbol=".$_POST['symbolid']." WHERE id=".$_POST['person']);
             mainMenu();
-            sparklets('<a href="./persons.php">osoby</a> &raquo; <a href="./symbols.php">nepřiřazené symboly</a>');
+            sparklets('<a href="/persons/">osoby</a> &raquo; <a href="./symbols.php">nepřiřazené symboly</a>');
             $sql_p = "SELECT name, surname FROM ".DB_PREFIX."person WHERE id=".$_POST['person'];
             $res_p = mysqli_query($database, $sql_p);
             $rec_p = mysqli_fetch_assoc($res_p);

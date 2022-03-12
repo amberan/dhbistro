@@ -1,11 +1,11 @@
         <div class="container-fluid breadcrumbs-fixed-top py-1" id="sparklets">
             <div class="row">
-                <div class="breadcrumb-side text-left">
+                <div class="breadcrumb-side-left text-left">
                     <p class="breadcrumb-item">
                         <span class="text-muted">{if @$subtitle}{$subtitle} / {/if}</span><span class="breadcrumb-item active">{$title}</span>
                     </p>
                 </div>
-                <div class="breadcrumb-side text-right">
+                <div class="breadcrumb-side-right text-right">
                     {if @$actions}
                         {foreach $actions as $action}
                             <a class="btn btn-sm btn-primary breadcrumb-item" href="{$action[0]}">{$action[1]}</a>

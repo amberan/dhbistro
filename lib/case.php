@@ -21,12 +21,11 @@ function casesAssignedTo($userid): array
 		FROM ".DB_PREFIX."c2s, ".DB_PREFIX."case
 		WHERE ".DB_PREFIX."case.id=".DB_PREFIX."c2s.idcase AND ".DB_PREFIX."case.status=0 AND ".DB_PREFIX."c2s.idsolver=".$userid."
         ORDER BY ".DB_PREFIX."case.title ASC";
-    $casesList = mysqli_query($database, $casesListSql);
-
-    while ($unfinishedcase = mysqli_fetch_assoc($casesList)) {
-        $unfinishedcases[] = [$unfinishedcase['id'], $unfinishedcase['title']];
+    if ($casesList = mysqli_query($database, $casesListSql)) {
+        while ($unfinishedcase = mysqli_fetch_assoc($casesList)) {
+            $unfinishedcases[] = [$unfinishedcase['id'], $unfinishedcase['title']];
+        }
     }
-
     return @$unfinishedcases;
 }
 

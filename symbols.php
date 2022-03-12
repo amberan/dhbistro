@@ -91,7 +91,7 @@ $latteParameters['title'] = 'Symboly';
     authorizedAccess(7, 1, 0);
     mainMenu();
     deleteUnread(7, 'none');
-    sparklets('<a href="persons.php">osoby</a> &raquo; <strong>nepřiřazené symboly</strong>', '<a href="newsymbol.php">nový symbol</a>; <a href="symbol_search.php">vyhledat symbol</a>');
+    sparklets('<a href="/persons/">osoby</a> &raquo; <strong>nepřiřazené symboly</strong>', '<a href="newsymbol.php">nový symbol</a>; <a href="symbol_search.php">vyhledat symbol</a>');
 
     if (sizeof(@$_POST['filter']) > 0) {
         filterSet('symbol', @$_POST['filter']);

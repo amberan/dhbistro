@@ -82,6 +82,13 @@ if (isset($user)) {
     } elseif ($user['aclRoot'] > 0 && $URL[1] == 'backup') {
         $latteParameters['title'] = $text['zalohovani'];
         require_once SERVER_ROOT.'/pages/backup.php';
+    } elseif ($URL[1] == 'persons') {
+        $latteParameters['title'] = $text['osoby'];
+        $latteParameters['actions'][] = ["/persons", $text['osoby']];
+        $latteParameters['actions'][] = ["/newperson.php", $text['pridatosobu']];
+        $latteParameters['actions'][] = ["/symbols.php", $text['neprirazenesymboly']];
+        $latteParameters['actions'][] = ["/symbol_search.php", $text['vyhledatsymbol']];
+        require_once SERVER_ROOT.'/pages/persons.php';
     } elseif ($URL[1] == 'users') {
         if ($user['aclUser'] < 1 && $user['aclGamemaster'] < 1) {
             unauthorizedAccess(8, 1, $URL[3]);

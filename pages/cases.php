@@ -96,6 +96,9 @@ switch (@$filter['stat']) {
     case 'on': $sqlFilter .= ' AND '.DB_PREFIX.'case.status in (0,1)'; break;
     default: $sqlFilter .= ' AND '.DB_PREFIX.'case.status=0 ';
 }
+if (@$filter['secret'] != 'on') {
+    $sqlFilter .= ' AND '.DB_PREFIX.'case.secret = 0 ';
+}
 if (@$filter['new']) {
     $sqlFilter .= ' AND '.DB_PREFIX.'unread.id is not null ';
 }
