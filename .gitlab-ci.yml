@@ -12,6 +12,8 @@ variables:
   SAST_EXPERIMENTAL_FEATURES: 'true'
   SAST_DEFAULT_ANALYZERS: nodejs-scan,eslint,phpcs-security-audit
   SEARCH_MAX_DEPTH: 10
+  TEST_FOLDER: '~/cz.prazskahlidka.test.nh/  ~/cz.prazskahlidka.test.dh/' # ~/cz.prazskahlidka.test.i/'
+  PROD_FOLDER: '~/cz.prazskahlidka.nhbistro/  ~/cz.prazskahlidka.dhbistro/' # ~/cz.prazskahlidka.ibistro'
 
 stages:
 - build
@@ -27,13 +29,13 @@ build:
   script:
   - composer install --ignore-platform-reqs
   - composer update --ignore-platform-reqs
-  - tar czf build.tgz --exclude .git --exclude bistro.tmp .
+  - tar czf bistro-$CI_PIPELINE_ID.tgz --exclude .git --exclude bistro.tmp .
   artifacts:
     paths:
-    - build.tgz
+    - bistro-$CI_PIPELINE_ID.tgz
     expire_in: 1 days
   rules:
-  - when: always
+    - when: always
 
 code_quality:
   stage: test
@@ -42,11 +44,9 @@ code_quality:
     paths:
     - gl-code-quality-report.json
   rules:
-  - if: "$CODE_QUALITY_DISABLED"
-    when: never
-  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-  - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
-  - if: "$CI_COMMIT_TAG"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_TAG
 
 sast:
   stage: test
@@ -55,85 +55,63 @@ sast:
     SAST_EXCLUDED_ANALYZERS: bandit, brakeman, flawfinder, gosec, kubesec, nodejs-scan,
       pmd-apex, security-code-scan, sobelow, spotbugs
 
-deploy alembiq:
+deploy test:
   stage: deploy
   image: alpine
   needs:
-  - build
+    - build
   allow_failure: true
   before_script:
-  - apk add openssh-client
-  - eval $(ssh-agent -s)
-  - cat $SSH_ALEMBIQ | tr -d '\r' | ssh-add -
-  - mkdir -p ~/.ssh
-  - chmod 700 ~/.ssh
-  - ssh-keyscan alembiq.net >> ~/.ssh/known_hosts
+    - apk add openssh-client
+    - eval $(ssh-agent -s)
+    - cat $TEST_SSH | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan alembiq.net >> ~/.ssh/known_hosts
   script:
-  - scp build.tgz gitlab-ci@alembiq.net:.
-  - ssh gitlab-ci@alembiq.net "mkdir $ALEMBIQ_FOLDER/$CI_JOB_ID
-    && tar zxf build.tgz -C $ALEMBIQ_FOLDER/$CI_JOB_ID/
-    && cp $ALEMBIQ_FOLDER/htdocs/.env.php $ALEMBIQ_FOLDER/$CI_JOB_ID/
-    && rsync -au --remove-source-files $ALEMBIQ_FOLDER/htdocs/files/ $ALEMBIQ_FOLDER/$CI_JOB_ID/files/
-    && tar zcf $ALEMBIQ_FOLDER/backup-$CI_JOB_ID.tgz --exclude $ALEMBIQ_FOLDER/htdocs/cache --exclude $ALEMBIQ_FOLDER/htdocs/.git $ALEMBIQ_FOLDER/htdocs/
-    && mv $ALEMBIQ_FOLDER/htdocs $ALEMBIQ_FOLDER/backup
-    && mv $ALEMBIQ_FOLDER/$CI_JOB_ID $ALEMBIQ_FOLDER/htdocs
-    && rm -rf $ALEMBIQ_FOLDER/backup
-    && rm build.tgz"
-  only:
-    - merge_requests
+    - scp bistro-$CI_PIPELINE_ID.tgz prazskahlidka@alembiq.net:.
+    - for folder in ${TEST_FOLDER} ;
+      do
+        ssh $TEST_REMOTE "mkdir $folder/$CI_PIPELINE_ID
+        && tar zxf bistro-$CI_PIPELINE_ID.tgz -C $folder/$CI_PIPELINE_ID/
+        && cp $folder/htdocs/.env.php $folder/$CI_PIPELINE_ID/
+        && rsync -au --remove-source-files $folder/htdocs/files/ $folder/$CI_PIPELINE_ID/files/
+        && tar zcf $folder/backup-$CI_PIPELINE_ID.tgz --exclude $folder/htdocs/cache --exclude $folder/htdocs/.git $folder/htdocs/
+        && mv $folder/htdocs $folder/backup
+        && mv $folder/$CI_PIPELINE_ID $folder/htdocs
+        && rm -rf $folder/backup" ;
+      done
+    - ssh $TEST_REMOTE "rm bistro-$CI_PIPELINE_ID.tgz"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_BRANCH != "master"
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH != "master"
 
-deploy nh_text:
+deploy production:
   stage: deploy
   image: alpine
   needs:
-  - build
-  allow_failure: false
+    - build
+  allow_failure: true
   before_script:
-  - apk add openssh-client
-  - eval $(ssh-agent -s)
-  - cat $SSH_TEST | tr -d '\r' | ssh-add -
-  - mkdir -p ~/.ssh
-  - chmod 700 ~/.ssh
-  - ssh-keyscan nh.test.prazskahlidka.cz >> ~/.ssh/known_hosts
+    - apk add openssh-client
+    - eval $(ssh-agent -s)
+    - cat $PROD_SSH | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan alembiq.net >> ~/.ssh/known_hosts
   script:
-  - scp build.tgz prazskahlidka@nh.test.prazskahlidka.cz:.
-  - ssh prazskahlidka@nh.test.prazskahlidka.cz "mkdir /srv/cz.prazskahlidka.test.nh/$CI_JOB_ID
-    && tar zxf build.tgz -C /srv/cz.prazskahlidka.test.nh/$CI_JOB_ID/
-    && find /srv/cz.prazskahlidka.test.nh/$CI_JOB_ID/ -type f  -not -regex '/srv/cz.prazskahlidka.test.nh/$CI_JOB_ID/\(vendor\|.git\|files\|js\|images\|custom\)/.*' -exec sed -i -r 's+Debugger::(DETECT|PRODUCTION)+Debugger::DEVELOPMENT+g' {} \;
-    && cp /srv/cz.prazskahlidka.test.nh/htdocs/.env.php /srv/cz.prazskahlidka.test.nh/$CI_JOB_ID/
-    && rsync -au --remove-source-files /srv/cz.prazskahlidka.test.nh/htdocs/files/ /srv/cz.prazskahlidka.test.nh/$CI_JOB_ID/files/
-    && mv /srv/cz.prazskahlidka.test.nh/htdocs /srv/cz.prazskahlidka.test.nh/backup
-    && mv /srv/cz.prazskahlidka.test.nh/$CI_JOB_ID /srv/cz.prazskahlidka.test.nh/htdocs
-    && tar zcf /srv/cz.prazskahlidka.test.nh/backup-$CI_JOB_ID.tgz --exclude /srv/cz.prazskahlidka.test.nh/backup/cache /srv/cz.prazskahlidka.test.nh/backup/
-    && rm -rf /srv/cz.prazskahlidka.test.nh/backup
-    && rm build.tgz"
-  only:
-    - testing
-
-deploy dh_text:
-  stage: deploy
-  image: alpine
-  needs:
-  - build
-  allow_failure: false
-  before_script:
-  - apk add openssh-client
-  - eval $(ssh-agent -s)
-  - cat $SSH_TEST | tr -d '\r' | ssh-add -
-  - mkdir -p ~/.ssh
-  - chmod 700 ~/.ssh
-  - ssh-keyscan dh.test.prazskahlidka.cz >> ~/.ssh/known_hosts
-  script:
-  - scp build.tgz prazskahlidka@dh.test.prazskahlidka.cz:.
-  - ssh prazskahlidka@dh.test.prazskahlidka.cz "mkdir /srv/cz.prazskahlidka.test.dh/$CI_JOB_ID
-    && tar zxf build.tgz -C /srv/cz.prazskahlidka.test.dh/$CI_JOB_ID/
-    && find /srv/cz.prazskahlidka.test.dh/$CI_JOB_ID/ -type f  -not -regex '/srv/cz.prazskahlidka.test.dh/$CI_JOB_ID/\(vendor\|.git\|files\|js\|images\|custom\)/.*' -exec sed -i -r 's+Debugger::(DETECT|PRODUCTION)+Debugger::DEVELOPMENT+g' {} \;
-    && cp /srv/cz.prazskahlidka.test.dh/htdocs/.env.php /srv/cz.prazskahlidka.test.dh/$CI_JOB_ID/
-    && rsync -au --remove-source-files /srv/cz.prazskahlidka.test.dh/htdocs/files/ /srv/cz.prazskahlidka.test.dh/$CI_JOB_ID/files/
-    && mv /srv/cz.prazskahlidka.test.dh/htdocs /srv/cz.prazskahlidka.test.dh/backup
-    && mv /srv/cz.prazskahlidka.test.dh/$CI_JOB_ID /srv/cz.prazskahlidka.test.dh/htdocs
-    && tar zcf /srv/cz.prazskahlidka.test.dh/backup-$CI_JOB_ID.tgz --exclude /srv/cz.prazskahlidka.test.dh/backup/cache /srv/cz.prazskahlidka.test.dh/backup/
-    && rm -rf /srv/cz.prazskahlidka.test.dh/backup
-    && rm build.tgz"
-  only:
-    - testing
+    - scp bistro-$CI_PIPELINE_ID.tgz prazskahlidka@alembiq.net:.
+    - for folder in ${PROD_FOLDER} ;
+      do
+        ssh $PROD_REMOTE "mkdir $folder/$CI_PIPELINE_ID
+        && tar zxf bistro-$CI_PIPELINE_ID.tgz -C $folder/$CI_PIPELINE_ID/
+        && cp $folder/htdocs/.env.php $folder/$CI_PIPELINE_ID/
+        && rsync -au --remove-source-files $folder/htdocs/files/ $folder/$CI_PIPELINE_ID/files/
+        && tar zcf $folder/backup-$CI_PIPELINE_ID.tgz --exclude $folder/htdocs/cache --exclude $folder/htdocs/.git $folder/htdocs/
+        && mv $folder/htdocs $folder/backup
+        && mv $folder/$CI_PIPELINE_ID $folder/htdocs
+        && rm -rf $folder/backup" ;
+      done
+    - ssh $PROD_REMOTE "rm bistro-$CI_PIPELINE_ID.tgz"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
