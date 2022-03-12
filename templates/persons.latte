@@ -111,8 +111,16 @@
                                 <td class="persons-table-cell">
                                     <div class="identity-main-wrapper">
                                         <div class="persons-image-wrapper">
-                                            {if isset($filter[portrait])}<img src="/file/portrait/{$person['id']}" alt="" />{/if}
-                                            {if isset($filter[symbol])}<img src="/file/symbol/{$person['symbol']}" alt="" />{/if}
+                                            {if isset($filter[portrait])}
+                                                <div class="persons-image-cropper">
+                                                    <img src="/file/portrait/{$person['id']}" alt="" />
+                                                </div>
+                                            {/if}
+                                            {if isset($filter[symbol])}
+                                                <div class="persons-image-cropper">
+                                                    <img src="/file/symbol/{$person['symbol']}" alt="" />
+                                                </div>
+                                            {/if}
                                         </div>
                                         <div class="persons-identification-wrapper">
                                             <p class="persons-name"><a href="/readperson.php?rid={$person['id']}&amp;hidenotes=0">{$person['surname']} {$person['name']}</a></p>

@@ -599,26 +599,44 @@ input[type='submit'] {
   }
 }
 
-.persons-image-wrapper > img {
+.persons-image-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.persons-image-cropper {
+  width: 75px;
+  height: 75px;
+  background-color: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.persons-image-cropper > img {
   width: auto;
-  height: auto;
-  max-height: 75px;
+  height: 100%;
+  position: absolute;
+  max-height: 100%;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 @media only screen and (max-width: 768px) {
 
   .persons-image-wrapper {
-    display: flex;
     justify-content: center;
-    align-items: flex-start;
     gap: 16px;
     width: 100%;
     margin-bottom: 8px;
   }
 
-  .persons-image-wrapper > img {
-    max-height: 150px;
+  .persons-image-cropper {
+    width: 150px;
     height: 150px;
+    background-color: transparent;
   }
 }
 

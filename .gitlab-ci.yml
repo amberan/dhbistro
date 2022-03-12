@@ -20,22 +20,101 @@ stages:
 - test
 - deploy
 
-build:
+build_test:
   stage: build
   image: alpine
   before_script:
   - apk add gzip
   - apk add composer
   script:
+  - find . -type f -name \*.php -exec sed -i -r 's+Debugger::(DETECT|PRODUCTION)+Debugger::DEVELOPMENT+g' {} \;
   - composer install --ignore-platform-reqs
-  - composer update --ignore-platform-reqs
   - tar czf bistro-$CI_PIPELINE_ID.tgz --exclude .git --exclude bistro.tmp .
   artifacts:
     paths:
     - bistro-$CI_PIPELINE_ID.tgz
     expire_in: 1 days
   rules:
-    - when: always
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_BRANCH != "master"
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH != "master"
+
+deploy_test:
+  stage: deploy
+  image: alpine
+  needs:
+    - build_test
+  allow_failure: true
+  before_script:
+    - apk add openssh-client
+    - eval $(ssh-agent -s)
+    - cat $TEST_SSH | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan alembiq.net >> ~/.ssh/known_hosts
+  script:
+    - scp bistro-$CI_PIPELINE_ID.tgz prazskahlidka@alembiq.net:.
+    - for folder in ${TEST_FOLDER} ;
+      do
+        ssh $TEST_REMOTE "mkdir $folder/$CI_PIPELINE_ID
+        && tar zxf bistro-$CI_PIPELINE_ID.tgz -C $folder/$CI_PIPELINE_ID/
+        && cp $folder/htdocs/.env.php $folder/$CI_PIPELINE_ID/
+        && rsync -au --remove-source-files $folder/htdocs/files/ $folder/$CI_PIPELINE_ID/files/
+        && tar zcf $folder/backup-$CI_PIPELINE_ID.tgz --exclude $folder/htdocs/cache --exclude $folder/htdocs/.git $folder/htdocs/
+        && mv $folder/htdocs $folder/backup
+        && mv $folder/$CI_PIPELINE_ID $folder/htdocs
+        && rm -rf $folder/backup" ;
+      done
+    - ssh $TEST_REMOTE "rm bistro-$CI_PIPELINE_ID.tgz"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_BRANCH != "master"
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH != "master"
+
+build_prod:
+  stage: build
+  image: alpine
+  before_script:
+  - apk add gzip
+  - apk add composer
+  script:
+  - find . -type f -name \*.php -exec sed -i -r 's+Debugger::(DETECT|DEVELOPMENT)+Debugger::PRODUCTION+g' {} \;
+  - composer install --ignore-platform-reqs
+  - tar czf bistro-$CI_PIPELINE_ID.tgz --exclude .git --exclude bistro.tmp .
+  artifacts:
+    paths:
+    - bistro-$CI_PIPELINE_ID.tgz
+    expire_in: 1 days
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+
+deploy_prod:
+  stage: deploy
+  image: alpine
+  needs:
+    - build_prod
+  allow_failure: true
+  before_script:
+    - apk add openssh-client
+    - eval $(ssh-agent -s)
+    - cat $PROD_SSH | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan alembiq.net >> ~/.ssh/known_hosts
+  script:
+    - scp bistro-$CI_PIPELINE_ID.tgz prazskahlidka@alembiq.net:.
+    - for folder in ${PROD_FOLDER} ;
+      do
+        ssh $PROD_REMOTE "mkdir $folder/$CI_PIPELINE_ID
+        && tar zxf bistro-$CI_PIPELINE_ID.tgz -C $folder/$CI_PIPELINE_ID/
+        && cp $folder/htdocs/.env.php $folder/$CI_PIPELINE_ID/
+        && rsync -au --remove-source-files $folder/htdocs/files/ $folder/$CI_PIPELINE_ID/files/
+        && tar zcf $folder/backup-$CI_PIPELINE_ID.tgz --exclude $folder/htdocs/cache --exclude $folder/htdocs/.git $folder/htdocs/
+        && mv $folder/htdocs $folder/backup
+        && mv $folder/$CI_PIPELINE_ID $folder/htdocs
+        && rm -rf $folder/backup" ;
+      done
+    - ssh $PROD_REMOTE "rm bistro-$CI_PIPELINE_ID.tgz"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
 
 code_quality:
   stage: test
@@ -54,66 +133,3 @@ sast:
     SAST_EXCLUDED_PATHS: vendor, js/jquery*, js/tiny*
     SAST_EXCLUDED_ANALYZERS: bandit, brakeman, flawfinder, gosec, kubesec, nodejs-scan,
       pmd-apex, security-code-scan, sobelow, spotbugs
-
-deploy test:
-  stage: deploy
-  image: alpine
-  needs:
-    - build
-  allow_failure: true
-  before_script:
-    - apk add openssh-client
-    - eval $(ssh-agent -s)
-    - cat $TEST_SSH | tr -d '\r' | ssh-add -
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - ssh-keyscan alembiq.net >> ~/.ssh/known_hosts
-  script:
-    - scp bistro-$CI_PIPELINE_ID.tgz prazskahlidka@alembiq.net:.
-    - for folder in ${TEST_FOLDER} ;
-      do
-        ssh $TEST_REMOTE "mkdir $folder/$CI_PIPELINE_ID
-        && tar zxf bistro-$CI_PIPELINE_ID.tgz -C $folder/$CI_PIPELINE_ID/
-        && find $folder/$CI_PIPELINE_ID/ -type f  -not -regex '$folder/$CI_PIPELINE_ID/\(vendor\|.git\|files\|js\|images\|custom\)/.*' -exec sed -i -r 's+Debugger::(DETECT|PRODUCTION)+Debugger::DEVELOPMENT+g' {} \;
-        && cp $folder/htdocs/.env.php $folder/$CI_PIPELINE_ID/
-        && rsync -au --remove-source-files $folder/htdocs/files/ $folder/$CI_PIPELINE_ID/files/
-        && tar zcf $folder/backup-$CI_PIPELINE_ID.tgz --exclude $folder/htdocs/cache --exclude $folder/htdocs/.git $folder/htdocs/
-        && mv $folder/htdocs $folder/backup
-        && mv $folder/$CI_PIPELINE_ID $folder/htdocs
-        && rm -rf $folder/backup" ;
-      done
-    - ssh $TEST_REMOTE "rm bistro-$CI_PIPELINE_ID.tgz"
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_BRANCH != "master"
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH != "master"
-
-deploy production:
-  stage: deploy
-  image: alpine
-  needs:
-    - build
-  allow_failure: true
-  before_script:
-    - apk add openssh-client
-    - eval $(ssh-agent -s)
-    - cat $PROD_SSH | tr -d '\r' | ssh-add -
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - ssh-keyscan alembiq.net >> ~/.ssh/known_hosts
-  script:
-    - scp bistro-$CI_PIPELINE_ID.tgz prazskahlidka@alembiq.net:.
-    - for folder in ${PROD_FOLDER} ;
-      do
-        ssh $PROD_REMOTE "mkdir $folder/$CI_PIPELINE_ID
-        && tar zxf bistro-$CI_PIPELINE_ID.tgz -C $folder/$CI_PIPELINE_ID/
-        && cp $folder/htdocs/.env.php $folder/$CI_PIPELINE_ID/
-        && find $folder/$CI_PIPELINE_ID/ -type f  -not -regex '$folder/$CI_PIPELINE_ID/\(vendor\|.git\|files\|js\|images\|custom\)/.*' -exec sed -i -r 's+Debugger::(DETECT|DEVELOPMENT)+Debugger::PRODUCTION+g' {} \;
-        && rsync -au --remove-source-files $folder/htdocs/files/ $folder/$CI_PIPELINE_ID/files/
-        && tar zcf $folder/backup-$CI_PIPELINE_ID.tgz --exclude $folder/htdocs/cache --exclude $folder/htdocs/.git $folder/htdocs/
-        && mv $folder/htdocs $folder/backup
-        && mv $folder/$CI_PIPELINE_ID $folder/htdocs
-        && rm -rf $folder/backup" ;
-      done
-    - ssh $PROD_REMOTE "rm bistro-$CI_PIPELINE_ID.tgz"
-  rules:
-    - if: $CI_COMMIT_BRANCH == "master"
