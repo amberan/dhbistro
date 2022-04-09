@@ -96,17 +96,6 @@ $columnAddIndex['user']['filter'] = ['userDeleted','userId','personId'];
 $columnAddIndex['person']['filter'] = ['side','spec','power','dead','surname','regdate','datum','iduser','id','deleted','secret','archived'];
 
 
-
-bistroDBIndexAdd($columnAddIndex);
-
-
-
-
-
-    $latteParameters['reportRole'] = reportRole();
-    $latteParameters['reportType'] = reportType();
-    $latteParameters['reportStatus'] = reportStatus();
-
 //FILTER
 if (isset($_GET['sort'])) {
     sortingSet('report', $_GET['sort'], 'report');
