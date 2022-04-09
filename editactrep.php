@@ -14,25 +14,26 @@ $author = $reportarray['iduser']; // určuje autora hlášení
 
 if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || ($user['userId'] == $author && $reportarray['status'] < 1))) {
     $sql = "SELECT
-		".DB_PREFIX."report.id AS 'id',
-		".DB_PREFIX."report.datum AS 'datum',
-		".DB_PREFIX."report.label AS 'label',
-		".DB_PREFIX."report.task AS 'task',
-                ".DB_PREFIX."report.deleted AS 'deleted',
-		".DB_PREFIX."report.summary AS 'summary',
-		".DB_PREFIX."report.impacts AS 'impacts',
-		".DB_PREFIX."report.details AS 'details',
-		".DB_PREFIX."report.secret AS 'secret',
-		".DB_PREFIX."report.status AS 'status',
+		".DB_PREFIX."report.reportId AS 'id',
+		".DB_PREFIX."report.reportModified AS 'datum',
+		".DB_PREFIX."report.reportName AS 'label',
+		".DB_PREFIX."report.reportTask AS 'task',
+        ".DB_PREFIX."report.reportDeleted AS 'deleted',
+		".DB_PREFIX."report.reportSummary AS 'summary',
+		".DB_PREFIX."report.reportImpact AS 'impacts',
+		".DB_PREFIX."report.reportDetail AS 'details',
+		".DB_PREFIX."report.reportSecret AS 'secret',
+		".DB_PREFIX."report.reportStatus AS 'status',
 		".DB_PREFIX."user.userName AS 'autor',
-		".DB_PREFIX."report.type AS 'type',
-		".DB_PREFIX."report.adatum AS 'adatum',
-		".DB_PREFIX."report.start AS 'start',
-		".DB_PREFIX."report.end AS 'end',
-		".DB_PREFIX."report.energy AS 'energy',
-		".DB_PREFIX."report.inputs AS 'inputs'
+		".DB_PREFIX."report.reportType AS 'type',
+		".DB_PREFIX."report.reportEventDate AS 'adatum',
+		".DB_PREFIX."report.reportEventStart AS 'start',
+		".DB_PREFIX."report.reportEventEnd AS 'end',
+		".DB_PREFIX."report.reportCost AS 'energy',
+		".DB_PREFIX."report.reportInput AS 'inputs'
 		FROM ".DB_PREFIX."report, ".DB_PREFIX."user
-		WHERE ".DB_PREFIX."report.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."report.id=".$_REQUEST['rid'];
+		WHERE ".DB_PREFIX."report.reportCreatedBy=".DB_PREFIX."user.userId AND ".DB_PREFIX."report.reportId=".$_REQUEST['rid'];
+
     $res = mysqli_query($database, $sql);
     if ($rec_actr = mysqli_fetch_assoc($res)) {
         if (($rec_actr['secret'] > $user['aclSecret']) || $rec_actr['deleted'] == 1) {

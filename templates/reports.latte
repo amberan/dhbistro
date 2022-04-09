@@ -147,7 +147,7 @@ hlaseni
                                         <a class="btn btn-sm  btn-info mb-1" href="/newnote.php?rid={$report['reportId']}&idtable=8">přidat poznámku</a>
                                     {/if*}
                                     {if ($user['aclRoot'] OR $user['aclReport'] > 1) AND !$report['reportDeleted']}
-                                        <a class="btn btn-sm btn-brick btn-danger mb-1" href="/reports/?delete={$report['reportId']}&amp;table=4" onclick="return confirm('{$text['opravdusmazatreport']} &quot; {$report['reportName']|stripHtml}&quot;?');" alt="{$text['smazatreport']}">{php echo file_get_contents("images/icons/trash-solid.svg")}</a>
+                                        <a class="btn btn-sm btn-brick btn-danger mb-1" href="/reports/delete/{$report['reportId']}" onclick="return confirm('{$text['opravdusmazatreport']} &quot; {$report['reportName']|stripHtml}&quot;?');" alt="{$text['smazatreport']}">{php echo file_get_contents("images/icons/trash-solid.svg")}</a>
                                     {/if}
                                     {if $user['aclRoot'] AND $report['reportDeleted']}
                                         <a class="btn btn-sm btn-success mb-1" href="/report/restore/{$report['reportId']}" onclick="return confirm('{$text['opravduobnovitreport']} &quot; {$report['reportName']|stripHtml}&quot;?');">{php echo file_get_contents("images/icons/recycle.svg")}</a>
