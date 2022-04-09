@@ -117,8 +117,9 @@ $latteParameters['filter'] = $filter;
     LEFT JOIN  ".DB_PREFIX."unread on  ".DB_PREFIX."group.id =  ".DB_PREFIX."unread.idrecord AND  ".DB_PREFIX."unread.idtable = 2 and  ".DB_PREFIX."unread.iduser=".$user['userId']."
     WHERE ".$sqlFilter." GROUP BY ".DB_PREFIX."group.id ".sortingGet('group');
     $groupList = mysqli_query($database, $sql);
-
-if (mysqli_num_rows($groupList) > 0) {
+$groupCount = mysqli_num_rows($groupList);
+if ($groupCount > 0) {
+    $latteParameters['group_count'] = $groupCount;
     $latteParameters['group_record'] = $groupList;
 } else {
     $latteParameters['warning'] = $text['prazdnyvypis'];

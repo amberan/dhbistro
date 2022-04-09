@@ -24,9 +24,9 @@ function bistroUpdatesList($updateFiles, $lastBackup)
 
 function bistroUpdate($updatesToRun)
 {
+    global $database;
     bistroMyisamToInnodb();
     foreach ($updatesToRun as $file) {
-        // require_once 'lib/update.php';
         require_once $_SERVER['DOCUMENT_ROOT']."/sql/".$file;
         if (isset($tableCreate)) {
             bistroDBTableCreate($tableCreate, substr($file, 7, -4));
@@ -46,6 +46,9 @@ function bistroUpdate($updatesToRun)
         if (isset($columnAddFulltext)) {
             bistroDBFulltextAdd($columnAddFulltext, substr($file, 7, -4));
         }
+        if (isset($columnAddIndex)) {
+            bistroDBIndexAdd($columnAddIndex, substr($file, 7, -4));
+        }
         if (DBcolumnExist("user", "userPassword")) {
             bistroDBPasswordEncrypt();
         }
@@ -61,7 +64,13 @@ function bistroUpdate($updatesToRun)
         if (isset($tableDrop)) {
             bistroDBTableDrop($tableDrop, substr($file, 7, -4));
         }
-        unset($tableCreate,$tableRename,$columnAdd,$columnAlter,$columnAddFulltext,$columnToMD,$rightsToUpdate,$convertTime,$columnDrop,$tableDrop);
+        if (isset($updateScript)) {
+            foreach ($updateScript as $issue => $script) {
+                mysqli_query($database, $script);
+                Debugger::log('UPDATER '.substr($file, 7, -4).'.'.$issue.' '.$script.mysqli_error($database));
+            }
+        }
+        unset($updateScript,$tableCreate,$tableRename,$columnAdd,$columnAlter,$columnAddFulltext,$columnToMD,$rightsToUpdate,$convertTime,$columnDrop,$tableDrop);
     }
 }
 
@@ -172,15 +181,18 @@ function bistroDBColumnMarkdown($data, $file = null): int
     $alter = 0;
     $converter = new HtmlConverter(['strip_tags' => true]); //https://github.com/thephpleague/html-to-markdown
     foreach ($data as $value) {
-        $preMarkdownSql = "SELECT ".$value[1].", ".$value[2]." FROM ".$configDB['dbDatabase'].".".DB_PREFIX.$value[0]." WHERE (length(".$value[3].") = 0  or length(".$value[3].") is null) and length(".$value[2].") > 0";
         if (DBcolumntNotEmpty($value[0], $value[3]) == 0 && DBcolumnExist($value[0], $value[2]) > 0 && DBcolumnExist($value[0], $value[3]) > 0) {
+            $preMarkdownSql = "SELECT ".$value[1].", ".$value[2]." FROM ".$configDB['dbDatabase'].".".DB_PREFIX.$value[0]." WHERE (length(".$value[3].") = 0  or length(".$value[3].") is null) and length(".$value[2].") > 0";
             $preMarkdownQuery = mysqli_query($database, $preMarkdownSql);
             while ($preMarkdown = mysqli_fetch_array($preMarkdownQuery)) {
                 $markdownColumn = $converter->convert(str_replace('\'', '', $preMarkdown[$value[2]]));
                 Debugger::log('UPDATER '.$file.' CONVERTING '.DB_PREFIX.$value[0].'.'.$value[2].'.'.$preMarkdown[$value[1]].' TO MARKDOWN '.$value[3]);
-                mysqli_query($database, "UPDATE ".DB_PREFIX.$value[0]." SET ".$value[3]."='".$markdownColumn."' WHERE ".$value[1]."=".$preMarkdown[$value[1]]);
+                $updateSql = "UPDATE ".DB_PREFIX.$value[0]." SET ".$value[3]."='".$markdownColumn."' WHERE ".$value[1]."=".$preMarkdown[$value[1]];
+                mysqli_query($database, $updateSql);
                 $alter++;
             }
+        } else {
+            Debugger::log('DEBUGGER '.$file.' '.$value[0].' expected: 0,1,1; current:'.DBcolumntNotEmpty($value[0], $value[3]).' '.DBcolumnExist($value[0], $value[2]).' '.DBcolumnExist($value[0], $value[3]).'<br/>');
         }
     }
 

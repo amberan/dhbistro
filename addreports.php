@@ -18,7 +18,7 @@ $latteParameters['title'] = 'Úprava hlášení';
             $case = $_POST['case'];
         }
         mainMenu();
-        sparklets('<a href="./reports.php">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>uložení změn</strong>', '<a href="readactrep.php?rid='.$_POST['reportid'].'&hidenotes=0&truenames=0">zobrazit upravené</a>');
+        sparklets('<a href="/reports/">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>uložení změn</strong>', '<a href="readactrep.php?rid='.$_POST['reportid'].'&hidenotes=0&truenames=0">zobrazit upravené</a>');
         echo '<div id="obsah"><p>Hlášení přiřazeno k příslušným případům.</p></div>';
         if (isset($_POST['case'])) {
             for ($i = 0;$i < Count($case);$i++) {

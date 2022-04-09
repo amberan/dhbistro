@@ -41,9 +41,9 @@ if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || ($user['userId'] == $
         authorizedAccess(4, 1, $_REQUEST['rid']);
         $latteParameters['title'] = 'Úprava hlášení'.$type == 1 ? ' z výjezdu' : ($type == 2 ? ' z výslechu' : '');
         mainMenu();
-        sparklets('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení'.$type == 1 ? ' z výjezdu' : ($type == 2 ? ' z výslechu' : '').'</strong>', '<a href="symbols.php">přiřadit symboly</a>'); ?>
+        sparklets('<a href="/reports/">hlášení</a> &raquo; <strong>úprava hlášení'.$type == 1 ? ' z výjezdu' : ($type == 2 ? ' z výslechu' : '').'</strong>', '<a href="symbols.php">přiřadit symboly</a>'); ?>
 <div id="obsah">
-    <form action="procactrep.php" method="post" id="inputform">
+    <form action="/reports/" method="post" id="inputform">
         <fieldset id="ramecek">
             <legend><strong>Úprava hlášení<?php echo $type == 1 ? ' z výjezdu' : ($type == 2 ? ' z výslechu' : ''); ?></strong></legend>
             <fieldset>
@@ -209,7 +209,7 @@ if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || ($user['userId'] == $
             <li class="soubor"><a href="file/attachement/<?php echo $rec_f['id']; ?>" title=""><?php echo stripslashes($rec_f['title']); ?></a><?php if ($rec_f['secret'] == 1) { ?> (TAJNÝ)<?php } ?><span
                       class="poznamka-edit-buttons"><?php
                 if (($rec_f['iduser'] == $user['userId']) || ($user['aclReport'])) {
-                    echo '<a class="delete" title="smazat" href="procactrep.php?deletefile='.$rec_f['id'].'&amp;reportid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editactrep.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat soubor &quot;'.stripslashes($rec_f['title']).'&quot; náležící k hlášení?\')"><span class="button-text">smazat soubor</span></a>';
+                    echo '<a class="delete" title="smazat" href="/reports/?deletefile='.$rec_f['id'].'&amp;reportid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editactrep.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat soubor &quot;'.stripslashes($rec_f['title']).'&quot; náležící k hlášení?\')"><span class="button-text">smazat soubor</span></a>';
                 } ?>
                 </span></li><?php
         }
@@ -226,7 +226,7 @@ if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || ($user['userId'] == $
     <div id="new-file" class="otherform-wrap">
         <fieldset>
             <legend><strong>Nový soubor</strong></legend>
-            <form action="procactrep.php" method="post" enctype="multipart/form-data" class="otherform">
+            <form action="/reports/" method="post" enctype="multipart/form-data" class="otherform">
                 <div>
                     <strong><label for="attachment">Soubor:</label></strong>
                     <input type="file" name="attachment" id="attachment" />

@@ -68,6 +68,7 @@ if ($URL[1] == 'file' && isset($user)) { // GET FILE type:  attachement,portrait
     require_once SERVER_ROOT.'/file.php';
     exit;
 }
+$latteParameters['title'] = '';
 latteDrawTemplate('headerMD');
 if (isset($user)) {
     $latteParameters['user'] = $user;
@@ -139,6 +140,13 @@ if (isset($user)) {
         $latteParameters['actions'][] = ["/newgroup.php", $text['pridatskupinu']];
         //TODO view group, edit group, new group
         require_once SERVER_ROOT.'/pages/groups.php';
+    } elseif ($URL[1] == 'reports') {
+        authorizedAccess(4, 1, 0);
+        $latteParameters['title'] = $text['hlaseniV'];
+        $latteParameters['actions'][] = ["/newactrep.php?type=1", $text['pridatvyjezd']];
+        $latteParameters['actions'][] = ["/newactrep.php?type=2", $text['pridatvyslech']];
+        //TODO view report, edit report, new report
+        require_once SERVER_ROOT.'/pages/reports.php';
     } else { // NEWS - DEFAULT
         $latteParameters['title'] = $text['aktuality'];
         if (isset($URL[2]) && $URL[2] == 'new' && ($user['aclNews'] < 1) && $URL[1] == 'news') {
@@ -158,8 +166,6 @@ if (isset($user)) {
         }
     }
 } else {
-    $latteParameters['title'] = '';
-    latteDrawTemplate('headerMD');
     require_once SERVER_ROOT.'/pages/login.php';
 }
 

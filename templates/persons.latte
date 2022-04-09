@@ -2,7 +2,7 @@
     <form action="{$URL[0]}{$URL[1]}/" method="POST" id="filter" class="row mb-1">
 	    <div class="col-12 col-md-4 text-left">
 	        <h4>
-                {$text[osoby]}
+                {$text[osoby]} {ifset $person_count}({$person_count}){/ifset}
             </h4>
 	    </div>
         <div class="col-12 col-md-8 text-right header-wrapper-right">

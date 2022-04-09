@@ -28,8 +28,12 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Refactored: deployment to new server #198
 - Refactored: backups #96 #219 #107
 - Refactored: installer #107
+- Refactored: listing reports #114
 ### Security
 - Feature: deny access to passwords #225
+
+
+TODO: check all 'report (169) and  "report (191) in code - columns renamed, status=3 > reportArchived > timestamp, deleted > reportDeleted timestamp
 
 
 ## 1.8.8 - 2021-12-04

@@ -1,0 +1,164 @@
+<div class="container-fluid mt-3 mb-3 mr-2 w-100">
+    <div class="row mb-1">
+	    <div class="col-12 col-sm-6 text-left">
+	        <h4>
+                {$text[hlaseniV]} {ifset $report_count}({$report_count}){/ifset}
+            </h4>
+	    </div>
+        <div class="col-12 col-sm-6 text-right">
+            <form action="{$URL[0]}{$URL[1]}/" method="POST" id="filter" class="header-form-wrapper">
+                <input type="hidden" name="filter[placeholder]" />
+vypsat
+               <div>
+                    <select name="filter[reportStatus]"  onchange="this.form.submit()">
+                        <option value="all">{$text['vsechna']}</option>
+                    {foreach $reportStatus as $id => $status }
+                        <option value="{$id}" {if (isset($filter['reportStatus']) AND $filter['reportStatus'] == $id AND $filter['reportStatus'] != 'all') } selected {/if}>{$status}</option>
+                    {/foreach}
+                    </select>
+                </div>
+hlaseni
+               <div>
+                    <select name="filter[reportType]"  onchange="this.form.submit()">
+                        <option value="0">{$text['vsechna']}</option>
+                    {foreach $reportType as $id => $type }
+                        <option value="{$id}" {if (isset($filter['reportType']) AND $filter['reportType'] == $id) } selected {/if}>{$type}</option>
+                    {/foreach}
+                    </select>
+                </div>
+
+{* TODO NEPRIRAZENE *}
+                <div class="header-switch">
+                    <label class="toggle-control">
+                        <input type="checkbox" name="filter[mine]" {if (isset($filter['mine']) AND $filter['mine'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                        <span class="control"></span>
+                    </label>
+                    {$text['jenmoje']}
+                </div>
+                <div class="header-switch">
+                    <label class="toggle-control">
+                        <input type="checkbox" name="filter[archived]" {if (isset($filter['archived']) AND $filter['archived'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                        <span class="control"></span>
+                    </label>
+                    {$text['iarchiv']}
+                </div>
+                <div class="header-switch">
+                    <label class="toggle-control">
+                        <input type="checkbox" name="filter[new]" {if (isset($filter['new']) AND $filter['new'] == 'on') } checked{/if} onchange="this.form.submit()" />
+                        <span class="control"></span>
+                    </label>
+                    {$text['jennove']}
+                </div>
+{if $user['aclSecret'] > 0}
+                <div class="header-switch">
+                    <label class="toggle-control">
+                        <input type="checkbox" name="filter[secret]" {if (isset($filter['secret']) AND $filter['secret'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                        <span class="control"></span>
+                    </label>
+                    {$text['itajne']}
+                </div>
+{/if}
+            </form>
+        </div>
+	</div>
+    <div class="row mb-1">
+        <div class="col-12">
+            {if @$warning}
+                <div>
+                    {$warning}
+                </div>
+            {else}
+                <div id="obsah">
+
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                {$text['report']}</a>
+                            </th>
+                            <th>
+                                {$text['stav']}
+                            </th>
+                            <th>
+                                {$text['probehlo']}<a href="{$URL[0]}{$URL[1]}/?sort=reportEventDate">&#8661;</a></a>
+                            </th>
+{*                            <th>
+                                {$text['vytvoreno']}  <a href="{$URL[0]}{$URL[1]}/?sort=reportCreated">&#8661;</a>
+                            </th>*}
+                            <th>
+                                {$text['zmeneno']}  <a href="{$URL[0]}{$URL[1]}/?sort=reportModified">&#8661;</a>
+                            </th>
+                            <th>
+                                {$text['ucastnici']}
+                            </th>
+                            <th>{$text['akce']}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $reports_record as $report}
+                            <tr class="{if @$report['unread']} unread_record{/if}{if $report['reportType'] == 1} vyjezd{else} vyslech{/if}">
+                                <td>
+                                    {$reportType[$report['reportType']]}: <a href="/readactrep.php?rid={$report['reportId']}">{$report['reportName']}</a>
+                                    <br/>{$text['ukol']}: {$report['reportTask']}
+                                    {if $report['reportSecret'] > 0 }
+                                        <span class="badge rounded-pill bg-danger text-light">{$text['utajeno']|upper}</span>
+                                    {/if}
+                                    {if $report['reportArchived']}
+                                        <span class="badge rounded-pill bg-secondary text-light mb-1">{$text['archivovano']}</span>
+                                    {/if}
+                                    {if $report['reportDeleted']}
+                                        <span class="badge rounded-pill bg-warning text-dark mb-1">{$text['smazany']}</span>
+                                    {/if}
+                                    {ifset $report['cases']}
+                                        <br/>{$text['pripady']}:
+                                        {foreach $report['cases'] as $case}
+                                            <a href="{$URL[0]}/readcase.php?rid={$case['caseId']}&hidenotes=0">{$case['caseName']}<a/><br/>
+                                        {/foreach}
+                                    {/ifset}
+                                </td>
+                                <td>
+                                    {$reportStatus[$report['reportStatus']]}</br>
+                                    {$text['prirazeno']}: {if $report['reportOwnerName'] }{$report['reportOwnerName']}{else}{$report['reportOwnerUserName']}{/if}</a>
+                                </td>
+                                <td>
+                                    {if $report['reportModified']}{if $report['reportEventStart'] && $report['reportEventEnd']}{$report['reportEventStart']} - {$report['reportEventEnd']}{/if} {$report['reportModified']|date:'%d.%m.%Y'}{else}<em>{$text['neznamo']}</em>{/if}
+                                </td>
+{*                                <td>
+                                    {if $report['reportCreated']} {$report['reportCreated']|date:'%d.%m.%Y'}{else}<em>{$text['neznamo']}</em>{/if}
+                                </td>*}
+                                <td>
+                                    {$report['reportModified']|date:'%d.%m.%Y'}<br/>
+                                    {$text['zmenil']}: {if $report['reportModifiedByName']}{$report['reportModifiedByName']}{else}{$report['reportModifiedByUserName']}{/if}
+                                </td>
+                                <td>
+                                    {ifset $report['participant']}
+                                        {foreach $report['participant'] as $participant}
+                                                {$participant['participantRole']} : {$participant['participantName']}<br/>
+                                        {/foreach}
+                                    {/ifset}
+                                </td>
+                                <td>
+                                    {if $user['aclReport'] AND !$report['reportDeleted']}
+                                        <a class="btn btn-sm btn-brick btn-info mb-1" href="/editactrep.php?rid={$report['reportId']}" alt="{$text[upravitreport]}">
+                                            {php  echo file_get_contents("images/icons/edit-solid.svg")}
+                                        </a>
+                                    {/if}
+                                    {*if !$report['reportDeleted']}
+                                        <a class="btn btn-sm  btn-info mb-1" href="/newnote.php?rid={$report['reportId']}&idtable=8">přidat poznámku</a>
+                                    {/if*}
+                                    {if ($user['aclRoot'] OR $user['aclReport'] > 1) AND !$report['reportDeleted']}
+                                        <a class="btn btn-sm btn-brick btn-danger mb-1" href="/reports/?delete={$report['reportId']}&amp;table=4" onclick="return confirm('{$text['opravdusmazatreport']} &quot; {$report['reportName']|stripHtml}&quot;?');" alt="{$text['smazatreport']}">{php echo file_get_contents("images/icons/trash-solid.svg")}</a>
+                                    {/if}
+                                    {if $user['aclRoot'] AND $report['reportDeleted']}
+                                        <a class="btn btn-sm btn-success mb-1" href="/report/restore/{$report['reportId']}" onclick="return confirm('{$text['opravduobnovitreport']} &quot; {$report['reportName']|stripHtml}&quot;?');">{php echo file_get_contents("images/icons/recycle.svg")}</a>
+                                    {/if}
+
+                                </td>
+                            </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            {/if}
+        </div>
+    </div>
+</div>

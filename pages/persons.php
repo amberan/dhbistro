@@ -231,9 +231,10 @@ WHERE ".$sqlFilter."
 GROUP BY ".DB_PREFIX."person.id ".sortingGet('person');
 
 $personList = mysqli_query($database, $sql);
-
-if (mysqli_num_rows($personList) > 0) {
+$personCount = mysqli_num_rows($personList);
+if ($personCount > 0) {
     $latteParameters['person_record'] = $personList;
+    $latteParameters['person_count'] = $personCount;
 } else {
     $latteParameters['warning'] = $text['prazdnyvypis'];
 }

@@ -48,7 +48,7 @@ if (isset($_POST['addpoints'])) {
             echo '<tr class="'.(($even % 2 == 0) ? 'even' : 'odd').'">
 	<td>'.getAuthor($rec['userId'], 0).'</td>
 	<td>'.($rec['zlobod']).'</td>
-	'.(($user['aclUsers']) ? '<td>
+	'.(($user['aclUser']) ? '<td>
 			<form action="evilpoints.php" method="post" id="inputform" class="evilform">
 			<input class="plus" type="text" name="plus" id="plus" />
 			<input type="hidden" name="usrid" value="'.($rec['userId']).'" />
