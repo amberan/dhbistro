@@ -122,5 +122,4 @@ $tableDrop[] = 'loggedin_deleted';
 $tableDrop[] = 'map_deleted';
 
 // #98 insert new value to audit enum
-$update98 = 'INSERT INTO '.DB_PREFIX.'operation_type (id,name) VALUES ("15","neopravněný pokus o řístup k tajnému") ON DUPLICATE KEY UPDATE id="15", name="neopravněný pokus o Přístup k tajnému"';
-mysqli_query($database, $update98);
+$updateScript[98] = 'INSERT INTO '.DB_PREFIX.'operation_type (id,name) VALUES ("15","neopravněný pokus o řístup k tajnému") ON DUPLICATE KEY UPDATE id="15", name="neopravněný pokus o Přístup k tajnému"';

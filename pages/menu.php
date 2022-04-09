@@ -2,7 +2,7 @@
 
 $menu[] = [$text['aktuality'], "/", searchTable(5)];
 $menu[] = [$text['nastenka'], "/board/", searchTable(6)];
-$menu[] = [$text['hlaseniV'], "/reports.php", searchTable(4)];
+$menu[] = [$text['hlaseniV'], "/reports/", searchTable(4)];
 $menu[] = [$text['osoby'], "/persons/", searchTable(1) + searchTable(7)];
 $menu[] = [$text['pripady'], "/cases/", searchTable(3)];
 $menu[] = [$text['skupiny'], "/groups/", searchTable(2)];

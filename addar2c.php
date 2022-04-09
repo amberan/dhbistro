@@ -8,7 +8,7 @@ latteDrawTemplate("header");
 $latteParameters['title'] = 'Prirazeni pripadu k hlaseni ';
 mainMenu();
     $customFilter = custom_Filter(18);
-    sparklets('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení</strong>');
+    sparklets('<a href="/reports/">hlášení</a> &raquo; <strong>úprava hlášení</strong>');
     $autharray = mysqli_fetch_assoc(mysqli_query($database, "SELECT iduser FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']));
     $author = $autharray['iduser'];
     if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || $user['userId'] == $author)) {

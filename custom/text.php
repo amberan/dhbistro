@@ -203,6 +203,14 @@ $text['vedma'] = 'vědma';
 $text['zarikavac'] = 'zaříkávač';
 $text['vykladac'] = 'vykladač';
 $text['jasnovidec'] = 'jasnovidec';
+$text['rozpracovane'] = 'rozpracované';
+$text['dokoncene'] = 'dokončené';
+$text['analyzovane'] = 'analyzované';
+$text['archivovane'] = 'archivované';
+$text['vyjezd']= 'výjezd';
+$text['vyslech'] = 'výslech';
+$text['jenmoje'] = 'jen moje';
+$text['vsechny'] = 'všechny';
 
 
 // CASES
@@ -219,6 +227,7 @@ $text['vytvoreno'] = 'Vytvořeno';
 $text['editpripad'] = 'Upravit případ';
 $text['smazatpripad'] = 'Smazat případ';
 $text['obnovitpripad'] = 'Obnovit případ';
+$text['vsechna'] = 'všechna';
 
 //GROUPS
 $text['pridatskupinu'] = 'Přidat skupinu';
@@ -229,13 +238,6 @@ $text['opravdusmazatskupinu'] = 'Opravdu smazat skupinu?';
 $text['opravduobnovitskupinu'] = 'Opravdu obnovit skupinu?';
 $text['aktivni'] = 'aktivní';
 
-//REPORTS
-$text['vyslychany'] = 'vyslíchaný';
-$text['vyslychajici'] = 'vyslíchající';
-$text['velitel'] = 'velitel zásahu';
-$text['zatceny'] = 'zatčený';
-$text['pritomny'] = 'přítomný';
-
 //PERSONS
 $text['mrtvy'] = 'mrtvý';
 $text['upravitosobu'] = 'Upravit osobu';
@@ -244,15 +246,28 @@ $text['obnovitosobu'] = 'Obnovit osobu';
 $text['opravdusmazatosobu'] = 'Opravdu smazat osobu?';
 $text['opravduobnovitosobu'] = 'Opravdu obnovit osobu?';
 $text['pridatosobu'] = 'přidat osobu';
+$text['definitions'] = 'Zařazení';
+$text['kontakty'] = 'Kontakty';
+$text['telefon'] = 'Telefon';
+
+//REPORTS
+$text['vyslychany'] = 'vyslíchaný';
+$text['vyslychajici'] = 'vyslíchající';
+$text['velitel'] = 'velitel zásahu';
+$text['zatceny'] = 'zatčený';
+$text['pritomny'] = 'přítomný';
+$text['pridatvyjezd'] = 'nové hlášení z výjezdu';
+$text['pridatvyslech'] = 'nové hlášení z výslechu';
+$text['upravitreport'] = 'upravit report';
+$text['opravdusmazatreport'] = 'Opravdu smazat report?';
+$text['opravduobnovitreport'] = 'Opravdu obnovit report?';
+$text['smazatreport'] = 'smazat report';
+$text['report'] = 'Report';
+$text['probehlo'] = 'Proběhlo';
+$text['prirazeno'] = 'Přiřazeno';
+$text['ucastnici'] = 'Účastnící';
+$text['ukol'] = 'Úkol';
 
 //SYMBOLS
 $text['neprirazenesymboly'] = 'nepřiřazené symboly';
 $text['vyhledatsymbol'] = 'vyhledat symbol';
-
-//PERSONS
-$text['telefon'] = 'Telefon';
-$text['definitions'] = 'Zařazení';
-$text['kontakty'] = 'Kontakty';
-$text['kategorie'] = 'Kategorie';
-$text['strana'] = 'Strana';
-$text['specializace'] = 'Specializace';

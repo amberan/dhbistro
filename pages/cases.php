@@ -111,9 +111,10 @@ LEFT JOIN  ".DB_PREFIX."unread on  ".DB_PREFIX."case.id =  ".DB_PREFIX."unread.i
 WHERE ".$sqlFilter." GROUP BY ".DB_PREFIX."case.id ".sortingGet('case');
 
 $caseList = mysqli_query($database, $sql);
-
-if (mysqli_num_rows($caseList) > 0) {
+$caseCount = mysqli_num_rows($caseList);
+if ($caseCount > 0) {
     $latteParameters['case_record'] = $caseList;
+    $latteParameters['case_count'] = $caseCount;
 } else {
     $latteParameters['warning'] = $text['prazdnyvypis'];
 }

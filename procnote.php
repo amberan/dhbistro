@@ -14,9 +14,9 @@ $latteParameters['title'] = 'Uložení změn';
         mainMenu();
         switch ($_POST['idtable']) {
             case 1: $sourceurl = "/persons/"; $sourcename = "osoby"; break;
-            case 2: $sourceurl = "groups/"; $sourcename = "skupiny"; break;
+            case 2: $sourceurl = "/groups/"; $sourcename = "skupiny"; break;
             case 3: $sourceurl = "/cases/"; $sourcename = "případy"; break;
-            case 4: $sourceurl = "reports.php"; $sourcename = "hlášení"; break;
+            case 4: $sourceurl = "/reports/"; $sourcename = "hlášení"; break;
             default: $sourceurl = ""; $sourcename = ""; break;
         }
         if (!isset($_POST['nnotnew'])) {
@@ -31,9 +31,9 @@ $latteParameters['title'] = 'Uložení změn';
             mainMenu();
             switch ($_REQUEST['idtable']) {
             case 1: $sourceurl = "/persons/"; $sourcename = "osoby"; break;
-            case 2: $sourceurl = "groups/"; $sourcename = "skupiny"; break;
+            case 2: $sourceurl = "/groups/"; $sourcename = "skupiny"; break;
             case 3: $sourceurl = "/cases/"; $sourcename = "případy"; break;
-            case 4: $sourceurl = "reports.php"; $sourcename = "hlášení"; break;
+            case 4: $sourceurl = "/reports/"; $sourcename = "hlášení"; break;
             default: $sourceurl = ""; $sourcename = ""; break;
         }
             sparklets('<a href="./'.$sourceurl.'">'.$sourcename.'</a> &raquo; <strong>úprava poznámky</strong> &raquo; <strong>uložení změn</strong>');

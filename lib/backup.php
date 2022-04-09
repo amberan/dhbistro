@@ -314,6 +314,30 @@ function bistroDBFulltextAdd($data, $file = null): int
     return $alter;
 }
 
+function bistroDBIndexAdd($data, $file = null):int
+{
+    global $database,$configDB;
+    $alter = 0;
+    foreach (array_keys($data) as $table) {
+        foreach ($data[$table] as $indexName => $column) {
+            //SHOW INDEX FROM bistro.nw_person WHERE index_type = 'BTREE' and Key_name='side_spec_power_dead'
+            $checkSql = "SHOW INDEX FROM ".$configDB['dbDatabase'].".".DB_PREFIX."$table WHERE index_type = 'BTREE' and Key_name='$indexName'";
+            if (DBtableExist($table) != 0 && (mysqli_num_rows(mysqli_query($database, $checkSql)) == 0)) {
+                $alterSql = "ALTER TABLE ".$configDB['dbDatabase'].".".DB_PREFIX."$table ADD INDEX $indexName (" . implode(',', $column) . ")";
+                mysqli_query($database, $alterSql);
+                Debugger::log('UPDATER '.$file.': '.$alterSql);
+                $alter++;
+            }
+        }
+    }
+
+    return $alter;
+}
+
+
+
+
+
 /**
  * DROP table.column.
  *

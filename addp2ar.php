@@ -19,7 +19,7 @@ if ($label != '') {
 $latteParameters['title'] = 'Prirazeni osob k  hlášení';
 mainMenu();
         $customFilter = custom_Filter(17);
-    sparklets('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení</strong>'.($label != '' ? ' - "'.$label.' ('.$typestring.')"' : ''));
+    sparklets('<a href="/reports/">hlášení</a> &raquo; <strong>úprava hlášení</strong>'.($label != '' ? ' - "'.$label.' ('.$typestring.')"' : ''));
     if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || $user['userId'] == $author)) {
         $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']);
         if ($rec = mysqli_fetch_assoc($res)) {
