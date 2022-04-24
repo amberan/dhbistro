@@ -116,11 +116,15 @@ $latteParameters['title'] = 'Úprava symbolu';
 		<p><span class="poznamka-edit-buttons"><a class="connect" href="addsy2ar.php?rid=<?php echo $_REQUEST['rid']; ?>" title="přiřazení"><span class="button-text">přiřazení hlášení</span></a><em style="font-size:smaller;"> (přiřazování)</em></span></p>
 		<!-- následuje seznam případů -->
 		<?php // generování seznamu přiřazených hlášení
-            $sqlFilter = DB_PREFIX."report.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."report.secret<=".$user['aclSecret'];
-            $sql = "SELECT ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.label AS 'label'
+        if ($user['aclRoot'] < 1) {
+            $sqlFilter .= ' AND ('.DB_PREFIX.'report.reportDeleted is null OR '.DB_PREFIX.'report.reportDeleted  < from_unixtime(1)) ';
+        }
+
+            $sqlFilter .= " AND ".DB_PREFIX."report.reportSecret<=".$user['aclSecret'];
+            $sql = "SELECT ".DB_PREFIX."report.reportId AS 'id', ".DB_PREFIX."report.reportName AS 'label'
             FROM ".DB_PREFIX."symbol2all, ".DB_PREFIX."report
-            WHERE $sqlFilter AND ".DB_PREFIX."report.id=".DB_PREFIX."symbol2all.idrecord AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4
-            ORDER BY ".DB_PREFIX."report.label ASC";
+            WHERE $sqlFilter AND ".DB_PREFIX."report.reportId=".DB_PREFIX."symbol2all.idrecord AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4
+            ORDER BY ".DB_PREFIX."report.reportName ASC";
             $pers = mysqli_query($database, $sql);
 
             $i = 0;
@@ -129,7 +133,7 @@ $latteParameters['title'] = 'Úprava symbolu';
                 if ($i == 1) { ?>
 		<ul id=""><?php
                 } ?>
-			<li><a href="readactrep.php?rid=<?php echo $perc['id']; ?>"><?php echo $perc['label']; ?></a></li>
+			<li><a href="/reports/<?php echo $perc['id']; ?>"><?php echo $perc['label']; ?></a></li>
 		<?php
             }
             if ($i != 0) { ?>

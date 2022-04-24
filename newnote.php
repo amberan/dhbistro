@@ -12,11 +12,11 @@ switch ($_REQUEST['idtable']) {
                 case 1: $sourceurl1 = "editperson.php"; $sourceurl2 = "editperson.php"; $sourcename = "osoba"; $idtable = 1; $typ = ' osobě'; break;
                 case 2: $sourceurl1 = "editgroup.php"; $sourceurl2 = "editgroup.php"; $sourcename = "skupina"; $idtable = 2; $typ = 'e skupině';  break;
                 case 3: $sourceurl1 = "editcase.php"; $sourceurl2 = "editcase.php"; $sourcename = "případ"; $idtable = 3; $typ = ' případu'; break;
-                case 4: $sourceurl1 = "editactrep.php"; $sourceurl2 = "editactrep.php"; $sourcename = "hlášení"; $idtable = 4; $typ = ' hlášení'; break;
+                case 4: $sourceurl1 = "/reports/".$_REQUEST['rid']."/edit"; $sourceurl2 = "/reports/"; $sourcename = "hlášení"; $idtable = 4; $typ = ' hlášení'; break;
                 case 5: $sourceurl1 = "readperson.php?rid=".$_REQUEST['rid']."&hidenotes=0"; $sourceurl2 = "/persons/"; $sourcename = "osoby"; $idtable = 1; $typ = ' osobě'; break;
                 case 6: $sourceurl1 = "readgroup.php?rid=".$_REQUEST['rid']."&hidenotes=0"; $sourceurl2 = "/groups/"; $sourcename = "skupiny"; $idtable = 2; $typ = 'e skupině'; break;
                 case 7: $sourceurl1 = "readcase.php?rid=".$_REQUEST['rid']."&hidenotes=0"; $sourceurl2 = "/cases/"; $sourcename = "případy"; $idtable = 3; $typ = ' případu'; break;
-                case 8: $sourceurl1 = "readactrep.php?rid=".$_REQUEST['rid']."&hidenotes=0"; $sourceurl2 = "/reports/"; $sourcename = "hlášení"; $idtable = 4; $typ = ' hlášení'; break;
+                case 8: $sourceurl1 = "/reports/".$_REQUEST['rid']; $sourceurl2 = "/reports/"; $sourcename = "hlášení"; $idtable = 4; $typ = ' hlášení'; break;
                 case 9: $sourceurl1 = "editsymbol.php"; $sourceurl2 = "editsymbol.php"; $sourcename = "symbol"; $idtable = 7; $typ = ' symbolu'; break;
                 default: $sourceurl = ""; $sourcename = ""; break;
             }

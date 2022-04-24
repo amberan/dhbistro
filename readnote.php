@@ -29,7 +29,7 @@ latteDrawTemplate("header");
                     case 1: $sourceurl = "readperson.php?rid=".$rec['iditem']."&hidenotes=0"; $sourcename = "osoby"; break;
                     case 2: $sourceurl = "readgroup.php?rid=".$rec['iditem']."&hidenotes=0"; $sourcename = "skupiny"; break;
                     case 3: $sourceurl = "readcase.php?rid=".$rec['iditem']."&hidenotes=0"; $sourcename = "případy"; break;
-                    case 4: $sourceurl = "readactrep.php?rid=".$rec['iditem']."&hidenotes=0&truenames=0"; $sourcename = "hlášení"; break;
+                    case 4: $sourceurl = "/reports/".$rec['iditem']; $sourcename = "hlášení"; break;
                     default: $sourceurl = ""; $sourcename = ""; break;
                 }
                 if ($user['aclUser']) { //TODO NOTE permission

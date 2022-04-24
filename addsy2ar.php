@@ -92,26 +92,30 @@ seřadit je podle <select name="sort">
             }
             filter();
             // vypis hlášení
-            $sqlFilter = DB_PREFIX."report.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."report.secret<=".$user['aclSecret'];
+            if ($user['aclRoot'] < 1) {
+                $sqlFilter .= ' AND ('.DB_PREFIX.'report.reportDeleted is null OR '.DB_PREFIX.'report.reportDeleted  < from_unixtime(1)) ';
+            }
+
+            $sqlFilter .= " AND ".DB_PREFIX."report.reportSecret<=".$user['aclSecret'];
 
             $sql = "SELECT
-			".DB_PREFIX."report.id AS 'id',
-	        ".DB_PREFIX."report.datum AS 'datum',
-	        ".DB_PREFIX."report.label AS 'label',
-	        ".DB_PREFIX."report.task AS 'task',
+			".DB_PREFIX."report.reportId AS 'id',
+	        ".DB_PREFIX."report.reportModified AS 'datum',
+	        ".DB_PREFIX."report.reportName AS 'label',
+	        ".DB_PREFIX."report.reportTask AS 'task',
 	        ".DB_PREFIX."user.userName AS 'autor',
-	        ".DB_PREFIX."report.type AS 'type',
+	        ".DB_PREFIX."report.reportType AS 'type',
 	        ".DB_PREFIX."symbol2all.iduser
 	        	FROM ".DB_PREFIX."user, ".DB_PREFIX."report LEFT JOIN ".DB_PREFIX."symbol2all
-	        	ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."report.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4
-				WHERE $sqlFilter AND ".DB_PREFIX."report.iduser=".DB_PREFIX."user.userId ".$filterSqlCat.$fsql_stat."
+	        	ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."report.reportId AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4
+				WHERE $sqlFilter AND ".DB_PREFIX."report.reportOwner=".DB_PREFIX."user.userId ".$filterSqlCat.$fsql_stat."
 				ORDER BY ".$filterSqlSort;
             $res = mysqli_query($database, $sql); ?>
     <div style="padding-left: 0px; padding-right: 0px; padding-top: 0px; padding-bottom: 0px;" id="in-form-table">
         <?php
     while ($rec = mysqli_fetch_assoc($res)) {
         echo '<div class="news_div '.(($rec['type'] == 1) ? 'game_news' : 'system_news').'">
-	<div class="news_head"><input type="checkbox" name="report[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser']) ? ' checked="checked"' : '').' /><strong><a href="readactrep.php?rid='.$rec['id'].'">'.StripSlashes($rec['label']).'</a></strong></span>';
+	<div class="news_head"><input type="checkbox" name="report[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser']) ? ' checked="checked"' : '').' /><strong><a href="/reports/'.$rec['id'].'">'.StripSlashes($rec['label']).'</a></strong></span>';
 
         echo '<p><span>['.webdatetime($rec['datum']).']</span> '.$rec['autor'].'<br /> <strong>Úkol: </strong>'
     .StripSlashes($rec['task']).'</p></div>

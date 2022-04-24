@@ -9,7 +9,8 @@ latteDrawTemplate("header");
 $latteParameters['title'] = 'Uložení změn';
 
 // úprava poznámky
-    if (isset($_POST['noteid'], $_POST['editnote']) && !preg_match('/^[[:blank:]]*$/i', $_POST['title']) && !preg_match('/^[[:blank:]]*$/i', $_POST['note']) && is_numeric($_POST['nsecret'])) {
+    if (isset($_POST['noteid'], $_POST['editnote']) &&
+    !preg_match('/^[[:blank:]]*$/i', $_POST['title']) && !preg_match('/^[[:blank:]]*$/i', $_POST['note']) && is_numeric($_POST['nsecret'])) {
         authorizedAccess($_POST['idtable'], 9, $_POST['itemid']);
         mainMenu();
         switch ($_POST['idtable']) {
@@ -46,9 +47,18 @@ $latteParameters['title'] = 'Uložení změn';
 
     // nová poznámka
     if (isset($_POST['setnote'])) {
-        if (!preg_match('/^[[:blank:]]*$/i', $_POST['note']) && is_numeric($_POST['secret'])) {
+        if (!preg_match('/^[[:blank:]]*$/i', $_POST['note'])) {
             authorizedAccess($_POST['tableid'], 7, $_POST['itemid']);
-            mysqli_query($database, "INSERT INTO ".DB_PREFIX."note (note, title, datum, iduser, idtable, iditem, secret, deleted) VALUES('".$_POST['note']."','".$_POST['title']."','".Time()."','".$user['userId']."','".$_POST['tableid']."','".$_POST['itemid']."','".$_POST['secret']."','0')");
+            $secret=0;
+            if (isset($_POST['secret'])) {
+                $secret = 1;
+            }
+            if (isset($_POST['private'])) {
+                $secret = 2;
+            }
+            $createSql = "INSERT INTO ".DB_PREFIX."note (note, title, datum, iduser, idtable, iditem, secret, deleted)
+            VALUES('".$_POST['note']."','".$_POST['title']."','".Time()."','".$user['userId']."','".$_POST['tableid']."','".$_POST['itemid']."',".$secret.",0)";
+            mysqli_query($database, $createSql);
             $_SESSION['message'] = "Poznámka uložena";
             if (!isset($_POST['nnotnew'])) {
                 unreadRecords($_POST['tableid'], $_POST['itemid']);

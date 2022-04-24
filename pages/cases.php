@@ -93,7 +93,7 @@ if (isset($_POST['filter']) && sizeof($_POST['filter']) > 0) {
 $filter = filterGet('case');
 $sqlFilter = DB_PREFIX."case.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."case.secret<=".$user['aclSecret'];
 switch (@$filter['stat']) {
-    case 'on': $sqlFilter .= ' AND '.DB_PREFIX.'case.status in (0,1)'; break;
+    case 'on': $sqlFilter .= ' AND '.DB_PREFIX.'case.status in (0,1)'; break; //solved
     default: $sqlFilter .= ' AND '.DB_PREFIX.'case.status=0 ';
 }
 if (@$filter['secret'] != 'on') {

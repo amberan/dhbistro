@@ -13,7 +13,7 @@ $latteParameters['title'] = 'Přiřazení symbolu k pripadu';
     $autharray = mysqli_fetch_assoc(mysqli_query($database, $sql));
     $author = $autharray['created_by'];
     if (is_numeric($_REQUEST['rid']) && ($user['aclCase'] || $user['userId'] == $author)) {
-        $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']);
+        $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE reportId=".$_REQUEST['rid']);
         if ($rec = mysqli_fetch_assoc($res)) {
             ?>
 

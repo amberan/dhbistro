@@ -11,7 +11,7 @@
                             <p class="card-text text-light">{$text[nedokoncenahlaseni]}:</p>
                             {foreach $reports as $report}
                                 <p>
-                                    <a class="text-dark underline-link" href="{$URL[0]}readactrep.php?rid={@$report[0]}">{@$report[2]} {@$report[1]} </a>
+                                    <a class="text-dark underline-link" href="/reports/{@$report[0]}">{@$report[2]} {@$report[1]} </a>
                                 </p>
                             {/foreach}
                         {/if}

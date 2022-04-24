@@ -2,27 +2,28 @@
     <div class="row mb-1">
 	    <div class="col-12 col-sm-6 text-left">
 	        <h4>
-                {$text[hlaseniV]} {ifset $report_count}({$report_count}){/ifset}
+                {$text[hlaseni]|firstUpper} {ifset $reportCount}({$reportCount}){/ifset}
             </h4>
 	    </div>
         <div class="col-12 col-sm-6 text-right">
             <form action="{$URL[0]}{$URL[1]}/" method="POST" id="filter" class="header-form-wrapper">
                 <input type="hidden" name="filter[placeholder]" />
-vypsat
+{$text['vsechnahlaseni']|firstUpper}
                <div>
-                    <select name="filter[reportStatus]"  onchange="this.form.submit()">
-                        <option value="all">{$text['vsechna']}</option>
-                    {foreach $reportStatus as $id => $status }
-                        <option value="{$id}" {if (isset($filter['reportStatus']) AND $filter['reportStatus'] == $id AND $filter['reportStatus'] != 'all') } selected {/if}>{$status}</option>
+                    <select name="filter[reportType]"  onchange="this.form.submit()">
+                        <option value="0">{$text['nerozhoduje']}</option>
+                    {foreach $reportType as $id => $type }
+                        <option value="{$id}" {if (isset($filter['reportType']) AND $filter['reportType'] == $id) } selected {/if}>{$type}</option>
                     {/foreach}
                     </select>
                 </div>
-hlaseni
+
+{$text['vestavu']}
                <div>
-                    <select name="filter[reportType]"  onchange="this.form.submit()">
-                        <option value="0">{$text['vsechna']}</option>
-                    {foreach $reportType as $id => $type }
-                        <option value="{$id}" {if (isset($filter['reportType']) AND $filter['reportType'] == $id) } selected {/if}>{$type}</option>
+                    <select name="filter[reportStatus]"  onchange="this.form.submit()">
+                        <option value="all">{$text['nerozhoduje']}</option>
+                    {foreach $reportStatus as $id => $status }
+                        <option value="{$id}" {if (isset($filter['reportStatus']) AND $filter['reportStatus'] == $id AND $filter['reportStatus'] != 'all') } selected {/if}>{$status}</option>
                     {/foreach}
                     </select>
                 </div>
@@ -74,31 +75,31 @@ hlaseni
                     <thead>
                         <tr>
                             <th>
-                                {$text['report']}</a>
+                                {$text['report']|firstUpper}</a>
                             </th>
                             <th>
-                                {$text['stav']}
+                                {$text['stav']|firstUpper}
                             </th>
                             <th>
-                                {$text['probehlo']}<a href="{$URL[0]}{$URL[1]}/?sort=reportEventDate">&#8661;</a></a>
-                            </th>
-{*                            <th>
-                                {$text['vytvoreno']}  <a href="{$URL[0]}{$URL[1]}/?sort=reportCreated">&#8661;</a>
-                            </th>*}
-                            <th>
-                                {$text['zmeneno']}  <a href="{$URL[0]}{$URL[1]}/?sort=reportModified">&#8661;</a>
+                                {$text['probehlo']|firstUpper}<a href="{$URL[0]}{$URL[1]}/?sort=reportEventDate">&#8661;</a></a>
                             </th>
                             <th>
-                                {$text['ucastnici']}
+                                {$text['vytvoreno']|firstUpper}  <a href="{$URL[0]}{$URL[1]}/?sort=reportCreated">&#8661;</a>
                             </th>
-                            <th>{$text['akce']}</th>
+                            <th>
+                                {$text['zmeneno']|firstUpper}  <a href="{$URL[0]}{$URL[1]}/?sort=reportModified">&#8661;</a>
+                            </th>
+                            <th>
+                                {$text['ucastnici']|firstUpper}
+                            </th>
+                            <th>{$text['akce']|firstUpper}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {foreach $reports_record as $report}
+                        {foreach $reportsRecord as $report}
                             <tr class="{if @$report['unread']} unread_record{/if}{if $report['reportType'] == 1} vyjezd{else} vyslech{/if}">
                                 <td>
-                                    {$reportType[$report['reportType']]}: <a href="/readactrep.php?rid={$report['reportId']}">{$report['reportName']}</a>
+                                    {$reportType[$report['reportType']]}: <a href="/reports/{$report['reportId']}">{$report['reportName']}</a>
                                     <br/>{$text['ukol']}: {$report['reportTask']}
                                     {if $report['reportSecret'] > 0 }
                                         <span class="badge rounded-pill bg-danger text-light">{$text['utajeno']|upper}</span>
@@ -118,17 +119,18 @@ hlaseni
                                 </td>
                                 <td>
                                     {$reportStatus[$report['reportStatus']]}</br>
-                                    {$text['prirazeno']}: {if $report['reportOwnerName'] }{$report['reportOwnerName']}{else}{$report['reportOwnerUserName']}{/if}</a>
+                                    {if $report['reportOwnerName'] }{$report['reportOwnerName']}{else}{$report['reportOwnerUserName']}{/if}</a>
                                 </td>
                                 <td>
                                     {if $report['reportModified']}{if $report['reportEventStart'] && $report['reportEventEnd']}{$report['reportEventStart']} - {$report['reportEventEnd']}{/if} {$report['reportModified']|date:'%d.%m.%Y'}{else}<em>{$text['neznamo']}</em>{/if}
                                 </td>
-{*                                <td>
-                                    {if $report['reportCreated']} {$report['reportCreated']|date:'%d.%m.%Y'}{else}<em>{$text['neznamo']}</em>{/if}
-                                </td>*}
+                                <td>
+                                    {if $report['reportCreated']} {$report['reportCreated']|date:'%d.%m.%Y'}{else}<em>{$text['neznamo']}</em>{/if}<br/>
+                                    {if $report['reportCreatedByName']}{$report['reportCreatedByName']}{else}{$report['reportCreatedByUserName']}{/if}
+                                </td>
                                 <td>
                                     {$report['reportModified']|date:'%d.%m.%Y'}<br/>
-                                    {$text['zmenil']}: {if $report['reportModifiedByName']}{$report['reportModifiedByName']}{else}{$report['reportModifiedByUserName']}{/if}
+                                    {if $report['reportModifiedByName']}{$report['reportModifiedByName']}{else}{$report['reportModifiedByUserName']}{/if}
                                 </td>
                                 <td>
                                     {ifset $report['participant']}
@@ -139,7 +141,7 @@ hlaseni
                                 </td>
                                 <td>
                                     {if $user['aclReport'] AND !$report['reportDeleted']}
-                                        <a class="btn btn-sm btn-brick btn-info mb-1" href="/editactrep.php?rid={$report['reportId']}" alt="{$text[upravitreport]}">
+                                        <a class="btn btn-sm btn-brick btn-info mb-1" href="/reports/{$report['reportId']}/edit" alt="{$text[upravitreport]}">
                                             {php  echo file_get_contents("images/icons/edit-solid.svg")}
                                         </a>
                                     {/if}

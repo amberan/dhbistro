@@ -6,11 +6,11 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
     // následuje načtení dat reportu a jejich uložení do vybranných proměných
-    $reportarray = mysqli_fetch_assoc(mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid'])); // načte data z DB
-    $type = intval($reportarray['type']); // určuje typ hlášení
+    $reportarray = mysqli_fetch_assoc(mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE reportId=".$_REQUEST['rid'])); // načte data z DB
+    $type = intval($reportarray['reportType']); // určuje typ hlášení
         $typestring = $type == 1 ? 'výjezd' : ($type == 2 ? 'výslech' : '?'); //odvozuje slovní typ hlášení
-    $author = $reportarray['iduser']; // určuje autora hlášení
-    $label = ($reportarray['label'] ?? ''); // nadpis hlášení, ke kterému je přiřazováno
+    $author = $reportarray['reportOwner']; // určuje autora hlášení
+    $label = ($reportarray['reportName'] ?? ''); // nadpis hlášení, ke kterému je přiřazováno
 
 if ($label != '') {
     $latteParameters['title'] .= $label.' ('.$typestring.')'; // specifikace TITLE
@@ -21,7 +21,7 @@ mainMenu();
         $customFilter = custom_Filter(17);
     sparklets('<a href="/reports/">hlášení</a> &raquo; <strong>úprava hlášení</strong>'.($label != '' ? ' - "'.$label.' ('.$typestring.')"' : ''));
     if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || $user['userId'] == $author)) {
-        $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']);
+        $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE reportId=".$_REQUEST['rid']);
         if ($rec = mysqli_fetch_assoc($res)) {
             ?>
 

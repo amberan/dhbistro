@@ -8,7 +8,7 @@
                 <ul class="navbar-nav mr-auto">
 {foreach $menu as $menuItem}
                     <li class="nav-item mr-2{if $menuItem[2]>0} unread{/if}">
-                        <a class="relative btn btn-{$config['themeBg']} nav-link{if ($menuItem[1]|slice: 1, -1) == $URL[1]} nav-link-active{/if}" href="{$menuItem[1]}">{$menuItem[0]}{if $menuItem[2]>0} <span class="unread-indicator">{$menuItem[2]}</span>{/if}</a>
+                        <a class="relative btn btn-{$config['themeBg']} nav-link{if ($menuItem[1]|slice: 1, -1) == $URL[1]} nav-link-active{/if}" href="{$menuItem[1]}">{$menuItem[0]|firstUpper}{if $menuItem[2]>0} <span class="unread-indicator">{$menuItem[2]}</span>{/if}</a>
                     </li>
 {/foreach}
                 </ul>
@@ -31,7 +31,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                             {foreach $menuSub as $menuSubItem}
-                                <a class="dropdown-item" href="{$menuSubItem[1]}">{$menuSubItem[0]}</a>
+                                <a class="dropdown-item" href="{$menuSubItem[1]}">{$menuSubItem[0]|firstUpper}</a>
                             {/foreach}
                         </div>
                     </li>

@@ -8,7 +8,7 @@
                 <div class="breadcrumb-side-right text-right">
                     {if @$actions}
                         {foreach $actions as $action}
-                            <a class="btn btn-sm btn-primary breadcrumb-item" href="{$action[0]}">{$action[1]}</a>
+                            <a class="btn btn-sm btn-primary breadcrumb-item" href="{$action[0]}">{$action[1]|firstUpper}</a>
                             {if !$iterator->last} | {/if}
                         {/foreach}
                     {/if}

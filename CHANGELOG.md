@@ -18,7 +18,22 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 ### Security
  -->
 
-## 1.8.9 - 2022-03-12
+
+TODO: check all 'report (169) and  "report (191) in code - columns renamed, status=3 > reportArchived > timestamp, deleted > reportDeleted timestamp
+
+## 1.8.11 - 2022-04-20
+### Changed
+- Refactored: report new form #108
+- Refactored: session span lenght in $config #232
+### Removed
+- Database: old report columns #108
+
+## 1.8.10 - 2022-04-10
+### Changed
+- Refactored: report view #108
+- Refactored: report edit form #108
+
+## 1.8.9 - 2022-04-09
 ### Added
 - Feature: BiStro needs you #207
 - Feature: links to other apps #169
@@ -31,10 +46,6 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Refactored: listing reports #114
 ### Security
 - Feature: deny access to passwords #225
-
-
-TODO: check all 'report (169) and  "report (191) in code - columns renamed, status=3 > reportArchived > timestamp, deleted > reportDeleted timestamp
-
 
 ## 1.8.8 - 2021-12-04
 ### Added

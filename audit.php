@@ -80,7 +80,7 @@ $latteParameters['title'] = 'Audit';
                             $name = 'neznámý';
                         }
                         break;
-                case 4: $sqlType = "SELECT ".DB_PREFIX."report.label as 'name' FROM ".DB_PREFIX."report WHERE ".DB_PREFIX."report.id='".$idrecord."'";
+                case 4: $sqlType = "SELECT ".DB_PREFIX."report.reportName as 'name' FROM ".DB_PREFIX."report WHERE ".DB_PREFIX."report.reportId='".$idrecord."'";
                         $resType = mysqli_query($database, $sqlType);
                         if (mysqli_num_rows($resType)) {
                             while ($recType = mysqli_fetch_assoc($resType)) {
@@ -120,7 +120,7 @@ $latteParameters['title'] = 'Audit';
                 case 1: $link = 'readperson.php?rid='.$recid.'&hidenotes=0'; break;
                 case 2: $link = 'readgroup.php?rid='.$recid.'&hidenotes=0'; break;
                 case 3: $link = 'readcase.php?rid='.$recid.'&hidenotes=0'; break;
-                case 4: $link = 'readactrep.php?rid='.$recid.'&hidenotes=0&truenames=0'; break;
+                case 4: $link = '/reports/'.$recid.''; break;
                 case 7: $link = 'readsymbol.php?rid='.$recid; break;
                 case 8: $link = 'edituser.php?rid='.$recid; break;
                 case 10: $link = 'tasks.php'; break;

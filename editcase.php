@@ -114,14 +114,14 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
 		<ul>
 		<?php
         if ($user['aclSecret']) {
-            $sql = "SELECT ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.task AS 'task', ".DB_PREFIX."user.userName AS 'user' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."report, ".DB_PREFIX."user WHERE ".DB_PREFIX."report.id=".DB_PREFIX."ar2c.idreport AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userId=".DB_PREFIX."report.iduser ORDER BY ".DB_PREFIX."report.label ASC";
+            $sql = "SELECT ".DB_PREFIX."report.reportId AS 'id', ".DB_PREFIX."report.reportName AS 'label', ".DB_PREFIX."report.reportTask AS 'task', ".DB_PREFIX."user.userName AS 'user' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."report, ".DB_PREFIX."user WHERE ".DB_PREFIX."report.reportId=".DB_PREFIX."ar2c.idreport AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userId=".DB_PREFIX."report.reportOwner ORDER BY ".DB_PREFIX."report.reportName ASC";
         } else {
-            $sql = "SELECT ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.task AS 'task', ".DB_PREFIX."user.userName AS 'user' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."report, ".DB_PREFIX."user WHERE ".DB_PREFIX."report.id=".DB_PREFIX."ar2c.idreport AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userId=".DB_PREFIX."report.iduser AND ".DB_PREFIX."report.secret=0 ORDER BY ".DB_PREFIX."report.label ASC";
+            $sql = "SELECT ".DB_PREFIX."report.reportId AS 'id', ".DB_PREFIX."report.reportName AS 'label', ".DB_PREFIX."report.reportTask AS 'task', ".DB_PREFIX."user.userName AS 'user' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."report, ".DB_PREFIX."user WHERE ".DB_PREFIX."report.reportId=".DB_PREFIX."ar2c.idreport AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userId=".DB_PREFIX."report.reportOwner AND ".DB_PREFIX."report.reportSecret=0 ORDER BY ".DB_PREFIX."report.reportName ASC";
         }
             $pers = mysqli_query($database, $sql);
             $reports = [];
             while ($perc = mysqli_fetch_assoc($pers)) {
-                $reports[] = '<li><a href="readactrep.php?rid='.$perc['id'].'">'.$perc['label'].'</a> - '.$perc['task'].' - <b>'.$perc['user'].'</b>';
+                $reports[] = '<li><a href="/reports/'.$perc['id'].'">'.$perc['label'].'</a> - '.$perc['task'].' - <b>'.$perc['user'].'</b>';
             }
             echo implode('; ', $reports) != "" ? implode('; ', $reports) : '<em>Nejsou připojena žádná hlášení.</em>'; ?>
 		</ul>
