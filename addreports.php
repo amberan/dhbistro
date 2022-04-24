@@ -18,7 +18,7 @@ $latteParameters['title'] = 'Úprava hlášení';
             $case = $_POST['case'];
         }
         mainMenu();
-        sparklets('<a href="/reports/">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>uložení změn</strong>', '<a href="readactrep.php?rid='.$_POST['reportid'].'&hidenotes=0&truenames=0">zobrazit upravené</a>');
+        sparklets('<a href="/reports/">hlášení</a> &raquo; <a href="/reports/'.$_POST['reportid'].'/edit">úprava hlášení</a> &raquo; <strong>uložení změn</strong>', '<a href="/reports/'.$_POST['reportid'].'">zobrazit upravené</a>');
         echo '<div id="obsah"><p>Hlášení přiřazeno k příslušným případům.</p></div>';
         if (isset($_POST['case'])) {
             for ($i = 0;$i < Count($case);$i++) {
@@ -33,7 +33,7 @@ $latteParameters['title'] = 'Úprava hlášení';
         if ($user['aclSecret'] == 1) {
             mysqli_query($database, "DELETE FROM ".DB_PREFIX."ar2c WHERE ".DB_PREFIX."ar2c.idcase=".$_POST['caseid']);
         } else {
-            mysqli_query($database, "DELETE c FROM ".DB_PREFIX."ar2c as c, ".DB_PREFIX."report as p WHERE c.idreport=p.id AND p.secret=0 AND c.idcase=".$_POST['caseid']);
+            mysqli_query($database, "DELETE c FROM ".DB_PREFIX."ar2c as c, ".DB_PREFIX."report as p WHERE c.idreport=p.reportId AND p.reportSecret=0 AND c.idcase=".$_POST['caseid']);
         }
         if (isset($_POST['report'])) {
             $report = $_POST['report'];

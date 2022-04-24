@@ -9,10 +9,10 @@ $latteParameters['title'] = 'Prirazeni pripadu k hlaseni ';
 mainMenu();
     $customFilter = custom_Filter(18);
     sparklets('<a href="/reports/">hlášení</a> &raquo; <strong>úprava hlášení</strong>');
-    $autharray = mysqli_fetch_assoc(mysqli_query($database, "SELECT iduser FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']));
-    $author = $autharray['iduser'];
+    $autharray = mysqli_fetch_assoc(mysqli_query($database, "SELECT reportOwner FROM ".DB_PREFIX."report WHERE reportId=".$_REQUEST['rid']));
+    $author = $autharray['reportOwner'];
     if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || $user['userId'] == $author)) {
-        $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']);
+        $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE reportId=".$_REQUEST['rid']);
         if ($rec = mysqli_fetch_assoc($res)) {
             ?>
 

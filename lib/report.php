@@ -93,14 +93,16 @@ function reportsAssignedTo($userid): array
         }
         $participantSql = "SELECT
             concat(COALESCE(".DB_PREFIX."person.name,''),' ',COALESCE(".DB_PREFIX."person.surname,'')) as participantName,
-            ".DB_PREFIX."ar2p.role as participantRole
+            ".DB_PREFIX."ar2p.role as participantRole,
+            ".DB_PREFIX."person.id as participantId
             FROM ".DB_PREFIX."person
             JOIN ".DB_PREFIX."ar2p on ".DB_PREFIX."person.id = ".DB_PREFIX."ar2p.idperson
             WHERE ".DB_PREFIX."ar2p.idreport = $reportId AND ".DB_PREFIX."person.secret <=".$user['aclSecret']." $sqlFilter
             ORDER BY ".DB_PREFIX."ar2p.role DESC";
         if ($participantList = mysqli_query($database, $participantSql)) {
             while ($participant = mysqli_fetch_assoc($participantList)) {
-                $participants[] = array('participantRole' => reportRole($participant['participantRole']),
+                $participants[] = array('participantId' => $participant['participantId'],
+                                        'participantRole' => reportRole($participant['participantRole']),
                                         'participantName' => $participant['participantName']);
             }
         }
@@ -140,8 +142,6 @@ function reportsAssignedTo($userid): array
         }
     }
 
-
-
     function reportCases($reportId)
     {
         global $database,$user;
@@ -162,6 +162,107 @@ function reportsAssignedTo($userid): array
         }
         if (isset($cases)) {
             return $cases;
+        } else {
+            return false;
+        }
+    }
+
+    function reportSymbols($reportId)
+    {
+        global $database,$user;
+        $sqlFilter = ' AND '.DB_PREFIX.'symbol.secret <= '.$user['aclSecret'];
+        if ($user['aclRoot'] < 1) {
+            $sqlFilter = " AND ".DB_PREFIX."symbol.deleted = 0 ";
+        }
+        $symbolSql = "SELECT
+            ".DB_PREFIX."symbol2all.*,
+            ".DB_PREFIX."symbol.*
+            FROM ".DB_PREFIX."symbol2all
+            JOIN ".DB_PREFIX."symbol on ".DB_PREFIX."symbol2all.idsymbol = ".DB_PREFIX."symbol.id
+            WHERE
+            ".DB_PREFIX."symbol.assigned=0
+            AND ".DB_PREFIX."symbol2all.idrecord=".$reportId."
+            AND ".DB_PREFIX."symbol2all.table=4 ".$sqlFilter;
+
+        if ($symbolList = mysqli_query($database, $symbolSql)) {
+            while ($symbol = mysqli_fetch_assoc($symbolList)) {
+                $symbols[] = array( 'symbolId' => $symbol['id'],
+                                    'symbolHash' => $symbol['symbol'],
+                                    'symbolDeleted' => $symbol['deleted'],
+                                    'symbolCreated' => $symbol['created'],
+                                    'symbolCreatedBy' => $symbol['created_by'],
+                                    'symbolModified' => $symbol['modified'],
+                                    'symbolModifiedBy' => $symbol['modified_by']);
+            }
+        }
+        if (isset($symbols)) {
+            return $symbols;
+        } else {
+            return false;
+        }
+    }
+
+    function reportNotes($reportId)
+    {
+        global $database,$user;
+        $sqlFilter = '';
+//        $sqlFilter = 'AND ('.DB_PREFIX.'note.secret <= '.$user['aclSecret'].' OR '.DB_PREFIX.'note.iduser='.$user['userId'].' )';
+        if ($user['aclRoot'] < 1) {
+            $sqlFilter = " AND ".DB_PREFIX."note.deleted = 0 ";
+        }
+        $noteSql = "SELECT
+            ".DB_PREFIX."note.*
+        FROM ".DB_PREFIX."note
+        WHERE ".DB_PREFIX."note.iditem=$reportId AND ".DB_PREFIX."note.idtable=4 $sqlFilter
+        ORDER BY ".DB_PREFIX."note.datum DESC";
+        if ($noteList = mysqli_query($database, $noteSql)) {
+            while ($note = mysqli_fetch_assoc($noteList)) {
+                $notes[] = array(   'noteId' => $note['id'],
+                                    'noteCreated' => $note['datum'],
+                                    'noteCreatedBy' => $note['iduser'],
+                                    'noteTitle' => $note['title'],
+                                    'noteNote' => $note['note'],
+                                    'noteDeleted' => $note['deleted'],
+                                    'noteSecret' => $note['secret']);
+            }
+        }
+        if (isset($notes)) {
+            return $notes;
+        } else {
+            return false;
+        }
+    }
+
+    function reportFiles($reportId)
+    {
+        global $database,$user,$config;
+        $sqlFilter = DB_PREFIX.'file.secret <= '.$user['aclSecret'];
+        // if ($user['aclRoot'] < 1) {
+        //     $sqlFilter = " AND ".DB_PREFIX."symbol.deleted = 0 ";
+        // }
+        $fileSql = "SELECT
+            ".DB_PREFIX."file.*
+            FROM ".DB_PREFIX."file
+            WHERE $sqlFilter AND ".DB_PREFIX."file.iditem=$reportId AND ".DB_PREFIX."file.idtable=4
+            ORDER BY ".DB_PREFIX."file.datum ASC";
+        if ($fileList = mysqli_query($database, $fileSql)) {
+            while ($file = mysqli_fetch_assoc($fileList)) {
+                $image = false;
+                if (in_array($file['mime'], $config['mime-image'], true)) {
+                    $image = true;
+                }
+                $files[] = array(   'fileId' => $file['id'],
+                                    'fileMime' => $file['mime'],
+                                    'fileSecret' => $file['secret'],
+                                    'fileHas' => $file['uniquename'],
+                                    'fileName' => $file['originalname'],
+                                    'fileCreatedBy' => $file['iduser'],
+                                    'fileCreated' => $file['datum'],
+                                    'fileIsImage' => $image);
+            }
+        }
+        if (isset($files)) {
+            return $files;
         } else {
             return false;
         }

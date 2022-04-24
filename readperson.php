@@ -184,16 +184,19 @@ latteDrawTemplate("header");
             } ?></p>
 		<div class="clear">&nbsp;</div>
                 <h3>Figuruje v těchto hlášení: </h3><p><?php
-                $sqlFilter = DB_PREFIX."report.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."report.secret<=".$user['aclSecret'];
-            $sql_r = "SELECT ".DB_PREFIX."report.adatum as date_created, ".DB_PREFIX."report.datum as date_changed, ".DB_PREFIX."report.secret AS 'secret', ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."ar2p.iduser
+                if ($user['aclRoot'] < 1) {
+                    $sqlFilter .= ' AND ('.DB_PREFIX.'report.reportDeleted is null OR '.DB_PREFIX.'report.reportDeleted  < from_unixtime(1)) ';
+                }
+            $sqlFilter .= " AND ".DB_PREFIX."report.reportSecret<=".$user['aclSecret'];
+            $sql_r = "SELECT ".DB_PREFIX."report.reportCreated as date_created, ".DB_PREFIX."report.reportModified as date_changed, ".DB_PREFIX."report.reportSecret AS 'secret', ".DB_PREFIX."report.reportName AS 'label', ".DB_PREFIX."report.reportId AS 'id', ".DB_PREFIX."ar2p.iduser
                 FROM ".DB_PREFIX."report, ".DB_PREFIX."ar2p
-                WHERE $sqlFilter AND ".DB_PREFIX."ar2p.idreport=".DB_PREFIX."report.id AND ".DB_PREFIX."ar2p.idperson=".$_REQUEST['rid']."
-                ORDER BY ".DB_PREFIX."report.label ASC";
+                WHERE $sqlFilter AND ".DB_PREFIX."ar2p.idreport=".DB_PREFIX."report.reportId AND ".DB_PREFIX."ar2p.idperson=".$_REQUEST['rid']."
+                ORDER BY ".DB_PREFIX."report.reportName ASC";
             $res_r = mysqli_query($database, $sql_r);
             if (mysqli_num_rows($res_r)) {
                 $reports = [];
                 while ($rec_r = mysqli_fetch_assoc($res_r)) {
-                    $reports[] = '<a href="./readactrep.php?rid='.$rec_r['id'].'&hidenotes=0&truenames=0">'.stripslashes($rec_r['label']).'</a> | vytvořeno: '.webdate($rec_r['date_created']).' | změněno: '.webdate($rec_r['date_changed']);
+                    $reports[] = '<a href="/reports/'.$rec_r['id'].'">'.stripslashes($rec_r['label']).'</a> | vytvořeno: '.webdate($rec_r['date_created']).' | změněno: '.webdate($rec_r['date_changed']);
                 }
                 echo implode('<br />', $reports);
             } else {

@@ -110,10 +110,11 @@ $latteParameters['filter'] = $filter;
             /* Hlášení */
             $fsql_archiv = '';
             if ($filter['archived'] != 'on') {
-                $fsql_archiv = ' AND '.DB_PREFIX.'report.status<>3 ';
+                $fsql_archiv = ' AND ('.DB_PREFIX.'report.reportArchived is null OR '.DB_PREFIX.'report.reportArchived  < from_unixtime(1)) ';
             }
             $sql = "
-    SELECT ".DB_PREFIX."report.adatum as date_created, ".DB_PREFIX."report.datum as date_changed,  ".DB_PREFIX."report.label , ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.status, ".DB_PREFIX."report.secret, ".DB_PREFIX."report.deleted
+    SELECT ".DB_PREFIX."report.reportCreated as date_created, ".DB_PREFIX."report.reportModified as date_changed,  ".DB_PREFIX."report.reportName , ".DB_PREFIX."report.reportId AS 'id', ".DB_PREFIX."report.reportStatus,
+    ".DB_PREFIX."report.reportSecret, ".DB_PREFIX."report.reportDeleted
     FROM ".DB_PREFIX."report
 	WHERE ".$sqlFilter." AND (label LIKE '%$searchedfor%' or task LIKE  '%$searchedfor%' or summary LIKE  '%$searchedfor%' or impacts LIKE  '%$searchedfor%' or details LIKE  '%$searchedfor%')"
     .$searchContitions.$fsql_archiv." ORDER BY 5 * MATCH(label) AGAINST ('$searchedfor')
@@ -138,7 +139,7 @@ $latteParameters['filter'] = $filter;
         $even = 0;
             while ($rec = mysqli_fetch_assoc($res)) {
                 echo '<tr class="'.($even % 2 === 0 ? 'even' : 'odd').'">
-	<td><a href="readactrep.php?rid='.$rec['id'].'&amp;hidenotes=0&amp;truenames=0">'.stripslashes($rec['label']).'</a></td>
+	<td><a href="/reports/'.$rec['id'].'">'.stripslashes($rec['label']).'</a></td>
 		<td>'.webdate($rec['date_created']).'</td>
 		<td>'.webdate($rec['date_changed']).'</td>
         <td>';
@@ -354,13 +355,13 @@ $latteParameters['filter'] = $filter;
                             break;
                         case 4:
                             $res_note = mysqli_query($database, "
-                                SELECT ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.secret AS 'secret'
+                                SELECT ".DB_PREFIX."report.reportName AS 'label', ".DB_PREFIX."report.reportId AS 'id', ".DB_PREFIX."report.reportSecret AS 'secret'
                                 FROM ".DB_PREFIX."report
                                 WHERE id = ".$rec['iditem']);
                             while ($rec_note = mysqli_fetch_assoc($res_note)) {
                                 $notetitle = $rec_note['label'];
                                 $type = "Hlášení";
-                                $linktype = "readactrep.php?rid=".$rec_note['id']."&amp;hidenotes=0&amp;truenames=0";
+                                $linktype = "/reports/".$rec_note['id'];
                             }
                             break;
                         default:

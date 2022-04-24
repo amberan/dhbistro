@@ -121,7 +121,7 @@ if (isset($_POST['addtoareport'])) {
         }
     }
     mainMenu();
-    sparklets('<a href="/reports/">hlášení</a> &raquo; <a href="./editactrep.php?rid='.$_POST['reportid'].'">úprava hlášení</a> &raquo; <strong>uložení změn</strong>', '<a href="readactrep.php?rid='.$_POST['reportid'].'&hidenotes=0&truenames=0">zobrazit upravené</a>');
+    sparklets('<a href="/reports/">hlášení</a> &raquo; <a href="/reports/'.$_POST['reportid'].'/edit">úprava hlášení</a> &raquo; <strong>uložení změn</strong>', '<a href="/reports/'.$_POST['reportid'].'">zobrazit upravené</a>');
     echo '<div id="obsah"><p>Osoby příslušné k hlášení uloženy.</p></div>';
     latteDrawTemplate("footer");
 }

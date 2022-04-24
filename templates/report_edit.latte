@@ -1,0 +1,284 @@
+<form action="/reports/{$report['reportId']}/edit" method="post">
+{ifset $reportNewId}
+VYTVORIT NOVY report
+{/ifset}
+
+<input name="reportName" value="{$report['reportName']}" />
+{if $report['reportSecret'] > 0 }
+    <span class="badge rounded-pill bg-danger text-light">{$text['utajeno']|upper}</span>
+{/if}
+{if $report['reportArchived']}
+<span class="badge rounded-pill bg-secondary text-light mb-1">{$text['archivovano']}</span>
+{/if}
+
+
+<br/>
+{$text['hlaseni']|firstUpper}
+<select name="reportType">
+{foreach $reportType as $reportTypeValue => $reportTypeName}
+    <option value={$reportTypeValue}{if $reportTypeValue == $report[reportType]} SELECTED{/if}> {$reportTypeName}</option>
+{/foreach}
+</select>
+<br/>
+{$text['ukol']}:<input name="reportTask" value="{$report['reportTask']}" />
+<br/>
+{$text['vytvoril']}: {$report['reportCreatedByName']} {$report['reportCreated']}
+<br/>
+{{$text['poslednizmena']|firstUpper}}: {$report['reportModifiedByName']} {$report['reportModified']}
+<br/>
+{$text['prirazeno']}:
+<select name="reportOwner">
+{foreach $suitableUsers as $suitableUser}
+    <option value="{$suitableUser['userId']}" {if $report['reportOwner'] == $suitableUser['userId']} SELECTED{/if}>{if $suitableUser['personName']}{$suitableUser['personName']}{else}{$suitableUser['userName']}{/if}</option>
+{/foreach}
+</select>
+<br/>
+{if $user['aclSecret'] > 0}
+{$text[tajne]}? <select name="reportSecret">
+    <option value="0">verejne</option>
+    <option value="1" {if $report[reportSecret] == 1} SELECTED{/if}>{$text['utajeno']}</option>
+</select>
+<br/>
+{/if}
+{$text['archiv']}:
+{if $report['reportArchived']}{$text['archivovano']} <input name="reportArchived" disabled value="{$report['reportArchived']}" />{else}archivovat {/if}
+<input name="reportArchivedCheck" type="checkbox" {if $report['reportArchived']}CHECKED{/if}>
+
+<br/>
+{$text['probehlo']} TODO DATEPICKER DAY <input name="reportEventDate" value="{$report['reportEventDate']}" /> {$text['od']}: <input name="reportEventStart" value={$report['reportEventStart']}> {$text['do']}: <input name="reportEventEnd" value={$report['reportEventEnd']}>
+<br/>
+
+{$text['stavhlaseni']}: <select name="reportStatus">
+{foreach $reportStatus as $reportStatusValue => $reportStatusName}
+    <option value={$reportStatusValue}{if $reportStatusValue == $report[reportStatus]} SELECTED{/if}> {$reportStatusName}</option>
+{/foreach}
+</select>
+<br/>
+{$text['osobyprirazenekhlaseni']}:
+{if $reportParticipants != false}
+    {foreach $reportParticipants as $participant}
+            <a href="/readperson.php?rid={$participant['participantId']}" title={$participant['participantRole']} {ifset $participant['participantDeleted'] }class="deleted"{/ifset}>{$participant['participantName']|noescape}</a>
+            {sep}, {/sep}
+    {/foreach}
+    {else}
+    <em>{$text['zadneosoby']}</em>
+{/if}
+<a href="/addp2ar.php?rid={$report[reportId]}">Upravit osoby</a>
+<br/>
+{if $reportCases != false}
+{$text['spojenospripady']}:
+    {foreach $reportCases as $case}
+        <a href="{$URL[0]}/readcase.php?rid={$case['caseId']}&hidenotes=0" {ifset $case['caseDeleted']}class="deleted"{/ifset}>{$case['caseName']}<a/>
+            {sep}, {/sep}
+    {/foreach}
+    {else}
+    {$text['zadnepripady']}.
+{/if}
+
+
+<a href="/addar2c.php?rid={$report['reportId']}">{$text['prirazenipripadu']}</a>
+<br/>
+
+{$text['shrnuti']}:
+<input class="form-control"  name="reportSummary" id="report{$report['reportId']|noescape}summaryRaw" type="hidden" />
+<div id="report{$report['reportId']|noescape}summary" class="form-control writable-section"></div>
+        <script type="text/javascript">
+        </script>
+    </div>
+</div>
+<script>
+    const summary = new toastui.Editor({
+    el: document.querySelector('#report{$report['reportId']|noescape}summary'),
+    height: '250px',
+    initialEditType: 'wysiwyg',
+    previewStyle: 'vertical',
+    initialValue:   `{$report['reportSummary']|noescape} `,
+    toolbarItems: [
+          ['heading', 'bold', 'italic', 'strike'],
+          ['hr', 'quote'],
+          ['ul', 'ol', 'task', 'indent', 'outdent'],
+          ['table', 'image', 'link'],
+    ],
+    });
+    setInterval(function() {
+        document.getElementById("report{$report['reportId']|noescape}summaryRaw").value = summary.getMarkdown();
+    }, 5);
+</script>
+
+<br/>
+{$text['moznedopady']}:
+<input class="form-control"  name="reportImpact" id="report{$report['reportId']|noescape}impactRaw" type="hidden" />
+<div id="report{$report['reportId']|noescape}impact" class="form-control writable-section"></div>
+        <script type="text/javascript">
+        </script>
+    </div>
+</div>
+<script>
+    const impact = new toastui.Editor({
+    el: document.querySelector('#report{$report['reportId']|noescape}impact'),
+    height: '250px',
+    initialEditType: 'wysiwyg',
+    previewStyle: 'vertical',
+    initialValue:   `{$report['reportImpact']|noescape} `,
+    toolbarItems: [
+          ['heading', 'bold', 'italic', 'strike'],
+          ['hr', 'quote'],
+          ['ul', 'ol', 'task', 'indent', 'outdent'],
+          ['table', 'image', 'link'],
+    ],
+    });
+    setInterval(function() {
+        document.getElementById("report{$report['reportId']|noescape}impactRaw").value = impact.getMarkdown();
+    }, 5);
+</script>
+
+<br/>
+{$text['podrobnyprubeh']}:
+<input class="form-control"  name="reportDetail" id="report{$report['reportId']|noescape}detailRaw" type="hidden" />
+<div id="report{$report['reportId']|noescape}detail" class="form-control writable-section"></div>
+        <script type="text/javascript">
+        </script>
+    </div>
+</div>
+<script>
+    const detail = new toastui.Editor({
+    el: document.querySelector('#report{$report['reportId']|noescape}detail'),
+    height: '250px',
+    initialEditType: 'wysiwyg',
+    previewStyle: 'vertical',
+    initialValue:   `{$report['reportDetail']|noescape} `,
+    toolbarItems: [
+          ['heading', 'bold', 'italic', 'strike'],
+          ['hr', 'quote'],
+          ['ul', 'ol', 'task', 'indent', 'outdent'],
+          ['table', 'image', 'link'],
+    ],
+    });
+
+    setInterval(function() {
+        document.getElementById("report{$report['reportId']|noescape}detailRaw").value = detail.getMarkdown();
+    }, 5);
+</script>
+
+<br/>
+{$text['energetickanarocnost']}:
+<input class="form-control"  name="reportCost" id="report{$report['reportId']|noescape}costRaw" type="hidden" />
+<div id="report{$report['reportId']|noescape}cost" class="form-control writable-section"></div>
+        <script type="text/javascript">
+        </script>
+    </div>
+</div>
+<script>
+    const cost = new toastui.Editor({
+    el: document.querySelector('#report{$report['reportId']|noescape}cost'),
+    height: '250px',
+    initialEditType: 'wysiwyg',
+    previewStyle: 'vertical',
+    initialValue:   `{$report['reportCost']|noescape} `,
+    toolbarItems: [
+          ['heading', 'bold', 'italic', 'strike'],
+          ['hr', 'quote'],
+          ['ul', 'ol', 'task', 'indent', 'outdent'],
+          ['table', 'image', 'link'],
+    ],
+    });
+
+    setInterval(function() {
+        document.getElementById("report{$report['reportId']|noescape}costRaw").value = cost.getMarkdown();
+    }, 5);
+</script>
+
+<br/>
+{$text['uvodnivstupy']}:
+<input class="form-control"  name="reportInput" id="report{$report['reportId']|noescape}inputRaw" type="hidden" />
+<div id="report{$report['reportId']|noescape}input" class="form-control writable-section"></div>
+        <script type="text/javascript">
+        </script>
+    </div>
+</div>
+<script>
+    const input = new toastui.Editor({
+    el: document.querySelector('#report{$report['reportId']|noescape}input'),
+    height: '250px',
+    initialEditType: 'wysiwyg',
+    previewStyle: 'vertical',
+    initialValue:   `{$report['reportInput']|noescape} `,
+    toolbarItems: [
+          ['heading', 'bold', 'italic', 'strike'],
+          ['hr', 'quote'],
+          ['ul', 'ol', 'task', 'indent', 'outdent'],
+          ['table', 'image', 'link'],
+    ],
+    });
+
+    setInterval(function() {
+        document.getElementById("report{$report['reportId']|noescape}inputRaw").value = input.getMarkdown();
+    }, 5);
+</script>
+
+<br/>
+
+<input type=hidden name="reportId" value={$report['reportId']} />
+<input type=submit value="{$text['ulozit']}" />
+</form>
+
+{$text['neprirazenesymbolyhlaseni']}:
+{if $reportSymbols != false}
+    {foreach $reportSymbols as $symbol}
+        <a href="/readsymbol.php?rid={$symbol['symbolId']}"><img {if $symbol['symbolDeleted'] > 0}class="deleted"{/if} {ifset $symbol['symbolSecret']}class="secret"{/ifset} src="/files/symbols/{$symbol['symbolHash']}" alt="{$symbol['symbolCreated']} {$text['vytvoril']} {$symbol['symbolCreatedBy']}" /></a>
+        {if $symbol['symbolCreatedBy'] == $user['userId'] || $report['reportOwner'] == $user['userId'] || true}
+            <a class="delete" title="{$text['smazat']}" href="/reports/{$report['reportId']}/edit/unlinksymbol={$symbol[symbolId]}" onclick="return confirm('{$text['opravduodpojitsymbol']}')">{$text['odpojitsymbol']}</a>
+        {/if}
+    {/foreach}
+{/if}
+<br/>
+{$text['prilozenesoubory']}:
+{if $reportFiles != false}
+    {foreach $reportFiles as $file}
+        {if $file[fileIsImage]}
+            <a href="/file/attachement/{$file['fileId']}"><img  width="300px" alt="{$file['fileName']}: {$file['fileCreated']} {$text['nahral']} {$file['fileCreatedBy']}" src="/file/attachement/{$file['fileId']}"></a>
+        {else }
+            <a href="/file/attachement/{$file['fileId']}">{$file['fileName']}: {$file['fileCreated']} {$text['nahral']} {$file['fileCreatedBy']}</a>
+        {/if}
+        {if $file['fileCreatedBy'] == $user['userId'] || $report['reportOwner'] == $user['userId']}
+            <a class="delete" title="{$text['smazat']}" href="/reports/{$report['reportId']}/edit/?deletefile={$file[fileId]}" onclick="return confirm('{$text['opravdusmazatsoubor']}')">{$text['smazat soubor']}</a>
+        {/if}
+    {/foreach}
+{/if}
+    <form action="/reports/{$report['reportId']}/edit" method="post" enctype="multipart/form-data">
+        {$text['pridatsoubor']}:
+        <input type="file" name="attachment" id="attachment" />
+        {if $user['aclSecret'] > 0} {$text['tajne']}: <input type="radio" name="secret" />{/if}
+        {if $user['aclGamemaster'] > 0 } {$text['neninove']}: <input type="checkbox" name="fnotnew"/>{/if}
+        <input type="hidden" name="reportId" value="{$report['reportId']}" />
+        <input type="submit" name="uploadfile" value="{$text['nahratsoubor']}" />
+    </form>
+<br/>
+{if $reportNotes != false}
+{$text['poznamky']}:
+    {foreach $reportNotes as $note}
+        {if $note['noteCreatedBy'] == $user['userId'] || $note['noteSecret'] <= $user['aclSecret']}
+            {$note['noteTitle']} {if $note['noteSecret'] == 1}{$text['utajeno']}{/if} {if $note['noteSecret'] == 2}{$text['soukrome']}{/if} {if $note['noteDeleted']}{$text['smazane']}{/if}
+            <br/>
+            {$note['noteCreatedBy']} [{$note['noteCreated']}]
+            <br/>
+        {$note['noteNote']|noescape}
+        {if $note['noteCreatedBy'] == $user['userId'] || $report['reportOwner'] == $user['userId']}
+            <a class="delete" title="{$text['smazat']}" href="/procnote.php?deletenote={$note['noteId']}&amp;itemid={$report['reportId']}&amp;backurl=/reports/{$report['reportId']}/edit" onclick="return confirm('{$text['opravdusmazatpoznamku']}')">{$text['smazatpoznamku']}</a>
+        {/if}
+        {/if}
+    {/foreach}
+{/if}
+        {$text['vytvoritpoznamku']}
+        <form action="/procnote.php" method="post">
+            {$text['nadpis']}: <input type="text" name="title" id="notetitle" />
+            {if $user['aclSecret'] > 0} tajne: <input type="checkbox" name="secret" />{/if}
+            {$text['soukrome']}: <input type="checkbox" name="private"/>
+            {if $user['aclGamemaster'] > 0} {$text['neninove']} <input type="checkbox" name="nnotnew"/>{/if}
+            <textarea cols="80" rows="7" name="note" id="notebody"></textarea>
+            <input type="hidden" name="itemid" value="{$report['reportId']}" />
+            <input type="hidden" name="backurl" value="/reports/{$report['reportId']}/edit" />
+            <input type="hidden" name="tableid" value="4" />
+            <input type="submit" value="{$text['ulozitpoznamku']}" name="setnote"  />
+        </form>
+<br/>

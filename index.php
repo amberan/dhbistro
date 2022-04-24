@@ -68,7 +68,9 @@ if ($URL[1] == 'file' && isset($user)) { // GET FILE type:  attachement,portrait
     require_once SERVER_ROOT.'/file.php';
     exit;
 }
-$latteParameters['title'] = '';
+//TODO add templates to queue and render at the end of everything
+//TODO generic latte for listing objects and sorting
+//TODO generic latte for filters
 latteDrawTemplate('headerMD');
 if (isset($user)) {
     $latteParameters['user'] = $user;
@@ -142,11 +144,27 @@ if (isset($user)) {
         require_once SERVER_ROOT.'/pages/groups.php';
     } elseif ($URL[1] == 'reports') {
         authorizedAccess(4, 1, 0);
-        $latteParameters['title'] = $text['hlaseniV'];
-        $latteParameters['actions'][] = ["/newactrep.php?type=1", $text['pridatvyjezd']];
-        $latteParameters['actions'][] = ["/newactrep.php?type=2", $text['pridatvyslech']];
-        //TODO view report, edit report, new report
-        require_once SERVER_ROOT.'/pages/reports.php';
+        $latteParameters['title'] = $text['hlaseni'];
+        if (is_numeric($URL[2])) {
+            // $latteParameters['actions'][] = ["/reports/$URL[2]/names", $text['zobrazitjmena']];
+            // $latteParameters['actions'][] = ["/reports/$URL[2]/symbols", $text['zobrazitsymboly']];
+            // $latteParameters['actions'][] = ["/reports/$URL[2]/notes", $text['zobrazitpoznamky']];
+            $latteParameters['actions'][] = ["/reports", $text['vypishlaseni']];
+            if (isset($URL[3]) && $URL[3] == 'edit') {
+                $latteParameters['actions'][] = ["/symbols.php", $text['priraditsymboly']];
+
+                require_once SERVER_ROOT.'/pages/report_edit.php';
+            } else {
+                require_once SERVER_ROOT.'/pages/report_view.php';
+            }
+        } elseif ($URL[2] == 'new') {
+            $latteParameters['actions'][] = ["/reports", $text['vypishlaseni']];
+            require_once SERVER_ROOT.'/pages/report_edit.php';
+        } else {
+            $latteParameters['actions'][] = ["/reports/new", $text['zalozithlaseni']];
+            //TODO view report, edit report, new report
+            require_once SERVER_ROOT.'/pages/reports.php';
+        }
     } else { // NEWS - DEFAULT
         $latteParameters['title'] = $text['aktuality'];
         if (isset($URL[2]) && $URL[2] == 'new' && ($user['aclNews'] < 1) && $URL[1] == 'news') {

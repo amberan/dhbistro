@@ -104,11 +104,14 @@ if (is_numeric($_REQUEST['rid'])) {
 			<div class="clear">&nbsp;</div>
 			<h3>Hlášení přiřazená k případu:</h3>
 				<?php
-            $sqlFilter = DB_PREFIX."report.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."report.secret<=".$user['aclSecret'];
-            $sql = "SELECT ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.task AS 'task', ".DB_PREFIX."report.type AS 'type', ".DB_PREFIX."report.adatum AS 'adatum', ".DB_PREFIX."user.userName AS 'user'
+            if ($user['aclRoot'] < 1) {
+                $sqlFilter .= ' AND ('.DB_PREFIX.'report.reportDeleted is null OR '.DB_PREFIX.'report.reportDeleted  < from_unixtime(1)) ';
+            }
+            $sqlFilter .= " AND ".DB_PREFIX."report.reportSecret<=".$user['aclSecret'];
+            $sql = "SELECT ".DB_PREFIX."report.reportId AS 'id', ".DB_PREFIX."report.reportName AS 'label', ".DB_PREFIX."report.reportTask AS 'task', ".DB_PREFIX."report.reportType AS 'type', ".DB_PREFIX."report.reportEventDate AS 'adatum', ".DB_PREFIX."user.userName AS 'user'
             FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."report, ".DB_PREFIX."user
-            WHERE $sqlFilter AND ".DB_PREFIX."report.id=".DB_PREFIX."ar2c.idreport AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userId=".DB_PREFIX."report.iduser
-            ORDER BY ".DB_PREFIX."report.label ASC";
+            WHERE $sqlFilter AND ".DB_PREFIX."report.reportId=".DB_PREFIX."ar2c.idreport AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userId=".DB_PREFIX."report.reportOwner
+            ORDER BY ".DB_PREFIX."report.reportName ASC";
             $pers = mysqli_query($database, $sql);
             $i = 0;
             while ($perc = mysqli_fetch_assoc($pers)) {
@@ -116,7 +119,7 @@ if (is_numeric($_REQUEST['rid'])) {
                 if ($i == 1) {
                     echo '<ul id="pripady">';
                 } ?>
-					<li><a href="readactrep.php?rid=<?php echo $perc['id']; ?>&hidenotes=0&truenames=0"><?php echo $perc['label']; ?></a> <span class="top">[ <strong><?php echo $perc['type'] == 1 ? 'Výjezd' : ($perc['type'] == 2 ? 'Výslech' : 'Hlášení'); ?></strong> | <strong>Ze dne:</strong> <?php echo date('d.m.Y', $perc['adatum']); ?> | <strong>Vyhotovil:</strong> <?php echo $perc['user']; ?> ]</span> - <?php echo $perc['task']; ?></li>
+					<li><a href="/reports/<?php echo $perc['id']; ?>"><?php echo $perc['label']; ?></a> <span class="top">[ <strong><?php echo $perc['type'] == 1 ? 'Výjezd' : ($perc['type'] == 2 ? 'Výslech' : 'Hlášení'); ?></strong> | <strong>Ze dne:</strong> <?php echo date('d.m.Y', $perc['adatum']); ?> | <strong>Vyhotovil:</strong> <?php echo $perc['user']; ?> ]</span> - <?php echo $perc['task']; ?></li>
 				<?php
             }
             if ($i != 0) {

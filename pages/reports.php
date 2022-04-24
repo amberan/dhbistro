@@ -27,73 +27,13 @@ if (isset($_POST['reportid'])) {
             if ($_POST['status'] <> 0) {
                 unreadRecords(4, $rid);
             }
-            Header('Location: readactrep.php?rid='.$rid);
-            // echo '<div id="obsah"><p>Hlášení uloženo.</p></div>
-            // <hr />
-            // <form action="addp2ar.php" method="post" class="otherform">
-            // <div>
-            // <input type="hidden" name="rid" value="'.$rid.'" />
-            // <input type="submit" value="Přidat k hlášení přítomné osoby" name="setperson" class="submitbutton" />
-            // </div>
-            // </form>';
+            Header('Location: /reports/'.$rid);
         }
     } else {
         if (isset($_POST['insertrep'])) {
             $latteParameters['message'] = 'Hlášení nepřidáno - Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva. Pamatujte, že všechna pole musí být vyplněná.';
         }
     }
-    if (isset($_POST['reportid'], $_POST['editactrep']) && ($user['aclReport'] || $user['userId'] == $author) && !preg_match('/^[[:blank:]]*$/i', $_POST['label']) && !preg_match('/^[[:blank:]]*$/i', $_POST['task']) && !preg_match('/^[[:blank:]]*$/i', $_POST['summary']) && !preg_match('/^[[:blank:]]*$/i', $_POST['impacts']) && !preg_match('/^[[:blank:]]*$/i', $_POST['details']) && is_numeric($_POST['secret']) && is_numeric($_POST['status'])) {
-        authorizedAccess(4, 2, $_POST['reportid']);
-        if ($_POST['status'] <> 0) {
-            unreadRecords(4, $_POST['reportid']);
-        }
-        $adatum = mktime(0, 0, 0, $_POST['adatummonth'], $_POST['adatumday'], $_POST['adatumyear']);
-        $ures = mysqli_query($database, "SELECT id FROM ".DB_PREFIX."report WHERE UCASE(label)=UCASE('".$_POST['label']."') AND id<>".$_POST['reportid']);
-        if (mysqli_num_rows($ures)) {
-            $latteParameters['message'] = 'Hlášení nepřidáno - Toto označení hlášení již existuje, změňte ho.';
-        } else {
-            mysqli_query($database, "UPDATE ".DB_PREFIX."report SET label='".$_POST['label']."', task='".$_POST['task']."', summary='".$_POST['summary']."', impacts='".$_POST['impacts']."', details='".$_POST['details']."', secret='".$_POST['secret']."', status='".$_POST['status']."', adatum='".$adatum."', start='".$_POST['start']."', end='".$_POST['end']."', energy='".$_POST['energy']."', inputs='".$_POST['inputs']."' WHERE id=".$_POST['reportid']);
-            $_SESSION['message'] = 'Hlášení uloženo';
-            Header('Location: readactrep.php?rid='.$_POST['reportid']);
-        }
-    } else {
-        if (isset($_POST['editactrep'])) {
-            $latteParameters['message'] = 'Hlášení nepřidáno - Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva. Pamatujte, že všechna pole musí být vyplněná.';
-        }
-    }
-    if (isset($_POST['uploadfile']) && is_uploaded_file($_FILES['attachment']['tmp_name']) && is_numeric($_POST['reportid']) && is_numeric($_POST['secret'])) {
-        authorizedAccess(4, 4, $_POST['reportid']);
-        $newname = Time().MD5(uniqid(Time().Rand()));
-        move_uploaded_file($_FILES['attachment']['tmp_name'], './files/'.$newname);
-        $sql = "INSERT INTO ".DB_PREFIX."file (uniquename,originalname,mime,size,datum,iduser,idtable,iditem,secret) VALUES('".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".Time()."','".$user['userId']."','4','".$_POST['reportid']."','".$_POST['secret']."')";
-        mysqli_query($database, $sql);
-        unreadRecords(4, $_POST['reportid']);
-        Header('Location: readactrep.php?rid='.$_POST['reportid']);
-    } else {
-        if (isset($_POST['uploadfile'])) {
-            $latteParameters['title'] = 'Přiložení souboru';
-            $_SESSION['message'] = 'Soubor nebyl přiložen, něco se nepodařilo. Možná nebyl zvolen přikládaný soubor.';
-            Header('Location: readactrep.php?rid='.$_POST['reportid']);
-        }
-    }
-    if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {
-        authorizedAccess(4, 5, $_GET['reportid']);
-        if ($user['aclReport']) {
-            $fres = mysqli_query($database, "SELECT uniquename FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
-            $frec = mysqli_fetch_assoc($fres);
-            UnLink('./files/'.$frec['uniquename']);
-            mysqli_query($database, "DELETE FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
-        }
-        Header('Location: editactrep.php?rid='.$_GET['reportid']);
-    }
-
-$columnAddIndex['unread']['filter'] = ['idtable', 'idrecord', 'iduser'];
-
-$columnAddIndex['report']['filter'] = ['reportSecret','reportStatus','reportType','reportDeleted','reportModifiedBy','reportCreatedBy','reportOwner','reportId'];
-
-$columnAddIndex['user']['filter'] = ['userDeleted','userId','personId'];
-
-$columnAddIndex['person']['filter'] = ['side','spec','power','dead','surname','regdate','datum','iduser','id','deleted','secret','archived'];
 
 
 //FILTER
@@ -171,8 +111,10 @@ if ($reportCount > 0) {
         $reports[$participant['reportId']]['participant'][] = array('participantRole' => $participant['participantRole'],
                                                                     'participantName' => $participant['participantName']);
     }
-    $latteParameters['reports_record'] = $reports;
-    $latteParameters['report_count'] = $reportCount;
+    $latteParameters['reportsRecord'] = $reports;
+    $latteParameters['reportCount'] = $reportCount;
+    $latteParameters['reportType'] = reportType();
+    $latteParameters['reportStatus'] = reportStatus();
 } else {
     $latteParameters['warning'] = $text['prazdnyvypis'];
 }

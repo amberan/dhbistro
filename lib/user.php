@@ -124,3 +124,33 @@ function getAuthor($recid, $trn)
 
     return $name;
 }
+
+function listUsersSuitable()
+{
+    global $database;
+    $listUsersSql = "(select userId, userName, concat(surname,', ',name,' [',username,']') as personName from nw_report
+        left join nw_user on nw_report.reportOwner = nw_user.userId
+        left join nw_person on nw_user.personId = nw_person.id
+        where reportOwner > 0
+        group by reportOwner)
+        union distinct
+        (select userId,  userName, concat(surname,', ',name,' [',username,']') as personName from nw_user
+        left join nw_person on nw_user.personId = nw_person.id
+        where userDeleted = 0
+        group by userId)
+        union distinct
+        (select userId, userName, concat(surname,', ',name,' [',username,']') as personName from nw_c2s
+        left join nw_user on nw_c2s.iduser = nw_user.userId
+        left join nw_person on nw_user.personId = nw_person.id
+        group by userId)
+        order by userName";
+    $listUsers = mysqli_query($database, $listUsersSql);
+    if (mysqli_num_rows($listUsers) > 0) {
+        while ($user = mysqli_fetch_assoc($listUsers)) {
+            $users[] = $user;
+        }
+        return $users;
+    } else {
+        return false;
+    }
+}
