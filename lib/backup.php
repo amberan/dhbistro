@@ -14,12 +14,15 @@ function bistroBackup()
         $lastBackupSql = "SELECT time FROM ".DB_PREFIX."backups ORDER BY time DESC LIMIT 1";
     }
     $lastBackup = mysqli_fetch_assoc(mysqli_query($database, $lastBackupSql));
-    $updatesToRun = natsort(bistroUpdatesList(array_diff(scandir($_SERVER['DOCUMENT_ROOT']."/sql"), array('.', '..')), @$lastBackup['version']));
+    $scandir = array_diff(scandir($_SERVER['DOCUMENT_ROOT']."/sql"), array('.', '..'));
+    natsort($scandir);
+    $updatesToRun = bistroUpdatesList($scandir, @$lastBackup['version']);
     if (round($lastBackup['time'], -5) < round(time(), -5) || sizeof($updatesToRun)>0) {
         bistroBackupGenerate();
     }
     bistroUpdate($updatesToRun);
 }
+
 
 
 /**
