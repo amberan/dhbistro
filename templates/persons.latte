@@ -2,7 +2,7 @@
     <form action="{$URL[0]}{$URL[1]}/" method="POST" id="filter" class="row mb-1">
 	    <div class="col-12 col-md-4 text-left">
 	        <h4>
-                {$text[osoby]} {ifset $person_count}({$person_count}){/ifset}
+                {$text[osoby]|firstUpper} {ifset $person_count}({$person_count}){/ifset}
             </h4>
 	    </div>
         <div class="col-12 col-md-8 text-right header-wrapper-right">
@@ -28,13 +28,15 @@
                 </label>
                 {$text['jennove']}
             </div>
-            <div class="header-switch">
-                <label class="toggle-control">
-                    <input type="checkbox" name="filter[secret]" {if (isset($filter['secret']) AND $filter['secret'] == 'on') } checked {/if} onchange="this.form.submit()" />
-                    <span class="control"></span>
-                </label>
-                {$text['itajne']}
-            </div>
+            {if $user['aclSecret'] > 0}
+                <div class="header-switch">
+                    <label class="toggle-control">
+                        <input type="checkbox" name="filter[secret]" {if (isset($filter['secret']) AND $filter['secret'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                        <span class="control"></span>
+                    </label>
+                    {$text['itajne']}
+                </div>
+            {/if}
         </div>
         <div class="col-12 col-lg-6 text-left header-wrapper-left">
             <div class="header-switch">
@@ -59,7 +61,7 @@
                     <option value="{$id}" {if (isset($filter['classSelect']) AND $filter['classSelect'] == $id) } selected {/if}>{$class}</option>
                 {/foreach}
                 </select>
-                <label class="header-switch-drop-label">{$text['specializace']}</label>
+                <label class="header-switch-drop-label-m-left">{$text['specializace']}</label>
             </div>
             <div class="header-switch">
                 <select name="filter[sideSelect]"  onchange="this.form.submit()">
@@ -67,7 +69,7 @@
                     <option value="{$id}" {if (isset($filter['sideSelect']) AND $filter['sideSelect'] == $id) } selected {/if}>{$side}</option>
                 {/foreach}
                 </select>
-                <label class="header-switch-drop-label">{$text['strana']}</label>
+                <label class="header-switch-drop-label-m-left">{$text['strana']}</label>
             </div>
             <div class="header-switch">
                 <select name="filter[categorySelect]"  onchange="this.form.submit()">
@@ -75,7 +77,7 @@
                     <option value="{$id}" {if (isset($filter['categorySelect']) AND $filter['categorySelect'] == $id) } selected {/if}>{$category}</option>
                 {/foreach}
                 </select>
-                <label class="header-switch-drop-label">{$text['kategorie']}</label>
+                <label class="header-switch-drop-label-m-left">{$text['kategorie']}</label>
             </div>
         </div>
 	</form>
@@ -92,23 +94,23 @@
                     <thead class="table-sticky-header">
                         <tr>
                             <th>
-                                <div class="table-no-wrap-left">{$text['jmeno']} <a href="{$URL[0]}{$URL[1]}/?sort=surname">&#8661;</a></div>
+                                <div class="table-no-wrap-left">{$text['jmeno']|firstUpper} <a href="{$URL[0]}{$URL[1]}/?sort=surname">&#8661;</a></div>
                             </th>
-                            <th class="mobile-no-show">{$text['definitions']}</th>
-                            <th class="mobile-no-show">{$text['kontakty']}</th>
+                            <th class="mobile-no-show">{$text['definitions']|firstUpper}</th>
+                            <th class="mobile-no-show">{$text['kontakty']|firstUpper}</th>
                             <th class="tablet-no-show">
-                                <div class="table-no-wrap text-center">{$text['vytvoreno']}  <a href="{$URL[0]}{$URL[1]}/?sort=regdate">&#8661;</a></div>
+                                <div class="table-no-wrap text-center">{$text['vytvoreno']|firstUpper}  <a href="{$URL[0]}{$URL[1]}/?sort=regdate">&#8661;</a></div>
                             </th>
                             <th class="tablet-no-show text-center">
-                                <div class="table-no-wrap">{$text['zmeneno']}  <a href="{$URL[0]}{$URL[1]}/?sort=datum">&#8661;</a></div>
+                                <div class="table-no-wrap">{$text['zmeneno']|firstUpper}  <a href="{$URL[0]}{$URL[1]}/?sort=datum">&#8661;</a></div>
                             </th>
-                            <th class="mobile-no-show">{$text['akce']}</th>
+                            <th class="mobile-no-show">{$text['akce']|firstUpper}</th>
                         </tr>
                     </thead>
                     <tbody>
                         {foreach $person_record as $person}
                             <tr class="{if @$person['unread']} unread_record{/if}">
-                                <td class="persons-table-cell">
+                                <td class="table-w-full-cell">
                                     <div class="identity-main-wrapper">
                                         <div class="persons-image-wrapper">
                                             {if isset($filter[portrait])}
@@ -123,8 +125,8 @@
                                             {/if}
                                         </div>
                                         <div class="persons-identification-wrapper">
-                                            <p class="persons-name"><a href="/readperson.php?rid={$person['id']}&amp;hidenotes=0">{$person['surname']} {$person['name']}</a></p>
-                                            <div class="persons-badge-wrapper">
+                                            <p class="table-cell-title"><a href="/readperson.php?rid={$person['id']}&amp;hidenotes=0">{$person['surname']} {$person['name']}</a></p>
+                                            <div class="table-badge-wrapper">
                                                 {if $person['secret']}
                                                     <span class="badge rounded-pill bg-danger text-light">{$text['utajeno']|upper}</span>
                                                 {/if}
@@ -142,19 +144,19 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="persons-table-cell">
-                                    <p class="persons-specs"><strong>{$text['kategorie']}: </strong>{$filter['category'][$person['power']+1]}</p>
-                                    <p class="persons-specs"><strong>{$text['strana']}: </strong>{$filter['side'][$person['side']+1]}</p>
-                                    <p class="persons-specs"><strong>{$text['specializace']}: </strong>{$filter['class'][$person['spec']+1]}</p>
+                                <td class="table-w-full-cell">
+                                    <p class="table-cell-subtitle"><strong>{$text['kategorie']}: </strong>{$filter['category'][$person['power']+1]}</p>
+                                    <p class="table-cell-subtitle"><strong>{$text['strana']}: </strong>{$filter['side'][$person['side']+1]}</p>
+                                    <p class="table-cell-subtitle"><strong>{$text['specializace']}: </strong>{$filter['class'][$person['spec']+1]}</p>
                                 </td>
-                                <td class="persons-table-cell">
+                                <td class="table-w-full-cell">
                                     <a href="tel:{$person['phone']}">{$person['phone']}</a>
                                 </td>
                                 <td class="tablet-no-show text-center">
                                     {if $person['date_created']}<em>{$person['date_created']|date:'%d.%m.%Y'}{else}{$text['neznamo']}</em>{/if}
                                 </td>
                                 <td class="tablet-no-show text-center"><em>{$person['date_changed']|date:'%d.%m.%Y'}</em></td>
-                                <td class="persons-table-cell">
+                                <td class="table-w-full-cell">
                                     <div class="table-no-wrap-right">
                                         {if $user['aclPerson'] AND !$person['deleted']}
                                             <a class="btn btn-sm btn-info btn-brick mb-1" href="/editperson.php?rid={$person['id']}" alt="{$text[upravitosobu]}">
@@ -166,7 +168,7 @@
                                             {/if}
                                         {/if}
                                         {if $user['aclRoot'] AND @$person['deleted']}
-                                            <a class="btn btn-sm tn-success mb-1" href="/persons/restore/{$person['id']}" onclick="return confirm('{$text['opravduobnovitosobu']} &quot; {$person['surname']|stripHtml} {$person['name']|stripHtml}&quot;?');">{php echo file_get_contents("images/icons/recycle.svg")}</a>
+                                            <a class="btn btn-sm btn-success mb-1" href="/persons/restore/{$person['id']}" onclick="return confirm('{$text['opravduobnovitosobu']} &quot; {$person['surname']|stripHtml} {$person['name']|stripHtml}&quot;?');">{php echo file_get_contents("images/icons/recycle.svg")}</a>
                                         {/if}
                                     </div>
                                 </td>

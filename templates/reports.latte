@@ -1,56 +1,34 @@
 <div class="container-fluid mt-3 mb-3 mr-2 w-100">
-    <div class="row mb-1">
-	    <div class="col-12 col-sm-6 text-left">
+    <form action="{$URL[0]}{$URL[1]}/" method="POST" id="filter" class="row mb-1">
+	    <div class="col-12 col-md-4 text-left">
 	        <h4>
                 {$text[hlaseni]|firstUpper} {ifset $reportCount}({$reportCount}){/ifset}
             </h4>
 	    </div>
-        <div class="col-12 col-sm-6 text-right">
-            <form action="{$URL[0]}{$URL[1]}/" method="POST" id="filter" class="header-form-wrapper">
-                <input type="hidden" name="filter[placeholder]" />
-{$text['vsechnahlaseni']|firstUpper}
-               <div>
-                    <select name="filter[reportType]"  onchange="this.form.submit()">
-                        <option value="0">{$text['nerozhoduje']}</option>
-                    {foreach $reportType as $id => $type }
-                        <option value="{$id}" {if (isset($filter['reportType']) AND $filter['reportType'] == $id) } selected {/if}>{$type}</option>
-                    {/foreach}
-                    </select>
-                </div>
-
-{$text['vestavu']}
-               <div>
-                    <select name="filter[reportStatus]"  onchange="this.form.submit()">
-                        <option value="all">{$text['nerozhoduje']}</option>
-                    {foreach $reportStatus as $id => $status }
-                        <option value="{$id}" {if (isset($filter['reportStatus']) AND $filter['reportStatus'] == $id AND $filter['reportStatus'] != 'all') } selected {/if}>{$status}</option>
-                    {/foreach}
-                    </select>
-                </div>
-
-{* TODO NEPRIRAZENE *}
-                <div class="header-switch">
-                    <label class="toggle-control">
-                        <input type="checkbox" name="filter[mine]" {if (isset($filter['mine']) AND $filter['mine'] == 'on') } checked {/if} onchange="this.form.submit()" />
-                        <span class="control"></span>
-                    </label>
-                    {$text['jenmoje']}
-                </div>
-                <div class="header-switch">
-                    <label class="toggle-control">
-                        <input type="checkbox" name="filter[archived]" {if (isset($filter['archived']) AND $filter['archived'] == 'on') } checked {/if} onchange="this.form.submit()" />
-                        <span class="control"></span>
-                    </label>
-                    {$text['iarchiv']}
-                </div>
-                <div class="header-switch">
-                    <label class="toggle-control">
-                        <input type="checkbox" name="filter[new]" {if (isset($filter['new']) AND $filter['new'] == 'on') } checked{/if} onchange="this.form.submit()" />
-                        <span class="control"></span>
-                    </label>
-                    {$text['jennove']}
-                </div>
-{if $user['aclSecret'] > 0}
+        <div class="col-12 col-md-8 text-right header-wrapper-right">
+            <input type="hidden" name="filter[placeholder]" />
+            <div class="header-switch">
+                <label class="toggle-control">
+                    <input type="checkbox" name="filter[mine]" {if (isset($filter['mine']) AND $filter['mine'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                    <span class="control"></span>
+                </label>
+                {$text['jenmoje']}
+            </div>
+            <div class="header-switch">
+                <label class="toggle-control">
+                    <input type="checkbox" name="filter[archived]" {if (isset($filter['archived']) AND $filter['archived'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                    <span class="control"></span>
+                </label>
+                {$text['iarchiv']}
+            </div>
+            <div class="header-switch">
+                <label class="toggle-control">
+                    <input type="checkbox" name="filter[new]" {if (isset($filter['new']) AND $filter['new'] == 'on') } checked{/if} onchange="this.form.submit()" />
+                    <span class="control"></span>
+                </label>
+                {$text['jennove']}
+            </div>
+            {if $user['aclSecret'] > 0}
                 <div class="header-switch">
                     <label class="toggle-control">
                         <input type="checkbox" name="filter[secret]" {if (isset($filter['secret']) AND $filter['secret'] == 'on') } checked {/if} onchange="this.form.submit()" />
@@ -58,10 +36,32 @@
                     </label>
                     {$text['itajne']}
                 </div>
-{/if}
-            </form>
+            {/if}
         </div>
-	</div>
+        <div class="col-12 col-lg-6 text-left header-wrapper-left">
+        </div>
+        <div class="col-12 col-lg-6 text-right header-wrapper-right">
+            <div class="header-switch">
+                <label class="header-switch-drop-label-m-right">{$text['vsechnahlaseni']|firstUpper}</label>
+                <select name="filter[reportType]"  onchange="this.form.submit()">
+                    <option value="0">{$text['nerozhoduje']}</option>
+                    {foreach $reportType as $id => $type }
+                        <option value="{$id}" {if (isset($filter['reportType']) AND $filter['reportType'] == $id) } selected {/if}>{$type}</option>
+                    {/foreach}
+                </select>
+            </div>
+            <div class="header-switch">
+                <label class="header-switch-drop-label-m-right">{$text['vestavu']}</label>
+                <select name="filter[reportStatus]"  onchange="this.form.submit()">
+                    <option value="all">{$text['nerozhoduje']}</option>
+                    {foreach $reportStatus as $id => $status }
+                        <option value="{$id}" {if (isset($filter['reportStatus']) AND $filter['reportStatus'] == $id AND $filter['reportStatus'] != 'all') } selected {/if}>{$status}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        {* TODO NEPRIRAZENE *}
+    </form>
     <div class="row mb-1">
         <div class="col-12">
             {if @$warning}
@@ -72,89 +72,94 @@
                 <div id="obsah">
 
                 <table class="table table-striped table-hover">
-                    <thead>
+                    <thead class="table-sticky-header">
                         <tr>
-                            <th>
-                                {$text['report']|firstUpper}</a>
+                            <th class="text-center">
+                                {$text['report']|firstUpper}
                             </th>
-                            <th>
+                            <th class="mobile-no-show text-center">
                                 {$text['stav']|firstUpper}
                             </th>
-                            <th>
-                                {$text['probehlo']|firstUpper}<a href="{$URL[0]}{$URL[1]}/?sort=reportEventDate">&#8661;</a></a>
+                            <th class="mobile-no-show">
+                                <div class="table-no-wrap">{$text['probehlo']|firstUpper}<a href="{$URL[0]}{$URL[1]}/?sort=reportEventDate">&#8661;</a></div>
                             </th>
-                            <th>
-                                {$text['vytvoreno']|firstUpper}  <a href="{$URL[0]}{$URL[1]}/?sort=reportCreated">&#8661;</a>
+                            <th class="tablet-no-show text-center">
+                                <div class="table-no-wrap">{$text['vytvoreno']|firstUpper}  <a href="{$URL[0]}{$URL[1]}/?sort=reportCreated">&#8661;</a></div>
                             </th>
-                            <th>
-                                {$text['zmeneno']|firstUpper}  <a href="{$URL[0]}{$URL[1]}/?sort=reportModified">&#8661;</a>
+                            <th class="tablet-no-show text-center">
+                                <div class="table-no-wrap">{$text['zmeneno']|firstUpper}  <a href="{$URL[0]}{$URL[1]}/?sort=reportModified">&#8661;</a></div>
                             </th>
-                            <th>
+                            <th class="mobile-no-show">
                                 {$text['ucastnici']|firstUpper}
                             </th>
-                            <th>{$text['akce']|firstUpper}</th>
+                            <th class="mobile-no-show">{$text['akce']|firstUpper}</th>
                         </tr>
                     </thead>
                     <tbody>
                         {foreach $reportsRecord as $report}
                             <tr class="{if @$report['unread']} unread_record{/if}{if $report['reportType'] == 1} vyjezd{else} vyslech{/if}">
-                                <td>
-                                    {$reportType[$report['reportType']]}: <a href="/reports/{$report['reportId']}">{$report['reportName']}</a>
-                                    <br/>{$text['ukol']}: {$report['reportTask']}
-                                    {if $report['reportSecret'] > 0 }
-                                        <span class="badge rounded-pill bg-danger text-light">{$text['utajeno']|upper}</span>
-                                    {/if}
-                                    {if $report['reportArchived']}
-                                        <span class="badge rounded-pill bg-secondary text-light mb-1">{$text['archivovano']}</span>
-                                    {/if}
-                                    {if $report['reportDeleted']}
-                                        <span class="badge rounded-pill bg-warning text-dark mb-1">{$text['smazany']}</span>
-                                    {/if}
-                                    {ifset $report['cases']}
-                                        <br/>{$text['pripady']}:
-                                        {foreach $report['cases'] as $case}
-                                            <a href="{$URL[0]}/readcase.php?rid={$case['caseId']}&hidenotes=0">{$case['caseName']}<a/><br/>
-                                        {/foreach}
-                                    {/ifset}
+                                <td class="table-w-full-cell">
+                                    <p class="table-cell-title-name"><strong>{$reportType[$report['reportType']]|firstUpper}: </strong><a href="/reports/{$report['reportId']}">{$report['reportName']}</a></p>
+                                    <p class="table-cell-subtitle mb-2">{$text['ukol']}: {$report['reportTask']}</p>
+                                    <div class="table-badge-wrapper">
+                                        {if $report['reportSecret'] > 0 }
+                                            <span class="badge rounded-pill bg-danger text-light">{$text['utajeno']|upper}</span>
+                                        {/if}
+                                        {if $report['reportArchived']}
+                                            <span class="badge rounded-pill bg-secondary text-light mb-1">{$text['archivovano']|firstUpper}</span>
+                                        {/if}
+                                        {if $report['reportDeleted']}
+                                            <span class="badge rounded-pill bg-warning text-dark mb-1">{$text['smazany']|firstUpper}</span>
+                                        {/if}
+                                    </div>
+                                    <div class="mobile-no-show">
+                                        {ifset $report['cases']}
+                                            <p class="mb-1"><strong>{$text['pripady']}: </strong></p>
+                                            {foreach $report['cases'] as $case}
+                                                <p class="table-cell-subtitle"><a href="{$URL[0]}/readcase.php?rid={$case['caseId']}&hidenotes=0">{$case['caseName']}<a/></p>
+                                            {/foreach}
+                                        {/ifset}
+                                    </div>
                                 </td>
-                                <td>
+                                <td class="table-w-full-cell">
                                     {$reportStatus[$report['reportStatus']]}</br>
-                                    {if $report['reportOwnerName'] }{$report['reportOwnerName']}{else}{$report['reportOwnerUserName']}{/if}</a>
+                                    {if $report['reportOwnerName'] }{$report['reportOwnerName']}{else}{$report['reportOwnerUserName']}{/if}
                                 </td>
-                                <td>
+                                <td class="table-w-full-cell text-center">
                                     {if $report['reportModified']}{if $report['reportEventStart'] && $report['reportEventEnd']}{$report['reportEventStart']} - {$report['reportEventEnd']}{/if} {$report['reportModified']|date:'%d.%m.%Y'}{else}<em>{$text['neznamo']}</em>{/if}
                                 </td>
-                                <td>
+                                <td class="tablet-no-show text-center">
                                     {if $report['reportCreated']} {$report['reportCreated']|date:'%d.%m.%Y'}{else}<em>{$text['neznamo']}</em>{/if}<br/>
                                     {if $report['reportCreatedByName']}{$report['reportCreatedByName']}{else}{$report['reportCreatedByUserName']}{/if}
                                 </td>
-                                <td>
+                                <td class="tablet-no-show text-center">
                                     {$report['reportModified']|date:'%d.%m.%Y'}<br/>
                                     {if $report['reportModifiedByName']}{$report['reportModifiedByName']}{else}{$report['reportModifiedByUserName']}{/if}
                                 </td>
-                                <td>
+                                <td class="mobile-no-show">
                                     {ifset $report['participant']}
                                         {foreach $report['participant'] as $participant}
-                                                {$participant['participantRole']} : {$participant['participantName']}<br/>
+                                                <p class="table-cell-subtitle"><strong>{$participant['participantRole']} :</strong> {$participant['participantName']}</p>
                                         {/foreach}
                                     {/ifset}
                                 </td>
-                                <td>
-                                    {if $user['aclReport'] AND !$report['reportDeleted']}
-                                        <a class="btn btn-sm btn-brick btn-info mb-1" href="/reports/{$report['reportId']}/edit" alt="{$text[upravitreport]}">
-                                            {php  echo file_get_contents("images/icons/edit-solid.svg")}
-                                        </a>
-                                    {/if}
-                                    {*if !$report['reportDeleted']}
-                                        <a class="btn btn-sm  btn-info mb-1" href="/newnote.php?rid={$report['reportId']}&idtable=8">přidat poznámku</a>
-                                    {/if*}
-                                    {if ($user['aclRoot'] OR $user['aclReport'] > 1) AND !$report['reportDeleted']}
-                                        <a class="btn btn-sm btn-brick btn-danger mb-1" href="/reports/delete/{$report['reportId']}" onclick="return confirm('{$text['opravdusmazatreport']} &quot; {$report['reportName']|stripHtml}&quot;?');" alt="{$text['smazatreport']}">{php echo file_get_contents("images/icons/trash-solid.svg")}</a>
-                                    {/if}
-                                    {if $user['aclRoot'] AND $report['reportDeleted']}
-                                        <a class="btn btn-sm btn-success mb-1" href="/report/restore/{$report['reportId']}" onclick="return confirm('{$text['opravduobnovitreport']} &quot; {$report['reportName']|stripHtml}&quot;?');">{php echo file_get_contents("images/icons/recycle.svg")}</a>
-                                    {/if}
-
+                                <td class="table-w-full-cell">
+                                    <div class="table-no-wrap-right">
+                                        {if $user['aclReport'] AND !$report['reportDeleted']}
+                                            <a class="btn btn-sm btn-brick btn-info mb-1" href="/reports/{$report['reportId']}/edit" alt="{$text[upravitreport]}">
+                                                {php  echo file_get_contents("images/icons/edit-solid.svg")}
+                                            </a>
+                                        {/if}
+                                        {*if !$report['reportDeleted']}
+                                            <a class="btn btn-sm  btn-info mb-1" href="/newnote.php?rid={$report['reportId']}&idtable=8">přidat poznámku</a>
+                                        {/if*}
+                                        {if ($user['aclRoot'] OR $user['aclReport'] > 1) AND !$report['reportDeleted']}
+                                            <a class="btn btn-sm btn-brick btn-danger mb-1" href="/reports/delete/{$report['reportId']}" onclick="return confirm('{$text['opravdusmazatreport']} &quot; {$report['reportName']|stripHtml}&quot;?');" alt="{$text['smazatreport']}">{php echo file_get_contents("images/icons/trash-solid.svg")}</a>
+                                        {/if}
+                                        {if $user['aclRoot'] AND $report['reportDeleted']}
+                                            <a class="btn btn-sm btn-success mb-1" href="/report/restore/{$report['reportId']}" onclick="return confirm('{$text['opravduobnovitreport']} &quot; {$report['reportName']|stripHtml}&quot;?');">{php echo file_get_contents("images/icons/recycle.svg")}</a>
+                                        {/if}
+                                    </div>
                                 </td>
                             </tr>
                         {/foreach}
