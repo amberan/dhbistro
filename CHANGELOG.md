@@ -27,6 +27,7 @@ TODO: check all 'report (169) and  "report (191) in code - columns renamed, stat
 - Refactored: session span lenght in $config #232
 ### Fixed
 - Fixed: natural ordering of upgrades #234
+- Fixed: saving doodle #233
 ### Removed
 - Database: old report columns #108
 
