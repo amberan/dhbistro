@@ -167,6 +167,13 @@ body {
   margin-bottom: 20px;
 }
 
+.login-image-wrapper > * {
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+}
+
 #logincontent form div {
   position: relative;
   width: 100%;
