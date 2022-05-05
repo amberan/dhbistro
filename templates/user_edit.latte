@@ -150,7 +150,7 @@
                         </div>
                     </div>
                 </div>
-                {if $user['aclHunt'] > 0 }
+                {if $user['aclHunt'] > 0  or $user['aclRoot'] > 0}
                 <div class="col-3">
                     <div class="input-group mb-1">
                         <div class="input-group-prepend">
@@ -167,7 +167,7 @@
                     </div>
                 </div>
                 {/if}
-                {if $user['aclSecret'] > 0 }
+                {if $user['aclSecret'] > 0  or $user['aclRoot'] > 0}
                 <div class="col-3">
                     <div class="input-group mb-1">
                         <div class="input-group-prepend">
@@ -184,7 +184,7 @@
                     </div>
                 </div>
                 {/if}
-                {if $user['aclNews'] > 0 }
+                {if $user['aclNews'] > 0  or $user['aclRoot'] > 0}
                 <div class="col-3">
                     <div class="input-group mb-1">
                         <div class="input-group-prepend">
@@ -201,7 +201,7 @@
                     </div>
                 </div>
                 {/if}
-                {if $user['aclBoard'] > 0 }
+                {if $user['aclBoard'] > 0  or $user['aclRoot'] > 0}
                 <div class="col-3">
                     <div class="input-group mb-1">
                         <div class="input-group-prepend">
@@ -213,23 +213,6 @@
                             <select class="w-100" name="aclBoard" id="aclBoard">
                                 <option value="0" {if $userEdit['aclBoard'] == 0 } selected="selected"{/if}>{$text['ne']}</option>
                                 <option value="1" {if $userEdit['aclBoard'] == 1} selected="selected"{/if}>{$text['ano']}</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                {/if}
-                {if $user['aclAudit'] > 0 }
-                <div class="col-3">
-                    <div class="input-group mb-1">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text min-w-user-edit">
-                                {$text[aclAudit]}
-                            </span>
-                        </div>
-                        <div class="input-group-append" style="flex-grow: 1;">
-                            <select class="w-100" name="aclAudit" id="aclAudit">
-                                <option value="0" {if $userEdit['aclAudit'] == 0 } selected="selected"{/if}>{$text['skryt']}</option>
-                                <option value="1" {if $userEdit['aclAudit'] == 1} selected="selected"{/if}>{$text['zpristupnit']}</option>
                             </select>
                         </div>
                     </div>
@@ -251,6 +234,23 @@
                             </div>
                         </div>
                     </div>
+                {/if}
+                {if $user['aclAudit'] > 0  or $user['aclRoot'] > 0}
+                <div class="col-3">
+                    <div class="input-group mb-1">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text min-w-user-edit">
+                                {$text[aclAudit]}
+                            </span>
+                        </div>
+                        <div class="input-group-append" style="flex-grow: 1;">
+                            <select class="w-100" name="aclAudit" id="aclAudit">
+                                <option value="0" {if $userEdit['aclAudit'] == 0 } selected="selected"{/if}>{$text['skryt']}</option>
+                                <option value="1" {if $userEdit['aclAudit'] == 1} selected="selected"{/if}>{$text['zpristupnit']}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 {/if}
                 {if $user['aclGamemaster'] > 0 or $user['aclRoot'] > 0 }
                 <div class="col-3">
