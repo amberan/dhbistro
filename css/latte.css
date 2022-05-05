@@ -172,6 +172,33 @@ body {
   height: auto;
   margin: 0 auto;
   display: block;
+  margin-bottom: 12px;
+}
+
+.logo-rotation {
+  transform: rotateY(0deg);
+  animation-name: LogoRotation;
+  animation-delay: 15000ms;
+  animation-duration: 40000ms;
+  animation-iteration-count: infinite;
+}
+
+@keyframes LogoRotation {
+  0% {
+    transform: rotateY(0deg);
+  }
+  2.5% {
+    transform: rotateY(180deg);
+  }
+  4.9% {
+    transform: rotateY(360deg);
+  }
+  5% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(0deg);
+  }
 }
 
 #logincontent form div {
@@ -509,6 +536,33 @@ input[type='submit'] {
     justify-content: flex-end;
   }
 
+}
+
+.prolink-wrapper {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+  width: auto;
+}
+
+@media only screen and (max-width: 992px) {
+  .prolink-wrapper {
+    margin: 1rem 0;
+  }
+}
+
+.prolink-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+}
+
+.prolink-icons > svg {
+  width: 24px;
+  height: 24px;
 }
 
 /* ------ PERSONS ------ */
