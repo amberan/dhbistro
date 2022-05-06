@@ -394,6 +394,7 @@ input[type='submit'] {
     position: absolute;
     top: 0px;
     right: 4px;
+    max-width: 250px;
   }
 }
 
