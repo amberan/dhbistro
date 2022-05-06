@@ -1,122 +1,291 @@
-{$report['reportName']}
-<br/>
-{$text['hlaseni']|firstUpper} {$reportType[$report['reportType']]}
-<br/>
-{$text['ukol']}: {$report['reportTask']}
-<br/>
-{$text['vytvoril']}: {$report['reportCreatedByName']} {$report['reportCreated']}
-<br/>
-{$text['posledniuprava']}: {$report['reportModifiedByName']} {$report['reportModified']}
-<br/>
-{$text['prirazeno']}: {$report['reportOwnerName']}
-<br/>
-{if $report['reportSecret'] > 0 }
-    <span class="badge rounded-pill bg-danger text-light">{$text['utajeno']|upper}</span>
-{/if}
-{if $report['reportArchived']}
-    <span class="badge rounded-pill bg-secondary text-light mb-1">{$text['archivovano']}</span>
-{/if}
-<br/>
-{$text['stavhlaseni']}: {$reportStatus[$report[reportStatus]]}
-<br/>
-{$text['probehlo']} {$report['reportEventStart']} - {$report['reportEventEnd']} {$report['reportEventDate']}
-<br/>
-{$text['osobyprirazenekhlaseni']}
-{if $reportParticipants != false}
-    {foreach $reportParticipants as $participant}
-            {$participant['participantRole']} : <a href="/readperson.php?rid={$participant['participantId']}" {ifset $participant['participantDeleted'] }class="deleted"{/ifset}>{$participant['participantName']}</a><br/>
-    {/foreach}
-{/if}
-<br/>
-{if $reportCases != false}
-{$text['spojenospripady']}:
-    {foreach $reportCases as $case}
-        <a href="{$URL[0]}/readcase.php?rid={$case['caseId']}&hidenotes=0" {ifset $case['caseDeleted']}class="deleted"{/ifset}>{$case['caseName']}<a/>
-        {sep}, {/sep}
-    {/foreach}
-    {else}
-    {$text['hlasenineniprirazenopripadu']}
-{/if}
-<br/>
-
-{$text['shrnuti']}:
-<div class="col-12" id="report{$report['reportId']|noescape}summary"></div>
-<script>
-const editor{$report['reportId']|noescape}summary = new toastui.Editor.factory({
-        el: document.querySelector('#report{$report['reportId']|noescape}summary'),
-        initialValue: `{$report['reportSummary']|noescape}`,
-        viewer: true,
-    });
-</script>
-<br/>
-{$text['moznedopady']}:
-<div class="col-12" id="report{$report['reportId']|noescape}impact"></div>
-<script>
-const editor{$report['reportId']|noescape}impact = new toastui.Editor.factory({
-        el: document.querySelector('#report{$report['reportId']|noescape}impact'),
-        initialValue: `{$report['reportImpact']|noescape}`,
-        viewer: true,
-    });
-</script>
-<br/>
-{$text['podrobnyprubeh']}:
-<div class="col-12" id="report{$report['reportId']|noescape}detail"></div>
-<script>
-const editor{$report['reportId']|noescape}detail = new toastui.Editor.factory({
-        el: document.querySelector('#report{$report['reportId']|noescape}detail'),
-        initialValue: `{$report['reportDetail']|noescape}`,
-        viewer: true,
-    });
-</script>
-<br/>
-{$text['energetickanarocnost']}:
-<div class="col-12" id="report{$report['reportId']|noescape}cost"></div>
-<script>
-const editor{$report['reportId']|noescape}cost = new toastui.Editor.factory({
-        el: document.querySelector('#report{$report['reportId']|noescape}cost'),
-        initialValue: `{$report['reportCost']|noescape}`,
-        viewer: true,
-    });
-</script>
-<br/>
-{$text['uvodnivstupy']}:
-<div class="col-12" id="report{$report['reportId']|noescape}input"></div>
-<script>
-const editor{$report['reportId']|noescape}input = new toastui.Editor.factory({
-        el: document.querySelector('#report{$report['reportId']|noescape}input'),
-        initialValue: `{$report['reportInput']|noescape}`,
-        viewer: true,
-    });
-</script>
-<br/>
+<div class="container-fluid mt-3 mb-3 mr-2 w-100">
+    <div class="row mb-1">
+        <div class="col-12 text-center">
+            <h4>
+                {$report['reportName']}
+            </h4>
+            <p class="mb-3">{$text['hlaseni']|firstUpper} {$reportType[$report['reportType']]}</p>
+            <div>
+                {if $report['reportSecret'] > 0 }
+                    <h5 class="bg-danger text-light w-100 p-2 mb-1">
+                        {$text['utajeno']|upper}
+                    </h5>
+                {/if}
+                {if $report['reportArchived']}
+                    <h6 class="bg-secondary text-light w-100 p-2 mb-1">
+                        {$text['archivovano']}
+                    </h6>
+                {/if}
+            </div>
+        </div>
+    </div>
+    <div class="row mb-1">
+        <div class="col-12 col-md-6">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">{$text['hlavickapopis']}</p>
+                <p><strong>{$text['ukol']}</strong>: {$report['reportTask']}</p>
+                <p><strong>{$text['prirazeno']}</strong>: {$report['reportOwnerName']}</p>
+                <p><strong>{$text['stavhlaseni']}</strong>: {$reportStatus[$report[reportStatus]]}</p>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">{$text['hlavickacas']}</p>
+                <p><strong>{$text['probehlo']}</strong>: {$report['reportEventStart']} - {$report['reportEventEnd']} {$report['reportEventDate']}</p>
+                <p><strong>{$text['vytvoril']}</strong>: {$report['reportCreatedByName']} {$report['reportCreated']}</p>
+                <p><strong>{$text['posledniuprava']}</strong>: {$report['reportModifiedByName']} {$report['reportModified']}</p>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-1">
+        <div class="col-12">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">{$text['osobyprirazenekhlaseni']|firstUpper}</p>
+                {if $reportParticipants != false}
+                    {foreach $reportParticipants as $participant}
+                            <p><strong>{$participant['participantRole']}</strong>: <a href="/readperson.php?rid={$participant['participantId']}" {ifset $participant['participantDeleted'] }class="deleted"{/ifset}>{$participant['participantName']}</a></p>
+                    {/foreach}
+                {/if}
+            </div>
+        </div>
+    </div>
+    <div class="row mb-1">
+        <div class="col-12">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">
+                    {$text['spojenospripady']}
+                </p>
+                {if $reportCases != false}
+                    {foreach $reportCases as $case}
+                        <p class="w-100"><a href="{$URL[0]}/readcase.php?rid={$case['caseId']}&hidenotes=0" {ifset $case['caseDeleted']}class="deleted"{/ifset}>{$case['caseName']}<a/></p>
+                        {sep}, {/sep}
+                    {/foreach}
+                    {else}
+                    <p>{$text['hlasenineniprirazenopripadu']}</p>
+                {/if}
+            </div>
+        </div>
+    </div>
+    <div class="row mb-1">
+        <div class="col-12">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">
+                    {$text['shrnuti']}
+                </p>
+                <div class="w-100" id="report{$report['reportId']|noescape}summary"></div>
+                <script>
+                    const editor{$report['reportId']|noescape}summary = new toastui.Editor.factory({
+                        el: document.querySelector('#report{$report['reportId']|noescape}summary'),
+                        initialValue: `{$report['reportSummary']|noescape}`,
+                        viewer: true,
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-1">
+        <div class="col-12">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">
+                    {$text['moznedopady']}
+                </p>
+                <div class="w-100" id="report{$report['reportId']|noescape}impact"></div>
+                <script>
+                    const editor{$report['reportId']|noescape}impact = new toastui.Editor.factory({
+                        el: document.querySelector('#report{$report['reportId']|noescape}impact'),
+                        initialValue: `{$report['reportImpact']|noescape}`,
+                        viewer: true,
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-1">
+        <div class="col-12">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">
+                    {$text['podrobnyprubeh']}
+                </p>
+                <div class="col-12" id="report{$report['reportId']|noescape}detail"></div>
+                <script>
+                    const editor{$report['reportId']|noescape}detail = new toastui.Editor.factory({
+                        el: document.querySelector('#report{$report['reportId']|noescape}detail'),
+                        initialValue: `{$report['reportDetail']|noescape}`,
+                        viewer: true,
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-1">
+        <div class="col-12">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">
+                    {$text['energetickanarocnost']}
+                </p>
+                <div class="col-12" id="report{$report['reportId']|noescape}cost"></div>
+                <script>
+                    const editor{$report['reportId']|noescape}cost = new toastui.Editor.factory({
+                        el: document.querySelector('#report{$report['reportId']|noescape}cost'),
+                        initialValue: `{$report['reportCost']|noescape}`,
+                        viewer: true,
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-1">
+        <div class="col-12">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">
+                    {$text['uvodnivstupy']}
+                </p>
+                <blockquote class="col-12" id="report{$report['reportId']|noescape}input"></blockquote>
+                <script>
+                    const editor{$report['reportId']|noescape}input = new toastui.Editor.factory({
+                        el: document.querySelector('#report{$report['reportId']|noescape}input'),
+                        initialValue: `{$report['reportInput']|noescape}`,
+                        viewer: true,
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
 {if $reportSymbols != false}
-{$text['neprirazenesymbolyhlaseni']}:
-    {foreach $reportSymbols as $symbol}
-        <a href="/readsymbol.php?rid={$symbol['symbolId']}"><img {if $symbol['symbolDeleted'] > 0}class="deleted"{/if} {ifset $symbol['symbolSecret']}class="secret"{/ifset} src="/files/symbols/{$symbol['symbolHash']}" alt="{$symbol['symbolCreated']} {$text['vytvoril']} {$symbol['symbolCreatedBy']}" /></a>
-    {/foreach}
-<br/>
+    <div class="row mb-1">
+        <div class="col-12">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">
+                    {$text['neprirazenesymbolyhlaseni']|firstUpper}
+                </p>
+                <div class="view-symbol-wrapper">
+                        {foreach $reportSymbols as $symbol}
+                            <a class="mb-2 mr-2" href="/readsymbol.php?rid={$symbol['symbolId']}"><img {if $symbol['symbolDeleted'] > 0}class="deleted"{/if} {ifset $symbol['symbolSecret']}class="secret"{/ifset} src="/files/symbols/{$symbol['symbolId']}" alt="{if $symbol['symbolCreatedByPerson']}{$symbol['symbolCreatedByPerson']}{else}{$symbol['symbolCreatedByUser']}{/if} {$symbol['symbolCreated']}" /></a>
+                        {/foreach}
+                </div>
+            </div>
+        </div>
+    </div>
 {/if}
 {if $reportFiles != false}
-{$text['prilozenesoubory']}:
-    {foreach $reportFiles as $file}
-    {if $file[fileIsImage]}
-        <a href="/file/attachement/{$file['fileId']}"><img  width="300px" alt="{$file['fileName']}: {$file['fileCreated']} {$text['nahral']} {$file['fileCreatedBy']}" src="/file/attachement/{$file['fileId']}"></a>
-    {else }
-        <a href="/file/attachement/{$file['fileId']}">{$file['fileName']}: {$file['fileCreated']} {$text['nahral']} {$file['fileCreatedBy']}</a>
-    {/if}
-    {/foreach}
-<br/>
+    <div class="row mb-1">
+        <div class="col-12">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">
+                    {$text['prilozenesoubory']}
+                </p>
+                    <div class="view-files-wrapper">
+                        {foreach $reportFiles as $file}
+                            {if $file[fileIsImage]}
+                                <a href="/file/attachement/{$file['fileId']}" class="file-link">
+                                    <div class="view-file-wrapper clear mr-2 mb-2 clear">
+                                        <img class="view-file-icon" alt="{$file['fileName']}: {$file['fileCreated']} {$file['fileCreatedBy']}" src="/file/attachement/{$file['fileId']}" />
+                                        <div>
+                                            <p class="view-file-name">
+                                                {$file['fileName']}
+                                            </p>
+                                            <p class="view-file-creator">{if $file['fileCreatedByPerson']}{$file['fileCreatedByPerson']}{else}{$file['fileCreatedByUser']}{/if} ({$file['fileCreated']})</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            {else }
+                                <a href="/file/attachement/{$file['fileId']}" class="file-link">
+                                    <div class="view-file-wrapper clear mr-2 mb-2 clear">
+                                        <img src="../images/folder_icon.png" class="view-file-icon"/>
+                                        <div>
+                                            <p class="view-file-name">
+                                                {$file['fileName']}
+                                            </p>
+                                            <p class="view-file-creator">{if $file['fileCreatedByPerson']}{$file['fileCreatedByPerson']}{else}{$file['fileCreatedByUser']}{/if} ({$file['fileCreated']})</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            {/if}
+                        {/foreach}
+                    </div>
+            </div>
+        </div>
+    </div>
 {/if}
 {if $reportNotes != false}
-{$text['poznamky']}:
-    {foreach $reportNotes as $note}
-        {if $note['noteCreatedBy'] == $user['userId'] || $note['noteSecret'] <= $user['aclSecret']}
-            {$note['noteTitle']} {if $note['noteSecret'] == 1}{$text['utajeno']|capitalize}{/if} {if $note['noteSecret'] == 2}{$text['soukrome']|capitalize}{/if} {if $note['noteDeleted']}{$text['smazeno']|capitalize}{/if}
-            <br/>
-            {$note['noteCreatedBy']} [{$note['noteCreated']}]
-            <br/>
-         {$note['noteNote']}
-        {/if}
-    {/foreach}
-<br/>
+    <div class="row mb-1">
+        <div class="col-12">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">
+                    {$text['poznamky']|firstUpper}
+                </p>
+                    <div class="system-notes-wrapper">
+                        {foreach $reportNotes as $note}
+                            {if $note['noteCreatedBy'] == $user['userId'] || $note['noteSecret'] <= $user['aclSecret']}
+                                {if $note['noteSecret'] == 1}
+                                    <div class="system-note note-color-secret">
+                                        <span class="system-note-stamp">{$text['tajne']|capitalize}</span>
+                                        <p class="system-note-title">
+                                            {$note['noteTitle']}
+                                        </p>
+                                        <p>
+                                            {$note['noteNote']}
+                                        </p>
+                                        <p class="system-note-creator">
+                                            {if $note['noteCreatedByPerson']}{$note['noteCreatedByPerson']}{else}{$note['noteCreatedByUser']}{/if} ({$note['noteCreated']})
+                                        </p>
+                                        <div class="system-note-peel">
+                                            <div class="system-note-peel-back"></div>
+                                        </div>
+                                    </div>
+                                {elseif $note['noteSecret'] == 2}
+                                    <div class="system-note note-color-personal">
+                                        <span class="system-note-stamp">{$text['soukrome']|capitalize}</span>
+                                        <p class="system-note-title">
+                                            {$note['noteTitle']}
+                                        </p>
+                                        <p>
+                                            {$note['noteNote']}
+                                        </p>
+                                        <p class="system-note-creator">
+                                            {if $note['noteCreatedByPerson']}{$note['noteCreatedByPerson']}{else}{$note['noteCreatedByUser']}{/if} ({$note['noteCreated']})
+                                        </p>
+                                        <div class="system-note-peel">
+                                            <div class="system-note-peel-back"></div>
+                                        </div>
+                                    </div>
+                                {elseif $note['noteDeleted']}
+                                    <div class="system-note note-color-deleted">
+                                        <span class="system-note-stamp">{$text['smazano']|capitalize}</span>
+                                        <p class="system-note-title">
+                                            {$note['noteTitle']}
+                                        </p>
+                                        <p>
+                                            {$note['noteNote']}
+                                        </p>
+                                        <p class="system-note-creator">
+                                            {if $note['noteCreatedByPerson']}{$note['noteCreatedByPerson']}{else}{$note['noteCreatedByUser']}{/if} ({$note['noteCreated']})
+                                        </p>
+                                        <div class="system-note-peel">
+                                            <div class="system-note-peel-back"></div>
+                                        </div>
+                                    </div>
+                                {else }
+                                    <div class="system-note note-color-default">
+                                        <p class="system-note-title">
+                                            {$note['noteTitle']}
+                                        </p>
+                                        <p>
+                                            {$note['noteNote']}
+                                        </p>
+                                        <p class="system-note-creator">
+                                            {if $note['noteCreatedByPerson']}{$note['noteCreatedByPerson']}{else}{$note['noteCreatedByUser']}{/if} ({$note['noteCreated']})
+                                        </p>
+                                        <div class="system-note-peel">
+                                            <div class="system-note-peel-back"></div>
+                                        </div>
+                                    </div>
+                                {/if}
+                            {/if}
+                        {/foreach}
+                    </div>
+            </div>
+        </div>
+    </div>
 {/if}
+</div>

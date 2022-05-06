@@ -35,7 +35,6 @@ if (isset($_POST['reportid'])) {
         }
     }
 
-
 //FILTER
 if (isset($_GET['sort'])) {
     sortingSet('report', $_GET['sort'], 'report');

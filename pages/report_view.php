@@ -31,7 +31,6 @@ if (!is_numeric($URL[2])|| $user['aclReport'] < 1 || mysqli_num_rows($reportQuer
     deleteUnread(4, $URL[2]);
 
     $latteParameters['title'] = $text['hlaseni']." ".reportType($report['reportType']).": ".stripslashes($report['reportName']);
-    $latteParameters['actions'][] = ["/reports/$URL[2]/edit", $text['upravitreport']];
     $latteParameters['reportType'] = reportType();
     $latteParameters['reportParticipants'] = reportParticipants($URL[2]);
     $latteParameters['reportRole'] = reportRole();

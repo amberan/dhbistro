@@ -184,10 +184,11 @@ latteDrawTemplate("header");
             } ?></p>
 		<div class="clear">&nbsp;</div>
                 <h3>Figuruje v těchto hlášení: </h3><p><?php
-                if ($user['aclRoot'] < 1) {
-                    $sqlFilter .= ' AND ('.DB_PREFIX.'report.reportDeleted is null OR '.DB_PREFIX.'report.reportDeleted  < from_unixtime(1)) ';
-                }
-            $sqlFilter .= " AND ".DB_PREFIX."report.reportSecret<=".$user['aclSecret'];
+            $sqlFilter = DB_PREFIX."report.reportSecret<=".$user['aclSecret'];
+            if ($user['aclRoot'] < 1) {
+                $sqlFilter .= ' AND ('.DB_PREFIX.'report.reportDeleted is null OR '.DB_PREFIX.'report.reportDeleted  < from_unixtime(1)) ';
+            }
+
             $sql_r = "SELECT ".DB_PREFIX."report.reportCreated as date_created, ".DB_PREFIX."report.reportModified as date_changed, ".DB_PREFIX."report.reportSecret AS 'secret', ".DB_PREFIX."report.reportName AS 'label', ".DB_PREFIX."report.reportId AS 'id', ".DB_PREFIX."ar2p.iduser
                 FROM ".DB_PREFIX."report, ".DB_PREFIX."ar2p
                 WHERE $sqlFilter AND ".DB_PREFIX."ar2p.idreport=".DB_PREFIX."report.reportId AND ".DB_PREFIX."ar2p.idperson=".$_REQUEST['rid']."

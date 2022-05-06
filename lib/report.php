@@ -176,9 +176,13 @@ function reportsAssignedTo($userid): array
         }
         $symbolSql = "SELECT
             ".DB_PREFIX."symbol2all.*,
-            ".DB_PREFIX."symbol.*
+            ".DB_PREFIX."symbol.*,
+            ".DB_PREFIX."user.userName,
+            ".DB_PREFIX."person.*
             FROM ".DB_PREFIX."symbol2all
             JOIN ".DB_PREFIX."symbol on ".DB_PREFIX."symbol2all.idsymbol = ".DB_PREFIX."symbol.id
+            JOIN ".DB_PREFIX."user ON ".DB_PREFIX."symbol.created_by = ".DB_PREFIX."user.userId
+            JOIN ".DB_PREFIX."person ON ".DB_PREFIX."user.personId = ".DB_PREFIX."person.id
             WHERE
             ".DB_PREFIX."symbol.assigned=0
             AND ".DB_PREFIX."symbol2all.idrecord=".$reportId."
@@ -189,8 +193,10 @@ function reportsAssignedTo($userid): array
                 $symbols[] = array( 'symbolId' => $symbol['id'],
                                     'symbolHash' => $symbol['symbol'],
                                     'symbolDeleted' => $symbol['deleted'],
-                                    'symbolCreated' => $symbol['created'],
+                                    'symbolCreated' => webdateTime($symbol['created']),
                                     'symbolCreatedBy' => $symbol['created_by'],
+                                    'symbolCreatedByPerson' => $symbol['name'].' '.$symbol['surname'],
+                                    'symbolCreatedByUser' => $symbol['userName'],
                                     'symbolModified' => $symbol['modified'],
                                     'symbolModifiedBy' => $symbol['modified_by']);
             }
@@ -211,15 +217,21 @@ function reportsAssignedTo($userid): array
             $sqlFilter = " AND ".DB_PREFIX."note.deleted = 0 ";
         }
         $noteSql = "SELECT
-            ".DB_PREFIX."note.*
+            ".DB_PREFIX."note.*,
+            ".DB_PREFIX."user.userName,
+            ".DB_PREFIX."person.*
         FROM ".DB_PREFIX."note
+        JOIN ".DB_PREFIX."user ON ".DB_PREFIX."note.iduser = ".DB_PREFIX."user.userId
+        JOIN ".DB_PREFIX."person ON ".DB_PREFIX."user.personId = ".DB_PREFIX."person.id
         WHERE ".DB_PREFIX."note.iditem=$reportId AND ".DB_PREFIX."note.idtable=4 $sqlFilter
         ORDER BY ".DB_PREFIX."note.datum DESC";
         if ($noteList = mysqli_query($database, $noteSql)) {
             while ($note = mysqli_fetch_assoc($noteList)) {
                 $notes[] = array(   'noteId' => $note['id'],
-                                    'noteCreated' => $note['datum'],
+                                    'noteCreated' => webdateTime($note['datum']),
                                     'noteCreatedBy' => $note['iduser'],
+                                    'noteCreatedByPerson' => $note['name'].' '.$note['surname'],
+                                    'noteCreatedByUser' => $note['userName'],
                                     'noteTitle' => $note['title'],
                                     'noteNote' => $note['note'],
                                     'noteDeleted' => $note['deleted'],
@@ -241,8 +253,12 @@ function reportsAssignedTo($userid): array
         //     $sqlFilter = " AND ".DB_PREFIX."symbol.deleted = 0 ";
         // }
         $fileSql = "SELECT
-            ".DB_PREFIX."file.*
+            ".DB_PREFIX."file.*,
+            ".DB_PREFIX."user.userName,
+            ".DB_PREFIX."person.*
             FROM ".DB_PREFIX."file
+            JOIN ".DB_PREFIX."user ON ".DB_PREFIX."file.iduser = ".DB_PREFIX."user.userId
+            JOIN ".DB_PREFIX."person ON ".DB_PREFIX."user.personId = ".DB_PREFIX."person.id
             WHERE $sqlFilter AND ".DB_PREFIX."file.iditem=$reportId AND ".DB_PREFIX."file.idtable=4
             ORDER BY ".DB_PREFIX."file.datum ASC";
         if ($fileList = mysqli_query($database, $fileSql)) {
@@ -257,7 +273,9 @@ function reportsAssignedTo($userid): array
                                     'fileHas' => $file['uniquename'],
                                     'fileName' => $file['originalname'],
                                     'fileCreatedBy' => $file['iduser'],
-                                    'fileCreated' => $file['datum'],
+                                    'fileCreatedByPerson' => $file['name'].' '.$file['surname'],
+                                    'fileCreatedByUser' => $file['userName'],
+                                    'fileCreated' => webdateTime($file['datum']),
                                     'fileIsImage' => $image);
             }
         }

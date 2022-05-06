@@ -104,10 +104,10 @@ if (is_numeric($_REQUEST['rid'])) {
 			<div class="clear">&nbsp;</div>
 			<h3>Hlášení přiřazená k případu:</h3>
 				<?php
+            $sqlFilter = DB_PREFIX."report.reportSecret<=".$user['aclSecret'];
             if ($user['aclRoot'] < 1) {
                 $sqlFilter .= ' AND ('.DB_PREFIX.'report.reportDeleted is null OR '.DB_PREFIX.'report.reportDeleted  < from_unixtime(1)) ';
             }
-            $sqlFilter .= " AND ".DB_PREFIX."report.reportSecret<=".$user['aclSecret'];
             $sql = "SELECT ".DB_PREFIX."report.reportId AS 'id', ".DB_PREFIX."report.reportName AS 'label', ".DB_PREFIX."report.reportTask AS 'task', ".DB_PREFIX."report.reportType AS 'type', ".DB_PREFIX."report.reportEventDate AS 'adatum', ".DB_PREFIX."user.userName AS 'user'
             FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."report, ".DB_PREFIX."user
             WHERE $sqlFilter AND ".DB_PREFIX."report.reportId=".DB_PREFIX."ar2c.idreport AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userId=".DB_PREFIX."report.reportOwner

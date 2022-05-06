@@ -90,13 +90,15 @@ $text['upravitosobu'] = 'Upravit osobu';
 $text['smazatosobu'] = 'Smazat osobu';
 $text['obnovitosobu'] = 'Obnovit osobu';
 $text['pridatosobu'] = 'Přidat osobu';
-$text['upravitreport'] = 'Upravit hlášení';
-$text['smazatreport'] = 'Smazat hlášení';
+$text['upravitreport'] = 'upravit hlášení';
+$text['smazatreport'] = 'smazat hlášení';
 $text['vyhledatsymbol'] = 'Vyhledat symbol';
 $text['odpojitsymbol'] = 'Odpojit symbol';
 $text['smazatsoubor'] = 'Smazat soubor';
 $text['pridatsoubor'] = 'Přidat soubor';
 $text['nahratsoubor'] = 'Nahrát soubor';
+$text['vybratsoubor'] = 'Vyberte soubor';
+$text['upravitosoby'] = 'Upravit osoby';
 
 // LOGIN
 $text['jmeno'] = 'Jméno';
@@ -280,18 +282,27 @@ $text['kontakty'] = 'Kontakty';
 $text['telefon'] = 'Telefon';
 
 //REPORTS
+$text['newreportheader'] = 'Vytvořit nový report';
+$text['editreportheader'] = 'Úprava reportu';
+$text['nazevreportu'] = 'Název reportu';
+$text['hlavickapopis'] = 'Popis hlášení';
+$text['hlavickacas'] = 'Časové údaje';
 $text['vyslychany'] = 'vyslíchaný';
 $text['vyslychajici'] = 'vyslíchající';
 $text['velitel'] = 'velitel zásahu';
 $text['zatceny'] = 'zatčený';
 $text['pritomny'] = 'přítomný';
 $text['zalozithlaseni'] = 'založit hlášení';
+$text['pridatvyjezd'] = 'nové hlášení z výjezdu';
+$text['pridatvyslech'] = 'nové hlášení z výslechu';
 $text['report'] = 'hlášení';
 $text['probehlo'] = 'Proběhlo';
 $text['prirazeno'] = 'Přiřazeno';
 $text['ucastnici'] = 'Účastnící';
 $text['ukol'] = 'Úkol';
 $text['archiv'] = 'Archiv';
+$text['archivovat'] = 'Změnit archivaci';
+$text['verejne'] = 'Veřejné';
 $text['tajne'] = 'Tajné';
 $text['priraditsymboly'] = 'přiřadit symboly';
 $text['vytvoril'] = 'Vytvořil';
@@ -305,6 +316,7 @@ $text['uvodnivstupy'] = 'Úvodní vstupy';
 $text['prilozenesoubory'] = 'Přiložené soubory';
 $text['nahral'] = 'nahrál';
 $text['soukrome'] = 'Soukromé';
+$text['smazano'] = 'Smazáno';
 $text['prirazenipripadu'] = 'Přiřazení případu';
 $text['neninove'] = 'není nové';
 $text['od'] = 'od';
@@ -313,6 +325,7 @@ $text['vypsat'] = 'vypsat';
 $text['vsechnahlaseni'] = 'všechna hlášení z';
 $text['vestavu'] = 've stavu';
 $text['nerozhoduje'] = 'nerozhoduje';
+$text['zobrazitreport'] = 'zobrazit hlášení';
 
 //SYMBOLS
 $text['neprirazenesymboly'] = 'nepřiřazené symboly';

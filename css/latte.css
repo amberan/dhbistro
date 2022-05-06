@@ -141,6 +141,30 @@ body {
   box-sizing: border-box;
 }
 
+p {
+  margin: 0;
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+blockquote {
+  border-left: 4px solid darkgrey !important;
+}
+
+.clear {
+  zoom: 1;
+}
+
+.clear:before,
+.clear:after {
+  content:"";
+  display:table;
+}
+
+.clear:after {
+  clear:both
+}
+
 .flex {
   display: flex;
 }
@@ -627,6 +651,7 @@ input[type='submit'] {
   justify-content: center;
   align-items: center;
   gap: 4px;
+  margin-bottom: 4px;
   width: 100%;
 }
 
@@ -716,4 +741,352 @@ input[type='submit'] {
     width: 100%;
     margin: 0 auto;
   }
+}
+
+/* ----- VIEW TEMPLATE ----- */
+
+.view-category-divider {
+  width: 100%;
+  height: 1px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  background-color: #555;
+  border: 0;
+}
+
+.view-category-wrapper {
+  position: relative;
+  border: 2px solid #333;
+  margin: 1rem 0;
+  padding: 1rem 0.5rem 0rem;
+  height: calc(100% - 1rem);
+}
+
+.view-category-name {
+  font-weight: bold;
+  background-color: #FFF;
+  position: absolute;
+  bottom: calc(100% - 0.5rem);
+  left: 2rem;
+  max-width: calc(100% - 2rem);
+  padding: 0 1rem;
+}
+
+.view-detail-highlight {
+  background-color: #F7F7F7;
+  padding: 0.25rem 0.5rem;
+}
+
+.view-symbol-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.system-notes-wrapper {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.system-note {
+  display: inline-block;
+  width: 100%;
+  height: auto;
+  min-width: 300px;
+  position: relative;
+  margin: 0 1rem 1rem 0;
+  padding: 0.5rem 61px 61px 20px;
+	box-shadow: 0 -1px 7px 1px #333;
+  border-bottom-width: 3px;
+  border-bottom-style: solid;
+}
+
+@media only screen and (min-width: 768px) {
+  .system-note {
+    width: auto;
+  }
+}
+
+.system-note-peel {
+  position: absolute;
+  z-index: 0;
+  bottom: 0;
+  right: 0;
+  height: 60px;
+  width: 60px;
+}
+
+.system-note-peel:before {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  right: 0;
+  content: "";
+  height: 31px;
+  width: 61px;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-right-radius: 50%
+}
+
+.system-note-peel:after {
+  position: absolute;
+  z-index: 6;
+  bottom: 0px;
+  right: 30px;
+  content: "";
+  height: 61px;
+  width: 31px;
+  border-bottom-right-radius: 50%
+}
+
+.system-note-peel-back {
+  position: absolute;
+  z-index: 2;
+  bottom: 5px;
+  right: 19px;
+  width: 20px;
+  height: 46px;
+  transform: rotate(45deg);
+}
+
+.system-note p {
+  font-style: italic;
+  z-index: 10;
+}
+
+.system-note-title {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.system-note-creator {
+  position: absolute;
+  text-align: right;
+  bottom: 5px;
+  right: 45px;
+  z-index: 5;
+  white-space: nowrap;
+}
+
+.system-note-stamp {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  font-size: 12px;
+  line-height: 18px;
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  text-align: center;
+  font-style: normal;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* ---- NOTE COLORS ---- */
+/* default */
+.system-note.note-color-default {
+  background-color: #FFFF66;
+  border-bottom-color: #E6E65C;
+}
+
+.system-note.note-color-default .system-note-peel {
+  background-color: #E6E65C;
+}
+
+.system-note.note-color-default .system-note-peel:before {
+  background-color: #FFFF66;
+  border-bottom-color: #B8B84A;
+}
+
+.system-note.note-color-default .system-note-peel:after {
+  background-color: #FFFF66;
+}
+
+.system-note.note-color-default .system-note-peel-back {
+  background-color: #CCCC6A;
+}
+
+/* secret */
+
+.system-note.note-color-secret {
+  background-color: #ffcccc;
+  border-bottom-color: #ffb3b3;
+}
+
+.system-note.note-color-secret .system-note-stamp {
+  color:#D92D2D;
+}
+
+.system-note.note-color-secret .system-note-peel {
+  background-color: #ffb3b3;
+}
+
+.system-note.note-color-secret .system-note-peel:before {
+  background-color: #ffcccc;
+  border-bottom-color: #ff8080;
+}
+
+.system-note.note-color-secret .system-note-peel:after {
+  background-color: #ffcccc;
+}
+
+.system-note.note-color-secret .system-note-peel-back {
+  background-color: #ff9999;
+}
+
+/* personal */
+
+.system-note.note-color-personal {
+  background-color: #ebfafa;
+  border-bottom-color: #d6f5f5;
+}
+
+.system-note.note-color-personal .system-note-stamp {
+  color:darkblue;
+}
+
+.system-note.note-color-personal .system-note-peel {
+  background-color: #d6f5f5;
+}
+
+.system-note.note-color-personal .system-note-peel:before {
+  background-color: #ebfafa;
+  border-bottom-color: #adebeb;
+}
+
+.system-note.note-color-personal .system-note-peel:after {
+  background-color: #ebfafa;
+}
+
+.system-note.note-color-personal .system-note-peel-back {
+  background-color: #c2f0f0;
+}
+
+/* deleted */
+
+.system-note.note-color-deleted {
+  background-color: #f5f5f0;
+  border-bottom-color: #ebebe0;
+}
+
+.system-note.note-color-deleted .system-note-stamp {
+  color:#D92D2D;
+}
+
+.system-note.note-color-deleted .system-note-peel {
+  background-color: #ebebe0;
+}
+
+.system-note.note-color-deleted .system-note-peel:before {
+  background-color: #f5f5f0;
+  border-bottom-color: #d6d6c2;
+}
+
+.system-note.note-color-deleted .system-note-peel:after {
+  background-color: #f5f5f0;
+}
+
+.system-note.note-color-deleted .system-note-peel-back {
+  background-color: #e0e0d1;
+}
+
+/* ----- VIEW FILE ----- */
+
+.file-link {
+  text-decoration: none;
+}
+
+.file-link:hover {
+  text-decoration: none;
+}
+
+.view-files-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  width: 100%;
+  height: auto;
+}
+
+.view-file-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  height: auto;
+  padding: 0.5rem;
+  border: 2px solid darkgrey;
+}
+
+@media only screen and (min-width: 768px) {
+  .view-file-wrapper {
+    width: auto;
+  }
+}
+
+.view-file-edit-wrapper {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+}
+
+.view-file-edit-wrapper a {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media only screen and (min-width: 768px) {
+  .view-file-edit-wrapper {
+    width: auto;
+  }
+}
+
+.view-file-icon {
+  display: inline-block;
+  width: 75px;
+  height: auto;
+  margin-right: 10px;
+}
+
+.view-file-name {
+  white-space: nowrap;
+}
+
+.view-file-name {
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.view-file-name:hover {
+  text-decoration: underline;
+}
+
+.view-file-creator {
+  color: #0D0D0D;
+  font-size: 11px;
+  text-decoration: none !important;
+  white-space: nowrap;
+}
+
+/* ----- EDIT TEMPLATE ----- */
+
+.edit-textarea {
+  width: 100%;
+  max-width: 100%;
+  min-width: 100%;
+  height: auto;
+  min-height: 100px;
 }
