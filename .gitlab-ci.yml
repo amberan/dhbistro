@@ -116,7 +116,11 @@ deploy_prod:
       done
     - ssh $PROD_REMOTE "rm bistro-$CI_PIPELINE_ID.tgz"
   rules:
+<<<<<<< HEAD
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master" && $CI_MERGE_REQUEST_APPROVED
+=======
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master" && $CI_MERGE_REQUEST_APPROVED’
+>>>>>>> ae40f06 (deploy production only on approved merge requests)
 
 code_quality:
   stage: test
