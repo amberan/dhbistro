@@ -27,6 +27,6 @@ if (isset($user) && $user['aclRoot'] > 0) {
 $menuSub[] = [$text['odhlasit'], "/logout", 0];
 
 
-$menuLinks[] = [$text['forum'],"http://www.prazskahlidka.cz/forums/index.php",0];
-$menuLinks[] = [$text['banka'],"http://banka.alembiq.net",0];
-$menuLinks[] = [$text['prazskahlidka'],"http://prazskahlidka.cz",0];
+$menuLinks[] = [$text['forum'],"http://www.prazskahlidka.cz/forums/index.php",0,"images/icons/Icon_forum.svg"];
+$menuLinks[] = [$text['banka'],"http://banka.alembiq.net",0,"images/icons/Icon_bank.svg"];
+$menuLinks[] = [$text['prazskahlidka'],"http://prazskahlidka.cz",0,"images/icons/Icon_web.svg"];
