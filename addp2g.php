@@ -5,11 +5,11 @@ use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
-$latteParameters['title'] = 'Úprava hlášení';
+$latteParameters['title'] = 'Prirazeni osob do Skupiny';
 mainMenu();
         $customFilter = custom_Filter(19);
     sparklets('<a href="./groups/">skupiny</a> &raquo; <strong>úprava skupiny</strong> &raquo; <strong>přidání osob</strong>');
-    if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
+    if (is_numeric($_REQUEST['rid']) && $user['aclGroup']) {
         $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."group WHERE id=".$_REQUEST['rid']);
         if ($rec = mysqli_fetch_assoc($res)) {
             ?>
@@ -57,9 +57,9 @@ mainMenu();
         default: $fsql_dead = ' AND '.DB_PREFIX.'person.dead=0 ';
     }
             switch ($farchiv) {
-        case 0: $fsql_archiv = ' AND '.DB_PREFIX.'person.archived is null '; break;
+        case 0: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1))  '; break;
         case 1: $fsql_archiv = ''; break;
-        default: $fsql_archiv = ' AND '.DB_PREFIX.'person.archived is null ';
+        default: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1))  ';
     }
             // formular filtru
             function filter(): void

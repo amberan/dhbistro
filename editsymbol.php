@@ -7,13 +7,13 @@ latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Úprava symbolu';
 
-    if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
+    if (is_numeric($_REQUEST['rid']) && $user['aclSymbol']) {
         $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."symbol WHERE id=".$_REQUEST['rid']);
         if ($rec_s = mysqli_fetch_assoc($res)) {
             if ($rec_s['secret'] > $user['aclSecret'] || $rec_s['deleted'] == 1) {
-                unauthorizedAccess(7, $rec_s['secret'], $rec_s['deleted'], $_REQUEST['rid']);
+                unauthorizedAccess(7, 1, $_REQUEST['rid']);
             }
-            auditTrail(7, 1, $_REQUEST['rid']);
+            authorizedAccess(7, 1, $_REQUEST['rid']);
             mainMenu();
             sparklets('<a href="./symbols.php">symboly</a> &raquo; <strong>úprava symbolu</strong>'); ?>
 <div id="obsah">
@@ -47,7 +47,7 @@ $latteParameters['title'] = 'Úprava symbolu';
 				<h3><label for="alphabeter">Písma:</label></h3><input type="range" value="<?php echo $rec_s['search_alphabets']; ?>" min="0" max="10" step="1" name="alphabeter" id="alphabeter" list=hodnoty /><br />
 				<h3><label for="specialchar">Spec. znaky:</label></h3><input type="range" value="<?php echo $rec_s['search_specialchars']; ?>" min="0" max="10" step="1" name="specialchar" id="specialchar" list=hodnoty /><br />
 			<div class="clear">&nbsp;</div>
-<?php 			if ($user['aclDeputy'] == 1) {
+<?php 			if ($user['aclSymbol'] > 1) {
                 echo '
 				<h3><label for="archiv">Archiv:</label></h3>
 					<input type="checkbox" name="archiv" value=1';
@@ -116,11 +116,16 @@ $latteParameters['title'] = 'Úprava symbolu';
 		<p><span class="poznamka-edit-buttons"><a class="connect" href="addsy2ar.php?rid=<?php echo $_REQUEST['rid']; ?>" title="přiřazení"><span class="button-text">přiřazení hlášení</span></a><em style="font-size:smaller;"> (přiřazování)</em></span></p>
 		<!-- následuje seznam případů -->
 		<?php // generování seznamu přiřazených hlášení
-            $sqlFilter = DB_PREFIX."report.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."report.secret<=".$user['aclSecret'];
-            $sql = "SELECT ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.label AS 'label'
+            $sqlFilter = DB_PREFIX."report.reportSecret<=".$user['aclSecret'];
+            if ($user['aclRoot'] < 1) {
+                $sqlFilter .= ' AND ('.DB_PREFIX.'report.reportDeleted is null OR '.DB_PREFIX.'report.reportDeleted  < from_unixtime(1)) ';
+            }
+
+
+            $sql = "SELECT ".DB_PREFIX."report.reportId AS 'id', ".DB_PREFIX."report.reportName AS 'label'
             FROM ".DB_PREFIX."symbol2all, ".DB_PREFIX."report
-            WHERE $sqlFilter AND ".DB_PREFIX."report.id=".DB_PREFIX."symbol2all.idrecord AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4
-            ORDER BY ".DB_PREFIX."report.label ASC";
+            WHERE $sqlFilter AND ".DB_PREFIX."report.reportId=".DB_PREFIX."symbol2all.idrecord AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4
+            ORDER BY ".DB_PREFIX."report.reportName ASC";
             $pers = mysqli_query($database, $sql);
 
             $i = 0;
@@ -129,7 +134,7 @@ $latteParameters['title'] = 'Úprava symbolu';
                 if ($i == 1) { ?>
 		<ul id=""><?php
                 } ?>
-			<li><a href="readactrep.php?rid=<?php echo $perc['id']; ?>"><?php echo $perc['label']; ?></a></li>
+			<li><a href="/reports/<?php echo $perc['id']; ?>"><?php echo $perc['label']; ?></a></li>
 		<?php
             }
             if ($i != 0) { ?>
@@ -175,10 +180,10 @@ $latteParameters['title'] = 'Úprava symbolu';
                 } ?></h4>
 				<div><?php echo stripslashes($rec_n['note']); ?></div>
 				<span class="poznamka-edit-buttons"><?php
-                if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
+                if (($rec_n['iduser'] == $user['userId']) || ($user['aclSymbol']>0)) {
                     echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=7" title="upravit"><span class="button-text">upravit</span></a> ';
                 }
-                if (($rec_n['iduser'] == $user['userId']) || ($user['aclDeputy'])) {
+                if (($rec_n['iduser'] == $user['userId']) || ($user['aclSymbol'] > 1)) {
                     echo '<a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('readperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec_n['title'])."&quot; náležící k symbolu?');".'" title="smazat"><span class="button-text">smazat</span></a>';
                 } ?>
 				</span>

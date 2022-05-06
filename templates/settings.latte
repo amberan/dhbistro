@@ -10,7 +10,7 @@
                 <div class="col-md-4">
                     <label class="mt-3" for="timeout">{$text[timeout]}:</label>
                     <input class="form-control" type="text" name="timeout"  value="{$user[userTimeout]}" />
-                    <small class="form-text text-muted">{$text[vevterinach]}.</small>
+                    <small class="form-text text-muted">{$config['session_lenght'][0]}-{$config['session_lenght'][1]} {$text[vterin]}.</small>
                 </div>
                 <div class="col-md-4">
                     <label class="mt-3" for="soucheslo">{$text[email]}:</label>
@@ -39,35 +39,27 @@
             <div id="editSection" class="writable-section"></div>
             <script type="text/javascript">
             </script>
-            <input class="btn btn-primary mt-2" type="submit" name="editsettings" id="submitbutton" value={$text[ulozit]}>
+            <input class="btn btn-primary mt-2" type="submit" name="editsettings" id="submitbutton" value={$text['ulozit']|firstUpper}>
     </form>
 </div>
 
 <script>
-    var editor = new tui.Editor({
-        el: document.querySelector('#editSection'),
-        previewStyle: 'vertical',
-        height: '400px',
-        initialEditType: 'wysiwyg',
-        initialValue: {$user[planMD]},
-        useCommandShortcut: true,
-        exts: [{
-                name: 'chart',
-                minWidth: 100,
-                maxWidth: 600,
-                minHeight: 100,
-                maxHeight: 300
-            },
-            'scrollSync',
-            'colorSyntax',
-            'uml',
-            'mark',
-            'table'
-        ]
+    const editor = new toastui.Editor({
+    el: document.querySelector('#editSection'),
+    height: '400px',
+    initialEditType: 'wysiwyg',
+    previewStyle: 'vertical',
+    initialValue: {$user[planMD]},
+    toolbarItems: [
+          ['heading', 'bold', 'italic', 'strike'],
+          ['hr', 'quote'],
+          ['ul', 'ol', 'task', 'indent', 'outdent'],
+          ['table', 'image', 'link'],
+    ],
     });
 
     setInterval(function() {
-        document.getElementById("plan").value = editor.getValue();
+        document.getElementById("plan").value = editor.getMarkdown();
     }, 5);
 
 </script>

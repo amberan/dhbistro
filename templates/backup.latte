@@ -14,6 +14,9 @@
                 <a class="btn btn-info mt-2 ml-1 col-md-4 col-sm-12" href="/backup/now">{$text['zalohovatrucne']}</a>
         </div>
 	</div>
+    {if $backup == false}
+        <div class="col-12">{$text['zalohynenalezeny']}</div>
+    {else}
     <div class="row mb-1">
         <div class="col-12">
                 <table class="table table-striped table-hover">
@@ -26,7 +29,7 @@
                                                 Verze
                                         </th>
                                         <th>
-                                                Datum vytvoření <a href="{$website_link}{$URL[1]}/?sort=time">&#8661;</a>
+                                                Datum vytvoření <a href="{$URL[0]}{$URL[1]}/?sort=time">&#8661;</a>
                                         </th>
                                         <th>
                                                 Velikost souboru
@@ -61,4 +64,5 @@
                 </table>
         </div>
     </div>
+    {/if}
 </div>

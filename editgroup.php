@@ -5,13 +5,13 @@ use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
-    if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
+    if (is_numeric($_REQUEST['rid']) && $user['aclGroup']) {
         $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."group WHERE id=".$_REQUEST['rid']);
         if ($rec_g = mysqli_fetch_assoc($res)) {
             if (($rec_g['secret'] > $user['aclSecret']) || $rec_g['deleted'] == 1) {
-                unauthorizedAccess(2, $rec_g['secret'], $rec_g['deleted'], $_REQUEST['rid']);
+                unauthorizedAccess(2, 1, $_REQUEST['rid']);
             }
-            auditTrail(2, 1, $_REQUEST['rid']);
+            authorizedAccess(2, 1, $_REQUEST['rid']);
             $latteParameters['title'] = 'Úprava skupiny';
             mainMenu();
             sparklets('<a href="./groups/">skupiny</a> &raquo; <strong>úprava skupiny</strong>'); ?>
@@ -74,8 +74,8 @@ latteDrawTemplate("header");
 	<fieldset><legend><strong>Přiložené soubory</strong></legend>
 		<strong><em>Ke skupině je možné nahrát neomezené množství souborů, ale velikost jednoho souboru je omezena na 2 MB.</em></strong>
 		<?php //generování seznamu přiložených souborů
-            $sqlFilter = DB_PREFIX."file.secret<=".$user['aclSecret']; //DB_PREFIX."case.deleted in (0,".$user['aclRoot'].") AND ".
-                $sql = "SELECT ".DB_PREFIX."file.iduser AS 'iduser', ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.secret AS 'secret', ".DB_PREFIX."file.id AS 'id'
+            $sqlFilter = DB_PREFIX."file.secret<=".$user['aclSecret'];
+            $sql = "SELECT ".DB_PREFIX."file.iduser AS 'iduser', ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.secret AS 'secret', ".DB_PREFIX."file.id AS 'id'
                 FROM ".DB_PREFIX."file
                 WHERE $sqlFilter AND ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=2 ORDER BY ".DB_PREFIX."file.originalname ASC";
             $res = mysqli_query($database, $sql);
@@ -86,7 +86,7 @@ latteDrawTemplate("header");
 		<ul id="prilozenadata">
 				<?php } ?>
 			<li class="soubor"><a href="file/attachement/<?php echo $rec_f['id']; ?>" title=""><?php echo stripslashes($rec_f['title']); ?></a><?php if ($rec_f['secret'] == 1) { ?> (TAJNÝ)<?php } ?><span class="poznamka-edit-buttons"><?php
-                if (($rec_f['iduser'] == $user['userId']) || ($user['aclDeputy'])) {
+                if (($rec_f['iduser'] == $user['userId']) || ($user['aclGroup']) > 1) {
                     echo '<a class="delete" title="smazat" href="groups/?deletefile='.$rec_f['id'].'&amp;groupid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editgroup.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat soubor &quot;'.stripslashes($rec_f['title']).'&quot; náležící ke skupině?\')"><span class="button-text">smazat soubor</span></a>';
                 } ?>
 				</span></li><?php
@@ -146,10 +146,10 @@ latteDrawTemplate("header");
             if ($rec_n['secret'] == 1) { ?> (tajná)<?php }
             if ($rec_n['secret'] == 2) { ?> (soukromá)<?php }
             ?><span class="poznamka-edit-buttons"><?php
-            if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
+            if (($rec_n['iduser'] == $user['userId']) || ($user['aclGroup'])) {
                 echo ' <a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=2" title="upravit"><span class="button-text">upravit poznámku</span></a>';
             }
-            if (($rec_n['iduser'] == $user['userId']) || ($user['aclDeputy'])) {
+            if (($rec_n['iduser'] == $user['userId']) || ($user['aclGroup'] > 1)) {
                 echo ' <a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editgroup.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec_n['title'])."&quot; náležící ke skupině?');".'" title="smazat"><span class="button-text">smazat poznámku</span></a>';
             }
             ?></span></span></li><?php
@@ -165,7 +165,7 @@ latteDrawTemplate("header");
             header('location: index.php');
         }
     } else {
-        $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+        $_SESSION['message'] = $text['accessdeniedrecorded'];
         header('location: index.php');
     }
     latteDrawTemplate("footer");

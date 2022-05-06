@@ -29,10 +29,10 @@ latteDrawTemplate("header");
                     case 1: $sourceurl = "readperson.php?rid=".$rec['iditem']."&hidenotes=0"; $sourcename = "osoby"; break;
                     case 2: $sourceurl = "readgroup.php?rid=".$rec['iditem']."&hidenotes=0"; $sourcename = "skupiny"; break;
                     case 3: $sourceurl = "readcase.php?rid=".$rec['iditem']."&hidenotes=0"; $sourcename = "případy"; break;
-                    case 4: $sourceurl = "readactrep.php?rid=".$rec['iditem']."&hidenotes=0&truenames=0"; $sourcename = "hlášení"; break;
+                    case 4: $sourceurl = "/reports/".$rec['iditem']; $sourcename = "hlášení"; break;
                     default: $sourceurl = ""; $sourcename = ""; break;
                 }
-                if ($usrinfo['right_text']) {
+                if ($user['aclUser']) { //TODO NOTE permission
                     $editbutton = '; <a href="editnote.php?rid='.$_REQUEST['rid'].'&amp;idtable='.$_REQUEST['idtable'].'">upravit poznámku</a>';
                 } else {
                     $editbutton = '';
@@ -51,7 +51,7 @@ latteDrawTemplate("header");
                 }
                 echo '<div id="obsah">'.StripSlashes($rec['note']).'</div>';
             } else {
-                $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+                $_SESSION['message'] = $text['accessdeniedrecorded'];
                 Header('location: index.php');
             }
         } else {

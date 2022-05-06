@@ -14,7 +14,7 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
     $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."case WHERE id=".$_REQUEST['rid']);
     $rec = mysqli_fetch_assoc($res);
 
-    if ($usrinfo['right_text'] && (($rec['secret'] == 0) || ($user['aclSecret']) || ($rec_a['iduser']))) {
+    if ($user['aclCase'] && (($rec['secret'] == 0) || ($user['aclSecret']) || ($rec_a['iduser']))) {
         $symbolbutton = ' <a href="symbols.php">přiřadit symboly</a>';
     } else {
         $symbolbutton = '';
@@ -22,9 +22,9 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
     $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."case WHERE id=".$_REQUEST['rid']);
     if ($rec_c = mysqli_fetch_assoc($res)) {
         if (($rec['secret'] > $user['aclSecret']) || $rec['deleted'] == 1) {
-            unauthorizedAccess(3, $rec_c['secret'], $rec_c['deleted'], $_REQUEST['rid']);
+            unauthorizedAccess(3, 1, $_REQUEST['rid']);
         }
-        auditTrail(3, 1, $_REQUEST['rid']);
+        authorizedAccess(3, 1, $_REQUEST['rid']);
         mainMenu();
         sparklets('<a href="/cases/">případy</a> &raquo; <strong>úprava případu</strong>', $symbolbutton); ?>
 <?php if (($rec['secret'] == 1) && (!$user['aclSecret']) && (!$rec_a['iduser'])) {
@@ -99,9 +99,7 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
                 WHERE ".DB_PREFIX."person.id=".DB_PREFIX."c2p.idperson AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret<=".$user['aclSecret']."
                 ORDER BY ".DB_PREFIX."person.surname, ".DB_PREFIX."person.name ASC";
             $pers = mysqli_query($database, $sql);
-//            $persons = [];
             while ($perc = mysqli_fetch_assoc($pers)) {
-                //$persons[] =
                 echo '<a href="readperson.php?rid='.$perc['id'].'">'.$perc['surname'].', '.$perc['name'].'</a>, ';
             }
             echo implode('; ', $solvers) != "" ? implode('; ', $solvers) : '<em>Nejsou připojeny žádné osoby.</em>'; ?></p>
@@ -116,14 +114,14 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
 		<ul>
 		<?php
         if ($user['aclSecret']) {
-            $sql = "SELECT ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.task AS 'task', ".DB_PREFIX."user.userName AS 'user' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."report, ".DB_PREFIX."user WHERE ".DB_PREFIX."report.id=".DB_PREFIX."ar2c.idreport AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userId=".DB_PREFIX."report.iduser ORDER BY ".DB_PREFIX."report.label ASC";
+            $sql = "SELECT ".DB_PREFIX."report.reportId AS 'id', ".DB_PREFIX."report.reportName AS 'label', ".DB_PREFIX."report.reportTask AS 'task', ".DB_PREFIX."user.userName AS 'user' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."report, ".DB_PREFIX."user WHERE ".DB_PREFIX."report.reportId=".DB_PREFIX."ar2c.idreport AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userId=".DB_PREFIX."report.reportOwner ORDER BY ".DB_PREFIX."report.reportName ASC";
         } else {
-            $sql = "SELECT ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.task AS 'task', ".DB_PREFIX."user.userName AS 'user' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."report, ".DB_PREFIX."user WHERE ".DB_PREFIX."report.id=".DB_PREFIX."ar2c.idreport AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userId=".DB_PREFIX."report.iduser AND ".DB_PREFIX."report.secret=0 ORDER BY ".DB_PREFIX."report.label ASC";
+            $sql = "SELECT ".DB_PREFIX."report.reportId AS 'id', ".DB_PREFIX."report.reportName AS 'label', ".DB_PREFIX."report.reportTask AS 'task', ".DB_PREFIX."user.userName AS 'user' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."report, ".DB_PREFIX."user WHERE ".DB_PREFIX."report.reportId=".DB_PREFIX."ar2c.idreport AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userId=".DB_PREFIX."report.reportOwner AND ".DB_PREFIX."report.reportSecret=0 ORDER BY ".DB_PREFIX."report.reportName ASC";
         }
             $pers = mysqli_query($database, $sql);
             $reports = [];
             while ($perc = mysqli_fetch_assoc($pers)) {
-                $reports[] = '<li><a href="readactrep.php?rid='.$perc['id'].'">'.$perc['label'].'</a> - '.$perc['task'].' - <b>'.$perc['user'].'</b>';
+                $reports[] = '<li><a href="/reports/'.$perc['id'].'">'.$perc['label'].'</a> - '.$perc['task'].' - <b>'.$perc['user'].'</b>';
             }
             echo implode('; ', $reports) != "" ? implode('; ', $reports) : '<em>Nejsou připojena žádná hlášení.</em>'; ?>
 		</ul>
@@ -213,10 +211,10 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
             if ($rec_n['secret'] == 1) { ?> (tajná)<?php }
             if ($rec_n['secret'] == 2) { ?> (soukromá)<?php }
             ?><span class="poznamka-edit-buttons"><?php
-            if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
+            if (($rec_n['iduser'] == $user['userId']) || ($user['aclCase']>0)) {
                 echo ' <a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=3" title="upravit"><span class="button-text">upravit poznámku</span></a>';
             }
-            if (($rec_n['iduser'] == $user['userId']) || ($user['aclDeputy'])) {
+            if (($rec_n['iduser'] == $user['userId']) || ($user['aclCase'] > 1)) {
                 echo ' <a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editgroup.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec_n['title'])."&quot; náležící k hlášení?');".'" title="smazat"><span class="button-text">smazat poznámku</span></a>';
             }
             ?></span></li><?php
@@ -232,7 +230,7 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
         header('location: index.php');
     }
 } else {
-    $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+    $_SESSION['message'] = $text['accessdeniedrecorded'];
     header('location: index.php');
 }
     latteDrawTemplate("footer");

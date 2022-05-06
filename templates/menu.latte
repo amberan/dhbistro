@@ -1,4 +1,5 @@
-	    <nav id="wrapper" class="navbar navbar-expand-lg  navbar-{$config['theme_navbar']} bg-{$config['theme_bg']} navbar-fixed-top">
+	<div class="nav-wrapper bg-{$config['themeBg']} navbar-fixed-top">
+        <nav id="wrapper" class="navbar navbar-expand-lg navbar-{$config['themeNavbar']} bg-{$config['themeBg']} navbar-nav-wrapper">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu"
             aria-controls="Toggle Menu" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -7,38 +8,44 @@
                 <ul class="navbar-nav mr-auto">
 {foreach $menu as $menuItem}
                     <li class="nav-item mr-2{if $menuItem[2]>0} unread{/if}">
-                        <a class="nav-link{if ($menuItem[1]|slice: 1, -1) == $URL[1]} nav-link-active{/if}" href="{$menuItem[1]}">{$menuItem[0]}{if $menuItem[2]>0} (<span class="unread-number">{$menuItem[2]}</span>){/if}</a>
+                        <a class="relative btn btn-{$config['themeBg']} nav-link{if ($menuItem[1]|slice: 1, -1) == $URL[1]} nav-link-active{/if}" href="{$menuItem[1]}">{$menuItem[0]|firstUpper}{if $menuItem[2]>0} <span class="unread-indicator">{$menuItem[2]}</span>{/if}</a>
                     </li>
 {/foreach}
                 </ul>
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item mr-2">
-                        <form id="search_menu" action="/search.php" method="get">
-                            <div class="input-group">
-                                <input type="text" name="search" class="form-control"/>
-                                <div class="input-group-append">
-                                    <input class="btn btn-secondary" type="submit" value="{$text[hledat]}" />
-                                </div>
-                            </div>
-                        </form>
+                    <li class="prolink-wrapper">
+                        {foreach $menuLinks as $menuLinksItem}
+                            <a class="btn btn-{$config['themeBg']} btn-md nav-link prolink-icons" href="{$menuLinksItem[1]}" alt="{$menuLinksItem[0]}">
+                                {php echo file_get_contents("{$menuLinksItem[3]}")}
+                            </a>
+                        {/foreach}
                     </li>
                     <li class="nav-item mr-2">
-                        <a class="nav-link" href="{$current_location}/?delallnew=true"
+                        <a class="relative btn btn-{$config['themeBg']} nav-link" href="{$URL[0]}?delallnew=true"
                             onclick="return confirm('{$text[opravduprecist]}');">
                             {$text[precistvse]}
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                        <a class="btn btn-{$config['themeBg']} nav-link dropdown-toggle mr-2" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
                             {$text[dalsi]}
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-{foreach $menu2 as $menu2Item}
-                        <a class="dropdown-item" href="{$menu2Item[1]}">{$menu2Item[0]}</a>
-{/foreach}
+                            {foreach $menuSub as $menuSubItem}
+                                <a class="dropdown-item" href="{$menuSubItem[1]}">{$menuSubItem[0]|firstUpper}</a>
+                            {/foreach}
                         </div>
                     </li>
                 </ul>
             </div>
         </nav>
+        <form id="search_menu" class="search-in-main-menu pt-2 ml-2 mr-3" action="/search.php" method="get">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control"/>
+                <div class="input-group-append">
+                    <input class="btn btn-secondary" type="submit" value="{$text[hledat]}" />
+                </div>
+            </div>
+        </form>
+    </div>

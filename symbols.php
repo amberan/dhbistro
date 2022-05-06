@@ -16,12 +16,12 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
             $sfile = '';
         }
         $time = time();
-        echo $sql_p = "INSERT INTO ".DB_PREFIX."symbol (symbol, `desc`, deleted, created, created_by, modified, modified_by, archived, assigned, search_lines, search_curves, search_points, search_geometricals, search_alphabets, search_specialchars, secret)  VALUES( '".$sfile."', '".$_POST['contents']."', '0', '".$time."', '".$user['userId']."', '".$time."', '".$user['userId']."', 0, '0', '".$_POST['liner']."', '".$_POST['curver']."', '".$_POST['pointer']."', '".$_POST['geometrical']."', '".$_POST['alphabeter']."', '".$_POST['specialchar']."', 0)";
+        $sql_p = "INSERT INTO ".DB_PREFIX."symbol (symbol, `desc`, deleted, created, created_by, modified, modified_by, archived, assigned, search_lines, search_curves, search_points, search_geometricals, search_alphabets, search_specialchars, secret)  VALUES( '".$sfile."', '".$_POST['contents']."', '0', '".$time."', '".$user['userId']."', '".$time."', '".$user['userId']."', 0, '0', '".$_POST['liner']."', '".$_POST['curver']."', '".$_POST['pointer']."', '".$_POST['geometrical']."', '".$_POST['alphabeter']."', '".$_POST['specialchar']."', 0)";
         mysqli_query($database, $sql_p);
         $sql_f = "SELECT id FROM ".DB_PREFIX."symbol WHERE created='".$time."' AND created_by='".$user['userId']."' AND modified='".$time."' AND modified_by='".$user['userId']."'";
         $pidarray = mysqli_fetch_assoc(mysqli_query($database, $sql_f));
         $pid = $pidarray['id'];
-        auditTrail(7, 3, $pid);
+        authorizedAccess(7, 3, $pid);
         if (!isset($_POST['notnew'])) {
             unreadRecords(7, $pid);
         }
@@ -30,22 +30,22 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
         $_SESSION['message'] = 'Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva.';
     }
         // Vymazani symbolu
-    if (isset($_REQUEST['sdelete']) && is_numeric($_REQUEST['sdelete']) && $usrinfo['right_text']) {
-        auditTrail(7, 11, $_REQUEST['sdelete']);
+    if (isset($_REQUEST['sdelete']) && is_numeric($_REQUEST['sdelete']) && $user['aclSymbol']>1) {
+        authorizedAccess(7, 11, $_REQUEST['sdelete']);
         mysqli_query($database, "UPDATE ".DB_PREFIX."symbol SET deleted=1 WHERE id=".$_REQUEST['sdelete']);
         deleteAllUnread(7, $_REQUEST['sdelete']);
         $_SESSION['message'] = 'Symbol smazan.';
     }
         // Obnoveni symbolu
     if (isset($_REQUEST['undelete']) && is_numeric($_REQUEST['undelete']) && $user['aclRoot']) {
-        auditTrail(7, 11, $_REQUEST['undelete']);
+        authorizedAccess(7, 11, $_REQUEST['undelete']);
         mysqli_query($database, "UPDATE ".DB_PREFIX."symbol SET deleted=0 WHERE id=".$_REQUEST['undelete']);
         $_SESSION['message'] = 'Symbol obnoven.';
     }
 
         // Uprava symbolu
-    if (isset($_POST['symbolid'], $_POST['editsymbol']) && $usrinfo['right_text']) {
-        auditTrail(7, 2, $_POST['symbolid']);
+    if (isset($_POST['symbolid'], $_POST['editsymbol']) && $user['aclSymbol']) {
+        authorizedAccess(7, 2, $_POST['symbolid']);
         if (!isset($_POST['notnew'])) {
             unreadRecords(7, $_POST['symbolid']);
         }
@@ -73,14 +73,14 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
         $_SESSION['message'] = 'Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva.';
     }
       // archivace symbolu
-    if (isset($_GET['archive']) && is_numeric($_GET['archive']) && $usrinfo['right_text']) {
-        auditTrail(7, 11, $_GET['archive']);
+    if (isset($_GET['archive']) && is_numeric($_GET['archive']) && $user['aclSymbol']) {
+        authorizedAccess(7, 11, $_GET['archive']);
         mysqli_query($database, 'UPDATE '.DB_PREFIX.'symbol SET archived=CURRENT_TIMESTAMP WHERE id='.$_GET['archive']);
         $_SESSION['message'] = 'Symbol archivovan.';
     }
       // odarchivace symbolu
-    if (isset($_GET['unarchive']) && is_numeric($_GET['unarchive']) && $usrinfo['right_text']) {
-        auditTrail(7, 11, $_GET['unarchive']);
+    if (isset($_GET['unarchive']) && is_numeric($_GET['unarchive']) && $user['aclSymbol']) {
+        authorizedAccess(7, 11, $_GET['unarchive']);
         mysqli_query($database, 'UPDATE '.DB_PREFIX.'symbol SET archived=0 WHERE id='.$_GET['unarchive']);
         $_SESSION['message'] = 'Symbol odarchivovan.';
     }
@@ -88,16 +88,16 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Symboly';
-    auditTrail(7, 1, 0);
+    authorizedAccess(7, 1, 0);
     mainMenu();
     deleteUnread(7, 'none');
-    sparklets('<a href="persons.php">osoby</a> &raquo; <strong>nepřiřazené symboly</strong>', '<a href="newsymbol.php">nový symbol</a>; <a href="symbol_search.php">vyhledat symbol</a>');
+    sparklets('<a href="/persons/">osoby</a> &raquo; <strong>nepřiřazené symboly</strong>', '<a href="newsymbol.php">nový symbol</a>; <a href="symbol_search.php">vyhledat symbol</a>');
 
-    if (sizeof($_POST['filter']) > 0) {
+    if (sizeof(@$_POST['filter']) > 0) {
         filterSet('symbol', @$_POST['filter']);
     }
 $filter = filterGet('symbol');
-$sqlFilter = DB_PREFIX.'symbol.deleted in (0,'.$user['aclRoot'].') '; // AND ".DB_PREFIX."case.secret<=".$user['aclSecret'];
+$sqlFilter = DB_PREFIX.'symbol.deleted in (0,'.$user['aclRoot'].') ';
 
 switch (@$filter['archived']) {
    case 'on': $sqlFilter .= ' AND '.DB_PREFIX.'symbol.archived >= 0 '; break;
@@ -205,11 +205,17 @@ switch (@$filter['deleted']) {
                     }
             // konec seznamu přiřazených případů
             // generování seznamu přiřazených hlášení
-            $sqlFilter = DB_PREFIX."report.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."report.secret<=".$user['aclSecret'];
-            $sql_s = "SELECT ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.label AS 'label'
+            $sqlFilter = DB_PREFIX."report.reportSecret<=".$user['aclSecret'];
+
+            if ($user['aclRoot'] < 1) {
+                $sqlFilter .= ' AND ('.DB_PREFIX.'report.reportDeleted is null OR '.DB_PREFIX.'report.reportDeleted  < from_unixtime(1)) ';
+            }
+
+
+            $sql_s = "SELECT ".DB_PREFIX."report.reportId AS 'id', ".DB_PREFIX."report.reportName AS 'label'
             FROM ".DB_PREFIX."symbol2all, ".DB_PREFIX."report
-            WHERE $sqlFilter AND ".DB_PREFIX."report.id=".DB_PREFIX."symbol2all.idrecord AND ".DB_PREFIX."symbol2all.idsymbol=".$rec['id']." AND ".DB_PREFIX."symbol2all.table=4
-            ORDER BY ".DB_PREFIX."report.label ASC";
+            WHERE $sqlFilter AND ".DB_PREFIX."report.reportId=".DB_PREFIX."symbol2all.idrecord AND ".DB_PREFIX."symbol2all.idsymbol=".$rec['id']." AND ".DB_PREFIX."symbol2all.table=4
+            ORDER BY ".DB_PREFIX."report.reportName ASC";
             $pers = mysqli_query($database, $sql_s);
 
             $i = 0;
@@ -219,7 +225,7 @@ switch (@$filter['deleted']) {
 		  		<strong>Hlášení:</strong>
 		  		<ul id=""><?php
                 } ?>
-		  		<li><a href="readactrep.php?rid=<?php echo $perc['id']; ?>"><?php echo $perc['label']; ?></a></li>
+		  		<li><a href="/reports/<?php echo $perc['id']; ?>"><?php echo $perc['label']; ?></a></li>
 		  		<?php
             }
             if ($i != 0) { ?>
@@ -233,7 +239,7 @@ switch (@$filter['deleted']) {
 		   	</td>
             <td>
 			<?php
-if ($usrinfo['right_text']) {
+if ($user['aclSymbol']) {
                 echo '	<a href="addsy2p.php?rid='.$rec['id'].'">přiřadit </a> <a href="editsymbol.php?rid='.$rec['id'].'">upravit </a> <a href="newnote.php?rid='.$rec['id'].'&idtable=7">přidat poznámku </a>';
                 if ($rec['archived'] > 0) {
                     echo '<a href="symbols.php?unarchive='.$rec['id'].'" onclick="'."return confirm('Opravdu vyjmout z archivu tento symbol?');".'">odarchivovat </a>';

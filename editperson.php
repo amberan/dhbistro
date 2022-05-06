@@ -7,18 +7,18 @@ latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Zobrazení symbolu';
 
-    if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
+    if (is_numeric($_REQUEST['rid']) && $user['aclPerson']) {
         $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."person WHERE id=".$_REQUEST['rid']);
         if ($rec_p = mysqli_fetch_assoc($res)) {
             if (($rec_p['secret'] > $user['aclSecret']) || $rec_p['deleted'] == 1) {
-                unauthorizedAccess(1, $rec_p['secret'], $rec_p['deleted'], $_REQUEST['rid']);
+                unauthorizedAccess(1, 1, $_REQUEST['rid']);
             }
-            auditTrail(1, 1, $_REQUEST['rid']);
+            authorizedAccess(1, 1, $_REQUEST['rid']);
             $latteParameters['title'] = 'Úprava osoby';
             mainMenu();
-            sparklets('<a href="./persons.php">osoby</a> &raquo; <strong>úprava osoby</strong>'); ?>
+            sparklets('<a href="/persons/">osoby</a> &raquo; <strong>úprava osoby</strong>'); ?>
 <div id="obsah">
-	<form action="persons.php" method="post" id="inputform" enctype="multipart/form-data">
+	<form action="/persons/" method="post" id="inputform" enctype="multipart/form-data">
 <?php  if ($user['aclGamemaster'] == 1) {
                 $sql = 'SELECT '.DB_PREFIX.'person.name, '.DB_PREFIX.'person.surname, '.DB_PREFIX.'user.userName , '.DB_PREFIX.'user.userId
                     FROM '.DB_PREFIX.'user
@@ -61,7 +61,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 		<?php } else { ?><a href="readsymbol.php?rid=<?php echo $rec_p['symbol']; ?>"><img src="file/symbol/<?php echo $rec_p['symbol']; ?>" alt="<?php echo stripslashes($rec_p['name']).' '.stripslashes($rec_p['surname']); ?>" id="symbolimg" /></a>
 		<?php } ?>
 		<?php if ($rec_p['symbol'] == null) { ?>
-		<?php } else { ?><span class="info-delete-symbol"><a class="delete" title="odpojit" href="persons.php?deletesymbol=<?php echo $rec_p['symbol']; ?>&amp;personid=<?php echo $_REQUEST['rid']; ?>&amp;backurl=<?php echo urlencode('editperson.php?rid='.$_REQUEST['rid']); ?>" onclick="return confirm('Opravdu odpojit symbol?')"><span class="button-text">smazat soubor</span></a></span>
+		<?php } else { ?><span class="info-delete-symbol"><a class="delete" title="odpojit" href="/persons/?deletesymbol=<?php echo $rec_p['symbol']; ?>&amp;personid=<?php echo $_REQUEST['rid']; ?>&amp;backurl=<?php echo urlencode('editperson.php?rid='.$_REQUEST['rid']); ?>" onclick="return confirm('Opravdu odpojit symbol?')"><span class="button-text">smazat soubor</span></a></span>
 		<?php } ?>
 			<div id="info">
 				<h3><label for="name">Jméno:</label></h3>
@@ -203,10 +203,14 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	<div id="change-groups" class="otherform-wrap">
 		<fieldset><legend><strong>Přiřazení skupiny</strong></legend>
 		<p>Osobě můžete přiřadit skupiny, do kterých patří. Opačnou akci lze provést u skupiny, kde přiřazujete pro změnu osoby dané skupině. Akce jsou si rovnocenné a je tedy nutná pouze jedna z nich.</p>
-		<form action="persons.php" method="post" class="otherform">
+		<form action="/persons/" method="post" class="otherform">
 		<?php
-            $sql = "SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."g2p.iduser FROM ".DB_PREFIX."group LEFT JOIN ".DB_PREFIX."g2p ON ".DB_PREFIX."g2p.idgroup=".DB_PREFIX."group.id AND ".DB_PREFIX."g2p.idperson=".$_REQUEST['rid']." WHERE ".DB_PREFIX."group.deleted=0 ORDER BY ".DB_PREFIX."group.title ASC";
-            if ($user['aclDeputy'] || $user['aclSecret']) {
+           $sql = "SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."g2p.iduser
+           FROM ".DB_PREFIX."group
+           LEFT JOIN ".DB_PREFIX."g2p ON ".DB_PREFIX."g2p.idgroup=".DB_PREFIX."group.id AND ".DB_PREFIX."g2p.idperson=".$_REQUEST['rid']."
+           WHERE ".DB_PREFIX."group.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."group.secret<=".$user['aclSecret']."
+           ORDER BY ".DB_PREFIX."group.title ASC";
+            if ($user['aclPerson'] && $user['aclGroup']) {
                 $res = mysqli_query($database, $sql);
                 while ($rec = mysqli_fetch_assoc($res)) {
                     echo '<div>
@@ -228,9 +232,9 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 	<fieldset><legend><strong>Přiložené soubory</strong></legend>
 		<strong><em>K osobě je možné nahrát neomezené množství souborů, ale velikost jednoho souboru je omezena na 2 MB.</em></strong>
 		<?php //generování seznamu přiložených souborů
-                    $sqlFilter = DB_PREFIX."file.secret<=".$user['aclSecret']; //DB_PREFIX."case.deleted in (0,".$user['aclRoot'].") AND ".
+                    $sqlFilter = DB_PREFIX."file.secret<=".$user['aclSecret'];
 
-                $sql = "SELECT ".DB_PREFIX."file.iduser AS 'iduser', ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.secret AS 'secret', ".DB_PREFIX."file.id AS 'id'
+            $sql = "SELECT ".DB_PREFIX."file.iduser AS 'iduser', ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.secret AS 'secret', ".DB_PREFIX."file.id AS 'id'
                 FROM ".DB_PREFIX."file
                 WHERE $sqlFilter AND ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=1
                 ORDER BY ".DB_PREFIX."file.originalname ASC";
@@ -242,8 +246,8 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 		<ul id="prilozenadata">
 				<?php } ?>
 			<li class="soubor"><a href="file/attachement/<?php echo $rec_f['id']; ?>" title=""><?php echo stripslashes($rec_f['title']); ?></a><?php if ($rec_f['secret'] == 1) { ?> (TAJNÝ)<?php } ?><span class="poznamka-edit-buttons"><?php
-                if (($rec_f['iduser'] == $user['userId']) || ($user['aclDeputy'])) {
-                    echo '<a class="delete" title="smazat" href="persons.php?deletefile='.$rec_f['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editperson.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat soubor &quot;'.stripslashes($rec_f['title']).'&quot; náležící k osobě?\')"><span class="button-text">smazat soubor</span></a>';
+                if (($rec_f['iduser'] == $user['userId']) || ($user['aclPerson'] > 1)) {
+                    echo '<a class="delete" title="smazat" href="/persons/?deletefile='.$rec_f['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editperson.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat soubor &quot;'.stripslashes($rec_f['title']).'&quot; náležící k osobě?\')"><span class="button-text">smazat soubor</span></a>';
                 } ?>
 				</span></li><?php
             }
@@ -259,7 +263,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 
 	<div id="new-file" class="otherform-wrap">
 		<fieldset><legend><strong>Nový soubor</strong></legend>
-		<form action="persons.php" method="post" enctype="multipart/form-data" class="otherform">
+		<form action="/persons/" method="post" enctype="multipart/form-data" class="otherform">
 			<div>
 				<strong><label for="attachment">Soubor:</label></strong>
 				<input type="file" name="attachment" id="attachment" />
@@ -318,10 +322,10 @@ $latteParameters['title'] = 'Zobrazení symbolu';
                 } ?></h4>
 				<div><?php echo stripslashes($rec_n['note']); ?></div>
 				<span class="poznamka-edit-buttons"><?php
-                if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
+                if (($rec_n['iduser'] == $user['userId']) || ($user['aclPerson'])) {
                     echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=1" title="upravit"><span class="button-text">upravit</span></a> ';
                 }
-                if (($rec_n['iduser'] == $user['userId']) || ($user['aclDeputy'])) {
+                if (($rec_n['iduser'] == $user['userId']) || ($user['aclPerson'] > 1)) {
                     echo '<a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec_n['title'])."&quot; náležící k osobě?');".'" title="smazat"><span class="button-text">smazat</span></a>';
                 } ?>
 				</span>
@@ -381,7 +385,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
             header('location: index.php');
         }
     } else {
-        $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+        $_SESSION['message'] = $text['accessdeniedrecorded'];
         header('location: index.php');
     }
     latteDrawTemplate("footer");

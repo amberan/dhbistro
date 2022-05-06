@@ -1,41 +1,29 @@
 <div class="container-fluid">
     <div class="row">
-        <div class="card p-1 m-2 w-100 text-white bg-secondary" style="display: block">
+        <div class="card p-1 m-2 w-100 text-dark bg-warning" style="display: block">
             <div class="card-body">
-                <h5 class="card-title">{$text[osobninastenka]}</h5>
+                <h5 class="card-title text-light">{$text[osobninastenka]}</h5>
                 <div class="row">
-                    <div class="col-md-4 col-sm-12">
+                    <div class="col-md-5 col-sm-12">
                         {if @$reportsnone}
                             <p class="card-text">{$reportsnone}</p>
                         {else}
-                            <p class="card-text">{$text[nedokoncenahlaseni]}:</p>
+                            <p class="card-text text-light">{$text[nedokoncenahlaseni]}:</p>
                             {foreach $reports as $report}
                                 <p>
-                                    <a href="{$website_link}readactrep.php?rid={$report[0]}&hidenotes=0&truenames=0">{$report[1]}</a>
+                                    <a class="text-dark underline-link" href="/reports/{@$report[0]}">{@$report[2]} {@$report[1]} </a>
                                 </p>
                             {/foreach}
                         {/if}
                     </div>
-                    <div class="col-md-4 col-sm-12">
+                    <div class="col-md-5 col-sm-12">
                         {if @$casesnone}
                             <p class="card-text">{$casesnone}</p>
                         {else}
-                            <p class="card-text">{$text[neuzavrenepripady]}:</p>
+                            <p class="card-text text-light">{$text[neuzavrenepripady]}:</p>
                             {foreach $cases as $case}
                                 <p>
-                                    <a href="{$website_link}readcase.php?rid={$case[0]}&hidenotes=0">{$case[1]}</a>
-                                </p>
-                            {/foreach}
-                        {/if}
-                    </div>
-                    <div class="col-md-4 col-sm-12">
-                        {if @$tasksnone}
-                            <p class="card-text">{$tasksnone}</p>
-                        {else}
-                            <p class="card-text">{$text[nedokonceneukoly]}:</p>
-                            {foreach $tasks as $task}
-                                <p>
-                                    <a href="{$website_link}procother.php?fnshtask={$task[0]}">{$task[1]}</a>
+                                    <a class="text-dark underline-link" href="{$URL[0]}readcase.php?rid={@$case[0]}">{@$case[1]}</a>
                                 </p>
                             {/foreach}
                         {/if}

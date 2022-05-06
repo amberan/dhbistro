@@ -1,35 +1,37 @@
 <div class="container-fluid mt-3 mb-3 mr-2 w-100">
-    <div class="row mb-1">
-	    <div class="col-6 text-left">
+    <form action="{$URL[0]}{$URL[1]}/" method="POST" id="filter" class="row mb-1">
+	    <div class="col-12 col-md-4 text-left">
 	        <h4>
-                {$text[pripady]}
+                {$text[pripady]|firstUpper} {ifset $case_count}({$case_count}){/ifset}
             </h4>
 	    </div>
-        <div class="col-6 text-right">
+        <div class="col-12 col-md-8 text-right header-wrapper-right">
+            <input type="hidden" name="filter[placeholder]" />
+            <div class="header-switch">
+                <label class="toggle-control">
+                    <input type="checkbox" name="filter[stat]" {if (isset($filter['stat']) AND $filter['stat'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                    <span class="control"></span>
+                </label>
+                {$text['iuzavrene']}
+            </div>
+            <div class="header-switch">
+                <label class="toggle-control">
+                    <input type="checkbox" name="filter[new]" {if (isset($filter['new']) AND $filter['new'] == 'on') } checked{/if} onchange="this.form.submit()" />
+                    <span class="control"></span>
+                </label>
+                {$text['jennove']}
+            </div>
+            <div class="header-switch">
+                <label class="toggle-control">
+                    <input type="checkbox" name="filter[secret]" {if (isset($filter['secret']) AND $filter['secret'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                    <span class="control"></span>
+                </label>
+                {$text['itajne']}
+            </div>
         </div>
-	</div>
+    </form>
     <div class="row mb-1">
         <div class="col-12">
-
-                <form action="{$website_link}{$URL[1]}/" method="POST" id="filter" class="header-form-wrapper">
-                    <input type="hidden" name="filter[placeholder]" />
-                    <div class="header-switch">
-                        <label class="toggle-control">
-                            <input type="checkbox" name="filter[stat]" {if (isset($filter['stat']) AND $filter['stat'] == 'on') } checked {/if} onchange="this.form.submit()" />
-                            <span class="control"></span>
-                        </label>
-                        {$text['iuzavrene']}
-                    </div>
-                    <div class="header-switch">
-                        <label class="toggle-control">
-                            <input type="checkbox" name="filter[new]" {if (isset($filter['new']) AND $filter['new'] == 'on') } checked{/if} onchange="this.form.submit()" />
-                            <span class="control"></span>
-                        </label>
-                        {$text['jennove']}
-                    </div>
-                </form>
-
-
             {if @$warning}
                 <div>
                     {$warning}
@@ -38,19 +40,19 @@
                 <div id="obsah">
 
                 <table class="table table-striped table-hover">
-                    <thead>
+                    <thead class="table-sticky-header">
                         <tr>
                             <th>
-                                {$text['nazev']} <a href="{$website_link}{$URL[1]}/?sort=title">&#8661;</a>
+                                <div class="table-no-wrap-left">{$text['nazev']|firstUpper} <a href="{$URL[0]}{$URL[1]}/?sort=title">&#8661;</a></div>
                             </th>
-                            <th>{$text['stav']}</th>
-                            <th>
-                                {$text['vytvoreno']}  <a href="{$website_link}{$URL[1]}/?sort=created">&#8661;</a>
+                            <th class="text-center">{$text['stav']|firstUpper}</th>
+                            <th class="mobile-no-show text-center">
+                                <div class="table-no-wrap">{$text['vytvoreno']|firstUpper}  <a href="{$URL[0]}{$URL[1]}/?sort=created">&#8661;</a></div>
                             </th>
-                            <th>
-                                {$text['zmeneno']}  <a href="{$website_link}{$URL[1]}/?sort=datum">&#8661;</a>
+                            <th class="text-center">
+                                <div class="table-no-wrap">{$text['zmeneno']|firstUpper}  <a href="{$URL[0]}{$URL[1]}/?sort=datum">&#8661;</a></div>
                             </th>
-                            <th>{$text['akce']}</th>
+                            <th>{$text['akce']|firstUpper}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -72,10 +74,10 @@
                                         <span class="badge rounded-pill bg-warning text-dark mb-1">{$text['smazany']}</span>
                                     {/if}
                                 </td>
-                                <td>
+                                <td class="mobile-no-show text-center">
                                     {if $cases['caseCreated']} {$cases['caseCreated']|date:'%d.%m.%Y'}{else}<em>{$text['neznamo']}</em>{/if}
                                 </td>
-                                <td><em>{$cases['date_changed']|date:'%d.%m.%Y'}</em></td>
+                                <td class="text-center"><em>{$cases['date_changed']|date:'%d.%m.%Y'}</em></td>
                                 <td>
                                     {if $user['aclCase'] AND !$cases['deleted']}
                                         <a class="btn btn-sm btn-info btn-brick mb-1" href="/editcase.php?rid={$cases['id']}" alt="{$text[editpripad]}">
@@ -89,7 +91,7 @@
                                         <a class="btn btn-sm btn-brick btn-danger mb-1" href="/cases/delete/{$cases['id']}" onclick="return confirm('{$text['opravdusmazatpripad']} &quot; {$cases['title']|stripHtml}&quot;?');" alt="{$text[smazatpripad]}">{php echo file_get_contents("images/icons/trash-solid.svg")}</a>
                                     {/if}
                                     {if $user['aclRoot'] AND $cases['deleted']}
-                                        <a class="btn btn-sm btn-success mb-1" href="/cases/restore/{$cases['id']}" onclick="return confirm('{$text['opravduobnovitpripad']} &quot; {$cases['title']|stripHtml}&quot;?');" alt="{$text[obnovitpripad]}">{$text['obnovit']}</a>
+                                        <a class="btn btn-sm btn-success mb-1" href="/cases/restore/{$cases['id']}" onclick="return confirm('{$text['opravduobnovitpripad']} &quot; {$cases['title']|stripHtml}&quot;?');" alt="{$text[obnovitpripad]}">{php echo file_get_contents("images/icons/recycle.svg")}</a>
                                     {/if}
                                 </td>
                             </tr>

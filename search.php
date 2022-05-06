@@ -6,20 +6,24 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Vyhledávání';
-auditTrail(12, 1, 0);
+authorizedAccess(12, 1, 0);
 mainMenu();
 sparklets('<strong>vyhledávání</strong>', '<a href="symbol_search.php">vyhledat symbol</a>');
 
 // default SQL filters
-$searchContitions = " AND secret<=".$user['aclSecret']."  AND deleted<=".$user['aclGamemaster']." ";
+$searchContitions = " AND secret<=".$user['aclSecret'];
+$searchContitions .= "  AND deleted<=".$user['aclGamemaster']." ";
 
 //TODO SORTING created/modified/title/status/type
 
-if (sizeof($_POST['filter']) > 0) {
-    filterSet('search', @$_POST['filter']);
+if (sizeof(@$_POST['filter']) > 0) {
+    filterSet('search', $_POST['filter']);
 }
 $filter = filterGet('search');
 $sqlFilter = "deleted in (0,".$user['aclRoot'].") AND secret<=".$user['aclSecret'];
+if (!isset($filter['secret'])) {
+    $sqlFilter .= ' AND secret = 0 ';
+}
 
 //TODO search legacy overload
 $searchedfor = $filter['search'];
@@ -39,7 +43,11 @@ $latteParameters['filter'] = $filter;
 <input type="checkbox" name="filter[archived]" <?php if (isset($filter['archived']) and $filter['archived'] == 'on') {
     echo " checked";
 } ?> onchange="this.form.submit()"/>Zobrazit i archiv (uzavřené případy, archivovaná hlášení, mrtvé a archivované osoby).
-	  <div id="filtersubmit"><input type="submit" name="filter[submit]" value="Vyhledat" onclick="this.form.submit()"/></div>
+<input type="checkbox" name="filter[secret]" <?php if (isset($filter['secret']) and $filter['secret'] == 'on') {
+    echo " checked";
+} ?> onchange="this.form.submit()"/>Zobrazit i tajné.
+
+<div id="filtersubmit"><input type="submit" name="filter[submit]" value="Vyhledat" onclick="this.form.submit()"/></div>
 	</fieldset>
 </form>
 </div>
@@ -71,7 +79,7 @@ $latteParameters['filter'] = $filter;
     FROM ".DB_PREFIX."case
 	WHERE ".$sqlFilter." AND (title LIKE '%$searchedfor%' or contents LIKE  '%$searchedfor%')
     ".$fsql_archiv.$searchContitions."
-	ORDER BY 5 * MATCH(title) AGAINST ('$searchedfor') + MATCH(contents) AGAINST ('$searchedfor') DESC"; //fsql_archiv
+	ORDER BY 5 * MATCH(title) AGAINST ('$searchedfor') + MATCH(contents) AGAINST ('$searchedfor') DESC";
             $res = mysqli_query($database, $sql); ?>
     <h3>Případy</h3>
     <table>
@@ -102,10 +110,11 @@ $latteParameters['filter'] = $filter;
             /* Hlášení */
             $fsql_archiv = '';
             if ($filter['archived'] != 'on') {
-                $fsql_archiv = ' AND '.DB_PREFIX.'report.status<>3 ';
+                $fsql_archiv = ' AND ('.DB_PREFIX.'report.reportArchived is null OR '.DB_PREFIX.'report.reportArchived  < from_unixtime(1)) ';
             }
             $sql = "
-    SELECT ".DB_PREFIX."report.adatum as date_created, ".DB_PREFIX."report.datum as date_changed,  ".DB_PREFIX."report.label , ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.status, ".DB_PREFIX."report.secret, ".DB_PREFIX."report.deleted
+    SELECT ".DB_PREFIX."report.reportCreated as date_created, ".DB_PREFIX."report.reportModified as date_changed,  ".DB_PREFIX."report.reportName , ".DB_PREFIX."report.reportId AS 'id', ".DB_PREFIX."report.reportStatus,
+    ".DB_PREFIX."report.reportSecret, ".DB_PREFIX."report.reportDeleted
     FROM ".DB_PREFIX."report
 	WHERE ".$sqlFilter." AND (label LIKE '%$searchedfor%' or task LIKE  '%$searchedfor%' or summary LIKE  '%$searchedfor%' or impacts LIKE  '%$searchedfor%' or details LIKE  '%$searchedfor%')"
     .$searchContitions.$fsql_archiv." ORDER BY 5 * MATCH(label) AGAINST ('$searchedfor')
@@ -130,7 +139,7 @@ $latteParameters['filter'] = $filter;
         $even = 0;
             while ($rec = mysqli_fetch_assoc($res)) {
                 echo '<tr class="'.($even % 2 === 0 ? 'even' : 'odd').'">
-	<td><a href="readactrep.php?rid='.$rec['id'].'&amp;hidenotes=0&amp;truenames=0">'.stripslashes($rec['label']).'</a></td>
+	<td><a href="/reports/'.$rec['id'].'">'.stripslashes($rec['label']).'</a></td>
 		<td>'.webdate($rec['date_created']).'</td>
 		<td>'.webdate($rec['date_changed']).'</td>
         <td>';
@@ -166,7 +175,7 @@ $latteParameters['filter'] = $filter;
             /* Osoby */
             $fsql_archiv = '';
             if ($filter['archived'] != 'on') {
-                $fsql_archiv = ' AND '.DB_PREFIX.'person.archived is null AND '.DB_PREFIX.'person.dead=0';
+                $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1)) ';
             }
             $sql = "
         SELECT ".DB_PREFIX."person.regdate as date_created, ".DB_PREFIX."person.datum as date_changed, ".DB_PREFIX."person.surname , ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.name , ".DB_PREFIX."person.archived , ".DB_PREFIX."person.dead , ".DB_PREFIX."person.secret , ".DB_PREFIX."person.deleted
@@ -317,11 +326,9 @@ $latteParameters['filter'] = $filter;
                                 FROM ".DB_PREFIX."person
                                 WHERE id = ".$rec['iditem']);
                             while ($rec_note = mysqli_fetch_assoc($res_note)) {
-                                //$noteid = $rec_note['id'];
                                 $notetitle = $rec_note['surname']." ".$rec_note['name'];
                                 $type = "Osoba";
                                 $linktype = "readperson.php?rid=".$rec_note['id']."&amp;hidenotes=0";
-                                // $secret = $rec_note['secret'];
                             }
                             break;
                         case 2:
@@ -330,11 +337,9 @@ $latteParameters['filter'] = $filter;
                                 FROM ".DB_PREFIX."group
                                 WHERE id = ".$rec['iditem']);
                             while ($rec_note = mysqli_fetch_assoc($res_note)) {
-                                //$noteid = $rec_note['id'];
                                 $notetitle = $rec_note['title'];
                                 $type = "Skupina";
                                 $linktype = "readgroup.php?rid=".$rec_note['id']."&amp;hidenotes=0";
-                                // $secret = $rec_note['secret'];
                             }
                             break;
                         case 3:
@@ -343,28 +348,23 @@ $latteParameters['filter'] = $filter;
                                 FROM ".DB_PREFIX."case
                                 WHERE id = ".$rec['iditem']);
                             while ($rec_note = mysqli_fetch_assoc($res_note)) {
-                                //$noteid = $rec_note['id'];
                                 $notetitle = $rec_note['title'];
                                 $type = "Případ";
                                 $linktype = "readcase.php?rid=".$rec_note['id']."&amp;hidenotes=0";
-                                //$secret = $rec_note['secret'];
                             }
                             break;
                         case 4:
                             $res_note = mysqli_query($database, "
-                                SELECT ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.secret AS 'secret'
+                                SELECT ".DB_PREFIX."report.reportName AS 'label', ".DB_PREFIX."report.reportId AS 'id', ".DB_PREFIX."report.reportSecret AS 'secret'
                                 FROM ".DB_PREFIX."report
                                 WHERE id = ".$rec['iditem']);
                             while ($rec_note = mysqli_fetch_assoc($res_note)) {
-                                // $noteid = $rec_note['id'];
                                 $notetitle = $rec_note['label'];
                                 $type = "Hlášení";
-                                $linktype = "readactrep.php?rid=".$rec_note['id']."&amp;hidenotes=0&amp;truenames=0";
-                                //$secret = $rec_note['secret'];
+                                $linktype = "/reports/".$rec_note['id'];
                             }
                             break;
                         default:
-                                //$noteid = $rec['id'];
                                 $notetitle = $rec['title'];
                                 $type = "Jiná";
                             break;

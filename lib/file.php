@@ -1,9 +1,29 @@
 <?php
-
-require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
+Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+
+function human_filesize($bytes, $decimals = 2)
+{
+    $size = 'BKMGTP';
+    $factor = floor((mb_strlen($bytes) - 1) / 3);
+    return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor];
+}
+
+/**
+ * returns array files and size
+ */
+function fileList($folder)
+{
+    $files = (array_diff(scandir($folder), array('.', '..', '.holder', '.htaccess')));
+    foreach (($files) as $value) {
+        $fileList[] = array(
+            basename($value),
+            human_filesize(filesize($folder.$value))
+        );
+    }
+    return $fileList;
+}
 
 /**
  * get fileName based on type.
@@ -13,7 +33,7 @@ Debugger::enable(Debugger::PRODUCTION,$config['folder_logs']);
  * @param mixed $type
  * @param mixed $objectId
  */
-function fileIdentify($type,$objectId = '0')
+function fileIdentify($type, $objectId = '0')
 {
     global $config,$database,$user;
     switch ($type) {
@@ -36,10 +56,10 @@ function fileIdentify($type,$objectId = '0')
         default:
             break;
     }
-    $query = mysqli_query($database,$sql);
+    $query = mysqli_query($database, $sql);
     $file = mysqli_fetch_assoc($query);
     //set real path to file, and filename
-    $tmp = explode("/",$file['file']);
+    $tmp = explode("/", $file['file']);
     $file['fileHash'] = $file['fileName'] = $file['file'] = end($tmp);
     if (isset($file['originalname']) && strlen($file['originalname'])) {
         $file['fileHash'] = $file['uniquename'];
@@ -79,7 +99,7 @@ function fileGet($object): void
     header("Pragma: no-cache");
     header("Expires: -1");
     header('Content-Type: '.$object['mime']);
-    if (!in_array($object['mime'],$imageMime, true)) {
+    if (!in_array($object['mime'], $imageMime, true)) {
         header('Content-Disposition: attachment; filename='.$object['fileName']);
     }
     header('Content-Length: '.$object['fileSize']);
@@ -111,6 +131,6 @@ function filePlaceholder($fileType = 'logo'): void
     header("Pragma: no-cache");
     header("Expires: -1");
     header('Content-Type: '.mime_content_type($placeholder));
-    $placeholderFile = fopen($placeholder,"r");
+    $placeholderFile = fopen($placeholder, "r");
     fpassthru($placeholderFile);
 }

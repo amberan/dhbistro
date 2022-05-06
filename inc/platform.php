@@ -1,94 +1,88 @@
 <?php
-
 // default
 define('DB_PREFIX', 'nw_'); // prefix tabulek
-$config['theme_bg'] = 'dark';
-$config['theme_navbar'] = 'dark';
-
+$config['themeBg'] = 'dark';
+$config['themeNavbar'] = 'dark';
 
 switch ($_SERVER["SERVER_NAME"]) {
     case 'bistro':
-        $config['dbuser'] = 'bistro';
-        $config['dbdatabase'] = 'bistro';
-        $config['barva'] = 'local';
-        $config['custom'] = 'NH';
-        $config['theme_bg'] = 'warning';
-        $config['theme_navbar'] = 'light';
+        $config['dbUser'] = 'bistro';
+        $config['dbDatabase'] = 'bistro';
+        $config['themeColor'] = 'local';
+        $config['themeCustom'] = 'NH';
+        $config['themeBg'] = 'warning';
+        $config['themeNavbar'] = 'light';
         break;
-    case 'dhbistro.cz';
+    case 'dhbistro.cz':
     case 'www.dhbistro.cz':
-        $config['dbuser'] = $config['dbdatabase'] = 'dhbistrocz';
-        $config['barva'] = 'dh';
-        $config['custom'] = 'DH';
-        $config['theme_bg'] = 'secondary';
+        $config['dbUser'] = $config['dbDatabase'] = 'dhbistrocz';
+        $config['themeColor'] = 'dh';
+        $config['themeCustom'] = 'DH';
+        $config['themeBg'] = 'secondary';
         break;
     case 'nh.dhbistro.cz':
-        $config['dbuser'] = $config['dbdatabase'] = 'nhbistro';
-        $config['barva'] = 'nh';
-        $config['custom'] = 'NH';
+        $config['dbUser'] = $config['dbDatabase'] = 'nhbistro';
+        $config['themeColor'] = 'nh';
+        $config['themeCustom'] = 'NH';
         break;
     case 'test.dhbistro.cz':
-        $config['dbuser'] = $config['dbdatabase'] = 'testbistro';
-        $config['barva'] = 'test';
-        $config['custom'] = 'DH';
-        $config['theme_bg'] = 'warning';
-        $config['theme_navbar'] = 'light';
+        $config['dbUser'] = $config['dbDatabase'] = 'testbistro';
+        $config['themeColor'] = 'test';
+        $config['themeCustom'] = 'DH';
+        $config['themeBg'] = 'warning';
+        $config['themeNavbar'] = 'light';
     break;
     case 'org.dhbistro.cz':
-        $config['dbuser'] = $config['dbdatabase'] = 'orgbistro';
-        $config['barva'] = 'org';
-        $config['custom'] = 'DH';
-        $config['theme_bg'] = 'dark';
-        $config['theme_navbar'] = 'light';
+        $config['dbUser'] = $config['dbDatabase'] = 'orgbistro';
+        $config['themeColor'] = 'org';
+        $config['themeCustom'] = 'DH';
+        $config['themeBg'] = 'dark';
+        $config['themeNavbar'] = 'light';
         break;
     case 'enigma.dhbistro.cz':
-        $config['dbuser'] = $config['dbdatabase'] = 'enigmabistro';
-        $config['barva'] = 'enigma';
-        $config['custom'] = 'enigma';
-        $config['theme_bg'] = 'dark';
-        $config['theme_navbar'] = 'light';
+        $config['dbUser'] = $config['dbDatabase'] = 'enigmabistro';
+        $config['themeColor'] = 'enigma';
+        $config['themeCustom'] = 'enigma';
+        $config['themeBg'] = 'dark';
+        $config['themeNavbar'] = 'light';
         break;
     case 'nhtest.dhbistro.cz':
-        $config['dbuser'] = $config['dbdatabase'] = 'nhtestbistro';
-        $config['barva'] = 'test';
-        $config['custom'] = 'NH';
+        $config['dbUser'] = $config['dbDatabase'] = 'nhtestbistro';
+        $config['themeColor'] = 'test';
+        $config['themeCustom'] = 'NH';
         break;
     case 'bistro.alembiq.net':
-        $config['dbuser'] = 'alembiq_bistro';
-        $config['dbdatabase'] = 'alembiq_bistro';
-        $config['barva'] = 'test';
-        $config['custom'] = 'NH';
-        $config['theme_bg'] = 'warning';
-        $config['theme_navbar'] = 'light';
+        $config['dbUser'] = 'alembiq_bistro';
+        $config['dbDatabase'] = 'alembiq_bistro';
+        $config['themeColor'] = 'test';
+        $config['themeCustom'] = 'NH';
+        $config['themeBg'] = 'warning';
+        $config['themeNavbar'] = 'light';
         break;
     case 'nhtestbistro.talmahera.eu':
-        $config['dbuser'] = $config['dbdatabase'] = 'nhtestbistro';
-        $config['barva'] = 'test';
-        $config['custom'] = 'NH';
+        $config['dbUser'] = $config['dbDatabase'] = 'nhtestbistro';
+        $config['themeColor'] = 'test';
+        $config['themeCustom'] = 'NH';
         break;
     case 'dbp.talmahera.eu':
-        $config['dbuser'] = 'dbp';
-        $config['dbdatabase'] = 'dbpbistro';
-        $config['barva'] = 'test';
-        $config['custom'] = 'DB';
-        $config['theme_bg'] = 'dark';
-        $config['theme_navbar'] = 'light';
+        $config['dbUser'] = 'dbp';
+        $config['dbDatabase'] = 'dbpbistro';
+        $config['themeColor'] = 'test';
+        $config['themeCustom'] = 'DB';
+        $config['themeBg'] = 'dark';
+        $config['themeNavbar'] = 'light';
         break;
     case 'dhtestbistro.talmahera.eu':
-        $config['dbuser'] = $config['dbdatabase'] = 'dhtestbistro';
-        $config['barva'] = 'test';
-        $config['custom'] = 'DH';
-        $config['theme_bg'] = 'secondary';
+        $config['dbUser'] = $config['dbDatabase'] = 'dhtestbistro';
+        $config['themeColor'] = 'test';
+        $config['themeCustom'] = 'DH';
+        $config['themeBg'] = 'secondary';
     break;
     default:
-        $config['dbuser'] = $config['dbdatabase'] = 'dhbistrocz';
-        $config['custom'] = 'DH';
-        $config['barva'] = 'local';
-        $config['theme_bg'] = 'warning';
-        $config['theme_navbar'] = 'light';
+        $config['dbUser'] = $config['dbDatabase'] = 'dhbistrocz';
+        $config['themeCustom'] = 'DH';
+        $config['themeColor'] = 'local';
+        $config['themeBg'] = 'warning';
+        $config['themeNavbar'] = 'light';
     break;
 }
-
-
-
-?>

@@ -5,12 +5,12 @@ use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
-$latteParameters['title'] = 'Úprava hlášení';
+$latteParameters['title'] = 'Prirazeni hlaseni k pripadu';
 mainMenu();
 
 $customFilter = custom_Filter(16);
     sparklets('<a href="/cases/">případy</a> &raquo; <strong>úprava případu</strong> &raquo; <strong>přidání hlášení</strong>');
-    if (is_numeric($_REQUEST['rid']) && $usrinfo['right_text']) {
+    if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
         $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."case WHERE id=".$_REQUEST['rid']);
         if ($rec = mysqli_fetch_assoc($res)) {
             ?>
@@ -44,30 +44,31 @@ $customFilter = custom_Filter(16);
             }
             switch ($filterCat) {
       case 0: $filterSqlCat = ''; break;
-      case 1: $filterSqlCat = ' AND '.DB_PREFIX.'report.type=1 '; break;
-      case 2: $filterSqlCat = ' AND '.DB_PREFIX.'report.type=2 '; break;
+      case 1: $filterSqlCat = ' AND '.DB_PREFIX.'report.reportType=1 '; break;
+      case 2: $filterSqlCat = ' AND '.DB_PREFIX.'report.reportType=2 '; break;
       default: $filterSqlCat = '';
     }
             switch ($filterSort) {
-      case 1: $filterSqlSort = ' '.DB_PREFIX.'report.datum DESC '; break;
-      case 2: $filterSqlSort = ' '.DB_PREFIX.'report.datum ASC '; break;
+      case 1: $filterSqlSort = ' '.DB_PREFIX.'report.reportCreated DESC '; break;
+      case 2: $filterSqlSort = ' '.DB_PREFIX.'report.reportCreated ASC '; break;
       case 3: $filterSqlSort = ' '.DB_PREFIX.'user.login ASC '; break;
       case 4: $filterSqlSort = ' '.DB_PREFIX.'user.login DESC '; break;
-      case 5: $filterSqlSort = ' '.DB_PREFIX.'report.adatum ASC '; break;
-      case 6: $filterSqlSort = ' '.DB_PREFIX.'report.adatum DESC '; break;
-      default: $filterSqlSort = ' '.DB_PREFIX.'report.adatum DESC ';
+      case 5: $filterSqlSort = ' '.DB_PREFIX.'report.reportModified ASC '; break;
+      case 6: $filterSqlSort = ' '.DB_PREFIX.'report.reportModified DESC '; break;
+      default: $filterSqlSort = ' '.DB_PREFIX.'report.reportModified DESC ';
     }
             switch ($filterStat) {
         case 0: $fsql_stat = ''; break;
-        case 1: $fsql_stat = ' AND '.DB_PREFIX.'report.status=0 '; break;
-        case 2: $fsql_stat = ' AND '.DB_PREFIX.'report.status=1 '; break;
-        case 3: $fsql_stat = ' AND '.DB_PREFIX.'report.status=2 '; break;
+        case 1: $fsql_stat = ' AND '.DB_PREFIX.'report.reportStatus=0 '; break;
+        case 2: $fsql_stat = ' AND '.DB_PREFIX.'report.reportStatus=1 '; break;
+        case 3: $fsql_stat = ' AND '.DB_PREFIX.'report.reportStatus=2 '; break;
         default: $fsql_stat = '';
     }
             switch ($filterArchiv) {
-        case 0: $fsql_archiv = ' AND '.DB_PREFIX.'report.status<>3 '; break;
+        case 0: $fsql_archiv = ' AND ('.DB_PREFIX.'report.reportArchived is null OR '.DB_PREFIX.'report.reportArchived  < from_unixtime(1)) '; break;
         case 1: $fsql_archiv = ''; break;
-        default: $fsql_archiv = ' AND '.DB_PREFIX.'report.status<>3 ';
+        default: $fsql_archiv = ' AND ('.DB_PREFIX.'report.reportArchived is null OR '.DB_PREFIX.'report.reportArchived  < from_unixtime(1)) ';
+
     }
             // filtr samotny
             function filter()
@@ -106,20 +107,24 @@ seřadit je podle <select name="sort">
             }
             filter();
             // vypis hlášení
-            $sqlFilter = DB_PREFIX."report.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."report.secret<=".$user['aclSecret'];
+            if ($user['aclRoot'] < 1) {
+                $sqlFilter .= ' AND ('.DB_PREFIX.'report.reportDeleted is null OR '.DB_PREFIX.'report.reportDeleted  < from_unixtime(1)) AND ';
+            }
+
+            $sqlFilter .= DB_PREFIX."report.reportSecret<=".$user['aclSecret'];
 
             $sql = "SELECT
-			".DB_PREFIX."report.id AS 'id',
-	        ".DB_PREFIX."report.datum AS 'datum',
-	        ".DB_PREFIX."report.label AS 'label',
-	        ".DB_PREFIX."report.task AS 'task',
+			".DB_PREFIX."report.reportId AS 'id',
+	        ".DB_PREFIX."report.reportModified AS 'datum',
+	        ".DB_PREFIX."report.reportName AS 'label',
+	        ".DB_PREFIX."report.reportTask AS 'task',
 	        ".DB_PREFIX."user.userName AS 'autor',
-	        ".DB_PREFIX."report.iduser AS 'iduser',
-	        ".DB_PREFIX."report.type AS 'type',
+	        ".DB_PREFIX."report.reportOwner AS 'iduser',
+	        ".DB_PREFIX."report.reportType AS 'type',
 	        ".DB_PREFIX."ar2c.iduser
-	        	FROM ".DB_PREFIX."user, ".DB_PREFIX."report LEFT JOIN ".DB_PREFIX."ar2c
-	        	ON ".DB_PREFIX."ar2c.idreport=".DB_PREFIX."report.id AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']."
-				WHERE $sqlFilter AND ".DB_PREFIX."report.iduser=".DB_PREFIX."user.userId ".$filterSqlCat.$fsql_stat.$fsql_archiv."
+	        	FROM ".DB_PREFIX."user, ".DB_PREFIX."report
+                LEFT JOIN ".DB_PREFIX."ar2c	ON ".DB_PREFIX."ar2c.idreport=".DB_PREFIX."report.reportId AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']."
+				WHERE $sqlFilter AND ".DB_PREFIX."report.reportOwner=".DB_PREFIX."user.userId ".$filterSqlCat.$fsql_stat.$fsql_archiv."
 				ORDER BY ".$filterSqlSort;
 
             $res = mysqli_query($database, $sql); ?>
@@ -127,7 +132,7 @@ seřadit je podle <select name="sort">
         <?php
     while ($rec = mysqli_fetch_assoc($res)) {
         echo '<div class="news_div '.(($rec['type'] == 1) ? 'game_news' : 'system_news').'">
-	<div class="news_head"><input type="checkbox" name="report[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser']) ? ' checked="checked"' : '').' /><strong><a href="readactrep.php?rid='.$rec['id'].'">'.StripSlashes($rec['label']).'</a></strong></span>';
+	<div class="news_head"><input type="checkbox" name="report[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser']) ? ' checked="checked"' : '').' /><strong><a href="/reports/'.$rec['id'].'">'.StripSlashes($rec['label']).'</a></strong></span>';
 
         echo '<p><span>['.webdatetime($rec['datum']).']</span> '.$rec['autor'].'<br /> <strong>Úkol: </strong>'
     .StripSlashes($rec['task']).'</p></div>

@@ -8,13 +8,14 @@ latteDrawTemplate("header");
 $latteParameters['title'] = 'Časová dostupnost';
         mainMenu();
         sparklets('<a href="./doode.php">Časová dostupnost</a>');
-if ($user['aclDeputy']) { ?>
+if ($user['aclUser']>0) { ?>
 <div id="obsah">
 <?php
     //Přidání nového doodlu
     if (isset($_POST['newlink'])) {
         if (isset($_POST['link'])) {
-            mysqli_query($database, "INSERT INTO ".DB_PREFIX."doodle VALUES('','".Time()."','".$_POST['link']."')");
+            $insertSql = "INSERT INTO ".DB_PREFIX."doodle (datum,link) VALUES(".Time().",'".$_POST['link']."')";
+            mysqli_query($database, $insertSql);
             echo '<div id=""><p>Nový link na doodle uložen.</p></div>';
         } else {
             echo '<div id=""><p>Link na doodle nesmí být prázdný.</p></div>';

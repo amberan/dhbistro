@@ -11,9 +11,9 @@ $latteParameters['title'] = 'Zobrazení symbolu';
         $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."symbol WHERE id=".$_REQUEST['rid']);
         if ($rec = mysqli_fetch_assoc($res)) {
             if ($rec['deleted'] == 1 || $rec['secret'] > $user['aclSecret']) {
-                unauthorizedAccess(1, $rec['secret'], $rec['deleted'], $_REQUEST['rid']);
+                unauthorizedAccess(7, 1, $_REQUEST['rid']);
             }
-            auditTrail(7, 1, $_REQUEST['rid']);
+            authorizedAccess(7, 1, $_REQUEST['rid']);
             mainMenu();
             if (!isset($_REQUEST['hidenotes'])) {
                 $hn = 0;
@@ -22,15 +22,13 @@ $latteParameters['title'] = 'Zobrazení symbolu';
             }
             if ($hn == 0) {
                 $hidenotes = '&amp;hidenotes=1">skrýt poznámky</a>';
-                $backurl = 'readsymbol.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
             } else {
                 $hidenotes = '&amp;hidenotes=0">zobrazit poznámky</a>';
-                $backurl = 'readsymbol.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
             }
             if ($user['aclSymbol']) {
                 $editbutton = '; <a href="editsymbol.php?rid='.$_REQUEST['rid'].'">upravit symbol</a>; číslo symbolu: '.$rec['id'].'';
             } else {
-                if ($usrinfo['right_text']) {
+                if ($user['aclSymbol']) {
                     $editbutton = '; <a href="editsymbol.php?rid='.$_REQUEST['rid'].'">upravit symbol</a>';
                 } else {
                     $editbutton = '';
@@ -136,11 +134,15 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 		<h3>Výskyt v hlášení</h3>
 		<!-- následuje seznam hlášení -->
 		<?php // generování seznamu přiřazených hlášení
-            $sqlFilter = DB_PREFIX."report.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."report.secret<=".$user['aclSecret'];
-            $sql = "SELECT ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."report.label AS 'label'
+        if ($user['aclRoot'] < 1) {
+            $sqlFilter .= ' AND ('.DB_PREFIX.'report.reportDeleted is null OR '.DB_PREFIX.'report.reportDeleted  < from_unixtime(1)) ';
+        }
+
+            $sqlFilter .= " AND ".DB_PREFIX."report.reportSecret<=".$user['aclSecret'];
+            $sql = "SELECT ".DB_PREFIX."report.reportId AS 'id', ".DB_PREFIX."report.reportName AS 'label'
             FROM ".DB_PREFIX."symbol2all, ".DB_PREFIX."report
-            WHERE $sqlFilter AND ".DB_PREFIX."report.id=".DB_PREFIX."symbol2all.idrecord AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4
-            ORDER BY ".DB_PREFIX."report.label ASC";
+            WHERE $sqlFilter AND ".DB_PREFIX."report.reportId=".DB_PREFIX."symbol2all.idrecord AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4
+            ORDER BY ".DB_PREFIX."report.reportName ASC";
             $pers = mysqli_query($database, $sql);
 
             $i = 0;
@@ -149,7 +151,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
                 if ($i == 1) { ?>
 		<ul id=""><?php
                 } ?>
-			<li><a href="readactrep.php?rid=<?php echo $perc['id']; ?>"><?php echo $perc['label']; ?></a></li>
+			<li><a href="/reports/<?php echo $perc['id']; ?>"><?php echo $perc['label']; ?></a></li>
 		<?php
             }
             if ($i != 0) { ?>
@@ -194,10 +196,10 @@ $latteParameters['title'] = 'Zobrazení symbolu';
                 } ?></h4>
 				<div><?php echo stripslashes($rec_n['note']); ?></div>
 				<span class="poznamka-edit-buttons"><?php
-                if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
+                if (($rec_n['iduser'] == $user['userId']) || ($user['aclSymbol'])) {
                     echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=7" title="upravit"><span class="button-text">upravit</span></a> ';
                 }
-                if (($rec_n['iduser'] == $user['userId']) || ($user['aclDeputy'])) {
+                if (($rec_n['iduser'] == $user['userId']) || ($user['aclSymbol'] > 1)) {
                     echo '<a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('readperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec_n['title'])."&quot; náležící k symbolu?');".'" title="smazat"><span class="button-text">smazat</span></a>';
                 } ?>
 				</span>
@@ -222,7 +224,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
             header('location: index.php');
         }
     } else {
-        $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+        $_SESSION['message'] = $text['accessdeniedrecorded'];
         header('location: index.php');
     }
         latteDrawTemplate("footer");

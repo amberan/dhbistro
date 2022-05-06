@@ -8,12 +8,12 @@ latteDrawTemplate("header");
 $latteParameters['title'] = $text['point'].'y';
 
 if (isset($_POST['addpoints'])) {
-    auditTrail(9, 2, 0);
+    authorizedAccess(9, 2, 0);
 } else {
-    auditTrail(9, 1, 0);
+    authorizedAccess(9, 1, 0);
 }
     mainMenu();
-    sparklets('<strong>'.$text['point'].'y</strong>', (($user['aclDeputy']) ? 'aktuální stav' : ''));
+    sparklets('<strong>'.$text['point'].'y</strong>', (($user['aclUser']) ? 'aktuální stav' : ''));  //TODO permission points
     //Přidání zlobodů
     if (isset($_POST['addpoints'])) {
         if (is_numeric($_POST['plus'])) {
@@ -38,17 +38,17 @@ if (isset($_POST['addpoints'])) {
 	<tr>
 	  <th>Kódové označení <a href="evilpoints.php?sort=userName">&#8661;</a></th>
 	  <th>Aktuální počet '.$text['point'].'ů <a href="evilpoints.php?sort=zlobod">&#8661;</a></th>
-	  '.(($user['aclDeputy']) ? '	  <th>Akce</th>' : '').'
+	  '.(($user['aclUser']) ? '	  <th>Akce</th>' : '').'
 	</tr>
 </thead>
 <tbody>
-';
+'; //TODO permission points
         $even = 0;
         while ($rec = mysqli_fetch_assoc($res)) {
             echo '<tr class="'.(($even % 2 == 0) ? 'even' : 'odd').'">
 	<td>'.getAuthor($rec['userId'], 0).'</td>
 	<td>'.($rec['zlobod']).'</td>
-	'.(($user['aclDeputy']) ? '<td>
+	'.(($user['aclUser']) ? '<td>
 			<form action="evilpoints.php" method="post" id="inputform" class="evilform">
 			<input class="plus" type="text" name="plus" id="plus" />
 			<input type="hidden" name="usrid" value="'.($rec['userId']).'" />

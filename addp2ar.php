@@ -6,26 +6,22 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
     // následuje načtení dat reportu a jejich uložení do vybranných proměných
-    $reportarray = mysqli_fetch_assoc(mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid'])); // načte data z DB
-    $type = intval($reportarray['type']); // určuje typ hlášení
+    $reportarray = mysqli_fetch_assoc(mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE reportId=".$_REQUEST['rid'])); // načte data z DB
+    $type = intval($reportarray['reportType']); // určuje typ hlášení
         $typestring = $type == 1 ? 'výjezd' : ($type == 2 ? 'výslech' : '?'); //odvozuje slovní typ hlášení
-    $author = $reportarray['iduser']; // určuje autora hlášení
-    $label = ($reportarray['label'] ?? ''); // nadpis hlášení, ke kterému je přiřazováno
+    $author = $reportarray['reportOwner']; // určuje autora hlášení
+    $label = ($reportarray['reportName'] ?? ''); // nadpis hlášení, ke kterému je přiřazováno
 
 if ($label != '') {
     $latteParameters['title'] .= $label.' ('.$typestring.')'; // specifikace TITLE
 }
 
-$latteParameters['title'] = 'Úprava hlášení';
+$latteParameters['title'] = 'Prirazeni osob k  hlášení';
 mainMenu();
         $customFilter = custom_Filter(17);
-    sparklets('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení</strong>'.($label != '' ? ' - "'.$label.' ('.$typestring.')"' : ''));
-    // *** původní načítání autora ---
-    //$autharray=mysqli_fetch_assoc (mysqli_query ($database,"SELECT iduser FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']));
-    //$author=$autharray['iduser'];
-    // --- původní načítání autora ***
-    if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || $user['userId'] == $author)) {
-        $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']);
+    sparklets('<a href="/reports/">hlášení</a> &raquo; <strong>úprava hlášení</strong>'.($label != '' ? ' - "'.$label.' ('.$typestring.')"' : ''));
+    if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || $user['userId'] == $author)) {
+        $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE reportId=".$_REQUEST['rid']);
         if ($rec = mysqli_fetch_assoc($res)) {
             ?>
 
@@ -72,9 +68,9 @@ mainMenu();
         default: $fsql_dead = ' AND '.DB_PREFIX.'person.dead=0 ';
     }
             switch ($farchiv) {
-        case 0: $fsql_archiv = ' AND '.DB_PREFIX.'person.archived is null '; break;
+        case 0: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1))  '; break;
         case 1: $fsql_archiv = ''; break;
-        default: $fsql_archiv = ' AND '.DB_PREFIX.'person.archived is null ';
+        default: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1))  ';
     }
             // formular filtru
             function filter(): void

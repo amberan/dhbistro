@@ -50,16 +50,23 @@ function validate_mail($addr): bool
 }
 
 /**
- * generate full domain name for this appliacation.
+ * SQL injection mitigation.
  *
- * @return string protocol://domainname
+ * @param array array
+ * @param mixed $array
+ *
+ * @return array escaped/slashed array
  */
-function siteURL(): string
+function escape_array($array): array
 {
-    $protocol = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' || $_SERVER['SERVER_PORT'] == 443 ? "https://" : "http://";
-    $domainName = $_SERVER['HTTP_HOST'].'/';
+    global $database;
+    foreach ($array as $key => $value) {
+        if (is_array($value)) {
+            escape_array($value);
+        } else {
+            $array[$key] = mysqli_real_escape_string($database, addslashes($value));
+        }
+    }
 
-    return $protocol.$domainName;
+    return $array;
 }
-
-$latteParameters['website_link'] = siteURL();

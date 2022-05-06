@@ -11,14 +11,14 @@ latteDrawTemplate("header");
         $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."group WHERE id=".$_REQUEST['rid']);
         if ($rec_g = mysqli_fetch_assoc($res)) {
             if (($rec_g['secret'] > $user['aclSecret']) || $rec_g['deleted'] == 1) {
-                unauthorizedAccess(2, $rec_g['secret'], $rec_g['deleted'], $_REQUEST['rid']);
+                unauthorizedAccess(2, 1, $_REQUEST['rid']);
             }
-            auditTrail(2, 1, $_REQUEST['rid']);
+            authorizedAccess(2, 1, $_REQUEST['rid']);
 
             $latteParameters['title'] = stripslashes($rec_g['title']);
 
             mainMenu();
-            if ($usrinfo['right_text']) {
+            if ($user['aclGroup']) {
                 $editbutton = ' <a href="editgroup.php?rid='.$_GET['rid'].'">upravit skupinu</a>';
             } else {
                 $editbutton = '';
@@ -86,8 +86,6 @@ latteDrawTemplate("header");
             $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."g2p.iduser
             FROM ".DB_PREFIX."person, ".DB_PREFIX."g2p
             WHERE $sqlFilter AND ".DB_PREFIX."g2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."g2p.idgroup=".$_REQUEST['rid']." ".sortingGet('group-member', 'person');
-
-            // .$sqlFilter.sortingGet('group');
             $res = mysqli_query($database, $sql);
             if (mysqli_num_rows($res)) {
                 echo '<div id=""><!-- je treba dostylovat -->
@@ -127,7 +125,7 @@ latteDrawTemplate("header");
 
     <!-- následuje seznam přiložených souborů -->
     <?php //generování seznamu přiložených souborů
-            $sqlFilter = DB_PREFIX."file.secret<=".$user['aclSecret']; //DB_PREFIX."case.deleted in (0,".$user['aclRoot'].") AND ".
+            $sqlFilter = DB_PREFIX."file.secret<=".$user['aclSecret'];
             $sql = "SELECT mime,  ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.id AS 'id'
             FROM ".DB_PREFIX."file
             WHERE $sqlFilter AND ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=2
@@ -191,10 +189,10 @@ if ((isset($filter['notes']) and $filter['notes'] == 'on')) { ?>
                 <div><?php echo stripslashes($rec_n['note']); ?></div>
                 <span
                       class="poznamka-edit-buttons"><?php
-            if (($rec_n['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
+            if (($rec_n['iduser'] == $user['userId']) || ($user['aclGroup'])) {
                 echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;idtable=2" title="upravit"><span class="button-text">upravit</span></a> ';
             }
-            if (($rec_n['iduser'] == $user['userId']) || ($user['aclDeputy'])) {
+            if (($rec_n['iduser'] == $user['userId']) || ($user['aclGroup'] > 1)) {
                 echo '<a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl=readgroup.php?rid='.$_GET['rid'].'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec_n['title'])."&quot; náležící k osobě?');".'" title="smazat"><span class="button-text">smazat</span></a>';
             } ?>
                 </span>
@@ -218,7 +216,7 @@ if ((isset($filter['notes']) and $filter['notes'] == 'on')) { ?>
             header('location: index.php');
         }
     } else {
-        $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+        $_SESSION['message'] = $text['accessdeniedrecorded'];
         header('location: index.php');
     }
     latteDrawTemplate("footer");

@@ -7,22 +7,12 @@ latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Vyhledané symboly';
 
-auditTrail(7, 1, 0);
+authorizedAccess(7, 1, 0);
 
     mainMenu();
-    sparklets('<a href="./persons.php">osoby</a> &raquo; <a href="newperson.php">přidat osobu</a>; <a href="symbols.php">nepřiřazené symboly</a>; <a href="symbol_search.php">vyhledat symbol</a>');
+    sparklets('<a href="/persons/">osoby</a> &raquo; <a href="newperson.php">přidat osobu</a>; <a href="symbols.php">nepřiřazené symboly</a>; <a href="symbol_search.php">vyhledat symbol</a>');
 
 if (isset($_POST['searchit'])) {
-    // ############################################## Určení vyhledavaneho znaku #
-    // test input
-    //		$input_liner=1;
-    //		$input_curver=2;
-    //		$input_pointer=3;
-    //		$input_geometrical=1;
-    //		$input_alphabeter=2;
-    //		$input_specialchar=3;
-
-    // real input
     $input_liner = htmlspecialchars($_POST['l']);
     $input_curver = htmlspecialchars($_POST['c']);
     $input_pointer = htmlspecialchars($_POST['p']);
@@ -30,13 +20,8 @@ if (isset($_POST['searchit'])) {
     $input_alphabeter = htmlspecialchars($_POST['a']);
     $input_specialchar = htmlspecialchars($_POST['sch']);
 
-    ///////////ECHO TEST PROMENNE
-    //$vypis='liner= '.$l.', curver= '.$c.', pointer= '.$p.', geometrical= '.$g.', alphabeter= '.$a.', specialchar= '.$sch.'';
-    //echo $vypis;
-    //////////
 
-    // ############################################## Vyhledavani a rovnani znaku #
-    //QUERY
+
     $symbol_query_sql = "
 			SELECT id,
 				   assigned,
@@ -117,16 +102,10 @@ if (isset($_POST['searchit'])) {
 				WHERE deleted=0
 				ORDER BY averangepercent DESC
 			";
-    //RESULT
     mysqli_query($database, 'SET NAMES utf8');
-    // Kontrola SQL dotazy ////////////////////////
-    //echo $symbol_query_sql;
-    ///////////////////////////////////////////////
+
     $symbol_result = mysqli_query($database, $symbol_query_sql) or die("Vyhledávání a srovnání symbolů neprošlo! SQL: $symbol_query_sql");
 
-    ///////////////////////// FUNCTIONS /////////////////////////////
-
-    // funkce pro změnu barvy ve výsledku vyhledávání
 
     function colorSwitch($inputSqlColumn)
     {
@@ -166,9 +145,7 @@ if (isset($_POST['searchit'])) {
         }
 
         return $segmentOutput;
-    }
-
-    //////////////////////////////////////////////////////////////////?>
+    } ?>
 		<link href="css/symbolstyle.css" rel="stylesheet" type="text/css" />
 	    <div class="top_margin"></div>
 	    <div class="message_frame">
@@ -195,7 +172,6 @@ if (isset($_POST['searchit'])) {
 	        </div>
 	    </div>
 	    <?php
-            //echo $symbol_record = mysqli_fetch_array ($symbol_result);
 
             $result = '
 	    <div class="central_result_frame">';

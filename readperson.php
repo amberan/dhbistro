@@ -9,11 +9,9 @@ latteDrawTemplate("header");
         $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."person WHERE id=".$_REQUEST['rid']);
         if ($rec = mysqli_fetch_assoc($res)) {
             if (($rec['secret'] > $user['aclSecret']) || $rec['deleted'] == 1) {
-                unauthorizedAccess(1, $rec['secret'], $rec['deleted'], $_REQUEST['rid']);
+                unauthorizedAccess(1, 1, $_REQUEST['rid']);
             }
-            auditTrail(1, 1, $_REQUEST['rid']);
-            //   $sides = ['', 'světlý', 'temný', 'člověk', 'neznámá'];
-            //   $powers = ['', 'neznámá', 'člověk', 'mimo kategorie', '1. kategorie', '2. kategorie', '3. kategorie', '4. kategorie'];
+            authorizedAccess(1, 1, $_REQUEST['rid']);
 
             $latteParameters['title'] = stripslashes($rec['surname']).', '.stripslashes($rec['name']);
             mainMenu();
@@ -24,26 +22,18 @@ latteDrawTemplate("header");
             }
             if ($hn == 0) {
                 $hidenotes = '&amp;hidenotes=1">skrýt poznámky</a>';
-            //     $backurl = 'readperson.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
             } else {
                 $hidenotes = '&amp;hidenotes=0">zobrazit poznámky</a>';
-                //        $backurl = 'readperson.php?rid='.$_REQUEST['rid'].'&hidenotes=0';
             }
-            if ($user['aclGamemaster']) {
+            if ($user['aclGamemaster'] || $user['aclUser']) {
                 $editbutton = '; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>; číslo osoby: '.$rec['id'];
+            } elseif ($user['aclperson']) {
+                $editbutton = '; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>';
             } else {
-                if ($user['aclDeputy'] > 0) {
-                    $editbutton = '; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>; číslo osoby: '.$rec['id'].'';
-                } else {
-                    if ($usrinfo['right_text']) {
-                        $editbutton = '; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>';
-                    } else {
-                        $editbutton = '';
-                    }
-                }
+                $editbutton = '';
             }
             deleteUnread(1, $_REQUEST['rid']);
-            sparklets('<a href="./persons.php">osoby</a> &raquo; <strong>'.stripslashes($rec['surname']).', '.stripslashes($rec['name']).'</strong>', '<a href="readperson.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton); ?>
+            sparklets('<a href="/persons/">osoby</a> &raquo; <strong>'.stripslashes($rec['surname']).', '.stripslashes($rec['name']).'</strong>', '<a href="readperson.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton); ?>
 <div id="obsah">
 	<h1><?php echo stripslashes($rec['surname']).', '.stripslashes($rec['name']); ?></h1>
 	<fieldset>
@@ -194,16 +184,20 @@ latteDrawTemplate("header");
             } ?></p>
 		<div class="clear">&nbsp;</div>
                 <h3>Figuruje v těchto hlášení: </h3><p><?php
-                $sqlFilter = DB_PREFIX."report.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."report.secret<=".$user['aclSecret'];
-            $sql_r = "SELECT ".DB_PREFIX."report.adatum as date_created, ".DB_PREFIX."report.datum as date_changed, ".DB_PREFIX."report.secret AS 'secret', ".DB_PREFIX."report.label AS 'label', ".DB_PREFIX."report.id AS 'id', ".DB_PREFIX."ar2p.iduser
+            $sqlFilter = DB_PREFIX."report.reportSecret<=".$user['aclSecret'];
+            if ($user['aclRoot'] < 1) {
+                $sqlFilter .= ' AND ('.DB_PREFIX.'report.reportDeleted is null OR '.DB_PREFIX.'report.reportDeleted  < from_unixtime(1)) ';
+            }
+
+            $sql_r = "SELECT ".DB_PREFIX."report.reportCreated as date_created, ".DB_PREFIX."report.reportModified as date_changed, ".DB_PREFIX."report.reportSecret AS 'secret', ".DB_PREFIX."report.reportName AS 'label', ".DB_PREFIX."report.reportId AS 'id', ".DB_PREFIX."ar2p.iduser
                 FROM ".DB_PREFIX."report, ".DB_PREFIX."ar2p
-                WHERE $sqlFilter AND ".DB_PREFIX."ar2p.idreport=".DB_PREFIX."report.id AND ".DB_PREFIX."ar2p.idperson=".$_REQUEST['rid']."
-                ORDER BY ".DB_PREFIX."report.label ASC";
+                WHERE $sqlFilter AND ".DB_PREFIX."ar2p.idreport=".DB_PREFIX."report.reportId AND ".DB_PREFIX."ar2p.idperson=".$_REQUEST['rid']."
+                ORDER BY ".DB_PREFIX."report.reportName ASC";
             $res_r = mysqli_query($database, $sql_r);
             if (mysqli_num_rows($res_r)) {
                 $reports = [];
                 while ($rec_r = mysqli_fetch_assoc($res_r)) {
-                    $reports[] = '<a href="./readactrep.php?rid='.$rec_r['id'].'&hidenotes=0&truenames=0">'.stripslashes($rec_r['label']).'</a> | vytvořeno: '.webdate($rec_r['date_created']).' | změněno: '.webdate($rec_r['date_changed']);
+                    $reports[] = '<a href="/reports/'.$rec_r['id'].'">'.stripslashes($rec_r['label']).'</a> | vytvořeno: '.webdate($rec_r['date_created']).' | změněno: '.webdate($rec_r['date_changed']);
                 }
                 echo implode('<br />', $reports);
             } else {
@@ -214,7 +208,7 @@ latteDrawTemplate("header");
 
 <!-- následuje seznam přiložených souborů -->
 	<?php //generování seznamu přiložených souborů
-            $sqlFilter = DB_PREFIX."file.secret<=".$user['aclSecret']; //DB_PREFIX."case.deleted in (0,".$user['aclRoot'].") AND ".
+            $sqlFilter = DB_PREFIX."file.secret<=".$user['aclSecret'];
             $sql = "SELECT ".DB_PREFIX."file.mime as mime, ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.id AS 'id'
             FROM ".DB_PREFIX."file
             WHERE $sqlFilter AND".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=1
@@ -274,10 +268,10 @@ if ($hn != 1) { ?>
             } ?></h4>
 			<div><?php echo stripslashes($rec['note']); ?></div>
 			<span class="poznamka-edit-buttons"><?php
-            if (($rec['iduser'] == $user['userId']) || ($usrinfo['right_text'])) {
+            if (($rec['iduser'] == $user['userId']) || ($user['aclPerson'])) {
                 echo '<a class="edit" href="editnote.php?rid='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=1" title="upravit"><span class="button-text">upravit</span></a> ';
             }
-            if (($rec['iduser'] == $user['userId']) || ($user['aclDeputy'])) {
+            if (($rec['iduser'] == $user['userId']) || ($user['aclPerson'] > 1)) {
                 echo '<a class="delete" href="procnote.php?deletenote='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('readperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec['title'])."&quot; náležící k osobě?');".'" title="smazat"><span class="button-text">smazat</span></a>';
             } ?>
 			</span>
@@ -302,7 +296,7 @@ if ($hn != 1) { ?>
             header('location: index.php');
         }
     } else {
-        $_SESSION['message'] = "Pokus o neoprávněný přístup zaznamenán!";
+        $_SESSION['message'] = $text['accessdeniedrecorded'];
         header('location: index.php');
     }
         latteDrawTemplate("footer");

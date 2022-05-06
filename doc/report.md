@@ -1,0 +1,17 @@
+# table nw_report
+- informations about reports
+- relations
+  - reportCreatedBy 1:1 nw_user.userId MANDATORY (get nw_user.UserName)
+    - nw_user.personId 1:1 nw_person.id OPTIONAL (get nw_person.name, nw_person.surbname; if nw_person.deleted = 0)
+  - reportModifiedBy 1:1 nw_user.userId OPTIONAL (get nw_user.UserName)
+    - nw_user.personId 1:1 nw_person.id OPTIONAL (get nw_person.name, nw_person.surbname; if nw_person.deleted = 0)
+  - reportOwner 1:1 nw_user.userId OPTIONAL (get nw_user.UserName)
+    - nw_user.personId 1:1 nw_person.id OPTIONAL (get nw_person.name, nw_person.surbname; if nw_person.deleted = 0)
+  - reportId 1:N nw_ar2p.idreport OPTIONAL
+    - nw_ar2p.idperson 1:1 nw_person.idperson MANDATORY (get get nw_person.name, nw_person.surbname; if nw_person.deleted = 0)
+  - reportId 1:N nw_ar2c.idreport OPTIONAL
+    - nw_ar2c.idcase 1:1 nw_case MANDATORY (get nw_case.id, nw_case.title; if nw_case.deleted = 0)
+  - reportId 1:1 nw_unread.idrecord (&& nw_unread.idtable =  4 && nw_unread.iduser = $user['userId']) OPTIONAL
+  - reportId 1:N nw_symbols2all.idrecord (&& nw_symbols2all.table =4) OPTIONAL
+    - nw_symbols2all.idsymbol 1:1 nw_symbol.id (&& nw_symbol.deleted=0) MANDATORY (get nw_symbol.*)
+  - reportId 1:N nw_file.iditem (&& nw_file.idtable = 4 ) OPTIONAL (get nw_file.*)

@@ -1,14 +1,15 @@
 <?php
-require_once ($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
-Debugger::enable(Debugger::DETECT,$config['folder_logs']);
+
+Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Symboly';
-	auditTrail(7, 14, 0);
-	mainMenu ();
-	sparklets ('<a href="./persons.php">osoby</a> &raquo; <a href="newperson.php">přidat osobu</a>; <a href="symbols.php">nepřiřazené symboly</a>; <a href="symbol_search.php">vyhledat symbol</a>');
-	?>
+    authorizedAccess(7, 14, 0);
+    mainMenu();
+    sparklets('<a href="/persons/">osoby</a> &raquo; <a href="newperson.php">přidat osobu</a>; <a href="symbols.php">nepřiřazené symboly</a>; <a href="symbol_search.php">vyhledat symbol</a>');
+    ?>
 		<link href="css/symbolstyle.css" rel="stylesheet" type="text/css" />
 	    <div class="message_frame">
 	    	<p class="message_text">Zadejte specifikaci vyhledávaného symbolu</p>
@@ -26,7 +27,7 @@ $latteParameters['title'] = 'Symboly';
 				<option>8</option>
 				<option>9</option>
 				<option>10</option>
-			</datalist>		
+			</datalist>
 	    <div class="central_frame">
 	        <div class="input_frame">
 	        	<div class="input_text">
@@ -172,5 +173,5 @@ $latteParameters['title'] = 'Symboly';
 	    </div>
 	    </form>
 	    <?php
-		latteDrawTemplate("footer");
-		?>
+        latteDrawTemplate("footer");
+        ?>

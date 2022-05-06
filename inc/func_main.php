@@ -1,117 +1,55 @@
 <?php
 
 session_start();
-define('SERVER_ROOT', $_SERVER['DOCUMENT_ROOT']);
-require_once SERVER_ROOT."/config.php";
-require_once SERVER_ROOT.'/vendor/autoload.php';
 
-$latte = new Latte\Engine();
-$latte->setTempDirectory($config['folder_cache']);
-
-$URL = explode('/', $_SERVER['REQUEST_URI']); // for THE LOOP
-
-require_once $config['folder_custom'].'text.php'; // defaultni text might be overloaded from inc/platform.php
-require_once SERVER_ROOT.'/inc/platform.php';  //platform setup based on server/link
-if (isset($config['custom'])) {
-    require_once $config['folder_custom'].'/text-'.$config['custom'].'.php';
+require_once $_SERVER['DOCUMENT_ROOT']."/config.php";
+if (!file_exists($config['platformConfig'])) {
+    echo $config['platformConfig'];
+    Header('location: index.php');
+    die();
 }
-
+require_once $config['platformConfig'];
+$latteParameters['config'] = $config;
+require_once SERVER_ROOT.'/vendor/autoload.php';
 use Tracy\Debugger;
 
 Debugger::enable(Debugger::DETECT, $config['folder_logs']);
-require_once SERVER_ROOT."/lib/security.php";
-require_once SERVER_ROOT.'/inc/database.php';
-// installer require_once SERVER_ROOT."/lib/security.php";
-require_once SERVER_ROOT."/lib/gui.php";
-require_once SERVER_ROOT."/lib/formatter.php";
-require_once SERVER_ROOT."/lib/filters.php";
+$latte = new Latte\Engine();
+$latte->setTempDirectory($config['folder_cache']);
+$latteParameters = [];
+
+require_once $config['folder_custom'].'text.php';
+if (isset($config['themeCustom'])) {
+    require_once $config['folder_custom'].'/text-'.$config['themeCustom'].'.php';
+}
+$latteParameters['text'] = $text;
+
+$URL = explode('/', $_SERVER['REQUEST_URI']);
+
+require_once SERVER_ROOT.'/lib/security.php';
+require_once SERVER_ROOT.'/lib/database.php';
+require_once SERVER_ROOT.'/lib/gui.php';
+require_once SERVER_ROOT.'/lib/filters.php';
 require_once SERVER_ROOT.'/lib/file.php';
-require_once SERVER_ROOT.'/inc/backup.php';
-// lib/user
-require_once SERVER_ROOT.'/lib/session.php';
-require_once SERVER_ROOT.'/inc/audit_trail.php';
+require_once SERVER_ROOT.'/lib/audit.php';
 require_once SERVER_ROOT.'/lib/image.php';
-require_once SERVER_ROOT.'/inc/unread.php';
-// *** FUNCTIONS for objects
 require_once SERVER_ROOT.'/lib/person.php';
 require_once SERVER_ROOT.'/lib/news.php';
+require_once SERVER_ROOT.'/lib/user.php';
+
+$database = mysqli_connect($configDB['dbHost'], $configDB['dbUser'], $configDB['dbPassword'], $configDB['dbDatabase']) or die($_SERVER["SERVER_NAME"].":".mysqli_connect_errno()." ".mysqli_connect_error());
+mysqli_query($database, "SET NAMES 'utf8'");
+
+require_once SERVER_ROOT.'/inc/session.php';
+require_once SERVER_ROOT.'/inc/unread.php';
 require_once SERVER_ROOT.'/inc/menu.php';
 
-$latteParameters['text'] = $text;
-$latteParameters['config'] = $config;
+$_REQUEST = escape_array($_REQUEST);
+$_POST = escape_array($_POST);
+$_GET = escape_array($_GET);
+
 if (isset($user)) {
     $latteParameters['user'] = $user;
-}
-
-function date_picker($name, $startyear = null, $endyear = null, $preset = null)
-{
-    global $user;
-    if ($startyear == null) {
-        echo $startyear = date("Y")-10;
-    }
-    if ($endyear == null) {
-        $endyear = date("Y") ; //+ 5;
-    }
-    if ($preset != null) {
-        $presetDay = date('j', $preset);
-        $presetMonth = date('n', $preset);
-        $presetYear = date('Y', $preset);
-    }
-
-    $months = ['', 'Leden', 'Únor', 'Březen', 'Duben', 'Květen',
-        'Červen', 'Červenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec', ];
-
-    // roletka dnů
-    $html = "<select class=\"day\" name=\"".$name."day\">";
-    for ($i = 1; $i <= 31; $i++) {
-        $html .= "<option ".($i == $presetDay ? ' selected' : '')." value='$i'>$i</option>";
-    }
-    $html .= "</select> ";
-
-    // roletka měsíců
-    $html .= "<select class=\"month\" name=\"".$name."month\">";
-
-    for ($i = 1; $i <= 12; $i++) {
-        $html .= "<option ".($i == $presetMonth ? ' selected' : '')." value='$i'>$months[$i]</option>";
-    }
-    $html .= "</select> ";
-
-    // roletka let
-    $html .= "<select class=\"year\" name=\"".$name."year\">";
-
-    for ($i = $startyear; $i <= $endyear; $i++) {
-        $html .= "<option ".($i == $presetYear ? ' selected' : '')." value='$i'>$i</option>";
-    }
-    $html .= "</select> ";
-
-    return $html;
-}
-
-// ziskani autora zaznamu - audit, dashboard, edituser, index, readcase, readperson, readsymbol, tasks
-function getAuthor($recid, $trn)
-{
-    global $database;
-    if (1 == $trn) { //person
-        $getAuthorSql = 'SELECT '.DB_PREFIX."person.name as 'name', ".DB_PREFIX."person.surname as 'surname', ".DB_PREFIX."user.userName as 'nick' FROM ".DB_PREFIX.'person, '.DB_PREFIX.'user WHERE '.DB_PREFIX.'user.userId='.$recid.' AND '.DB_PREFIX.'person.id='.DB_PREFIX.'user.personId';
-        $getAuthorQuery = mysqli_query($database, $getAuthorSql);
-        if (!is_bool($getAuthorQuery)) {
-            $getAuthorResult = mysqli_fetch_assoc($getAuthorQuery);
-            $name = stripslashes(@$getAuthorResult['surname']).', '.stripslashes(@$getAuthorResult['name']);
-        } else {
-            $name = 'Uživatel není přiřazen.';
-        }
-    } else { //user
-        $getAuthorSql = 'SELECT '.DB_PREFIX."user.userName as 'nick' FROM ".DB_PREFIX.'user WHERE '.DB_PREFIX.'user.userId='.$recid;
-        $getAuthorQuery = mysqli_query($database, $getAuthorSql);
-        if (!is_bool($getAuthorQuery)) {
-            $getAuthorResult = mysqli_fetch_assoc($getAuthorQuery);
-            $name = stripslashes($getAuthorResult['nick']);
-        } else {
-            $name = 'Neznámo.';
-        }
-    }
-
-    return $name;
 }
 
 // funkce pro ukládání fitru do databáza a načítání filtru z databáze

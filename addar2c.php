@@ -5,14 +5,14 @@ use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
-$latteParameters['title'] = 'Úprava hlášení';
+$latteParameters['title'] = 'Prirazeni pripadu k hlaseni ';
 mainMenu();
     $customFilter = custom_Filter(18);
-    sparklets('<a href="./reports.php">hlášení</a> &raquo; <strong>úprava hlášení</strong>');
-    $autharray = mysqli_fetch_assoc(mysqli_query($database, "SELECT iduser FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']));
-    $author = $autharray['iduser'];
-    if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || $user['userId'] == $author)) {
-        $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']);
+    sparklets('<a href="/reports/">hlášení</a> &raquo; <strong>úprava hlášení</strong>');
+    $autharray = mysqli_fetch_assoc(mysqli_query($database, "SELECT reportOwner FROM ".DB_PREFIX."report WHERE reportId=".$_REQUEST['rid']));
+    $author = $autharray['reportOwner'];
+    if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || $user['userId'] == $author)) {
+        $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE reportId=".$_REQUEST['rid']);
         if ($rec = mysqli_fetch_assoc($res)) {
             ?>
 
@@ -22,18 +22,16 @@ mainMenu();
     </p>
 
     <?php
-// zpracovani filtru
 if (!isset($customFilter['sort'])) {
-    $filterSort = 1;
-} else {
-    $filterSort = $customFilter['sort'];
-}
+                $filterSort = 1;
+            } else {
+                $filterSort = $customFilter['sort'];
+            }
             switch ($filterSort) {
     case 1: $filterSqlSort = ' '.DB_PREFIX.'case.title ASC '; break;
     case 2: $filterSqlSort = ' '.DB_PREFIX.'case.title DESC '; break;
     default: $filterSqlSort = ' '.DB_PREFIX.'case.title ASC ';
 }
-//
             function filter()
             {
                 global $filterSort;

@@ -1,0 +1,167 @@
+{include 'headerMD.latte'}
+<div class="container">
+	<div class="row flex-center-center installer-header-wrapper">
+		<h1 class="mr-3 display-3">BiStro Installer</h1>
+		<a href="https://gitlab.com/alembiq/bistro/" target="_new"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Git_icon.svg/97px-Git_icon.svg.png" title="BiStro repository"  alt="BiStro repository"></a>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<p class="text-center">
+				<em>
+					Are you one of the Others...?
+					<br />
+					A member of the Night Watch, Day Watch or Inquisition perhaps?<br />
+					BiStro is here for you and will try to keep you from getting lost in  all the gloom related informations!
+				</em>
+			</p>
+		</div>
+	</div>
+
+	<form action="/" method="post" id="dbconfig">
+		<div class="row">
+			<div class="col-12">
+				<h4>Setting for this instance</h4>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12 col-md-4">
+				<label for="themeColor" class="col-form-label">
+					Theme Color:
+				</label>
+				<select name="themeColor" id="themeColor" class="custom-select">
+					<option value="local"{if @$config[themeColor] == "local"} selected {/if}>local</option>
+					<option value="dh"{if @$config[themeColor] == "dh"} selected {/if}>dh</option>
+					<option value="nh"{if @$config[themeColor] == "nh"} selected {/if}>nh</option>
+					<option value="test"{if @$config[themeColor] == "test"} selected {/if}>test</option>
+					<option value="org"{if @$config[themeColor] == "org"} selected {/if}>org</option>
+					<option value="enigma"{if @$config[themeColor] == "enigma"} selected {/if}>enigma</option>
+				</select>
+			</div>
+			<div class="col-12 col-md-4">
+				<label for="themeBackground" class="col-form-label">
+					Theme Background:
+				</label>
+				<select name="themeBackground" id="themeBackground" class="custom-select">
+					<option value="dark"{if @$config[themeBackground] == "dh"} selected {/if}>dark</option>
+					<option value="warning"{if @$config[themeBackground] == "warning"} selected {/if}>warning</option>
+					<option value="secondary"{if @$config[themeBackground] == "secondary"} selected {/if}>secondary</option>
+				</select>
+			</div>
+			<div class="col-12 col-md-4">
+				<label for="themeNavbar" class="col-form-label">
+					Theme Navigation Bar:
+				</label>
+				<select name="themeNavbar" id="themeNavbar" class="custom-select">
+					<option value="dark"{if @$config[themeNavbar] == "dark"} selected {/if}>dark</option>
+					<option value="light"{if @$config[themeNavbar] == "light"} selected {/if}>light</option>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12 col-md-4">
+				<label for="themeCustom" class="col-form-label">
+					Theme Custom:
+				</label>
+				<select name="themeCustom" id="themeCustom" class="custom-select">
+					<option value="DH"{if @$config[themeCustom] == "DH"} selected {/if}>DH</option>
+					<option value="NH"{if @$config[themeCustom] == "NH"} selected {/if}>NH</option>
+					<option value="DB"{if @$config[themeCustom] == "DB"} selected {/if}>DB</option>
+					<option value="enigma"{if @$config[themeCustom] == "enigma"} selected {/if}>enigma</option>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<p class="text-right text-muted"><small>These settings will be stored in `.env.php`.</small></p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<h4 class="mb-3">Database connection configuration</h4>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12 col-md-4">
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<label class="input-group-text" id="db-hostname">DB Hostname</label>
+					</div>
+					<input name="dbHost" value="localhost" class="form-control" />
+				</div>
+			</div>
+			<div class="col-12 col-md-4">
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<label class="input-group-text" id="db-user">DB User</label>
+					</div>
+					<input name="dbUser" type="input" value="{@$config[dbUser]}" class="form-control" />
+				</div>
+			</div>
+			<div class="col-12 col-md-4">
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<label class="input-group-text" id="db-password">DB Password</label>
+					</div>
+					<input name="dbPassword" type="Password" class="form-control" />
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12 col-md-4">
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<label class="input-group-text" id="db-database">Database</label>
+					</div>
+					<input name="dbDatabase" value="{@$config[dbDatabase]}" class="form-control" />
+				</div>
+			</div>
+			<div class="col-12 col-md-4">
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<label class="input-group-text" id="db-tablefix">Table prefix</label>
+					</div>
+					<input name="dbPrefix" value="{if @$config[dbPrefix]}{$config[dbPrefix]}{else}nw_{/if}" class="form-control" />
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<p class="text-right text-muted"><small>These settings will be stored in `.env.php`.</small></p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<h4 class="mb-3">Data for your BiStro</h4>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<p><strong>If any data will be found in the database, database population will be skipped.</strong></p>
+				{if !$backupList}
+					<p>No backups found in {$config['folder_backup']}, database will be populated by default script.</p>
+					<p>Default user is <mark>`admin`</mark> his password is <mark>`kokot`</mark>.</p>
+				{else}
+					<p>You can select one of the backups listed below to fill the new database (if it is empty).</p>
+					<p>If you wont select any backup to restore, database will be populated by default script (default user is <mark>`admin`</mark> with password <mark>`kokot`</mark>.).</p>
+					<label for="themeCustom" class="col-form-label">
+						Files found:
+					</label>
+					<Select name="backupFile" class="custom-select">
+						<option value=""></option>
+						{foreach $backupList as $backupFile}
+							<option value="{$backupFile[0]}">{$backupFile[0]}  ---      {$backupFile[1]} </option>
+						{/foreach}
+					</select>
+					<p class="text-danger"><em>Currently can handle only unpacked sql files!</em></p>
+				{/if}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12 flex-center-center m-4">
+				<input class="btn btn-lg btn-danger text-center" type="submit" value="Do your magic!" />
+			</div>
+		</div>
+	</form>
+</div>
+
+{include 'footerMD.latte'}

@@ -1,34 +1,32 @@
 <div class="container-fluid mt-3 mb-3 mr-2 w-100">
     <div class="row mb-1">
-	    <div class="col-6 text-left">
+	    <div class="col-12 col-sm-6 text-left">
 	        <h4>
-                {$text[skupiny]}
+                {$text[skupiny]} {ifset $group_count}({$group_count}){/ifset}
             </h4>
 	    </div>
-        <div class="col-6 text-right">
+        <div class="col-12 col-sm-6 text-right">
+            <form action="{$URL[0]}{$URL[1]}/" method="POST" id="filter" class="header-form-wrapper">
+                <input type="hidden" name="filter[placeholder]" />
+                <div class="header-switch">
+                    <label class="toggle-control">
+                        <input type="checkbox" name="filter[archived]" {if (isset($filter['archived']) AND $filter['archived'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                        <span class="control"></span>
+                    </label>
+                    {$text['iarchiv']}
+                </div>
+                <div class="header-switch">
+                    <label class="toggle-control">
+                        <input type="checkbox" name="filter[new]" {if (isset($filter['new']) AND $filter['new'] == 'on') } checked{/if} onchange="this.form.submit()" />
+                        <span class="control"></span>
+                    </label>
+                    {$text['jennove']}
+                </div>
+            </form>
         </div>
 	</div>
     <div class="row mb-1">
         <div class="col-12">
-                <form action="{$website_link}{$URL[1]}/" method="POST" id="filter" class="header-form-wrapper">
-                    <input type="hidden" name="filter[placeholder]" />
-                    <div class="header-switch">
-                        <label class="toggle-control">
-                            <input type="checkbox" name="filter[archived]" {if (isset($filter['archived']) AND $filter['archived'] == 'on') } checked {/if} onchange="this.form.submit()" />
-                            <span class="control"></span>
-                        </label>
-                        {$text['iarchiv']}
-                    </div>
-                    <div class="header-switch">
-                        <label class="toggle-control">
-                            <input type="checkbox" name="filter[new]" {if (isset($filter['new']) AND $filter['new'] == 'on') } checked{/if} onchange="this.form.submit()" />
-                            <span class="control"></span>
-                        </label>
-                        {$text['jennove']}
-                    </div>
-                </form>
-
-
             {if @$warning}
                 <div>
                     {$warning}
@@ -40,14 +38,14 @@
                     <thead>
                         <tr>
                             <th>
-                                {$text['nazev']} <a href="{$website_link}{$URL[1]}/?sort=title">&#8661;</a>
+                                {$text['nazev']} <a href="{$URL[0]}{$URL[1]}/?sort=title">&#8661;</a>
                             </th>
                             <th>{$text['stav']}</th>
                             <th>
-                                {$text['vytvoreno']}  <a href="{$website_link}{$URL[1]}/?sort=created">&#8661;</a>
+                                {$text['vytvoreno']}  <a href="{$URL[0]}{$URL[1]}/?sort=created">&#8661;</a>
                             </th>
                             <th>
-                                {$text['zmeneno']}  <a href="{$website_link}{$URL[1]}/?sort=datum">&#8661;</a>
+                                {$text['zmeneno']}  <a href="{$URL[0]}{$URL[1]}/?sort=datum">&#8661;</a>
                             </th>
                             <th>{$text['akce']}</th>
                         </tr>
@@ -88,7 +86,7 @@
                                         <a class="btn btn-sm btn-brick btn-danger mb-1" href="/groups/delete/{$groups['id']}" onclick="return confirm('{$text['opravdusmazatskupinu']} &quot; {$groups['title']|stripHtml}&quot;?');" alt="{$text[smazatskupinu]}">{php echo file_get_contents("images/icons/trash-solid.svg")}</a>
                                     {/if}
                                     {if $user['aclRoot'] AND $groups['deleted']}
-                                        <a class="btn btn-sm btn-success mb-1" href="/groups/restore/{$groups['id']}" onclick="return confirm('{$text['opravduobnovitskupinu']} &quot; {$groups['title']|stripHtml}&quot;?');">{$text['obnovit']}</a>
+                                        <a class="btn btn-sm btn-success mb-1" href="/groups/restore/{$groups['id']}" onclick="return confirm('{$text['opravduobnovitskupinu']} &quot; {$groups['title']|stripHtml}&quot;?');">{php echo file_get_contents("images/icons/recycle.svg")}</a>
                                     {/if}
                                 </td>
                             </tr>

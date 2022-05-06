@@ -5,15 +5,15 @@ use Tracy\Debugger;
 Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 latteDrawTemplate("header");
 
-$latteParameters['title'] = 'Přiřazení symbolu';
+$latteParameters['title'] = 'Přiřazení symbolu k pripadu';
     mainMenu();
         $customFilter = custom_Filter(21);
     sparklets('<a href="./symbols.php">nepřiřazené symboly</a> &raquo; <strong>přiřazení symbolu k případu</strong>');
     $sql = "SELECT created_by FROM ".DB_PREFIX."symbol WHERE id=".$_REQUEST['rid'];
     $autharray = mysqli_fetch_assoc(mysqli_query($database, $sql));
     $author = $autharray['created_by'];
-    if (is_numeric($_REQUEST['rid']) && ($usrinfo['right_text'] || $user['userId'] == $author)) {
-        $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE id=".$_REQUEST['rid']);
+    if (is_numeric($_REQUEST['rid']) && ($user['aclCase'] || $user['userId'] == $author)) {
+        $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE reportId=".$_REQUEST['rid']);
         if ($rec = mysqli_fetch_assoc($res)) {
             ?>
 
@@ -34,7 +34,6 @@ if (!isset($customFilter['sort'])) {
     case 2: $filterSqlSort = ' '.DB_PREFIX.'case.title DESC '; break;
     default: $filterSqlSort = ' '.DB_PREFIX.'case.title ASC ';
 }
-//
             function filter()
             {
                 global $filterSort;

@@ -7,92 +7,131 @@
 include:
 - template: Code-Quality.gitlab-ci.yml
 - template: Security/SAST.gitlab-ci.yml
-- template: Security/Secret-Detection.gitlab-ci.yml
 - template: Security/Dependency-Scanning.gitlab-ci.yml
 variables:
   SAST_EXPERIMENTAL_FEATURES: 'true'
   SAST_DEFAULT_ANALYZERS: nodejs-scan,eslint,phpcs-security-audit
   SEARCH_MAX_DEPTH: 10
+  TEST_FOLDER: '~/cz.prazskahlidka.test.nh/  ~/cz.prazskahlidka.test.dh/' # ~/cz.prazskahlidka.test.i/'
+  PROD_FOLDER: '~/cz.prazskahlidka.nhbistro/  ~/cz.prazskahlidka.dhbistro/' # ~/cz.prazskahlidka.ibistro'
+
 stages:
 - build
 - test
 - deploy
-build:
+
+build_test:
   stage: build
   image: alpine
   before_script:
   - apk add gzip
+  - apk add composer
   script:
-  - tar czf build.tgz --exclude .git --exclude bistro.tmp .
+  - find . -type f -name \*.php -exec sed -i -r 's+Debugger::(DETECT|PRODUCTION)+Debugger::DEVELOPMENT+g' {} \;
+  - composer install --ignore-platform-reqs
+  - tar czf bistro-$CI_PIPELINE_ID.tgz --exclude .git --exclude bistro.tmp .
   artifacts:
     paths:
-    - build.tgz
+    - bistro-$CI_PIPELINE_ID.tgz
     expire_in: 1 days
   rules:
-  - when: always
-code_quality:
-  stage: test
-  interruptible: true
-  resource_group: "$CI_COMMIT_SHA"
-  artifacts:
-    reports:
-      codequality: gl-code-quality-report.json
-    paths:
-    - gl-code-quality-report.json
-  rules:
-  - if: $CI_PIPELINE_SOURCE ==  "merge_request_event"
-code_quality_html:
-  stage: test
-  interruptible: true
-  resource_group: "$CI_COMMIT_SHA"
-  extends: code_quality
-  needs:
-  - build
-  allow_failure: true
-  variables:
-    REPORT_FORMAT: html
-    CI_DEBUG_TRACE: 'true'
-  artifacts:
-    paths:
-    - gl-code-quality-report.html
-    expire_in: 3 months
-  rules:
-  - if: "$CODE_QUALITY_DISABLED"
-    when: never
-  - if: $CI_PIPELINE_SOURCE ==  "merge_request_event"
-    when: never
-  - when: always
-phpcs-security-audit-sast:
-  interruptible: true
-secret_detection:
-  interruptible: true
-  variables:
-    SECRET_DETECTION_HISTORIC_SCAN: 'true'
-deploy test:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_BRANCH != "master"
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH != "master"
+
+deploy_test:
+  resource_group: testing
   stage: deploy
   image: alpine
   needs:
-  - build
+    - build_test
   allow_failure: true
   before_script:
-  - apk add openssh-client
-  - eval $(ssh-agent -s)
-  - cat $SSH_KEY | tr -d '\r' | ssh-add -
-  - mkdir -p ~/.ssh
-  - chmod 700 ~/.ssh
-  - ssh-keyscan alembiq.net >> ~/.ssh/known_hosts
+    - apk add openssh-client
+    - eval $(ssh-agent -s)
+    - cat $TEST_SSH | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan alembiq.net >> ~/.ssh/known_hosts
   script:
-  - scp build.tgz gitlab-ci@alembiq.net:.
-  - ssh gitlab-ci@alembiq.net "mkdir $DEPLOY_FOLDER/$CI_JOB_ID && tar zxf build.tgz
-    -C $DEPLOY_FOLDER/$CI_JOB_ID/ && cp $DEPLOY_FOLDER/htdocs/inc/important.php $DEPLOY_FOLDER/$CI_JOB_ID/inc/
-    && rsync -au --remove-source-files $DEPLOY_FOLDER/htdocs/files/ $DEPLOY_FOLDER/$CI_JOB_ID/files/
-    && tar zcf $DEPLOY_FOLDER/backup-$CI_JOB_ID.tgz --exclude $DEPLOY_FOLDER/htdocs/cache
-    --exclude $DEPLOY_FOLDER/htdocs/.git $DEPLOY_FOLDER/htdocs/ && mv $DEPLOY_FOLDER/htdocs
-    $DEPLOY_FOLDER/backup && mv $DEPLOY_FOLDER/$CI_JOB_ID $DEPLOY_FOLDER/htdocs &&
-    rm -rf $DEPLOY_FOLDER/backup && rm build.tgz"
+    - scp bistro-$CI_PIPELINE_ID.tgz prazskahlidka@alembiq.net:.
+    - for folder in ${TEST_FOLDER} ;
+      do
+        ssh $TEST_REMOTE "mkdir $folder/$CI_PIPELINE_ID
+        && tar zxf bistro-$CI_PIPELINE_ID.tgz -C $folder/$CI_PIPELINE_ID/
+        && cp $folder/htdocs/.env.php $folder/$CI_PIPELINE_ID/
+        && rsync -au --remove-source-files $folder/htdocs/files/ $folder/$CI_PIPELINE_ID/files/
+        && tar zcf $folder/backup-$CI_PIPELINE_ID.tgz --exclude $folder/htdocs/cache --exclude $folder/htdocs/.git $folder/htdocs/
+        && mv $folder/htdocs $folder/backup
+        && mv $folder/$CI_PIPELINE_ID $folder/htdocs
+        && rm -rf $folder/backup" ;
+      done
+    - ssh $TEST_REMOTE "rm bistro-$CI_PIPELINE_ID.tgz"
   rules:
-  - when: manual
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "master"
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "master"
+
+build_prod:
+  stage: build
+  image: alpine
+  before_script:
+  - apk add gzip
+  - apk add composer
+  script:
+  - find . -type f -name \*.php -exec sed -i -r 's+Debugger::(DETECT|DEVELOPMENT)+Debugger::PRODUCTION+g' {} \;
+  - composer install --ignore-platform-reqs
+  - tar czf bistro-$CI_PIPELINE_ID.tgz --exclude .git --exclude bistro.tmp .
+  artifacts:
+    paths:
+    - bistro-$CI_PIPELINE_ID.tgz
+    expire_in: 1 days
+  rules:
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
+
+deploy_prod:
+  resource_group: production
+  stage: deploy
+  image: alpine
+  needs:
+    - build_prod
+  allow_failure: true
+  before_script:
+    - apk add openssh-client
+    - eval $(ssh-agent -s)
+    - cat $PROD_SSH | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan alembiq.net >> ~/.ssh/known_hosts
+  script:
+    - scp bistro-$CI_PIPELINE_ID.tgz prazskahlidka@alembiq.net:.
+    - for folder in ${PROD_FOLDER} ;
+      do
+        ssh $PROD_REMOTE "mkdir $folder/$CI_PIPELINE_ID
+        && tar zxf bistro-$CI_PIPELINE_ID.tgz -C $folder/$CI_PIPELINE_ID/
+        && cp $folder/htdocs/.env.php $folder/$CI_PIPELINE_ID/
+        && rsync -au --remove-source-files $folder/htdocs/files/ $folder/$CI_PIPELINE_ID/files/
+        && tar zcf $folder/backup-$CI_PIPELINE_ID.tgz --exclude $folder/htdocs/cache --exclude $folder/htdocs/.git $folder/htdocs/
+        && mv $folder/htdocs $folder/backup
+        && mv $folder/$CI_PIPELINE_ID $folder/htdocs
+        && rm -rf $folder/backup" ;
+      done
+    - ssh $PROD_REMOTE "rm bistro-$CI_PIPELINE_ID.tgz"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+
+code_quality:
+  stage: test
+  interruptible: true
+  artifacts:
+    paths:
+    - gl-code-quality-report.json
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_TAG
+
 sast:
   stage: test
   variables:
-    SAST_EXCLUDED_PATHS: vendor
+    SAST_EXCLUDED_PATHS: vendor, js/jquery*, js/tiny*
+    SAST_EXCLUDED_ANALYZERS: bandit, brakeman, flawfinder, gosec, kubesec, nodejs-scan,
+      pmd-apex, security-code-scan, sobelow, spotbugs

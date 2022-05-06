@@ -9,10 +9,10 @@ $latteParameters['title'] = 'Úprava poznámky';
 
 mainMenu();
     switch ($_REQUEST['idtable']) {
-        case 1: $sourceurl = "persons.php"; $sourcename = "osoby"; break;
-        case 2: $sourceurl = "groups/"; $sourcename = "skupiny"; break;
+        case 1: $sourceurl = "/persons/"; $sourcename = "osoby"; break;
+        case 2: $sourceurl = "/groups/"; $sourcename = "skupiny"; break;
         case 3: $sourceurl = "/cases/"; $sourcename = "případy"; break;
-        case 4: $sourceurl = "reports.php"; $sourcename = "hlášení"; break;
+        case 4: $sourceurl = "/reports/"; $sourcename = "hlášení"; break;
         case 7: $sourceurl = "symbols.php"; $sourcename = "symboly"; break;
         default: $sourceurl = ""; $sourcename = ""; break;
     }
@@ -43,7 +43,7 @@ mainMenu();
 		</select>
 	</div>
 	<?php
-    if ($user['aclDeputy']) {
+    if ($user['aclUser']) { //TODO PERMISSION NOTE?
         $sql = "SELECT id, login FROM ".DB_PREFIX."user WHERE deleted=0 ORDER BY login ASC";
         $res_n = mysqli_query($database, $sql);
         echo '<div>

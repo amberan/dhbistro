@@ -7,7 +7,7 @@ latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Nový symbol';
     mainMenu();
-    sparklets('<a href="persons.php">osoby</a> &raquo; <a href="symbols.php">nepřiřazené symboly</a> &raquo; <strong>nový symbol</strong>');
+    sparklets('<a href="/persons/">osoby</a> &raquo; <a href="symbols.php">nepřiřazené symboly</a> &raquo; <strong>nový symbol</strong>');
 ?>
 <div id="obsah">
 	<fieldset><legend><strong>Nový symbol</strong></legend>

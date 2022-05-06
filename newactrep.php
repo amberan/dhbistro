@@ -10,18 +10,18 @@ $latteParameters['title'] = 'Nové hlášení';
     mainMenu();
     $type = $_GET['type']; // nacitani typu hlaseni z prikazove radky prohlizece (zakladni ochrana proti SQL injection)
     if ($type == '1') {
-        sparklets('<a href="./reports.php">hlášení</a> &raquo; <strong>nové hlášení z výjezdu</strong>');
+        sparklets('<a href="/reports/">hlášení</a> &raquo; <strong>nové hlášení z výjezdu</strong>');
     } else {
         if ($type == '2') {
-            sparklets('<a href="./reports.php">hlášení</a> &raquo; <strong>nové hlášení z výslechu</strong>');
+            sparklets('<a href="/reports/">hlášení</a> &raquo; <strong>nové hlášení z výslechu</strong>');
         } else { ?>
-<h1>Požadovaný typ hlášení neexistuje - vraťte se prosím <a href="./reports.php" title="">zpět &raquo;</a></h1>
+<h1>Požadovaný typ hlášení neexistuje - vraťte se prosím <a href="/reports/" title="">zpět &raquo;</a></h1>
 <?php latteDrawTemplate("footer"); exit; }
     }
 
 ?>
 <div id="obsah">
-<form action="procactrep.php" method="post" id="inputform">
+<form action="/reports/" method="post" id="inputform">
 <fieldset id="ramecek"><legend><strong>Nové hlášení z <?php echo $type == 1 ? 'výjezdu' : ($type == 2 ? 'výslechu' : '#&*'); ?></strong></legend>
 	<fieldset><legend><strong>Základní údaje</strong></legend>
 		<div id="info"><?php

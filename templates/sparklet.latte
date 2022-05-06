@@ -1,10 +1,17 @@
-        <div class="pt-1 pl-2 pr-2 pb-3 breadcrumbs-fixed-top" id="sparklets">{$text['cesta']}:
-            <strong class="mr-3">{$title}{if @$subtitle} - {$subtitle}{/if}</strong>
-            {if @$actions}
-                {$text['akce']}:
-                {foreach $actions as $action}
-                    <a class="menu-action mr-1 ml-1" href="{$action[0]}">{$action[1]}</a>
-                    {if !$iterator->last} | {/if}
-                {/foreach}
-            {/if}
+        <div class="container-fluid breadcrumbs-fixed-top py-1" id="sparklets">
+            <div class="row">
+                <div class="breadcrumb-side-left text-left">
+                    <p class="breadcrumb-item">
+                        <span class="text-muted">{if @$subtitle}{$subtitle} / {/if}</span><span class="breadcrumb-item active">{$title}</span>
+                    </p>
+                </div>
+                <div class="breadcrumb-side-right text-right">
+                    {if @$actions}
+                        {foreach $actions as $action}
+                            <a class="btn btn-sm btn-primary breadcrumb-item" href="{$action[0]}">{$action[1]|firstUpper}</a>
+                            {if !$iterator->last} | {/if}
+                        {/foreach}
+                    {/if}
+                </div>
+            </div>
         </div>
