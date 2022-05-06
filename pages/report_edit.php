@@ -11,8 +11,8 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 
 if (isset($URL[2]) && $URL[2] == 'new') {
     //create new report in draft
-    $newSql = 'INSERT INTO '.DB_PREFIX.'report (reportOwner,reportCreatedBy,reportCreated,reportStatus,reportSecret,reportType,reportEventStart,reportEventEnd)
-        VALUES ('.$user['userId'].','.$user['userId'].',NOW(),0,0,1,\'-\',\'-\')';
+    $newSql = 'INSERT INTO '.DB_PREFIX.'report (reportOwner,reportCreatedBy,reportCreated,reportStatus,reportSecret,reportType,reportEventStart,reportEventEnd,reportEventDate)
+        VALUES ('.$user['userId'].','.$user['userId'].',NOW(),0,0,1,\'-\',\'-\',now())';
     mysqli_query($database, $newSql);
     $URL[2] = $reportNewId = mysqli_insert_id($database);
 
@@ -25,7 +25,8 @@ if (isset($_POST['reportId'],$_POST['reportName'],$_POST['reportType']) && $user
     if ($_POST['reportStatus'] <> 0) {
         unreadRecords(4, $_POST['reportId']);
     }
-    if ($_POST['reportArchivedCheck'] && !isset($_POST['reportArchived'])) {
+    $sqlArchived = ' ';
+    if (isset($_POST['reportArchivedCheck']) && !isset($_POST['reportArchived'])) {
         $sqlArchived = 'reportArchived=NOW(),';
     }
     $updateSql = "UPDATE ".DB_PREFIX."report SET
@@ -103,6 +104,7 @@ $reportSql = "SELECT
     createdUser.userName as reportCreatedByUserName,
     concat(modifiedPerson.name,' ',modifiedPerson.surname) as reportModifiedByName,
     modifiedUser.userName as reportModifiedByUserName,
+    date(".DB_PREFIX."report.reportEventDate) as reportEventDate,
     ".DB_PREFIX."unread.id AS 'unread'
     FROM ".DB_PREFIX."report
     LEFT JOIN ".DB_PREFIX."unread on  ".DB_PREFIX."report.reportId =  ".DB_PREFIX."unread.idrecord AND  ".DB_PREFIX."unread.idtable = 4 and  ".DB_PREFIX."unread.iduser=".$user['userId']."
@@ -120,7 +122,6 @@ if (!is_numeric($URL[2])  || $user['aclReport'] < 1 || mysqli_num_rows($reportQu
 } else {
     authorizedAccess(4, 1, $URL[2]);
     deleteUnread(4, $URL[2]);
-
     $latteParameters['title'] = $text['hlaseni']." ".reportType($report['reportType']).": ".stripslashes($report['reportName']);
     $latteParameters['reportType'] = reportType();
     $latteParameters['reportParticipants'] = reportParticipants($URL[2]);

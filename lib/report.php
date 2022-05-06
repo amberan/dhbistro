@@ -20,7 +20,7 @@ function reportsAssignedTo($userid): array
 
     $reportsListSql = 'SELECT reportId, reportName, date(reportEventDate) as reportEventDate
     FROM '.DB_PREFIX.'report
-    WHERE '.DB_PREFIX.'report.reportOwner='.$userid.' AND '.DB_PREFIX.'report.reportStatus!=1
+    WHERE '.DB_PREFIX.'report.reportOwner='.$userid.' AND '.DB_PREFIX.'report.reportStatus = 0
         AND ('.DB_PREFIX.'report.reportDeleted is null OR '.DB_PREFIX.'report.reportDeleted  < from_unixtime(1))
         AND ('.DB_PREFIX.'report.reportArchived is null OR '.DB_PREFIX.'report.reportArchived  < from_unixtime(1))
     ORDER BY '.DB_PREFIX.'report.reportName ASC';

@@ -25,7 +25,7 @@ latteDrawTemplate("header");
             } else {
                 $hidenotes = '&amp;hidenotes=0">zobrazit poznámky</a>';
             }
-            if ($user['aclGamemaster'] || $user['aclUser']) {
+            if ($user['aclGamemaster'] || $user['aclPerson']) {
                 $editbutton = '; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>; číslo osoby: '.$rec['id'];
             } elseif ($user['aclperson']) {
                 $editbutton = '; <a href="editperson.php?rid='.$_REQUEST['rid'].'">upravit osobu</a>';
@@ -33,7 +33,7 @@ latteDrawTemplate("header");
                 $editbutton = '';
             }
             deleteUnread(1, $_REQUEST['rid']);
-            sparklets('<a href="/persons/">osoby</a> &raquo; <strong>'.stripslashes($rec['surname']).', '.stripslashes($rec['name']).'</strong>', '<a href="readperson.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton); ?>
+            sparklets('<a href="./persons.php">osoby</a> &raquo; <strong>'.StripSlashes($rec['surname']).', '.StripSlashes($rec['name']).'</strong>', '<a href="readperson.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton); ?>
 <div id="obsah">
 	<h1><?php echo stripslashes($rec['surname']).', '.stripslashes($rec['name']); ?></h1>
 	<fieldset>
@@ -52,7 +52,7 @@ latteDrawTemplate("header");
 		<?php } ?>
 		<div id="info">
 			<?php
-            if ($rec['secret'] > 0 || $rec['dead'] == 1 || $rec['archiv'] == 1 || $rec['deleted'] == 1) {
+            if ($rec['secret'] > 0 || $rec['dead'] == 1 ||  $rec['archived'] > 1 || $rec['deleted'] == 1) {
                 echo '<h2>';
             }
             if ($rec['secret'] > 0) {
@@ -61,13 +61,13 @@ latteDrawTemplate("header");
             if ($rec['dead'] == 1) {
                 echo 'MRTVOLA ';
             }
-            if ($rec['archiv'] == 1) {
+            if ($rec['archived'] > 1) {
                 echo 'ARCHIV';
             }
             if ($rec['deleted'] == 1) {
                 echo 'SMAZANÝ ZÁZNAM';
             }
-            if ($rec['secret'] == 1 || $rec['dead'] == 1 || $rec['archiv'] == 1 || $rec['deleted'] == 1) {
+            if ($rec['secret'] == 1 || $rec['dead'] == 1 || $rec['archived'] > 1 || $rec['deleted'] == 1) {
                 echo '</h2>';
             } ?>
 			<h3>Jméno: </h3><p><?php echo stripslashes($rec['name']); ?></p>
@@ -197,7 +197,7 @@ latteDrawTemplate("header");
             if (mysqli_num_rows($res_r)) {
                 $reports = [];
                 while ($rec_r = mysqli_fetch_assoc($res_r)) {
-                    $reports[] = '<a href="/reports/'.$rec_r['id'].'">'.stripslashes($rec_r['label']).'</a> | vytvořeno: '.webdate($rec_r['date_created']).' | změněno: '.webdate($rec_r['date_changed']);
+                    $reports[] = '<a href="/reports/'.$rec_r['id'].'">'.stripslashes($rec_r['label']).'</a> | vytvořeno: '.($rec_r['date_created']).' | změněno: '.($rec_r['date_changed']);
                 }
                 echo implode('<br />', $reports);
             } else {
@@ -211,7 +211,7 @@ latteDrawTemplate("header");
             $sqlFilter = DB_PREFIX."file.secret<=".$user['aclSecret'];
             $sql = "SELECT ".DB_PREFIX."file.mime as mime, ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.id AS 'id'
             FROM ".DB_PREFIX."file
-            WHERE $sqlFilter AND".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=1
+            WHERE $sqlFilter AND ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=1
             ORDER BY ".DB_PREFIX."file.originalname ASC";
             $res = mysqli_query($database, $sql);
             $i = 0;
