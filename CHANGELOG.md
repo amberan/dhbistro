@@ -21,7 +21,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 
 TODO: check all 'report (169) and  "report (191) in code - columns renamed, status=3 > reportArchived > timestamp, deleted > reportDeleted timestamp
 
-## 1.8.11 - 2022-04-20
+## 1.8.11 - 2022-05-06
 ### Changed
 - Refactored: report new form #108
 - Refactored: session span lenght in $config #232
