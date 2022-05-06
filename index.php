@@ -152,9 +152,10 @@ if (isset($user)) {
             $latteParameters['actions'][] = ["/reports", $text['vypishlaseni']];
             if (isset($URL[3]) && $URL[3] == 'edit') {
                 $latteParameters['actions'][] = ["/symbols.php", $text['priraditsymboly']];
-
+                $latteParameters['actions'][] = ["/reports/$URL[2]", $text['zobrazitreport']];
                 require_once SERVER_ROOT.'/pages/report_edit.php';
             } else {
+                $latteParameters['actions'][] = ["/reports/$URL[2]/edit", $text['upravitreport']];
                 require_once SERVER_ROOT.'/pages/report_view.php';
             }
         } elseif ($URL[2] == 'new') {

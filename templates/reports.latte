@@ -99,17 +99,17 @@
                         {foreach $reportsRecord as $report}
                             <tr class="{if @$report['unread']} unread_record{/if}{if $report['reportType'] == 1} vyjezd{else} vyslech{/if}">
                                 <td class="table-w-full-cell">
-                                    <p class="table-cell-title-name"><strong>{$reportType[$report['reportType']]|firstUpper}: </strong><a href="/reports/{$report['reportId']}">{$report['reportName']}</a></p>
+                                    <p class="table-cell-title"><strong>{$reportType[$report['reportType']]|firstUpper}: </strong><a href="/reports/{$report['reportId']}">{$report['reportName']}</a></p>
                                     <p class="table-cell-subtitle mb-2">{$text['ukol']}: {$report['reportTask']}</p>
                                     <div class="table-badge-wrapper">
                                         {if $report['reportSecret'] > 0 }
                                             <span class="badge rounded-pill bg-danger text-light">{$text['utajeno']|upper}</span>
                                         {/if}
                                         {if $report['reportArchived']}
-                                            <span class="badge rounded-pill bg-secondary text-light mb-1">{$text['archivovano']|firstUpper}</span>
+                                            <span class="badge rounded-pill bg-secondary text-light">{$text['archivovano']|firstUpper}</span>
                                         {/if}
                                         {if $report['reportDeleted']}
-                                            <span class="badge rounded-pill bg-warning text-dark mb-1">{$text['smazany']|firstUpper}</span>
+                                            <span class="badge rounded-pill bg-warning text-dark">{$text['smazany']|firstUpper}</span>
                                         {/if}
                                     </div>
                                     <div class="mobile-no-show">

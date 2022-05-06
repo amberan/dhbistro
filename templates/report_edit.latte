@@ -1,284 +1,590 @@
-<form action="/reports/{$report['reportId']}/edit" method="post">
-{ifset $reportNewId}
-VYTVORIT NOVY report
-{/ifset}
-
-<input name="reportName" value="{$report['reportName']}" />
-{if $report['reportSecret'] > 0 }
-    <span class="badge rounded-pill bg-danger text-light">{$text['utajeno']|upper}</span>
-{/if}
-{if $report['reportArchived']}
-<span class="badge rounded-pill bg-secondary text-light mb-1">{$text['archivovano']}</span>
-{/if}
-
-
-<br/>
-{$text['hlaseni']|firstUpper}
-<select name="reportType">
-{foreach $reportType as $reportTypeValue => $reportTypeName}
-    <option value={$reportTypeValue}{if $reportTypeValue == $report[reportType]} SELECTED{/if}> {$reportTypeName}</option>
-{/foreach}
-</select>
-<br/>
-{$text['ukol']}:<input name="reportTask" value="{$report['reportTask']}" />
-<br/>
-{$text['vytvoril']}: {$report['reportCreatedByName']} {$report['reportCreated']}
-<br/>
-{{$text['poslednizmena']|firstUpper}}: {$report['reportModifiedByName']} {$report['reportModified']}
-<br/>
-{$text['prirazeno']}:
-<select name="reportOwner">
-{foreach $suitableUsers as $suitableUser}
-    <option value="{$suitableUser['userId']}" {if $report['reportOwner'] == $suitableUser['userId']} SELECTED{/if}>{if $suitableUser['personName']}{$suitableUser['personName']}{else}{$suitableUser['userName']}{/if}</option>
-{/foreach}
-</select>
-<br/>
-{if $user['aclSecret'] > 0}
-{$text[tajne]}? <select name="reportSecret">
-    <option value="0">verejne</option>
-    <option value="1" {if $report[reportSecret] == 1} SELECTED{/if}>{$text['utajeno']}</option>
-</select>
-<br/>
-{/if}
-{$text['archiv']}:
-{if $report['reportArchived']}{$text['archivovano']} <input name="reportArchived" disabled value="{$report['reportArchived']}" />{else}archivovat {/if}
-<input name="reportArchivedCheck" type="checkbox" {if $report['reportArchived']}CHECKED{/if}>
-
-<br/>
-{$text['probehlo']} TODO DATEPICKER DAY <input name="reportEventDate" value="{$report['reportEventDate']}" /> {$text['od']}: <input name="reportEventStart" value={$report['reportEventStart']}> {$text['do']}: <input name="reportEventEnd" value={$report['reportEventEnd']}>
-<br/>
-
-{$text['stavhlaseni']}: <select name="reportStatus">
-{foreach $reportStatus as $reportStatusValue => $reportStatusName}
-    <option value={$reportStatusValue}{if $reportStatusValue == $report[reportStatus]} SELECTED{/if}> {$reportStatusName}</option>
-{/foreach}
-</select>
-<br/>
-{$text['osobyprirazenekhlaseni']}:
-{if $reportParticipants != false}
-    {foreach $reportParticipants as $participant}
-            <a href="/readperson.php?rid={$participant['participantId']}" title={$participant['participantRole']} {ifset $participant['participantDeleted'] }class="deleted"{/ifset}>{$participant['participantName']|noescape}</a>
-            {sep}, {/sep}
-    {/foreach}
-    {else}
-    <em>{$text['zadneosoby']}</em>
-{/if}
-<a href="/addp2ar.php?rid={$report[reportId]}">Upravit osoby</a>
-<br/>
-{if $reportCases != false}
-{$text['spojenospripady']}:
-    {foreach $reportCases as $case}
-        <a href="{$URL[0]}/readcase.php?rid={$case['caseId']}&hidenotes=0" {ifset $case['caseDeleted']}class="deleted"{/ifset}>{$case['caseName']}<a/>
-            {sep}, {/sep}
-    {/foreach}
-    {else}
-    {$text['zadnepripady']}.
-{/if}
-
-
-<a href="/addar2c.php?rid={$report['reportId']}">{$text['prirazenipripadu']}</a>
-<br/>
-
-{$text['shrnuti']}:
-<input class="form-control"  name="reportSummary" id="report{$report['reportId']|noescape}summaryRaw" type="hidden" />
-<div id="report{$report['reportId']|noescape}summary" class="form-control writable-section"></div>
-        <script type="text/javascript">
-        </script>
+<form action="/reports/{$report['reportId']}/edit" method="post" class="container-fluid mt-3 mb-3 mr-2 w-100">
+    <div class="row mb-1">
+        {ifset $reportNewId}
+            <div class="col-12 text-center">
+                <h4>
+                    {$text['newreportheader']|firstUpper}
+                </h4>
+            </div>
+        {else}
+            <div class="col-12 text-center">
+                <h4>
+                    {$text['editreportheader']|firstUpper}
+                </h4>
+            </div>
+        {/ifset}
     </div>
-</div>
-<script>
-    const summary = new toastui.Editor({
-    el: document.querySelector('#report{$report['reportId']|noescape}summary'),
-    height: '250px',
-    initialEditType: 'wysiwyg',
-    previewStyle: 'vertical',
-    initialValue:   `{$report['reportSummary']|noescape} `,
-    toolbarItems: [
-          ['heading', 'bold', 'italic', 'strike'],
-          ['hr', 'quote'],
-          ['ul', 'ol', 'task', 'indent', 'outdent'],
-          ['table', 'image', 'link'],
-    ],
-    });
-    setInterval(function() {
-        document.getElementById("report{$report['reportId']|noescape}summaryRaw").value = summary.getMarkdown();
-    }, 5);
-</script>
-
-<br/>
-{$text['moznedopady']}:
-<input class="form-control"  name="reportImpact" id="report{$report['reportId']|noescape}impactRaw" type="hidden" />
-<div id="report{$report['reportId']|noescape}impact" class="form-control writable-section"></div>
-        <script type="text/javascript">
-        </script>
+    <div class="row mb-1">
+        <div class="col-12">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">{$text['nazevreportu']|firstUpper}</p>
+                <input class="form-control" type="text" name="reportName" value="{$report['reportName']}" />
+            </div>
+        </div>
     </div>
-</div>
-<script>
-    const impact = new toastui.Editor({
-    el: document.querySelector('#report{$report['reportId']|noescape}impact'),
-    height: '250px',
-    initialEditType: 'wysiwyg',
-    previewStyle: 'vertical',
-    initialValue:   `{$report['reportImpact']|noescape} `,
-    toolbarItems: [
-          ['heading', 'bold', 'italic', 'strike'],
-          ['hr', 'quote'],
-          ['ul', 'ol', 'task', 'indent', 'outdent'],
-          ['table', 'image', 'link'],
-    ],
-    });
-    setInterval(function() {
-        document.getElementById("report{$report['reportId']|noescape}impactRaw").value = impact.getMarkdown();
-    }, 5);
-</script>
-
-<br/>
-{$text['podrobnyprubeh']}:
-<input class="form-control"  name="reportDetail" id="report{$report['reportId']|noescape}detailRaw" type="hidden" />
-<div id="report{$report['reportId']|noescape}detail" class="form-control writable-section"></div>
-        <script type="text/javascript">
-        </script>
+    <div class="text-center">
+        {if $report['reportSecret'] > 0 }
+            <h5 class="bg-danger text-light w-100 p-2 mb-1">
+                {$text['utajeno']|upper}
+            </h5>
+        {/if}
+        {if $report['reportArchived']}
+            <h6 class="bg-secondary text-light w-100 p-2 mb-1">
+                {$text['archivovano']}
+            </h6>
+        {/if}
     </div>
-</div>
-<script>
-    const detail = new toastui.Editor({
-    el: document.querySelector('#report{$report['reportId']|noescape}detail'),
-    height: '250px',
-    initialEditType: 'wysiwyg',
-    previewStyle: 'vertical',
-    initialValue:   `{$report['reportDetail']|noescape} `,
-    toolbarItems: [
-          ['heading', 'bold', 'italic', 'strike'],
-          ['hr', 'quote'],
-          ['ul', 'ol', 'task', 'indent', 'outdent'],
-          ['table', 'image', 'link'],
-    ],
-    });
-
-    setInterval(function() {
-        document.getElementById("report{$report['reportId']|noescape}detailRaw").value = detail.getMarkdown();
-    }, 5);
-</script>
-
-<br/>
-{$text['energetickanarocnost']}:
-<input class="form-control"  name="reportCost" id="report{$report['reportId']|noescape}costRaw" type="hidden" />
-<div id="report{$report['reportId']|noescape}cost" class="form-control writable-section"></div>
-        <script type="text/javascript">
-        </script>
+    <div class="row mb-1 align-items-stretch">
+        <div class="col-12 col-md-6">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">{$text['hlavickapopis']}</p>
+                <div class="w-100">
+                    <label class="mt-3" for="idreporttype">
+                        {$text['hlaseni']|firstUpper}:
+                    </label>
+                    <select class="form-control" name="reportType" id="reporttype">
+                    {foreach $reportType as $reportTypeValue => $reportTypeName}
+                        <option value={$reportTypeValue}{if $reportTypeValue == $report[reportType]} SELECTED{/if}> {$reportTypeName}</option>
+                    {/foreach}
+                    </select>
+                </div>
+                <div class="w-100">
+                    <label class="mt-3" for="task">
+                        {$text['ukol']|firstUpper}:
+                    </label>
+                    <textarea class="form-control edit-textarea" name="reportTask" value="{$report['reportTask']}" id="task"/>
+                </div>
+                <div class="w-100">
+                    <label class="mt-3" for="reportowner">
+                        {$text['prirazeno']|firstUpper}:
+                    </label>
+                    <select name="reportOwner" class="form-control" id="reportowner">
+                        {foreach $suitableUsers as $suitableUser}
+                            <option value="{$suitableUser['userId']}" {if $report['reportOwner'] == $suitableUser['userId']} SELECTED{/if}>{if $suitableUser['personName']}{$suitableUser['personName']}{else}{$suitableUser['userName']}{/if}</option>
+                        {/foreach}
+                    </select>
+                </div>
+                {if $user['aclSecret'] > 0}
+                    <div class="w-100">
+                        <label class="mt-3" for="isitsecret">
+                            {$text[tajne]|firstUpper}?:
+                        </label>
+                        <select class="form-control" name="reportSecret" id="isitsecret">
+                            <option value="0">{$text['verejne']|firstUpper}</option>
+                            <option value="1" {if $report[reportSecret] == 1} SELECTED{/if}>{$text['utajeno']|firstUpper}</option>
+                        </select>
+                    </div>
+                {/if}
+                <div class="w-100">
+                    <p class="mt-3 mb-2">
+                        {$text['archiv']}:
+                    </p>
+                    {if $report['reportArchived']}
+                         <input class="form-control mb-2" name="reportArchived" disabled value="{$text['archivovano']} {$report['reportArchived']}" />
+                    {/if}
+                    <div class="header-switch ml-0">
+                        <label class="toggle-control">
+                            <input name="reportArchivedCheck" type="checkbox" {if $report['reportArchived']}CHECKED{/if}>
+                            <span class="control"></span>
+                        </label>
+                        {$text['archivovat']}
+                    </div>
+                </div>
+                <div class="w-100">
+                    <label class="mt-3" for="reportstatusdropdown">
+                        {$text['stavhlaseni']}:
+                    </label>
+                    <select name="reportStatus" id="reportstatusdropdown" class="form-control">
+                        {foreach $reportStatus as $reportStatusValue => $reportStatusName}
+                            <option value={$reportStatusValue}{if $reportStatusValue == $report[reportStatus]} SELECTED{/if}> {$reportStatusName}</option>
+                        {/foreach}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">{$text['hlavickacas']}</p>
+                <div class="w-100">
+                    <p class="mt-3 mb-2">
+                        {$text['vytvoril']|firstUpper}:
+                    </p>
+                    <input class="form-control mb-2" name="reportCreatedByWhen" readonly value="{$report['reportCreatedByName']} {$report['reportCreated']}" />
+                </div>
+                <div class="w-100">
+                    <p class="mt-3 mb-2">
+                        {$text['poslednizmena']|firstUpper}:
+                    </p>
+                    <input class="form-control mb-2" name="reportLastChangedByWhen" readonly value="{$report['reportModifiedByName']} {$report['reportModified']}" />
+                </div>
+                <div class="w-100">
+                    <label class="mt-3" for="timeDayHappenedPicker">
+                        {$text['probehlo']}
+                    </label>
+                    <input class="form-control" name="reportEventDate" value="{$report['reportEventDate']}" type="date"/>
+                    <label class="mt-3" for="timeDayHappenedFrom">
+                        {$text['od']}:
+                    </label>
+                    <input class="form-control" name="reportEventStart" value={$report['reportEventStart']} type="time">
+                    <label class="mt-3" for="timeDayHappenedTo">
+                        {$text['do']}:
+                    </label>
+                    <input class="form-control" name="reportEventEnd" value={$report['reportEventEnd']} type="time">
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-<script>
-    const cost = new toastui.Editor({
-    el: document.querySelector('#report{$report['reportId']|noescape}cost'),
-    height: '250px',
-    initialEditType: 'wysiwyg',
-    previewStyle: 'vertical',
-    initialValue:   `{$report['reportCost']|noescape} `,
-    toolbarItems: [
-          ['heading', 'bold', 'italic', 'strike'],
-          ['hr', 'quote'],
-          ['ul', 'ol', 'task', 'indent', 'outdent'],
-          ['table', 'image', 'link'],
-    ],
-    });
-
-    setInterval(function() {
-        document.getElementById("report{$report['reportId']|noescape}costRaw").value = cost.getMarkdown();
-    }, 5);
-</script>
-
-<br/>
-{$text['uvodnivstupy']}:
-<input class="form-control"  name="reportInput" id="report{$report['reportId']|noescape}inputRaw" type="hidden" />
-<div id="report{$report['reportId']|noescape}input" class="form-control writable-section"></div>
-        <script type="text/javascript">
-        </script>
+    <div class="row mb-1">
+        <div class="col-12">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">{$text['osobyprirazenekhlaseni']|firstUpper}</p>
+                {if $reportParticipants != false}
+                    {foreach $reportParticipants as $participant}
+                        <p><strong>{$participant['participantRole']}</strong>: <a href="/readperson.php?rid={$participant['participantId']}" title={$participant['participantRole']} {ifset $participant['participantDeleted'] }class="deleted"{/ifset}>{$participant['participantName']|noescape}</a>{sep}{/sep}</p>
+                    {/foreach}
+                    {else}
+                    <p><em>{$text['zadneosoby']}</em></p>
+                {/if}
+                <hr class="view-category-divider">
+                <p class="w-100 text-right"><a href="/addp2ar.php?rid={$report[reportId]}">{$text['upravitosoby']|firstUpper}</a></p>
+            </div>
+        </div>
     </div>
-</div>
-<script>
-    const input = new toastui.Editor({
-    el: document.querySelector('#report{$report['reportId']|noescape}input'),
-    height: '250px',
-    initialEditType: 'wysiwyg',
-    previewStyle: 'vertical',
-    initialValue:   `{$report['reportInput']|noescape} `,
-    toolbarItems: [
-          ['heading', 'bold', 'italic', 'strike'],
-          ['hr', 'quote'],
-          ['ul', 'ol', 'task', 'indent', 'outdent'],
-          ['table', 'image', 'link'],
-    ],
-    });
+    <div class="row mb-1">
+        <div class="col-12">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">{$text['spojenospripady']|firstUpper}</p>
+                {if $reportCases != false}
+                    {foreach $reportCases as $case}
+                        <p class="w-100"><a href="{$URL[0]}/readcase.php?rid={$case['caseId']}&hidenotes=0" {ifset $case['caseDeleted']}class="deleted"{/ifset}>{$case['caseName']}<a/>{sep}{/sep}</p>
+                    {/foreach}
+                    {else}
+                    <p>{$text['zadnepripady']}.</p>
+                {/if}
+                <hr class="view-category-divider">
+                <p class="w-100 text-right"><a href="/addar2c.php?rid={$report['reportId']}">{$text['prirazenipripadu']}</a></p>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-1">
+        <div class="col-12">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">
+                    {$text['shrnuti']}
+                </p>
+                <input class="form-control"  name="reportSummary" id="report{$report['reportId']|noescape}summaryRaw" type="hidden" />
+                <div id="report{$report['reportId']|noescape}summary" class="form-control writable-section"></div>
+                <script type="text/javascript">
+                </script>
+                <script>
+                    const summary = new toastui.Editor({
+                    el: document.querySelector('#report{$report['reportId']|noescape}summary'),
+                    height: '400px',
+                    initialEditType: 'wysiwyg',
+                    previewStyle: 'vertical',
+                    initialValue:   `{$report['reportSummary']|noescape} `,
+                    toolbarItems: [
+                        ['heading', 'bold', 'italic', 'strike'],
+                        ['hr', 'quote'],
+                        ['ul', 'ol', 'task', 'indent', 'outdent'],
+                        ['table', 'image', 'link'],
+                    ],
+                    });
+                    setInterval(function() {
+                        document.getElementById("report{$report['reportId']|noescape}summaryRaw").value = summary.getMarkdown();
+                    }, 5);
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-1">
+        <div class="col-12">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">
+                    {$text['moznedopady']}
+                </p>
+                <input class="form-control"  name="reportImpact" id="report{$report['reportId']|noescape}impactRaw" type="hidden" />
+                <div id="report{$report['reportId']|noescape}impact" class="form-control writable-section"></div>
+                <script type="text/javascript">
+                </script>
+                <script>
+                    const impact = new toastui.Editor({
+                    el: document.querySelector('#report{$report['reportId']|noescape}impact'),
+                    height: '400px',
+                    initialEditType: 'wysiwyg',
+                    previewStyle: 'vertical',
+                    initialValue:   `{$report['reportImpact']|noescape} `,
+                    toolbarItems: [
+                        ['heading', 'bold', 'italic', 'strike'],
+                        ['hr', 'quote'],
+                        ['ul', 'ol', 'task', 'indent', 'outdent'],
+                        ['table', 'image', 'link'],
+                    ],
+                    });
+                    setInterval(function() {
+                        document.getElementById("report{$report['reportId']|noescape}impactRaw").value = impact.getMarkdown();
+                    }, 5);
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-1">
+        <div class="col-12">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">
+                    {$text['podrobnyprubeh']}
+                </p>
+                <input class="form-control"  name="reportDetail" id="report{$report['reportId']|noescape}detailRaw" type="hidden" />
+                <div id="report{$report['reportId']|noescape}detail" class="form-control writable-section"></div>
+                <script type="text/javascript">
+                </script>
+                <script>
+                    const detail = new toastui.Editor({
+                    el: document.querySelector('#report{$report['reportId']|noescape}detail'),
+                    height: '400px',
+                    initialEditType: 'wysiwyg',
+                    previewStyle: 'vertical',
+                    initialValue:   `{$report['reportDetail']|noescape} `,
+                    toolbarItems: [
+                        ['heading', 'bold', 'italic', 'strike'],
+                        ['hr', 'quote'],
+                        ['ul', 'ol', 'task', 'indent', 'outdent'],
+                        ['table', 'image', 'link'],
+                    ],
+                    });
 
-    setInterval(function() {
-        document.getElementById("report{$report['reportId']|noescape}inputRaw").value = input.getMarkdown();
-    }, 5);
-</script>
+                    setInterval(function() {
+                        document.getElementById("report{$report['reportId']|noescape}detailRaw").value = detail.getMarkdown();
+                    }, 5);
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-1">
+        <div class="col-12">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">
+                    {$text['energetickanarocnost']}
+                </p>
+                <input class="form-control"  name="reportCost" id="report{$report['reportId']|noescape}costRaw" type="hidden" />
+                <div id="report{$report['reportId']|noescape}cost" class="form-control writable-section"></div>
+                <script type="text/javascript">
+                </script>
+                <script>
+                    const cost = new toastui.Editor({
+                    el: document.querySelector('#report{$report['reportId']|noescape}cost'),
+                    height: '400px',
+                    initialEditType: 'wysiwyg',
+                    previewStyle: 'vertical',
+                    initialValue:   `{$report['reportCost']|noescape} `,
+                    toolbarItems: [
+                        ['heading', 'bold', 'italic', 'strike'],
+                        ['hr', 'quote'],
+                        ['ul', 'ol', 'task', 'indent', 'outdent'],
+                        ['table', 'image', 'link'],
+                    ],
+                    });
 
-<br/>
+                    setInterval(function() {
+                        document.getElementById("report{$report['reportId']|noescape}costRaw").value = cost.getMarkdown();
+                    }, 5);
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-1">
+        <div class="col-12">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">
+                    {$text['uvodnivstupy']}
+                </p>
+                <input class="form-control"  name="reportInput" id="report{$report['reportId']|noescape}inputRaw" type="hidden" />
+                <div id="report{$report['reportId']|noescape}input" class="form-control writable-section"></div>
+                <script type="text/javascript">
+                </script>
+                <script>
+                    const input = new toastui.Editor({
+                    el: document.querySelector('#report{$report['reportId']|noescape}input'),
+                    height: '250px',
+                    initialEditType: 'wysiwyg',
+                    previewStyle: 'vertical',
+                    initialValue:   `{$report['reportInput']|noescape} `,
+                    toolbarItems: [
+                        ['heading', 'bold', 'italic', 'strike'],
+                        ['hr', 'quote'],
+                        ['ul', 'ol', 'task', 'indent', 'outdent'],
+                        ['table', 'image', 'link'],
+                    ],
+                    });
 
-<input type=hidden name="reportId" value={$report['reportId']} />
-<input type=submit value="{$text['ulozit']}" />
+                    setInterval(function() {
+                        document.getElementById("report{$report['reportId']|noescape}inputRaw").value = input.getMarkdown();
+                    }, 5);
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-1">
+        <input type=hidden name="reportId" value={$report['reportId']} />
+    </div>
+    <div class="row mb-1">
+        <div class="col-12">
+            <input type=submit value="{$text['ulozit']|firstUpper}" class="btn btn-primary btn-lg w-100" />
+        </div>
+    </div>
 </form>
-
-{$text['neprirazenesymbolyhlaseni']}:
-{if $reportSymbols != false}
-    {foreach $reportSymbols as $symbol}
-        <a href="/readsymbol.php?rid={$symbol['symbolId']}"><img {if $symbol['symbolDeleted'] > 0}class="deleted"{/if} {ifset $symbol['symbolSecret']}class="secret"{/ifset} src="/files/symbols/{$symbol['symbolHash']}" alt="{$symbol['symbolCreated']} {$text['vytvoril']} {$symbol['symbolCreatedBy']}" /></a>
-        {if $symbol['symbolCreatedBy'] == $user['userId'] || $report['reportOwner'] == $user['userId'] || true}
-            <a class="delete" title="{$text['smazat']}" href="/reports/{$report['reportId']}/edit/unlinksymbol={$symbol[symbolId]}" onclick="return confirm('{$text['opravduodpojitsymbol']}')">{$text['odpojitsymbol']}</a>
-        {/if}
-    {/foreach}
-{/if}
-<br/>
-{$text['prilozenesoubory']}:
-{if $reportFiles != false}
-    {foreach $reportFiles as $file}
-        {if $file[fileIsImage]}
-            <a href="/file/attachement/{$file['fileId']}"><img  width="300px" alt="{$file['fileName']}: {$file['fileCreated']} {$text['nahral']} {$file['fileCreatedBy']}" src="/file/attachement/{$file['fileId']}"></a>
-        {else }
-            <a href="/file/attachement/{$file['fileId']}">{$file['fileName']}: {$file['fileCreated']} {$text['nahral']} {$file['fileCreatedBy']}</a>
-        {/if}
-        {if $file['fileCreatedBy'] == $user['userId'] || $report['reportOwner'] == $user['userId']}
-            <a class="delete" title="{$text['smazat']}" href="/reports/{$report['reportId']}/edit/?deletefile={$file[fileId]}" onclick="return confirm('{$text['opravdusmazatsoubor']}')">{$text['smazat soubor']}</a>
-        {/if}
-    {/foreach}
-{/if}
-    <form action="/reports/{$report['reportId']}/edit" method="post" enctype="multipart/form-data">
-        {$text['pridatsoubor']}:
-        <input type="file" name="attachment" id="attachment" />
-        {if $user['aclSecret'] > 0} {$text['tajne']}: <input type="radio" name="secret" />{/if}
-        {if $user['aclGamemaster'] > 0 } {$text['neninove']}: <input type="checkbox" name="fnotnew"/>{/if}
-        <input type="hidden" name="reportId" value="{$report['reportId']}" />
-        <input type="submit" name="uploadfile" value="{$text['nahratsoubor']}" />
-    </form>
-<br/>
-{if $reportNotes != false}
-{$text['poznamky']}:
-    {foreach $reportNotes as $note}
-        {if $note['noteCreatedBy'] == $user['userId'] || $note['noteSecret'] <= $user['aclSecret']}
-            {$note['noteTitle']} {if $note['noteSecret'] == 1}{$text['utajeno']}{/if} {if $note['noteSecret'] == 2}{$text['soukrome']}{/if} {if $note['noteDeleted']}{$text['smazane']}{/if}
-            <br/>
-            {$note['noteCreatedBy']} [{$note['noteCreated']}]
-            <br/>
-        {$note['noteNote']|noescape}
-        {if $note['noteCreatedBy'] == $user['userId'] || $report['reportOwner'] == $user['userId']}
-            <a class="delete" title="{$text['smazat']}" href="/procnote.php?deletenote={$note['noteId']}&amp;itemid={$report['reportId']}&amp;backurl=/reports/{$report['reportId']}/edit" onclick="return confirm('{$text['opravdusmazatpoznamku']}')">{$text['smazatpoznamku']}</a>
-        {/if}
-        {/if}
-    {/foreach}
-{/if}
-        {$text['vytvoritpoznamku']}
-        <form action="/procnote.php" method="post">
-            {$text['nadpis']}: <input type="text" name="title" id="notetitle" />
-            {if $user['aclSecret'] > 0} tajne: <input type="checkbox" name="secret" />{/if}
-            {$text['soukrome']}: <input type="checkbox" name="private"/>
-            {if $user['aclGamemaster'] > 0} {$text['neninove']} <input type="checkbox" name="nnotnew"/>{/if}
-            <textarea cols="80" rows="7" name="note" id="notebody"></textarea>
-            <input type="hidden" name="itemid" value="{$report['reportId']}" />
-            <input type="hidden" name="backurl" value="/reports/{$report['reportId']}/edit" />
-            <input type="hidden" name="tableid" value="4" />
-            <input type="submit" value="{$text['ulozitpoznamku']}" name="setnote"  />
-        </form>
-<br/>
+<div class="container-fluid mt-3 mb-3 mr-2 w-100">
+    <div class="row mb-1">
+        <div class="col-12">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">
+                    {$text['neprirazenesymbolyhlaseni']|firstUpper}
+                </p>
+                <div class="view-symbol-wrapper">
+                    {if $reportSymbols != false}
+                        {foreach $reportSymbols as $symbol}
+                            <a href="/readsymbol.php?rid={$symbol['symbolId']}"><img {if $symbol['symbolDeleted'] > 0}class="deleted"{/if} {ifset $symbol['symbolSecret']}class="secret"{/ifset} src="/files/symbols/{$symbol['symbolHash']}" alt="{if $symbol['symbolCreatedByPerson']}{$symbol['symbolCreatedByPerson']}{else}{$symbol['symbolCreatedByUser']}{/if} {$symbol['symbolCreated']}" /></a>
+                            {if $symbol['symbolCreatedBy'] == $user['userId'] || $report['reportOwner'] == $user['userId'] || true}
+                                <a class="delete" title="{$text['smazat']}" href="/reports/{$report['reportId']}/edit/unlinksymbol={$symbol[symbolId]}" onclick="return confirm('{$text['opravduodpojitsymbol']}')">{$text['odpojitsymbol']}</a>
+                            {/if}
+                        {/foreach}
+                    {/if}
+                <hr class="view-category-divider">
+                <p class="w-100 text-right"><a href="/symbols.php">{$text['neprirazenesymboly']}</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-1">
+        <div class="col-12">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">
+                    {$text['prilozenesoubory']}
+                </p>
+                {if $reportFiles != false}
+                    <div class="view-files-wrapper">
+                        {foreach $reportFiles as $file}
+                            <div class="view-file-edit-wrapper mr-2 mb-2">
+                                {if $file[fileIsImage]}
+                                    <a href="/file/attachement/{$file['fileId']}" class="file-link">
+                                        <div class="view-file-wrapper mb-2 clear">
+                                            <img class="view-file-icon" alt="{$file['fileName']}: {$file['fileCreated']} {$file['fileCreatedBy']}" src="/file/attachement/{$file['fileId']}" />
+                                            <div>
+                                                <p class="view-file-name">
+                                                    {$file['fileName']}
+                                                </p>
+                                                <p class="view-file-creator">{if $file['fileCreatedByPerson']}{$file['fileCreatedByPerson']}{else}{$file['fileCreatedByUser']}{/if} ({$file['fileCreated']})</p>
+                                                {if $file['fileSecret'] == 1}
+                                                {$text['tajne']|capitalize}
+                                                {/if}                                            </div>
+                                        </div>
+                                    </a>
+                                {else }
+                                    <a href="/file/attachement/{$file['fileId']}" class="file-link">
+                                        <div class="view-file-wrapper mb-2 clear">
+                                            <img src="/images/folder_icon.png" class="view-file-icon"/>
+                                            <div>
+                                                <p class="view-file-name">
+                                                    {$file['fileName']}
+                                                </p>
+                                                <p class="view-file-creator">
+                                                    {if $file['fileCreatedByPerson']}
+                                                        {$file['fileCreatedByPerson']}
+                                                    {else}
+                                                        {$file['fileCreatedByUser']}
+                                                    {/if}
+                                                    ({$file['fileCreated']})
+                                                </p>
+                                                {if $file['fileSecret'] == 1}
+                                                {$text['tajne']|capitalize}
+                                                {/if}
+                                            </div>
+                                        </div>
+                                    </a>
+                                {/if}
+                                {if $file['fileCreatedBy'] == $user['userId'] || $report['reportOwner'] == $user['userId']}
+                                    <a class="btn btn-sm btn-danger w-100" title="{$text['smazat']}" href="/reports/{$report['reportId']}/edit/?deletefile={$file[fileId]}" onclick="return confirm('{$text['opravdusmazatsoubor']}')">{$text['smazatsoubor']}</a>
+                                {/if}
+                            </div>
+                        {/foreach}
+                    </div>
+                {/if}
+                <hr class="view-category-divider">
+                <h5><strong>{$text['pridatsoubor']|firstUpper}</strong></h5>
+                <form action="/reports/{$report['reportId']}/edit" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-12 col-md-4 offset-md-8">
+                            <div class="custom-file mb-2">
+                                <input type="file" class="custom-file-input" type="file" name="attachment" id="attachment">
+                                <label class="custom-file-label" for="attachment">{$text['vybratsoubor']|firstUpper}</label>
+                            </div>
+                            {if $user['aclSecret'] > 0}
+                                <div class="header-switch ml-0 mb-2">
+                                    <label class="toggle-control" for="setfilesecret">
+                                        <input type="checkbox" name="secret" id="setfilesecret" />
+                                        <span class="control"></span>
+                                    </label>
+                                    {$text['tajne']}
+                                </div>
+                            {/if}
+                            {if $user['aclGamemaster'] > 0}
+                                <div class="header-switch ml-0 mb-2">
+                                    <label class="toggle-control" for="setfilenotnew">
+                                        <input type="checkbox" name="nnotnew" id="setfilenotnew"/>
+                                        <span class="control"></span>
+                                    </label>
+                                    {$text['neninove']|firstUpper}
+                                </div>
+                            {/if}
+                            <input type="hidden" name="reportId" value="{$report['reportId']}" />
+                            <div class="w-100 text-right">
+                                <input class="btn btn-md btn-primary" type="submit" name="uploadfile" value="{$text['nahratsoubor']|firstUpper}" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-1">
+        <div class="col-12">
+            <div class="view-category-wrapper">
+                <p class="view-category-name">
+                    {$text['poznamky']|firstUpper}
+                </p>
+                {if $reportNotes != false}
+                    <div class="system-notes-wrapper">
+                        {foreach $reportNotes as $note}
+                            {if $note['noteCreatedBy'] == $user['userId'] || $note['noteSecret'] <= $user['aclSecret']}
+                                {if $note['noteSecret'] == 1}
+                                    <div class="system-note note-color-secret">
+                                        <span class="system-note-stamp">{$text['tajne']|capitalize}</span>
+                                        <p class="system-note-title">
+                                            {$note['noteTitle']}
+                                        </p>
+                                        <p>
+                                            {$note['noteNote']}
+                                        </p>
+                                        {if $note['noteCreatedBy'] == $user['userId'] || $report['reportOwner'] == $user['userId']}
+                                            <p><a class="delete" title="{$text['smazat']}" href="/procnote.php?deletenote={$note['noteId']}&amp;itemid={$report['reportId']}&amp;backurl=/reports/{$report['reportId']}/edit" onclick="return confirm('{$text['opravdusmazatpoznamku']}')">{$text['smazatpoznamku']}</a></p>
+                                        {/if}
+                                        <p class="system-note-creator">
+                                            {if $note['noteCreatedByPerson']}{$note['noteCreatedByPerson']}{else}{$note['noteCreatedByUser']}{/if} ({$note['noteCreated']})
+                                        </p>
+                                        <div class="system-note-peel">
+                                            <div class="system-note-peel-back"></div>
+                                        </div>
+                                    </div>
+                                {elseif $note['noteSecret'] == 2}
+                                    <div class="system-note note-color-personal">
+                                        <span class="system-note-stamp">{$text['soukrome']|capitalize}</span>
+                                        <p class="system-note-title">
+                                            {$note['noteTitle']}
+                                        </p>
+                                        <p>
+                                            {$note['noteNote']}
+                                        </p>
+                                        {if $note['noteCreatedBy'] == $user['userId'] || $report['reportOwner'] == $user['userId']}
+                                            <p><a class="delete" title="{$text['smazat']}" href="/procnote.php?deletenote={$note['noteId']}&amp;itemid={$report['reportId']}&amp;backurl=/reports/{$report['reportId']}/edit" onclick="return confirm('{$text['opravdusmazatpoznamku']}')">{$text['smazatpoznamku']}</a></p>
+                                        {/if}
+                                        <p class="system-note-creator">
+                                            {if $note['noteCreatedByPerson']}{$note['noteCreatedByPerson']}{else}{$note['noteCreatedByUser']}{/if} ({$note['noteCreated']})
+                                        </p>
+                                        <div class="system-note-peel">
+                                            <div class="system-note-peel-back"></div>
+                                        </div>
+                                    </div>
+                                {elseif $note['noteDeleted']}
+                                    <div class="system-note note-color-deleted">
+                                        <span class="system-note-stamp">{$text['smazano']|capitalize}</span>
+                                        <p class="system-note-title">
+                                            {$note['noteTitle']}
+                                        </p>
+                                        <p>
+                                            {$note['noteNote']}
+                                        </p>
+                                        {if $note['noteCreatedBy'] == $user['userId'] || $report['reportOwner'] == $user['userId']}
+                                            <p><a class="delete" title="{$text['smazat']}" href="/procnote.php?deletenote={$note['noteId']}&amp;itemid={$report['reportId']}&amp;backurl=/reports/{$report['reportId']}/edit" onclick="return confirm('{$text['opravdusmazatpoznamku']}')">{$text['smazatpoznamku']}</a></p>
+                                        {/if}
+                                        <p class="system-note-creator">
+                                            {if $note['noteCreatedByPerson']}{$note['noteCreatedByPerson']}{else}{$note['noteCreatedByUser']}{/if} ({$note['noteCreated']})
+                                        </p>
+                                        <div class="system-note-peel">
+                                            <div class="system-note-peel-back"></div>
+                                        </div>
+                                    </div>
+                                {else }
+                                    <div class="system-note note-color-default">
+                                        <p class="system-note-title">
+                                            {$note['noteTitle']}
+                                        </p>
+                                        <p>
+                                            {$note['noteNote']}
+                                        </p>
+                                        {if $note['noteCreatedBy'] == $user['userId'] || $report['reportOwner'] == $user['userId']}
+                                            <p><a class="delete" title="{$text['smazat']}" href="/procnote.php?deletenote={$note['noteId']}&amp;itemid={$report['reportId']}&amp;backurl=/reports/{$report['reportId']}/edit" onclick="return confirm('{$text['opravdusmazatpoznamku']}')">{$text['smazatpoznamku']}</a></p>
+                                        {/if}
+                                        <p class="system-note-creator">
+                                            {if $note['noteCreatedByPerson']}{$note['noteCreatedByPerson']}{else}{$note['noteCreatedByUser']}{/if} ({$note['noteCreated']})
+                                        </p>
+                                        <div class="system-note-peel">
+                                            <div class="system-note-peel-back"></div>
+                                        </div>
+                                    </div>
+                                {/if}
+                            {/if}
+                        {/foreach}
+                    </div>
+                {/if}
+                <hr class="view-category-divider">
+                <h5><strong>{$text['vytvoritpoznamku']|firstUpper}</strong></h5>
+                <form action="/procnote.php" method="post">
+                    <div class="row">
+                        <div class="col-12 col-md-4">
+                            <label class="mt-3" for="notetitle">
+                                {$text['nadpis']|firstUpper}:
+                            </label>
+                            <input class="form-control mb-2" type="text" name="title" id="notetitle" />
+                            {if $user['aclSecret'] > 0}
+                                <div class="header-switch ml-0 mb-2">
+                                    <label class="toggle-control" for="setnotesecret">
+                                        <input type="checkbox" name="secret" id="setnotesecret" />
+                                        <span class="control"></span>
+                                    </label>
+                                    {$text['tajne']}
+                                </div>
+                            {/if}
+                            <div class="header-switch ml-0 mb-2">
+                                <label class="toggle-control" for="setnotepersonal">
+                                    <input type="checkbox" name="private" id="setnotepersonal"/>
+                                    <span class="control"></span>
+                                </label>
+                                {$text['soukrome']}
+                            </div>
+                            {if $user['aclGamemaster'] > 0}
+                                <div class="header-switch ml-0 mb-2">
+                                    <label class="toggle-control" for="setnotenotnew">
+                                        <input type="checkbox" name="nnotnew" id="setnotenotnew"/>
+                                        <span class="control"></span>
+                                    </label>
+                                    {$text['neninove']|firstUpper}
+                                </div>
+                            {/if}
+                            <input type="hidden" name="itemid" value="{$report['reportId']}" />
+                            <input type="hidden" name="backurl" value="/reports/{$report['reportId']}/edit" />
+                            <input type="hidden" name="tableid" value="4" />
+                        </div>
+                        <div class="col-12 col-md-8">
+                            <textarea class="edit-textarea mb-2" cols="80" rows="7" name="note" id="notebody"></textarea>
+                        </div>
+                    </div>
+                    <div class="row text-right">
+                        <div class="col-12">
+                            <input class="btn btn-md btn-primary" type="submit" value="{$text['ulozitpoznamku']|firstUpper}" name="setnote"  />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

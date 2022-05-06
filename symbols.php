@@ -205,11 +205,13 @@ switch (@$filter['deleted']) {
                     }
             // konec seznamu přiřazených případů
             // generování seznamu přiřazených hlášení
+            $sqlFilter = DB_PREFIX."report.reportSecret<=".$user['aclSecret'];
+
             if ($user['aclRoot'] < 1) {
                 $sqlFilter .= ' AND ('.DB_PREFIX.'report.reportDeleted is null OR '.DB_PREFIX.'report.reportDeleted  < from_unixtime(1)) ';
             }
 
-            $sqlFilter .= " AND ".DB_PREFIX."report.reportSecret<=".$user['aclSecret'];
+
             $sql_s = "SELECT ".DB_PREFIX."report.reportId AS 'id', ".DB_PREFIX."report.reportName AS 'label'
             FROM ".DB_PREFIX."symbol2all, ".DB_PREFIX."report
             WHERE $sqlFilter AND ".DB_PREFIX."report.reportId=".DB_PREFIX."symbol2all.idrecord AND ".DB_PREFIX."symbol2all.idsymbol=".$rec['id']." AND ".DB_PREFIX."symbol2all.table=4

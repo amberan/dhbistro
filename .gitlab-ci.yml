@@ -39,6 +39,7 @@ build_test:
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH != "master"
 
 deploy_test:
+  resource_group: testing
   stage: deploy
   image: alpine
   needs:
@@ -87,6 +88,7 @@ build_prod:
     - if: $CI_COMMIT_BRANCH == "master"
 
 deploy_prod:
+  resource_group: production
   stage: deploy
   image: alpine
   needs:

@@ -57,8 +57,13 @@ if (isset($_POST['uploadfile']) && is_uploaded_file($_FILES['attachment']['tmp_n
     authorizedAccess(4, 4, $_POST['reportId']);
     $newname = Time().MD5(uniqid(Time().Rand()));
     move_uploaded_file($_FILES['attachment']['tmp_name'], './files/'.$newname);
+    if (isset($_POST['secret']) && $_POST['secret'] == 'on') {
+        $_POST['secret'] = 1;
+    } else {
+        $_POST['secret'] = 0;
+    }
 
-    $sql = "INSERT INTO ".DB_PREFIX."file (uniquename,originalname,mime,size,datum,iduser,idtable,iditem,secret) VALUES('".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".Time()."','".$user['userId']."','4','".$_POST['reportId']."',0".$_POST['secret'].")";
+    $sql = "INSERT INTO ".DB_PREFIX."file (uniquename,originalname,mime,size,datum,iduser,idtable,iditem,secret) VALUES('".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".Time()."','".$user['userId']."','4','".$_POST['reportId']."',".$_POST['secret'].")";
     mysqli_query($database, $sql);
     unreadRecords(4, $_POST['reportId']);
     $_SESSION['message'] = 'Soubor uložen';
@@ -117,7 +122,6 @@ if (!is_numeric($URL[2])  || $user['aclReport'] < 1 || mysqli_num_rows($reportQu
     deleteUnread(4, $URL[2]);
 
     $latteParameters['title'] = $text['hlaseni']." ".reportType($report['reportType']).": ".stripslashes($report['reportName']);
-    $latteParameters['actions'][] = ["/reports/$URL[2]/edit", $text['upravitreport']];
     $latteParameters['reportType'] = reportType();
     $latteParameters['reportParticipants'] = reportParticipants($URL[2]);
     $latteParameters['reportRole'] = reportRole();
@@ -127,7 +131,6 @@ if (!is_numeric($URL[2])  || $user['aclReport'] < 1 || mysqli_num_rows($reportQu
     $latteParameters['reportNotes'] = reportNotes($URL[2]);
     $latteParameters['reportStatus'] = reportStatus();
     $latteParameters['suitableUsers'] = listUsersSuitable();
-
     $latteParameters['report'] = $report;
     latteDrawTemplate('sparklet');
     latteDrawTemplate('report_edit');
