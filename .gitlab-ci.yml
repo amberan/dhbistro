@@ -35,8 +35,8 @@ build_test:
     - bistro-$CI_PIPELINE_ID.tgz
     expire_in: 1 days
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_BRANCH != "master"
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH != "master"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "master"
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "master"
 
 deploy_test:
   resource_group: testing
@@ -85,7 +85,7 @@ build_prod:
     - bistro-$CI_PIPELINE_ID.tgz
     expire_in: 1 days
   rules:
-    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
 
 deploy_prod:
   resource_group: production
@@ -116,7 +116,7 @@ deploy_prod:
       done
     - ssh $PROD_REMOTE "rm bistro-$CI_PIPELINE_ID.tgz"
   rules:
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
 
 code_quality:
   stage: test
