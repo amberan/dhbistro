@@ -29,6 +29,7 @@ if (isset($_POST['reportId'],$_POST['reportName'],$_POST['reportType']) && $user
     if (isset($_POST['reportArchivedCheck']) && !isset($_POST['reportArchived'])) {
         $sqlArchived = 'reportArchived=NOW(),';
     }
+    if (!isset($_POST['reportSecret'])) { $_POST['reportSecret'] = 0; }
     $updateSql = "UPDATE ".DB_PREFIX."report SET
     reportName='".$_POST['reportName']."',
     reportTask='".$_POST['reportTask']."',
