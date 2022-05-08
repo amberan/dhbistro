@@ -55,9 +55,9 @@ if (!isset($customFilter['sort'])) {
             $sqlFilter = DB_PREFIX."case.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."case.secret<=".$user['aclSecret'];
 
             $sql = "SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."symbol2all.iduser
-    FROM ".DB_PREFIX."case
-    LEFT JOIN ".DB_PREFIX."symbol2all ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."case.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']."
-    WHERE $sqlFilter ORDER BY ".$filterSqlSort;
+                FROM ".DB_PREFIX."case
+                LEFT JOIN ".DB_PREFIX."symbol2all ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."case.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']."
+                WHERE $sqlFilter ORDER BY ".$filterSqlSort;
             $res = mysqli_query($database, $sql); ?>
         <div id="in-form-table">
             <?php

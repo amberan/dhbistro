@@ -91,10 +91,10 @@ $latteParameters['title'] = 'Přiřazení symbolu osobě';
             filter();
             // vypis osob
             $sqlFilter = DB_PREFIX."person.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."person.secret<=".$user['aclSecret'];
-            $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol', ".DB_PREFIX."c2p.iduser
+            $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol'
                 FROM ".DB_PREFIX."person
-                LEFT JOIN ".DB_PREFIX."c2p ON ".DB_PREFIX."c2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']."
-                WHERE $sqlFilter AND ".DB_PREFIX."person.symbol is null ".$fsql_dead.$fsql_archiv." ORDER BY ".$filterSqlSort;
+                LEFT JOIN ".DB_PREFIX."symbol2all ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."person.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']."
+                WHERE $sqlFilter AND ".DB_PREFIX."person.symbol < 1 ".$fsql_dead.$fsql_archiv." ORDER BY ".$filterSqlSort;
             $res = mysqli_query($database, $sql); ?>
     <div id="in-form-table">
         <?php

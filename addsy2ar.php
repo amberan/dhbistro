@@ -38,24 +38,24 @@ $latteParameters['title'] = 'Přiřazení k hlášení k pripadu';
             }
             switch ($filterCat) {
       case 0: $filterSqlCat = ''; break;
-      case 1: $filterSqlCat = ' AND '.DB_PREFIX.'report.type=1 '; break;
-      case 2: $filterSqlCat = ' AND '.DB_PREFIX.'report.type=2 '; break;
+      case 1: $filterSqlCat = ' AND '.DB_PREFIX.'report.reportType=1 '; break;
+      case 2: $filterSqlCat = ' AND '.DB_PREFIX.'report.reportType=2 '; break;
       default: $filterSqlCat = '';
     }
             switch ($filterSort) {
-      case 1: $filterSqlSort = ' '.DB_PREFIX.'report.datum DESC '; break;
-      case 2: $filterSqlSort = ' '.DB_PREFIX.'report.datum ASC '; break;
-      case 3: $filterSqlSort = ' '.DB_PREFIX.'user.login ASC '; break;
-      case 4: $filterSqlSort = ' '.DB_PREFIX.'user.login DESC '; break;
-      case 5: $filterSqlSort = ' '.DB_PREFIX.'report.adatum ASC '; break;
-      case 6: $filterSqlSort = ' '.DB_PREFIX.'report.adatum DESC '; break;
-      default: $filterSqlSort = ' '.DB_PREFIX.'report.adatum DESC ';
+      case 1: $filterSqlSort = ' '.DB_PREFIX.'report.reportModified DESC '; break;
+      case 2: $filterSqlSort = ' '.DB_PREFIX.'report.reportModified ASC '; break;
+      case 3: $filterSqlSort = ' '.DB_PREFIX.'user.reportModifiedBy ASC '; break;
+      case 4: $filterSqlSort = ' '.DB_PREFIX.'user.reportModifiedBy DESC '; break;
+      case 5: $filterSqlSort = ' '.DB_PREFIX.'report.reportEventDate ASC '; break;
+      case 6: $filterSqlSort = ' '.DB_PREFIX.'report.reportEventDate DESC '; break;
+      default: $filterSqlSort = ' '.DB_PREFIX.'report.reportEventDate DESC ';
     }
             switch ($filterStat) {
         case 0: $fsql_stat = ''; break;
-        case 1: $fsql_stat = ' AND '.DB_PREFIX.'report.status=0 '; break;
-        case 2: $fsql_stat = ' AND '.DB_PREFIX.'report.status=1 '; break;
-        case 3: $fsql_stat = ' AND '.DB_PREFIX.'report.status=2 '; break;
+        case 1: $fsql_stat = ' AND '.DB_PREFIX.'report.reportStatus=0 '; break;
+        case 2: $fsql_stat = ' AND '.DB_PREFIX.'report.reportStatus=1 '; break;
+        case 3: $fsql_stat = ' AND '.DB_PREFIX.'report.reportStatus=2 '; break;
         default: $fsql_stat = '';
     }
             function filter()
@@ -92,11 +92,11 @@ seřadit je podle <select name="sort">
             }
             filter();
             // vypis hlášení
+            $sqlFilter = DB_PREFIX."report.reportSecret<=".$user['aclSecret'];
+
             if ($user['aclRoot'] < 1) {
                 $sqlFilter .= ' AND ('.DB_PREFIX.'report.reportDeleted is null OR '.DB_PREFIX.'report.reportDeleted  < from_unixtime(1)) ';
             }
-
-            $sqlFilter .= " AND ".DB_PREFIX."report.reportSecret<=".$user['aclSecret'];
 
             $sql = "SELECT
 			".DB_PREFIX."report.reportId AS 'id',
@@ -106,8 +106,8 @@ seřadit je podle <select name="sort">
 	        ".DB_PREFIX."user.userName AS 'autor',
 	        ".DB_PREFIX."report.reportType AS 'type',
 	        ".DB_PREFIX."symbol2all.iduser
-	        	FROM ".DB_PREFIX."user, ".DB_PREFIX."report LEFT JOIN ".DB_PREFIX."symbol2all
-	        	ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."report.reportId AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4
+	        	FROM ".DB_PREFIX."user, ".DB_PREFIX."report
+                LEFT JOIN ".DB_PREFIX."symbol2all ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."report.reportId AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4
 				WHERE $sqlFilter AND ".DB_PREFIX."report.reportOwner=".DB_PREFIX."user.userId ".$filterSqlCat.$fsql_stat."
 				ORDER BY ".$filterSqlSort;
             $res = mysqli_query($database, $sql); ?>
@@ -115,7 +115,8 @@ seřadit je podle <select name="sort">
         <?php
     while ($rec = mysqli_fetch_assoc($res)) {
         echo '<div class="news_div '.(($rec['type'] == 1) ? 'game_news' : 'system_news').'">
-	<div class="news_head"><input type="checkbox" name="report[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser']) ? ' checked="checked"' : '').' /><strong><a href="/reports/'.$rec['id'].'">'.StripSlashes($rec['label']).'</a></strong></span>';
+	<div class="news_head">
+    <input type="checkbox" name="report[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser']) ? ' checked="checked"' : '').' /><strong><a href="/reports/'.$rec['id'].'">'.StripSlashes($rec['label']).'</a></strong></span>';
 
         echo '<p><span>['.webdatetime($rec['datum']).']</span> '.$rec['autor'].'<br /> <strong>Úkol: </strong>'
     .StripSlashes($rec['task']).'</p></div>

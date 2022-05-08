@@ -21,6 +21,16 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 
 TODO: check all 'report (169) and  "report (191) in code - columns renamed, status=3 > reportArchived > timestamp, deleted > reportDeleted timestamp
 
+## 1.8.12
+### Fixed
+- Fixed: mobile menu
+- Fixed: report attachment #242
+- Fixed: report task and notSecret #108
+- Fixed: report dates #241
+- Fixed: report on dashboard #241
+- Fixed: person edit link #241
+- Fixed: symbol linking #244
+
 ## 1.8.11 - 2022-05-06
 ### Changed
 - Refactored: report new form #108
