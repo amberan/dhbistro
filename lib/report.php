@@ -254,6 +254,7 @@ function reportsAssignedTo($userid): array
         // }
         $fileSql = "SELECT
             ".DB_PREFIX."file.*,
+            ".DB_PREFIX."file.id as fileId,
             ".DB_PREFIX."user.userName,
             ".DB_PREFIX."person.*
             FROM ".DB_PREFIX."file
@@ -267,7 +268,7 @@ function reportsAssignedTo($userid): array
                 if (in_array($file['mime'], $config['mime-image'], true)) {
                     $image = true;
                 }
-                $files[] = array(   'fileId' => $file['id'],
+                $files[] = array(   'fileId' => $file['fileId'],
                                     'fileMime' => $file['mime'],
                                     'fileSecret' => $file['secret'],
                                     'fileHas' => $file['uniquename'],
