@@ -343,9 +343,9 @@
                 <div class="view-symbol-wrapper">
                     {if $reportSymbols != false}
                         {foreach $reportSymbols as $symbol}
-                            <a href="/readsymbol.php?rid={$symbol['symbolId']}"><img {if $symbol['symbolDeleted'] > 0}class="deleted"{/if} {ifset $symbol['symbolSecret']}class="secret"{/ifset} src="/files/symbols/{$symbol['symbolHash']}" alt="{if $symbol['symbolCreatedByPerson']}{$symbol['symbolCreatedByPerson']}{else}{$symbol['symbolCreatedByUser']}{/if} {$symbol['symbolCreated']}" /></a>
-                            {if $symbol['symbolCreatedBy'] == $user['userId'] || $report['reportOwner'] == $user['userId'] || true}
-                                <a class="delete" title="{$text['smazat']}" href="/reports/{$report['reportId']}/edit/unlinksymbol={$symbol[symbolId]}" onclick="return confirm('{$text['opravduodpojitsymbol']}')">{$text['odpojitsymbol']}</a>
+                            <a href="/readsymbol.php?rid={$symbol['symbolId']}"><img {if $symbol['symbolDeleted'] > 0}class="deleted"{/if} {ifset $symbol['symbolSecret']}class="secret"{/ifset} src="/file/symbol/{$symbol['symbolId']}" alt="{if $symbol['symbolCreatedByPerson']}{$symbol['symbolCreatedByPerson']}{else}{$symbol['symbolCreatedByUser']}{/if} {$symbol['symbolCreated']}" /></a>
+                            {if $symbol['symbolCreatedBy'] == $user['userId'] || $report['reportOwner'] == $user['userId']}
+                                <a class="btn btn-sm btn-danger w-100" title="{$text['smazat']}" href="/reports/{$report['reportId']}/edit/unlinksymbol={$symbol[symbolId]}" onclick="return confirm('{$text['opravduodpojitsymbol']}')">{$text['odpojitsymbol']}</a>
                             {/if}
                         {/foreach}
                     {/if}
@@ -403,8 +403,8 @@
                                         </div>
                                     </a>
                                 {/if}
-                                {if $file['fileCreatedBy'] == $user['userId'] || $report['reportOwner'] == $user['userId']}
-                                    <a class="btn btn-sm btn-danger w-100" title="{$text['smazat']}" href="/reports/{$report['reportId']}/edit/?deletefile={$file[fileId]}" onclick="return confirm('{$text['opravdusmazatsoubor']}')">{$text['smazatsoubor']}</a>
+                                {if $file['fileCreatedBy'] == $user['userId'] || $report['reportOwner'] == $user['userId'] || $user['aclReport'] > 1}
+                                   <a class="btn btn-sm btn-danger w-100" title="{$text['smazat']}" href="/reports/{$report['reportId']}/edit/?deletefile={$file[fileId]}" onclick="return confirm('{$text['opravdusmazatsoubor']}')">{$text['smazatsoubor']}</a>
                                 {/if}
                             </div>
                         {/foreach}

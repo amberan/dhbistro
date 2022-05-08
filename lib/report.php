@@ -177,6 +177,7 @@ function reportsAssignedTo($userid): array
         $symbolSql = "SELECT
             ".DB_PREFIX."symbol2all.*,
             ".DB_PREFIX."symbol.*,
+            ".DB_PREFIX."symbol.id as symbolId,
             ".DB_PREFIX."user.userName,
             ".DB_PREFIX."person.*
             FROM ".DB_PREFIX."symbol2all
@@ -190,7 +191,7 @@ function reportsAssignedTo($userid): array
 
         if ($symbolList = mysqli_query($database, $symbolSql)) {
             while ($symbol = mysqli_fetch_assoc($symbolList)) {
-                $symbols[] = array( 'symbolId' => $symbol['id'],
+                $symbols[] = array( 'symbolId' => $symbol['symbolId'],
                                     'symbolHash' => $symbol['symbol'],
                                     'symbolDeleted' => $symbol['deleted'],
                                     'symbolCreated' => webdateTime($symbol['created']),
@@ -255,11 +256,13 @@ function reportsAssignedTo($userid): array
         $fileSql = "SELECT
             ".DB_PREFIX."file.*,
             ".DB_PREFIX."file.id as fileId,
+            ".DB_PREFIX."file.datum as fileCreated,
+            ".DB_PREFIX."file.iduser as fileCreatedBy,
             ".DB_PREFIX."user.userName,
             ".DB_PREFIX."person.*
             FROM ".DB_PREFIX."file
-            JOIN ".DB_PREFIX."user ON ".DB_PREFIX."file.iduser = ".DB_PREFIX."user.userId
-            JOIN ".DB_PREFIX."person ON ".DB_PREFIX."user.personId = ".DB_PREFIX."person.id
+            LEFT JOIN ".DB_PREFIX."user ON ".DB_PREFIX."file.iduser = ".DB_PREFIX."user.userId
+            LEFT JOIN ".DB_PREFIX."person ON ".DB_PREFIX."user.personId = ".DB_PREFIX."person.id
             WHERE $sqlFilter AND ".DB_PREFIX."file.iditem=$reportId AND ".DB_PREFIX."file.idtable=4
             ORDER BY ".DB_PREFIX."file.datum ASC";
         if ($fileList = mysqli_query($database, $fileSql)) {
@@ -273,10 +276,10 @@ function reportsAssignedTo($userid): array
                                     'fileSecret' => $file['secret'],
                                     'fileHas' => $file['uniquename'],
                                     'fileName' => $file['originalname'],
-                                    'fileCreatedBy' => $file['iduser'],
+                                    'fileCreatedBy' => $file['fileCreatedBy'],
                                     'fileCreatedByPerson' => $file['name'].' '.$file['surname'],
                                     'fileCreatedByUser' => $file['userName'],
-                                    'fileCreated' => webdateTime($file['datum']),
+                                    'fileCreated' => webDateTime($file['fileCreated']),
                                     'fileIsImage' => $image);
             }
         }

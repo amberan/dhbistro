@@ -118,7 +118,7 @@ seřadit je podle <select name="sort">
 	<div class="news_head">
     <input type="checkbox" name="report[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser']) ? ' checked="checked"' : '').' /><strong><a href="/reports/'.$rec['id'].'">'.StripSlashes($rec['label']).'</a></strong></span>';
 
-        echo '<p><span>['.webdatetime($rec['datum']).']</span> '.$rec['autor'].'<br /> <strong>Úkol: </strong>'
+        echo '<p><span>['.($rec['datum']).']</span> '.$rec['autor'].'<br /> <strong>Úkol: </strong>'
     .StripSlashes($rec['task']).'</p></div>
 </div>';
     } ?>
