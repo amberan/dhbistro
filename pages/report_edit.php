@@ -84,7 +84,7 @@ if (isset($_POST['uploadfile']) && is_uploaded_file($_FILES['attachment']['tmp_n
             WHERE ".DB_PREFIX."file.id=".$_GET['deletefile'];
         $deleteCheckQuery = mysqli_query($database, $deleteCheckSql);
         $deleteCheck = mysqli_fetch_assoc($deleteCheckQuery);
-        if ($deleteCheck['iduser'] == $user['userId'] || $deleteCheck['reportOwner'] == $user['userId']) {
+        if ($deleteCheck['iduser'] == $user['userId'] || $deleteCheck['reportOwner'] == $user['userId'] || $userId['aclReport'] > 1) {
             UnLink('./files/'.$deleteCheck['uniquename']);
             mysqli_query($database, "DELETE FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
             $_SESSION['message'] = 'Soubor odstranen';

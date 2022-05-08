@@ -160,7 +160,7 @@
                 </p>
                 <div class="view-symbol-wrapper">
                         {foreach $reportSymbols as $symbol}
-                            <a class="mb-2 mr-2" href="/readsymbol.php?rid={$symbol['symbolId']}"><img {if $symbol['symbolDeleted'] > 0}class="deleted"{/if} {ifset $symbol['symbolSecret']}class="secret"{/ifset} src="/files/symbols/{$symbol['symbolId']}" alt="{if $symbol['symbolCreatedByPerson']}{$symbol['symbolCreatedByPerson']}{else}{$symbol['symbolCreatedByUser']}{/if} {$symbol['symbolCreated']}" /></a>
+                           <a class="mb-2 mr-2" href="/readsymbol.php?rid={$symbol['symbolId']}"><img {if $symbol['symbolDeleted'] > 0}class="deleted"{/if} {ifset $symbol['symbolSecret']}class="secret"{/ifset} src="/file/symbol/{$symbol['symbolId']}" alt="{if $symbol['symbolCreatedByPerson']}{$symbol['symbolCreatedByPerson']}{else}{$symbol['symbolCreatedByUser']}{/if} {$symbol['symbolCreated']}" /></a>
                         {/foreach}
                 </div>
             </div>

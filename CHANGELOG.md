@@ -30,6 +30,7 @@ TODO: check all 'report (169) and  "report (191) in code - columns renamed, stat
 - Fixed: report on dashboard #241
 - Fixed: person edit link #241
 - Fixed: symbol linking #244
+- Fixed: linked symbols not showing #108
 
 ## 1.8.11 - 2022-05-06
 ### Changed
