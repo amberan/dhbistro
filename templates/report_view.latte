@@ -31,9 +31,9 @@
         <div class="col-12 col-md-6">
             <div class="view-category-wrapper">
                 <p class="view-category-name">{$text['hlavickacas']}</p>
-                <p><strong>{$text['probehlo']}</strong>: {$report['reportEventStart']} - {$report['reportEventEnd']} {$report['reportEventDate']}</p>
-                <p><strong>{$text['vytvoril']}</strong>: {$report['reportCreatedByName']} {$report['reportCreated']}</p>
-                <p><strong>{$text['posledniuprava']}</strong>: {$report['reportModifiedByName']} {$report['reportModified']}</p>
+                <p><strong>{$text['probehlo']}</strong>: {$report['reportEventStart']} - {$report['reportEventEnd']} {$report['reportEventDate']|date:'d.m.Y'}</p>
+                <p><strong>{$text['vytvoril']}</strong>: {$report['reportCreatedByName']} {$report['reportCreated']|date:'d.m.Y'}</p>
+                <p><strong>{$text['posledniuprava']}</strong>: {$report['reportModifiedByName']} {$report['reportModified']|date:'d.m.Y'}</p>
             </div>
         </div>
     </div>

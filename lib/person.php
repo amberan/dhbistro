@@ -17,7 +17,7 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 function personRead($personId): array
 {
     global $database, $user, $text;
-    $sql = 'SELECT * FROM '.DB_PREFIX.'person WHERE id = $personId AND '.$user['sqlDeleted'].' AND '.$user['sqlDeleted'];
+    $sql = 'SELECT * FROM '.DB_PREFIX.'person WHERE id = '.$personId.' AND '.$user['sqlDeleted'].' AND '.$user['sqlDeleted'];
     $query = mysqli_query($database, $sql);
     if (mysqli_num_rows($query) > 0) {
         $person = mysqli_fetch_assoc($query);
@@ -49,7 +49,7 @@ function personList($where = 1, $order = 1): array
     if (mb_strlen($order) < 1) {
         $order = 1;
     }
-    $sql = 'SELECT * FROM '.DB_PREFIX.'person WHERE ($where) AND '.$user['sqlDeleted'].' AND '.$user['sqlSecret'].' ORDER BY $order';
+    $sql = 'SELECT * FROM '.DB_PREFIX.'person WHERE ('.$where.') AND '.$user['sqlDeleted'].' AND '.$user['sqlSecret'].' ORDER BY '.$order;
     $query = mysqli_query($database, $sql);
     //echo mysqli_num_rows($query);
     if (mysqli_num_rows($query) > 0) {

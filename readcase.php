@@ -96,7 +96,7 @@ if (is_numeric($_REQUEST['rid'])) {
                 while ($rec_p = mysqli_fetch_assoc($res)) {
                     $groups[] = '<a href="./readperson.php?rid='.$rec_p['id'].'">'.stripslashes($rec_p['surname']).', '.stripslashes($rec_p['name']).'</a>';
                 }
-                echo implode($groups, ', ');
+                echo implode(', ', $groups);
             } else {
                 echo "<em>K případu nejsou připojeny žádné osoby.</em>";
             } ?>

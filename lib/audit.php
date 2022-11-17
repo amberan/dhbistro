@@ -8,7 +8,7 @@ function authorizedAccess($recordType, $operationType, $idrecord): void
 {
     global $database,$user;
     if (isset($user)) {
-        $auditSql = "INSERT INTO ".DB_PREFIX."audit_trail VALUES('','".$user['userId']."','".time()."','".$operationType."','".$recordType."','".$idrecord."','".$user['ipv4']."','".$user['aclGamemaster']."')";
+        $auditSql = "INSERT INTO ".DB_PREFIX."audit_trail (iduser, time, operation_type, record_type, idrecord, ip, org) VALUES('".$user['userId']."','".time()."','".$operationType."','".$recordType."','".$idrecord."','".$user['ipv4']."','".$user['aclGamemaster']."')";
         mysqli_query($database, $auditSql);
     }
 }

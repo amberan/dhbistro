@@ -44,13 +44,13 @@ mainMenu();
 	</div>
 	<?php
     if ($user['aclUser']) { //TODO PERMISSION NOTE?
-        $sql = "SELECT id, login FROM ".DB_PREFIX."user WHERE deleted=0 ORDER BY login ASC";
+        $sql = "SELECT userId, userName FROM ".DB_PREFIX."user WHERE userDeleted=0 ORDER BY userName ASC";
         $res_n = mysqli_query($database, $sql);
         echo '<div>
 		<label for="nowner">Vlastník:</label>
 		<select name="nowner" id="nowner">';
         while ($rec_n = mysqli_fetch_assoc($res_n)) {
-            echo '<option value="'.$rec_n['id'].'"'.(($rec_n['id'] == $user['userId']) ? ' selected="selected"' : '').'>'.$rec_n['login'].'</option>';
+            echo '<option value="'.$rec_n['userId'].'"'.(($rec_n['userId'] == $user['userId']) ? ' selected="selected"' : '').'>'.$rec_n['userName'].'</option>';
         };
         echo '</select>
 			  </div>';

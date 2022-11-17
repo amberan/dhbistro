@@ -22,6 +22,9 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 TODO: check all 'report (169) and  "report (191) in code - columns renamed, status=3 > reportArchived > timestamp, deleted > reportDeleted timestamp
 
 ## 1.8.12
+### Changed 
+- Refactored: symbols in top menu #246
+- Refactored: external links from menu open in new tab/window #230
 ### Fixed
 - Fixed: mobile menu
 - Fixed: report attachment #242
@@ -31,6 +34,9 @@ TODO: check all 'report (169) and  "report (191) in code - columns renamed, stat
 - Fixed: person edit link #241
 - Fixed: symbol linking #244
 - Fixed: linked symbols not showing #108
+- Fixed: user to person link #248  
+### Security 
+- Feature: upgrade to PHP 8.1 #250 
 
 ## 1.8.11 - 2022-05-06
 ### Changed
