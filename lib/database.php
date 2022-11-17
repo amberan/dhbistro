@@ -17,7 +17,7 @@ function DBconnect($configDB)
 function DBTest($configDB)
 {
     $dbtest = @mysqli_connect($configDB['dbHost'], $configDB['dbUser'], $configDB['dbPassword'], $configDB['dbDatabase']);
-    if (mysqli_connect_errno($dbtest)) {
+    if (mysqli_connect_errno()) {
         return false;
     }
     return true;

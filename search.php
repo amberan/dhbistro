@@ -13,16 +13,17 @@ sparklets('<strong>vyhledávání</strong>', '<a href="symbol_search.php">vyhled
 // default SQL filters
 $searchContitions = " AND secret<=".$user['aclSecret'];
 $searchContitions .= "  AND deleted<=".$user['aclGamemaster']." ";
+$sqlFilter = "deleted in (0,".$user['aclRoot'].") AND secret<=".$user['aclSecret'];
 
 //TODO SORTING created/modified/title/status/type
 
-if (sizeof(@$_POST['filter']) > 0) {
+if (isset($_POST['filter']) && sizeof($_POST['filter']) > 0) {
     filterSet('search', $_POST['filter']);
 }
 $filter = filterGet('search');
-$sqlFilter = "deleted in (0,".$user['aclRoot'].") AND secret<=".$user['aclSecret'];
 if (!isset($filter['secret'])) {
     $sqlFilter .= ' AND secret = 0 ';
+    $sqlFilterReport .= ' AND reportSecret = 0';
 }
 
 //TODO search legacy overload
@@ -108,21 +109,24 @@ $latteParameters['filter'] = $filter;
 </table>';
 
             /* Hlášení */
+            $searchContitionsReport = " AND reportSecret<=".$user['aclSecret'];       
+            $searchContitionsReport .= "  AND (".DB_PREFIX."report.reportDeleted is null OR ".DB_PREFIX."report.reportDeleted  < from_unixtime(1)) ";
             $fsql_archiv = '';
             if ($filter['archived'] != 'on') {
                 $fsql_archiv = ' AND ('.DB_PREFIX.'report.reportArchived is null OR '.DB_PREFIX.'report.reportArchived  < from_unixtime(1)) ';
             }
             $sql = "
-    SELECT ".DB_PREFIX."report.reportCreated as date_created, ".DB_PREFIX."report.reportModified as date_changed,  ".DB_PREFIX."report.reportName , ".DB_PREFIX."report.reportId AS 'id', ".DB_PREFIX."report.reportStatus,
+    SELECT ".DB_PREFIX."report.reportCreated as date_created, ".DB_PREFIX."report.reportModified as date_changed,  ".DB_PREFIX."report.reportName , ".DB_PREFIX."report.reportId, ".DB_PREFIX."report.reportStatus,
     ".DB_PREFIX."report.reportSecret, ".DB_PREFIX."report.reportDeleted
     FROM ".DB_PREFIX."report
-	WHERE ".$sqlFilter." AND (label LIKE '%$searchedfor%' or task LIKE  '%$searchedfor%' or summary LIKE  '%$searchedfor%' or impacts LIKE  '%$searchedfor%' or details LIKE  '%$searchedfor%')"
-    .$searchContitions.$fsql_archiv." ORDER BY 5 * MATCH(label) AGAINST ('$searchedfor')
-    + 3 * MATCH(summary) AGAINST ('$searchedfor')
-    + 2 * MATCH(task) AGAINST ('$searchedfor')
-    + 2 * MATCH(impacts) AGAINST ('$searchedfor')
-	+ MATCH(details) AGAINST ('$searchedfor') DESC";
-            $res = mysqli_query($database, $sql); ?>
+	WHERE (reportTask LIKE  '%".$searchedfor."%' or reportDetail LIKE  '%".$searchedfor."%' or reportImpact LIKE  '%".$searchedfor."%' or reportInput LIKE  '%".$searchedfor."%'  or reportSummary LIKE  '%".$searchedfor."%' )"
+    .$searchContitionsReport.$fsql_archiv." ORDER BY 5 * MATCH(reportInput) AGAINST ('".$searchedfor."')
+    + 3 * MATCH(reportSummary) AGAINST ('".$searchedfor."')
+    + 2 * MATCH(reportTask) AGAINST ('".$searchedfor."')
+    + 2 * MATCH(reportImpact) AGAINST ('".$searchedfor."')
+	+ MATCH(reportDetail) AGAINST ('".$searchedfor."') DESC";
+            $res = mysqli_query($database, $sql); 
+          ?>
             <h3>Hlášení</h3>
             <table>
                 <thead>
@@ -139,11 +143,11 @@ $latteParameters['filter'] = $filter;
         $even = 0;
             while ($rec = mysqli_fetch_assoc($res)) {
                 echo '<tr class="'.($even % 2 === 0 ? 'even' : 'odd').'">
-	<td><a href="/reports/'.$rec['id'].'">'.stripslashes($rec['label']).'</a></td>
-		<td>'.webdate($rec['date_created']).'</td>
-		<td>'.webdate($rec['date_changed']).'</td>
+	<td><a href="/reports/'.$rec['reportId'].'">'.stripslashes($rec['reportName']).'</a></td>
+		<td>'.date('d.m.Y', strtotime($rec['date_created'])).'</td>
+		<td>'.date('d.m.Y', strtotime($rec['date_changed'])).'</td>
         <td>';
-                switch ($rec['status']) {
+                switch ($rec['reportStatus']) { //webdate
                 case 0:
                     echo 'Rozpracované';
                     break;
@@ -159,10 +163,10 @@ $latteParameters['filter'] = $filter;
                 default:
                 ;
         }
-                if ($rec['secret'] > 0) {
-                    echo ', Tajné ['.$rec['secret'].']';
+                if ($rec['reportSecret'] > 0) {
+                    echo ', Tajné ['.$rec['reportSecret'].']';
                 }
-                if ($rec['deleted'] > 0) {
+                if ($rec['reportDeleted'] > 0) {
                     echo ', Smazané ';
                 }
                 echo '</td></tr>';
@@ -355,13 +359,13 @@ $latteParameters['filter'] = $filter;
                             break;
                         case 4:
                             $res_note = mysqli_query($database, "
-                                SELECT ".DB_PREFIX."report.reportName AS 'label', ".DB_PREFIX."report.reportId AS 'id', ".DB_PREFIX."report.reportSecret AS 'secret'
+                                SELECT ".DB_PREFIX."report.reportName , ".DB_PREFIX."report.reportId, ".DB_PREFIX."report.reportSecret AS 'secret'
                                 FROM ".DB_PREFIX."report
-                                WHERE id = ".$rec['iditem']);
+                                WHERE reportId = ".$rec['iditem']);
                             while ($rec_note = mysqli_fetch_assoc($res_note)) {
-                                $notetitle = $rec_note['label'];
+                                $notetitle = $rec_note['reportName'];
                                 $type = "Hlášení";
-                                $linktype = "/reports/".$rec_note['id'];
+                                $linktype = "/reports/".$rec_note['reportId'];
                             }
                             break;
                         default:

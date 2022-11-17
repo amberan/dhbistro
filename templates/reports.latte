@@ -126,14 +126,14 @@
                                     {if $report['reportOwnerName'] }{$report['reportOwnerName']}{else}{$report['reportOwnerUserName']}{/if}
                                 </td>
                                 <td class="table-w-full-cell text-center">
-                                    {if $report['reportModified']}{if $report['reportEventStart'] && $report['reportEventEnd']}{$report['reportEventStart']} - {$report['reportEventEnd']}{/if} {$report['reportModified']|date:'%d.%m.%Y'}{else}<em>{$text['neznamo']}</em>{/if}
+                                    {if $report['reportModified']}{if $report['reportEventStart'] && $report['reportEventEnd']}{$report['reportEventStart']} - {$report['reportEventEnd']}{/if} {$report['reportModified']|date:'d.m.Y'}{else}<em>{$text['neznamo']}</em>{/if}
                                 </td>
                                 <td class="tablet-no-show text-center">
-                                    {if $report['reportCreated']} {$report['reportCreated']|date:'%d.%m.%Y'}{else}<em>{$text['neznamo']}</em>{/if}<br/>
+                                    {if $report['reportCreated']} {$report['reportCreated']|date:'d.m.Y'}{else}<em>{$text['neznamo']}</em>{/if}<br/>
                                     {if $report['reportCreatedByName']}{$report['reportCreatedByName']}{else}{$report['reportCreatedByUserName']}{/if}
                                 </td>
                                 <td class="tablet-no-show text-center">
-                                    {$report['reportModified']|date:'%d.%m.%Y'}<br/>
+                                    {$report['reportModified']|date:'d.m.Y'}<br/>
                                     {if $report['reportModifiedByName']}{$report['reportModifiedByName']}{else}{$report['reportModifiedByUserName']}{/if}
                                 </td>
                                 <td class="mobile-no-show">

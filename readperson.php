@@ -178,7 +178,7 @@ latteDrawTemplate("header");
                 while ($rec_c = mysqli_fetch_assoc($res_c)) {
                     $cases[] = '<a href="./readcase.php?rid='.$rec_c['id'].'">'.stripslashes($rec_c['title']).'</a>';
                 }
-                echo implode($cases, '<br />');
+                echo implode( '<br />', $cases);
             } else {
                 echo 'Osoba nefiguruje v žádném případu.';
             } ?></p>

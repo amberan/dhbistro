@@ -133,7 +133,7 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
 		<?php //generování seznamu přiložených souborů
             $sql = "SELECT ".DB_PREFIX."file.iduser AS 'iduser', ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.secret AS 'secret', ".DB_PREFIX."file.id AS 'id'
             FROM ".DB_PREFIX."file
-            WHERE ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=3 AND ".DB_PREFIX."file.secret <= ".$user[aclSecret]."
+            WHERE ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=3 AND ".DB_PREFIX."file.secret <= ".$user['aclSecret']."
             ORDER BY ".DB_PREFIX."file.originalname ASC";
 
             $res = mysqli_query($database, $sql);
