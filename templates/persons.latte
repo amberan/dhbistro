@@ -153,9 +153,9 @@
                                     <a href="tel:{$person['phone']}">{$person['phone']}</a>
                                 </td>
                                 <td class="tablet-no-show text-center">
-                                    {if $person['date_created']}<em>{$person['date_created']|date:'%d.%m.%Y'}{else}{$text['neznamo']}</em>{/if}
+                                    {if $person['date_created']}<em>{$person['date_created']|date:'d.m.Y'}{else}{$text['neznamo']}</em>{/if}
                                 </td>
-                                <td class="tablet-no-show text-center"><em>{$person['date_changed']|date:'%d.%m.%Y'}</em></td>
+                                <td class="tablet-no-show text-center"><em>{$person['date_changed']|date:'d.m.Y'}</em></td>
                                 <td class="table-w-full-cell">
                                     <div class="table-no-wrap-right">
                                         {if $user['aclPerson'] AND !$person['deleted']}

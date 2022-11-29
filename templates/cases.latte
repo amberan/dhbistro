@@ -75,9 +75,9 @@
                                     {/if}
                                 </td>
                                 <td class="mobile-no-show text-center">
-                                    {if $cases['caseCreated']} {$cases['caseCreated']|date:'%d.%m.%Y'}{else}<em>{$text['neznamo']}</em>{/if}
+                                    {if $cases['caseCreated']} {$cases['caseCreated']|date:'d.m.Y'}{else}<em>{$text['neznamo']}</em>{/if}
                                 </td>
-                                <td class="text-center"><em>{$cases['date_changed']|date:'%d.%m.%Y'}</em></td>
+                                <td class="text-center"><em>{$cases['date_changed']|date:'d.m.Y'}</em></td>
                                 <td>
                                     {if $user['aclCase'] AND !$cases['deleted']}
                                         <a class="btn btn-sm btn-info btn-brick mb-1" href="/editcase.php?rid={$cases['id']}" alt="{$text[editpripad]}">

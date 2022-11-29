@@ -8,14 +8,12 @@ Debugger::enable(Debugger::DETECT,$config['folder_logs']);
 if (isset($URL[2])) {
     $fileType = $URL[2];
 }
-if (isset($URL[3]) and is_numeric($URL[3])) {
-    $fileId = $URL[3];
-}
-
 if (isset($fileType)) {
-    $requestedFile = fileIdentify($fileType,$fileId);
-
-    if (strlen($requestedFile['fileName']) != 0 or strlen($requestedFile['fileHash']) != 0) {
+    if (isset($URL[3]) and is_numeric($URL[3])) {
+        $fileId = $URL[3];
+        $requestedFile = fileIdentify($fileType,$fileId);
+    }
+    if (isset($requestedFile) && $requestedFile) {
         fileGet($requestedFile);
     } else {
         filePlaceholder($fileType);

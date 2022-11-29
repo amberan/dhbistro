@@ -70,9 +70,9 @@
                                     {/if}
                                 </td>
                                 <td>
-                                    {if $groups['groupCreated']} {$groups['groupCreated']|date:'%d.%m.%Y'}{else}<em>{$text['neznamo']}</em>{/if}
+                                    {if $groups['groupCreated']} {$groups['groupCreated']|date:'d.m.Y'}{else}<em>{$text['neznamo']}</em>{/if}
                                 </td>
-                                <td><em>{$groups['date_changed']|date:'%d.%m.%Y'}</em></td>
+                                <td><em>{$groups['date_changed']|date:'d.m.Y'}</em></td>
                                 <td>
                                     {if $user['aclCase'] AND !$groups['deleted']}
                                         <a class="btn btn-sm btn-info btn-brick mb-1" href="/editgroup.php?rid={$groups['id']}" alt="{$text[upravitskupinu]}">

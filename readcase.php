@@ -119,7 +119,7 @@ if (is_numeric($_REQUEST['rid'])) {
                 if ($i == 1) {
                     echo '<ul id="pripady">';
                 } ?>
-					<li><a href="/reports/<?php echo $perc['id']; ?>"><?php echo $perc['label']; ?></a> <span class="top">[ <strong><?php echo $perc['type'] == 1 ? 'Výjezd' : ($perc['type'] == 2 ? 'Výslech' : 'Hlášení'); ?></strong> | <strong>Ze dne:</strong> <?php echo date('d.m.Y', $perc['adatum']); ?> | <strong>Vyhotovil:</strong> <?php echo $perc['user']; ?> ]</span> - <?php echo $perc['task']; ?></li>
+					<li><a href="/reports/<?php echo $perc['id']; ?>"><?php echo $perc['label']; ?></a> <span class="top">[ <strong><?php echo $perc['type'] == 1 ? 'Výjezd' : ($perc['type'] == 2 ? 'Výslech' : 'Hlášení'); ?></strong> | <strong>Ze dne:</strong> <?php echo $perc['adatum']; ?> | <strong>Vyhotovil:</strong> <?php echo $perc['user']; ?> ]</span> - <?php echo $perc['task']; ?></li>
 				<?php
             }
             if ($i != 0) {

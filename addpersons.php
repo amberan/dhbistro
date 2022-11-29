@@ -117,7 +117,7 @@ if (isset($_POST['addtoareport'])) {
 
     if (isset($_POST['person'])) {
         for ($i = 0;$i < Count($person);$i++) {
-            mysqli_query($database, "INSERT INTO ".DB_PREFIX."ar2p VALUES('".$person[$i]."','".$_POST['reportid']."','".$user['userId']."','".$role[$i]."')");
+            mysqli_query($database, "INSERT INTO ".DB_PREFIX."ar2p VALUES('".$person[$i]."','".$_POST['reportid']."','".$user['userId']."','0".$role[$i]."')");
         }
     }
     mainMenu();
@@ -128,7 +128,7 @@ if (isset($_POST['addtoareport'])) {
 
 if (isset($_POST['addsolver'])) {
     authorizedAccess(3, 6, $_POST['caseid']);
-    mysqli_query($database, "DELETE c FROM ".DB_PREFIX."c2s as c, ".DB_PREFIX."user as p WHERE c.iduser=p.id AND c.idcase=".$_POST['caseid']);
+    mysqli_query($database, "DELETE c FROM ".DB_PREFIX."c2s as c, ".DB_PREFIX."user as p WHERE c.iduser=p.userId AND c.idcase=".$_POST['caseid']);
     mainMenu();
     sparklets('<a href="/cases/">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>uložení změn</strong>', '<a href="readcase.php?rid='.$_POST['caseid'].'&hidenotes=0">zobrazit upravené</a>');
     if (isset($_POST['solver'])) {

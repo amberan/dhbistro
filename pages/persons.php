@@ -224,7 +224,21 @@ $filter['class'] = filterClass();
 $latteParameters['filter'] = $filter;
 
 
-$sql = "SELECT ".DB_PREFIX."person.deleted, ".DB_PREFIX."person.spec, ".DB_PREFIX."person.power, ".DB_PREFIX."person.side,".DB_PREFIX."unread.id as unread, ".DB_PREFIX."person.regdate as date_created, ".DB_PREFIX."person.datum as date_changed, ".DB_PREFIX."person.phone, ".DB_PREFIX."person.archived, ".DB_PREFIX."person.dead , ".DB_PREFIX."person.secret , ".DB_PREFIX."person.name , ".DB_PREFIX."person.surname , ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol
+$sql = "SELECT ".DB_PREFIX."person.deleted, 
+    ".DB_PREFIX."person.spec, 
+    ".DB_PREFIX."person.power, 
+    ".DB_PREFIX."person.side,
+    ".DB_PREFIX."unread.id as unread, 
+    ".DB_PREFIX."person.regdate as date_created, 
+    ".DB_PREFIX."person.datum as date_changed, 
+    ".DB_PREFIX."person.phone, 
+    ".DB_PREFIX."person.archived, 
+    ".DB_PREFIX."person.dead , 
+    ".DB_PREFIX."person.secret , 
+    ".DB_PREFIX."person.name , 
+    ".DB_PREFIX."person.surname , 
+    ".DB_PREFIX."person.id AS 'id', 
+    ".DB_PREFIX."person.symbol
 FROM ".DB_PREFIX."person
 LEFT JOIN  ".DB_PREFIX."unread on  ".DB_PREFIX."person.id =  ".DB_PREFIX."unread.idrecord AND  ".DB_PREFIX."unread.idtable = 1 and  ".DB_PREFIX."unread.iduser=".$user['userId']."
 WHERE ".$sqlFilter."
