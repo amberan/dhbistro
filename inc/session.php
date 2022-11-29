@@ -33,7 +33,7 @@ function sessionUser($sid): array
         $user['aclGamemaster'] = $user['aclGamemaster'];
         $user['aclAudit'] = $user['aclAudit'];
         $user['aclRoot'] = $user['aclRoot'];
-        $usrinfo['planMD'] = $user['planMD'] = stripslashes($user['planMD']);
+        $usrinfo['planMD'] = $user['planMD'] = stripslashes($user['planMD'].' ');
 
         $user['sqlDeleted'] = " deleted <= ".$user['aclRoot'];
         $user['sqlSecret'] = " secret <= ".$user['aclSecret'];

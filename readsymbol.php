@@ -44,16 +44,16 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 		<?php } ?>
 		<div id="info">
 			<?php
-            if ($rec['archiv'] == 1 || $rec['deleted'] == 1) {
+            if ($rec['archived'] == 1 || $rec['deleted'] == 1) {
                 echo '<h2>';
             }
-            if ($rec['archiv'] == 1) {
+            if ($rec['archived'] == 1) {
                 echo 'ARCHIV';
             }
             if ($rec['deleted'] == 1) {
                 echo 'SMAZANÝ ZÁZNAM';
             }
-            if ($rec['archiv'] == 1 || $rec['deleted'] == 1) {
+            if ($rec['archived'] == 1 || $rec['deleted'] == 1) {
                 echo '</h2>';
             } ?>
 			<h3>Přiřazená osoba: </h3><p>
@@ -135,7 +135,7 @@ $latteParameters['title'] = 'Zobrazení symbolu';
 		<!-- následuje seznam hlášení -->
 		<?php // generování seznamu přiřazených hlášení
         if ($user['aclRoot'] < 1) {
-            $sqlFilter .= ' AND ('.DB_PREFIX.'report.reportDeleted is null OR '.DB_PREFIX.'report.reportDeleted  < from_unixtime(1)) ';
+            $sqlFilter = ' ('.DB_PREFIX.'report.reportDeleted is null OR '.DB_PREFIX.'report.reportDeleted  < from_unixtime(1)) ';
         }
 
             $sqlFilter .= " AND ".DB_PREFIX."report.reportSecret<=".$user['aclSecret'];

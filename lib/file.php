@@ -33,57 +33,59 @@ function fileList($folder)
  * @param mixed $type
  * @param mixed $objectId
  */
-function fileIdentify($type, $objectId = '0')
+function fileIdentify($type, $objectId = 0)
 {
-    global $config,$database,$user;
-    switch ($type) {
-        case 'portrait':
-            $sql = 'SELECT id, portrait, portrait as `file` FROM '.DB_PREFIX.'person WHERE '.$user['sqlDeleted'].' AND '.$user['sqlSecret'].' AND id='.$objectId;
-            $folder = $config['folder_portrait'];
-            break;
-        case 'symbol':
-            $sql = 'SELECT id, symbol, symbol as `file` FROM '.DB_PREFIX.'symbol WHERE '.$user['sqlDeleted'].' AND '.$user['sqlSecret'].' AND id='.$objectId;
-            $folder = $config['folder_symbol'];
-            break;
-        case 'attachement':
-            $sql = 'SELECT *, uniquename AS soubor, originalname AS nazev, size, originalname as `file` FROM '.DB_PREFIX.'file WHERE '.$user['sqlSecret'].' AND id='.$objectId;
-            $folder = $config['folder_attachement'];
-            break;
-        case 'backup':
-            $sql = 'SELECT `file`  FROM '.DB_PREFIX.'backup where id='.$objectId;
-            $folder = $config['folder_backup'];
-            break;
-        default:
-            break;
-    }
-    $query = mysqli_query($database, $sql);
-    $file = mysqli_fetch_assoc($query);
-    //set real path to file, and filename
-    $tmp = explode("/", $file['file']);
-    $file['fileHash'] = $file['fileName'] = $file['file'] = end($tmp);
-    if (isset($file['originalname']) && strlen($file['originalname'])) {
-        $file['fileHash'] = $file['uniquename'];
-        $file['fileName'] = $file['originalname'];
-    }
-    if (isset($file['portrait']) && strlen($file['portrait'])) {
-        $file['fileHash'] = $file['fileName'] = $file['portrait'];
-        $file['fileName'] = $file['id'];
-        $file['mime'] = 'image/jpg';
-    }
-    if (isset($file['symbol']) && strlen($file['symbol'])) {
-        $file['fileHash'] = $file['fileName'] = $file['symbol'];
-        $file['fileName'] = $file['id'];
-        $file['mime'] = 'image/jpg';
-    }
-    $file['fullPath'] = $folder.$file['fileHash'];
-    //set mimetype
-    if (!isset($file['mime'])) {
-        $file['mime'] = 'application/octet-stream';
-    }
-    //get size of file
-    $file['fileSize'] = filesize($file['fullPath']);
+global $config,$database,$user;
+    if (isset($objectId)) {
+        switch ($type) {
+            case 'portrait':
+                $sql = 'SELECT id, portrait, portrait as `file` FROM '.DB_PREFIX.'person WHERE '.$user['sqlDeleted'].' AND '.$user['sqlSecret'].' AND id='.$objectId;
+                $folder = $config['folder_portrait'];
+                break;
+            case 'symbol':
+                $sql = 'SELECT id, symbol, symbol as `file` FROM '.DB_PREFIX.'symbol WHERE '.$user['sqlDeleted'].' AND '.$user['sqlSecret'].' AND id='.$objectId;
+                $folder = $config['folder_symbol'];
+                break;
+            case 'attachement':
+                $sql = 'SELECT *, uniquename AS soubor, originalname AS nazev, size, originalname as `file` FROM '.DB_PREFIX.'file WHERE '.$user['sqlSecret'].' AND id='.$objectId;
+                $folder = $config['folder_attachement'];
+                break;
+            case 'backup':
+                $sql = 'SELECT `file`  FROM '.DB_PREFIX.'backup where id='.$objectId;
+                $folder = $config['folder_backup'];
+                break;
+            default:
+                break;
+        }
+        $query = mysqli_query($database, $sql);
+        $file = mysqli_fetch_assoc($query);
+        //set real path to file, and filename
+        $tmp = explode("/", $file['file']);
+        $file['fileHash'] = $file['fileName'] = $file['file'] = end($tmp);
+        if (isset($file['originalname']) && strlen($file['originalname'])) {
+            $file['fileHash'] = $file['uniquename'];
+            $file['fileName'] = $file['originalname'];
+        } elseif (isset($file['portrait']) && strlen($file['portrait'])) {
+            $file['fileHash'] = $file['fileName'] = $file['portrait'];
+            $file['fileName'] = $file['id'];
+            $file['mime'] = 'image/jpg';
+        } elseif (isset($file['symbol']) && strlen($file['symbol'])) {
+            $file['fileHash'] = $file['fileName'] = $file['symbol'];
+            $file['fileName'] = $file['id'];
+            $file['mime'] = 'image/jpg';
+        } else {
+            return false; exit;
+        }
+        $file['fullPath'] = $folder.$file['fileHash'];
+        //set mimetype
+        if (!isset($file['mime'])) {
+            $file['mime'] = 'application/octet-stream';
+        }
+        //get size of file
+        $file['fileSize'] = filesize($file['fullPath']);
 
-    return $file;
+        return $file;
+    } else { return false; }
 }
 
 /**

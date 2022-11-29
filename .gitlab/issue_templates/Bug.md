@@ -9,21 +9,17 @@ filtered by the "bug" label:
 and verify the issue you're about to submit isn't a duplicate.
 --->
 
-### Summary
+### WHERE - Bistro Link
 
-<!-- Summarize the bug encountered concisely. -->
+### WHEN - Time and Date of when issue was identifies/replicated
 
-### Steps to reproduce
+### WHO - Bistro Username
+
+### WHAT - Summary
+
+### HOW - Steps to reproduce
 
 <!-- Describe how one can reproduce the issue - this is very important. Please use an ordered list. -->
-
-### Bistro Instance
-
-<!-- Specify on which instance of Bistro did the bug occured - copy link. -->
-
-### Bistro User
-
-<!-- Under which user did you noticed the issue (login name). -->
 
 ### What is the current *bug* behavior?
 
