@@ -102,6 +102,10 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 ### Security
 - Feature: update of composer libs and php to 8.2.2 #270
 
+## 1.11.x
+### Fixed
+- Fixed: twice displayed 'Dosažení stropu zaznamenáno' #256
+
 ## 1.11 - 2023-02-09
 ### Security
 - Feature: update of composer libs and php to 8.2.2 #270
