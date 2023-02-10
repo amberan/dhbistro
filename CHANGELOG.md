@@ -105,6 +105,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 ## 1.11.x
 ### Fixed
 - Fixed: twice displayed 'Dosažení stropu zaznamenáno' #256
+- Fixed: linked webapps opening in new tab #230
 
 ## 1.11 - 2023-02-09
 ### Security
