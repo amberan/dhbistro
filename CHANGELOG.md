@@ -110,6 +110,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Fixed: symbol deletion #254
 - Fixed: link symbol to person #260
 - Fixed: archive symbol #262
+- Fixed: new user creation #251 #182
 
 ## 1.11 - 2023-02-09
 ### Security
