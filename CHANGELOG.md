@@ -103,6 +103,8 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Feature: update of composer libs and php to 8.2.2 #270
 
 ## 1.11.x
+### Added
+- Feature: report restoration #256
 ### Fixed
 - Fixed: twice displayed 'Dosažení stropu zaznamenáno' #256
 - Fixed: linked webapps opening in new tab #230
