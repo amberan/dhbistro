@@ -102,6 +102,11 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 ### Security
 - Feature: update of composer libs and php to 8.2.2 #270
 
+
+## 1.11.2
+### Fixed
+- Fixed: random sorting on persons #237
+
 ## 1.11.1 - 2023-02-14
 ### Added
 - Feature: report restoration #256
