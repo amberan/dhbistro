@@ -114,6 +114,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Fixed: symbols to the old top menu #246
 - Fixed: error while refreshing after timeout #279
 - Fixed: report string escaping #264
+- Fixed: after editing symbol return to symbol page #285
 
 ## 1.11.1 - 2023-02-14
 ### Added
