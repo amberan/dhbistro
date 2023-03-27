@@ -111,6 +111,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Fixed: random sorting on persons #237
 - Fixed: linking persons to report #262
 - Fixed: symbols to the old top menu #246
+- Fixed: error while refreshing after timeout #279
 
 ## 1.11.1 - 2023-02-14
 ### Added
