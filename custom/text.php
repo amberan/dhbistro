@@ -137,6 +137,12 @@ $text['hlasenineniprirazenopripadu'] = 'hlášení není přiřazeno k žádném
 $text['neprirazenesymbolyhlaseni'] = 'nepřiřazené symboly spojené s hlášením';
 $text['osobyprirazenekhlaseni'] = 'osoby přiřazené k hlášení';
 $text['nemanedokoncenahlaseni'] = 'uživatel nemá žádná nedokončená hlášení.';
+$text['reportDefaultTask'] = '';
+$text['reportDefaultSummary'] = '';
+$text['reportDefaultCost'] = '';
+$text['reportDefaultImpact'] = '';
+$text['reportDefaultDetail'] = '';
+$text['reportDefaultInput'] = '';
 
 
 // GENERIC
