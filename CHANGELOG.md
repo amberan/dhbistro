@@ -105,10 +105,13 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 
 
 ## 1.11.2 - 2023-02-15
+### Added
+- Feature: secret symbols #284
 ### Changed
 - Refactored: symbols redesign #116
 - Refactored: report default text #283
 - Refactored: groups filter - secret #59
+- Refactored: header/listing template separation #273
 ### Fixed
 - Fixed: random sorting on persons #237
 - Fixed: linking persons to report #262
