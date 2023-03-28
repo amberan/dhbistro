@@ -29,8 +29,11 @@ if (count(($_POST)) > 1) {
 
 $latteParameters['userId'] = 'new';
 
-if (!isset($_POST['heslo']) || ( isset($_POST['heslo']) && strlen($_POST['heslo'])) < 1) { $userEdit['newPassword'] = randomPassword(); }
-else { $userEdit['newPassword'] = @$_POST['heslo']; }
+if (!isset($_POST['heslo']) || (isset($_POST['heslo']) && strlen($_POST['heslo'])) < 1) {
+    $userEdit['newPassword'] = randomPassword();
+} else {
+    $userEdit['newPassword'] = trim(@$_POST['heslo']);
+}
 if (count(($_POST)) > 1) {
     $userEdit['aclRoot'] = @$_POST['aclRoot'];
     $userEdit['aclUser'] = @$_POST['aclUser'];
@@ -47,7 +50,7 @@ if (count(($_POST)) > 1) {
     $userEdit['aclSymbol'] = @$_POST['aclSymbol'];
     $userEdit['aclAPI'] = @$_POST['aclAPI'];
     $userEdit['userEmail'] = @$_POST['userEmail'];
-    $userEdit['userName'] = @$_POST['login'];
+    $userEdit['userName'] = trim(@$_POST['login']);
     $userEdit['personId'] = @$_POST['idperson'];
 
 
