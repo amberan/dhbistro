@@ -1,0 +1,121 @@
+
+            {if @$warning}
+                <div>
+                    {$warning}
+                </div>
+            {else}
+                <div id="obsah">
+                <table class="table table-striped table-hover">
+                    <thead class="table-sticky-header">
+                        <tr>
+                            <th class="text-center">
+                                {$text['symbol']|firstUpper}
+                            </th>
+                            <th class="mobile-no-show text-center">
+                                {$text['notes']|firstUpper}
+                            </th>
+                            <th class="mobile-no-show">
+                                <div class="table-no-wrap">{$text['vytvoreno']|firstUpper}<a href="{$URL[0]}{$URL[1]}/?sort=created">&#8661;</a></div>
+                            </th>
+
+                            <th class="tablet-no-show text-center">
+                                <div class="table-no-wrap">{$text['zmeneno']|firstUpper}  <a href="{$URL[0]}{$URL[1]}/?sort=modified">&#8661;</a></div>
+                            </th>
+
+                            <th class="tablet-no-show text-center">
+                                {$text['linked']|firstUpper}
+                            </th>
+                            <th class="mobile-no-show">{$text['akce']|firstUpper}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $symbolsRecord as $symbol}
+                            <tr class="{if @$symbol['unread']} unread_record{/if}">
+                                <td class="table-w-full-cell">
+                                    <p class="table-cell-title">
+                                        {if $symbol['symbolDeleted'] }
+                                            <img src="/file/symbol/{$symbol['symbolId']}" alt="{$symbol['symbolDescription']}" />
+                                        {else}
+                                            <a href="/readsymbol.php?rid={$symbol['symbolId']}"><img src="/file/symbol/{$symbol['symbolId']}" alt="{$symbol['symbolDescription']}" /></a>
+                                        {/if}
+                                    </p>
+                                </td>
+                                <td class="table-w-full-cell text-center">
+                                    {$symbol['symbolDescription']|stripHtml}
+                                    {if @$symbol['notes']}
+                                        {foreach @$symbol['notes'] as $note}
+                                            <br/><strong>{if $note['noteCreatedByPerson']}{$note['noteCreatedByPerson']}{else}{$note['noteCreatedByUser']}{/if} {$noteType[$note['noteSecret']]} <br/>
+                                            {$note['noteTitle']}: {$note['noteBody']}</strong><br/>
+                                        {/foreach}
+                                    {/if}
+                                    <div class="table-badge-wrapper">
+                                        {if $symbol['symbolSecret'] > 0 }
+                                            <span class="badge rounded-pill bg-danger text-light">{$text['utajeno']|upper}</span>
+                                        {/if}
+                                        {if $symbol['symbolArchivedBool'] == 'True'}
+                                            <span class="badge rounded-pill bg-secondary text-light">{$text['archivovano']|firstUpper}</span>
+                                        {/if}
+                                        {if $symbol['symbolDeleted'] }
+                                            <span class="badge rounded-pill bg-warning text-dark">{$text['smazany']|firstUpper}</span>
+                                        {/if}
+                                    </div>
+                                </td>
+                                <td class="tablet-no-show text-center">
+                                    {if $symbol['symbolCreated']} {$symbol['symbolCreated']|date:'d.m.Y'}{else}<em>{$text['neznamo']}</em>{/if}<br/>
+                                    {if $symbol['symbolCreatedByName']}{$symbol['symbolCreatedByName']}{else}{$symbol['symbolCreatedByUserName']}{/if}
+                                </td>
+                                <td class="tablet-no-show text-center">
+                                    {$symbol['symbolModified']|date:'d.m.Y'}<br/>
+                                    {if $symbol['symbolModifiedByName']}{$symbol['symbolModifiedByName']}{else}{$symbol['symbolModifiedByUserName']}{/if}
+                                </td>
+                                <td class="mobile-no-show">
+                                {if @$symbol['cases']}{$text['linkedCases']}:<br/>
+                                    {foreach $symbol['cases'] as $case}
+                                        <a href="/readcase.php?rid={$case['caseId']}">{$case['caseName']}</a><br/>
+                                    {/foreach}
+                                {else}
+                                    {$text['symbolNotLinkedToCase']}<br/>
+                                {/if}
+                                {if @$symbol['reports']}{$text['linkedReports']}:<br/>
+                                    {foreach $symbol['reports'] as $report}
+                                       <a href="/reports/{$report['reportId']}">{$report['reportName']}</a> <br/>
+                                    {/foreach}
+                                {else}
+                                    {$text['symbolNotLinkedToReport']}<br/>
+                                {/if}
+                                </td>
+                                <td class="table-w-full-cell">
+                                    <div class="table-no-wrap-right">
+                                        {if $user['aclSymbol'] >= 1 && !$symbol['symbolDeleted']}
+                                            <a href="/addsy2p.php?rid={$symbol['symbolId']}">{$text['linkTo']|firstUpper}</a>
+                                            <a class="btn btn-sm btn-brick btn-info mb-1" href="/editsymbol.php?rid={$symbol['symbolId']}" alt="{$text[upravitsymbol]}">
+                                                {php inject_svg("images/icons/edit-solid.svg")}
+                                            </a>
+                                            <a href="/newnote.php?rid={$symbol['symbolId']}&idtable=11">{$text['addNote']|firstUpper}</a>
+                                        {/if}
+                                        {if $user['aclSymbol'] <= 2 && $symbol['symbolArchivedBool'] == 'False'}
+                                            <a href="/symbols/?archive={$symbol['symbolId']}" onclick="return confirm('Opravdu archivovat tento symbol?');">
+                                            archivovat
+                                            </a>
+                                        {elseif  $user['aclSymbol'] <= 2}
+                                            <a href="/symbols/?unarchive={$symbol['symbolId']}" onclick="return confirm('Opravdu vyjmout z archivu tento symbol?');">
+                                            odarchivat
+                                            </a>
+                                        {/if}
+                                        {if $user['aclSymbol'] >= 2 && !$symbol['symbolDeleted'] }
+                                            <a class="btn btn-sm btn-brick btn-danger mb-1" href="/symbols/?sdelete={$symbol['symbolId']}" onclick="return confirm('{$text['opravdusmazatsymbol']} &quot; {$symbol['symbolDescription']|stripHtml}&quot;?');" alt="{$text['smazatsymbol']}">
+                                            {php inject_svg("images/icons/trash-solid.svg")}
+                                            </a>
+                                        {/if}
+                                        {if $user['aclRoot'] AND $symbol['symbolDeleted']}
+                                            <a class="btn btn-sm btn-success mb-1" href="/symbols/?undelete={$symbol['symbolId']}" onclick="return confirm('{$text['opravduobnovitsymbol']} &quot; {$symbol['symbolDescription']|stripHtml}&quot;?');">
+                                            {php inject_svg("images/icons/recycle.svg")}
+                                            </a>
+                                        {/if}
+                                    </div>
+                                </td>
+                            </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            {/if}

@@ -2,8 +2,6 @@
 
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
-
 /**
  * GET USER INFO.
  *
@@ -81,7 +79,7 @@ function logout_forced($msg): void
  * PROCESS LOGIN FORM
  */
 if (isset($_POST['logmein']) and mb_strlen($_POST['loginname']) and mb_strlen($_POST['loginpwd'])) {
-    $logonSql = "SELECT userId FROM ".DB_PREFIX."user WHERE userName='".$_POST['loginname']."' AND userPassword='".md5($_POST['loginpwd'])."' and userDeleted=0 and userSuspended=0";
+    $logonSql = "SELECT userId FROM ".DB_PREFIX."user WHERE userName='".trim($_POST['loginname'])."' AND userPassword='".md5(trim($_POST['loginpwd']))."' and userDeleted=0 and userSuspended=0";
     $logon = mysqli_query($database, $logonSql);
     if (mysqli_num_rows($logon) && $logonUser = mysqli_fetch_array($logon)) {
         $_SESSION['sid'] = session_id();

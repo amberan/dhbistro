@@ -2,7 +2,7 @@
 
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+//
 
 // REPORTS
 $reportsAssigned = reportsAssignedTo($user['userId']);

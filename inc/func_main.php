@@ -14,8 +14,8 @@ require_once $config['platformConfig'];
 $latteParameters['config'] = $config;
 require_once SERVER_ROOT.'/vendor/autoload.php';
 use Tracy\Debugger;
-
 Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+
 $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 $latteParameters = [];

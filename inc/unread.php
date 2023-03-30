@@ -1,5 +1,7 @@
 <?php
 
+use Tracy\Debugger;
+
 if (isset($_REQUEST['delallnew'])) {
     mysqli_query($database, "DELETE FROM ".DB_PREFIX."unread WHERE iduser = ".$user['userId']);
     $_SESSION['message'] = "Označeno jako přečtené";
@@ -39,12 +41,16 @@ function unreadRecords($tablenum, $rid)
 function deleteUnread($tablenum, $rid)
 {
     global $database,$user;
-    if ($rid <> 'none') {
-        $unreadSql = "DELETE FROM ".DB_PREFIX."unread WHERE idtable=".$tablenum." AND idrecord=".$rid." AND iduser=".$user['userId'];
+    if (isset($user['usedId'])) {
+        if ($rid <> 'none' && $user['userId']) {
+            $unreadSql = "DELETE FROM ".DB_PREFIX."unread WHERE idtable=".$tablenum." AND idrecord=".$rid." AND iduser=".$user['userId'];
+        } elseif ($user['userId']) {
+            $unreadSql = "DELETE FROM ".DB_PREFIX."unread WHERE idtable=".$tablenum." AND iduser=".$user['userId'];
+        }
+        mysqli_query($database, $unreadSql);
     } else {
-        $unreadSql = "DELETE FROM ".DB_PREFIX."unread WHERE idtable=".$tablenum." AND iduser=".$user['userId'];
+        Debugger::log("deleteUnread failed: ".$_SERVER['REQUEST_URI'].$_SERVER['QUERY_STRING']);
     }
-    mysqli_query($database, $unreadSql);
 }
 
 // vymaz z tabulek neprectenych pri smazani zaznamu

@@ -1,7 +1,7 @@
 <?php
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+
 
 /**
  * list unfinished cases assigned to.

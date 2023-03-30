@@ -1,7 +1,7 @@
 <?php
 
 $text['point'] = 'zlobod';
-$text['hlaseni']|firstUpper = 'Zakázka';
+$text['hlaseni'] = 'Zakázka';
 $text['hlaseni'] = 'zakázka';
 
 

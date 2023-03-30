@@ -2,7 +2,7 @@
 require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Vyhledané symboly';
@@ -102,8 +102,6 @@ if (isset($_POST['searchit'])) {
 				WHERE deleted=0
 				ORDER BY averangepercent DESC
 			";
-    mysqli_query($database, 'SET NAMES utf8');
-
     $symbol_result = mysqli_query($database, $symbol_query_sql) or die("Vyhledávání a srovnání symbolů neprošlo! SQL: $symbol_query_sql");
 
 

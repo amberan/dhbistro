@@ -16,7 +16,7 @@
                     <li class="prolink-wrapper">
                         {foreach $menuLinks as $menuLinksItem}
                             <a class="btn btn-{$config['themeBg']} btn-md nav-link prolink-icons" href="{$menuLinksItem[1]}" alt="{$menuLinksItem[0]}" target="_blank">
-                                {php echo file_get_contents("{$menuLinksItem[3]}")}
+                                {php inject_svg("{$menuLinksItem[3]}")}
                             </a>
                         {/foreach}
                     </li>

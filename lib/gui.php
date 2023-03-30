@@ -18,6 +18,17 @@ function latteDrawTemplate($template): void
 }
 
 /**
+ * Inject file content (used for injecting SVG into LATTE templates).
+ *
+ * @param string file to inject
+ * @param mixed $file
+ */
+function inject_svg($file)
+{
+    echo file_get_contents($file);
+}
+
+/**
  * Fill notification modal window if $_SESSION['message'] exists.
  */
 function latteNotification(): void
@@ -173,7 +184,6 @@ function nocs($string): string
         'Ł' => 'L',
         'Ż' => 'Z',
         'Ź' => 'Z',
-        'Ć' => 'C',
         'Ń' => 'N',
         'ę' => 'e',
         'ó' => 'o',
@@ -182,25 +192,20 @@ function nocs($string): string
         'ł' => 'l',
         'ż' => 'z',
         'ź' => 'z',
-        'ć' => 'c',
-        'ń' => 'n'
-
-
-
+        'ń' => 'n',
     ];
 
     return strtr($string, $table);
 }
 
-
 function date_picker($name, $startyear = null, $endyear = null, $preset = null)
 {
     global $user;
     if ($startyear == null) {
-        echo $startyear = date("Y")-10;
+        echo $startyear = date("Y") - 10;
     }
     if ($endyear == null) {
-        $endyear = date("Y") ; //+ 5;
+        $endyear = date("Y"); //+ 5;
     }
     if ($preset != null) {
         $presetDay = date('j', $preset);

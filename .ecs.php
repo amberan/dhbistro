@@ -1,7 +1,14 @@
 <?php
 
+
+declare(strict_types=1);
+
+use PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff;
 use PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer;
 use PhpCsFixer\Fixer\FunctionNotation\MethodArgumentSpaceFixer;
+
+
+use PhpCsFixer\Fixer\Import\NoUnusedImportsFixer;
 use PhpCsFixer\Fixer\Operator\ConcatSpaceFixer;
 use PhpCsFixer\Fixer\Operator\IncrementStyleFixer;
 use PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer;
@@ -15,27 +22,40 @@ use SlevomatCodingStandard\Sniffs\Whitespaces\DuplicateSpacesSniff;
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayOpenerAndCloserNewlineFixer;
 use Symplify\CodingStandard\Fixer\Commenting\RemoveCommentedCodeFixer;
 use Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer;
-use PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff;
-
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\EasyCodingStandard\ValueObject\Option;
+use Symplify\EasyCodingStandard\Config\ECSConfig;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(SetList::SPACES);
-    $containerConfigurator->import(SetList::ARRAY);
-    $containerConfigurator->import(SetList::DOCBLOCK);
-    $containerConfigurator->import(SetList::PSR_12);
-    $containerConfigurator->import(SetList::SYMFONY);
-    $containerConfigurator->import(SetList::ARRAY);
-    $containerConfigurator->import(SetList::PHP_CS_FIXER);
-    $containerConfigurator->import(SetList::SYMPLIFY);
-    $containerConfigurator->import(SetList::CLEAN_CODE);
-    $containerConfigurator->import(SetList::COMMON);
+// use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+// use Symplify\EasyCodingStandard\ValueObject\Option;
+// use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
-    $parameters = $containerConfigurator->parameters();
+return function (ECSConfig $ecsConfig): void {
+    $ecsConfig->paths([
+        __DIR__ . '/API',
+        __DIR__ . '/custom',
+        __DIR__ . '/inc',
+        __DIR__ . '/lib',
+        __DIR__ . '/pages',
+    ]);
 
-    $parameters->set(Option::SKIP, [
+    // this way you add a single rule
+    $ecsConfig->rules([
+        NoUnusedImportsFixer::class,
+    ]);
+
+    // this way you can add sets - group of rules
+    $ecsConfig->sets([
+        // run and fix, one by one
+        SetList::ARRAY,
+        SetList::CLEAN_CODE,
+        SetList::DOCBLOCK,
+        SetList::PHPUNIT,
+        SetList::PSR_12,
+        SetList::SPACES,
+        SetList::SYMPLIFY,
+    ]);
+
+    $ecsConfig->skip([
         __DIR__ . '/vendor',
 
         ArrayOpenerAndCloserNewlineFixer::class,
@@ -57,6 +77,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     ]);
 
-    $parameters->set(Option::INDENTATION, 'spaces');
-    $parameters->set(Option::PARALLEL, true);
+    $ecsConfig->indentation('spaces');
 };

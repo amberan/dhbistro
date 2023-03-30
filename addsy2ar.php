@@ -1,18 +1,17 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Přiřazení k hlášení k pripadu';
-    mainMenu();
-        $customFilter = custom_Filter(22);
-    sparklets('<a href="./symbols.php">symboly</a> &raquo; <strong>úprava symbolu</strong> &raquo; <strong>přidání k hlášení</strong>');
-    if (is_numeric($_REQUEST['rid']) && $user['aclSymbol']) {
-        $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."symbol WHERE id=".$_REQUEST['rid']);
-        if ($rec = mysqli_fetch_assoc($res)) {
-            ?>
+mainMenu();
+$customFilter = custom_Filter(22);
+sparklets('<a href="/symbols">symboly</a> &raquo; <strong>úprava symbolu</strong> &raquo; <strong>přidání k hlášení</strong>');
+if (is_numeric($_REQUEST['rid']) && $user['aclSymbol']) {
+    $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."symbol WHERE id=".$_REQUEST['rid']);
+    if ($rec = mysqli_fetch_assoc($res)) {
+        ?>
 
 <div id="obsah">
     <p>
@@ -26,42 +25,55 @@ $latteParameters['title'] = 'Přiřazení k hlášení k pripadu';
     } else {
         $filterCat = $customFilter['type'];
     }
-            if (!isset($customFilter['sort'])) {
-                $filterSort = 6;
-            } else {
-                $filterSort = $customFilter['sort'];
-            }
-            if (!isset($customFilter['status'])) {
-                $filterStat = 0;
-            } else {
-                $filterStat = $customFilter['status'];
-            }
-            switch ($filterCat) {
-      case 0: $filterSqlCat = ''; break;
-      case 1: $filterSqlCat = ' AND '.DB_PREFIX.'report.reportType=1 '; break;
-      case 2: $filterSqlCat = ' AND '.DB_PREFIX.'report.reportType=2 '; break;
-      default: $filterSqlCat = '';
-    }
-            switch ($filterSort) {
-      case 1: $filterSqlSort = ' '.DB_PREFIX.'report.reportModified DESC '; break;
-      case 2: $filterSqlSort = ' '.DB_PREFIX.'report.reportModified ASC '; break;
-      case 3: $filterSqlSort = ' '.DB_PREFIX.'user.reportModifiedBy ASC '; break;
-      case 4: $filterSqlSort = ' '.DB_PREFIX.'user.reportModifiedBy DESC '; break;
-      case 5: $filterSqlSort = ' '.DB_PREFIX.'report.reportEventDate ASC '; break;
-      case 6: $filterSqlSort = ' '.DB_PREFIX.'report.reportEventDate DESC '; break;
-      default: $filterSqlSort = ' '.DB_PREFIX.'report.reportEventDate DESC ';
-    }
-            switch ($filterStat) {
-        case 0: $fsql_stat = ''; break;
-        case 1: $fsql_stat = ' AND '.DB_PREFIX.'report.reportStatus=0 '; break;
-        case 2: $fsql_stat = ' AND '.DB_PREFIX.'report.reportStatus=1 '; break;
-        case 3: $fsql_stat = ' AND '.DB_PREFIX.'report.reportStatus=2 '; break;
-        default: $fsql_stat = '';
-    }
-            function filter()
-            {
-                global $filterCat,$filterSort,$filterStat;
-                echo '<form action="addsy2ar.php" method="post" id="filter">
+        if (!isset($customFilter['sort'])) {
+            $filterSort = 6;
+        } else {
+            $filterSort = $customFilter['sort'];
+        }
+        if (!isset($customFilter['status'])) {
+            $filterStat = 0;
+        } else {
+            $filterStat = $customFilter['status'];
+        }
+        switch ($filterCat) {
+            case 0: $filterSqlCat = '';
+                break;
+            case 1: $filterSqlCat = ' AND '.DB_PREFIX.'report.reportType=1 ';
+                break;
+            case 2: $filterSqlCat = ' AND '.DB_PREFIX.'report.reportType=2 ';
+                break;
+            default: $filterSqlCat = '';
+        }
+        switch ($filterSort) {
+            case 1: $filterSqlSort = ' '.DB_PREFIX.'report.reportModified DESC ';
+                break;
+            case 2: $filterSqlSort = ' '.DB_PREFIX.'report.reportModified ASC ';
+                break;
+            case 3: $filterSqlSort = ' '.DB_PREFIX.'user.reportModifiedBy ASC ';
+                break;
+            case 4: $filterSqlSort = ' '.DB_PREFIX.'user.reportModifiedBy DESC ';
+                break;
+            case 5: $filterSqlSort = ' '.DB_PREFIX.'report.reportEventDate ASC ';
+                break;
+            case 6: $filterSqlSort = ' '.DB_PREFIX.'report.reportEventDate DESC ';
+                break;
+            default: $filterSqlSort = ' '.DB_PREFIX.'report.reportEventDate DESC ';
+        }
+        switch ($filterStat) {
+            case 0: $fsql_stat = '';
+                break;
+            case 1: $fsql_stat = ' AND '.DB_PREFIX.'report.reportStatus=0 ';
+                break;
+            case 2: $fsql_stat = ' AND '.DB_PREFIX.'report.reportStatus=1 ';
+                break;
+            case 3: $fsql_stat = ' AND '.DB_PREFIX.'report.reportStatus=2 ';
+                break;
+            default: $fsql_stat = '';
+        }
+        function filter()
+        {
+            global $filterCat,$filterSort,$filterStat;
+            echo '<form action="addsy2ar.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 <!--
@@ -89,16 +101,16 @@ seřadit je podle <select name="sort">
 	  <input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
 </form><form action="addsymbols.php" method="post" class="otherform">';
-            }
-            filter();
-            // vypis hlášení
-            $sqlFilter = DB_PREFIX."report.reportSecret<=".$user['aclSecret'];
+        }
+        filter();
+        // vypis hlášení
+        $sqlFilter = DB_PREFIX."report.reportSecret<=".$user['aclSecret'];
 
-            if ($user['aclRoot'] < 1) {
-                $sqlFilter .= ' AND ('.DB_PREFIX.'report.reportDeleted is null OR '.DB_PREFIX.'report.reportDeleted  < from_unixtime(1)) ';
-            }
+        if ($user['aclRoot'] < 1) {
+            $sqlFilter .= ' AND ('.DB_PREFIX.'report.reportDeleted is null OR '.DB_PREFIX.'report.reportDeleted  < from_unixtime(1)) ';
+        }
 
-            $sql = "SELECT
+        $sql = "SELECT
 			".DB_PREFIX."report.reportId AS 'id',
 	        ".DB_PREFIX."report.reportModified AS 'datum',
 	        ".DB_PREFIX."report.reportName AS 'label',
@@ -110,7 +122,7 @@ seřadit je podle <select name="sort">
                 LEFT JOIN ".DB_PREFIX."symbol2all ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."report.reportId AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=4
 				WHERE $sqlFilter AND ".DB_PREFIX."report.reportOwner=".DB_PREFIX."user.userId ".$filterSqlCat.$fsql_stat."
 				ORDER BY ".$filterSqlSort;
-            $res = mysqli_query($database, $sql); ?>
+        $res = mysqli_query($database, $sql); ?>
     <div style="padding-left: 0px; padding-right: 0px; padding-top: 0px; padding-bottom: 0px;" id="in-form-table">
         <?php
     while ($rec = mysqli_fetch_assoc($res)) {
@@ -131,11 +143,11 @@ seřadit je podle <select name="sort">
 </div>
 <!-- end of #obsah -->
 <?php
-        } else {
-            echo '<div id="obsah"><p>Hlášení neexistuje. Rid='.$_REQUEST['rid'].'</p></div>';
-        }
     } else {
-        echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
+        echo '<div id="obsah"><p>Hlášení neexistuje. Rid='.$_REQUEST['rid'].'</p></div>';
     }
-    latteDrawTemplate("footer");
+} else {
+    echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
+}
+latteDrawTemplate("footer");
 ?>

@@ -1,8 +1,7 @@
 <?php
 
-use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+
 $latteParameters['title'] = $text['nastaveni'];
 
 if ((isset($_POST['userid']) and isset($_POST['edituser']) and !is_numeric($_REQUEST['timeout'])) and ($user['userId'] == $_POST['userid'])) {
@@ -13,7 +12,11 @@ if ((isset($_POST['userid']) and isset($_POST['edituser']) and !is_numeric($_REQ
     } elseif (isset($_REQUEST['editsettings'], $_REQUEST['soucheslo']) && $_REQUEST['soucheslo'] != '') {
         $currentpwd = userRead($user['userId']);
         if ($currentpwd['userPassword'] == md5($_REQUEST['soucheslo'])) {
-            userChange($user['userId'], ['userPassword' => md5($_POST['heslo'])], $text['nastaveniulozeno'], $text['akcinelzeprovest']);
+            if (strlen(trim($_POST['heslo'])) > 0) {
+                userChange($user['userId'], ['userPassword' => md5($_POST['heslo'])], $text['nastaveniulozeno'], $text['akcinelzeprovest']);
+            } else {
+                $latteParameters['message'] = $text['newPasswordEmpty'];
+            }
         } else {
             $latteParameters['message'] = $text['puvodniheslospatne'];
         }

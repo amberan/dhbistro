@@ -1,39 +1,28 @@
 <?php
-use Tracy\Debugger;
-
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 
 
-if (isset($_POST['reportid'])) {
-    $autharray = mysqli_fetch_assoc(mysqli_query($database, "SELECT iduser FROM ".DB_PREFIX."report WHERE id=".$_POST['reportid']));
-    $author = $autharray['iduser'];
-}
-    if (isset($_REQUEST['delete']) && is_numeric($_REQUEST['delete'])) {
-        authorizedAccess(4, 11, $_REQUEST['delete']);
-        mysqli_query($database, "UPDATE ".DB_PREFIX."report SET deleted=1 WHERE id=".$_REQUEST['delete']);
-        deleteAllUnread($_REQUEST['table'], $_REQUEST['delete']);
-    }
-    if (isset($_POST['insertrep']) && !preg_match('/^[[:blank:]]*$/i', $_POST['label']) && !preg_match('/^[[:blank:]]*$/i', $_POST['task']) && !preg_match('/^[[:blank:]]*$/i', $_POST['summary']) && !preg_match('/^[[:blank:]]*$/i', $_POST['impact']) && !preg_match('/^[[:blank:]]*$/i', $_POST['details']) && !preg_match('/^[[:blank:]]*$/i', $_POST['start']) && !preg_match('/^[[:blank:]]*$/i', $_POST['end']) && !preg_match('/^[[:blank:]]*$/i', $_POST['energy']) && !preg_match('/^[[:blank:]]*$/i', $_POST['inputs']) && is_numeric($_POST['secret']) && is_numeric($_POST['status']) && is_numeric($_POST['type'])) {
-        $adatum = mktime(0, 0, 0, $_POST['adatummonth'], $_POST['adatumday'], $_POST['adatumyear']);
-        $ures = mysqli_query($database, "SELECT id FROM ".DB_PREFIX."report WHERE UCASE(label)=UCASE('".$_POST['label']."')");
-        if (mysqli_num_rows($ures)) {
-            $latteParameters['message'] = 'Hlášení nepřidáno - Toto označení hlášení již existuje, změňte ho.';
-        } else {
-            $latteParameters['message'] = 'Hlášení uloženo';
-            mysqli_query($database, "INSERT INTO ".DB_PREFIX."report (label, datum, iduser, task, summary, impacts, details, secret, deleted, status, type, adatum, start, end, energy, inputs) VALUES('".$_POST['label']."','".Time()."','".$user['userId']."','".$_POST['task']."','".$_POST['summary']."','".$_POST['impact']."','".$_POST['details']."','".$_POST['secret']."','0','".$_POST['status']."','".$_POST['type']."','".$adatum."','".$_POST['start']."','".$_POST['end']."','".$_POST['energy']."','".$_POST['inputs']."')");
-            $ridarray = mysqli_fetch_assoc(mysqli_query($database, "SELECT id FROM ".DB_PREFIX."report WHERE UCASE(label)=UCASE('".$_POST['label']."')"));
-            $rid = $ridarray['id'];
-            authorizedAccess(4, 3, $rid);
-            if ($_POST['status'] <> 0) {
-                unreadRecords(4, $rid);
-            }
-            Header('Location: /reports/'.$rid);
-        }
+if ($URL[1] == 'reports' && isset($URL[2],$URL[3]) && $URL[2] == 'delete' && is_numeric($URL[3])) {
+    if ($user['aclReport'] < 2) {
+        unauthorizedAccess(4, 11, $URL[3]);
     } else {
-        if (isset($_POST['insertrep'])) {
-            $latteParameters['message'] = 'Hlášení nepřidáno - Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva. Pamatujte, že všechna pole musí být vyplněná.';
-        }
+        authorizedAccess(4, 11, $URL[3]);
+        $deleteReportSql = 'UPDATE '.DB_PREFIX.'report SET reportDeleted=now(), reportModifiedBy='.$user['userId'].' WHERE reportId='.$URL[3];
+        mysqli_query($database, $deleteReportSql);
+        deleteAllUnread(1, $URL[3]);
     }
+}
+
+if ($URL[1] == 'reports' && isset($URL[2],$URL[3]) && $URL[2] == 'restore' && is_numeric($URL[3])) {
+    if ($user['aclRoot'] < 1) {
+        unauthorizedAccess(4, 17, $URL[3]);
+    } else {
+        authorizedAccess(4, 17, $URL[3]);
+        $deleteReportSql = 'UPDATE '.DB_PREFIX.'report SET reportDeleted=0, reportModifiedBy='.$user['userId'].' WHERE reportId='.$URL[3];
+        mysqli_query($database, $deleteReportSql);
+        deleteAllUnread(1, $URL[3]);
+    }
+}
+
 
 //FILTER
 if (isset($_GET['sort'])) {
@@ -70,6 +59,7 @@ if (isset($filter['reportStatus']) && @$filter['reportStatus'] != 'all') {
 $latteParameters['filter'] = $filter;
 
 
+//create new bool column for deletion
 $reportsSql = "SELECT
     concat(ownerPerson.name,' ',ownerPerson.surname) as reportOwnerName,
     ownerUser.userName as reportOwnerUserName,
@@ -78,7 +68,8 @@ $reportsSql = "SELECT
     concat(modifiedPerson.name,' ',modifiedPerson.surname) as reportModifiedByName,
     modifiedUser.userName as reportModifiedByUserName,
     ".DB_PREFIX."report.*,
-    ".DB_PREFIX."unread.id AS 'unread'
+    ".DB_PREFIX."unread.id AS 'unread',
+    CASE WHEN ( reportDeleted < from_unixtime(1) OR reportDeleted IS NULL) THEN 'False' ELSE 'True' END AS reportDeletedBool
     FROM ".DB_PREFIX."report
     LEFT JOIN ".DB_PREFIX."unread on  ".DB_PREFIX."report.reportId =  ".DB_PREFIX."unread.idrecord AND  ".DB_PREFIX."unread.idtable = 4 and  ".DB_PREFIX."unread.iduser=".$user['userId']."
     LEFT JOIN ".DB_PREFIX."user as ownerUser on ".DB_PREFIX."report.reportOwner = ownerUser.userId
@@ -89,8 +80,10 @@ $reportsSql = "SELECT
     LEFT JOIN ".DB_PREFIX."person as modifiedPerson on modifiedUser.personId = modifiedPerson.id and modifiedPerson.deleted = 0 AND modifiedPerson.secret <= ".$user['aclSecret']."
     WHERE $sqlFilter ".
     sortingGet('report'); //."GROUP BY ".DB_PREFIX."report.id";
-    $reportList = mysqli_query($database, $reportsSql);
-    $reportCount = mysqli_num_rows($reportList);
+$reportList = mysqli_query($database, $reportsSql);
+$reportCount = mysqli_num_rows($reportList);
+
+
 
 if ($reportCount > 0) {
     while ($report = mysqli_fetch_assoc($reportList)) {
@@ -104,11 +97,14 @@ if ($reportCount > 0) {
         // reportId 1:N nw_symbols2all.idrecord (&& nw_symbols2all.table =4) OPTIONAL
         //     nw_symbols2all.idsymbol 1:1 nw_symbol.id (&& nw_symbol.deleted=0) MANDATORY (get nw_symbol.*)
         $reports[$report['reportId']] = $report;
+        $reports[$report['reportId']]['reportName'] = stripslashes($report['reportName'].'');
     }
     $reportParticipants = reportsParticipants($reportIdList);
     foreach ($reportParticipants as $participant) {
-        $reports[$participant['reportId']]['participant'][] = array('participantRole' => $participant['participantRole'],
-                                                                    'participantName' => $participant['participantName']);
+        $reports[$participant['reportId']]['participant'][] = [
+            'participantRole' => $participant['participantRole'],
+            'participantName' => stripslashes($participant['participantName']),
+        ];
     }
     $latteParameters['reportsRecord'] = $reports;
     $latteParameters['reportCount'] = $reportCount;
@@ -119,4 +115,4 @@ if ($reportCount > 0) {
 }
 
 latteDrawTemplate('sparklet');
-latteDrawTemplate('reports');
+latteDrawTemplate('reports_body');

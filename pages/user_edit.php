@@ -1,8 +1,7 @@
 <?php
 
-use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+
 
 // upravit uzivatele
 if (isset($_POST['userid'], $_POST['edituser']) && $user['aclUser'] && !preg_match('/^[[:blank:]]*$/i', $_POST['login'])) {
@@ -53,29 +52,25 @@ if (isset($_POST['userid'], $_POST['edituser']) && $user['aclUser'] && !preg_mat
     }
 }
 
-    $personList = personList('deleted=0 and (archived is null OR archived  < from_unixtime(1)) and dead=0', 'surname');
-    if (count($personList) > 1) {
-        foreach ($personList as $personList) {
-            $persons[] = [$personList['id'], $personList['surname'], $personList['name']];
-        }
-        $latteParameters['persons'] = $persons;
+
+$latteParameters['persons'] = personsUnlinked($URL[3]);
+
+
+$res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."user WHERE userId=".$URL[3]);
+if ($rec = mysqli_fetch_assoc($res)) {
+    $latteParameters['userEdit'] = $rec;
+
+    $reportsAssignedToUser = reportsAssignedTo($rec['userId']);
+    if (sizeof($reportsAssignedToUser) > 1) {
+        $latteParameters['userEdit']['hlaseni'] = $reportsAssignedToUser;
     }
 
-    $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."user WHERE userId=".$URL[3]);
-    if ($rec = mysqli_fetch_assoc($res)) {
-        $latteParameters['userEdit'] = $rec;
-
-        $reportsAssignedToUser = reportsAssignedTo($rec['userId']);
-        if (sizeof($reportsAssignedToUser)>1) {
-            $latteParameters['userEdit']['hlaseni'] = $reportsAssignedToUser;
-        }
-
-        $casesAssignedToUser = casesAssignedTo($rec['userId']);
-        if (sizeof($casesAssignedToUser)>1) {
-            $latteParameters['userEdit']['pripady'] = $casesAssignedToUser;
-        }
-    } else {
-        $latteParameters['warning'] = $text['zaznamnenalezen'];
+    $casesAssignedToUser = casesAssignedTo($rec['userId']);
+    if (sizeof($casesAssignedToUser) > 1) {
+        $latteParameters['userEdit']['pripady'] = $casesAssignedToUser;
     }
+} else {
+    $latteParameters['warning'] = $text['zaznamnenalezen'];
+}
 latteDrawTemplate('sparklet');
 latteDrawTemplate('user_edit');

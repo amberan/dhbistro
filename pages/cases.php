@@ -2,7 +2,7 @@
 
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+
 
     if (isset($URL[2], $URL[3]) && $URL[2] == 'delete' && is_numeric($URL[3]) && $user['aclCase'] > 0) { //delete case
         authorizedAccess(3, 11, $URL[3]);

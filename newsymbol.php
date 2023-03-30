@@ -1,13 +1,12 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
-use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Nový symbol';
-    mainMenu();
-    sparklets('<a href="/persons/">osoby</a> &raquo; <a href="symbols.php">nepřiřazené symboly</a> &raquo; <strong>nový symbol</strong>');
+mainMenu();
+sparklets('<a href="/persons/">osoby</a> &raquo; <a href="symbols.php">nepřiřazené symboly</a> &raquo; <strong>nový symbol</strong>');
 ?>
 <div id="obsah">
 	<fieldset><legend><strong>Nový symbol</strong></legend>
@@ -37,7 +36,14 @@ $latteParameters['title'] = 'Nový symbol';
 				<h3><label for="alphabeter">Písma:</label></h3><input type="range" value="0" min="0" max="10" step="1" name="alphabeter" id="alphabeter" list=hodnoty /><br />
 				<h3><label for="specialchar">Spec. znaky:</label></h3><input type="range" value="0" min="0" max="10" step="1" name="specialchar" id="specialchar" list=hodnoty /><br />
 	        <div class="clear">&nbsp;</div>
-<?php 			if ($user['aclGamemaster'] == 1) {
+<?php
+if ($user['aclSecret'] > 0) {
+    echo "<br/><br/>";
+    echo '<h3><label for="archiv">Utajeno:</label></h3>
+	<input type="checkbox" name="secret" />';
+}
+
+if ($user['aclGamemaster'] == 1) {
     echo '
 				<h3><label for="notnew">Není nové</label></h3>
 					<input type="checkbox" name="notnew"/><br/>

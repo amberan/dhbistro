@@ -1,9 +1,46 @@
 <?php
-use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+
+if (isset($_POST['addtoareport'])) {
+    authorizedAccess(4, 6, $_POST['reportid']);
+
+    switch ($_POST['fdead']) {
+        case 0: $fsql_dead = ' AND '.DB_PREFIX.'person.dead=0 ';
+            break;
+        case 1: $fsql_dead = '';
+            break;
+        default: $fsql_dead = ' AND '.DB_PREFIX.'person.dead=0 ';
+    }
+    switch ($_POST['farchiv']) {
+        case 0: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1))  ';
+            break;
+        case 1: $fsql_archiv = '';
+            break;
+        default: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1))  ';
+    }
+    $sqlFilter = " ".DB_PREFIX."person.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."person.secret<=".$user['aclSecret']." ";
+
+    $deletePersonFromReportSql = 'DELETE c FROM '.DB_PREFIX.'ar2p as c, '.DB_PREFIX.'person WHERE '.$sqlFilter.$fsql_dead.$fsql_archiv.' AND  c.idperson='.DB_PREFIX.'person.id AND c.idreport='.$_POST['reportid'];
+    mysqli_query($database, $deletePersonFromReportSql);
+
+    if (isset($_POST['person'])) {
+        $person = $_POST['person'];
+    }
+    if (isset($_POST['role'])) {
+        $role = $_POST['role'];
+    }
+
+    if (isset($_POST['person'])) {
+        for ($i = 0; $i < Count($person); $i++) {
+            $insertPersonToReportSql = "INSERT INTO " . DB_PREFIX . "ar2p VALUES('" . $person[$i] . "','" . $_POST['reportid'] . "','" . $user['userId'] . "','0" . $role[$i] . "');";
+            mysqli_query($database, $insertPersonToReportSql);
+        }
+    }
+    $latteParameters['message'] = 'Osoby příslušné k hlášení uloženy.';
+}
 
 //TODO evaluation of "new"
+//https://gitlab.com/alembiq/bistro/-/issues/259
 // if data are send undelete draft
 // else create "deleted" record
 // TODO LATTE if new - add draft flag, new form target, hide items that needs ID for creating relations
@@ -76,20 +113,20 @@ if (isset($_POST['uploadfile']) && is_uploaded_file($_FILES['attachment']['tmp_n
         $_SESSION['message'] = 'Soubor nebyl přiložen, něco se nepodařilo. Možná nebyl zvolen přikládaný soubor.';
     }
 }
-    if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {
-        authorizedAccess(4, 5, $_POST['reportId']);
-        $deleteCheckSql = "SELECT *
+if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {
+    authorizedAccess(4, 5, $_POST['reportId']);
+    $deleteCheckSql = "SELECT *
             FROM ".DB_PREFIX."file
             join ".DB_PREFIX."report on ".DB_PREFIX."file.iditem = ".DB_PREFIX."report.reportId
             WHERE ".DB_PREFIX."file.id=".$_GET['deletefile'];
-        $deleteCheckQuery = mysqli_query($database, $deleteCheckSql);
-        $deleteCheck = mysqli_fetch_assoc($deleteCheckQuery);
-        if ($deleteCheck['iduser'] == $user['userId'] || $deleteCheck['reportOwner'] == $user['userId'] || $userId['aclReport'] > 1) {
-            UnLink('./files/'.$deleteCheck['uniquename']);
-            mysqli_query($database, "DELETE FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
-            $_SESSION['message'] = 'Soubor odstranen';
-        }
+    $deleteCheckQuery = mysqli_query($database, $deleteCheckSql);
+    $deleteCheck = mysqli_fetch_assoc($deleteCheckQuery);
+    if ($deleteCheck['iduser'] == $user['userId'] || $deleteCheck['reportOwner'] == $user['userId'] || $userId['aclReport'] > 1) {
+        UnLink('./files/'.$deleteCheck['uniquename']);
+        mysqli_query($database, "DELETE FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
+        $_SESSION['message'] = 'Soubor odstranen';
     }
+}
 
 
 
@@ -120,12 +157,13 @@ $reportSql = "SELECT
     WHERE ".$sqlFilter;
 $reportQuery = mysqli_query($database, $reportSql);
 $report = mysqli_fetch_assoc($reportQuery);
-if (!is_numeric($URL[2])  || $user['aclReport'] < 1 || mysqli_num_rows($reportQuery) < 1|| ($report['reportSecret'] > $user['aclSecret'] && $report['reportOwner'] == $user['userId'])) {
+if (!is_numeric($URL[2]) || $user['aclReport'] < 1 || mysqli_num_rows($reportQuery) < 1 || ($report['reportSecret'] > $user['aclSecret'] && $report['reportOwner'] == $user['userId'])) {
     unauthorizedAccess(4, 1, $URL[2]);
 } else {
     authorizedAccess(4, 1, $URL[2]);
     deleteUnread(4, $URL[2]);
-    $latteParameters['title'] = $text['hlaseni']." ".reportType($report['reportType']).": ".stripslashes($report['reportName']);
+    $report['reportName'] = stripslashes($report['reportName'].'');
+    $latteParameters['title'] = $text['hlaseni']." ".reportType($report['reportType']).": ".stripslashes($report['reportName'].'');
     $latteParameters['reportType'] = reportType();
     $latteParameters['reportParticipants'] = reportParticipants($URL[2]);
     $latteParameters['reportRole'] = reportRole();

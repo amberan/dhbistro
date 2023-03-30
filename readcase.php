@@ -1,8 +1,7 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
-use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+
 latteDrawTemplate("header");
 
 if (is_numeric($_REQUEST['rid'])) {
@@ -64,16 +63,16 @@ if (is_numeric($_REQUEST['rid'])) {
 	<fieldset><legend><strong>Obecné informace</strong></legend>
 		<div id="info">
 			<?php if ($rec['secret'] == 1) {
-                echo '<h2>TAJNÉ</h2>';
-            } ?>
+			    echo '<h2>TAJNÉ</h2>';
+			} ?>
 			<?php if ($rec['deleted'] == 1) {
-                echo '<h2>SMAZANÝ ZÁZNAM</h2>';
-            } ?>
+			    echo '<h2>SMAZANÝ ZÁZNAM</h2>';
+			} ?>
 			<div class="clear">&nbsp;</div>
 			<h3>Řešitelé: </h3>
 			<p>
 			<?php
-            $sql = "SELECT ".DB_PREFIX."user.userId AS 'id', ".DB_PREFIX."user.userName AS 'login' FROM ".DB_PREFIX."c2s, ".DB_PREFIX."user WHERE ".DB_PREFIX."user.userId=".DB_PREFIX."c2s.idsolver AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userDeleted=0 ORDER BY ".DB_PREFIX."user.userName ASC";
+			$sql = "SELECT ".DB_PREFIX."user.userId AS 'id', ".DB_PREFIX."user.userName AS 'login' FROM ".DB_PREFIX."c2s, ".DB_PREFIX."user WHERE ".DB_PREFIX."user.userId=".DB_PREFIX."c2s.idsolver AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userDeleted=0 ORDER BY ".DB_PREFIX."user.userName ASC";
             $pers = mysqli_query($database, $sql);
             $solvers = [];
             while ($perc = mysqli_fetch_assoc($pers)) {
@@ -131,7 +130,7 @@ if (is_numeric($_REQUEST['rid'])) {
 				<p>
 					<strong>Datum poslední změny:</strong> <?php echo webdate($rec['datum']); ?>
 					<strong>Změnil:</strong>
-					<?php echo  getAuthor($rec['iduser'], 1); ?>
+					<?php echo AuthorDB($rec['iduser']); ?>
 				</p>
 			<div class="clear">&nbsp;</div>
 		</div>
@@ -148,25 +147,25 @@ if (is_numeric($_REQUEST['rid'])) {
 	<fieldset><legend><strong>Přiložené symboly</strong></legend>
 	<?php //generování seznamu přiložených symbolů
         $sql_s = "SELECT ".DB_PREFIX."symbol2all.idsymbol AS 'id' FROM ".DB_PREFIX."symbol2all, ".DB_PREFIX."symbol WHERE ".DB_PREFIX."symbol2all.idsymbol = ".DB_PREFIX."symbol.id AND ".DB_PREFIX."symbol.assigned=0 AND ".DB_PREFIX."symbol2all.idrecord=".$_REQUEST['rid']." AND ".DB_PREFIX."symbol2all.table=3 AND ".DB_PREFIX."symbol.deleted=0";
-        $res_s = mysqli_query($database, $sql_s);
-        if (mysqli_num_rows($res_s)) {
-            $inc = 0; ?>
+            $res_s = mysqli_query($database, $sql_s);
+            if (mysqli_num_rows($res_s)) {
+                $inc = 0; ?>
 		<div id="symbols">
 		<table>
 		<?php
-            while ($rec_s = mysqli_fetch_assoc($res_s)) {
-                if ($inc == 0 || $inc == 8) {
-                    echo '<tr>';
-                }
-                echo '<td><img src="file/symbol/'.$rec_s['id'].'" alt="symbol chybí" /></td>';
-                if ($inc == 7) {
-                    echo '</tr>';
-                }
-                $inc++;
-            } ?> </table></div> <?php
-        } else {
-            echo 'Žádné přiložené symboly.';
-        } ?>
+                while ($rec_s = mysqli_fetch_assoc($res_s)) {
+                    if ($inc == 0 || $inc == 8) {
+                        echo '<tr>';
+                    }
+                    echo '<td><img src="file/symbol/'.$rec_s['id'].'" alt="symbol chybí" /></td>';
+                    if ($inc == 7) {
+                        echo '</tr>';
+                    }
+                    $inc++;
+                } ?> </table></div> <?php
+            } else {
+                echo 'Žádné přiložené symboly.';
+            } ?>
 	</fieldset>
 	<!-- konec seznamu přiložených symbolů -->
 	<?php } ?>
@@ -188,10 +187,10 @@ if (is_numeric($_REQUEST['rid'])) {
 		<?php }
                 if (in_array($rec_f['mime'], $config['mime-image'], true)) { ?>
 							<li><a href="file/attachement/<?php echo $rec_f['id']; ?>"><img  width="300px" alt="<?php echo stripslashes($rec_f['title']); ?>" src="file/attachement/<?php echo $rec_f['id']; ?>"></a></li>
-			<?php		} else { ?>
+			<?php	} else { ?>
 							<li><a href="file/attachement/<?php echo $rec_f['id']; ?>"><?php echo stripslashes($rec_f['title']); ?></a></li>
 			<?php }
-            }
+			}
             if ($i != 0) {
                 echo "</ul>\n<!-- end of #prilozenadata -->\n</fieldset>";
             }
@@ -208,55 +207,55 @@ if (is_numeric($_REQUEST['rid'])) {
         ORDER BY ".DB_PREFIX."note.datum DESC";
         $res_n = mysqli_query($database, $sql_n);
         $i = 0;
-            while ($rec_n = mysqli_fetch_assoc($res_n)) {
-                $i++;
-                if ($i == 1) { ?>
+        while ($rec_n = mysqli_fetch_assoc($res_n)) {
+            $i++;
+            if ($i == 1) { ?>
 	<fieldset><legend><strong>Poznámky</strong></legend>
 	<div id="poznamky"><?php
-                }
-                if ($i > 1) {?>
+            }
+            if ($i > 1) {?>
 		<hr /><?php
-                } ?>
+            } ?>
 		<div class="poznamka">
 			<h4>
 			<?php
-                echo stripslashes($rec_n['title']).' - '.stripslashes($rec_n['user']).' ['.webdate($rec_n['date_created']).']';
-                if ($rec_n['secret'] == 0) {
-                    echo ' (veřejná)';
-                }
-                if ($rec_n['secret'] == 1) {
-                    echo ' (tajná)';
-                }
-                if ($rec_n['secret'] == 2) {
-                    echo ' (soukromá)';
-                } ?>
+            echo stripslashes($rec_n['title']).' - '.stripslashes($rec_n['user']).' ['.webdate($rec_n['date_created']).']';
+            if ($rec_n['secret'] == 0) {
+                echo ' (veřejná)';
+            }
+            if ($rec_n['secret'] == 1) {
+                echo ' (tajná)';
+            }
+            if ($rec_n['secret'] == 2) {
+                echo ' (soukromá)';
+            } ?>
 			</h4>
 			<div><?php echo stripslashes($rec_n['note']); ?></div>
 			<span class="poznamka-edit-buttons"><?php
-                if (($rec_n['iduser'] == $user['userId']) || ($user['aclCase'])) {
-                    echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;idtable=3" title="upravit"><span class="button-text">upravit</span></a> ';
-                }
-                if (($rec_n['iduser'] == $user['userId']) || ($user['aclCase'] > 1)) {
-                    echo '<a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.urlencode($backurl).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec_n['title'])."&quot; náležící k osobě?');".'" title="smazat"><span class="button-text">smazat</span></a>';
-                } ?>
+            if (($rec_n['iduser'] == $user['userId']) || ($user['aclCase'])) {
+                echo '<a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;idtable=3" title="upravit"><span class="button-text">upravit</span></a> ';
+            }
+            if (($rec_n['iduser'] == $user['userId']) || ($user['aclCase'] > 1)) {
+                echo '<a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;personid='.$_REQUEST['rid'].'&amp;backurl='.urlencode($backurl).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec_n['title'])."&quot; náležící k osobě?');".'" title="smazat"><span class="button-text">smazat</span></a>';
+            } ?>
 			</span>
 		</div>
 		<!-- end of .poznamka -->
 	<?php
-            }
-            if ($i != 0) { ?>
+        }
+        if ($i != 0) { ?>
 	</div>
 	<!-- end of #poznamky -->
 	</fieldset>
-	<?php 	}
-    // konec poznámek
-        } ?>
+	<?php }
+        // konec poznámek
+    } ?>
 </div>
 <!-- end of #obsah -->
 <?php
         }
     } else {
-        echo      $_SESSION['message'] = "Případ neexistuje!";
+        echo $_SESSION['message'] = "Případ neexistuje!";
     }
 } else {
     echo $_SESSION['message'] = $text['accessdeniedrecorded'];

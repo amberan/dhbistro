@@ -1,68 +1,34 @@
 <?php
 
-use Tracy\Debugger;
-
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
-
-if (isset($URL['3']) and $URL['1'] == "news" and ($user['aclNews'] > 0) and $URL['2'] == "delete") { // DELETE
-    mysqli_query($database, "UPDATE ".DB_PREFIX."news set deleted=1 where id='".$URL['3']."'");
-    if (mysqli_affected_rows($database) == 1) {
-        authorizedAccess(5, 11, $URL['3']);
-        $latteParameters['message'] = $text['aktualitaodebrana'];
-    } else {
-        $latteParameters['message'] = $text['aktualitaneodebrana'];
-    }
-} elseif (isset($_GET['newsdelete'])) {
-    $latteParameters['message'] = $text['http401'];
-    unauthorizedAccess(5, 11, $URL[3]);
-}
-
-if (isset($URL['3']) and $URL['1'] == "news" and ($user['aclNews'] > 0) and $URL['2'] == "restore") { // DELETE
-    mysqli_query($database, "UPDATE ".DB_PREFIX."news set deleted=0 where id='".$URL['3']."'");
-    if (mysqli_affected_rows($database) == 1) {
-        authorizedAccess(5, 11, $URL['3']);
-        $latteParameters['message'] = $text['aktualitaobnovena'];
-    } else {
-        $latteParameters['message'] = $text['aktualitaneobnovena'];
-    }
-} elseif (isset($_GET['newsdelete'])) {
-    $latteParameters['message'] = $text['http401'];
-    unauthorizedAccess(5, 11, $URL[3]);
-}
-
-if ($URL['1'] == "news" and ($user['aclNews'] > 0) and isset($_POST['news_new'])) { // ADD
-    if ($_POST['insertnews'] && !preg_match('/^[[:blank:]]*$/i', $_POST['nadpis']) && !preg_match('/^[[:blank:]]*$/i', $_POST['news_new']) && is_numeric($_POST['kategorie'])) {
-        mysqli_query($database, "INSERT INTO ".DB_PREFIX."news ( datum, iduser, kategorie, nadpis, obsahMD, deleted) VALUES('".time()."','".$user['userId']."','".$_POST['kategorie']."','".$_POST['nadpis']."','".$_POST['news_new']."',0)");
-        if (mysqli_affected_rows($database) == 1) {
-            authorizedAccess(5, 3, 0);
-            $latteParameters['message'] = $text['aktualitavlozena'];
-            unreadRecords(5, 0);
-        } else {
-            $latteParameters['message'] = $text['aktualitanevlozena'];
+if (isset($URL[1],$URL[2],$URL[3]) && $URL['1'] == 'news' && is_numeric($URL[2])) {
+    if ($user['aclNews'] || $user['aclRoot']) {
+        if ($URL[2] == 0 && isset($_POST['newsTitle'], $_POST['newsBody']) && !preg_match('/^[[:blank:]]*$/i', $_POST['newsTitle']) && !preg_match('/^[[:blank:]]*$/i', $_POST['newsBody'])) {
+            $latteParameters['message'] = newsAdd($_POST['newsTitle'], $_POST['newsBody'], $_POST['newsCategory']);
+        } elseif ($URL[3] == 'edit' && isset($_POST['newsTitle'],$_POST['newsBody']) && !preg_match('/^[[:blank:]]*$/i', $_POST['newsTitle']) && !preg_match('/^[[:blank:]]*$/i', $_POST['newsBody'])) {
+            $latteParameters['message'] = newsEdit($_POST['newsTitle'], $_POST['newsBody'], $_POST['newsCategory']);
+            $latteParameters['newsEdit'] = newsRead($URL[2]);
+        } elseif ($URL[3] == 'delete') {
+            $latteParameters['message'] = newsDelete($URL[2]);
+        } elseif ($URL[3] == 'restore') {
+            $latteParameters['message'] = newsRestore($URL[2]);
         }
-    } else {
-        $latteParameters['message'] = $text['nevytvoreno'];
-    }
-}
-
-deleteUnread(5, 0);
-$sql_news = "SELECT ".DB_PREFIX."news.* , ".DB_PREFIX."user.userName AS 'author'
-FROM ".DB_PREFIX."news JOIN ".DB_PREFIX."user ON ".DB_PREFIX."news.iduser = ".DB_PREFIX."user.userId
-WHERE ".$user['sqlDeleted']." ORDER BY ".DB_PREFIX."news.datum DESC LIMIT 10";
-$news_query = mysqli_query($database, $sql_news);
-if (mysqli_num_rows($news_query)) {
-    while ($news_record = mysqli_fetch_assoc($news_query)) {
-        if (isset($news_record['obsahMD']) && strlen($news_record['obsahMD']) > 0) {
-            $news_record['datum'] = webdatetime($news_record['datum']);
-            $news_record['category'] = $news_record['kategorie'];
-            $news_array[] = $news_record;
+        if ($URL[3] == 'new') {
+            $latteParameters['subtitle'] = $text['subtitleNewsAdd'];
+        } elseif ($URL[3] == 'edit') {
+            $latteParameters['subtitle'] = $text['subtitleNewsEdit'];
         }
+        if ($URL[2] > 0) {
+            $latteParameters['newsEdit'] = newsRead($URL[2]);
+        }
+        latteDrawTemplate('sparklet');
+        latteDrawTemplate('news_edit');
+    } else {
+        $latteParameters['message'] = $text['notificationHttp401'];
+        unauthorizedAccess('news', 'unauthorizedAccess', $URL[2]);
     }
-    $latteParameters['news_array'] = $news_array;
 } else {
-    $latteParameters['warning'] = $text['prazdnyvypis'];
+    $latteParameters['news_array'] = newsList();
+    latteDrawTemplate('sparklet');
+    latteDrawTemplate('dashboard');
+    latteDrawTemplate('news');
 }
-
-latteDrawTemplate('sparklet');
-latteDrawTemplate('dashboard');
-latteDrawTemplate('news');

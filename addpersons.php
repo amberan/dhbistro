@@ -3,7 +3,7 @@
 require_once($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Úprava hlášení';
@@ -80,49 +80,6 @@ if (isset($_POST['addtogroup'])) {
             mysqli_query($database, "INSERT INTO ".DB_PREFIX."g2p VALUES('".$person[$i]."','".$_POST['groupid']."','".$user['userId']."')");
         }
     }
-    latteDrawTemplate("footer");
-}
-
-if (isset($_POST['addtoareport'])) {
-    authorizedAccess(4, 6, $_POST['reportid']);
-    mysqli_query($database, "DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archived is null AND p.dead=0 AND c.idreport=".$_POST['reportid']);
-    if ($user['aclSecret'] == 1 && $_POST['farchiv'] == 0 && $_POST['fdead'] == 0) {
-        mysqli_query($database, "DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archived is null AND p.dead=0 AND c.idreport=".$_POST['reportid']);
-    }
-    if ($user['aclPerson'] == 1 && $_POST['farchiv'] == 1 && $_POST['fdead'] == 0) {
-        mysqli_query($database, "DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archived is not null AND p.dead=0 AND c.idreport=".$_POST['reportid']);
-    }
-    if ($user['aclPerson'] == 1 && $_POST['farchiv'] == 0 && $_POST['fdead'] == 1) {
-        mysqli_query($database, "DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archived is null AND p.dead=1 AND c.idreport=".$_POST['reportid']);
-    }
-    if ($user['aclSecret'] == 1 && $_POST['farchiv'] == 1 && $_POST['fdead'] == 0) {
-        mysqli_query($database, "DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archived is not null AND p.dead=0 AND c.idreport=".$_POST['reportid']);
-    }
-    if ($user['aclPerson'] == 1 && $_POST['farchiv'] == 1 && $_POST['fdead'] == 1) {
-        mysqli_query($database, "DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=0 AND p.archived is not null AND p.dead=1 AND c.idreport=".$_POST['reportid']);
-    }
-    if ($user['aclSecret'] == 1 && $_POST['farchiv'] == 0 && $_POST['fdead'] == 1) {
-        mysqli_query($database, "DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archived is null AND p.dead=1 AND c.idreport=".$_POST['reportid']);
-    }
-    if ($user['aclSecret'] == 1 && $_POST['farchiv'] == 1 && $_POST['fdead'] == 1) {
-        mysqli_query($database, "DELETE c FROM ".DB_PREFIX."ar2p as c, ".DB_PREFIX."person as p WHERE c.idperson=p.id AND p.secret=1 AND p.archived is not null AND p.dead=1 AND c.idreport=".$_POST['reportid']);
-    }
-    if (isset($_POST['person'])) {
-        $person = $_POST['person'];
-    }
-    if (isset($_POST['role'])) {
-        $role = $_POST['role'];
-    }
-
-
-    if (isset($_POST['person'])) {
-        for ($i = 0;$i < Count($person);$i++) {
-            mysqli_query($database, "INSERT INTO ".DB_PREFIX."ar2p VALUES('".$person[$i]."','".$_POST['reportid']."','".$user['userId']."','0".$role[$i]."')");
-        }
-    }
-    mainMenu();
-    sparklets('<a href="/reports/">hlášení</a> &raquo; <a href="/reports/'.$_POST['reportid'].'/edit">úprava hlášení</a> &raquo; <strong>uložení změn</strong>', '<a href="/reports/'.$_POST['reportid'].'">zobrazit upravené</a>');
-    echo '<div id="obsah"><p>Osoby příslušné k hlášení uloženy.</p></div>';
     latteDrawTemplate("footer");
 }
 

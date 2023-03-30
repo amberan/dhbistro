@@ -1,7 +1,7 @@
 <?php
-use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+
+
 
 $sqlFilter = DB_PREFIX.'report.reportId = '.$URL[2].' AND ('.DB_PREFIX.'report.reportDeleted is null OR '.DB_PREFIX.'report.reportDeleted  < from_unixtime(1)) ';
 $reportSql = "SELECT
@@ -24,12 +24,12 @@ $reportSql = "SELECT
     WHERE ".$sqlFilter;
 $reportQuery = mysqli_query($database, $reportSql);
 $report = mysqli_fetch_assoc($reportQuery);
-if (!is_numeric($URL[2])|| $user['aclReport'] < 1 || mysqli_num_rows($reportQuery) < 1 || ($report['reportSecret'] > $user['aclSecret'] && $report['reportOwner'] != $user['userId'])) {
+if (!is_numeric($URL[2]) || $user['aclReport'] < 1 || mysqli_num_rows($reportQuery) < 1 || ($report['reportSecret'] > $user['aclSecret'] && $report['reportOwner'] != $user['userId'])) {
     unauthorizedAccess(4, 1, $URL[2]);
 } else {
     authorizedAccess(4, 1, $URL[2]);
     deleteUnread(4, $URL[2]);
-
+    $report['reportName'] = stripslashes($report['reportName']);
     $latteParameters['title'] = $text['hlaseni']." ".reportType($report['reportType']).": ".stripslashes($report['reportName']);
     $latteParameters['reportType'] = reportType();
     $latteParameters['reportParticipants'] = reportParticipants($URL[2]);
