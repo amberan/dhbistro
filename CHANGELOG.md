@@ -102,6 +102,9 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 ### Security
 - Feature: update of composer libs and php to 8.2.2 #270
 
+## 1.11.4 WIP
+
+
 ## 1.11.3 - 2023-03-30
 ### Added
 - Feature: secret symbols #284
