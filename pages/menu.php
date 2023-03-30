@@ -4,7 +4,7 @@ $menu[] = [$text['aktuality'], "/", searchTable(5)];
 $menu[] = [$text['nastenka'], "/board/", searchTable(6)];
 $menu[] = [$text['hlaseni'], "/reports/", searchTable(4)];
 $menu[] = [$text['osoby'], "/persons/", searchTable(1)];
-$menu[] = [$text['symboly'], "/symbols.php", searchTable(7)];
+$menu[] = [$text['symboly'], "/symbols/", searchTable(7)];
 $menu[] = [$text['pripady'], "/cases/", searchTable(3)];
 $menu[] = [$text['skupiny'], "/groups/", searchTable(2)];
 
@@ -28,6 +28,6 @@ if (isset($user) && $user['aclRoot'] > 0) {
 $menuSub[] = [$text['odhlasit'], "/logout", 0];
 
 
-$menuLinks[] = [$text['forum'],"http://www.prazskahlidka.cz/forums/index.php",0,"images/icons/Icon_forum.svg"];
-$menuLinks[] = [$text['banka'],"http://banka.alembiq.net",0,"images/icons/Icon_bank.svg"];
-$menuLinks[] = [$text['prazskahlidka'],"http://prazskahlidka.cz",0,"images/icons/Icon_web.svg"];
+$menuLinks[] = [$text['forum'], "http://www.prazskahlidka.cz/forums/index.php", 0, "images/icons/Icon_forum.svg"];
+$menuLinks[] = [$text['banka'], "http://banka.prazskahlidka.cz", 0, "images/icons/Icon_bank.svg"];
+$menuLinks[] = [$text['prazskahlidka'], "http://prazskahlidka.cz", 0, "images/icons/Icon_web.svg"];

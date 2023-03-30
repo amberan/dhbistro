@@ -1,8 +1,35 @@
 <?php
 
-use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+function AuthorDB($userId)
+{
+    global $database,$text;
+    $authorSql = 'SELECT ' . DB_PREFIX . 'user.userName, concat( ' . DB_PREFIX . 'person.name, " ", ' . DB_PREFIX . 'person.surname) as personName
+            FROM ' . DB_PREFIX . 'user
+            LEFT JOIN ' . DB_PREFIX . 'person ON ' . DB_PREFIX . 'user.personId = ' . DB_PREFIX . 'person.id
+            WHERE ' . DB_PREFIX . 'user.userId=' . $userId;
+    $authorQuery = mysqli_query($database, $authorSql);
+    if (mysqli_num_rows($authorQuery) > 0) {
+        $authorResult = mysqli_fetch_assoc($authorQuery);
+        return Author(
+            $authorResult['userName'],
+            $authorResult['personName']
+        );
+    } else {
+        return $text['warningInformationUnavailable'];
+    }
+}
+
+
+function Author($userName,$personName)
+{
+    if ($personName) {
+        return $personName;
+    } else {
+        return $userName;
+    }
+}
+
 
 /**
  * get user details.
@@ -82,8 +109,8 @@ function userChange($userId, $data, $success = null, $failure = null): string
     global $database, $latteParameters;
     $chain = "";
     foreach ($data as $column => $value) {
-        if (DBcolumnExist('user', $column) and mb_strlen($value) > 0) {
-            $chain .= " $column = '$value',";
+        if (DBcolumnExist('user', $column) and mb_strlen(trim($value)) > 0) {
+            $chain .= " $column = '".trim($value)."',";
         }
     }
     if (mb_strlen($chain) > 0) {
@@ -98,33 +125,6 @@ function userChange($userId, $data, $success = null, $failure = null): string
 
     return $chain;
 }
-
-function getAuthor($recid, $trn)
-{
-    global $database;
-    if (1 == $trn) { //person
-        $getAuthorSql = 'SELECT '.DB_PREFIX."person.name as 'name', ".DB_PREFIX."person.surname as 'surname', ".DB_PREFIX."user.userName as 'nick' FROM ".DB_PREFIX.'person, '.DB_PREFIX.'user WHERE '.DB_PREFIX.'user.userId='.$recid.' AND '.DB_PREFIX.'person.id='.DB_PREFIX.'user.personId';
-        $getAuthorQuery = mysqli_query($database, $getAuthorSql);
-        if (!is_bool($getAuthorQuery)) {
-            $getAuthorResult = mysqli_fetch_assoc($getAuthorQuery);
-            $name = stripslashes(@$getAuthorResult['surname']).', '.stripslashes(@$getAuthorResult['name']);
-        } else {
-            $name = 'Uživatel není přiřazen.';
-        }
-    } else { //user
-        $getAuthorSql = 'SELECT '.DB_PREFIX."user.userName as 'nick' FROM ".DB_PREFIX.'user WHERE '.DB_PREFIX.'user.userId='.$recid;
-        $getAuthorQuery = mysqli_query($database, $getAuthorSql);
-        if (!is_bool($getAuthorQuery)) {
-            $getAuthorResult = mysqli_fetch_assoc($getAuthorQuery);
-            $name = stripslashes($getAuthorResult['nick']);
-        } else {
-            $name = 'Neznámo.';
-        }
-    }
-
-    return $name;
-}
-
 function listUsersSuitable()
 {
     global $database;

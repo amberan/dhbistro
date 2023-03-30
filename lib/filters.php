@@ -13,17 +13,21 @@
 function sortingSet($object, $column, $linkedTable = null): void
 {
     global $database,$user;
+    //str_replace(' ', '',str_replace('ASC', '',str_replace('DESC', '',str_replace('ORDERBY', '',
     $currentSorting = sortingGet($object, $linkedTable);
-    //TODO overeni ze bylo zapsano do db
-    if (mb_strpos($currentSorting, $column) and mb_strpos($currentSorting, 'DESC')) {
-        mysqli_query($database, "UPDATE ".DB_PREFIX."sort set sortDirection='ASC' where objectType='$object' AND userId=".$user['userId']);
-    } elseif (mb_strpos($currentSorting, $column) and mb_strpos($currentSorting, 'ASC')) {
-        mysqli_query($database, "UPDATE ".DB_PREFIX."sort set sortDirection='DESC' where objectType='$object' AND userId=".$user['userId']);
-    } elseif ((DBcolumnExist($object, $column) or DBcolumnExist($linkedTable, $column)) and mb_strlen($currentSorting) > 0) {
-        mysqli_query($database, "UPDATE ".DB_PREFIX."sort set sortColumn='$column' , sortDirection='ASC' where objectType='$object' AND userId=".$user['userId']);
-    } elseif (DBcolumnExist($object, $column) or DBcolumnExist($linkedTable, $column)) {
-        mysqli_query($database, "INSERT INTO ".DB_PREFIX."sort (userId,objectType,sortColumn,sortDirection) VALUES (".$user['userId'].",'$object','$column','ASC')");
+    $columnList = explode(',', $column);
+    if (mb_strpos($currentSorting, $columnList[0]) and mb_strpos($currentSorting, 'DESC')) { //update to ASC
+        $sortingSql = "UPDATE ".DB_PREFIX."sort set sortDirection='ASC' where objectType='$object' AND userId=".$user['userId'];
+    } elseif (mb_strpos($currentSorting, $columnList[0]) and mb_strpos($currentSorting, 'ASC')) { //update to DESC
+        $sortingSql = "UPDATE ".DB_PREFIX."sort set sortDirection='DESC' where objectType='$object' AND userId=".$user['userId'];
+    } elseif ((DBcolumnExist($object, $columnList[0]) or DBcolumnExist($linkedTable, $columnList[0])) and mb_strlen($currentSorting) > 0) { //change column
+        $sortingSql = "UPDATE ".DB_PREFIX."sort set sortColumn='$column' , sortDirection='ASC' where objectType='$object' AND userId=".$user['userId'];
+    } elseif (DBcolumnExist($object, $columnList[0]) or DBcolumnExist($linkedTable, $columnList[0])) { //insert new
+        $sortingSql = "INSERT INTO ".DB_PREFIX."sort (userId,objectType,sortColumn,sortDirection) VALUES (".$user['userId'].",'$object','$column','ASC')";
+    } else {
+        $sortingSql = 'SELECT NULL LIMIT 0;';
     }
+    mysqli_query($database, $sortingSql);
 }
 
 /**
@@ -39,11 +43,14 @@ function sortingGet($object, $linkedTable = null): string
     $query = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."sort where objectType='$object' AND userId=".$user['userId']);
     if (mysqli_num_rows($query) > 0) {
         $sorter = mysqli_fetch_array($query);
-        if (DBcolumnExist($object, $sorter['sortColumn']) or DBcolumnExist($linkedTable, $sorter['sortColumn'])) {
-            $result = " ORDER BY ".$sorter['sortColumn']." ".$sorter['sortDirection'];
+        $columnListDB = explode(',', $sorter['sortColumn']);
+        foreach ($columnListDB as $columnDB) {
+            if (DBcolumnExist($object, $columnDB) or DBcolumnExist($linkedTable, $columnDB)) {
+                $columnList[] = $columnDB;
+            }
         }
+        $result = " ORDER BY ".implode(' '.$sorter['sortDirection'].', ', $columnList)." ".$sorter['sortDirection'];
     }
-
     return $result;
 }
 
@@ -59,7 +66,7 @@ function filterSet($object, $data): void
     global $database,$user;
     $currentFilter = filterGet($object);
     if (is_array($data) and sizeof($data) > 0) {
-        $data = json_encode($data);
+        $data = json_encode($data,JSON_UNESCAPED_UNICODE);
     }
     if (@$currentFilter['id'] != 'X') {
         $sql = "UPDATE ".DB_PREFIX."filter SET filterPreference='".$data."' WHERE userId=".$user['userId']." AND objectType='".$object."'";

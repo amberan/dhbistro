@@ -17,14 +17,65 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 ### Fixed
 ### Security
  -->
-
-
 TODO: check all 'report (169) and  "report (191) in code - columns renamed, status=3 > reportArchived > timestamp, deleted > reportDeleted timestamp
+
+## 1.11.3 - 2023-03-30
+### Added
+- Feature: secret symbols #284
+- Feature: editable news #264
+### Changed
+- Refactored: header/listing template separation #273
+- Refactored: report default text #283
+### Fixed
+- Fixed: group filter for secret #59
+- Fixed: after editing symbol return to symbol page #285
+- Fixed: trim whitespaces from username and password #182
+- Fixed: one person cannot be linked to two users #182
+- Fixed: new link for banka #230
+- Fixed: report string escaping #264
+- Fixed: error while refreshing after timeout #279
+- Fixed: symbols to the old top menu #246
+### Removed
+- Database: drop news.obsah_md #300
+
+## 1.11.2 - 2023-02-15
+### Changed
+- Refactored: symbols redesign #116
+- Refactored: groups filter - secret #59
+### Fixed
+- Fixed: random sorting on persons #237
+- Fixed: linking persons to report #262
+
+## 1.11.1 - 2023-02-14
+### Added
+- Feature: report restoration #256
+- Feature: counting of results on search #119
+### Fixed
+- Fixed: twice displayed 'Dosažení stropu zaznamenáno' #256
+- Fixed: linked webapps opening in new tab #230
+- Fixed: display of symbol detail #252
+- Fixed: symbol deletion #254
+- Fixed: link symbol to person #260
+- Fixed: archive symbol #262
+- Fixed: new user creation #251 #182
+- Fixed: report deletion #256
+- Fixed: report listing event date #266
+- Fixed: notes on secret items in search #202 #253
+- Fixed: adding notes to symbols #116 #110
+### Security
+- Update: Latte 3.0 #269
+- Update: Tracy 2.9 #269
+- Update: ECS 11.2.8 #269
+- Update: html-to-markdown 5.1 #269
+
+## 1.11 - 2023-02-09
+### Security
+- Feature: update of composer libs and php to 8.2.2 #270
 
 ## 1.10 - 2022-11-29
 
 ## 1.8.12 - 2022-11-17
-### Changed 
+### Changed
 - Refactored: symbols in top menu #246
 - Refactored: external links from menu open in new tab/window #230
 ### Fixed
@@ -36,9 +87,9 @@ TODO: check all 'report (169) and  "report (191) in code - columns renamed, stat
 - Fixed: person edit link #241
 - Fixed: symbol linking #244
 - Fixed: linked symbols not showing #108
-- Fixed: user to person link #248  
-### Security 
-- Feature: upgrade to PHP 8.1 #250 
+- Fixed: user to person link #248
+### Security
+- Feature: upgrade to PHP 8.1 #250
 
 ## 1.8.11 - 2022-05-06
 ### Changed

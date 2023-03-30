@@ -1,0 +1,90 @@
+<div class="container-fluid mt-3 mb-3 mr-2 w-100">
+    <form action="{$URL[0]}{$URL[1]}/" method="POST" id="filter" class="row mb-1">
+	    <div class="col-12 col-md-4 text-left">
+	        <h4>
+                {$text[osoby]|firstUpper} {ifset $person_count}({$person_count}){/ifset}
+            </h4>
+	    </div>
+        <div class="col-12 col-md-8 text-right header-wrapper-right">
+            <input type="hidden" name="filter[placeholder]" />
+            <div class="header-switch">
+                <label class="toggle-control">
+                    <input type="checkbox" name="filter[dead]" {if (isset($filter['dead']) AND $filter['dead'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                    <span class="control"></span>
+                </label>
+                {$text['imrtve']}
+            </div>
+            <div class="header-switch">
+                <label class="toggle-control">
+                    <input type="checkbox" name="filter[archived]" {if (isset($filter['archived']) AND $filter['archived'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                    <span class="control"></span>
+                </label>
+                {$text['iarchiv']}
+            </div>
+            <div class="header-switch">
+                <label class="toggle-control">
+                    <input type="checkbox" name="filter[new]" {if (isset($filter['new']) AND $filter['new'] == 'on') } checked{/if} onchange="this.form.submit()" />
+                    <span class="control"></span>
+                </label>
+                {$text['jennove']}
+            </div>
+            {if $user['aclSecret'] > 0}
+                <div class="header-switch">
+                    <label class="toggle-control">
+                        <input type="checkbox" name="filter[secret]" {if (isset($filter['secret']) AND $filter['secret'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                        <span class="control"></span>
+                    </label>
+                    {$text['itajne']}
+                </div>
+            {/if}
+        </div>
+        <div class="col-12 col-lg-6 text-left header-wrapper-left">
+            <div class="header-switch">
+                <label class="toggle-control">
+                    <input type="checkbox" name="filter[portrait]" {if (isset($filter['portrait']) AND $filter['portrait'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                    <span class="control"></span>
+                </label>
+                {$text['portrety']}
+            </div>
+            <div class="header-switch">
+                <label class="toggle-control">
+                    <input type="checkbox" name="filter[symbol]" {if (isset($filter['symbol']) AND $filter['symbol'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                    <span class="control"></span>
+                </label>
+                {$text['symboly']}
+            </div>
+        </div>
+        <div class="col-12 col-lg-6 text-right header-wrapper-right">
+            <div class="header-switch">
+                <select name="filter[classSelect]"  onchange="this.form.submit()">
+                {foreach $filter['class'] as $id => $class }
+                    <option value="{$id}" {if (isset($filter['classSelect']) AND $filter['classSelect'] == $id) } selected {/if}>{$class}</option>
+                {/foreach}
+                </select>
+                <label class="header-switch-drop-label-m-left">{$text['specializace']}</label>
+            </div>
+            <div class="header-switch">
+                <select name="filter[sideSelect]"  onchange="this.form.submit()">
+                {foreach $filter['side'] as $id => $side }
+                    <option value="{$id}" {if (isset($filter['sideSelect']) AND $filter['sideSelect'] == $id) } selected {/if}>{$side}</option>
+                {/foreach}
+                </select>
+                <label class="header-switch-drop-label-m-left">{$text['strana']}</label>
+            </div>
+            <div class="header-switch">
+                <select name="filter[categorySelect]"  onchange="this.form.submit()">
+                {foreach $filter['category'] as $id => $category }
+                    <option value="{$id}" {if (isset($filter['categorySelect']) AND $filter['categorySelect'] == $id) } selected {/if}>{$category}</option>
+                {/foreach}
+                </select>
+                <label class="header-switch-drop-label-m-left">{$text['kategorie']}</label>
+            </div>
+        </div>
+	</form>
+    <div class="row mb-1">
+        <div class="col-12">
+{include 'persons.latte'}
+
+        </div>
+    </div>
+</div>

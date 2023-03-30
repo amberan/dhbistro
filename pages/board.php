@@ -1,8 +1,7 @@
 <?php
 
-use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+
 
 $latteParameters['title'] = $text['nastenka'];
 authorizedAccess(6, 1, 0);
@@ -23,7 +22,7 @@ $dashboard = mysqli_fetch_assoc($sql_dashboard);
 if (isset($dashboard['contentMD']) && strlen($dashboard['contentMD']) > 0) {
     $latteParameters['board'] = $dashboard['contentMD'];
     $latteParameters['board_created'] = webdate($dashboard['created']);
-    $latteParameters['board_author'] = getAuthor($dashboard['iduser'], 0);
+    $latteParameters['board_author'] = AuthorDB($dashboard['iduser']);
 } else {
     $latteParameters['board'] = $text['nastenkaprazdna'];
 }

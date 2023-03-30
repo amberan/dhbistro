@@ -2,8 +2,6 @@
 
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
-
 //TODO funkce pro prevod id fotek s symbolu na odkazy
 
 /**
@@ -17,7 +15,7 @@ Debugger::enable(Debugger::DETECT, $config['folder_logs']);
 function personRead($personId): array
 {
     global $database, $user, $text;
-    $sql = 'SELECT * FROM '.DB_PREFIX.'person WHERE id = '.$personId.' AND '.$user['sqlDeleted'].' AND '.$user['sqlDeleted'];
+    $sql = 'SELECT * FROM '.DB_PREFIX.'person WHERE id = '.$personId.' AND '.$user['sqlDeleted'].' AND '.$user['sqlSecret'];
     $query = mysqli_query($database, $sql);
     if (mysqli_num_rows($query) > 0) {
         $person = mysqli_fetch_assoc($query);
@@ -82,7 +80,6 @@ function personCheckboxUpdate($id, $field, $checkbox): void
         $sql = 'select '.$field.' from '.DB_PREFIX.'person where id='.$id;
         $sqlQuery = mysqli_query($database, $sql);
         $sqlField = mysqli_fetch_assoc($sqlQuery);
-        print_r($sqlField);
         if ($sqlField['roof'] == null) {
             $sqlUpdate = 'update '.DB_PREFIX.'person set '.$field.'=CURRENT_TIMESTAMP where id='.$id;
         }
@@ -94,7 +91,7 @@ function personCheckboxUpdate($id, $field, $checkbox): void
 function personDelete($id): void
 {
     global $database,$user;
-    if ($user['aclPerson']>0) {
+    if ($user['aclPerson'] > 0) {
         authorizedAccess(1, 11, $id);
         //TODO deleted to timestamp
         $sqlUpdate = 'update '.DB_PREFIX.'person set deleted=1 where id='.$id;
@@ -109,7 +106,7 @@ function personDelete($id): void
 function personRestore($id): void
 {
     global $database,$user;
-    if ($user['aclRoot']>0) {
+    if ($user['aclRoot'] > 0) {
         authorizedAccess(1, 17, $id);
         $sqlUpdate = 'update '.DB_PREFIX.'person set deleted=0 where id='.$id;
         mysqli_query($database, $sqlUpdate);
@@ -118,4 +115,26 @@ function personRestore($id): void
     } else {
         unauthorizedAccess(1, 17, $id);
     }
+}
+
+//list of unlinked persons for user editing (includes person linked to $editedUser)
+function personsUnlinked($editedUser = 0): array
+{
+    global $database;
+
+    $personLinked[] = [];
+    //list linked persons except person linked to $editedUser
+    $personLinkedSql = "SELECT ".DB_PREFIX."user.personId FROM ".DB_PREFIX."user where personId != 0 AND userId != ".$editedUser." ORDER BY personId";
+    $personLinkedQuery = mysqli_query($database, $personLinkedSql);
+    while ($personLinkedRecord = mysqli_fetch_assoc($personLinkedQuery)) {
+        $personLinked[] = $personLinkedRecord['personId'];
+    }
+    $personList = personList('deleted=0 and  (archived is null OR archived  < from_unixtime(1)) ', 'surname');
+    //substract linked from all undeleted
+    foreach ($personList as $personList) {
+        if (!in_array($personList['id'], $personLinked, true)) {
+            $person[] = [$personList['id'], $personList['surname'], $personList['name']];
+        }
+    }
+    return $person;
 }

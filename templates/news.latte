@@ -2,14 +2,14 @@
     <div class="row">
     {if @$news_array}
         {foreach $news_array as $news} {* 1=herni, 2=systemova *}
-            <div class="alert {if $news[category] == 1}alert-info{/if}{if $news[category] == 2}alert-warning{/if} mb-1 ml-2 mr-2 w-100">
+            <div class="alert {if $news['category'] == 1}alert-info{/if}{if $news['category'] == 2}alert-warning{/if} mb-1 ml-2 mr-2 w-100">
                 <h5>{$news[nadpis]}</h5>
                 <div class="row">
                     <div class="col-12" id="viewer{$news[id]|noescape}"></div>
                     <script>
                     const editor{$news[id]|noescape} = new toastui.Editor.factory({
-                            el: document.querySelector('#viewer{$news[id]|noescape}'),
-                            initialValue: `{$news[obsahMD]|noescape}`,
+                            el: document.querySelector('#viewer' + {$news[id]|noescape}),
+                            initialValue: `{$news['newsBody']|noescape}`,
                             viewer: true,
                         });
                     </script>
@@ -17,20 +17,23 @@
                 <hr>
                 <div class="row">
                     <div class="col-md-6 col-sm-12 text-left">
-                        {$news[datum]}, {$news[author]}
+                        {$news['newsCreated']}, {$news['newsCreatedBy']}
                     </div>
                     <div class="col-md-6 col-sm-12 text-right">
-                        {if ($user[aclNews] > 0 ) and $news[deleted] == 0}
-                            <a href='/news/delete/{$news[id]}' onclick='return confirm("Opravdu smazat aktualitu &quot;{$news[nadpis]}&quot;?")' title={$text[smazat]}>{$text[smazat]}</a>
-                        {elseif ($user[aclNews] > 0 ) > 0 and $news[deleted] == 1}
-                            <a href='/news/restore/{$news[id]}' onclick='return confirm("Opravdu obnovit aktualitu &quot;{$news[nadpis]}&quot;?")' title={$text[smazat]}>{$text[obnovit]}</a>
+                        {if ($user['aclNews'] > 0 && $news['deleted'] == 0)}
+                            {if $user['aclRoot'] || $news['category'] == 1}
+                                <a href='/news/{$news[id]}/edit' title={$text[upravit]}>{$text[upravit]}</a>
+                                <a href='/news/{$news[id]}/delete' onclick='return confirm("Opravdu smazat aktualitu: {$news['newsTitle']|noescape}?")' title={$text['smazat']}>{$text['smazat']}</a>
+                            {/if}
+                        {elseif ($user['aclRoot'] > 0 && $news['deleted'] == 1)}
+                            <a href='/news/{$news[id]}/restore' onclick='return confirm("Opravdu obnovit aktualitu: {$news['newsTitle']|noescape}?")' title={$text['obnovit']}>{$text['obnovit']}</a>
                         {/if}
                     </div>
                 </div>
             </div>
         {/foreach}
      {else}
-	V systému nejsou nadefinovány žádné aktuality!
+	{$text['notificationListEmpty']}
      {/if}
 	</div>
 </div>

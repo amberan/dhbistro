@@ -1,6 +1,8 @@
 [![pipeline status](https://gitlab.com/alembiq/bistro/badges/master/pipeline.svg)](https://gitlab.com/alembiq/bistro/commits/master)
 [![license](https://img.shields.io/github/license/amberan/dhbistro.svg)](https://gitlab.com/alembiq/bistro/blob/master/LICENSE)
 [![lines of code](https://tokei.rs/b1/github/amberan/dhbistro)](https://tokei.rs/b1/github/amberan/dhbistro)
+[![Latest Release](https://gitlab.com/alembiq/bistro/-/badges/release.svg)](https://gitlab.com/alembiq/bistro/-/releases)
+
 
 
 # [BISTRO](https://gitlab.com/alembiq/bistro)
@@ -12,15 +14,15 @@
 In-game it's used by two teams (Day and Night watch) to keep tracks of characters and events especially between iterations of the game.
 
 ## BiStro needs you!
-No doubt you've noticed BiStro is not a professional product, and at this moment individual components look quite different. This is due to ongoing refactoring of GUI to be usable also on mobile devices. However, our efforts to rewrite the user interface is much more complicated and time consuming that we expected.  
+No doubt you've noticed BiStro is not a professional product, and at this moment individual components look quite different. This is due to ongoing refactoring of GUI to be usable also on mobile devices. However, our efforts to rewrite the user interface is much more complicated and time consuming that we expected.
 
-Based on the current knowledge we know that rewriting BiStro in two people (one PHP, one HTML/CSS) is doable, but it would take too long and the user experience in the meantime would be greatly diminished. That's why we are looking for help, we could use more programmers but also some permanent testers.  
+Based on the current knowledge we know that rewriting BiStro in two people (one PHP, one HTML/CSS) is doable, but it would take too long and the user experience in the meantime would be greatly diminished. That's why we are looking for help, we could use more programmers but also some permanent testers.
 
 Just for the context - history of BiStro starts in 2006 - it was created for the first Watch game, part of Dies Irae. That's when Ethan wrote the core functionality in PHP (version 5 at the time). Years later Amberan took over and started using source code management tools. Together with Atlan they've added a lot of new functionality. A few years later, Ernedar joined. At the end of 2018 Charles updated the code to work with PHP 7 and started refactoring the whole system in an effort to understand how it works (and if we shouldn't just moved the data to some other system). While getting some understanding of the code an idea that came, idea of new UI. That's where we're now, slowly chewing up the old code and refactoring it while changing the UI.
 
-At the moment we are targeting the following technologies PHP 7, MariaDB, Bootstrap, Latte and tui.editor. Of course, everything could be written on the green field with a mobile app and everything, but we really don't have the time and energy for that.   
+At the moment we are targeting the following technologies PHP 7, MariaDB, Bootstrap, Latte and tui.editor. Of course, everything could be written on the green field with a mobile app and everything, but we really don't have the time and energy for that.
 
-P.S. If you don't know how to code but still want to help, you can always help us with testing or create user documentation.   
+P.S. If you don't know how to code but still want to help, you can always help us with testing or create user documentation.
 
 ## running BiStro
 It's a simple php website, you need just the basics - LAMP :)
@@ -30,7 +32,7 @@ It's a simple php website, you need just the basics - LAMP :)
     - headers
     - rewrite
 - MariaDB
-- PHP7
+- PHP 8.1 / 8.2
     php modules:
     - php-mysql
     - php-xml
@@ -42,7 +44,7 @@ It's a simple php website, you need just the basics - LAMP :)
 ### Installation
 - clone repository & run composer
 ```bash
-git clone git@gitlab.com:alembiq/bistro.git && cd bistro && composer install && composer update
+git clone git@gitlab.com:alembiq/bistro.git && cd bistro && composer install
 ```
 - point apache to the BiStro folder
 - create database & user
@@ -63,7 +65,7 @@ There is none:( docs below are just notes created during reverse engeneering pha
 
 - Lost all passwords?
 ```sql
-UPDATE nw_user SET pwd=md5('newpassword') WHERE id='1';
+UPDATE nw_user SET userPassword=md5('newPassword') ;
 ```
 - Prepare data for testing
 ```sql
@@ -80,7 +82,7 @@ UPDATE nw_file SET secret=1 WHERE RAND() < 0.3;
 UPDATE nw_group SET secret=1 WHERE deleted = 0 AND RAND() < 0.3;
 UPDATE nw_note SET secret=1 WHERE deleted = 0 AND RAND() < 0.3;
 UPDATE nw_person SET secret=1 WHERE deleted = 0 AND RAND() < 0.3;
-UPDATE nw_report SET secret=1 WHERE deleted = 0 AND RAND() < 0.3;
+UPDATE nw_report SET reportSecret=1 WHERE reportDeleted = 0 AND RAND() < 0.3;
 UPDATE nw_symbol SET secret=1 WHERE deleted = 0 AND RAND() < 0.3;
 
 UPDATE nw_user SET aclAPI=1, aclAudit=1, aclCase=2, aclUser=1, aclNews=1, aclBoard=1, aclGamemaster=1, aclGroup=2,

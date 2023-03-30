@@ -2,7 +2,7 @@
 
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+
 
 function bistroBackup()
 {
@@ -91,7 +91,9 @@ function backupBackupGetData()
                 }
                 $sqlScript .= "(";
                 for ($i=0; $i < $fields_count; $i++) {
-                    $row_content =  str_replace("\n", "\\n", mysqli_real_escape_string($database, $row[$i]));
+                    $row_content =  str_replace("\n", "\\n", mysqli_real_escape_string($database, $row[$i].' '));
+//TODO mysqli_real_escape_string deprecated?
+//PHP Deprecated: mysqli_real_escape_string(): Passing null to parameter #2 ($string) of type string is deprecated in .../charles/workspace/alembiq/bistro/htdocs/lib/backup.php:94
 
                     switch ($fields[$i]->type) {
                     case 8: case 3: //int bigint

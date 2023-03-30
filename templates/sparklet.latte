@@ -2,7 +2,11 @@
             <div class="row">
                 <div class="breadcrumb-side-left text-left">
                     <p class="breadcrumb-item">
-                        <span class="text-muted">{if @$subtitle}{$subtitle} / {/if}</span><span class="breadcrumb-item active">{$title}</span>
+                        {if @$subtitle}<span class="text-muted">{$title|firstUpper}</span> / <span class="breadcrumb-item active">{$subtitle|firstUpper} </span>
+                        {else}
+                        <span class="breadcrumb-item active">{$title|firstUpper}</span>
+                        {/if}
+
                     </p>
                 </div>
                 <div class="breadcrumb-side-right text-right">

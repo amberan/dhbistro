@@ -2,7 +2,7 @@
 
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+
 
 
 function DBconnect($configDB)
@@ -18,6 +18,7 @@ function DBTest($configDB)
 {
     $dbtest = @mysqli_connect($configDB['dbHost'], $configDB['dbUser'], $configDB['dbPassword'], $configDB['dbDatabase']);
     if (mysqli_connect_errno()) {
+        printf("Connect failed: %s\n", mysqli_connect_error());
         return false;
     }
     return true;

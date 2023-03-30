@@ -1,5 +1,6 @@
 # You can override the included template(s) by including variable overrides
 # SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
+# SAST config https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/SAST.gitlab-ci.yml
 # Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
 # Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
 # Note that environment variables can be set in several places
@@ -9,20 +10,28 @@ include:
 - template: Security/SAST.gitlab-ci.yml
 - template: Security/Dependency-Scanning.gitlab-ci.yml
 variables:
-  SAST_EXPERIMENTAL_FEATURES: 'true'
-  SAST_DEFAULT_ANALYZERS: nodejs-scan,eslint,phpcs-security-audit
+  SAST_EXPERIMENTAL_FEATURES: "true"
+  SAST_DEFAULT_ANALYZERS: "phpcs-security-audit"
+  SAST_EXCLUDED_PATHS: "vendor, js/jquery*, js/tiny*"
+  # SAST_EXCLUDED_ANALYZERS: "bandit, brakeman, flawfinder, gosec, kubesec, nodejs-scan, pmd-apex, security-code-scan, sobelow, spotbugs"
   SEARCH_MAX_DEPTH: 10
-  TEST_FOLDER: '~/cz.prazskahlidka.test.nh/  ~/cz.prazskahlidka.test.dh/' # ~/cz.prazskahlidka.test.i/'
-  PROD_FOLDER: '~/cz.prazskahlidka.nhbistro/  ~/cz.prazskahlidka.dhbistro/' # ~/cz.prazskahlidka.ibistro'
+  TEST_FOLDER: "~/cz.prazskahlidka.test.nh/  ~/cz.prazskahlidka.test.dh/" # ~/cz.prazskahlidka.test.i/'
+  PROD_FOLDER: "~/cz.prazskahlidka.nhbistro/  ~/cz.prazskahlidka.dhbistro/" # ~/cz.prazskahlidka.ibistro'
+cache:
+  paths:
+    - vendor/
+image: alpine
+
 
 stages:
 - build
 - test
 - deploy
 
+######################################################## BUILD
 build_test:
   stage: build
-  image: alpine
+  interruptible: true
   before_script:
   - apk add gzip
   - apk add composer
@@ -36,12 +45,59 @@ build_test:
     expire_in: 1 days
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "master"
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "master"
+    - if: $CI_PIPELINE_SOURCE == "push"
+      when: never
+
+build_prod:
+  stage: build
+  before_script:
+  - apk add gzip
+  - apk add composer
+  script:
+  - find . -type f -name \*.php -exec sed -i -r 's+Debugger::(DETECT|DEVELOPMENT)+Debugger::PRODUCTION+g' {} \;
+  - composer install --ignore-platform-reqs
+  - tar czf bistro-$CI_PIPELINE_ID.tgz --exclude .git --exclude bistro.tmp .
+  artifacts:
+    paths:
+    - bistro-$CI_PIPELINE_ID.tgz
+    expire_in: 1 days
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
+
+######################################################## TEST
+
+code_quality:
+  interruptible: true
+#   artifacts:
+#     paths:
+#     - gl-code-quality-report.json
+  rules:
+    - if: $CI_COMMIT_BRANCH
+      when: manual
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+      exists:
+        - '**/*.php'
+
+phpcs-security-audit-sast:
+  interruptible: true
+  rules:
+    - if: $CI_COMMIT_BRANCH
+      when: never
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+      when: manual
+      exists:
+        - '**/*.php'
+
+semgrep-sast:
+  interruptible: true
+  rules:
+    - when: manual
+
+######################################################## DEPLOY
 
 deploy_test:
   resource_group: testing
   stage: deploy
-  image: alpine
   needs:
     - build_test
   allow_failure: true
@@ -68,29 +124,12 @@ deploy_test:
     - ssh $TEST_REMOTE "rm bistro-$CI_PIPELINE_ID.tgz"
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "master"
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "master"
-
-build_prod:
-  stage: build
-  image: alpine
-  before_script:
-  - apk add gzip
-  - apk add composer
-  script:
-  - find . -type f -name \*.php -exec sed -i -r 's+Debugger::(DETECT|DEVELOPMENT)+Debugger::PRODUCTION+g' {} \;
-  - composer install --ignore-platform-reqs
-  - tar czf bistro-$CI_PIPELINE_ID.tgz --exclude .git --exclude bistro.tmp .
-  artifacts:
-    paths:
-    - bistro-$CI_PIPELINE_ID.tgz
-    expire_in: 1 days
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master" 
+    - if: $CI_PIPELINE_SOURCE == "push"
+      when: never
 
 deploy_prod:
   resource_group: production
   stage: deploy
-  image: alpine
   needs:
     - build_prod
   allow_failure: true
@@ -116,22 +155,4 @@ deploy_prod:
       done
     - ssh $PROD_REMOTE "rm bistro-$CI_PIPELINE_ID.tgz"
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master" 
-
-code_quality:
-  stage: test
-  interruptible: true
-  artifacts:
-    paths:
-    - gl-code-quality-report.json
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    - if: $CI_COMMIT_TAG
-
-sast:
-  stage: test
-  variables:
-    SAST_EXCLUDED_PATHS: vendor, js/jquery*, js/tiny*
-    SAST_EXCLUDED_ANALYZERS: bandit, brakeman, flawfinder, gosec, kubesec, nodejs-scan,
-      pmd-apex, security-code-scan, sobelow, spotbugs
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"

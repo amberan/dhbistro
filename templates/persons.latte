@@ -1,88 +1,4 @@
-<div class="container-fluid mt-3 mb-3 mr-2 w-100">
-    <form action="{$URL[0]}{$URL[1]}/" method="POST" id="filter" class="row mb-1">
-	    <div class="col-12 col-md-4 text-left">
-	        <h4>
-                {$text[osoby]|firstUpper} {ifset $person_count}({$person_count}){/ifset}
-            </h4>
-	    </div>
-        <div class="col-12 col-md-8 text-right header-wrapper-right">
-            <input type="hidden" name="filter[placeholder]" />
-            <div class="header-switch">
-                <label class="toggle-control">
-                    <input type="checkbox" name="filter[dead]" {if (isset($filter['dead']) AND $filter['dead'] == 'on') } checked {/if} onchange="this.form.submit()" />
-                    <span class="control"></span>
-                </label>
-                {$text['imrtve']}
-            </div>
-            <div class="header-switch">
-                <label class="toggle-control">
-                    <input type="checkbox" name="filter[archived]" {if (isset($filter['archived']) AND $filter['archived'] == 'on') } checked {/if} onchange="this.form.submit()" />
-                    <span class="control"></span>
-                </label>
-                {$text['iarchiv']}
-            </div>
-            <div class="header-switch">
-                <label class="toggle-control">
-                    <input type="checkbox" name="filter[new]" {if (isset($filter['new']) AND $filter['new'] == 'on') } checked{/if} onchange="this.form.submit()" />
-                    <span class="control"></span>
-                </label>
-                {$text['jennove']}
-            </div>
-            {if $user['aclSecret'] > 0}
-                <div class="header-switch">
-                    <label class="toggle-control">
-                        <input type="checkbox" name="filter[secret]" {if (isset($filter['secret']) AND $filter['secret'] == 'on') } checked {/if} onchange="this.form.submit()" />
-                        <span class="control"></span>
-                    </label>
-                    {$text['itajne']}
-                </div>
-            {/if}
-        </div>
-        <div class="col-12 col-lg-6 text-left header-wrapper-left">
-            <div class="header-switch">
-                <label class="toggle-control">
-                    <input type="checkbox" name="filter[portrait]" {if (isset($filter['portrait']) AND $filter['portrait'] == 'on') } checked {/if} onchange="this.form.submit()" />
-                    <span class="control"></span>
-                </label>
-                {$text['portrety']}
-            </div>
-            <div class="header-switch">
-                <label class="toggle-control">
-                    <input type="checkbox" name="filter[symbol]" {if (isset($filter['symbol']) AND $filter['symbol'] == 'on') } checked {/if} onchange="this.form.submit()" />
-                    <span class="control"></span>
-                </label>
-                {$text['symboly']}
-            </div>
-        </div>
-        <div class="col-12 col-lg-6 text-right header-wrapper-right">
-            <div class="header-switch">
-                <select name="filter[classSelect]"  onchange="this.form.submit()">
-                {foreach $filter['class'] as $id => $class }
-                    <option value="{$id}" {if (isset($filter['classSelect']) AND $filter['classSelect'] == $id) } selected {/if}>{$class}</option>
-                {/foreach}
-                </select>
-                <label class="header-switch-drop-label-m-left">{$text['specializace']}</label>
-            </div>
-            <div class="header-switch">
-                <select name="filter[sideSelect]"  onchange="this.form.submit()">
-                {foreach $filter['side'] as $id => $side }
-                    <option value="{$id}" {if (isset($filter['sideSelect']) AND $filter['sideSelect'] == $id) } selected {/if}>{$side}</option>
-                {/foreach}
-                </select>
-                <label class="header-switch-drop-label-m-left">{$text['strana']}</label>
-            </div>
-            <div class="header-switch">
-                <select name="filter[categorySelect]"  onchange="this.form.submit()">
-                {foreach $filter['category'] as $id => $category }
-                    <option value="{$id}" {if (isset($filter['categorySelect']) AND $filter['categorySelect'] == $id) } selected {/if}>{$category}</option>
-                {/foreach}
-                </select>
-                <label class="header-switch-drop-label-m-left">{$text['kategorie']}</label>
-            </div>
-        </div>
-	</form>
-    <div class="row mb-1">
-        <div class="col-12">
+
             {if @$warning}
                 <div>
                     {$warning}
@@ -94,7 +10,7 @@
                     <thead class="table-sticky-header">
                         <tr>
                             <th>
-                                <div class="table-no-wrap-left">{$text['jmeno']|firstUpper} <a href="{$URL[0]}{$URL[1]}/?sort=surname">&#8661;</a></div>
+                                <div class="table-no-wrap-left">{$text['jmeno']|firstUpper} <a href="{$URL[0]}{$URL[1]}/?sort=surname,name">&#8661;</a></div>
                             </th>
                             <th class="mobile-no-show">{$text['definitions']|firstUpper}</th>
                             <th class="mobile-no-show">{$text['kontakty']|firstUpper}</th>
@@ -125,7 +41,7 @@
                                             {/if}
                                         </div>
                                         <div class="persons-identification-wrapper">
-                                            <p class="table-cell-title"><a href="/readperson.php?rid={$person['id']}&amp;hidenotes=0">{$person['surname']} {$person['name']}</a></p>
+                                            <p class="table-cell-title"><a href="/readperson.php?rid={$person['id']}&amp;hidenotes=0">{$person['surname']|replace: '\\', NULL} {$person['name']|replace: '\\', NULL}</a></p>
                                             <div class="table-badge-wrapper">
                                                 {if $person['secret']}
                                                     <span class="badge rounded-pill bg-danger text-light">{$text['utajeno']|upper}</span>
@@ -160,15 +76,15 @@
                                     <div class="table-no-wrap-right">
                                         {if $user['aclPerson'] AND !$person['deleted']}
                                             <a class="btn btn-sm btn-info btn-brick mb-1" href="/editperson.php?rid={$person['id']}" alt="{$text[upravitosobu]}">
-                                                {php  echo file_get_contents("images/icons/edit-solid.svg")}
+                                                {php inject_svg("images/icons/edit-solid.svg")}
                                             </a>
                                             <a class="btn btn-sm  btn-info mb-1" href="/newnote.php?rid={$person['id']}&idtable=5">přidat poznámku</a>
                                             {if $user['aclPerson'] > 1 }
-                                                <a class="btn btn-sm btn-brick btn-danger mb-1" href="/persons/delete/{$person['id']}" onclick="return confirm('{$text['opravdusmazatosobu']} &quot; {$person['surname']|stripHtml} {$person['name']|stripHtml}&quot;?');" alt="{$text[smazatosobu]}">{php echo file_get_contents("images/icons/trash-solid.svg")}</a>
+                                                <a class="btn btn-sm btn-brick btn-danger mb-1" href="/persons/delete/{$person['id']}" onclick="return confirm('{$text['opravdusmazatosobu']} &quot; {$person['surname']|stripHtml} {$person['name']|stripHtml}&quot;?');" alt="{$text[smazatosobu]}">{php inject_svg("images/icons/trash-solid.svg")}</a>
                                             {/if}
                                         {/if}
                                         {if $user['aclRoot'] AND @$person['deleted']}
-                                            <a class="btn btn-sm btn-success mb-1" href="/persons/restore/{$person['id']}" onclick="return confirm('{$text['opravduobnovitosobu']} &quot; {$person['surname']|stripHtml} {$person['name']|stripHtml}&quot;?');">{php echo file_get_contents("images/icons/recycle.svg")}</a>
+                                            <a class="btn btn-sm btn-success mb-1" href="/persons/restore/{$person['id']}" onclick="return confirm('{$text['opravduobnovitosobu']} &quot; {$person['surname']|stripHtml} {$person['name']|stripHtml}&quot;?');">{php inject_svg("images/icons/recycle.svg")}</a>
                                         {/if}
                                     </div>
                                 </td>
@@ -177,6 +93,3 @@
                     </tbody>
                 </table>
             {/if}
-        </div>
-    </div>
-</div>

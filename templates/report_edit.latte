@@ -52,7 +52,7 @@
                     <label class="mt-3" for="task">
                         {$text['ukol']|firstUpper}:
                     </label>
-		    <textarea class="form-control edit-textarea" name="reportTask" id="task">{$report['reportTask']}</textarea>
+		    <textarea class="form-control edit-textarea" name="reportTask" id="task">{if $report['reportTask']}{$report['reportTask']}{else}{$text['reportDefaultTask']}{/if}</textarea>
                 </div>
                 <div class="w-100">
                     <label class="mt-3" for="reportowner">
@@ -140,7 +140,7 @@
                 <p class="view-category-name">{$text['osobyprirazenekhlaseni']|firstUpper}</p>
                 {if $reportParticipants != false}
                     {foreach $reportParticipants as $participant}
-                        <p><strong>{$participant['participantRole']}</strong>: <a href="/readperson.php?rid={$participant['participantId']}" title={$participant['participantRole']} {ifset $participant['participantDeleted'] }class="deleted"{/ifset}>{$participant['participantName']|noescape}</a>{sep}{/sep}</p>
+                        <p><strong>{$participant['participantRole']}</strong>: <a href="/readperson.php?rid={$participant['participantId']}" title={$participant['participantRole']} {ifset $participant['participantDeleted'] }class="deleted"{/ifset}>{$participant['participantName']}</a>{sep}{/sep}</p>
                     {/foreach}
                     {else}
                     <p><em>{$text['zadneosoby']}</em></p>
@@ -182,7 +182,7 @@
                     height: '400px',
                     initialEditType: 'wysiwyg',
                     previewStyle: 'vertical',
-                    initialValue:   `{$report['reportSummary']|noescape} `,
+                    initialValue:   `{if $report['reportSummary']}{$report['reportSummary']|noescape}{else}{$text['reportDefaultSummary']|noescape}{/if}`,
                     toolbarItems: [
                         ['heading', 'bold', 'italic', 'strike'],
                         ['hr', 'quote'],
@@ -213,7 +213,7 @@
                     height: '400px',
                     initialEditType: 'wysiwyg',
                     previewStyle: 'vertical',
-                    initialValue:   `{$report['reportImpact']|noescape} `,
+                    initialValue:   `{if $report['reportImpact']}{$report['reportImpact']|noescape}{else}{$text['reportDefaultImpact']|noescape}{/if}`,
                     toolbarItems: [
                         ['heading', 'bold', 'italic', 'strike'],
                         ['hr', 'quote'],
@@ -244,7 +244,7 @@
                     height: '400px',
                     initialEditType: 'wysiwyg',
                     previewStyle: 'vertical',
-                    initialValue:   `{$report['reportDetail']|noescape} `,
+                    initialValue:   `{if $report['reportDetail']}{$report['reportDetail']|noescape}{else}{$text['reportDefaultDetail']|noescape}{/if}`,
                     toolbarItems: [
                         ['heading', 'bold', 'italic', 'strike'],
                         ['hr', 'quote'],
@@ -276,7 +276,7 @@
                     height: '400px',
                     initialEditType: 'wysiwyg',
                     previewStyle: 'vertical',
-                    initialValue:   `{$report['reportCost']|noescape} `,
+                    initialValue:   `{if $report['reportCost']}{$report['reportCost']|noescape}{else}{$text['reportDefaultCost']|noescape}{/if}`,
                     toolbarItems: [
                         ['heading', 'bold', 'italic', 'strike'],
                         ['hr', 'quote'],
@@ -308,7 +308,7 @@
                     height: '250px',
                     initialEditType: 'wysiwyg',
                     previewStyle: 'vertical',
-                    initialValue:   `{$report['reportInput']|noescape} `,
+                    initialValue:   `{if $report['reportInput']}{$report['reportInput']|noescape}{else}{$text['reportDefaultInput']|noescape}{/if}`,
                     toolbarItems: [
                         ['heading', 'bold', 'italic', 'strike'],
                         ['hr', 'quote'],
@@ -350,7 +350,7 @@
                         {/foreach}
                     {/if}
                 <hr class="view-category-divider">
-                <p class="w-100 text-right"><a href="/symbols.php">{$text['neprirazenesymboly']}</a></p>
+                <p class="w-100 text-right"><a href="/symbols">{$text['neprirazenesymboly']}</a></p>
                 </div>
             </div>
         </div>

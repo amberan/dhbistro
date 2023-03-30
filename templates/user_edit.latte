@@ -15,13 +15,17 @@
             <div class="col-6 text-right">
             </div>
         </div>
-        <form action="/users/edit/{$userEdit['userId']}" method="post">
+        {if @$userId == 'new'}
+        <form action="/users/new" method="post">
+        {else }
+        <form action="/users/edit/{@$userEdit['userId']}" method="post">
+        {/if}
             <div class="row mb-2">
                 <div class="col-12 col-md-3">
                     <label class="mt-3" for="login">
                         {$text['uzivatelskejmeno']}:
                     </label>
-                    <input class="form-control" type="text" name="login" id="login" value="{$userEdit['userName']}" />
+                    <input class="form-control" type="text" name="login" id="login" value="{@$userEdit['userName']}" />
                 </div>
                 <div class="col-12 col-md-3">
                     <label class="mt-3" for="idperson">
@@ -31,7 +35,7 @@
                         <option value="0"> ??? </option>
 			{if @$persons}
                         {foreach $persons as $person}
-                            <option value="{$person[0]}"{if $person[0] == $userEdit['personId']} selected="selected"{/if}>{$person[1]}, {$person[2]}</option>
+                            <option value="{$person[0]}"{if $person[0] == @$userEdit['personId']} selected="selected"{/if}>{$person[1]}, {$person[2]}</option>
                         {/foreach}
 			{/if}
                     </select>
@@ -40,31 +44,39 @@
                     <label class="mt-3" for="email">
                         {$text['email']}:
                     </label>
-                    <input class="form-control" type="text" name="userEmail" id="userEmail" value="{$userEdit['userEmail']}" />
+                    <input class="form-control" type="text" name="userEmail" id="userEmail" value="{@$userEdit['userEmail']}" />
                 </div>
+        {if @$userId == 'new'}
+            <div class="col-12 col-md-3">
+                <label class="mt-3" for="heslo">
+                    {$text['heslo']}:
+                </label>
+                <input class="form-control" type="text" name="heslo" id="heslo" value="{@$userEdit['newPassword']}" />
+            </div>
 
+        {else}
             <div  class="col-12 col-md-3">
-                {if $userEdit['userId'] != $user['userId']}
-                    <a class="btn btn-sm  btn-info mb-1" href="/users/reset/{$userEdit['userId']}" onclick="return confirm('{$text['opravdugenerovatheslo']} {$userEdit['userName']}?')">{$text[noveheslo]}</a>
-                    {if $userEdit['userSuspended'] == "1"}
-                        <a class="btn btn-sm btn-brick btn-success mb-1 mr-1" href="/users/unlock/{$userEdit['userId']}" onclick="return confirm('{$text['opravduodemnkout']} {$userEdit['userName']}?')" alt="{$text[odemnkoutuzivatele]}">
-                        {php  echo file_get_contents("images/icons/lock-open-solid.svg")}
+                {if @$userEdit['userId'] != $user['userId']}
+                    <a class="btn btn-sm  btn-info mb-1" href="/users/reset/{@$userEdit['userId']}" onclick="return confirm('{$text['opravdugenerovatheslo']} {@$userEdit['userName']}?')">{$text[noveheslo]}</a>
+                    {if @$userEdit['userSuspended'] == "1"}
+                        <a class="btn btn-sm btn-brick btn-success mb-1 mr-1" href="/users/unlock/{@$userEdit['userId']}" onclick="return confirm('{$text['opravduodemnkout']} {@$userEdit['userName']}?')" alt="{$text[odemnkoutuzivatele]}">
+                        {php inject_svg("images/icons/lock-open-solid.svg")}
                     {else}
-                        <a class="btn btn-sm btn-brick btn-warning mb-1 mr-1" href="/users/lock/{$userEdit['userId']}" onclick="return confirm('{$text['opravduzamknout']} {$userEdit['userName']}?')" alt="{$text[zamknoutuzivatele]}">
-                        {php  echo file_get_contents("images/icons/lock-solid.svg")}
+                        <a class="btn btn-sm btn-brick btn-warning mb-1 mr-1" href="/users/lock/{@$userEdit['userId']}" onclick="return confirm('{$text['opravduzamknout']} {@$userEdit['userName']}?')" alt="{$text[zamknoutuzivatele]}">
+                        {php inject_svg("images/icons/lock-solid.svg")}
                     {/if}
                         </a>
-                    {if $userEdit[userDeleted] == 0}
-                        <a class="btn btn-sm btn-brick btn-danger mb-1" href="/users/delete/{$userEdit['userId']}" onclick="return confirm('{$text['opravdusmazat']} {$userEdit['userName']}?')" alt="{$text[smazatuzivatele]}">
-                        {php  echo file_get_contents("images/icons/trash-solid.svg")}
-                    {elseif $userEdit['userDeleted'] == 1 && $user['aclRoot']}
-                        <a class="btn btn-sm btn-brick btn-success mb-1" href="/users/restore/{$userEdit['userId']}" onclick="return confirm('{$text['opravduobnovit']} {$userEdit['userName']}?')" alt="{$text[obnovituzivatele]}">
-                        {php echo file_get_contents("images/icons/recycle.svg")}
+                    {if @$userEdit[userDeleted] == 0}
+                        <a class="btn btn-sm btn-brick btn-danger mb-1" href="/users/delete/{@$userEdit['userId']}" onclick="return confirm('{$text['opravdusmazat']} {@$userEdit['userName']}?')" alt="{$text[smazatuzivatele]}">
+                        {php inject_svg("images/icons/trash-solid.svg")}
+                    {elseif @$userEdit['userDeleted'] == 1 && $user['aclRoot']}
+                        <a class="btn btn-sm btn-brick btn-success mb-1" href="/users/restore/{@$userEdit['userId']}" onclick="return confirm('{$text['opravduobnovit']} {@$userEdit['userName']}?')" alt="{$text[obnovituzivatele]}">
+                        {php inject_svg("images/icons/recycle.svg")}
                     {/if}
                         </a>
                 {/if}
             </div>
-
+        {/if}
             </div>
             <div class="row mb-2">
                 <div class="col-12">
@@ -79,9 +91,9 @@
                         </div>
                         <div class="input-group-append" style="flex-grow: 1;">
                             <select class="w-100" name="aclReport" id="aclReport">
-                                <option value="0" {if $userEdit['aclReport'] == 0 } selected="selected"{/if}>{$text['cteni']}</option>
-                                <option value="1" {if $userEdit['aclReport'] == 1} selected="selected"{/if}>{$text['zapis']}</option>
-                                <option value="2" {if $userEdit['aclReport'] == 2} selected="selected"{/if}>{$text['spravce']}</option>
+                                <option value="0" {if @$userEdit['aclReport'] == 0 } selected="selected"{/if}>{$text['cteni']}</option>
+                                <option value="1" {if @$userEdit['aclReport'] == 1} selected="selected"{/if}>{$text['zapis']}</option>
+                                <option value="2" {if @$userEdit['aclReport'] == 2} selected="selected"{/if}>{$text['spravce']}</option>
                             </select>
                         </div>
                     </div>
@@ -95,9 +107,9 @@
                         </div>
                         <div class="input-group-append" style="flex-grow: 1;">
                             <select class="w-100" name="aclPerson" id="aclPerson">
-                                <option value="0" {if $userEdit['aclPerson'] == 0 } selected="selected"{/if}>{$text['cteni']}</option>
-                                <option value="1" {if $userEdit['aclPerson'] == 1} selected="selected"{/if}>{$text['zapis']}</option>
-                                <option value="2" {if $userEdit['aclPerson'] == 2} selected="selected"{/if}>{$text['spravce']}</option>
+                                <option value="0" {if @$userEdit['aclPerson'] == 0 } selected="selected"{/if}>{$text['cteni']}</option>
+                                <option value="1" {if @$userEdit['aclPerson'] == 1} selected="selected"{/if}>{$text['zapis']}</option>
+                                <option value="2" {if @$userEdit['aclPerson'] == 2} selected="selected"{/if}>{$text['spravce']}</option>
                             </select>
                         </div>
                     </div>
@@ -111,9 +123,9 @@
                         </div>
                         <div class="input-group-append" style="flex-grow: 1;">
                             <select class="w-100" name="aclCase" id="aclCase">
-                                <option value="0" {if $userEdit['aclCase'] == 0 } selected="selected"{/if}>{$text['cteni']}</option>
-                                <option value="1" {if $userEdit['aclCase'] == 1} selected="selected"{/if}>{$text['zapis']}</option>
-                                <option value="2" {if $userEdit['aclCase'] == 2} selected="selected"{/if}>{$text['spravce']}</option>
+                                <option value="0" {if @$userEdit['aclCase'] == 0 } selected="selected"{/if}>{$text['cteni']}</option>
+                                <option value="1" {if @$userEdit['aclCase'] == 1} selected="selected"{/if}>{$text['zapis']}</option>
+                                <option value="2" {if @$userEdit['aclCase'] == 2} selected="selected"{/if}>{$text['spravce']}</option>
                             </select>
                         </div>
                     </div>
@@ -127,9 +139,9 @@
                         </div>
                         <div class="input-group-append" style="flex-grow: 1;">
                             <select class="w-100" name="aclGroup" id="aclGroup">
-                                <option value="0" {if $userEdit['aclGroup'] == 0 } selected="selected"{/if}>{$text['cteni']}</option>
-                                <option value="1" {if $userEdit['aclGroup'] == 1} selected="selected"{/if}>{$text['zapis']}</option>
-                                <option value="2" {if $userEdit['aclGroup'] == 2} selected="selected"{/if}>{$text['spravce']}</option>
+                                <option value="0" {if @$userEdit['aclGroup'] == 0 } selected="selected"{/if}>{$text['cteni']}</option>
+                                <option value="1" {if @$userEdit['aclGroup'] == 1} selected="selected"{/if}>{$text['zapis']}</option>
+                                <option value="2" {if @$userEdit['aclGroup'] == 2} selected="selected"{/if}>{$text['spravce']}</option>
                             </select>
                         </div>
                     </div>
@@ -143,9 +155,9 @@
                         </div>
                         <div class="input-group-append" style="flex-grow: 1;">
                             <select class="w-100" name="aclSymbol" id="aclSymbol">
-                                <option value="0" {if $userEdit['aclSymbol'] == 0 } selected="selected"{/if}>{$text['cteni']}</option>
-                                <option value="1" {if $userEdit['aclSymbol'] == 1} selected="selected"{/if}>{$text['zapis']}</option>
-                                <option value="2" {if $userEdit['aclSymbol'] == 2} selected="selected"{/if}>{$text['spravce']}</option>
+                                <option value="0" {if @$userEdit['aclSymbol'] == 0 } selected="selected"{/if}>{$text['cteni']}</option>
+                                <option value="1" {if @$userEdit['aclSymbol'] == 1} selected="selected"{/if}>{$text['zapis']}</option>
+                                <option value="2" {if @$userEdit['aclSymbol'] == 2} selected="selected"{/if}>{$text['spravce']}</option>
                             </select>
                         </div>
                     </div>
@@ -160,8 +172,8 @@
                         </div>
                         <div class="input-group-append" style="flex-grow: 1;">
                             <select class="w-100" name="aclHunt" id="aclHunt">
-                                <option value="0" {if $userEdit['aclHunt'] == 0 } selected="selected"{/if}>{$text['skryt']}</option>
-                                <option value="1" {if $userEdit['aclHunt'] == 1} selected="selected"{/if}>{$text['zpristupnit']}</option>
+                                <option value="0" {if @$userEdit['aclHunt'] == 0 } selected="selected"{/if}>{$text['skryt']}</option>
+                                <option value="1" {if @$userEdit['aclHunt'] == 1} selected="selected"{/if}>{$text['zpristupnit']}</option>
                             </select>
                         </div>
                     </div>
@@ -177,8 +189,8 @@
                         </div>
                         <div class="input-group-append" style="flex-grow: 1;">
                             <select class="w-100" name="aclSecret" id="aclSecret">
-                                <option value="0" {if $userEdit['aclSecret'] == 0 } selected="selected"{/if}>{$text['skryt']}</option>
-                                <option value="1" {if $userEdit['aclSecret'] == 1} selected="selected"{/if}>{$text['zpristupnit']}</option>
+                                <option value="0" {if @$userEdit['aclSecret'] == 0 } selected="selected"{/if}>{$text['skryt']}</option>
+                                <option value="1" {if @$userEdit['aclSecret'] == 1} selected="selected"{/if}>{$text['zpristupnit']}</option>
                             </select>
                         </div>
                     </div>
@@ -194,8 +206,8 @@
                         </div>
                         <div class="input-group-append" style="flex-grow: 1;">
                             <select class="w-100" name="aclNews" id="aclNews">
-                                <option value="0" {if $userEdit['aclNews'] == 0 } selected="selected"{/if}>{$text['ne']}</option>
-                                <option value="1" {if $userEdit['aclNews'] == 1} selected="selected"{/if}>{$text['ano']}</option>
+                                <option value="0" {if @$userEdit['aclNews'] == 0 } selected="selected"{/if}>{$text['ne']}</option>
+                                <option value="1" {if @$userEdit['aclNews'] == 1} selected="selected"{/if}>{$text['ano']}</option>
                             </select>
                         </div>
                     </div>
@@ -211,8 +223,8 @@
                         </div>
                         <div class="input-group-append" style="flex-grow: 1;">
                             <select class="w-100" name="aclBoard" id="aclBoard">
-                                <option value="0" {if $userEdit['aclBoard'] == 0 } selected="selected"{/if}>{$text['ne']}</option>
-                                <option value="1" {if $userEdit['aclBoard'] == 1} selected="selected"{/if}>{$text['ano']}</option>
+                                <option value="0" {if @$userEdit['aclBoard'] == 0 } selected="selected"{/if}>{$text['ne']}</option>
+                                <option value="1" {if @$userEdit['aclBoard'] == 1} selected="selected"{/if}>{$text['ano']}</option>
                             </select>
                         </div>
                     </div>
@@ -228,8 +240,8 @@
                         </div>
                         <div class="input-group-append" style="flex-grow: 1;">
                             <select class="w-100" name="aclUser" id="aclUser">
-                                <option value="0" {if $userEdit['aclUser'] == 0} selected="selected"{/if}>{$text['ne']}</option>
-                                <option value="1" {if $userEdit['aclUser'] == 1} selected="selected"{/if}>{$text['ano']}</option>
+                                <option value="0" {if @$userEdit['aclUser'] == 0} selected="selected"{/if}>{$text['ne']}</option>
+                                <option value="1" {if @$userEdit['aclUser'] == 1} selected="selected"{/if}>{$text['ano']}</option>
                                 </select>
                             </div>
                         </div>
@@ -245,8 +257,8 @@
                         </div>
                         <div class="input-group-append" style="flex-grow: 1;">
                             <select class="w-100" name="aclAudit" id="aclAudit">
-                                <option value="0" {if $userEdit['aclAudit'] == 0 } selected="selected"{/if}>{$text['skryt']}</option>
-                                <option value="1" {if $userEdit['aclAudit'] == 1} selected="selected"{/if}>{$text['zpristupnit']}</option>
+                                <option value="0" {if @$userEdit['aclAudit'] == 0 } selected="selected"{/if}>{$text['skryt']}</option>
+                                <option value="1" {if @$userEdit['aclAudit'] == 1} selected="selected"{/if}>{$text['zpristupnit']}</option>
                             </select>
                         </div>
                     </div>
@@ -262,8 +274,8 @@
                         </div>
                         <div class="input-group-append" style="flex-grow: 1;">
                             <select class="w-100" name="aclGamemaster" id="aclGamemaster">
-                                <option value="0" {if $userEdit['aclGamemaster'] == 0} selected="selected"{/if}>{$text['ne']}</option>
-                                <option value="1" {if $userEdit['aclGamemaster'] == 1} selected="selected"{/if}>{$text['ano']}</option>
+                                <option value="0" {if @$userEdit['aclGamemaster'] == 0} selected="selected"{/if}>{$text['ne']}</option>
+                                <option value="1" {if @$userEdit['aclGamemaster'] == 1} selected="selected"{/if}>{$text['ano']}</option>
                             </select>
                         </div>
                     </div>
@@ -279,8 +291,8 @@
                         </div>
                         <div class="input-group-append" style="flex-grow: 1;">
                             <select class="w-100" name="aclRoot" id="aclRoot">
-                                <option value="0" {if $userEdit['aclRoot'] == 0} selected="selected"{/if}>{$text['ne']}</option>
-                                <option value="1" {if $userEdit['aclRoot'] == 1} selected="selected"{/if}>{$text['ano']}</option>
+                                <option value="0" {if @$userEdit['aclRoot'] == 0} selected="selected"{/if}>{$text['ne']}</option>
+                                <option value="1" {if @$userEdit['aclRoot'] == 1} selected="selected"{/if}>{$text['ano']}</option>
                             </select>
                         </div>
                     </div>
@@ -296,8 +308,8 @@
                         </div>
                         <div class="input-group-append" style="flex-grow: 1;">
                             <select class="w-100" name="aclAPI" id="aclAPI">
-                                <option value="0" {if $userEdit['aclAPI'] == 0} selected="selected"{/if}>{$text['ne']}</option>
-                                <option value="1" {if $userEdit['aclAPI'] == 1} selected="selected"{/if}>{$text['ano']}</option>
+                                <option value="0" {if @$userEdit['aclAPI'] == 0} selected="selected"{/if}>{$text['ne']}</option>
+                                <option value="1" {if @$userEdit['aclAPI'] == 1} selected="selected"{/if}>{$text['ano']}</option>
                             </select>
                         </div>
                     </div>
@@ -306,7 +318,7 @@
             </div>
             <div class="row mb-1">
                 <div class="col-12">
-                    <input type="hidden" name="userid" value="{$userEdit['userId']}" />
+                    <input type="hidden" name="userid" value="{@$userEdit['userId']}" />
                 </div>
             </div>
             <div class="row mb-2">
@@ -321,7 +333,7 @@
                     {$text['nedokoncenahlaseni']}:
                 </p>
                 {if @$userEdit['hlaseni']}
-                    {foreach $userEdit['hlaseni'] as $hlaseni}
+                    {foreach @$userEdit['hlaseni'] as $hlaseni}
                         <p class="h6">
                             <a href="/reports/{$hlaseni[0]}">{$hlaseni[1]}</a>
                         </p>
@@ -337,7 +349,7 @@
                     {$text['neuzavrenepripady']}:
                 </p>
                 {if @$userEdit['pripady']}
-                    {foreach $userEdit['pripady'] as $pripady}
+                    {foreach @$userEdit['pripady'] as $pripady}
                         <p class="h6">
                             <a href="/readcase.php?rid={$pripady[0]}&hidenotes=0">{$pripady[1]}</a>
                         </p>

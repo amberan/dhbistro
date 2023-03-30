@@ -56,7 +56,7 @@
                                                 </td>
                                                 <td>
                                                         <a class="btn btn-sm {if @$backupFile['filesize']}  btn-primary{else} disabled btn-secondary {/if}" href="{$backupFile['file']}" alt="{$text[stahnoutzalohu]}">
-                                        {php  echo file_get_contents("images/icons/download-solid.svg")}</a>
+                                        {php inject_svg('images/icons/download-solid.svg') }</a>
                                                 </td>
                                         </tr>
                                 {/foreach}

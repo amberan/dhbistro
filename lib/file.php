@@ -1,7 +1,7 @@
 <?php
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+
 
 function human_filesize($bytes, $decimals = 2)
 {

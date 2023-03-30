@@ -1,19 +1,18 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
-use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Přiřazení symbolu osobě';
-    mainMenu();
-        $customFilter = custom_Filter(20);
-    sparklets('<a href="/persons/">osoby</a> &raquo; <a href="./symbols.php">nepřiřazené symboly</a>');
+mainMenu();
+$customFilter = custom_Filter(20);
+sparklets('<a href="/persons/">osoby</a> &raquo; <a href="/symbols">nepřiřazené symboly</a>');
 // Overeni, zda dany symbol existuje, a uzivatel ma dostatecna prava na jeho upravu
-    if (is_numeric($_REQUEST['rid']) && ($user['aclPerson'] || $user['aclSymbol'])) {
-        $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."symbol WHERE id=".$_REQUEST['rid']);
-        if ($rec = mysqli_fetch_assoc($res)) {
-            ?>
+if (is_numeric($_REQUEST['rid']) && ($user['aclPerson'] || $user['aclSymbol'])) {
+    $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."symbol WHERE id=".$_REQUEST['rid']);
+    if ($rec = mysqli_fetch_assoc($res)) {
+        ?>
 
 <div id="obsah">
 
@@ -28,46 +27,52 @@ $latteParameters['title'] = 'Přiřazení symbolu osobě';
     } else {
         $filterSort = $customFilter['sort'];
     }
-            if (!isset($customFilter['sportraits'])) {
-                $sportraits = false;
-            } else {
-                $sportraits = $customFilter['sportraits'];
-            }
-            if (!isset($customFilter['ssymbols'])) {
-                $ssymbols = false;
-            } else {
-                $ssymbols = $customFilter['ssymbols'];
-            }
-            if (!isset($customFilter['fdead'])) {
-                $fdead = 0;
-            } else {
-                $fdead = 1;
-            }
-            if (!isset($customFilter['farchiv'])) {
-                $farchiv = 0;
-            } else {
-                $farchiv = 1;
-            }
-            switch ($filterSort) {
-      case 1: $filterSqlSort = ' '.DB_PREFIX.'person.surname ASC, '.DB_PREFIX.'person.name ASC '; break;
-      case 2: $filterSqlSort = ' '.DB_PREFIX.'person.surname DESC, '.DB_PREFIX.'person.name DESC '; break;
-      default: $filterSqlSort = ' '.DB_PREFIX.'person.surname ASC, '.DB_PREFIX.'person.name ASC ';
-    }
-            switch ($fdead) {
-        case 0: $fsql_dead = ' AND '.DB_PREFIX.'person.dead=0 '; break;
-        case 1: $fsql_dead = ''; break;
-        default: $fsql_dead = ' AND '.DB_PREFIX.'person.dead=0 ';
-    }
-            switch ($farchiv) {
-        case 0: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1))  '; break;
-        case 1: $fsql_archiv = ''; break;
-        default: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1))  ';
-    }
-            // formular filtru
-            function filter(): void
-            {
-                global $filterSort, $sportraits, $farchiv, $fdead;
-                echo '<form action="addsy2p.php" method="post" id="filter">
+        if (!isset($customFilter['sportraits'])) {
+            $sportraits = false;
+        } else {
+            $sportraits = $customFilter['sportraits'];
+        }
+        if (!isset($customFilter['ssymbols'])) {
+            $ssymbols = false;
+        } else {
+            $ssymbols = $customFilter['ssymbols'];
+        }
+        if (!isset($customFilter['fdead'])) {
+            $fdead = 0;
+        } else {
+            $fdead = 1;
+        }
+        if (!isset($customFilter['farchiv'])) {
+            $farchiv = 0;
+        } else {
+            $farchiv = 1;
+        }
+        switch ($filterSort) {
+            case 1: $filterSqlSort = ' '.DB_PREFIX.'person.surname ASC, '.DB_PREFIX.'person.name ASC ';
+                break;
+            case 2: $filterSqlSort = ' '.DB_PREFIX.'person.surname DESC, '.DB_PREFIX.'person.name DESC ';
+                break;
+            default: $filterSqlSort = ' '.DB_PREFIX.'person.surname ASC, '.DB_PREFIX.'person.name ASC ';
+        }
+        switch ($fdead) {
+            case 0: $fsql_dead = ' AND '.DB_PREFIX.'person.dead=0 ';
+                break;
+            case 1: $fsql_dead = '';
+                break;
+            default: $fsql_dead = ' AND '.DB_PREFIX.'person.dead=0 ';
+        }
+        switch ($farchiv) {
+            case 0: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1))  ';
+                break;
+            case 1: $fsql_archiv = '';
+                break;
+            default: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1))  ';
+        }
+        // formular filtru
+        function filter(): void
+        {
+            global $filterSort, $sportraits, $farchiv, $fdead;
+            echo '<form action="addsy2p.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat osoby a seřadit je podle <select name="sort">
@@ -87,15 +92,15 @@ $latteParameters['title'] = 'Přiřazení symbolu osobě';
         </form>
 
         <form action="addsymbols.php" method="post" class="otherform">';
-            }
-            filter();
-            // vypis osob
-            $sqlFilter = DB_PREFIX."person.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."person.secret<=".$user['aclSecret'];
-            $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol'
+        }
+        filter();
+        // vypis osob
+        $sqlFilter = DB_PREFIX."person.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."person.secret<=".$user['aclSecret'];
+        $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol'
                 FROM ".DB_PREFIX."person
                 LEFT JOIN ".DB_PREFIX."symbol2all ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."person.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']."
                 WHERE $sqlFilter AND ".DB_PREFIX."person.symbol < 1 ".$fsql_dead.$fsql_archiv." ORDER BY ".$filterSqlSort;
-            $res = mysqli_query($database, $sql); ?>
+        $res = mysqli_query($database, $sql); ?>
     <div id="in-form-table">
         <?php
     if (mysqli_num_rows($res)) {
@@ -131,11 +136,11 @@ $latteParameters['title'] = 'Přiřazení symbolu osobě';
 </div>
 <!-- end of #obsah -->
 <?php
-        } else {
-            echo '<div id="obsah"><p>Symbol neexistuje. Rid='.$_REQUEST['rid'].'</p></div>';
-        }
     } else {
-        echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
+        echo '<div id="obsah"><p>Symbol neexistuje. Rid='.$_REQUEST['rid'].'</p></div>';
     }
-    latteDrawTemplate("footer");
+} else {
+    echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
+}
+latteDrawTemplate("footer");
 ?>

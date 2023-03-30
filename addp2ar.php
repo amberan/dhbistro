@@ -1,29 +1,28 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
-use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+
 latteDrawTemplate("header");
 
-    // následuje načtení dat reportu a jejich uložení do vybranných proměných
-    $reportarray = mysqli_fetch_assoc(mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE reportId=".$_REQUEST['rid'])); // načte data z DB
-    $type = intval($reportarray['reportType']); // určuje typ hlášení
-        $typestring = $type == 1 ? 'výjezd' : ($type == 2 ? 'výslech' : '?'); //odvozuje slovní typ hlášení
-    $author = $reportarray['reportOwner']; // určuje autora hlášení
-    $label = ($reportarray['reportName'] ?? ''); // nadpis hlášení, ke kterému je přiřazováno
+// následuje načtení dat reportu a jejich uložení do vybranných proměných
+$reportarray = mysqli_fetch_assoc(mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE reportId=".$_REQUEST['rid'])); // načte data z DB
+$type = intval($reportarray['reportType']); // určuje typ hlášení
+$typestring = $type == 1 ? 'výjezd' : ($type == 2 ? 'výslech' : '?'); //odvozuje slovní typ hlášení
+$author = $reportarray['reportOwner']; // určuje autora hlášení
+$label = ($reportarray['reportName'] ?? ''); // nadpis hlášení, ke kterému je přiřazováno
 
 if ($label != '') {
-    $latteParameters['title'] .= $label.' ('.$typestring.')'; // specifikace TITLE
+    $latteParameters['title'] = $label.' ('.$typestring.')'; // specifikace TITLE
 }
 
 $latteParameters['title'] = 'Prirazeni osob k  hlášení';
 mainMenu();
-        $customFilter = custom_Filter(17);
-    sparklets('<a href="/reports/">hlášení</a> &raquo; <strong>úprava hlášení</strong>'.($label != '' ? ' - "'.$label.' ('.$typestring.')"' : ''));
-    if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || $user['userId'] == $author)) {
-        $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE reportId=".$_REQUEST['rid']);
-        if ($rec = mysqli_fetch_assoc($res)) {
-            ?>
+$customFilter = custom_Filter(17);
+sparklets('<a href="/reports/">hlášení</a> &raquo; <strong>úprava hlášení</strong>'.($label != '' ? ' - "'.$label.' ('.$typestring.')"' : ''));
+if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || $user['userId'] == $author)) {
+    $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE reportId=".$_REQUEST['rid']);
+    if ($rec = mysqli_fetch_assoc($res)) {
+        ?>
 
 <div id="obsah">
     <p>
@@ -37,46 +36,51 @@ mainMenu();
     } else {
         $filterSort = $customFilter['sort'];
     }
-            if (!isset($customFilter['sportraits'])) {
-                $sportraits = false;
-            } else {
-                $sportraits = $customFilter['sportraits'];
-            }
-            if (!isset($customFilter['ssymbols'])) {
-                $ssymbols = false;
-            } else {
-                $ssymbols = $customFilter['ssymbols'];
-            }
-            if (!isset($customFilter['fdead'])) {
-                $fdead = 0;
-            } else {
-                $fdead = 1;
-            }
-            if (!isset($customFilter['farchiv'])) {
-                $farchiv = 0;
-            } else {
-                $farchiv = 1;
-            }
-            switch ($filterSort) {
-      case 1: $filterSqlSort = ' '.DB_PREFIX.'person.surname, '.DB_PREFIX.'person.name ASC '; break;
-      case 2: $filterSqlSort = ' '.DB_PREFIX.'person.surname, '.DB_PREFIX.'person.name DESC '; break;
-      default: $filterSqlSort = ' '.DB_PREFIX.'person.surname, '.DB_PREFIX.'person.name ASC ';
-    }
-            switch ($fdead) {
-        case 0: $fsql_dead = ' AND '.DB_PREFIX.'person.dead=0 '; break;
-        case 1: $fsql_dead = ''; break;
-        default: $fsql_dead = ' AND '.DB_PREFIX.'person.dead=0 ';
-    }
-            switch ($farchiv) {
-        case 0: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1))  '; break;
-        case 1: $fsql_archiv = ''; break;
-        default: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1))  ';
-    }
-            // formular filtru
-            function filter(): void
-            {
-                global $filterSort, $sportraits, $ssymbols, $farchiv, $fdead;
-                echo '<form action="addp2ar.php" method="post" id="filter">
+        if (!isset($customFilter['sportraits'])) {
+            $sportraits = false;
+        } else {
+            $sportraits = $customFilter['sportraits'];
+        }
+        if (!isset($customFilter['ssymbols'])) {
+            $ssymbols = false;
+        } else {
+            $ssymbols = $customFilter['ssymbols'];
+        }
+        if (!isset($customFilter['fdead'])) {
+            $fdead = 0;
+        } else {
+            $fdead = 1;
+        }
+        if (!isset($customFilter['farchiv'])) {
+            $farchiv = 0;
+        } else {
+            $farchiv = 1;
+        }
+        switch ($filterSort) {
+            case 1: $filterSqlSort = ' role DESC, '.DB_PREFIX.'person.surname, '.DB_PREFIX.'person.name ASC ';
+                break;
+            case 2: $filterSqlSort = ' role DESC, '.DB_PREFIX.'person.surname, '.DB_PREFIX.'person.name DESC ';
+                break;
+            default: $filterSqlSort = ' role DESC, '.DB_PREFIX.'person.surname, '.DB_PREFIX.'person.name ASC ';
+        }
+        switch ($fdead) {
+            case 0: $fsql_dead = ' AND '.DB_PREFIX.'person.dead=0 ';
+                break;
+            case 1: $fsql_dead = '';
+                break;
+            default: $fsql_dead = ' AND '.DB_PREFIX.'person.dead=0 ';
+        }
+        switch ($farchiv) {
+            case 0: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1))  ';
+                break;
+            case 1: $fsql_archiv = '';
+                break;
+            default: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1))  ';
+        }
+        function filter(): void
+        {
+            global $filterSort, $sportraits, $ssymbols, $farchiv, $fdead;
+            echo '<form action="addp2ar.php?rid='.$_REQUEST['rid'].'" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat osoby a seřadit je podle <select name="sort">
@@ -94,16 +98,27 @@ mainMenu();
 	</table>
 	  <div id="filtersubmit"><input type="hidden" name="rid" value="'.$_REQUEST['rid'].'" /><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
-</form><form name="addpersons" action="addpersons.php" method="post" class="otherform">';
-            }
-            filter();
-            // vypis osob
-            $sqlFilter = DB_PREFIX."person.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."person.secret<=".$user['aclSecret'];
-            $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol', ".DB_PREFIX."ar2p.role AS 'role', ".DB_PREFIX."ar2p.iduser
+</form>
+
+<form name="addpersons" action="/reports/'.$_GET['rid'].'/edit" method="post" class="otherform">
+<input type="hidden" name="fdead" value="'.$fdead.'" />
+<input type="hidden" name="farchiv" value="'.$farchiv.'" />
+<input type="hidden" name="reportid" value="'.$_REQUEST['rid'].'" />
+<input type="submit" name="addtoareport" value="Uložit změny"  title="Uložit změny" />';
+        }
+        filter();
+        $sqlFilter = DB_PREFIX."person.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."person.secret<=".$user['aclSecret'];
+        $sql = "SELECT ".DB_PREFIX."person.secret AS 'secret',
+                ".DB_PREFIX."person.name AS 'name',
+                ".DB_PREFIX."person.surname AS 'surname',
+                ".DB_PREFIX."person.id AS 'id',
+                ".DB_PREFIX."person.symbol AS 'symbol',
+                ".DB_PREFIX."ar2p.role AS 'role',
+                ".DB_PREFIX."ar2p.iduser
                 FROM ".DB_PREFIX."person
                 LEFT JOIN ".DB_PREFIX."ar2p ON ".DB_PREFIX."ar2p.idperson=".DB_PREFIX."person.id AND ".DB_PREFIX."ar2p.idreport=".$_REQUEST['rid']."
                 WHERE $sqlFilter ".$fsql_dead.$fsql_archiv." ORDER BY ".$filterSqlSort;
-            $res = mysqli_query($database, $sql); ?>
+        $res = mysqli_query($database, $sql); ?>
     <div id="in-form-table">
         <?php
     if (mysqli_num_rows($res)) {
@@ -155,22 +170,18 @@ mainMenu();
         echo '</tbody>
 </table>';
     } ?>
-        <input type="hidden" name="fdead" value="<?php echo $fdead; ?>" />
-        <input type="hidden" name="farchiv" value="<?php echo $farchiv; ?>" />
-        <input type="hidden" name="reportid" value="<?php echo $_REQUEST['rid']; ?>" />
-        <input id="button-floating-uloz" type="submit" value="Uložit změny" name="addtoareport" class="submitbutton" title="Uložit změny" />
+
+
     </div>
-    <!-- end of #obsah -->
     </form>
 
 </div>
-<!-- end of #obsah -->
 <?php
-        } else {
-            echo '<div id="obsah"><p>Hlášení neexistuje. Rid='.$_REQUEST['rid'].'</p></div>';
-        }
     } else {
-        echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
+        echo '<div id="obsah"><p>Hlášení neexistuje. Rid='.$_REQUEST['rid'].'</p></div>';
     }
-    latteDrawTemplate("footer");
+} else {
+    echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
+}
+latteDrawTemplate("footer");
 ?>

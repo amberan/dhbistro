@@ -1,9 +1,7 @@
 <?php
 
-    use League\HTMLToMarkdown\HtmlConverter;
-    use Tracy\Debugger;
-
-    Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+use League\HTMLToMarkdown\HtmlConverter;
+use Tracy\Debugger;
 
 /**
  * returns all update*php files in sql that are never than last backup but at most current version
@@ -11,7 +9,7 @@
 function bistroUpdatesList($updateFiles, $lastBackup)
 {
     global $config;
-    $files = array();
+    $files = [];
     foreach ($updateFiles as $file) {
         if (preg_match('/update-[0-9.]{1,}php/', $file) != null && version_compare($lastBackup, substr($file, 7, -4)) < 0
         && version_compare($config['version'], substr($file, 7, -4)) >= 0) {
@@ -24,7 +22,7 @@ function bistroUpdatesList($updateFiles, $lastBackup)
 
 function bistroUpdate($updatesToRun)
 {
-    global $database;
+    global $database,$text;
     bistroMyisamToInnodb();
     foreach ($updatesToRun as $file) {
         require_once $_SERVER['DOCUMENT_ROOT']."/sql/".$file;

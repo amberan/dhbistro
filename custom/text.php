@@ -1,5 +1,25 @@
 <?php
 
+//1.11.2
+$text['notificationUpdated'] = 'Záznam uložena!';
+$text['notificationNotUpdated'] = 'Záznam se nepodařilo uložit!';
+$text['notificationDeleted'] = 'Záznam smazán!';
+$text['notificationNotDeleted'] = 'Záznam se nepodařilo smazat!';
+$text['notificationRestored'] = 'Záznam úspešně obnoven!';
+$text['notificationNotRestored'] = 'Záznam se nepodařilo obnovit!';
+$text['notificationCreated'] = 'Záznam vytvořen!';
+$text['notificationNotCreated'] = 'Záznam se nepodařilo vytvořit!';
+$text['notificationHttp401'] = 'K této akci nemáte oprávnění!';
+$text['notificationListEmpty'] = 'Nebyly nalezeny žádné položky!';
+$text['notificationRecordNotFound'] = 'Požadovaný záznam nebyl nalezen!';
+
+$text['subtitleNewsAdd'] = 'přidat aktualitu';
+$text['subtitleNewsEdit'] = 'upravit aktualitu';
+
+$text['warningInformationUnavailable'] = 'Informace nedostupná';
+
+$text['subMenuListNews'] = 'Zobrazit aktuality';
+
 //QUESTIONS/VERITIFICATIONS
 $text['opravduprecist'] = 'opravdu označit vše jako přečtené?';
 $text['opravdugenerovatheslo'] = 'opravdu vygenerovat nové heslo pro uživatele?';
@@ -18,12 +38,17 @@ $text['opravduobnovitreport'] = 'opravdu obnovit hlášení?';
 $text['opravduodpojitsymbol'] = 'opravdu odpojit symbol?';
 $text['opravdusmazatpoznamku'] = 'opravdu smazat poznámku?';
 $text['opravdusmazatsoubor'] = 'opravdu smazat soubor?';
+$text['opravdusmazatsymbol'] = 'opravdu smazat symbol?';
+$text['opravduobnovitsymbol'] = 'opravdu obnovit symbol?';
 
 //NOTES
 $text['poznamky'] = 'poznámky';
 $text['smazatpoznamku'] = 'smazat poznámku';
 $text['vytvoritpoznamku'] = 'vytvořit poznámku';
 $text['ulozitpoznamku'] = 'uložit poznámku';
+$text['notePublic'] = 'veřejná';
+$text['notePrivate'] = 'soukromá';
+$text['noteSecret'] = 'tajná';
 
 //REPORT
 $text['hlaseni'] = 'hlášení';
@@ -35,6 +60,12 @@ $text['hlasenineniprirazenopripadu'] = 'hlášení není přiřazeno k žádném
 $text['neprirazenesymbolyhlaseni'] = 'nepřiřazené symboly spojené s hlášením';
 $text['osobyprirazenekhlaseni'] = 'osoby přiřazené k hlášení';
 $text['nemanedokoncenahlaseni'] = 'uživatel nemá žádná nedokončená hlášení.';
+$text['reportDefaultTask'] = '';
+$text['reportDefaultSummary'] = '';
+$text['reportDefaultCost'] = '';
+$text['reportDefaultImpact'] = '';
+$text['reportDefaultDetail'] = '';
+$text['reportDefaultInput'] = '';
 
 // GENERIC
 $text['bistro'] = 'BIStro';
@@ -74,9 +105,7 @@ $text['smazatuzivatele'] = 'Smazat uživatele';
 $text['obnovituzivatele'] = 'Obnovit uživatele';
 $text['zalohovatrucne'] = 'Vytvořit zálohu ručně';
 $text['stahnoutzalohu'] = 'Stáhnout zálohu';
-$text['pridataktualitu'] = 'přidat aktualitu';
-$text['novaaktualita'] = 'Nová aktualita';
-$text['zobrazitaktuality'] = 'Zobrazit aktuality';
+
 $text['upravitnastenku'] = 'Upravit nástěnku';
 $text['pridatpripad'] = 'Přidat případ';
 $text['editpripad'] = 'Upravit případ';
@@ -111,7 +140,7 @@ $text['vytvorenadmin'] = 'Vytvořen uživatel `admin` s heslem: ';
 $text['zaznamnenalezen'] = 'Požadovaný záznam nebyl nalezen!';
 $text['prazdnyvypis'] = 'Výpis neobsahuje žádné položky!';
 $text['http401'] = 'You are unauthorized to make this request!';
-$text['uzivatelexistuje'] = 'Uživatel již existuje, použijte jiné přihlašovací jméno!';
+$text['uzivatelexistuje'] = 'Uživatel již v databázi existuje, použijte jiné přihlašovací jméno!';
 $text['soubornenalezen'] = 'Soubor nenalezen!';
 $text['akcinelzeprovest'] = 'Požadovanou akci se nepodařilo uskutečnit!';
 $text['nuceneodhlaseni'] = 'Z bezpečnostních důvodů jste byl odhlášen!';
@@ -122,26 +151,22 @@ $text['uzivatelobnoven'] = 'Uživatelský účet obnoven!';
 $text['uzivatelzablokovan'] = 'Uživatelský účet zablokován!';
 $text['uzivatelodblokovan'] = 'Uživatelský účet odblokován!';
 $text['nastenkaprazdna'] = 'Veřejná nástěnka nemá žádný obsah!';
-$text['aktualitaneodebrana'] = 'Aktualitu se nepodařilo odebrat!';
-$text['aktualitanevlozena'] = 'Aktualitu se nepodařilo vložit!';
 $text['nevytvoreno'] = 'Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva!';
 $text['timeoutnenicislo'] = 'Timeout není číslo, nastavení nebylo uloženo!';
 $text['timeoutspatne'] = 'Timeout nesouhlasí, je buď příliš malý nebo příliš velký!';
 $text['puvodniheslospatne'] = 'Nesouhlasí staré heslo, nastavení nebylo uloženo!';
+$text['newPasswordEmpty'] = 'Nové heslo nemůže být prázdné!';
 $text['neplatnyemail'] = 'Neplatná e-mailová adresa!';
-$text['aktualitaobnovena'] = 'Aktualita obnovena!';
-$text['aktualitaneobnovena'] = 'Aktualitu se nepodařilo obnovit!';
 $text['zalohynenalezeny'] = 'Zálohy nenalezeny!';
 $text['zadneosoby'] = 'Nejsou přirazeny žádné osoby!';
 $text['zadnepripady'] = 'Není spojeno s žádným případem!';
-
+$text['nevalidniemail'] = 'Zadaná emailová adresa není platná!';
+$text['prazdnyuzivatel'] = 'Přihlašovací jméno nebylo zadáno!';
 
 //NOTIFICATIONS
-$text['aktualitavlozena'] = 'Aktualita vložena';
 $text['heslonastaveno'] = 'Nové heslo nastaveno: ';
 $text['uzivatelvytvoren'] = 'Vytvořen uživatel: ';
 $text['nastenkaupravena'] = 'Nástěnka upravena';
-$text['aktualitaodebrana'] = 'Aktualita odebrána';
 $text['zalohavytvorena'] = 'Záloha vytvořena';
 
 //NONE
@@ -260,7 +285,7 @@ $text['rozpracovane'] = 'rozpracované';
 $text['dokoncene'] = 'dokončené';
 $text['analyzovane'] = 'analyzované';
 $text['archivovane'] = 'archivované';
-$text['vyjezd']= 'výjezd';
+$text['vyjezd'] = 'výjezd';
 $text['vyslech'] = 'výslech';
 $text['jenmoje'] = 'jen moje';
 $text['vsechny'] = 'všechny';
@@ -329,3 +354,52 @@ $text['zobrazitreport'] = 'zobrazit hlášení';
 
 //SYMBOLS
 $text['neprirazenesymboly'] = 'nepřiřazené symboly';
+$text['newSymbol'] = 'nový symbol';
+$text['searchSymbol'] = 'vyhledat symbol';
+$text['linked'] = 'přiřazeno';
+$text['notes'] = 'poznámky';
+$text['linkTo'] = 'přiřadit';
+$text['addNote'] = 'přidat poznámku';
+$text['upravitsymbol'] = 'upravit symbol';
+$text['smazatsymbol'] = 'smazat symbol';
+$text['symbolNotLinkedToCase'] = 'Symbol nebyl přiřazen žádnému případu.';
+$text['linkedCases'] = 'Symbol připojen k případu';
+$text['symbolNotLinkedToReport'] = 'Symbol nebyl přiřazen žádnému hlášení.	';
+$text['linkedReports'] = "Symbol připojen k hlášení";
+
+//AUDIT
+$text['read'] = 'čtení záznamu';
+$text['edit'] = 'úprava záznamu';
+$text['new'] = 'vytvoření záznamu';
+$text['addFile'] = 'přiložení souboru';
+$text['removeFile'] = 'odstranění soubouru';
+$text['link'] = 'provazba';
+$text['newNote'] = 'nová poznámka';
+$text['deleteNote'] = 'smazání poznámky';
+$text['editNote'] = 'úprava poznámky';
+$text['gamemastersEdit'] = 'organizační zásah';
+$text['delete'] = 'smazání záznamu';
+$text['unauthorizedAccess'] = 'pokus o neoprávněný přístup';
+$text['unauthorizedAccessToDeletedItem'] = 'pokus o přístup ke smazanému záznamu';
+$text['search'] = 'vyhledávání';
+$text['unauthorizedAccessToSecret'] = 'pokus o neoprávněný přístup k utajovanému';
+$text['passwordReset'] = 'obnovení hesla';
+$text['recovery'] = 'obnovení záznamu';
+$text['lock'] = 'zamknutí';
+$text['unlock'] = 'odemknutí';
+
+$text['person'] = 'osoba';
+$text['group'] = 'skupina';
+$text['case'] = 'případ';
+$text['report'] = 'hlášení';
+$text['news'] = 'novinky';
+$text['dashboard'] = 'nástěnka';
+$text['symbol'] = 'symbol';
+$text['user'] = 'uživatel';
+$text['point'] = 'bod';
+$text['task'] = 'úkol';
+$text['audit'] = 'audit';
+$text['other'] = 'jiné';
+$text['file'] = 'soubor';
+$text['backup'] = 'záloha';
+$text['setting'] = 'nastavení';
