@@ -102,26 +102,32 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 ### Security
 - Feature: update of composer libs and php to 8.2.2 #270
 
-
-
-## 1.11.2 - 2023-02-15
+## 1.11.3 - 2023-03-30
 ### Added
 - Feature: secret symbols #284
 - Feature: editable news #264
 ### Changed
-- Refactored: symbols redesign #116
-- Refactored: report default text #283
-- Refactored: groups filter - secret #59
 - Refactored: header/listing template separation #273
+- Refactored: report default text #283
 ### Fixed
-- Fixed: random sorting on persons #237
-- Fixed: linking persons to report #262
-- Fixed: symbols to the old top menu #246
-- Fixed: error while refreshing after timeout #279
-- Fixed: report string escaping #264
+- Fixed: group filter for secret #59
 - Fixed: after editing symbol return to symbol page #285
 - Fixed: trim whitespaces from username and password #182
 - Fixed: one person cannot be linked to two users #182
+- Fixed: new link for banka #230
+- Fixed: report string escaping #264
+- Fixed: error while refreshing after timeout #279
+- Fixed: symbols to the old top menu #246
+### Removed
+- Database: drop news.obsah_md #300
+
+## 1.11.2 - 2023-02-15
+### Changed
+- Refactored: symbols redesign #116
+- Refactored: groups filter - secret #59
+### Fixed
+- Fixed: random sorting on persons #237
+- Fixed: linking persons to report #262
 
 ## 1.11.1 - 2023-02-14
 ### Added
