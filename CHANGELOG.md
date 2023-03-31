@@ -103,6 +103,10 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Feature: update of composer libs and php to 8.2.2 #270
 
 ## 1.11.4 WIP
+### Changed
+- Refactored: showing date of archived/dead mark on person #274
+### Fixed
+- Fixed: updating roof/archived on person #274
 
 
 ## 1.11.3 - 2023-03-30
