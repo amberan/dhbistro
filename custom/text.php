@@ -125,6 +125,7 @@ $text['ulozitpoznamku'] = 'uložit poznámku';
 $text['notePublic'] = 'veřejná';
 $text['notePrivate'] = 'soukromá';
 $text['noteSecret'] = 'tajná';
+$text['note'] = 'poznámka';
 
 $text['note'] = 'poznámka';
 

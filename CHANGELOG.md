@@ -107,6 +107,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Refactored: showing date of archived/dead mark on person #274
 ### Fixed
 - Fixed: updating roof/archived on person #274
+- Fixed: creating notes #297
 
 
 ## 1.11.3 - 2023-03-30
