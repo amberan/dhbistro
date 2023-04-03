@@ -102,7 +102,10 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 ### Security
 - Feature: update of composer libs and php to 8.2.2 #270
 
-## 1.11.4 WIP
+## 1.11.4 2023-04-04
+### Added
+- Feature: archive/unarchive from listing for maintainers #309
+- Feature: case can be archived #139
 ### Changed
 - Refactored: showing date of archived/dead mark on person #274
 - Refactored: notes can be added only from inside the objects, not from listing #303

@@ -279,7 +279,6 @@ FROM ".DB_PREFIX."person
 LEFT JOIN  ".DB_PREFIX."unread on  ".DB_PREFIX."person.id =  ".DB_PREFIX."unread.idrecord AND  ".DB_PREFIX."unread.idtable = 1 and  ".DB_PREFIX."unread.iduser=".$user['userId']."
 WHERE ".$sqlFilter."
 GROUP BY ".DB_PREFIX."person.id ".sortingGet('person');
-//    ".DB_PREFIX."person.surname ,
 
 $personList = mysqli_query($database, $sql);
 $personCount = mysqli_num_rows($personList);

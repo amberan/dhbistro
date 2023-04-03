@@ -106,6 +106,15 @@
                                                 <span class="bubbletip bubbletip-bottom-right">{$text['actionUnarchive']}</span>
                                             </a>
                                         {/if}
+                                        {if $user['aclReport'] <= 2 && $report['reportArchivedBool'] == 'False' AND $report['reportDeletedBool'] == 'False'}
+                                            <a href="/reports/{$report['reportId']}/archive" onclick="return confirm('{$text['actionCheckArchive']|noescape } {$report['reportName']|stripHtml} ?');">
+                                            {$text['actionArchive']|firstUpper}
+                                            </a>
+                                        {elseif  $user['aclReport'] <= 2 AND $report['reportDeletedBool'] == 'False'}
+                                            <a href="/reports/{$report['reportId']}/unarchive" onclick="return confirm('{$text['actionCheckUnarchive']|noescape} {$report['reportName']|stripHtml} ?');">
+                                            {$text['actionUnarchive']|firstUpper}
+                                            </a>
+                                        {/if}
                                         {if $user['aclReport'] >= 2 AND $report['reportDeletedBool'] == 'False'}
                                             <a class="btn btn-sm btn-brick btn-danger mb-1 tip-wrapper" href="/reports/{$report['reportId']}/delete" onclick="return confirm('{$text['actionConfirmationRemove']|noescape} {$report['reportName']|stripHtml}?');" alt="{$text['smazatreport']}">{php inject_svg("images/icons/trash-solid.svg")}
                                                 <span class="bubbletip bubbletip-bottom-right">{$text['smazatreport']}</span>
