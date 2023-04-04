@@ -23,7 +23,7 @@ if (isset($URL[1],$URL[2],$URL[3]) && $URL['1'] == 'news' && is_numeric($URL[2])
         latteDrawTemplate('sparklet');
         latteDrawTemplate('news_edit');
     } else {
-        $latteParameters['message'] = $text['notificationHttp401'];
+        $latteParameters['message'] = $text['notificationnotificationHttp401'];
         unauthorizedAccess('news', 'unauthorizedAccess', $URL[2]);
     }
 } else {

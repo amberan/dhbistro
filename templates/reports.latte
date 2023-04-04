@@ -107,11 +107,11 @@
                                             </a>
                                         {/if}
                                         {if $user['aclReport'] <= 2 && $report['reportArchivedBool'] == 'False' AND $report['reportDeletedBool'] == 'False'}
-                                            <a href="/reports/{$report['reportId']}/archive" onclick="return confirm('{$text['actionCheckArchive']|noescape } {$report['reportName']|stripHtml} ?');">
+                                            <a href="/reports/{$report['reportId']}/archive" onclick="return confirm('{$text['actionConfirmationArchive']|noescape } {$report['reportName']|stripHtml} ?');">
                                             {$text['actionArchive']|firstUpper}
                                             </a>
                                         {elseif  $user['aclReport'] <= 2 AND $report['reportDeletedBool'] == 'False'}
-                                            <a href="/reports/{$report['reportId']}/unarchive" onclick="return confirm('{$text['actionCheckUnarchive']|noescape} {$report['reportName']|stripHtml} ?');">
+                                            <a href="/reports/{$report['reportId']}/unarchive" onclick="return confirm('{$text['actionConfirmationUnarchive']|noescape} {$report['reportName']|stripHtml} ?');">
                                             {$text['actionUnarchive']|firstUpper}
                                             </a>
                                         {/if}

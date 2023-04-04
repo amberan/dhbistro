@@ -109,6 +109,8 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 ### Changed
 - Refactored: showing date of archived/dead mark on person #274
 - Refactored: notes can be added only from inside the objects, not from listing #303
+- Refactored: unification of terminology in UI (part) #7
+- Refactored: report link unification #321
 ### Fixed
 - Fixed: updating roof/archived on person #274
 - Fixed: creating notes #297
