@@ -118,7 +118,8 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Fixed: all notes on report marked as secret #302
 - Fixed: change user password #276
 - Fixed: note formating while editing person #319
-- Fixed: new UI edit link permisssion check #185
+- Fixed: edit link permisssion check #185
+- Fixed: disable links to deleted items in listings #226
 
 ## 1.11.3 - 2023-03-30
 ### Added
