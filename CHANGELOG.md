@@ -106,6 +106,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 ### Added
 - Feature: archive/unarchive from listing for maintainers #309
 - Feature: case can be archived #139
+- Feature: filter deleted in listing for admin #308
 ### Changed
 - Refactored: showing date of archived/dead mark on person #274
 - Refactored: notes can be added only from inside the objects, not from listing #303
