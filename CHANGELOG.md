@@ -117,7 +117,8 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Fixed: new symbol creation #305
 - Fixed: all notes on report marked as secret #302
 - Fixed: change user password #276
-- Fixed: Note formating while editing person #319
+- Fixed: note formating while editing person #319
+- Fixed: new UI edit link permisssion check #185
 
 ## 1.11.3 - 2023-03-30
 ### Added
