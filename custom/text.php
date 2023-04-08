@@ -114,7 +114,6 @@ $text['connectedTo'] = 'připojeno k';
 
 
 
-
 # PERMISSION
 $text['aclNews'] = 'Aktuality';
 $text['aclBoard'] = 'Nástěnka';
@@ -146,6 +145,16 @@ $text['reportDefaultCost'] = '';
 $text['reportDefaultImpact'] = '';
 $text['reportDefaultDetail'] = '';
 $text['reportDefaultInput'] = '';
+
+# WHATEVER
+$text['searchResults'] = 'výsledky vyhledávaní';
+$text['connectedTo'] = 'připojeno k';
+
+
+
+
+
+
 
 
 //NOTES

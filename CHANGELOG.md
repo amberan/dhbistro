@@ -113,6 +113,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Refactored: unification of terminology in UI (part) #7
 - Refactored: report link unification #321
 - Refactored: improved report creation #259
+- Refactored: search UI to bootstrap #119
 ### Fixed
 - Fixed: updating roof/archived on person #274
 - Fixed: creating notes #297
