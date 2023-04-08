@@ -107,12 +107,14 @@
                                             </a>
                                         {/if}
                                         {if $user['aclReport'] <= 2 && $report['reportArchivedBool'] == 'False' AND $report['reportDeletedBool'] == 'False'}
-                                            <a href="/reports/{$report['reportId']}/archive" onclick="return confirm('{$text['actionConfirmationArchive']|noescape } {$report['reportName']|stripHtml} ?');">
-                                            {$text['actionArchive']|firstUpper}
+                                            <a class="btn btn-sm btn-brick btn-dark mb-1" href="/reports/{$report['reportId']}/archive" onclick="return confirm('{$text['actionConfirmationArchive']|noescape } {$report['reportName']|stripHtml} ?');" alt="
+                                            {$text['actionArchive']}">
+                                            {php inject_svg("images/icons/box-solid.svg")}
                                             </a>
                                         {elseif  $user['aclReport'] <= 2 AND $report['reportDeletedBool'] == 'False'}
-                                            <a href="/reports/{$report['reportId']}/unarchive" onclick="return confirm('{$text['actionConfirmationUnarchive']|noescape} {$report['reportName']|stripHtml} ?');">
-                                            {$text['actionUnarchive']|firstUpper}
+                                            <a class="btn btn-sm btn-brick btn-secondary mb-1" href="/reports/{$report['reportId']}/unarchive" onclick="return confirm('{$text['actionConfirmationUnarchive']|noescape} {$report['reportName']|stripHtml} ?');" alt="
+                                            {$text['actionUnarchive']}">
+                                            {php inject_svg("images/icons/box-open-solid.svg")}
                                             </a>
                                         {/if}
                                         {if $user['aclReport'] >= 2 AND $report['reportDeletedBool'] == 'False'}
