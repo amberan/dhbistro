@@ -104,7 +104,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 
 ## 1.11.4 2023-04-04
 ### Added
-- Feature: archive/unarchive from listing for maintainers #309
+- Feature: archive/unarchive from listing for maintainers #309 #331
 - Feature: case can be archived #139
 - Feature: filter deleted in listing for admin #308
 ### Changed
@@ -114,6 +114,10 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Refactored: report link unification #321
 - Refactored: improved report creation #259
 - Refactored: search UI to bootstrap #119
+- Refactored: Tooltips on iconized actions #330
+- Refactored: Tooltips on labels #320
+- Refactored: note deletion #312
+- Refactored: floating save button on reports #322
 ### Fixed
 - Fixed: updating roof/archived on person #274
 - Fixed: creating notes #297
@@ -125,6 +129,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Fixed: disable links to deleted items in listings #226
 - Fixed: read all link update on old UI #186
 - Fixed: notes from users without person #332
+- Fixed: note author display #318 #332
 
 ## 1.11.3 - 2023-03-30
 ### Added
