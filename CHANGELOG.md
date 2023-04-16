@@ -129,7 +129,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Fixed: edit link permisssion check #185
 - Fixed: disable links to deleted items in listings #226
 - Fixed: read all link update on old UI #186
-- Fixed: notes from users without person #332
+- Fixed: notes from users without person #332 #340
 - Fixed: note author display #318 #332
 
 ## 1.11.3 - 2023-03-30
