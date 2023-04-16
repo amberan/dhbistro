@@ -112,7 +112,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Refactored: notes can be added only from inside the objects, not from listing #303
 - Refactored: unification of terminology in UI (part) #7
 - Refactored: report link unification #321
-- Refactored: improved report creation #259
+- Refactored: improved report creation #259 #342
 - Refactored: search UI to bootstrap #119
 - Refactored: Tooltips on iconized actions #330
 - Refactored: Tooltips on labels #320
