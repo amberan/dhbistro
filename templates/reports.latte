@@ -112,7 +112,7 @@
                                             {php inject_svg("images/icons/box-solid.svg")}
                                                 <span class="bubbletip bubbletip-bottom-right">{$text['actionArchive']}</span>
                                             </a>
-                                        {elseif  $user['aclReport'] <= 2 AND $report['reportDeletedBool'] == 'False'}
+                                        {elseif  $user['aclReport'] >= 2 AND $report['reportDeletedBool'] == 'False'}
                                             <a class="btn btn-sm btn-brick btn-secondary mb-1 tip-wrapper" href="/reports/{$report['reportId']}/unarchive" onclick="return confirm('{$text['actionConfirmationUnarchive']|noescape} {$report['reportName']|stripHtml} ?');" alt="
                                             {$text['actionUnarchive']}">
                                             {php inject_svg("images/icons/box-open-solid.svg")}
