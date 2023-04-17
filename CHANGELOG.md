@@ -119,6 +119,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Refactored: note deletion #312
 - Refactored: floating save button on reports #322
 - Refactored: 'mark all as read' can work per section #186
+- Refactored: filter() removal from item linking #343
 ### Fixed
 - Fixed: updating roof/archived on person #274
 - Fixed: creating notes #297
