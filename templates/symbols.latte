@@ -1,7 +1,7 @@
 
-            {if @$warning}
+            {ifset $warningSymbols}
                 <div>
-                    {$warning}
+                    {$warningSymbols}
                 </div>
             {else}
                 <div id="obsah">
@@ -14,18 +14,19 @@
                             <th class="mobile-no-show text-center">
                                 {$text['notes']|firstUpper}
                             </th>
-                            <th class="mobile-no-show">
-                                <div class="table-no-wrap">{$text['vytvoreno']|firstUpper}<a href="{$URL[0]}{$URL[1]}/?sort=created">&#8661;</a></div>
-                            </th>
-
-                            <th class="tablet-no-show text-center">
-                                <div class="table-no-wrap">{$text['zmeneno']|firstUpper}  <a href="{$URL[0]}{$URL[1]}/?sort=modified">&#8661;</a></div>
-                            </th>
-
                             <th class="tablet-no-show text-center">
                                 {$text['linked']|firstUpper}
                             </th>
-                            <th class="mobile-no-show">{$text['akce']|firstUpper}</th>
+                            <th class="mobile-no-show">
+                                <div class="table-no-wrap">{$text['vytvoreno']|firstUpper}{if $URL[1] != 'search'} <a href="{$URL[0]}{$URL[1]}/?sort=created">&#8661;</a>{/if}</div>
+                            </th>
+
+                            <th class="tablet-no-show text-center">
+                                <div class="table-no-wrap">{$text['zmeneno']|firstUpper}{if $URL[1] != 'search'} <a href="{$URL[0]}{$URL[1]}/?sort=modified">&#8661;</a>{/if}</div>
+                            </th>
+                            {if $URL[1] != 'search' && $user['aclSymbol'] > 0}
+                                <th class="mobile-no-show">{$text['akce']|firstUpper}</th>
+                            {/if}
                         </tr>
                     </thead>
                     <tbody>
@@ -34,9 +35,9 @@
                                 <td class="table-w-full-cell">
                                     <p class="table-cell-title">
                                         {if $symbol['symbolDeleted'] }
-                                            <img src="/file/symbol/{$symbol['symbolId']}" alt="{$symbol['symbolDescription']}" />
+                                            <img  loading="lazy" src="/file/symbol/{$symbol['symbolId']}" alt="{$symbol['symbolDescription']}" />
                                         {else}
-                                            <a href="/readsymbol.php?rid={$symbol['symbolId']}"><img src="/file/symbol/{$symbol['symbolId']}" alt="{$symbol['symbolDescription']}" /></a>
+                                            <a href="/readsymbol.php?rid={$symbol['symbolId']}"><img  loading="lazy" src="/file/symbol/{$symbol['symbolId']}" alt="{$symbol['symbolDescription']}" /></a>
                                         {/if}
                                     </p>
                                 </td>
@@ -44,8 +45,7 @@
                                     {$symbol['symbolDescription']|stripHtml}
                                     {if @$symbol['notes']}
                                         {foreach @$symbol['notes'] as $note}
-                                            <br/><strong>{if $note['noteCreatedByPerson']}{$note['noteCreatedByPerson']}{else}{$note['noteCreatedByUser']}{/if} {$noteType[$note['noteSecret']]} <br/>
-                                            {$note['noteTitle']}: {$note['noteBody']}</strong><br/>
+                                            <br/>{$text['note']|firstUpper}: {if $note['noteCreatedByPerson']}{$note['noteCreatedByPerson']}{else}{$note['noteCreatedByUser']}{/if} {$noteType[$note['noteSecret']]}: {$note['noteTitle']}: {$note['noteBody']}<br/>
                                         {/foreach}
                                     {/if}
                                     <div class="table-badge-wrapper">
@@ -53,20 +53,12 @@
                                             <span class="badge rounded-pill bg-danger text-light">{$text['utajeno']|upper}</span>
                                         {/if}
                                         {if $symbol['symbolArchivedBool'] == 'True'}
-                                            <span class="badge rounded-pill bg-secondary text-light">{$text['archivovano']|firstUpper}</span>
+                                            <span class="badge rounded-pill bg-secondary text-light">{$text['archivovano']|upper}</span>
                                         {/if}
                                         {if $symbol['symbolDeleted'] }
-                                            <span class="badge rounded-pill bg-warning text-dark">{$text['smazany']|firstUpper}</span>
+                                            <span class="badge rounded-pill bg-warning text-dark">{$text['smazany']|upper}</span>
                                         {/if}
                                     </div>
-                                </td>
-                                <td class="tablet-no-show text-center">
-                                    {if $symbol['symbolCreated']} {$symbol['symbolCreated']|date:'d.m.Y'}{else}<em>{$text['neznamo']}</em>{/if}<br/>
-                                    {if $symbol['symbolCreatedByName']}{$symbol['symbolCreatedByName']}{else}{$symbol['symbolCreatedByUserName']}{/if}
-                                </td>
-                                <td class="tablet-no-show text-center">
-                                    {$symbol['symbolModified']|date:'d.m.Y'}<br/>
-                                    {if $symbol['symbolModifiedByName']}{$symbol['symbolModifiedByName']}{else}{$symbol['symbolModifiedByUserName']}{/if}
                                 </td>
                                 <td class="mobile-no-show">
                                 {if @$symbol['cases']}{$text['linkedCases']}:<br/>
@@ -84,38 +76,58 @@
                                     {$text['symbolNotLinkedToReport']}<br/>
                                 {/if}
                                 </td>
-                                <td class="table-w-full-cell">
+                                <td class="tablet-no-show text-center">
+                                    {if $symbol['symbolCreated']} {$symbol['symbolCreated']|date:'d.m.Y'}{else}<em>{$text['notificationInformationUnknown']}</em>{/if}<br/>
+                                    {if $symbol['symbolCreatedByName']}{$symbol['symbolCreatedByName']}{else}{$symbol['symbolCreatedByUserName']}{/if}
+                                </td>
+                                <td class="tablet-no-show text-center">
+                                    {$symbol['symbolModified']|date:'d.m.Y'}<br/>
+                                    {if $symbol['symbolModifiedByName']}{$symbol['symbolModifiedByName']}{else}{$symbol['symbolModifiedByUserName']}{/if}
+                                </td>
+{if $URL[1] != 'search' && $user['aclSymbol'] > 0}
+                                <td class="table-w-full-cell text-right">
                                     <div class="table-no-wrap-right">
                                         {if $user['aclSymbol'] >= 1 && !$symbol['symbolDeleted']}
-                                            <a href="/addsy2p.php?rid={$symbol['symbolId']}">{$text['linkTo']|firstUpper}</a>
-                                            <a class="btn btn-sm btn-brick btn-info mb-1" href="/editsymbol.php?rid={$symbol['symbolId']}" alt="{$text[upravitsymbol]}">
+                                            <a class="btn btn-sm btn-brick btn-light mb-1 tip-wrapper" href="/addsy2p.php?rid={$symbol['symbolId']}" alt="{$text['linkTo']}">
+                                                {php inject_svg("images/icons/check-double-solid.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text['linkTo']}</span>
+                                            </a>
+                                            <a class="btn btn-sm btn-brick btn-info mb-1 tip-wrapper" href="/editsymbol.php?rid={$symbol['symbolId']}" alt="{$text[upravitsymbol]}">
                                                 {php inject_svg("images/icons/edit-solid.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text[upravitsymbol]}</span>
                                             </a>
-                                            <a href="/newnote.php?rid={$symbol['symbolId']}&idtable=11">{$text['addNote']|firstUpper}</a>
                                         {/if}
-                                        {if $user['aclSymbol'] <= 2 && $symbol['symbolArchivedBool'] == 'False'}
-                                            <a href="/symbols/?archive={$symbol['symbolId']}" onclick="return confirm('Opravdu archivovat tento symbol?');">
-                                            archivovat
+                                        {if $user['aclSymbol'] >= 2 && $symbol['symbolArchivedBool'] == 'False' && !$symbol['symbolDeleted'] }
+                                            <a class="btn btn-sm btn-brick btn-dark mb-1 tip-wrapper" href="/symbols/{$symbol['symbolId']}/archive" onclick="return confirm('{$text['actionConfirmationArchive']|noescape}?');" alt="
+                                            {$text['actionArchive']}">
+                                            {php inject_svg("images/icons/box-solid.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text['actionArchive']}</span>
                                             </a>
-                                        {elseif  $user['aclSymbol'] <= 2}
-                                            <a href="/symbols/?unarchive={$symbol['symbolId']}" onclick="return confirm('Opravdu vyjmout z archivu tento symbol?');">
-                                            odarchivat
+                                        {elseif  $user['aclSymbol'] >= 2 && !$symbol['symbolDeleted'] }
+                                            <a class="btn btn-sm btn-brick btn-secondary mb-1 tip-wrapper" href="/symbols/{$symbol['symbolId']}/unarchive" onclick="return confirm('{$text['actionConfirmationUnarchive']|noescape}?');" alt="
+                                            {$text['actionUnarchive']}">
+                                            {php inject_svg("images/icons/box-open-solid.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text['actionUnarchive']}</span>
                                             </a>
                                         {/if}
                                         {if $user['aclSymbol'] >= 2 && !$symbol['symbolDeleted'] }
-                                            <a class="btn btn-sm btn-brick btn-danger mb-1" href="/symbols/?sdelete={$symbol['symbolId']}" onclick="return confirm('{$text['opravdusmazatsymbol']} &quot; {$symbol['symbolDescription']|stripHtml}&quot;?');" alt="{$text['smazatsymbol']}">
+                                            <a class="btn btn-sm btn-brick btn-danger mb-1 tip-wrapper" href="/symbols/?sdelete={$symbol['symbolId']}" onclick="return confirm('{$text['actionConfirmationRemove']|noescape} {$symbol['symbolDescription']|stripHtml}?');" alt="{$text['smazatsymbol']}">
                                             {php inject_svg("images/icons/trash-solid.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text['smazatsymbol']}</span>
                                             </a>
                                         {/if}
                                         {if $user['aclRoot'] AND $symbol['symbolDeleted']}
-                                            <a class="btn btn-sm btn-success mb-1" href="/symbols/?undelete={$symbol['symbolId']}" onclick="return confirm('{$text['opravduobnovitsymbol']} &quot; {$symbol['symbolDescription']|stripHtml}&quot;?');">
+                                            <a class="btn btn-sm btn-success mb-1 tip-wrapper" href="/symbols/?undelete={$symbol['symbolId']}" onclick="return confirm('{$text['actionConfirmationRestore']|noescape} {$symbol['symbolDescription']|stripHtml}?');">
                                             {php inject_svg("images/icons/recycle.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text['actionRestore']}</span>
                                             </a>
                                         {/if}
                                     </div>
                                 </td>
+{/if}
                             </tr>
                         {/foreach}
                     </tbody>
                 </table>
-            {/if}
+            </div>
+            {/ifset}

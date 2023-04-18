@@ -1,6 +1,6 @@
 <form action="/reports/{$report['reportId']}/edit" method="post" class="container-fluid mt-3 mb-3 mr-2 w-100">
     <div class="row mb-1">
-        {ifset $reportNewId}
+{if $report['reportId'] == 0}
             <div class="col-12 text-center">
                 <h4>
                     {$text['newreportheader']|firstUpper}
@@ -12,23 +12,23 @@
                     {$text['editreportheader']|firstUpper}
                 </h4>
             </div>
-        {/ifset}
+{/if}
     </div>
     <div class="row mb-1">
         <div class="col-12">
             <div class="view-category-wrapper">
                 <p class="view-category-name">{$text['nazevreportu']|firstUpper}</p>
-                <input class="form-control" type="text" name="reportName" value="{$report['reportName']}" />
+                <input class="form-control" type="text" name="reportName" value="{@$report['reportName']}" />
             </div>
         </div>
     </div>
     <div class="text-center">
-        {if $report['reportSecret'] > 0 }
+        {if @$report['reportSecret'] > 0 }
             <h5 class="bg-danger text-light w-100 p-2 mb-1">
                 {$text['utajeno']|upper}
             </h5>
         {/if}
-        {if $report['reportArchived']}
+        {if @$report['reportArchived']}
             <h6 class="bg-secondary text-light w-100 p-2 mb-1">
                 {$text['archivovano']}
             </h6>
@@ -40,11 +40,11 @@
                 <p class="view-category-name">{$text['hlavickapopis']}</p>
                 <div class="w-100">
                     <label class="mt-3" for="idreporttype">
-                        {$text['hlaseni']|firstUpper}:
+                        {$text['menuReports']|firstUpper}:
                     </label>
                     <select class="form-control" name="reportType" id="reporttype">
                     {foreach $reportType as $reportTypeValue => $reportTypeName}
-                        <option value={$reportTypeValue}{if $reportTypeValue == $report[reportType]} SELECTED{/if}> {$reportTypeName}</option>
+                        <option value={$reportTypeValue}{if $reportTypeValue == @$report[reportType]} SELECTED{/if}> {$reportTypeName}</option>
                     {/foreach}
                     </select>
                 </div>
@@ -52,7 +52,7 @@
                     <label class="mt-3" for="task">
                         {$text['ukol']|firstUpper}:
                     </label>
-		    <textarea class="form-control edit-textarea" name="reportTask" id="task">{if $report['reportTask']}{$report['reportTask']}{else}{$text['reportDefaultTask']}{/if}</textarea>
+		    <textarea class="form-control edit-textarea" name="reportTask" id="task">{ifset $report['reportTask']}{$report['reportTask']}{else}{$text['reportDefaultTask']}{/ifset}</textarea>
                 </div>
                 <div class="w-100">
                     <label class="mt-3" for="reportowner">
@@ -60,7 +60,7 @@
                     </label>
                     <select name="reportOwner" class="form-control" id="reportowner">
                         {foreach $suitableUsers as $suitableUser}
-                            <option value="{$suitableUser['userId']}" {if $report['reportOwner'] == $suitableUser['userId']} SELECTED{/if}>{if $suitableUser['personName']}{$suitableUser['personName']}{else}{$suitableUser['userName']}{/if}</option>
+                            <option value="{$suitableUser['userId']}" {if @$report['reportOwner'] == $suitableUser['userId']} SELECTED{/if}>{if $suitableUser['personName']}{$suitableUser['personName']}{else}{$suitableUser['userName']}{/if}</option>
                         {/foreach}
                     </select>
                 </div>
@@ -71,32 +71,34 @@
                         </label>
                         <select class="form-control" name="reportSecret" id="isitsecret">
                             <option value="0">{$text['verejne']|firstUpper}</option>
-                            <option value="1" {if $report[reportSecret] == 1} SELECTED{/if}>{$text['utajeno']|firstUpper}</option>
+                            <option value="1" {if @$report[reportSecret] == 1} SELECTED{/if}>{$text['utajeno']|firstUpper}</option>
                         </select>
                     </div>
                 {/if}
-                <div class="w-100">
-                    <p class="mt-3 mb-2">
-                        {$text['archiv']}:
-                    </p>
-                    {if $report['reportArchived']}
-                         <input class="form-control mb-2" name="reportArchived" disabled value="{$text['archivovano']} {$report['reportArchived']}" />
-                    {/if}
-                    <div class="header-switch ml-0">
-                        <label class="toggle-control">
-                            <input name="reportArchivedCheck" type="checkbox" {if $report['reportArchived']}CHECKED{/if}>
-                            <span class="control"></span>
-                        </label>
-                        {$text['archivovat']}
+{if $report['reportId'] != 0}
+                    <div class="w-100">
+                        <p class="mt-3 mb-2">
+                            {$text['archiv']}:
+                        </p>
+                        {if $report['reportArchived']}
+                            <input class="form-control mb-2" name="reportArchived" disabled value="{$text['archivovano']} {$report['reportArchived']}" />
+                        {/if}
+                        <div class="header-switch ml-0">
+                            <label class="toggle-control">
+                                <input name="reportArchivedCheck" type="checkbox" {if $report['reportArchived']}CHECKED{/if}>
+                                <span class="control"></span>
+                            </label>
+                            {$text['archivovat']}
+                        </div>
                     </div>
-                </div>
+{/if}
                 <div class="w-100">
                     <label class="mt-3" for="reportstatusdropdown">
                         {$text['stavhlaseni']}:
                     </label>
                     <select name="reportStatus" id="reportstatusdropdown" class="form-control">
                         {foreach $reportStatus as $reportStatusValue => $reportStatusName}
-                            <option value={$reportStatusValue}{if $reportStatusValue == $report[reportStatus]} SELECTED{/if}> {$reportStatusName}</option>
+                            <option value={$reportStatusValue}{if $reportStatusValue == @$report[reportStatus]} SELECTED{/if}> {$reportStatusName}</option>
                         {/foreach}
                     </select>
                 </div>
@@ -105,6 +107,7 @@
         <div class="col-12 col-md-6">
             <div class="view-category-wrapper">
                 <p class="view-category-name">{$text['hlavickacas']}</p>
+{if $report['reportId'] != 0}
                 <div class="w-100">
                     <p class="mt-3 mb-2">
                         {$text['vytvoril']|firstUpper}:
@@ -117,23 +120,31 @@
                     </p>
                     <input class="form-control mb-2" name="reportLastChangedByWhen" readonly value="{$report['reportModifiedByName']} {$report['reportModified']}" />
                 </div>
-                <div class="w-100">
-                    <label class="mt-3" for="timeDayHappenedPicker">
-                        {$text['probehlo']}
-                    </label>
-                    <input class="form-control" name="reportEventDate" value={$report['reportEventDate']} type="date"/>
-                    <label class="mt-3" for="timeDayHappenedFrom">
-                        {$text['od']}:
-                    </label>
-                    <input class="form-control" name="reportEventStart" value={$report['reportEventStart']} type="time">
-                    <label class="mt-3" for="timeDayHappenedTo">
-                        {$text['do']}:
-                    </label>
-                    <input class="form-control" name="reportEventEnd" value={$report['reportEventEnd']} type="time">
+{/if}
+                <div class="row">
+                    <div class="col-12 col-lg-4">
+                        <label class="mt-3" for="timeDayHappenedPicker">
+                            {$text['probehlo']}
+                        </label>
+                        <input class="form-control" name="reportEventDate" value={@$report['reportEventDate']} type="date"/>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <label class="mt-3" for="timeDayHappenedFrom">
+                            {$text['od']}:
+                        </label>
+                        <input class="form-control" name="reportEventStart" value={@$report['reportEventStart']} type="time">
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <label class="mt-3" for="timeDayHappenedTo">
+                            {$text['do']}:
+                        </label>
+                        <input class="form-control" name="reportEventEnd" value={@$report['reportEventEnd']} type="time">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+{if $report['reportId'] != 0}
     <div class="row mb-1">
         <div class="col-12">
             <div class="view-category-wrapper">
@@ -166,6 +177,7 @@
             </div>
         </div>
     </div>
+{/if}
     <div class="row mb-1">
         <div class="col-12">
             <div class="view-category-wrapper">
@@ -182,7 +194,7 @@
                     height: '400px',
                     initialEditType: 'wysiwyg',
                     previewStyle: 'vertical',
-                    initialValue:   `{if $report['reportSummary']}{$report['reportSummary']|noescape}{else}{$text['reportDefaultSummary']|noescape}{/if}`,
+                    initialValue:   `{if $report['reportId'] != 0}{$report['reportSummary']|noescape}{else}{$text['reportDefaultSummary']|noescape}{/if}`,
                     toolbarItems: [
                         ['heading', 'bold', 'italic', 'strike'],
                         ['hr', 'quote'],
@@ -213,7 +225,7 @@
                     height: '400px',
                     initialEditType: 'wysiwyg',
                     previewStyle: 'vertical',
-                    initialValue:   `{if $report['reportImpact']}{$report['reportImpact']|noescape}{else}{$text['reportDefaultImpact']|noescape}{/if}`,
+                    initialValue:   `{if $report['reportId'] != 0}{$report['reportImpact']|noescape}{else}{$text['reportDefaultImpact']|noescape}{/if}`,
                     toolbarItems: [
                         ['heading', 'bold', 'italic', 'strike'],
                         ['hr', 'quote'],
@@ -244,7 +256,7 @@
                     height: '400px',
                     initialEditType: 'wysiwyg',
                     previewStyle: 'vertical',
-                    initialValue:   `{if $report['reportDetail']}{$report['reportDetail']|noescape}{else}{$text['reportDefaultDetail']|noescape}{/if}`,
+                    initialValue:   `{if $report['reportId'] != 0}{$report['reportDetail']|noescape}{else}{$text['reportDefaultDetail']|noescape}{/if}`,
                     toolbarItems: [
                         ['heading', 'bold', 'italic', 'strike'],
                         ['hr', 'quote'],
@@ -276,7 +288,7 @@
                     height: '400px',
                     initialEditType: 'wysiwyg',
                     previewStyle: 'vertical',
-                    initialValue:   `{if $report['reportCost']}{$report['reportCost']|noescape}{else}{$text['reportDefaultCost']|noescape}{/if}`,
+                    initialValue:   `{if $report['reportId'] != 0}{$report['reportCost']|noescape}{else}{$text['reportDefaultCost']|noescape}{/if}`,
                     toolbarItems: [
                         ['heading', 'bold', 'italic', 'strike'],
                         ['hr', 'quote'],
@@ -308,7 +320,7 @@
                     height: '250px',
                     initialEditType: 'wysiwyg',
                     previewStyle: 'vertical',
-                    initialValue:   `{if $report['reportInput']}{$report['reportInput']|noescape}{else}{$text['reportDefaultInput']|noescape}{/if}`,
+                    initialValue:   `{if $report['reportId'] != 0}{$report['reportInput']|noescape}{else}{$text['reportDefaultInput']|noescape}{/if}`,
                     toolbarItems: [
                         ['heading', 'bold', 'italic', 'strike'],
                         ['hr', 'quote'],
@@ -327,12 +339,13 @@
     <div class="row mb-1">
         <input type=hidden name="reportId" value={$report['reportId']} />
     </div>
-    <div class="row mb-1">
+    <div class="row mb-1 sticky-bottom pt-2 pb-2 bg-white z-30">
         <div class="col-12">
             <input type=submit value="{$text['ulozit']|firstUpper}" class="btn btn-primary btn-lg w-100" />
         </div>
     </div>
 </form>
+{if $report['reportId'] != 0}
 <div class="container-fluid mt-3 mb-3 mr-2 w-100">
     <div class="row mb-1">
         <div class="col-12">
@@ -343,14 +356,14 @@
                 <div class="view-symbol-wrapper">
                     {if $reportSymbols != false}
                         {foreach $reportSymbols as $symbol}
-                            <a href="/readsymbol.php?rid={$symbol['symbolId']}"><img {if $symbol['symbolDeleted'] > 0}class="deleted"{/if} {ifset $symbol['symbolSecret']}class="secret"{/ifset} src="/file/symbol/{$symbol['symbolId']}" alt="{if $symbol['symbolCreatedByPerson']}{$symbol['symbolCreatedByPerson']}{else}{$symbol['symbolCreatedByUser']}{/if} {$symbol['symbolCreated']}" /></a>
-                            {if $symbol['symbolCreatedBy'] == $user['userId'] || $report['reportOwner'] == $user['userId']}
+                            <a href="/readsymbol.php?rid={$symbol['symbolId']}"><img  loading="lazy" {if $symbol['symbolDeleted'] > 0}class="deleted"{/if} {ifset $symbol['symbolSecret']}class="secret"{/ifset} src="/file/symbol/{$symbol['symbolId']}" alt="{$symbol['symbolCreatedBy']} {$symbol['symbolCreated']}" /></a>
+                            {if $symbol['symbolCreatedById'] == $user['userId'] || $report['reportOwner'] == $user['userId']}
                                 <a class="btn btn-sm btn-danger w-100" title="{$text['smazat']}" href="/reports/{$report['reportId']}/edit/unlinksymbol={$symbol[symbolId]}" onclick="return confirm('{$text['opravduodpojitsymbol']}')">{$text['odpojitsymbol']}</a>
                             {/if}
                         {/foreach}
                     {/if}
                 <hr class="view-category-divider">
-                <p class="w-100 text-right"><a href="/symbols">{$text['neprirazenesymboly']}</a></p>
+                <p class="w-100 text-right"><a href="/symbols" target=_new>{$text['neprirazenesymboly']}</a></p>
                 </div>
             </div>
         </div>
@@ -368,12 +381,12 @@
                                 {if $file[fileIsImage]}
                                     <a href="/file/attachement/{$file['fileId']}" class="file-link">
                                         <div class="view-file-wrapper mb-2 clear">
-                                            <img class="view-file-icon" alt="{$file['fileName']}: {$file['fileCreated']} {$file['fileCreatedBy']}" src="/file/attachement/{$file['fileId']}" />
+                                            <img  loading="lazy" class="view-file-icon" alt="{$file['fileName']}: {$file['fileCreated']} {$file['fileCreatedBy']}" src="/file/attachement/{$file['fileId']}" />
                                             <div>
                                                 <p class="view-file-name">
                                                     {$file['fileName']}
                                                 </p>
-                                                <p class="view-file-creator">{if $file['fileCreatedByPerson']}{$file['fileCreatedByPerson']}{else}{$file['fileCreatedByUser']}{/if} ({$file['fileCreated']})</p>
+                                                <p class="view-file-creator">{$file['fileCreatedBy']} ({$file['fileCreated']})</p>
                                                 {if $file['fileSecret'] == 1}
                                                 {$text['tajne']|capitalize}
                                                 {/if}
@@ -383,17 +396,13 @@
                                 {else }
                                     <a href="/file/attachement/{$file['fileId']}" class="file-link">
                                         <div class="view-file-wrapper mb-2 clear">
-                                            <img src="/images/folder_icon.png" class="view-file-icon"/>
+                                            <img  loading="lazy" src="/images/folder_icon.png" class="view-file-icon"/>
                                             <div>
                                                 <p class="view-file-name">
                                                     {$file['fileName']}
                                                 </p>
                                                 <p class="view-file-creator">
-                                                    {if $file['fileCreatedByPerson']}
-                                                        {$file['fileCreatedByPerson']}
-                                                    {else}
-                                                        {$file['fileCreatedByUser']}
-                                                    {/if}
+                                                    {$file['fileCreatedBy']}
                                                     ({$file['fileCreated']})
                                                 </p>
                                                 {if $file['fileSecret'] == 1}
@@ -403,8 +412,8 @@
                                         </div>
                                     </a>
                                 {/if}
-                                {if $file['fileCreatedBy'] == $user['userId'] || $report['reportOwner'] == $user['userId'] || $user['aclReport'] > 1}
-                                   <a class="btn btn-sm btn-danger w-100" title="{$text['smazat']}" href="/reports/{$report['reportId']}/edit/?deletefile={$file[fileId]}" onclick="return confirm('{$text['opravdusmazatsoubor']}')">{$text['smazatsoubor']}</a>
+                                {if $file['fileCreatedById'] == $user['userId'] || $report['reportOwner'] == $user['userId'] || $user['aclReport'] > 1}
+                                   <a class="btn btn-sm btn-danger w-100" title="{$text['smazat']}" href="/reports/{$report['reportId']}/edit/?deletefile={$file[fileId]}" onclick="return confirm('{$text['actionConfirmationRemove']}')">{$text['smazatsoubor']}</a>
                                 {/if}
                             </div>
                         {/foreach}
@@ -456,21 +465,25 @@
                 {if $reportNotes != false}
                     <div class="system-notes-wrapper">
                         {foreach $reportNotes as $note}
-                            {if $note['noteCreatedBy'] == $user['userId'] || $note['noteSecret'] <= $user['aclSecret']}
+                            {if ($note['noteCreatedById'] == $user['userId'] ) || ($note['noteSecret'] <= $user['aclSecret'])}
                                 {if $note['noteSecret'] == 1}
                                     <div class="system-note note-color-secret">
                                         <span class="system-note-stamp">{$text['tajne']|capitalize}</span>
                                         <p class="system-note-title">
                                             {$note['noteTitle']}
                                         </p>
-                                        <p>
-                                            {$note['noteNote']}
+                                        <p class="system-note-note">
+                                            {$note['noteNote']|striptags}
                                         </p>
-                                        {if $note['noteCreatedBy'] == $user['userId'] || $report['reportOwner'] == $user['userId']}
-                                            <p><a class="delete" title="{$text['smazat']}" href="/procnote.php?deletenote={$note['noteId']}&amp;itemid={$report['reportId']}&amp;backurl=/reports/{$report['reportId']}/edit" onclick="return confirm('{$text['opravdusmazatpoznamku']}')">{$text['smazatpoznamku']}</a></p>
+                                        {if $note['noteCreatedById'] == $user['userId'] || $report['reportOwner'] == $user['userId'] || $user['aclReport'] > 1}
+                                            <div class="system-note-delete-wrapper">
+                                                <a class="btn btn-sm btn-brick system-note-delete" title="{$text['smazat']}" href="/procnote.php?deletenote={$note['noteId']}&amp;itemid={$report['reportId']}&amp;backurl=/reports/{$report['reportId']}/edit" onclick="return confirm('{$text['actionConfirmationRemove']}')" alt="{$text['smazatpoznamku']}">
+                                                    {php inject_svg("images/icons/xmark-solid.svg")}
+                                                </a>
+                                            </div>
                                         {/if}
                                         <p class="system-note-creator">
-                                            {if $note['noteCreatedByPerson']}{$note['noteCreatedByPerson']}{else}{$note['noteCreatedByUser']}{/if} ({$note['noteCreated']})
+                                            {$note['noteCreatedBy']} ({$note['noteCreated']})
                                         </p>
                                         <div class="system-note-peel">
                                             <div class="system-note-peel-back"></div>
@@ -482,33 +495,41 @@
                                         <p class="system-note-title">
                                             {$note['noteTitle']}
                                         </p>
-                                        <p>
-                                            {$note['noteNote']}
+                                        <p class="system-note-note">
+                                            {$note['noteNote']|striptags}
                                         </p>
-                                        {if $note['noteCreatedBy'] == $user['userId'] || $report['reportOwner'] == $user['userId']}
-                                            <p><a class="delete" title="{$text['smazat']}" href="/procnote.php?deletenote={$note['noteId']}&amp;itemid={$report['reportId']}&amp;backurl=/reports/{$report['reportId']}/edit" onclick="return confirm('{$text['opravdusmazatpoznamku']}')">{$text['smazatpoznamku']}</a></p>
+                                        {if $note['noteCreatedById'] == $user['userId'] || $report['reportOwner'] == $user['userId']}
+                                            <div class="system-note-delete-wrapper">
+                                                <a class="btn btn-sm btn-brick system-note-delete" title="{$text['smazat']}" href="/procnote.php?deletenote={$note['noteId']}&amp;itemid={$report['reportId']}&amp;backurl=/reports/{$report['reportId']}/edit" onclick="return confirm('{$text['actionConfirmationRemove']}')" alt="{$text['smazatpoznamku']}">
+                                                    {php inject_svg("images/icons/xmark-solid.svg")}
+                                                </a>
+                                            </div>
                                         {/if}
                                         <p class="system-note-creator">
-                                            {if $note['noteCreatedByPerson']}{$note['noteCreatedByPerson']}{else}{$note['noteCreatedByUser']}{/if} ({$note['noteCreated']})
+                                            {{$note['noteCreatedBy']} ({$note['noteCreated']})
                                         </p>
                                         <div class="system-note-peel">
                                             <div class="system-note-peel-back"></div>
                                         </div>
                                     </div>
-                                {elseif $note['noteDeleted']}
+                                {elseif $note['noteDeleted'] && $user['aclRoot']}
                                     <div class="system-note note-color-deleted">
                                         <span class="system-note-stamp">{$text['smazano']|capitalize}</span>
                                         <p class="system-note-title">
                                             {$note['noteTitle']}
                                         </p>
-                                        <p>
-                                            {$note['noteNote']}
+                                        <p class="system-note-note">
+                                            {$note['noteNote']|striptags}
                                         </p>
-                                        {if $note['noteCreatedBy'] == $user['userId'] || $report['reportOwner'] == $user['userId']}
-                                            <p><a class="delete" title="{$text['smazat']}" href="/procnote.php?deletenote={$note['noteId']}&amp;itemid={$report['reportId']}&amp;backurl=/reports/{$report['reportId']}/edit" onclick="return confirm('{$text['opravdusmazatpoznamku']}')">{$text['smazatpoznamku']}</a></p>
+                                        {if $note['noteCreatedById'] == $user['userId'] || $report['reportOwner'] == $user['userId']}
+                                            <div class="system-note-delete-wrapper">
+                                                <a class="btn btn-sm btn-brick system-note-delete" title="{$text['smazat']}" href="/procnote.php?deletenote={$note['noteId']}&amp;itemid={$report['reportId']}&amp;backurl=/reports/{$report['reportId']}/edit" onclick="return confirm('{$text['actionConfirmationRemove']}')" alt="{$text['smazatpoznamku']}">
+                                                    {php inject_svg("images/icons/xmark-solid.svg")}
+                                                </a>
+                                            </div>
                                         {/if}
                                         <p class="system-note-creator">
-                                            {if $note['noteCreatedByPerson']}{$note['noteCreatedByPerson']}{else}{$note['noteCreatedByUser']}{/if} ({$note['noteCreated']})
+                                            {$note['noteCreatedBy']} ({$note['noteCreated']})
                                         </p>
                                         <div class="system-note-peel">
                                             <div class="system-note-peel-back"></div>
@@ -519,14 +540,18 @@
                                         <p class="system-note-title">
                                             {$note['noteTitle']}
                                         </p>
-                                        <p>
-                                            {$note['noteNote']}
+                                        <p class="system-note-note">
+                                            {$note['noteNote']|striptags}
                                         </p>
-                                        {if $note['noteCreatedBy'] == $user['userId'] || $report['reportOwner'] == $user['userId']}
-                                            <p><a class="delete" title="{$text['smazat']}" href="/procnote.php?deletenote={$note['noteId']}&amp;itemid={$report['reportId']}&amp;backurl=/reports/{$report['reportId']}/edit" onclick="return confirm('{$text['opravdusmazatpoznamku']}')">{$text['smazatpoznamku']}</a></p>
+                                        {if $note['noteCreatedById'] == $user['userId'] || $report['reportOwner'] == $user['userId'] || $user['aclReport'] > 1}
+                                            <div class="system-note-delete-wrapper">
+                                                <a class="btn btn-sm btn-brick system-note-delete" title="{$text['smazat']}" href="/procnote.php?deletenote={$note['noteId']}&amp;itemid={$report['reportId']}&amp;backurl=/reports/{$report['reportId']}/edit" onclick="return confirm('{$text['actionConfirmationRemove']}')" alt="{$text['smazatpoznamku']}">
+                                                    {php inject_svg("images/icons/xmark-solid.svg")}
+                                                </a>
+                                            </div>
                                         {/if}
                                         <p class="system-note-creator">
-                                            {if $note['noteCreatedByPerson']}{$note['noteCreatedByPerson']}{else}{$note['noteCreatedByUser']}{/if} ({$note['noteCreated']})
+                                            {$note['noteCreatedBy']} ({$note['noteCreated']})
                                         </p>
                                         <div class="system-note-peel">
                                             <div class="system-note-peel-back"></div>
@@ -538,54 +563,9 @@
                     </div>
                 {/if}
                 <hr class="view-category-divider">
-                <h5><strong>{$text['vytvoritpoznamku']|firstUpper}</strong></h5>
-                <form action="/procnote.php" method="post">
-                    <div class="row">
-                        <div class="col-12 col-md-4">
-                            <label class="mt-3" for="notetitle">
-                                {$text['nadpis']|firstUpper}:
-                            </label>
-                            <input class="form-control mb-2" type="text" name="title" id="notetitle" />
-                            {if $user['aclSecret'] > 0}
-                                <div class="header-switch ml-0 mb-2">
-                                    <label class="toggle-control" for="setnotesecret">
-                                        <input type="checkbox" name="secret" id="setnotesecret" />
-                                        <span class="control"></span>
-                                    </label>
-                                    {$text['tajne']}
-                                </div>
-                            {/if}
-                            <div class="header-switch ml-0 mb-2">
-                                <label class="toggle-control" for="setnotepersonal">
-                                    <input type="checkbox" name="private" id="setnotepersonal"/>
-                                    <span class="control"></span>
-                                </label>
-                                {$text['soukrome']}
-                            </div>
-                            {if $user['aclGamemaster'] > 0}
-                                <div class="header-switch ml-0 mb-2">
-                                    <label class="toggle-control" for="setnotenotnew">
-                                        <input type="checkbox" name="nnotnew" id="setnotenotnew"/>
-                                        <span class="control"></span>
-                                    </label>
-                                    {$text['neninove']|firstUpper}
-                                </div>
-                            {/if}
-                            <input type="hidden" name="itemid" value="{$report['reportId']}" />
-                            <input type="hidden" name="backurl" value="/reports/{$report['reportId']}/edit" />
-                            <input type="hidden" name="tableid" value="4" />
-                        </div>
-                        <div class="col-12 col-md-8">
-                            <textarea class="edit-textarea mb-2" cols="80" rows="7" name="note" id="notebody"></textarea>
-                        </div>
-                    </div>
-                    <div class="row text-right">
-                        <div class="col-12">
-                            <input class="btn btn-md btn-primary" type="submit" value="{$text['ulozitpoznamku']|firstUpper}" name="setnote"  />
-                        </div>
-                    </div>
-                </form>
+{include 'noteAdd.latte'}
             </div>
         </div>
     </div>
 </div>
+{/if}

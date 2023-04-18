@@ -44,7 +44,7 @@ function symbolNotes($symbolId)
                 'noteCreatedByPerson' => $note['personName'].' '.$note['personSurname'],
                 'noteCreatedByUser' => $note['userName'],
                 'noteTitle' => $note['noteTitle'],
-                'noteBody' => $note['note'],
+                'noteBody' => strip_tags($note['note']),
                 'noteDeleted' => $note['noteDeleted'],
                 'noteSecret' => $note['noteSecret'],
             ];

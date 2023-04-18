@@ -1,0 +1,73 @@
+<div class="container-fluid mt-3 mb-3 mr-2 w-100">
+    <form action="{$URL[0]}{$URL[1]}/" method="POST" id="filter" class="row mb-1">
+	    <div class="col-12 col-md-6 col-lg-7 col-xl-8 text-left">
+	        <h4>
+                {$text['searchResults']|firstUpper}: "{$filter['search']}"
+                <input type="hidden" name="filter[placeholder]" />
+            </h4>
+	    </div>
+        <div class="col-12 col-md-6 col-lg-5 col-xl-4 text-right search-wrapper-right">
+            <div class="header-switch">
+                <label class="toggle-control">
+                    <input type="checkbox" name="filter[archived]" {if (isset($filter['archived']) AND $filter['archived'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                    <span class="control"></span>
+                </label>
+                {$text['iarchiv']}
+            </div>
+            {if $user['aclSecret'] > 0}
+                <div class="header-switch">
+                    <label class="toggle-control">
+                        <input type="checkbox" name="filter[secret]" {if (isset($filter['secret']) AND $filter['secret'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                        <span class="control"></span>
+                    </label>
+                    {$text['filterSecretInclude']}
+                </div>
+            {/if}
+            {if $user['aclRoot'] > 0}
+                <div class="header-switch">
+                    <label class="toggle-control">
+                        <input type="checkbox" name="filter[deleted]" {if (isset($filter['deleted']) AND $filter['deleted'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                        <span class="control"></span>
+                    </label>
+                    {$text['filterDeleteInclude']}
+                </div>
+            {/if}
+        </div>
+    </form>
+    {ifset $filter['search']}
+        {if ($filter['search']|length) < 3}
+        <div class="row pt-4 mb-4">
+            <div class="col-12">
+                <h2>Výraz "{$filter['search']}" je příliš krátký, zadejte výraz o délce alespoň 3 znaky.</h2>
+            </div>
+        </div>
+        {else}
+        <div class="row pt-4 mb-4">
+            <div class="col-12 mb-3">
+                <h4>{$text['menuCases']|firstUpper}{ifset $caseCount} ({$caseCount}){/ifset}</h4>
+                {include 'cases.latte'}
+            </div>
+            <div class="col-12 mb-3">
+                <h4>{$text['menuReports']|firstUpper}{ifset $reportCount} ({$reportCount}){/ifset}</h4>
+                {include 'reports.latte'}
+            </div>
+            <div class="col-12 mb-3">
+                <h4>{$text['menuPersons']|firstUpper}{ifset $personCount} ({$personCount}){/ifset}</h4>
+                {include 'persons.latte'}
+            </div>
+            <div class="col-12 mb-3">
+                <h4>{$text['menuGroups']|firstUpper}{ifset $groupCount} ({$groupCount}){/ifset}</h4>
+                {include 'groups.latte'}
+            </div>
+            <div class="col-12 mb-3">
+                <h4>{$text['menuSymbols']|firstUpper}{ifset $symbolCount} ({$symbolCount}){/ifset}</h4>
+                {include 'symbols.latte'}
+            </div>
+            <div class="col-12">
+                <h4>{$text['headingNotes']|firstUpper}{ifset $noteCount} ({$noteCount}){/ifset}</h4>
+                {include 'notes.latte'}
+            </div>
+        </div>
+        {/if}
+    {/ifset}
+</div>

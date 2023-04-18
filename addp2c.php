@@ -1,19 +1,18 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
-use Tracy\Debugger;
 
 
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Prirazeni osob k Pripadu';
 mainMenu();
-        $customFilter = custom_Filter(15);
-    sparklets('<a href="/cases/">případy</a> &raquo; <strong>úprava případu</strong> &raquo; <strong>přidání osob</strong>');
-    if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
-        $sql = "SELECT * FROM ".DB_PREFIX."case WHERE id=".$_REQUEST['rid'];
-        $res = mysqli_query($database, $sql);
-        if ($rec = mysqli_fetch_assoc($res)) {
-            ?>
+$customFilter = custom_Filter(15);
+sparklets('<a href="/cases/">případy</a> &raquo; <strong>úprava případu</strong> &raquo; <strong>přidání osob</strong>');
+if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
+    $sql = "SELECT * FROM ".DB_PREFIX."case WHERE id=".$_REQUEST['rid'];
+    $res = mysqli_query($database, $sql);
+    if ($rec = mysqli_fetch_assoc($res)) {
+        ?>
 
 <div id="obsah">
     <p>
@@ -27,46 +26,49 @@ mainMenu();
     } else {
         $filterSort = $customFilter['sort'];
     }
-            if (!isset($customFilter['sportraits'])) {
-                $sportraits = false;
-            } else {
-                $sportraits = $customFilter['sportraits'];
-            }
-            if (!isset($customFilter['ssymbols'])) {
-                $ssymbols = false;
-            } else {
-                $ssymbols = $customFilter['ssymbols'];
-            }
-            if (!isset($customFilter['fdead'])) {
-                $fdead = 0;
-            } else {
-                $fdead = 1;
-            }
-            if (!isset($customFilter['farchiv'])) {
-                $farchiv = 0;
-            } else {
-                $farchiv = 1;
-            }
-            switch ($filterSort) {
-      case 1: $filterSqlSort = ' '.DB_PREFIX.'person.surname, '.DB_PREFIX.'person.name ASC '; break;
-      case 2: $filterSqlSort = ' '.DB_PREFIX.'person.surname, '.DB_PREFIX.'person.name DESC '; break;
-      default: $filterSqlSort = ' '.DB_PREFIX.'person.surname, '.DB_PREFIX.'person.name ASC ';
-    }
-            switch ($fdead) {
-        case 0: $fsql_dead = ' AND '.DB_PREFIX.'person.dead=0 '; break;
-        case 1: $fsql_dead = ''; break;
-        default: $fsql_dead = ' AND '.DB_PREFIX.'person.dead=0 ';
-    }
-            switch ($farchiv) {
-        case 0: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1))  '; break;
-        case 1: $fsql_archiv = ''; break;
-        default: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1))  ';
-    }
-            // formular filtru
-            function filter(): void
-            {
-                global $filterSort, $sportraits, $ssymbols, $farchiv, $fdead;
-                echo '<form action="addp2c.php" method="post" id="filter">
+        if (!isset($customFilter['sportraits'])) {
+            $sportraits = false;
+        } else {
+            $sportraits = $customFilter['sportraits'];
+        }
+        if (!isset($customFilter['ssymbols'])) {
+            $ssymbols = false;
+        } else {
+            $ssymbols = $customFilter['ssymbols'];
+        }
+        if (!isset($customFilter['fdead'])) {
+            $fdead = 0;
+        } else {
+            $fdead = 1;
+        }
+        if (!isset($customFilter['farchiv'])) {
+            $farchiv = 0;
+        } else {
+            $farchiv = 1;
+        }
+        switch ($filterSort) {
+            case 1: $filterSqlSort = ' '.DB_PREFIX.'person.surname, '.DB_PREFIX.'person.name ASC ';
+                break;
+            case 2: $filterSqlSort = ' '.DB_PREFIX.'person.surname, '.DB_PREFIX.'person.name DESC ';
+                break;
+            default: $filterSqlSort = ' '.DB_PREFIX.'person.surname, '.DB_PREFIX.'person.name ASC ';
+        }
+        switch ($fdead) {
+            case 0: $fsql_dead = ' AND '.DB_PREFIX.'person.dead=0 ';
+                break;
+            case 1: $fsql_dead = '';
+                break;
+            default: $fsql_dead = ' AND '.DB_PREFIX.'person.dead=0 ';
+        }
+        switch ($farchiv) {
+            case 0: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1))  ';
+                break;
+            case 1: $fsql_archiv = '';
+                break;
+            default: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1))  ';
+        }
+        // formular filtru
+    echo '<form action="addp2c.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat osoby a seřadit je podle <select name="sort">
@@ -85,11 +87,9 @@ mainMenu();
 	<div id="filtersubmit"><input type="hidden" name="rid" value="'.$_REQUEST['rid'].'" /><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
 </form><form action="addpersons.php" method="post" class="otherform">';
-            }
-            filter();
-            // vypis osob
-            $sqlFilter = DB_PREFIX."person.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."person.secret<=".$user['aclSecret'];
-            $sql = "SELECT ".DB_PREFIX."unread.id as unread, ".DB_PREFIX."person.regdate as date_created, ".DB_PREFIX."person.datum as date_changed, ".DB_PREFIX."person.phone AS 'phone',
+        // vypis osob
+        $sqlFilter = DB_PREFIX."person.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."person.secret<=".$user['aclSecret'];
+        $sql = "SELECT ".DB_PREFIX."unread.id as unread, ".DB_PREFIX."person.regdate as date_created, ".DB_PREFIX."person.datum as date_changed, ".DB_PREFIX."person.phone AS 'phone',
                             ".DB_PREFIX."person.archived, ".DB_PREFIX."person.dead AS 'dead', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname',
                             ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol', ".DB_PREFIX."c2p.iduser
             FROM ".DB_PREFIX."person
@@ -98,7 +98,7 @@ mainMenu();
             WHERE ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret<=".$user['aclSecret'].$fsql_sec.$fsql_dead.$fsql_archiv.$fsql_fspec.$fsql_fside.$fsql_fpow.$filterUnread." GROUP BY ".DB_PREFIX."person.id ".sortingGet('person');
 
 
-            $res = mysqli_query($database, $sql); ?>
+        $res = mysqli_query($database, $sql); ?>
 
     <div style="padding-top: 0px; padding-bottom: 0px;" id="in-form-table">
 
@@ -123,8 +123,8 @@ mainMenu();
         while ($person = mysqli_fetch_assoc($res)) {
             echo '<tr class="'.($person['unread'] ? ' unread_record' : ($even % 2 == 0 ? 'even' : 'odd')).'">
                         <td><input type="checkbox" name="person[]" value="'.$person['id'].'" class="checkbox"'.($person['iduser'] ? ' checked="checked"' : '').' /></td>
-                        '.($sportraits ? '<td><img src="file/portrait/'.$person['id'].'" alt="" /></td>' : '').'
-                        '.($ssymbols ? '<td><img src="file/symbol/'.$person['symbol'].'" alt="" /></td>' : '').'
+                        '.($sportraits ? '<td><img  loading="lazy" src="file/portrait/'.$person['id'].'" alt="" /></td>' : '').'
+                        '.($ssymbols ? '<td><img  loading="lazy" src="file/symbol/'.$person['symbol'].'" alt="" /></td>' : '').'
                         <td>'.($person['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$person['id'].'&amp;hidenotes=0">'.implode(', ', [stripslashes($person['surname']), stripslashes($person['name'])]).'</a></span>' : '<a href="readperson.php?rid='.$person['id'].'&amp;hidenotes=0">'.implode(', ', [stripslashes($person['surname']), stripslashes($person['name'])]).'</a>').'</td>
 						<td><a href="tel:'.str_replace(' ', '', $person['phone']).'">'.$person['phone'].'</a></td>
 						<td>'.webdate($person['date_created']).' / '.webdate($person['date_changed']).'</td>
@@ -150,7 +150,7 @@ mainMenu();
         $even = 0;
         while ($rec = mysqli_fetch_assoc($res)) {
             echo '<tr class="'.($even % 2 == 0 ? 'even' : 'odd').'"><td><input type="checkbox" name="person[]" value="'.$rec['id'].'" class="checkbox"'.($rec['iduser'] ? ' checked="checked"' : '').' /></td>
-            '.($sportraits ? '<td><img src="file/portrait/'.$rec['id'].'" alt="portrét chybí" /></td>' : '').($ssymbols ? '<td><img src="file/symbol/'.$rec['symbol'].'" alt="symbol chybí" /></td>' : '').'
+            '.($sportraits ? '<td><img  loading="lazy" src="file/portrait/'.$rec['id'].'" alt="portrét chybí" /></td>' : '').($ssymbols ? '<td><img  loading="lazy" src="file/symbol/'.$rec['symbol'].'" alt="symbol chybí" /></td>' : '').'
 	<td>'.($rec['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$rec['id'].'">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a></span>' : '<a href="readperson.php?rid='.$rec['id'].'">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a>').'</td>
 	</tr>';
             $even++;
@@ -170,11 +170,11 @@ mainMenu();
 </div>
 <!-- end of #obsah -->
 <?php
-        } else {
-            echo '<div id="obsah"><p>Případ neexistuje. Rid='.$_REQUEST['rid'].'</p></div>';
-        }
     } else {
-        echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
+        echo '<div id="obsah"><p>Případ neexistuje. Rid='.$_REQUEST['rid'].'</p></div>';
     }
-    latteDrawTemplate("footer");
+} else {
+    echo '<div id="obsah"><p>Tohle nezkoušejte.</p></div>';
+}
+latteDrawTemplate("footer");
 ?>

@@ -1,7 +1,7 @@
 
-            {if @$warning}
+            {ifset $warningCase}
                 <div>
-                    {$warning}
+                    {$warningCase}
                 </div>
             {else}
                 <div id="obsah">
@@ -9,59 +9,87 @@
                     <thead class="table-sticky-header">
                         <tr>
                             <th>
-                                <div class="table-no-wrap-left">{$text['nazev']|firstUpper} <a href="{$URL[0]}{$URL[1]}/?sort=title">&#8661;</a></div>
+                                <div class="table-no-wrap-left">{$text['nazev']|firstUpper}{if $URL[1] != 'search'} <a href="{$URL[0]}{$URL[1]}/?sort=title">&#8661;</a>{/if}</div>
                             </th>
-                            <th class="text-center">{$text['stav']|firstUpper}</th>
+                            <th class="text-left">{$text['stav']|firstUpper}</th>
                             <th class="mobile-no-show text-center">
-                                <div class="table-no-wrap">{$text['vytvoreno']|firstUpper}  <a href="{$URL[0]}{$URL[1]}/?sort=created">&#8661;</a></div>
+                                <div class="table-no-wrap">{$text['vytvoreno']|firstUpper}{if $URL[1] != 'search'} <a href="{$URL[0]}{$URL[1]}/?sort=created">&#8661;</a>{/if}</div>
                             </th>
                             <th class="text-center">
-                                <div class="table-no-wrap">{$text['zmeneno']|firstUpper}  <a href="{$URL[0]}{$URL[1]}/?sort=datum">&#8661;</a></div>
+                                <div class="table-no-wrap">{$text['zmeneno']|firstUpper}{if $URL[1] != 'search'} <a href="{$URL[0]}{$URL[1]}/?sort=datum">&#8661;</a>{/if}</div>
                             </th>
-                            <th>{$text['akce']|firstUpper}</th>
+                            {if $URL[1] != 'search' && $user['aclCase'] > 0}
+                                <th class="mobile-no-show">{$text['akce']|firstUpper}</th>
+                            {/if}
                         </tr>
                     </thead>
                     <tbody>
-                        {foreach $case_record as $cases}
-                            <tr class="{if @$cases['unread']} unread_record{/if}{if $cases['status']} solved{/if}">
+                        {foreach $case_record as $case}
+                            <tr class="{if @$case['unread']} unread_record{/if}{if $case['status']} solved{/if}">
                                 <td>
-                                    <a href="/readcase.php?rid={$cases['id']}&amp;hidenotes=0">{$cases['title']}</a>
-                                    {if $cases['secret']}
+                                    {if $case['deleted']}
+                                        {$case['title']}
+                                    {else}
+                                        <a href="/readcase.php?rid={$case['id']}&amp;hidenotes=0">{$case['title']}</a>
+                                    {/if}
+                                    {if $case['secret']}
                                         <span class="badge rounded-pill bg-danger text-light">{$text['utajeno']|upper}</span>
                                     {/if}
                                 </td>
                                 <td>
-                                    {if $cases['status']}
-                                        <span class="badge rounded-pill bg-secondary text-light mb-1">{$text['uzavreny']}</span>
+                                    {if $case['deleted']}
+                                        <span class="badge rounded-pill bg-warning text-dark mb-1">{$text['smazany']|upper}</span>
+                                    {elseif $case['caseArchivedBool'] == 'True'}
+                                        <span class="badge rounded-pill bg-secondary text-light mb-1">{$text['archivovano']|upper}</span>
                                     {else}
-                                        <span class="badge rounded-pill bg-success text-light mb-1">{$text['otevreny']}</span>
-                                    {/if}
-                                    {if $cases['deleted']}
-                                        <span class="badge rounded-pill bg-warning text-dark mb-1">{$text['smazany']}</span>
+                                        {if $case['status']}
+                                            <span class="badge rounded-pill bg-secondary text-light mb-1">{$text['uzavreny']}</span>
+                                        {else}
+                                            <span class="badge rounded-pill bg-success text-light mb-1">{$text['otevreny']}</span>
+                                        {/if}
                                     {/if}
                                 </td>
                                 <td class="mobile-no-show text-center">
-                                    {if $cases['caseCreated']} {$cases['caseCreated']|date:'d.m.Y'}{else}<em>{$text['neznamo']}</em>{/if}
+                                    {if $case['caseCreated']} {$case['caseCreated']|date:'d.m.Y'}{else}<em>{$text['notificationInformationUnknown']}</em>{/if}
                                 </td>
-                                <td class="text-center"><em>{$cases['date_changed']|date:'d.m.Y'}</em></td>
-                                <td>
-                                    {if $user['aclCase'] AND !$cases['deleted']}
-                                        <a class="btn btn-sm btn-info btn-brick mb-1" href="/editcase.php?rid={$cases['id']}" alt="{$text[editpripad]}">
+                                <td class="text-center"><em>{$case['date_changed']|date:'d.m.Y'}</em></td>
+{if $URL[1] != 'search' && $user['aclCase'] > 0}
+                                <td class="table-w-full-cell text-right">
+                                    {if $user['aclCase'] >= 1 AND !$case['deleted']}
+                                        <a class="btn btn-sm btn-info btn-brick mb-1 tip-wrapper" href="/editcase.php?rid={$case['id']}" alt="{$text[editpripad]}">
                                             {php inject_svg("images/icons/edit-solid.svg")}
+                                            <span class="bubbletip bubbletip-bottom-right">{$text[editpripad]}</span>
                                         </a>
                                     {/if}
-                                    {if !$cases['deleted']}
-                                        <a class="btn btn-sm  btn-info mb-1" href="/newnote.php?rid={$cases['id']}&idtable=7">přidat poznámku</a>
+                                    {if $user['aclCase'] >= 2 && $case['caseArchivedBool'] == 'False' && !$case['deleted']}
+                                        <a class="btn btn-sm btn-brick btn-dark mb-1 tip-wrapper" href="/cases/{$case['id']}/archive" onclick="return confirm('{$text['actionConfirmationArchive']|noescape} {$case['title']}?');" alt="
+                                            {$text['actionArchive']}">
+                                            {php inject_svg("images/icons/box-solid.svg")}
+                                            <span class="bubbletip bubbletip-bottom-right">{$text['actionArchive']}</span>
+                                        </a>
+                                    {elseif  $user['aclCase'] >= 2 && !$case['deleted']}
+                                        <a class="btn btn-sm btn-brick btn-secondary mb-1" href="/cases/{$case['id']}/unarchive" onclick="return confirm('{$text['actionConfirmationUnarchive']|noescape} {$case['title']}?');" alt="
+                                            {$text['actionUnarchive']}">
+                                            {php inject_svg("images/icons/box-open-solid.svg")}
+                                            <span class="bubbletip bubbletip-bottom-right">{$text['actionUnarchive']}</span>
+                                        </a>
                                     {/if}
-                                    {if $user['aclRoot'] AND !$cases['deleted']}
-                                        <a class="btn btn-sm btn-brick btn-danger mb-1" href="/cases/delete/{$cases['id']}" onclick="return confirm('{$text['opravdusmazatpripad']} &quot; {$cases['title']|stripHtml}&quot;?');" alt="{$text[smazatpripad]}">{php inject_svg("images/icons/trash-solid.svg")}</a>
+                                    {if $user['aclCase'] >= 2 && !$case['deleted']}
+                                        <a class="btn btn-sm btn-brick btn-danger mb-1 tip-wrapper" href="/cases/delete/{$case['id']}" onclick="return confirm('{$text['actionConfirmationRemove']} &quot; {$case['title']|stripHtml}&quot;?');" alt="{$text[smazatpripad]}">{php inject_svg("images/icons/trash-solid.svg")}
+                                            <span class="bubbletip bubbletip-bottom-right">{$text[smazatpripad]}</span>
+                                        </a>
                                     {/if}
-                                    {if $user['aclRoot'] AND $cases['deleted']}
-                                        <a class="btn btn-sm btn-success mb-1" href="/cases/restore/{$cases['id']}" onclick="return confirm('{$text['opravduobnovitpripad']} &quot; {$cases['title']|stripHtml}&quot;?');" alt="{$text[obnovitpripad]}">{php inject_svg("images/icons/recycle.svg")}</a>
+                                    {if $user['aclRoot'] AND $case['deleted']}
+                                        <a class="btn btn-sm btn-success mb-1 tip-wrapper" href="/cases/restore/{$case['id']}" onclick="return confirm('{$text['actionConfirmationRestore']} &quot; {$case['title']|stripHtml}&quot;?');" alt="{$text[obnovitpripad]}">
+                                            {php inject_svg("images/icons/recycle.svg")}
+                                            <span class="bubbletip bubbletip-bottom-right">{$text[obnovitpripad]}</span>
+                                        </a>
                                     {/if}
                                 </td>
+{/if}
                             </tr>
                         {/foreach}
                     </tbody>
                 </table>
-            {/if}
+            </div>
+            {/ifset}

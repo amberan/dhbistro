@@ -1,0 +1,66 @@
+
+            {ifset $warningNotes}
+                <div>
+                    {$warningNotes}
+                </div>
+            {else}
+                <div id="obsah">
+                <table class="table table-striped table-hover">
+                    <thead class="table-sticky-header">
+                        <tr>
+                            <th>
+                                <div class="table-no-wrap-left">{$text['nazev']|firstUpper}</div>
+                            </th>
+                            <th>
+                                <div class="table-no-wrap-left">{$text['connectedTo']|firstUpper}</div>
+                            </th>
+                            <th class="mobile-no-show text-center">
+                                <div class="table-no-wrap">{$text['vytvoreno']|firstUpper}</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $noteRecords as $note}
+                           {* {ifset $note['skip']}
+                           {else} *}
+                                <tr class="{if @$note['unread']} unread_record{/if}">
+                                    <td>
+                                        {if $note['deleted']}
+                                            {$note['title']}
+                                        {else}
+                                            <a href="/readnote.php?rid={$note['id']}&amp;table={$note['idtable']}">{$note['title']}</a>
+                                        {/if}
+                                        {if $note['secret']}
+                                            <span class="badge rounded-pill bg-danger text-light">{$text['utajeno']|upper}</span>
+                                        {/if}
+                                        {if $note['deleted']}
+                                            <span class="badge rounded-pill bg-danger text-light">{$text['smazany']|upper}</span>
+                                        {/if}
+                                    </td>
+                                    <td>
+
+                                        {$note['type']}: <a href={$note['relatedLink']|nocheck}>{$note['relatedTitle']}</a>
+                                        {ifset $note['relatedSecret']}
+                                            <span class="badge rounded-pill bg-danger text-light">{$text['utajeno']|upper}</span>
+                                        {/ifset}
+                                        {ifset $note['relatedDeleted']}
+                                            <span class="badge rounded-pill bg-danger text-light">{$text['smazany']|upper}</span>
+                                        {/ifset}
+                                        {ifset $note['relatedArchived']}
+                                            <span class="badge rounded-pill bg-danger text-light">{$text['archivovano']|upper}</span>
+                                        {/ifset}
+                                    </td>
+                                    <td class="mobile-no-show text-center">
+                                        {if $note['noteCreated']}
+                                            {$note['noteCreated']|date:'d.m.Y'}
+                                        {else}
+                                            <em>{$text['notificationInformationUnknown']}</em>
+                                        {/if}
+                                    </td>
+                                </tr>
+                            {* {/ifset} *}
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
+            {/ifset}

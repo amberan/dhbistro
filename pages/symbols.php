@@ -1,6 +1,6 @@
 <?php
 
-$latteParameters['title'] = $text['symboly'];
+$latteParameters['title'] = $text['menuSymbols'];
 
 // Přidání symbolu
 if (isset($_POST['insertsymbol'])) {
@@ -20,7 +20,7 @@ if (isset($_POST['insertsymbol'])) {
     $sql_f = "SELECT id FROM ".DB_PREFIX."symbol WHERE created='".$time."' AND created_by='".$user['userId']."' AND modified='".$time."' AND modified_by='".$user['userId']."'";
     $pidarray = mysqli_fetch_assoc(mysqli_query($database, $sql_f));
     $pid = $pidarray['id'];
-    authorizedAccess(7, 3, $pid);
+    authorizedAccess('symbol', 'new', $pid);
     if (!isset($_POST['notnew'])) {
         unreadRecords(7, $pid);
     }
@@ -30,30 +30,38 @@ if (isset($_POST['insertsymbol'])) {
 }
 // Vymazani symbolu
 if (isset($_REQUEST['sdelete']) && is_numeric($_REQUEST['sdelete']) && $user['aclSymbol'] > 1) {
-    authorizedAccess(7, 11, $_REQUEST['sdelete']);
+    authorizedAccess('symbol', 'delete', $_REQUEST['sdelete']);
     $sqlDelete = "UPDATE ".DB_PREFIX."symbol SET deleted=1 WHERE id=".$_REQUEST['sdelete'];
     mysqli_query($database, $sqlDelete);
-    deleteAllUnread(7, $_REQUEST['sdelete']);
+    deleteAllUnread('symbol', $_REQUEST['sdelete']);
     $_SESSION['message'] = 'Symbol smazan.';
 }
 // Obnoveni symbolu
 if (isset($_REQUEST['undelete']) && is_numeric($_REQUEST['undelete']) && $user['aclRoot']) {
-    authorizedAccess(7, 11, $_REQUEST['undelete']);
+    authorizedAccess('symbol', 'restore', $_REQUEST['undelete']);
     mysqli_query($database, "UPDATE ".DB_PREFIX."symbol SET deleted=0 WHERE id=".$_REQUEST['undelete']);
     $_SESSION['message'] = 'Symbol obnoven.';
 }
 
 // archivace symbolu
-if (isset($_GET['archive']) && is_numeric($_GET['archive']) && $user['aclSymbol']) {
-    authorizedAccess(7, 11, $_GET['archive']);
-    mysqli_query($database, 'UPDATE '.DB_PREFIX.'symbol SET archived=CURRENT_TIMESTAMP WHERE id='.$_GET['archive']);
-    $_SESSION['message'] = 'Symbol archivovan.';
+if (isset($URL[3]) && is_numeric($URL[2]) && $URL[3] == 'archive' && $user['aclSymbol'] > 1) {
+    authorizedAccess('symbol', 'edit', $URL['2']);
+    mysqli_query($database, 'UPDATE '.DB_PREFIX.'symbol SET archived=CURRENT_TIMESTAMP WHERE id='.$URL[2]);
+    if (mysqli_affected_rows($database) > 0) {
+        $_SESSION['message'] = $text['notificationArchived'];
+    } else {
+        $_SESSION['message'] = $text['notificationNotArchived'];
+    }
 }
 // odarchivace symbolu
-if (isset($_GET['unarchive']) && is_numeric($_GET['unarchive']) && $user['aclSymbol']) {
-    authorizedAccess(7, 11, $_GET['unarchive']);
-    mysqli_query($database, 'UPDATE '.DB_PREFIX.'symbol SET archived=0 WHERE id='.$_GET['unarchive']);
-    $_SESSION['message'] = 'Symbol odarchivovan.';
+if (isset($URL[3]) && is_numeric($URL[2]) && $URL[3] == 'unarchive' && $user['aclSymbol'] > 1) {
+    authorizedAccess('symbol', 'edit', $URL[2]);
+    mysqli_query($database, 'UPDATE '.DB_PREFIX.'symbol SET archived=0 WHERE id='.$URL[2]);
+    if (mysqli_affected_rows($database) > 0) {
+        $_SESSION['message'] = $text['notificationUnarchived'];
+    } else {
+        $_SESSION['message'] = $text['notificationNotUnarchived'];
+    }
 }
 
 
@@ -65,7 +73,12 @@ if (isset($_POST['filter']) && sizeof($_POST['filter']) > 0) {
     filterSet('symbol', @$_POST['filter']);
 }
 $filter = filterGet('symbol');
-$sqlFilter = 'symbol.deleted <='.$user['aclRoot'];
+
+$sqlFilter = "symbol.secret<=" . $user['aclSecret'];
+if ($user['aclRoot'] < 1 || ($user['aclRoot'] && !isset($filter['deleted']))) {
+    $sqlFilter .= ' AND symbol.deleted = 0 ';
+}
+
 switch (@$filter['archived']) {
     case 'on':;
         break;
@@ -124,9 +137,9 @@ if ($symbolCount > 0) {
     }
     $latteParameters['symbolsRecord'] = $symbols;
     $latteParameters['symbolCount'] = $symbolCount;
-    $latteParameters['noteType'] = notesType();
+    $latteParameters['noteType'] = noteType();
 } else {
-    $latteParameters['warning'] = $text['prazdnyvypis'];
+    $latteParameters['warning'] = $text['notificationListEmpty'];
 }
 
 

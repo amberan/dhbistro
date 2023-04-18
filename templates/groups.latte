@@ -1,7 +1,7 @@
 
-            {if @$warning}
+            {ifset $warningGroup}
                 <div>
-                    {$warning}
+                    {$warningGroup}
                 </div>
             {else}
                 <div id="obsah">
@@ -10,59 +10,82 @@
                     <thead>
                         <tr>
                             <th>
-                                {$text['nazev']|firstUpper} <a href="{$URL[0]}{$URL[1]}/?sort=title">&#8661;</a>
+                                {$text['nazev']|firstUpper}{if $URL[1] != 'search'} <a href="{$URL[0]}{$URL[1]}/?sort=title">&#8661;</a>{/if}
                             </th>
                             <th>{$text['stav']|firstUpper}</th>
                             <th>
-                                {$text['vytvoreno']|firstUpper}  <a href="{$URL[0]}{$URL[1]}/?sort=created">&#8661;</a>
+                                {$text['vytvoreno']|firstUpper}{if $URL[1] != 'search'} <a href="{$URL[0]}{$URL[1]}/?sort=created">&#8661;</a>{/if}
                             </th>
                             <th>
-                                {$text['zmeneno']|firstUpper}  <a href="{$URL[0]}{$URL[1]}/?sort=datum">&#8661;</a>
+                                {$text['zmeneno']|firstUpper}{if $URL[1] != 'search'} <a href="{$URL[0]}{$URL[1]}/?sort=datum">&#8661;</a>{/if}
                             </th>
-                            <th>{$text['akce']|firstUpper}</th>
+                            {if $URL[1] != 'search' && $user['aclGroup'] > 0}
+                                <th class="mobile-no-show">{$text['akce']|firstUpper}</th>
+                            {/if}
                         </tr>
                     </thead>
                     <tbody>
-                        {foreach $group_record as $groups}
-                            <tr class="{if @$groups['unread']} unread_record{/if}">
+                        {foreach $group_record as $group}
+                            <tr class="{if @$group['unread']} unread_record{/if}">
                                 <td>
-                                    <a href="/readgroup.php?rid={$groups['id']}&amp;hidenotes=0">{$groups['title']}</a>
-                                    {if $groups['secret']}
+                                    {if $group['deleted']}
+                                        {$group['title']}
+                                    {else}
+                                        <a href="/readgroup.php?rid={$group['id']}&amp;hidenotes=0">{$group['title']}</a>
+                                    {/if}
+                                    {if $group['secret']}
                                         <span class="badge rounded-pill bg-danger text-light">{$text['utajeno']|upper}</span>
                                     {/if}
                                 </td>
                                 <td>
-                                    {if $groups['archived']}
-                                        <span class="badge rounded-pill bg-secondary text-light mb-1">{$text['archivovano']}</span>
+                                    {if $group['deleted']}
+                                        <span class="badge rounded-pill bg-warning text-dark mb-1">{$text['smazany']|upper}</span>
+                                    {elseif $group['groupArchivedBool'] == 'True'}
+                                        <span class="badge rounded-pill bg-secondary text-light mb-1">{$text['archivovano']|upper}</span>
                                     {else}
                                         <span class="badge rounded-pill bg-success text-light mb-1">{$text['aktivni']}</span>
                                     {/if}
-                                    {if $groups['deleted']}
-                                        <span class="badge rounded-pill bg-warning text-dark mb-1">{$text['smazany']}</span>
-                                    {/if}
                                 </td>
                                 <td>
-                                    {if $groups['groupCreated']} {$groups['groupCreated']|date:'d.m.Y'}{else}<em>{$text['neznamo']}</em>{/if}
+                                    {if $group['groupCreated']} {$group['groupCreated']|date:'d.m.Y'}{else}<em>{$text['notificationInformationUnknown']}</em>{/if}
                                 </td>
-                                <td><em>{$groups['date_changed']|date:'d.m.Y'}</em></td>
-                                <td>
-                                    {if $user['aclCase'] AND !$groups['deleted']}
-                                        <a class="btn btn-sm btn-info btn-brick mb-1" href="/editgroup.php?rid={$groups['id']}" alt="{$text[upravitskupinu]}">
+                                <td><em>{$group['date_changed']|date:'d.m.Y'}</em></td>
+{if $URL[1] != 'search' && $user['aclGroup'] > 0}
+                                <td class="table-w-full-cell text-right">
+                                    {if $user['aclGroup'] AND !$group['deleted']}
+                                        <a class="btn btn-sm btn-info btn-brick mb-1 tip-wrapper" href="/editgroup.php?rid={$group['id']}" alt="{$text[upravitskupinu]}">
                                             {php inject_svg("images/icons/edit-solid.svg")}
-                                        </a>
+                                                <span class="bubbletip bubbletip-bottom-right">{$text[upravitskupinu]}</span>
+                                            </a>
                                     {/if}
-                                    {if !$groups['deleted']}
-                                        <a class="btn btn-sm  btn-info mb-1" href="/newnote.php?rid={$groups['id']}&idtable=6">přidat poznámku</a>
+                                    {if $user['aclGroup'] >= 2 && $group['groupArchivedBool'] == 'False' && !$group['deleted']}
+                                        <a class="btn btn-sm btn-brick btn-dark mb-1 tip-wrapper" href="/groups/{$group['id']}/archive" onclick="return confirm('{$text['actionConfirmationArchive']|noescape} {$group['title']}?');" alt="
+                                            {$text['actionArchive']}">
+                                            {php inject_svg("images/icons/box-solid.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text['actionArchive']}</span>
+                                            </a>
+                                    {elseif  $user['aclGroup'] >= 2 && !$group['deleted']}
+                                        <a class="btn btn-sm btn-brick btn-secondary mb-1 tip-wrapper" href="/groups/{$group['id']}/unarchive" onclick="return confirm('{$text['actionConfirmationUnarchive']|noescape} {$group['title']}?');" alt="
+                                            {$text['actionUnarchive']}">
+                                            {php inject_svg("images/icons/box-open-solid.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text['actionUnarchive']}</span>
+                                            </a>
                                     {/if}
-                                    {if $user['aclRoot'] AND !$groups['deleted']}
-                                        <a class="btn btn-sm btn-brick btn-danger mb-1" href="/groups/delete/{$groups['id']}" onclick="return confirm('{$text['opravdusmazatskupinu']} &quot; {$groups['title']|stripHtml}&quot;?');" alt="{$text[smazatskupinu]}">{php inject_svg("images/icons/trash-solid.svg")}</a>
+                                    {if $user['aclGroup'] >= 2 AND !$group['deleted']}
+                                        <a class="btn btn-sm btn-brick btn-danger mb-1 tip-wrapper" href="/groups/delete/{$group['id']}" onclick="return confirm('{$text['actionConfirmationRemove']} &quot; {$group['title']|stripHtml}&quot;?');" alt="{$text[smazatskupinu]}">{php inject_svg("images/icons/trash-solid.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text[smazatskupinu]}</span>
+                                            </a>
                                     {/if}
-                                    {if $user['aclRoot'] AND $groups['deleted']}
-                                        <a class="btn btn-sm btn-success mb-1" href="/groups/restore/{$groups['id']}" onclick="return confirm('{$text['opravduobnovitskupinu']} &quot; {$groups['title']|stripHtml}&quot;?');">{php inject_svg("images/icons/recycle.svg")}</a>
+                                    {if $user['aclRoot'] AND $group['deleted']}
+                                        <a class="btn btn-sm btn-success mb-1 tip-wrapper" href="/groups/restore/{$group['id']}" onclick="return confirm('{$text['actionConfirmationRestore']} &quot; {$group['title']|stripHtml}&quot;?');">{php inject_svg("images/icons/recycle.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text['actionRestore']}</span>
+                                            </a>
                                     {/if}
                                 </td>
+{/if}
                             </tr>
                         {/foreach}
                     </tbody>
                 </table>
-            {/if}
+            </div>
+            {/ifset}

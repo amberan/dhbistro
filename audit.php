@@ -9,6 +9,7 @@ if (!$user['aclAudit']) {
     unauthorizedAccess(11, 1, 0);
 }
 
+//TODO replace with lib/audit.php operationType() after enhancing for $text[]
 function operationTypeDB($type)
 {
     global $database;
@@ -27,6 +28,7 @@ function operationTypeDB($type)
     }
 }
 
+//TODO replace with lib/audit.php recordType() after enhancing for $text[]
 function recordTypeDB($type)
 {
     global $database;
@@ -231,14 +233,8 @@ if ($filterCount <> 0) {
 } else {
     $filterSqlCount = ' ';
 }
-?>
-
-<?php
-    // filtr
-    function filter()
-    {
-        global $database,$filterCat,$filterUser,$filterType,$user,$filterOrg,$filterMine,$filterGlob,$filterCount;
-        echo '<div id="filter-wrapper"><form action="audit.php" method="post" id="filter">
+// filtr
+echo '<div id="filter-wrapper"><form action="audit.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat <select name="kategorie">
@@ -259,19 +255,19 @@ if ($filterCount <> 0) {
 		<select name="user" id="user">
 	  	<option value=0 '.(($filterUser == 0) ? ' selected="selected"' : '').'>všemi</option>';
 
-        $sqlU = "SELECT userId, userName FROM ".DB_PREFIX."user ORDER BY username ASC";
-        $resU = mysqli_query($database, $sqlU);
-        while ($recU = mysqli_fetch_assoc($resU)) {
-            echo '<option value="'.$recU['userId'].'"'.(($recU['userId'] == $filterUser) ? ' selected="selected"' : '').'>'.$recU['userName'].'</option>';
-        }
-        echo '</select></p>';
-        if ($user['aclGamemaster'] == 1) {
-            echo '
+$sqlU = "SELECT userId, userName FROM ".DB_PREFIX."user ORDER BY username ASC";
+$resU = mysqli_query($database, $sqlU);
+while ($recU = mysqli_fetch_assoc($resU)) {
+    echo '<option value="'.$recU['userId'].'"'.(($recU['userId'] == $filterUser) ? ' selected="selected"' : '').'>'.$recU['userName'].'</option>';
+}
+echo '</select></p>';
+if ($user['aclGamemaster'] == 1) {
+    echo '
 		<label for="org">Zobrazit i zásahy organizátorů</label>
 		<input type="checkbox" name="org" '.(($filterOrg == 1) ? ' checked="checked"' : '').'/><br/>
 		<div class="clear">&nbsp;</div>';
-        }
-        echo '<label for="my">Zobrazit i moje zásahy</label>
+}
+echo '<label for="my">Zobrazit i moje zásahy</label>
 	<input type="checkbox" name="my" '.(($filterMine == 1) ? ' checked="checked"' : '').'/><br/>
 	<div class="clear">&nbsp;</div>
 	<label for="my">Zobrazit i globální operace</label>
@@ -281,8 +277,6 @@ if ($filterCount <> 0) {
 	<div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
 </form></div><!-- end of #filter-wrapper -->';
-    }
-    filter();
 if (isset($_GET['sort'])) {
     sortingSet('audit', $_GET['sort'], 'audit_trail');
 }

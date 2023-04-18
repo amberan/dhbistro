@@ -2,7 +2,7 @@
     <form action="{$URL[0]}{$URL[1]}/" method="POST" id="filter" class="row mb-1">
 	    <div class="col-12 col-md-4 text-left">
 	        <h4>
-                {$text[osoby]|firstUpper} {ifset $person_count}({$person_count}){/ifset}
+                {$text['menuPersons']|firstUpper} {ifset $personCount}({$personCount}){/ifset}
             </h4>
 	    </div>
         <div class="col-12 col-md-8 text-right header-wrapper-right">
@@ -37,6 +37,15 @@
                     {$text['itajne']}
                 </div>
             {/if}
+            {if $user['aclRoot'] > 0}
+                <div class="header-switch">
+                    <label class="toggle-control">
+                        <input type="checkbox" name="filter[deleted]" {if (isset($filter['deleted']) AND $filter['deleted'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                        <span class="control"></span>
+                    </label>
+                    {$text['filterDeleteInclude']}
+                </div>
+            {/if}
         </div>
         <div class="col-12 col-lg-6 text-left header-wrapper-left">
             <div class="header-switch">
@@ -44,15 +53,22 @@
                     <input type="checkbox" name="filter[portrait]" {if (isset($filter['portrait']) AND $filter['portrait'] == 'on') } checked {/if} onchange="this.form.submit()" />
                     <span class="control"></span>
                 </label>
-                {$text['portrety']}
+                {$text['portrety']|firstUpper}
             </div>
             <div class="header-switch">
                 <label class="toggle-control">
                     <input type="checkbox" name="filter[symbol]" {if (isset($filter['symbol']) AND $filter['symbol'] == 'on') } checked {/if} onchange="this.form.submit()" />
                     <span class="control"></span>
                 </label>
-                {$text['symboly']}
+                {$text['menuSymbols']|firstUpper}
             </div>
+            {* <div class="header-switch">
+                <label class="toggle-control">
+                    <input type="checkbox" name="filter[qr]" {if (isset($filter['qr']) AND $filter['qr'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                    <span class="control"></span>
+                </label>
+                {$text['filterQrContact']|firstUpper}
+            </div> *}
         </div>
         <div class="col-12 col-lg-6 text-right header-wrapper-right">
             <div class="header-switch">

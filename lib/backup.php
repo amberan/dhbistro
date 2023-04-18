@@ -2,8 +2,6 @@
 
 use Tracy\Debugger;
 
-
-
 function bistroBackup()
 {
     global $database;
@@ -14,10 +12,10 @@ function bistroBackup()
         $lastBackupSql = "SELECT time FROM ".DB_PREFIX."backups ORDER BY time DESC LIMIT 1";
     }
     $lastBackup = mysqli_fetch_assoc(mysqli_query($database, $lastBackupSql));
-    $scandir = array_diff(scandir($_SERVER['DOCUMENT_ROOT']."/sql"), array('.', '..'));
+    $scandir = array_diff(scandir($_SERVER['DOCUMENT_ROOT']."/sql"), ['.', '..']);
     natsort($scandir);
     $updatesToRun = bistroUpdatesList($scandir, @$lastBackup['version']);
-    if (round($lastBackup['time'], -5) < round(time(), -5) || sizeof($updatesToRun)>0) {
+    if (round($lastBackup['time'], -5) < round(time(), -5) || sizeof($updatesToRun) > 0) {
         bistroBackupGenerate();
     }
     bistroUpdate($updatesToRun);
@@ -33,7 +31,7 @@ function bistroBackupList($empty = null)
     global $config,$database,$text;
     $backups_sql = "SELECT ".DB_PREFIX."backup.* FROM ".DB_PREFIX."backup ".sortingGet('backup');
     $backups_query = mysqli_query($database, $backups_sql);
-    while (mysqli_num_rows($backups_query)> 0 && $backup_record = mysqli_fetch_assoc($backups_query)) {
+    while (mysqli_num_rows($backups_query) > 0 && $backup_record = mysqli_fetch_assoc($backups_query)) {
         unset($backup);
         $file = basename($backup_record['file']);
         if (file_exists($config['folder_backup'].$file) || $empty) {
@@ -43,7 +41,7 @@ function bistroBackupList($empty = null)
             if (file_exists($config['folder_backup'].$file)) {
                 $backup['filesize'] = human_filesize(filesize($config['folder_backup'].$file))."B";
             } else {
-                $backup['filesize'] = $text['soubornenalezen'];
+                $backup['filesize'] = $text['notificationRecordNotFound'];
             }
             $backup_array[] = $backup;
         }
@@ -74,46 +72,46 @@ function backupBackupGetData()
         $fields_count = count($fields);
 
         $insert_head = "INSERT INTO `".$table."` (";
-        for ($i=0; $i < $fields_count; $i++) {
-            $insert_head  .= "`".$fields[$i]->name."`";
-            if ($i < $fields_count-1) {
-                $insert_head  .= ', ';
+        for ($i = 0; $i < $fields_count; $i++) {
+            $insert_head .= "`".$fields[$i]->name."`";
+            if ($i < $fields_count - 1) {
+                $insert_head .= ', ';
             }
         }
-        $insert_head .=  ")";
+        $insert_head .= ")";
         $insert_head .= " VALUES\n";
 
-        if ($row_count>0) {
+        if ($row_count > 0) {
             $r = 0;
             while ($row = mysqli_fetch_array($results)) {
-                if (($r % 400)  == 0) {
+                if (($r % 400) == 0) {
                     $sqlScript .= $insert_head;
                 }
                 $sqlScript .= "(";
-                for ($i=0; $i < $fields_count; $i++) {
-                    $row_content =  str_replace("\n", "\\n", mysqli_real_escape_string($database, $row[$i].' '));
-//TODO mysqli_real_escape_string deprecated?
-//PHP Deprecated: mysqli_real_escape_string(): Passing null to parameter #2 ($string) of type string is deprecated in .../charles/workspace/alembiq/bistro/htdocs/lib/backup.php:94
+                for ($i = 0; $i < $fields_count; $i++) {
+                    $row_content = str_replace("\n", "\\n", mysqli_real_escape_string($database, $row[$i].' '));
+                    //TODO mysqli_real_escape_string deprecated?
+                    //PHP Deprecated: mysqli_real_escape_string(): Passing null to parameter #2 ($string) of type string is deprecated in .../charles/workspace/alembiq/bistro/htdocs/lib/backup.php:94
 
                     switch ($fields[$i]->type) {
-                    case 8: case 3: //int bigint
-                        $sqlScript .=  $row_content;
-                        break;
-                    case 7: //timestamp
-                        if (strlen($row_content) < 1) {
-                            $sqlScript .= ' NULL ';
-                        } else {
+                        case 8: case 3: //int bigint
+                            $sqlScript .= $row_content;
+                            break;
+                        case 7: //timestamp
+                            if (strlen($row_content) < 1) {
+                                $sqlScript .= ' NULL ';
+                            } else {
+                                $sqlScript .= "'". $row_content ."'";
+                            }
+                            break;
+                        default:
                             $sqlScript .= "'". $row_content ."'";
-                        }
-                        break;
-                    default:
-                        $sqlScript .= "'". $row_content ."'";
-                }
-                    if ($i < $fields_count-1) {
-                        $sqlScript  .= ', ';
+                    }
+                    if ($i < $fields_count - 1) {
+                        $sqlScript .= ', ';
                     }
                 }
-                if (($r+1) == $row_count || ($r % 400) == 399) {
+                if (($r + 1) == $row_count || ($r % 400) == 399) {
                     $sqlScript .= ");\n\n";
                 } else {
                     $sqlScript .= "),\n";
@@ -279,7 +277,7 @@ function bistroDBColumnAlter($data, $file = null): int
 function bistroMyisamToInnodb(): int
 {
     global $database,$config;
-    $alter =0;
+    $alter = 0;
     $myisamDbsql = "select table_name from information_schema.tables tab
     where engine = 'MyISAM' and table_type = 'BASE TABLE' and table_schema not in ('information_schema', 'sys', 'performance_schema','mysql')
     and table_schema = 'bistro' order by table_schema, table_name";
@@ -319,7 +317,7 @@ function bistroDBFulltextAdd($data, $file = null): int
     return $alter;
 }
 
-function bistroDBIndexAdd($data, $file = null):int
+function bistroDBIndexAdd($data, $file = null): int
 {
     global $database,$configDB;
     $alter = 0;

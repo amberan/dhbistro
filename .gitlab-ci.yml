@@ -1,10 +1,8 @@
-# You can override the included template(s) by including variable overrides
-# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
-# SAST config https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/SAST.gitlab-ci.yml
-# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
-# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
-# Note that environment variables can be set in several places
-# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
+# .gitlab-ci.yml documentation: https://docs.gitlab.com/ee/ci/yaml/gitlab_ci_yaml.html
+# Code-Quality documentation: https://docs.gitlab.com/ee/ci/testing/code_quality.html
+# Static Application Security Testing documentation: https://docs.gitlab.com/ee/user/application_security/sast/
+# SAST example https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/SAST.gitlab-ci.yml
+
 include:
 - template: Code-Quality.gitlab-ci.yml
 - template: Security/SAST.gitlab-ci.yml
@@ -13,7 +11,6 @@ variables:
   SAST_EXPERIMENTAL_FEATURES: "true"
   SAST_DEFAULT_ANALYZERS: "phpcs-security-audit"
   SAST_EXCLUDED_PATHS: "vendor, js/jquery*, js/tiny*"
-  # SAST_EXCLUDED_ANALYZERS: "bandit, brakeman, flawfinder, gosec, kubesec, nodejs-scan, pmd-apex, security-code-scan, sobelow, spotbugs"
   SEARCH_MAX_DEPTH: 10
   TEST_FOLDER: "~/cz.prazskahlidka.test.nh/  ~/cz.prazskahlidka.test.dh/" # ~/cz.prazskahlidka.test.i/'
   PROD_FOLDER: "~/cz.prazskahlidka.nhbistro/  ~/cz.prazskahlidka.dhbistro/" # ~/cz.prazskahlidka.ibistro'
@@ -22,13 +19,13 @@ cache:
     - vendor/
 image: alpine
 
-
 stages:
 - build
 - test
 - deploy
 
 ######################################################## BUILD
+
 build_test:
   stage: build
   interruptible: true
@@ -68,30 +65,36 @@ build_prod:
 
 code_quality:
   interruptible: true
-#   artifacts:
-#     paths:
-#     - gl-code-quality-report.json
+  allow_failure: true
   rules:
-    - if: $CI_COMMIT_BRANCH
-      when: manual
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CODE_QUALITY_DISABLED
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       exists:
         - '**/*.php'
+      when: manual
 
 phpcs-security-audit-sast:
   interruptible: true
+  allow_failure: true
   rules:
-    - if: $CI_COMMIT_BRANCH
-      when: never
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: manual
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" # Run code quality job in merge request pipelines
       when: manual
       exists:
         - '**/*.php'
 
 semgrep-sast:
   interruptible: true
+  allow_failure: true
   rules:
-    - when: manual
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: manual
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" # Run code quality job in merge request pipelines
+      when: manual
+      exists:
+        - '**/*.php'
 
 ######################################################## DEPLOY
 

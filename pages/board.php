@@ -3,17 +3,17 @@
 
 
 
-$latteParameters['title'] = $text['nastenka'];
-authorizedAccess(6, 1, 0);
-deleteUnread(6, 0);
+$latteParameters['title'] = $text['menuDashboard'];
+authorizedAccess('news', 'read', 0);
+deleteUnread('board', 0);
 
 // BOARD MEMO SAVE
 if (isset($_POST['editdashboard']) and $user['aclBoard'] > 0) {
-    authorizedAccess(6, 2, 0);
+    authorizedAccess('news', 'edit', 0);
     $sql = "INSERT INTO ".DB_PREFIX."dashboard ( created, iduser, contentMD) VALUES('".time()."','".$user['userId']."','".$_REQUEST['dashboard']."')";
     mysqli_query($database, $sql);
-    unreadRecords(6, 0);
-    $latteParameters['message'] = $text['nastenkaupravena'];
+    unreadRecords('board', 0);
+    $latteParameters['message'] = $text['notificationUpdated'];
 }
 
 // BOARD MEMO
@@ -24,7 +24,7 @@ if (isset($dashboard['contentMD']) && strlen($dashboard['contentMD']) > 0) {
     $latteParameters['board_created'] = webdate($dashboard['created']);
     $latteParameters['board_author'] = AuthorDB($dashboard['iduser']);
 } else {
-    $latteParameters['board'] = $text['nastenkaprazdna'];
+    $latteParameters['board'] = $text['notificationListEmpty'];
 }
 
 

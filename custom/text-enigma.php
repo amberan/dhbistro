@@ -1,8 +1,8 @@
 <?php
 
 $text['point'] = 'zlobod';
-$text['hlaseni'] = 'Zakázka';
-$text['hlaseni'] = 'zakázka';
+$text['menuReports'] = 'Zakázka';
+$text['menuReports'] = 'zakázka';
 
 
 $text['pridatvyjezd'] = 'nové hlášení z výjezdu';

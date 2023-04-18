@@ -1,7 +1,6 @@
 <?php
+
 use Tracy\Debugger;
-
-
 
 function human_filesize($bytes, $decimals = 2)
 {
@@ -15,12 +14,12 @@ function human_filesize($bytes, $decimals = 2)
  */
 function fileList($folder)
 {
-    $files = (array_diff(scandir($folder), array('.', '..', '.holder', '.htaccess')));
+    $files = (array_diff(scandir($folder), ['.', '..', '.holder', '.htaccess']));
     foreach (($files) as $value) {
-        $fileList[] = array(
+        $fileList[] = [
             basename($value),
-            human_filesize(filesize($folder.$value))
-        );
+            human_filesize(filesize($folder.$value)),
+        ];
     }
     return $fileList;
 }
@@ -35,19 +34,19 @@ function fileList($folder)
  */
 function fileIdentify($type, $objectId = 0)
 {
-global $config,$database,$user;
+    global $config,$database,$user;
     if (isset($objectId)) {
         switch ($type) {
             case 'portrait':
-                $sql = 'SELECT id, portrait, portrait as `file` FROM '.DB_PREFIX.'person WHERE '.$user['sqlDeleted'].' AND '.$user['sqlSecret'].' AND id='.$objectId;
+                $sql = 'SELECT id, portrait, portrait as `file` FROM '.DB_PREFIX.'person WHERE deleted <='.$user['aclRoot'].' AND secret <='.$user['aclSecret'].' AND id='.$objectId;
                 $folder = $config['folder_portrait'];
                 break;
             case 'symbol':
-                $sql = 'SELECT id, symbol, symbol as `file` FROM '.DB_PREFIX.'symbol WHERE '.$user['sqlDeleted'].' AND '.$user['sqlSecret'].' AND id='.$objectId;
+                $sql = 'SELECT id, symbol, symbol as `file` FROM '.DB_PREFIX.'symbol WHERE deleted <='.$user['aclRoot'].' AND secret <='.$user['aclSecret'].' AND id='.$objectId;
                 $folder = $config['folder_symbol'];
                 break;
             case 'attachement':
-                $sql = 'SELECT *, uniquename AS soubor, originalname AS nazev, size, originalname as `file` FROM '.DB_PREFIX.'file WHERE '.$user['sqlSecret'].' AND id='.$objectId;
+                $sql = 'SELECT *, uniquename AS soubor, originalname AS nazev, size, originalname as `file` FROM '.DB_PREFIX.'file WHERE secret <='.$user['aclSecret'].' AND id='.$objectId;
                 $folder = $config['folder_attachement'];
                 break;
             case 'backup':
@@ -74,7 +73,8 @@ global $config,$database,$user;
             $file['fileName'] = $file['id'];
             $file['mime'] = 'image/jpg';
         } else {
-            return false; exit;
+            return false;
+            exit;
         }
         $file['fullPath'] = $folder.$file['fileHash'];
         //set mimetype
@@ -85,7 +85,9 @@ global $config,$database,$user;
         $file['fileSize'] = filesize($file['fullPath']);
 
         return $file;
-    } else { return false; }
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -128,7 +130,7 @@ function filePlaceholder($fileType = 'logo'): void
             break;
         default: $placeholder = SERVER_ROOT."/images/placeholder.jpg";
             break;
-        }
+    }
     header("Cache-Control: no-cache, no-store, must-revalidate, post-check=0, pre-check=0");
     header("Pragma: no-cache");
     header("Expires: -1");

@@ -560,7 +560,6 @@ input[type='submit'] {
   .header-wrapper-right {
     justify-content: flex-end;
   }
-
 }
 
 .prolink-wrapper {
@@ -796,13 +795,18 @@ input[type='submit'] {
 }
 
 .system-note {
-  display: inline-block;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
   width: 100%;
   height: auto;
-  min-width: 300px;
+  min-width: 250px;
+  min-height: 65px;
   position: relative;
   margin: 0 1rem 1rem 0;
-  padding: 0.5rem 61px 61px 20px;
+  padding: 10px 45px 5px 10px;
 	box-shadow: 0 -1px 7px 1px #333;
   border-bottom-width: 3px;
   border-bottom-style: solid;
@@ -865,15 +869,20 @@ input[type='submit'] {
 .system-note-title {
   font-weight: bold;
   text-decoration: underline;
+  flex-shrink: 0;
+}
+
+.system-note-note {
+  flex-grow: 1;
 }
 
 .system-note-creator {
-  position: absolute;
+  align-self: flex-end;
+  flex-shrink: 0;
   text-align: right;
-  bottom: 5px;
-  right: 45px;
-  z-index: 5;
-  white-space: nowrap;
+  font-size: 12px;
+  max-width: 400px;
+  margin-block-start: 15px;
 }
 
 .system-note-stamp {
@@ -889,6 +898,30 @@ input[type='submit'] {
   font-style: normal;
   font-weight: bold;
   text-transform: uppercase;
+}
+
+.system-note-delete-wrapper {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  z-index: 5;
+}
+
+.system-note-delete {
+  border: 2px solid #D92D2D;
+  border-radius: 4px;
+  color: #D92D2D;
+  padding: 0px;
+}
+
+.system-note-delete:hover {
+  border-color: #6c1414;
+  color: #6c1414;
+}
+
+.system-note-delete svg {
+  width: 16px;
+  height: 16px;
 }
 
 /* ---- NOTE COLORS ---- */
@@ -1090,4 +1123,169 @@ input[type='submit'] {
   min-width: 100%;
   height: auto;
   min-height: 100px;
+}
+
+/* ----- STICKY BEHAVIOR ----- */
+
+.sticky-bottom {
+  position: sticky;
+  bottom: 0px;
+}
+
+/* ----- Z-INDEX ----- */
+
+.z-30 {
+  z-index: 30;
+}
+
+/* ----- SEARCH HEADER ----- */
+
+
+.search-wrapper-left,
+.search-wrapper-right {
+  display: flex;
+  justify-content: flex-start;
+  align-items: baseline;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+@media only screen and (min-width: 768px) {
+
+  .search-wrapper-left,
+  .search-wrapper-right {
+    flex-wrap: nowrap;
+    margin-bottom: 0px;
+  }
+
+  .search-wrapper-left {
+    justify-content: flex-start;
+  }
+
+  .search-wrapper-right {
+    justify-content: flex-end;
+  }
+}
+/* ----- BUBBLETIP TOOLTIP ----- */
+
+/* weird behavior on bootstrap tooltip so I made my own */
+
+html {
+  --tooltip-gap: 5px;
+}
+
+.tip-wrapper {
+  position: relative;
+}
+
+.bubbletip {
+  position: absolute;
+  display: none;
+  background-color: #0D0D0D;
+  color: #FFFFFF;
+  font-size: 11px;
+  line-height: 0.95;
+  padding: 1px 2px 2px;
+  border-radius: 2px;
+  z-index: 10;
+}
+
+.bubbletip:before {
+  position: absolute;
+  content: '';
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+.bubbletip-top-left:before,
+.bubbletip-top-right:before,
+.bubbletip-top-center:before {
+  border-top-width: var(--tooltip-gap);
+  border-top-color: #0D0D0D;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  border-left-width: calc(var(--tooltip-gap) * 2 / 3);
+  border-right-color: transparent;
+  border-right-width: calc(var(--tooltip-gap) * 2 / 3);
+}
+
+.bubbletip-bottom-left:before,
+.bubbletip-bottom-right:before,
+.bubbletip-bottom-center:before {
+  border-top-color: transparent;
+  border-bottom-width: var(--tooltip-gap);
+  border-bottom-color: #0D0D0D;
+  border-left-color: transparent;
+  border-left-width: calc(var(--tooltip-gap) * 2 / 3);
+  border-right-color: transparent;
+  border-right-width: calc(var(--tooltip-gap) * 2 / 3);
+}
+
+.bubbletip-top-left {
+  bottom: calc(100% + var(--tooltip-gap));
+  left: 0;
+}
+
+.bubbletip-top-left:before {
+  top: 100%;
+  left: var(--tooltip-gap);
+}
+
+.bubbletip-top-center {
+  bottom: calc(100% + var(--tooltip-gap));
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.bubbletip-top-center:before {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.bubbletip-top-right {
+  bottom: calc(100% + var(--tooltip-gap));
+  right: 0;
+}
+
+.bubbletip-top-right:before {
+  top: 100%;
+  right: var(--tooltip-gap);
+}
+
+.bubbletip-bottom-left {
+  top: calc(100% + var(--tooltip-gap));
+  left: 0;
+}
+
+.bubbletip-bottom-left:before {
+  bottom: 100%;
+  left: var(--tooltip-gap);
+}
+
+.bubbletip-bottom-center {
+  top: calc(100% + var(--tooltip-gap));
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.bubbletip-bottom-center:before {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.bubbletip-bottom-right {
+  top: calc(100% + var(--tooltip-gap));
+  right: 0;
+}
+
+.bubbletip-bottom-right:before {
+  bottom: 100%;
+  right: var(--tooltip-gap);
+}
+
+.tip-wrapper:hover .bubbletip {
+  display: block;
 }

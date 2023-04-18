@@ -1,7 +1,7 @@
 <?php
 
 $text['point'] = 'zlobod';
-$text['menu-zlobody'] = 'Zlobody';
+$text['menuPoints'] = 'Zlobody';
 
 $text['reportDefaultTask'] = '';
 $text['reportDefaultSummary'] = '';

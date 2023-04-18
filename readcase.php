@@ -47,12 +47,12 @@ if (is_numeric($_REQUEST['rid'])) {
                 }
             }
         }
-        if (($rec['secret'] <= $user['aclSecret']) || (!$rec_a['iduser'])) {
+        if ($user['aclCase'] || $user['aclGamemaster']) {
             $editbutton = '; <a href="editcase.php?rid='.$_REQUEST['rid'].'">upravit případ</a>';
         } else {
             $editbutton = '';
         }
-        deleteUnread(3, $_REQUEST['rid']);
+        deleteUnread('case', $_REQUEST['rid']);
         sparklets('<a href="/cases/">případy</a> &raquo; <strong>'.stripslashes($rec['title']).'</strong>', $spaction.$editbutton);
         if (($rec['secret'] > $user['aclSecret']) && (!$rec_a['iduser'])) {
             echo '<div id="obsah"><p>Hezký pokus.</p></div>';
@@ -157,7 +157,7 @@ if (is_numeric($_REQUEST['rid'])) {
                     if ($inc == 0 || $inc == 8) {
                         echo '<tr>';
                     }
-                    echo '<td><img src="file/symbol/'.$rec_s['id'].'" alt="symbol chybí" /></td>';
+                    echo '<td><img  loading="lazy" src="file/symbol/'.$rec_s['id'].'" alt="symbol chybí" /></td>';
                     if ($inc == 7) {
                         echo '</tr>';
                     }
@@ -186,7 +186,7 @@ if (is_numeric($_REQUEST['rid'])) {
 	<ul id="prilozenadata">
 		<?php }
                 if (in_array($rec_f['mime'], $config['mime-image'], true)) { ?>
-							<li><a href="file/attachement/<?php echo $rec_f['id']; ?>"><img  width="300px" alt="<?php echo stripslashes($rec_f['title']); ?>" src="file/attachement/<?php echo $rec_f['id']; ?>"></a></li>
+							<li><a href="file/attachement/<?php echo $rec_f['id']; ?>"><img  loading="lazy"  width="300px" alt="<?php echo stripslashes($rec_f['title']); ?>" src="file/attachement/<?php echo $rec_f['id']; ?>"></a></li>
 			<?php	} else { ?>
 							<li><a href="file/attachement/<?php echo $rec_f['id']; ?>"><?php echo stripslashes($rec_f['title']); ?></a></li>
 			<?php }
@@ -258,7 +258,7 @@ if (is_numeric($_REQUEST['rid'])) {
         echo $_SESSION['message'] = "Případ neexistuje!";
     }
 } else {
-    echo $_SESSION['message'] = $text['accessdeniedrecorded'];
+    echo $_SESSION['message'] = $text['notificationHttp401'];
 }
 latteDrawTemplate("footer");
 ?>

@@ -70,10 +70,7 @@ if (is_numeric($_REQUEST['rid']) && $user['aclSymbol']) {
                 break;
             default: $fsql_stat = '';
         }
-        function filter()
-        {
-            global $filterCat,$filterSort,$filterStat;
-            echo '<form action="addsy2ar.php" method="post" id="filter">
+        echo '<form action="addsy2ar.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 <!--
@@ -101,8 +98,6 @@ seřadit je podle <select name="sort">
 	  <input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
 </form><form action="addsymbols.php" method="post" class="otherform">';
-        }
-        filter();
         // vypis hlášení
         $sqlFilter = DB_PREFIX."report.reportSecret<=".$user['aclSecret'];
 

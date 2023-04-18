@@ -4,7 +4,7 @@
             <h4>
                 {$report['reportName']}
             </h4>
-            <p class="mb-3">{$text['hlaseni']|firstUpper} {$reportType[$report['reportType']]}</p>
+            <p class="mb-3">{$text['menuReports']|firstUpper} {$reportType[$report['reportType']]}</p>
             <div>
                 {if $report['reportSecret'] > 0 }
                     <h5 class="bg-danger text-light w-100 p-2 mb-1">
@@ -160,7 +160,7 @@
                 </p>
                 <div class="view-symbol-wrapper">
                         {foreach $reportSymbols as $symbol}
-                           <a class="mb-2 mr-2" href="/readsymbol.php?rid={$symbol['symbolId']}"><img {if $symbol['symbolDeleted'] > 0}class="deleted"{/if} {ifset $symbol['symbolSecret']}class="secret"{/ifset} src="/file/symbol/{$symbol['symbolId']}" alt="{if $symbol['symbolCreatedByPerson']}{$symbol['symbolCreatedByPerson']}{else}{$symbol['symbolCreatedByUser']}{/if} {$symbol['symbolCreated']}" /></a>
+                           <a class="mb-2 mr-2" href="/readsymbol.php?rid={$symbol['symbolId']}"><img  loading="lazy" {if $symbol['symbolDeleted'] > 0}class="deleted"{/if} {ifset $symbol['symbolSecret']}class="secret"{/ifset} src="/file/symbol/{$symbol['symbolId']}" alt="{$symbol['symbolCreatedBy']} {$symbol['symbolCreated']}" /></a>
                         {/foreach}
                 </div>
             </div>
@@ -179,24 +179,24 @@
                             {if $file[fileIsImage]}
                                 <a href="/file/attachement/{$file['fileId']}" class="file-link">
                                     <div class="view-file-wrapper clear mr-2 mb-2 clear">
-                                        <img class="view-file-icon" alt="{$file['fileName']}: {$file['fileCreated']} {$file['fileCreatedBy']}" src="/file/attachement/{$file['fileId']}" />
+                                        <img  loading="lazy" class="view-file-icon" alt="{$file['fileName']}: {$file['fileCreated']} {$file['fileCreatedBy']}" src="/file/attachement/{$file['fileId']}" />
                                         <div>
                                             <p class="view-file-name">
                                                 {$file['fileName']}
                                             </p>
-                                            <p class="view-file-creator">{if $file['fileCreatedByPerson']}{$file['fileCreatedByPerson']}{else}{$file['fileCreatedByUser']}{/if} ({$file['fileCreated']})</p>
+                                            <p class="view-file-creator">{$file['fileCreatedBy']} ({$file['fileCreated']})</p>
                                         </div>
                                     </div>
                                 </a>
                             {else }
                                 <a href="/file/attachement/{$file['fileId']}" class="file-link">
                                     <div class="view-file-wrapper clear mr-2 mb-2 clear">
-                                        <img src="../images/folder_icon.png" class="view-file-icon"/>
+                                        <img  loading="lazy" src="../images/folder_icon.png" class="view-file-icon"/>
                                         <div>
                                             <p class="view-file-name">
                                                 {$file['fileName']}
                                             </p>
-                                            <p class="view-file-creator">{if $file['fileCreatedByPerson']}{$file['fileCreatedByPerson']}{else}{$file['fileCreatedByUser']}{/if} ({$file['fileCreated']})</p>
+                                            <p class="view-file-creator">{$file['fileCreatedBy']} ({$file['fileCreated']})</p>
                                         </div>
                                     </div>
                                 </a>
@@ -216,18 +216,18 @@
                 </p>
                     <div class="system-notes-wrapper">
                         {foreach $reportNotes as $note}
-                            {if $note['noteCreatedBy'] == $user['userId'] || $note['noteSecret'] <= $user['aclSecret']}
+                            {if ($note['noteCreatedById'] == $user['userId'] ) || ($note['noteSecret'] <= $user['aclSecret'])}
                                 {if $note['noteSecret'] == 1}
                                     <div class="system-note note-color-secret">
                                         <span class="system-note-stamp">{$text['tajne']|capitalize}</span>
                                         <p class="system-note-title">
                                             {$note['noteTitle']}
                                         </p>
-                                        <p>
-                                            {$note['noteNote']}
+                                        <p class="system-note-note">
+                                            {$note['noteNote']|striptags}
                                         </p>
                                         <p class="system-note-creator">
-                                            {if $note['noteCreatedByPerson']}{$note['noteCreatedByPerson']}{else}{$note['noteCreatedByUser']}{/if} ({$note['noteCreated']})
+                                            {$note['noteCreatedBy']} ({$note['noteCreated']})
                                         </p>
                                         <div class="system-note-peel">
                                             <div class="system-note-peel-back"></div>
@@ -239,11 +239,11 @@
                                         <p class="system-note-title">
                                             {$note['noteTitle']}
                                         </p>
-                                        <p>
-                                            {$note['noteNote']}
+                                        <p class="system-note-note">
+                                            {$note['noteNote']|striptags}
                                         </p>
                                         <p class="system-note-creator">
-                                            {if $note['noteCreatedByPerson']}{$note['noteCreatedByPerson']}{else}{$note['noteCreatedByUser']}{/if} ({$note['noteCreated']})
+                                            {$note['noteCreatedBy']} ({$note['noteCreated']})
                                         </p>
                                         <div class="system-note-peel">
                                             <div class="system-note-peel-back"></div>
@@ -255,11 +255,11 @@
                                         <p class="system-note-title">
                                             {$note['noteTitle']}
                                         </p>
-                                        <p>
-                                            {$note['noteNote']}
+                                        <p class="system-note-note">
+                                            {$note['noteNote']|striptags}
                                         </p>
                                         <p class="system-note-creator">
-                                            {if $note['noteCreatedByPerson']}{$note['noteCreatedByPerson']}{else}{$note['noteCreatedByUser']}{/if} ({$note['noteCreated']})
+                                            {$note['noteCreatedBy']} ({$note['noteCreated']})
                                         </p>
                                         <div class="system-note-peel">
                                             <div class="system-note-peel-back"></div>
@@ -270,11 +270,11 @@
                                         <p class="system-note-title">
                                             {$note['noteTitle']}
                                         </p>
-                                        <p>
-                                            {$note['noteNote']}
+                                        <p class="system-note-note">
+                                            {$note['noteNote']|striptags}
                                         </p>
                                         <p class="system-note-creator">
-                                            {if $note['noteCreatedByPerson']}{$note['noteCreatedByPerson']}{else}{$note['noteCreatedByUser']}{/if} ({$note['noteCreated']})
+                                            {$note['noteCreatedBy']} ({$note['noteCreated']})
                                         </p>
                                         <div class="system-note-peel">
                                             <div class="system-note-peel-back"></div>
@@ -288,4 +288,11 @@
         </div>
     </div>
 {/if}
+    <div class="row mb-1">
+        <div class="col-12">
+            <div class="view-category-wrapper">
+{include 'noteAdd.latte'}
+            </div>
+        </div>
+    </div>
 </div>

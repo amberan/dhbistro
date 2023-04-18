@@ -1,8 +1,13 @@
 <?php
 
-function operationType($operationType)
+/**
+ * when audit is called with name for operationType, translates into id
+ * @param mixed $operationType
+ * @return bool|int|string
+ */
+function operationType($operationType = null)
 {
-    $operation = [
+    $list = [
         1 => 'read',
         2 => 'edit',
         3 => 'new',
@@ -23,12 +28,23 @@ function operationType($operationType)
         18 => 'lock',
         19 => 'ulock',
     ];
-    return array_search($operationType, $operation);
+    $return = $list;
+    if (isset($operationType) && is_numeric($operationType)) {
+        $return = $list[$operationType];
+    } elseif (isset($operationType) && is_string($operationType)) {
+        $return = array_search($operationType, $list);
+    }
+    return $return;
 }
 
-function recordType($recordType)
+/**
+ * when audit is called with name for recordType, translates into id
+ * @param mixed $recordType
+ * @return bool|int|string
+ */
+function recordType($recordType = null)
 {
-    $record = [
+    $list = [
         1 => 'person',
         2 => 'group',
         3 => 'case',
@@ -44,18 +60,25 @@ function recordType($recordType)
         13 => 'file',
         14 => 'backup',
         15 => 'settings',
+        16 => 'search'
     ];
-    return array_search($recordType, $record);
+    $return = $list;
+    if (isset($recordType) && is_numeric($recordType)) {
+        $return = $list[$recordType];
+    } elseif (isset($recordType) && is_string($recordType)) {
+        $return = array_search($recordType, $list);
+    }
+    return $return;
 }
 
 function authorizedAccess($recordType, $operationType, $idrecord): void
 {
     global $database,$user;
     // translation layer TEXT > ID
-    if (is_string($recordType)) {
+    if (!is_numeric($recordType)) {
         $recordType = recordType($recordType);
     }
-    if (is_string($operationType)) {
+    if (!is_numeric($operationType)) {
         $operationType = operationType($operationType);
     }
     //end of translation layer
@@ -79,6 +102,6 @@ function unauthorizedAccess($recordType, $operationType, $idrecord): void
     if (isset($user) && is_numeric($recordType) && is_numeric($operationType) && is_numeric($idrecord)) {
         authorizedAccess($recordType, $operationType + 100, $idrecord);
     }
-    $_SESSION['message'] = $text['accessdeniedrecorded'];
+    $_SESSION['message'] = $text['notificationHttp401'];
     header('location: index.php');
 }

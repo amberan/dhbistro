@@ -27,19 +27,17 @@ function sessionUser($sid): array
         $usrinfo['deleted'] = $user['userDeleted'];
         $usrinfo['suspended'] = $user['userSuspended'];
         $usrinfo['zlobody'] = $user['zlobod'];
-        $user['aclUser'] = $user['aclUser'];
-        $user['aclGamemaster'] = $user['aclGamemaster'];
-        $user['aclAudit'] = $user['aclAudit'];
-        $user['aclRoot'] = $user['aclRoot'];
+        // $user['aclUser'] = $user['aclUser'];
+        // $user['aclGamemaster'] = $user['aclGamemaster'];
+        // $user['aclAudit'] = $user['aclAudit'];
+        // $user['aclRoot'] = $user['aclRoot'];
         $usrinfo['planMD'] = $user['planMD'] = stripslashes($user['planMD'].' ');
-
-        $user['sqlDeleted'] = " deleted <= ".$user['aclRoot'];
-        $user['sqlSecret'] = " secret <= ".$user['aclSecret'];
     } else {
         unset($_SESSION['sid']);
     }
-
-    return $user;
+    if (isset($user)) {
+        return $user;
+    }
 }
 
 /**
@@ -104,7 +102,7 @@ if (isset($_SESSION['sid'])) {
  * LOGOUT
  */
 if (!isset($_SESSION['sid']) and (in_array($URL[1], $config['page_free'], true) == false)) { //neprihlaseny, zkousi, legacy only
-    logout_forced($text['http401']);
+    logout_forced($text['notificationHttp401']);
 }
 if (isset($user) and (@$user['userTimeout'] + @$_SESSION['timestamp'] < time()) and !isset($_POST['logmein'])) { //neprihlasuje se, je prihlaseny, ale vyprsel timeout
     logout_forced($text['nuceneodhlaseni']);

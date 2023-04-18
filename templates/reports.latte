@@ -1,33 +1,34 @@
 
-            {if @$warning}
+            {ifset $warningReport}
                 <div>
-                    {$warning}
+                    {$warningReport}
                 </div>
             {else}
                 <div id="obsah">
-
                 <table class="table table-striped table-hover">
                     <thead class="table-sticky-header">
                         <tr>
-                            <th class="text-center">
+                            <th class="text-left">
                                 {$text['report']|firstUpper}
                             </th>
-                            <th class="mobile-no-show text-center">
+                            <th class="mobile-no-show text-left">
                                 {$text['stav']|firstUpper}
                             </th>
                             <th class="mobile-no-show">
-                                <div class="table-no-wrap">{$text['probehlo']|firstUpper}<a href="{$URL[0]}{$URL[1]}/?sort=reportEventDate">&#8661;</a></div>
-                            </th>
-                            <th class="tablet-no-show text-center">
-                                <div class="table-no-wrap">{$text['vytvoreno']|firstUpper}  <a href="{$URL[0]}{$URL[1]}/?sort=reportCreated">&#8661;</a></div>
-                            </th>
-                            <th class="tablet-no-show text-center">
-                                <div class="table-no-wrap">{$text['zmeneno']|firstUpper}  <a href="{$URL[0]}{$URL[1]}/?sort=reportModified">&#8661;</a></div>
+                                <div class="table-no-wrap">{$text['probehlo']|firstUpper}{if $URL[1] != 'search'} <a href="{$URL[0]}{$URL[1]}/?sort=reportEventDate">&#8661;</a>{/if}</div>
                             </th>
                             <th class="mobile-no-show">
                                 {$text['ucastnici']|firstUpper}
                             </th>
-                            <th class="mobile-no-show">{$text['akce']|firstUpper}</th>
+                            <th class="tablet-no-show text-center">
+                                <div class="table-no-wrap">{$text['vytvoreno']|firstUpper}{if $URL[1] != 'search'} <a href="{$URL[0]}{$URL[1]}/?sort=reportCreated">&#8661;</a>{/if}</div>
+                            </th>
+                            <th class="tablet-no-show text-center">
+                                <div class="table-no-wrap">{$text['zmeneno']|firstUpper}{if $URL[1] != 'search'} <a href="{$URL[0]}{$URL[1]}/?sort=reportModified">&#8661;</a>{/if}</div>
+                            </th>
+                            {if $URL[1] != 'search' && $user['aclReport'] > 0}
+                                <th class="mobile-no-show">{$text['akce']|firstUpper}</th>
+                            {/if}
                         </tr>
                     </thead>
                     <tbody>
@@ -36,7 +37,7 @@
                                 <td class="table-w-full-cell">
                                     <p class="table-cell-title"><strong>{$reportType[$report['reportType']]|firstUpper}: </strong>
                                     {if $report['reportDeletedBool'] == 'True'}
-                                        {$report['reportName']} deleted on: {$report['reportDeleted']}
+                                        {$report['reportName']}
                                     {else}
                                         <a href="/reports/{$report['reportId']}">{$report['reportName']}</a>
                                     {/if}</p>
@@ -46,15 +47,15 @@
                                             <span class="badge rounded-pill bg-danger text-light">{$text['utajeno']|upper}</span>
                                         {/if}
                                         {if $report['reportArchived']}
-                                            <span class="badge rounded-pill bg-secondary text-light">{$text['archivovano']|firstUpper}</span>
+                                            <span class="badge rounded-pill bg-secondary text-light">{$text['archivovano']|upper}</span>
                                         {/if}
                                         {if $report['reportDeletedBool'] == 'True'}
-                                            <span class="badge rounded-pill bg-warning text-dark">{$text['smazany']|firstUpper}</span>
+                                            <span class="badge rounded-pill bg-warning text-dark tip-wrapper">{$text['smazany']|upper}<span class="bubbletip bubbletip-top-left">{$report['reportDeleted']}</span></span>
                                         {/if}
                                     </div>
                                     <div class="mobile-no-show">
                                         {ifset $report['cases']}
-                                            <p class="mb-1"><strong>{$text['pripady']}: </strong></p>
+                                            <p class="mb-1"><strong>{$text['menuCases']}: </strong></p>
                                             {foreach $report['cases'] as $case}
                                                 <p class="table-cell-subtitle"><a href="{$URL[0]}/readcase.php?rid={$case['caseId']}&hidenotes=0">{$case['caseName']}<a/></p>
                                             {/foreach}
@@ -66,15 +67,7 @@
                                     {if $report['reportOwnerName'] }{$report['reportOwnerName']}{else}{$report['reportOwnerUserName']}{/if}
                                 </td>
                                 <td class="table-w-full-cell text-center">
-                                    {if $report['reportModified']}{if $report['reportEventStart'] && $report['reportEventEnd']}{$report['reportEventStart']} - {$report['reportEventEnd']}{/if} {$report['reportEventDate']|date:'d.m.Y'}{else}<em>{$text['neznamo']}</em>{/if}
-                                </td>
-                                <td class="tablet-no-show text-center">
-                                    {if $report['reportCreated']} {$report['reportCreated']|date:'d.m.Y'}{else}<em>{$text['neznamo']}</em>{/if}<br/>
-                                    {if $report['reportCreatedByName']}{$report['reportCreatedByName']}{else}{$report['reportCreatedByUserName']}{/if}
-                                </td>
-                                <td class="tablet-no-show text-center">
-                                    {$report['reportModified']|date:'d.m.Y'}<br/>
-                                    {if $report['reportModifiedByName']}{$report['reportModifiedByName']}{else}{$report['reportModifiedByUserName']}{/if}
+                                    {if $report['reportModified']}{if $report['reportEventStart'] && $report['reportEventEnd']}{$report['reportEventStart']} - {$report['reportEventEnd']}{/if} {$report['reportEventDate']|date:'d.m.Y'}{else}<em>{$text['notificationInformationUnknown']}</em>{/if}
                                 </td>
                                 <td class="mobile-no-show">
                                     {ifset $report['participant']}
@@ -83,23 +76,53 @@
                                         {/foreach}
                                     {/ifset}
                                 </td>
-                                <td class="table-w-full-cell">
+                                <td class="tablet-no-show text-center">
+                                    {if $report['reportCreated']} {$report['reportCreated']|date:'d.m.Y'}{else}<em>{$text['notificationInformationUnknown']}</em>{/if}<br/>
+                                    {if $report['reportCreatedByName']}{$report['reportCreatedByName']}{else}{$report['reportCreatedByUserName']}{/if}
+                                </td>
+                                <td class="tablet-no-show text-center">
+                                    {$report['reportModified']|date:'d.m.Y'}<br/>
+                                    {if $report['reportModifiedByName']}{$report['reportModifiedByName']}{else}{$report['reportModifiedByUserName']}{/if}
+                                </td>
+{if $URL[1] != 'search' && $user['aclReport'] > 0}
+                                <td class="table-w-full-cell text-right">
                                     <div class="table-no-wrap-right">
                                         {if $user['aclReport'] >= 1 AND $report['reportDeletedBool'] == 'False'}
-                                            <a class="btn btn-sm btn-brick btn-info mb-1" href="/reports/{$report['reportId']}/edit" alt="{$text[upravitreport]}">
+                                            <a class="btn btn-sm btn-brick btn-info mb-1 tip-wrapper" href="/reports/{$report['reportId']}/edit" alt="{$text[upravitreport]}">
                                                 {php inject_svg("images/icons/edit-solid.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text[upravitreport]}</span>
+                                            </a>
+                                        {/if}
+                                        {if $user['aclReport'] >= 2 && $report['reportArchivedBool'] == 'False' AND $report['reportDeletedBool'] == 'False'}
+                                            <a class="btn btn-sm btn-brick btn-dark mb-1 tip-wrapper" href="/reports/{$report['reportId']}/archive" onclick="return confirm('{$text['actionConfirmationArchive']|noescape } {$report['reportName']|stripHtml} ?');" alt="
+                                            {$text['actionArchive']}">
+                                            {php inject_svg("images/icons/box-solid.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text['actionArchive']}</span>
+                                            </a>
+                                        {elseif  $user['aclReport'] >= 2 AND $report['reportDeletedBool'] == 'False'}
+                                            <a class="btn btn-sm btn-brick btn-secondary mb-1 tip-wrapper" href="/reports/{$report['reportId']}/unarchive" onclick="return confirm('{$text['actionConfirmationUnarchive']|noescape} {$report['reportName']|stripHtml} ?');" alt="
+                                            {$text['actionUnarchive']}">
+                                            {php inject_svg("images/icons/box-open-solid.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text['actionUnarchive']}</span>
                                             </a>
                                         {/if}
                                         {if $user['aclReport'] >= 2 AND $report['reportDeletedBool'] == 'False'}
-                                            <a class="btn btn-sm btn-brick btn-danger mb-1" href="/reports/delete/{$report['reportId']}" onclick="return confirm('{$text['opravdusmazatreport']} &quot; {$report['reportName']|stripHtml}&quot;?');" alt="{$text['smazatreport']}">{php inject_svg("images/icons/trash-solid.svg")}</a>
+                                            <a class="btn btn-sm btn-brick btn-danger mb-1 tip-wrapper" href="/reports/{$report['reportId']}/delete" onclick="return confirm('{$text['actionConfirmationRemove']|noescape} {$report['reportName']|stripHtml}?');" alt="{$text['smazatreport']}">{php inject_svg("images/icons/trash-solid.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text['smazatreport']}</span>
+                                            </a>
                                         {/if}
                                         {if $user['aclRoot'] AND $report['reportDeletedBool'] == 'True'}
-                                            <a class="btn btn-sm btn-success mb-1" href="/reports/restore/{$report['reportId']}" onclick="return confirm('{$text['opravduobnovitreport']} &quot; {$report['reportName']|stripHtml}&quot;?');">{php inject_svg("images/icons/recycle.svg")}</a>
+                                            <a class="btn btn-sm btn-success mb-1 tip-wrapper" href="/reports/{$report['reportId']}/restore" onclick="return confirm('{$text['actionConfirmationRestore']|noescape}  {$report['reportName']|stripHtml}?');">
+                                                {php inject_svg("images/icons/recycle.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text['actionRestore']}</span>
+                                            </a>
                                         {/if}
                                     </div>
                                 </td>
+{/if}
                             </tr>
                         {/foreach}
                     </tbody>
                 </table>
-            {/if}
+            </div>
+            {/ifset}

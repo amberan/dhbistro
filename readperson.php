@@ -31,7 +31,7 @@ if (is_numeric($_REQUEST['rid'])) {
         } else {
             $editbutton = '';
         }
-        deleteUnread(1, $_REQUEST['rid']);
+        deleteUnread('person', $_REQUEST['rid']);
         sparklets('<a href="/persons">osoby</a> &raquo; <strong>'.StripSlashes($rec['surname']).', '.StripSlashes($rec['name']).'</strong>', '<a href="readperson.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton); ?>
 <div id="obsah">
 	<h1><?php echo stripslashes($rec['surname']).', '.stripslashes($rec['name']); ?></h1>
@@ -42,100 +42,105 @@ if (is_numeric($_REQUEST['rid'])) {
 		<?php if ($rec['portrait'] == null) { ?>
             <img src="#" alt="portrét chybí" title="portrét chybí" id="portraitimg" class="noname"/>
 		<?php } else { ?>
-            <img src="file/portrait/<?php echo $_REQUEST['rid']; ?>" alt="<?php echo stripslashes($rec['name']).' '.stripslashes($rec['surname']); ?>" id="portraitimg" />
+            <img  loading="lazy" src="file/portrait/<?php echo $_REQUEST['rid']; ?>" alt="<?php echo stripslashes($rec['name']).' '.stripslashes($rec['surname']); ?>" id="portraitimg" />
 		<?php } ?>
 		<?php if ($rec['symbol'] == null) { ?>
             <img src="#" alt="symbol chybí" title="symbol chybí" id="symbolimg" class="noname"/>
 		<?php } else { ?>
             <a href="readsymbol.php?rid=<?php echo $rec['symbol']; ?>"><img src="file/symbol/<?php echo $rec['symbol']; ?>" alt="<?php echo stripslashes($rec['name']).' '.stripslashes($rec['surname']); ?>" id="symbolimg" /></a>
-		<?php } ?>
-		<div id="info">
+		<?php }
+		if (file_exists('file/qrcontact/'.$rec['id'].'.png')) { ?>
+        <div id="qrcodeimg" class="noname">
+            <img loading="lazy" src="/file/qrcontact/<?php echo $rec['id']; ?>.png" alt="" />
+        </div>
+        <?php } ?>
+        <div id="info">
 			<?php
-        if ($rec['secret'] > 0 || $rec['dead'] == 1 || $rec['archived'] > 1 || $rec['deleted'] == 1) {
-            echo '<h2>';
-        }
-        if ($rec['secret'] > 0) {
-            echo 'TAJNÉ: '.$rec['secret'];
-        }
-        if ($rec['dead'] == 1) {
-            echo 'MRTVOLA ';
-        }
-        if ($rec['archived'] > 1) {
-            echo 'ARCHIV';
-        }
-        if ($rec['deleted'] == 1) {
-            echo 'SMAZANÝ ZÁZNAM';
-        }
-        if ($rec['secret'] == 1 || $rec['dead'] == 1 || $rec['archived'] > 1 || $rec['deleted'] == 1) {
-            echo '</h2>';
-        } ?>
+		if ($rec['secret'] > 0 || $rec['dead'] == 1 || $rec['archived'] > 1 || $rec['deleted'] == 1) {
+		    echo '<h2>';
+		}
+		if ($rec['secret'] > 0) {
+		    echo 'TAJNÉ: '.$rec['secret'];
+		}
+		if ($rec['dead'] == 1) {
+		    echo 'MRTVOLA ';
+		}
+		if ($rec['archived'] > 1) {
+		    echo 'ARCHIV['.$rec['archived'].'] ';
+		}
+		if ($rec['deleted'] == 1) {
+		    echo 'SMAZANÝ ZÁZNAM';
+		}
+		if ($rec['secret'] == 1 || $rec['dead'] == 1 || $rec['archived'] > 1 || $rec['deleted'] == 1) {
+		    echo '</h2>';
+		} ?>
 			<h3>Jméno: </h3><p><?php echo stripslashes($rec['name']); ?></p>
 			<div class="clear">&nbsp;</div>
 			<h3>Příjmení: </h3><p><?php echo stripslashes($rec['surname']); ?></p>
 			<div class="clear">&nbsp;</div>
 			<h3>Strana: </h3><p><?php
-            switch ($rec['side']) {
-                case 1: $side = 'světlo';
-                    break;
-                case 2: $side = 'tma';
-                    break;
-                case 3: $side = 'člověk';
-                    break;
-                default: $side = 'neznámá';
-                    break;
-            }
-        echo $side; ?></p>
+		    switch ($rec['side']) {
+		        case 1: $side = 'světlo';
+		            break;
+		        case 2: $side = 'tma';
+		            break;
+		        case 3: $side = 'člověk';
+		            break;
+		        default: $side = 'neznámá';
+		            break;
+		    }
+		echo $side; ?></p>
 			<div class="clear">&nbsp;</div>
 			<h3>Síla: </h3><p><?php
-            switch ($rec['power']) {
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                case 6:
-                case 7:
-                    $power = $rec['power'].'. kategorie';
-                    break;
-                case 8:
-                    $power = 'mimo kategorie';
-                    break;
-                default: $power = 'neznámá';
-                    break;
-            }
-            echo $power; ?></p>
+		    switch ($rec['power']) {
+		        case 1:
+		        case 2:
+		        case 3:
+		        case 4:
+		        case 5:
+		        case 6:
+		        case 7:
+		            $power = $rec['power'].'. kategorie';
+		            break;
+		        case 8:
+		            $power = 'mimo kategorie';
+		            break;
+		        default: $power = 'neznámá';
+		            break;
+		    }
+		    echo $power; ?></p>
 			<div class="clear">&nbsp;</div>
             <?php
-            if ($rec['roof'] > null) {
-                echo '<h3>Dosažení stropu zaznamenáno: </h3><p>'.$rec['roof'].'</p><div class="clear">&nbsp;</div>';
-            } ?>
+		    if ($rec['roof'] > null) {
+		        echo '<h3>Dosažení stropu zaznamenáno: </h3><p>'.$rec['roof'].'</p><div class="clear">&nbsp;</div>';
+		    } ?>
 			<div class="clear">&nbsp;</div>
 			<h3>Specializace: </h3><p><?php
-                switch ($rec['spec']) {
-                    case 1: $side = 'bílý mág';
-                        break;
-                    case 2: $side = 'černý mág';
-                        break;
-                    case 3: $side = 'léčitel';
-                        break;
-                    case 4: $side = 'obrateň';
-                        break;
-                    case 5: $side = 'upír';
-                        break;
-                    case 6: $side = 'vlkodlak';
-                        break;
-                    case 7: $side = 'vědma';
-                        break;
-                    case 8: $side = 'zaříkávač';
-                        break;
-                    case 9: $side = 'vykladač';
-                        break;
-                    case 10: $side = 'jasnovidec';
-                        break;
-                    default: $side = 'neznámá';
-                        break;
-                }
-            echo $side; ?></p>
+		        switch ($rec['spec']) {
+		            case 1: $side = 'bílý mág';
+		                break;
+		            case 2: $side = 'černý mág';
+		                break;
+		            case 3: $side = 'léčitel';
+		                break;
+		            case 4: $side = 'obrateň';
+		                break;
+		            case 5: $side = 'upír';
+		                break;
+		            case 6: $side = 'vlkodlak';
+		                break;
+		            case 7: $side = 'vědma';
+		                break;
+		            case 8: $side = 'zaříkávač';
+		                break;
+		            case 9: $side = 'vykladač';
+		                break;
+		            case 10: $side = 'jasnovidec';
+		                break;
+		            default: $side = 'neznámá';
+		                break;
+		        }
+		    echo $side; ?></p>
 			<div class="clear">&nbsp;</div>
 			<h3>Telefon: </h3><p><a href ="tel:<?php echo str_replace(' ', '', $rec['phone']); ?>"><?php echo $rec['phone']; ?></a></p>
 			<div class="clear">&nbsp;</div>
@@ -234,7 +239,7 @@ if (is_numeric($_REQUEST['rid'])) {
 	<ul id="prilozenadata">
 			<?php }
             if (in_array($rec['mime'], $config['mime-image'], true)) { ?>
-							<li><a href="file/attachement/<?php echo $rec['id']; ?>"><img  width="300px" alt="<?php echo stripslashes($rec['title']); ?>" src="file/attachement/<?php echo $rec['id']; ?>"></a></li>
+							<li><a href="file/attachement/<?php echo $rec['id']; ?>"><img  loading="lazy"  width="300px" alt="<?php echo stripslashes($rec['title']); ?>" src="file/attachement/<?php echo $rec['id']; ?>"></a></li>
 			<?php	} else { ?>
 							<li><a href="file/attachement/<?php echo $rec['id']; ?>"><?php echo stripslashes($rec['title']); ?></a></li>
 			<?php }
@@ -308,7 +313,7 @@ if ($hn != 1) { ?>
         header('location: index.php');
     }
 } else {
-    $_SESSION['message'] = $text['accessdeniedrecorded'];
+    $_SESSION['message'] = $text['notificationHttp401'];
     header('location: index.php');
 }
 latteDrawTemplate("footer");

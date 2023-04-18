@@ -151,12 +151,12 @@ if (isset($_POST['searchit'])) {
 	    </div>
 	    <div class="message_frame">
 	    	<div class="predis_symbols">
-	        	<img class="predis_image" src="images/line.png" height="10" width="10"/>
-	            <img class="predis_image" src="images/curve.png" height="10" width="10" />
-	            <img class="predis_image" src="images/point.png" height="10" width="10" />
-	            <img class="predis_image" src="images/geometrical.png" height="10" width="10" />
-	            <img class="predis_image" src="images/alphabet.png" height="10" width="10" />
-	            <img class="predis_image" src="images/special.png" height="10" width="10" />
+	        	<img  loading="lazy" class="predis_image" src="images/line.png" height="10" width="10"/>
+	            <img  loading="lazy" class="predis_image" src="images/curve.png" height="10" width="10" />
+	            <img  loading="lazy" class="predis_image" src="images/point.png" height="10" width="10" />
+	            <img  loading="lazy" class="predis_image" src="images/geometrical.png" height="10" width="10" />
+	            <img  loading="lazy" class="predis_image" src="images/alphabet.png" height="10" width="10" />
+	            <img  loading="lazy" class="predis_image" src="images/special.png" height="10" width="10" />
 	        </div>
 	        <div class="predis_numbers">
 	        	<p class="label_text">
@@ -186,16 +186,16 @@ if (isset($_POST['searchit'])) {
             $result .= '
 			<div class="result">
 	        	<div class="result_symbol_image">
-	            	<img src="file/symbol/'.$symbol_record['id'].'" height="75" width="75" />
+	            	<img  loading="lazy" src="file/symbol/'.$symbol_record['id'].'" height="75" width="75" />
 	            </div>
 	            <div class="result_stats">
 	            	<div class="result_stats_singles">
-	                    	<img class="predis_image" src="images/'.$color_l.'.png" height="5" />
-	                    	<img class="predis_image" src="images/'.$color_c.'.png" height="5" />
-	                    	<img class="predis_image" src="images/'.$color_p.'.png" height="5" />
-	                    	<img class="predis_image" src="images/'.$color_g.'.png" height="5" />
-	                    	<img class="predis_image" src="images/'.$color_a.'.png" height="5" />
-	                    	<img class="predis_image" src="images/'.$color_sch.'.png" height="5" />
+	                    	<img  loading="lazy" class="predis_image" src="images/'.$color_l.'.png" height="5" />
+	                    	<img  loading="lazy" class="predis_image" src="images/'.$color_c.'.png" height="5" />
+	                    	<img  loading="lazy" class="predis_image" src="images/'.$color_p.'.png" height="5" />
+	                    	<img  loading="lazy" class="predis_image" src="images/'.$color_g.'.png" height="5" />
+	                    	<img  loading="lazy" class="predis_image" src="images/'.$color_a.'.png" height="5" />
+	                    	<img  loading="lazy" class="predis_image" src="images/'.$color_sch.'.png" height="5" />
 	                        <div class="result_stats_singles_parts">
 	                        	<p class="result_stats_singles_parts_text"><b>Vlastník: '.$symbol_record['title'].'</b></p>
 	                        </div>

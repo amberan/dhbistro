@@ -2,7 +2,7 @@
     <form action="{$URL[0]}{$URL[1]}/" method="POST" id="filter" class="row mb-1">
 	    <div class="col-12 col-md-4 text-left">
 	        <h4>
-                {$text[hlaseni]|firstUpper} {ifset $reportCount}({$reportCount}){/ifset}
+                {$text['menuReports']|firstUpper} {ifset $reportCount}({$reportCount}){/ifset}
             </h4>
 	    </div>
         <div class="col-12 col-md-8 text-right header-wrapper-right">
@@ -34,7 +34,16 @@
                         <input type="checkbox" name="filter[secret]" {if (isset($filter['secret']) AND $filter['secret'] == 'on') } checked {/if} onchange="this.form.submit()" />
                         <span class="control"></span>
                     </label>
-                    {$text['itajne']}
+                    {$text['filterSecretInclude']}
+                </div>
+            {/if}
+            {if $user['aclRoot'] > 0}
+                <div class="header-switch">
+                    <label class="toggle-control">
+                        <input type="checkbox" name="filter[deleted]" {if (isset($filter['deleted']) AND $filter['deleted'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                        <span class="control"></span>
+                    </label>
+                    {$text['filterDeleteInclude']}
                 </div>
             {/if}
         </div>
@@ -65,7 +74,6 @@
     <div class="row mb-1">
         <div class="col-12">
 {include 'reports.latte'}
-
         </div>
     </div>
 </div>

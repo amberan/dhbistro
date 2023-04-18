@@ -6,13 +6,13 @@ latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Nový symbol';
 mainMenu();
-sparklets('<a href="/persons/">osoby</a> &raquo; <a href="symbols.php">nepřiřazené symboly</a> &raquo; <strong>nový symbol</strong>');
+sparklets('<a href="/symbols/">symboly</a> &raquo; &raquo; <strong>nový symbol</strong>');
 ?>
 <div id="obsah">
 	<fieldset><legend><strong>Nový symbol</strong></legend>
 	<p id="top-text">Symboly nahrávejte pokud možno ve velikosti 100x100 bodů, budou se sice zvětšovat a zmenšovat na jeden z těch rozměrů, nebo oba, pokud bude správný poměr stran, ale chceme snad mít hezkou databázi. A nahrávejte opravdu jen symboly jasně rozeznatelné, rozmazané fotky použijte třeba jako přílohu. <br />
 	Pokud zadáváte hodnoty pro čáry, křivky, body, geometrické tvary, písma a speciální znaky, hodnota nabývá velikosti 0 až 10.</p>
-	<form action="symbols.php" method="post" id="inputform" enctype="multipart/form-data">
+	<form action="/symbols/" method="post" id="inputform" enctype="multipart/form-data">
 	    	<datalist id=hodnoty>
 				<option>0</option>
 				<option>1</option>
@@ -45,7 +45,7 @@ if ($user['aclSecret'] > 0) {
 
 if ($user['aclGamemaster'] == 1) {
     echo '
-				<h3><label for="notnew">Není nové</label></h3>
+				<br><br><h3><label for="notnew">Není nové</label></h3>
 					<input type="checkbox" name="notnew"/><br/>
 				<div class="clear">&nbsp;</div>';
 }

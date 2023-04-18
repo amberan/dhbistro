@@ -51,7 +51,7 @@ if (count(($_POST)) > 1) {
         $userEdit['userId'] = mysqli_insert_id($database);
         if (is_numeric($userEdit['userId'])) {
             unset($latteParameters['userId']);
-            authorizedAccess(8, 3, $userEdit['userId']);
+            authorizedAccess('user', 'new', $userEdit['userId']);
             userChange($userEdit['userId'], $userEdit);
             $latteParameters['userEdit'] = $userEdit;
             $latteParameters['message'] = $text['uzivatelvytvoren'];

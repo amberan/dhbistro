@@ -5,7 +5,7 @@
 
 // upravit uzivatele
 if (isset($_POST['userid'], $_POST['edituser']) && $user['aclUser'] && !preg_match('/^[[:blank:]]*$/i', $_POST['login'])) {
-    authorizedAccess(8, 2, $_POST['userid']);
+    authorizedAccess('user', 'edit', $_POST['userid']);
     $usernameConflict = mysqli_query($database, "SELECT userId FROM ".DB_PREFIX."user WHERE UCASE(userName)=UCASE('".$_POST['login']."') AND userId<>".$_POST['userid']);
     if (mysqli_num_rows($usernameConflict)) {
         $latteParameters['message'] = "Uživatel již existuje, změňte jeho jméno.";
@@ -70,7 +70,7 @@ if ($rec = mysqli_fetch_assoc($res)) {
         $latteParameters['userEdit']['pripady'] = $casesAssignedToUser;
     }
 } else {
-    $latteParameters['warning'] = $text['zaznamnenalezen'];
+    $latteParameters['warning'] = $text['notificationRecordNotFound'];
 }
 latteDrawTemplate('sparklet');
 latteDrawTemplate('user_edit');

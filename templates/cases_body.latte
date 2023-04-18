@@ -2,11 +2,18 @@
     <form action="{$URL[0]}{$URL[1]}/" method="POST" id="filter" class="row mb-1">
 	    <div class="col-12 col-md-4 text-left">
 	        <h4>
-                {$text[pripady]|firstUpper} {ifset $case_count}({$case_count}){/ifset}
+                {$text['menuCases']|firstUpper} {ifset $caseCount}({$caseCount}){/ifset}
             </h4>
 	    </div>
         <div class="col-12 col-md-8 text-right header-wrapper-right">
             <input type="hidden" name="filter[placeholder]" />
+            <div class="header-switch">
+                <label class="toggle-control">
+                    <input type="checkbox" name="filter[archived]" {if (isset($filter['archived']) AND $filter['archived'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                    <span class="control"></span>
+                </label>
+                {$text['iarchiv']}
+            </div>
             <div class="header-switch">
                 <label class="toggle-control">
                     <input type="checkbox" name="filter[stat]" {if (isset($filter['stat']) AND $filter['stat'] == 'on') } checked {/if} onchange="this.form.submit()" />
@@ -21,13 +28,24 @@
                 </label>
                 {$text['jennove']}
             </div>
-            <div class="header-switch">
-                <label class="toggle-control">
-                    <input type="checkbox" name="filter[secret]" {if (isset($filter['secret']) AND $filter['secret'] == 'on') } checked {/if} onchange="this.form.submit()" />
-                    <span class="control"></span>
-                </label>
-                {$text['itajne']}
-            </div>
+            {if $user['aclSecret'] > 0}
+                <div class="header-switch">
+                    <label class="toggle-control">
+                        <input type="checkbox" name="filter[secret]" {if (isset($filter['secret']) AND $filter['secret'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                        <span class="control"></span>
+                    </label>
+                    {$text['itajne']}
+                </div>
+            {/if}
+            {if $user['aclRoot'] > 0}
+                <div class="header-switch">
+                    <label class="toggle-control">
+                        <input type="checkbox" name="filter[deleted]" {if (isset($filter['deleted']) AND $filter['deleted'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                        <span class="control"></span>
+                    </label>
+                    {$text['filterDeleteInclude']}
+                </div>
+            {/if}
         </div>
     </form>
     <div class="row mb-1">

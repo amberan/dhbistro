@@ -1,6 +1,5 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
-use Tracy\Debugger;
 
 
 latteDrawTemplate("header");
@@ -8,12 +7,12 @@ latteDrawTemplate("header");
 $latteParameters['title'] = 'Nová osoba';
 
 mainMenu();
-    sparklets('<a href="/persons/">osoby</a> &raquo; <strong>nová osoba</strong>');
+sparklets('<a href="/persons/">osoby</a> &raquo; <strong>nová osoba</strong>');
 ?>
 <div id="obsah">
 	<fieldset><legend><strong>Nová osoba</strong></legend>
 	<form action="/persons/" method="post" id="inputform" enctype="multipart/form-data">
-<?php  if ($user['aclGamemaster'] == 1) {
+<?php if ($user['aclGamemaster'] == 1) {
     $sql = 'SELECT '.DB_PREFIX.'person.name, '.DB_PREFIX.'person.surname, '.DB_PREFIX.'user.userName , '.DB_PREFIX.'user.userId
                     FROM '.DB_PREFIX.'user
                     JOIN '.DB_PREFIX.'person ON '.DB_PREFIX.'user.personId = '.DB_PREFIX.'person.id
@@ -31,9 +30,9 @@ mainMenu();
 				<div>
 				<h3><label for="regusr">Vytvořil:</label></h3>
 				<select name="regusr" id="regusr">
-<?php           while ($rec = mysqli_fetch_assoc($res)) {
-        echo '<option value="'.$rec['userId'].'" '.($rec['userId'] == $rec_p['regid'] ? ' selected' : '').'>'.stripslashes($rec['userName']).'       -      '.stripslashes($rec['surname']).', '.stripslashes($rec['name']).'</option>';
-    } ?>
+<?php while ($rec = mysqli_fetch_assoc($res)) {
+    echo '<option value="'.$rec['userId'].'" '.($rec['userId'] == @$rec_p['regid'] ? ' selected' : '').'>'.stripslashes($rec['userName']).'       -      '.stripslashes($rec['surname']).', '.stripslashes($rec['name']).'</option>';
+} ?>
 				</select>
 				</div>
 				<div class="clear">&nbsp;</div>
@@ -101,8 +100,9 @@ mainMenu();
 					<h3><label>&nbsp;</label></h3><input type="radio" name="secret" value="1">ano
 				<div class="clear">&nbsp;</div>
 				<div class="clear">&nbsp;</div>
-				<h3><label for="personRoof">strop</label></h3><input type="checkbox" name="personRoof"/>
-			</div>
+				<h3><label for="personRoof">strop</label></h3><input type="checkbox" name="personRoof"/></h3><br/><br/>
+				<h3><label for="dead">mrtvý</label></h3><input type="checkbox" name="dead"/></h3>
+            </div>
 			<!-- end of #info -->
 		</fieldset>
 		<!-- náseduje popis osoby -->
