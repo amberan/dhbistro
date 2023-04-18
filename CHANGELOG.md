@@ -105,6 +105,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 ## 1.11.x
 ### Added
 - Feature: report restoration #256
+- Feature: counting of results on search #119
 ### Fixed
 - Fixed: twice displayed 'Dosažení stropu zaznamenáno' #256
 - Fixed: linked webapps opening in new tab #230
@@ -115,6 +116,8 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Fixed: new user creation #251 #182
 - Fixed: report deletion #256
 - Fixed: report listing event date #266
+- Fixed: notes on secret items in search #202 #253
+- Fixed: adding notes to symbols #116 #110
 
 ## 1.11 - 2023-02-09
 ### Security
