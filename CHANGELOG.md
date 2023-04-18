@@ -102,7 +102,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 ### Security
 - Feature: update of composer libs and php to 8.2.2 #270
 
-## 1.11.x
+## 1.11.1 - 2023-02-14
 ### Added
 - Feature: report restoration #256
 - Feature: counting of results on search #119
@@ -118,6 +118,11 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Fixed: report listing event date #266
 - Fixed: notes on secret items in search #202 #253
 - Fixed: adding notes to symbols #116 #110
+### Security
+- Update: Latte 3.0 #269
+- Update: Tracy 2.9 #269
+- Update: ECS 11.2.8 #269
+- Update: html-to-markdown 5.1 #269
 
 ## 1.11 - 2023-02-09
 ### Security
