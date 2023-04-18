@@ -1,6 +1,5 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
-use Tracy\Debugger;
 
 
 latteDrawTemplate("header");
@@ -47,19 +46,19 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
 				<h3><label for="status">Stav:</label></h3>
 				<select name="status" id="status">
 					<option value="0"<?php if ($rec_c['status'] == 0) {
-                echo ' selected="selected"';
-            } ?>>otevřený</option>
+					    echo ' selected="selected"';
+					} ?>>otevřený</option>
 					<option value="1"<?php if ($rec_c['status'] == 1) {
-                echo ' selected="selected"';
-            } ?>>uzavřený</option>
+					    echo ' selected="selected"';
+					} ?>>uzavřený</option>
 				</select>
 				<div class="clear">&nbsp;</div>
-<?php 			if ($user['aclGamemaster'] == 1) {
-                echo '
+<?php if ($user['aclGamemaster'] == 1) {
+    echo '
 				<h3><label for="notnew">Není nové</label></h3>
 					<input type="checkbox" name="notnew"/><br/>
 				<div class="clear">&nbsp;</div>';
-            } ?>
+} ?>
 			</div>
 			<!-- end of #info -->
 			<fieldset><legend><strong>Obsah:</strong></legend>
@@ -78,7 +77,7 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
 			<input type="submit" value="Upravit řešitele" name="setsolver" class="submitbutton editbutton" title="Upravit řešitele" />
 		</form>
 		<p><?php
-            $sql = "SELECT ".DB_PREFIX."user.userId AS 'id', ".DB_PREFIX."user.userName AS 'login' FROM ".DB_PREFIX."c2s, ".DB_PREFIX."user WHERE ".DB_PREFIX."user.userId=".DB_PREFIX."c2s.idsolver AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userDeleted=0 ORDER BY ".DB_PREFIX."user.userName ASC";
+$sql = "SELECT ".DB_PREFIX."user.userId AS 'id', ".DB_PREFIX."user.userName AS 'login' FROM ".DB_PREFIX."c2s, ".DB_PREFIX."user WHERE ".DB_PREFIX."user.userId=".DB_PREFIX."c2s.idsolver AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userDeleted=0 ORDER BY ".DB_PREFIX."user.userName ASC";
             $pers = mysqli_query($database, $sql);
             $solvers = [];
             while ($perc = mysqli_fetch_assoc($pers)) {
@@ -207,18 +206,18 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
             $res_n = mysqli_query($database, $sql_n);
             while ($rec_n = mysqli_fetch_assoc($res_n)) { ?>
 			<li class="Clear"><a href="readnote.php?rid=<?php echo $rec_n['id']; ?>&amp;idtable=3"><?php echo stripslashes($rec_n['title']); ?></a> - <?php echo stripslashes($rec_n['user']);
-            if ($rec_n['secret'] == 0) { ?> (veřejná)<?php }
-            if ($rec_n['secret'] == 1) { ?> (tajná)<?php }
-            if ($rec_n['secret'] == 2) { ?> (soukromá)<?php }
-            ?><span class="poznamka-edit-buttons"><?php
-            if (($rec_n['iduser'] == $user['userId']) || ($user['aclCase']>0)) {
-                echo ' <a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=3" title="upravit"><span class="button-text">upravit poznámku</span></a>';
-            }
-            if (($rec_n['iduser'] == $user['userId']) || ($user['aclCase'] > 1)) {
-                echo ' <a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editgroup.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec_n['title'])."&quot; náležící k hlášení?');".'" title="smazat"><span class="button-text">smazat poznámku</span></a>';
-            }
-            ?></span></li><?php
-        } ?>
+                if ($rec_n['secret'] == 0) { ?> (veřejná)<?php }
+                if ($rec_n['secret'] == 1) { ?> (tajná)<?php }
+                if ($rec_n['secret'] == 2) { ?> (soukromá)<?php }
+                ?><span class="poznamka-edit-buttons"><?php
+                if (($rec_n['iduser'] == $user['userId']) || ($user['aclCase'] > 0)) {
+                    echo ' <a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=3" title="upravit"><span class="button-text">upravit poznámku</span></a>';
+                }
+                if (($rec_n['iduser'] == $user['userId']) || ($user['aclCase'] > 1)) {
+                    echo ' <a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editgroup.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec_n['title'])."&quot; náležící k hlášení?');".'" title="smazat"><span class="button-text">smazat poznámku</span></a>';
+                }
+                ?></span></li><?php
+            } ?>
 		</ul>
 	</fieldset>
 </div>
@@ -230,8 +229,8 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
         header('location: index.php');
     }
 } else {
-    $_SESSION['message'] = $text['accessdeniedrecorded'];
+    $_SESSION['message'] = $text['notificationHttp401'];
     header('location: index.php');
 }
-    latteDrawTemplate("footer");
+latteDrawTemplate("footer");
 ?>

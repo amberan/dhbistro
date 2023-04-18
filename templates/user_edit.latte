@@ -9,7 +9,7 @@
         <div class="row mb-1">
             <div class="col-6 text-left">
                 <h4>
-                    {$text['upravituzivatele']}
+                    {$text['subMenuActionUsersEdit']}
                 </h4>
             </div>
             <div class="col-6 text-right">
@@ -57,20 +57,20 @@
         {else}
             <div  class="col-12 col-md-3">
                 {if @$userEdit['userId'] != $user['userId']}
-                    <a class="btn btn-sm  btn-info mb-1" href="/users/reset/{@$userEdit['userId']}" onclick="return confirm('{$text['opravdugenerovatheslo']} {@$userEdit['userName']}?')">{$text[noveheslo]}</a>
+                    <a class="btn btn-sm  btn-info mb-1" href="/users/reset/{@$userEdit['userId']}" onclick="return confirm('{$text['actionConfirmationGeneratePassword']} {@$userEdit['userName']}?')">{$text[noveheslo]}</a>
                     {if @$userEdit['userSuspended'] == "1"}
-                        <a class="btn btn-sm btn-brick btn-success mb-1 mr-1" href="/users/unlock/{@$userEdit['userId']}" onclick="return confirm('{$text['opravduodemnkout']} {@$userEdit['userName']}?')" alt="{$text[odemnkoutuzivatele]}">
+                        <a class="btn btn-sm btn-brick btn-success mb-1 mr-1" href="/users/unlock/{@$userEdit['userId']}" onclick="return confirm('{$text['actionConfirmationUnlock']} {@$userEdit['userName']}?')" alt="{$text[actionUnlock]}">
                         {php inject_svg("images/icons/lock-open-solid.svg")}
                     {else}
-                        <a class="btn btn-sm btn-brick btn-warning mb-1 mr-1" href="/users/lock/{@$userEdit['userId']}" onclick="return confirm('{$text['opravduzamknout']} {@$userEdit['userName']}?')" alt="{$text[zamknoutuzivatele]}">
+                        <a class="btn btn-sm btn-brick btn-warning mb-1 mr-1" href="/users/lock/{@$userEdit['userId']}" onclick="return confirm('{$text['actionConfirmationLock']} {@$userEdit['userName']}?')" alt="{$text[actionLock]}">
                         {php inject_svg("images/icons/lock-solid.svg")}
                     {/if}
                         </a>
                     {if @$userEdit[userDeleted] == 0}
-                        <a class="btn btn-sm btn-brick btn-danger mb-1" href="/users/delete/{@$userEdit['userId']}" onclick="return confirm('{$text['opravdusmazat']} {@$userEdit['userName']}?')" alt="{$text[smazatuzivatele]}">
+                        <a class="btn btn-sm btn-brick btn-danger mb-1" href="/users/delete/{@$userEdit['userId']}" onclick="return confirm('{$text['actionConfirmationRemove']} {@$userEdit['userName']}?')" alt="{$text[actionRemove]}">
                         {php inject_svg("images/icons/trash-solid.svg")}
                     {elseif @$userEdit['userDeleted'] == 1 && $user['aclRoot']}
-                        <a class="btn btn-sm btn-brick btn-success mb-1" href="/users/restore/{@$userEdit['userId']}" onclick="return confirm('{$text['opravduobnovit']} {@$userEdit['userName']}?')" alt="{$text[obnovituzivatele]}">
+                        <a class="btn btn-sm btn-brick btn-success mb-1" href="/users/restore/{@$userEdit['userId']}" onclick="return confirm('{$text['actionConfirmationRestore']} {@$userEdit['userName']}?')" alt="{$text[actionRestore]}">
                         {php inject_svg("images/icons/recycle.svg")}
                     {/if}
                         </a>
@@ -91,9 +91,9 @@
                         </div>
                         <div class="input-group-append" style="flex-grow: 1;">
                             <select class="w-100" name="aclReport" id="aclReport">
-                                <option value="0" {if @$userEdit['aclReport'] == 0 } selected="selected"{/if}>{$text['cteni']}</option>
-                                <option value="1" {if @$userEdit['aclReport'] == 1} selected="selected"{/if}>{$text['zapis']}</option>
-                                <option value="2" {if @$userEdit['aclReport'] == 2} selected="selected"{/if}>{$text['spravce']}</option>
+                                <option value="0" {if @$userEdit['aclReport'] == 0 } selected="selected"{/if}>{$text['aclLevel'][1]}</option>
+                                <option value="1" {if @$userEdit['aclReport'] == 1} selected="selected"{/if}>{$text['aclLevel'][2]}</option>
+                                <option value="2" {if @$userEdit['aclReport'] == 2} selected="selected"{/if}>{$text['aclLevel'][3]}</option>
                             </select>
                         </div>
                     </div>
@@ -107,9 +107,9 @@
                         </div>
                         <div class="input-group-append" style="flex-grow: 1;">
                             <select class="w-100" name="aclPerson" id="aclPerson">
-                                <option value="0" {if @$userEdit['aclPerson'] == 0 } selected="selected"{/if}>{$text['cteni']}</option>
-                                <option value="1" {if @$userEdit['aclPerson'] == 1} selected="selected"{/if}>{$text['zapis']}</option>
-                                <option value="2" {if @$userEdit['aclPerson'] == 2} selected="selected"{/if}>{$text['spravce']}</option>
+                                <option value="0" {if @$userEdit['aclPerson'] == 0 } selected="selected"{/if}>{$text['aclLevel'][1]}</option>
+                                <option value="1" {if @$userEdit['aclPerson'] == 1} selected="selected"{/if}>{$text['aclLevel'][2]}</option>
+                                <option value="2" {if @$userEdit['aclPerson'] == 2} selected="selected"{/if}>{$text['aclLevel'][3]}</option>
                             </select>
                         </div>
                     </div>
@@ -123,9 +123,9 @@
                         </div>
                         <div class="input-group-append" style="flex-grow: 1;">
                             <select class="w-100" name="aclCase" id="aclCase">
-                                <option value="0" {if @$userEdit['aclCase'] == 0 } selected="selected"{/if}>{$text['cteni']}</option>
-                                <option value="1" {if @$userEdit['aclCase'] == 1} selected="selected"{/if}>{$text['zapis']}</option>
-                                <option value="2" {if @$userEdit['aclCase'] == 2} selected="selected"{/if}>{$text['spravce']}</option>
+                                <option value="0" {if @$userEdit['aclCase'] == 0 } selected="selected"{/if}>{$text['aclLevel'][1]}</option>
+                                <option value="1" {if @$userEdit['aclCase'] == 1} selected="selected"{/if}>{$text['aclLevel'][2]}</option>
+                                <option value="2" {if @$userEdit['aclCase'] == 2} selected="selected"{/if}>{$text['aclLevel'][3]}</option>
                             </select>
                         </div>
                     </div>
@@ -139,9 +139,9 @@
                         </div>
                         <div class="input-group-append" style="flex-grow: 1;">
                             <select class="w-100" name="aclGroup" id="aclGroup">
-                                <option value="0" {if @$userEdit['aclGroup'] == 0 } selected="selected"{/if}>{$text['cteni']}</option>
-                                <option value="1" {if @$userEdit['aclGroup'] == 1} selected="selected"{/if}>{$text['zapis']}</option>
-                                <option value="2" {if @$userEdit['aclGroup'] == 2} selected="selected"{/if}>{$text['spravce']}</option>
+                                <option value="0" {if @$userEdit['aclGroup'] == 0 } selected="selected"{/if}>{$text['aclLevel'][1]}</option>
+                                <option value="1" {if @$userEdit['aclGroup'] == 1} selected="selected"{/if}>{$text['aclLevel'][2]}</option>
+                                <option value="2" {if @$userEdit['aclGroup'] == 2} selected="selected"{/if}>{$text['aclLevel'][3]}</option>
                             </select>
                         </div>
                     </div>
@@ -155,9 +155,9 @@
                         </div>
                         <div class="input-group-append" style="flex-grow: 1;">
                             <select class="w-100" name="aclSymbol" id="aclSymbol">
-                                <option value="0" {if @$userEdit['aclSymbol'] == 0 } selected="selected"{/if}>{$text['cteni']}</option>
-                                <option value="1" {if @$userEdit['aclSymbol'] == 1} selected="selected"{/if}>{$text['zapis']}</option>
-                                <option value="2" {if @$userEdit['aclSymbol'] == 2} selected="selected"{/if}>{$text['spravce']}</option>
+                                <option value="0" {if @$userEdit['aclSymbol'] == 0 } selected="selected"{/if}>{$text['aclLevel'][1]}</option>
+                                <option value="1" {if @$userEdit['aclSymbol'] == 1} selected="selected"{/if}>{$text['aclLevel'][2]}</option>
+                                <option value="2" {if @$userEdit['aclSymbol'] == 2} selected="selected"{/if}>{$text['aclLevel'][3]}</option>
                             </select>
                         </div>
                     </div>
@@ -356,7 +356,7 @@
                     {/foreach}
                 {else}
                     <p class="h6 small">
-                        {$text['nemaneuzavrenepripady']}
+                        {$text['notificationListEmpty']}
                     </p>
                 {/if}
             </div>

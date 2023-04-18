@@ -69,9 +69,6 @@ if (is_numeric($_REQUEST['rid']) && ($user['aclPerson'] || $user['aclSymbol'])) 
             default: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1))  ';
         }
         // formular filtru
-        function filter(): void
-        {
-            global $filterSort, $sportraits, $farchiv, $fdead;
             echo '<form action="addsy2p.php" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
@@ -92,8 +89,6 @@ if (is_numeric($_REQUEST['rid']) && ($user['aclPerson'] || $user['aclSymbol'])) 
         </form>
 
         <form action="addsymbols.php" method="post" class="otherform">';
-        }
-        filter();
         // vypis osob
         $sqlFilter = DB_PREFIX."person.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."person.secret<=".$user['aclSecret'];
         $sql = "SELECT ".DB_PREFIX."person.phone AS 'phone', ".DB_PREFIX."person.secret AS 'secret', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname', ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.symbol AS 'symbol'
@@ -117,7 +112,7 @@ if (is_numeric($_REQUEST['rid']) && ($user['aclPerson'] || $user['aclSymbol'])) 
         $even = 0;
         while ($rec = mysqli_fetch_assoc($res)) {
             echo '<tr class="'.($even % 2 == 0 ? 'even' : 'odd').'"><td><input type="radio" name="person" value="'.$rec['id'].'" class="checkbox"'.($rec['iduser'] ? ' checked="checked"' : '').' /></td>
-'.($sportraits ? '<td><img src="file/portrait/'.$rec['id'].'" alt="portrét chybí" /></td>' : '').($ssymbols ? '<td><img src="file/symbol/'.$rec['symbol'].'" alt="symbol chybí" /></td>' : '').'
+'.($sportraits ? '<td><img  loading="lazy" src="file/portrait/'.$rec['id'].'" alt="portrét chybí" /></td>' : '').($ssymbols ? '<td><img  loading="lazy" src="file/symbol/'.$rec['symbol'].'" alt="symbol chybí" /></td>' : '').'
 	<td>'.($rec['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$rec['id'].'">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a></span>' : '<a href="readperson.php?rid='.$rec['id'].'">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a>').'</td>
 	</tr>';
             $even++;

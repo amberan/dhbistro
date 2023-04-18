@@ -3,27 +3,36 @@
 
 function AuthorDB($userId)
 {
-    global $database,$text;
-    $authorSql = 'SELECT ' . DB_PREFIX . 'user.userName, concat( ' . DB_PREFIX . 'person.name, " ", ' . DB_PREFIX . 'person.surname) as personName
-            FROM ' . DB_PREFIX . 'user
-            LEFT JOIN ' . DB_PREFIX . 'person ON ' . DB_PREFIX . 'user.personId = ' . DB_PREFIX . 'person.id
-            WHERE ' . DB_PREFIX . 'user.userId=' . $userId;
-    $authorQuery = mysqli_query($database, $authorSql);
-    if (mysqli_num_rows($authorQuery) > 0) {
-        $authorResult = mysqli_fetch_assoc($authorQuery);
-        return Author(
-            $authorResult['userName'],
-            $authorResult['personName']
-        );
+    global $database,$text,$user;
+    if (is_numeric($userId)) {
+        $authorSql = 'SELECT ' . DB_PREFIX . 'user.userName,
+                    concat( ' . DB_PREFIX . 'person.name, " ", ' . DB_PREFIX . 'person.surname) as personName,
+                    ' . DB_PREFIX . 'person.secret
+                FROM ' . DB_PREFIX . 'user
+                LEFT JOIN ' . DB_PREFIX . 'person ON ' . DB_PREFIX . 'user.personId = ' . DB_PREFIX . 'person.id
+                WHERE ' . DB_PREFIX . 'user.userId=' . $userId;
+        $authorQuery = mysqli_query($database, $authorSql);
+        if (mysqli_num_rows($authorQuery) > 0) {
+            $authorResult = mysqli_fetch_assoc($authorQuery);
+            if ($authorResult['secret'] > $user['aclSecret']) {
+                $authorResult['personName'] == '';
+            }
+            return Author(
+                $authorResult['userName'],
+                $authorResult['personName']
+            );
+        } else {
+            return $text['notificationInformationUnknown'];
+        }
     } else {
-        return $text['warningInformationUnavailable'];
+        return $text['notificationInformationUnknown'];
     }
 }
 
 
 function Author($userName,$personName)
 {
-    if ($personName) {
+    if (isset($personName) && strlen($personName) > 0) {
         return $personName;
     } else {
         return $userName;
@@ -48,7 +57,7 @@ function userRead($userId): array
     if (mysqli_num_rows($query) > 0) {
         $user = mysqli_fetch_assoc($query);
     } else {
-        $user[] = $text['zaznamnenalezen'];
+        $user[] = $text['notificationRecordNotFound'];
     }
 
     return $user;
@@ -79,14 +88,14 @@ function userList($where = 1): array
     if (mysqli_num_rows($query) > 0) {
         while ($users = mysqli_fetch_assoc($query)) {
             if ($users['lastLogin'] < 1) {
-                $users['lastLogin'] = $text['nikdy'];
+                $users['lastLogin'] = $text['notificationInformationUnknown'];
             } else {
                 $users['lastLogin'] = webdatetime($users['lastLogin']);
             }
             $userList[] = $users;
         }
     } else {
-        $userList[] = $text['prazdnyvypis'];
+        $userList[] = $text['notificationListEmpty'];
     }
 
     return $userList;

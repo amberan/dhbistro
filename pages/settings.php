@@ -2,7 +2,7 @@
 
 
 
-$latteParameters['title'] = $text['nastaveni'];
+$latteParameters['title'] = $text['menuSettings'];
 
 if ((isset($_POST['userid']) and isset($_POST['edituser']) and !is_numeric($_REQUEST['timeout'])) and ($user['userId'] == $_POST['userid'])) {
     $latteParameters['message'] = $text['timeoutnenicislo'];

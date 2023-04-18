@@ -1,33 +1,33 @@
 <?php
 
-$menu[] = [$text['aktuality'], "/", searchTable(5)];
-$menu[] = [$text['nastenka'], "/board/", searchTable(6)];
-$menu[] = [$text['hlaseni'], "/reports/", searchTable(4)];
-$menu[] = [$text['osoby'], "/persons/", searchTable(1)];
-$menu[] = [$text['symboly'], "/symbols/", searchTable(7)];
-$menu[] = [$text['pripady'], "/cases/", searchTable(3)];
-$menu[] = [$text['skupiny'], "/groups/", searchTable(2)];
+$menu[] = [$text['menuNews'], "/", unreadItems(5)];
+$menu[] = [$text['menuDashboard'], "/board/", unreadItems(6)];
+$menu[] = [$text['menuReports'], "/reports/", unreadItems(4)];
+$menu[] = [$text['menuPersons'], "/persons/", unreadItems(1)];
+$menu[] = [$text['menuSymbols'], "/symbols/", unreadItems(7)];
+$menu[] = [$text['menuCases'], "/cases/", unreadItems(3)];
+$menu[] = [$text['menuGroups'], "/groups/", unreadItems(2)];
 
-$menuSub[] = [$text['menu-zlobody'], "/evilpoints.php", 0];
+$menuSub[] = [$text['menuPoints'], "/evilpoints.php", 0];
 if (isset($user) && $user['aclUser'] > 0) {
-    $menuSub[] = [$text['spravauzivatelu'], "/users", 0];
+    $menuSub[] = [$text['menuUsers'], "/users", 0];
 }
 if (isset($user) && $user['aclUser'] > 0) {
-    $menuSub[] = [$text['casovadostupnost'], "/doodle.php", 0];
+    $menuSub[] = [$text['menuDoodle'], "/doodle.php", 0];
 } else {
     $doodle = mysqli_fetch_assoc(mysqli_query($database, "SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1"));
-    $menuSub[] = [$text['casovadostupnost'], @$doodle['link'], 0];
+    $menuSub[] = [$text['menuDoodle'], @$doodle['link'], 0];
 }
 if (isset($user) && $user['aclAudit'] > 0) {
-    $menuSub[] = [$text['audit'], "/audit.php", 0];
+    $menuSub[] = [$text['menuAudit'], "/audit.php", 0];
 }
-$menuSub[] = [$text['nastaveni'], "/settings", 0];
+$menuSub[] = [$text['menuSettings'], "/settings", 0];
 if (isset($user) && $user['aclRoot'] > 0) {
-    $menuSub[] = [$text['zalohovani'], '/backup', 0];
+    $menuSub[] = [$text['menuBackups'], '/backup', 0];
 }
-$menuSub[] = [$text['odhlasit'], "/logout", 0];
+$menuSub[] = [$text['menuLogout'], "/logout", 0];
 
 
-$menuLinks[] = [$text['forum'], "http://www.prazskahlidka.cz/forums/index.php", 0, "images/icons/Icon_forum.svg"];
-$menuLinks[] = [$text['banka'], "http://banka.prazskahlidka.cz", 0, "images/icons/Icon_bank.svg"];
-$menuLinks[] = [$text['prazskahlidka'], "http://prazskahlidka.cz", 0, "images/icons/Icon_web.svg"];
+$menuLinks[] = [$text['menuForum'], "http://www.prazskahlidka.cz/forums/index.php", 0, "images/icons/Icon_forum.svg"];
+$menuLinks[] = [$text['menuBank'], "http://banka.prazskahlidka.cz", 0, "images/icons/Icon_bank.svg"];
+$menuLinks[] = [$text['menuGameWebsite'], "http://prazskahlidka.cz", 0, "images/icons/Icon_web.svg"];

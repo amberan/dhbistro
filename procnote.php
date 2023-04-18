@@ -36,7 +36,8 @@ if (isset($_POST['noteid'], $_POST['editnote']) &&
         unreadRecords($_POST['idtable'], $_POST['itemid']);
     }
     sparklets('<a href="./'.$sourceurl.'">'.$sourcename.'</a> &raquo; <strong>úprava poznámky</strong> &raquo; <strong>uložení změn</strong>');
-    mysqli_query($database, "UPDATE ".DB_PREFIX."note SET title='".$_POST['title']."', datum='".Time()."', note='".$_POST['note']."', secret='".$_POST['nsecret']."', iduser='".$_POST['nowner']."' WHERE id=".$_POST['noteid']);
+    $updateSql = "UPDATE " . DB_PREFIX . "note SET title='" . $_POST['title'] . "', datum='" . Time() . "', note='" . $_POST['note'] . "', secret='" . $_POST['nsecret'] . "', iduser='" . $_POST['nowner'] . "' WHERE id=" . $_POST['noteid'];
+    mysqli_query($database, $updateSql);
     echo '<div id="obsah"><p>Poznámka upravena.</p></div>';
     latteDrawTemplate("footer");
 } else {
@@ -74,16 +75,16 @@ if (isset($_POST['noteid'], $_POST['editnote']) &&
 if (isset($_POST['setnote'])) {
     if (!preg_match('/^[[:blank:]]*$/i', $_POST['note'])) {
         authorizedAccess($_POST['tableid'], 7, $_POST['itemid']);
-        $secret = 0;
-        if (isset($_POST['secret'])) {
-            $secret = 1;
-        }
-        if (isset($_POST['private'])) {
-            $secret = 2;
-        }
+        // $secret = 0;
+        // if (isset($_POST['secret'])) {
+        //     $secret = 1;
+        // }
+        // if (isset($_POST['private'])) {
+        //     $secret = 2;
+        // }
         $createSql = "INSERT INTO ".DB_PREFIX."note (note, title, datum, iduser, idtable, iditem, secret, deleted)
-            VALUES('".$_POST['note']."','".$_POST['title']."','".Time()."','".$user['userId']."','".$_POST['tableid']."','".$_POST['itemid']."',".$secret.",0)";
-        //     mysqli_query($database, $createSql);
+            VALUES('".$_POST['note']."','".$_POST['title']."','".Time()."','".$user['userId']."','".$_POST['tableid']."','".$_POST['itemid']."',".$_POST['secret'].",0)";
+        mysqli_query($database, $createSql);
         $_SESSION['message'] = "Poznámka uložena";
         if (!isset($_POST['nnotnew'])) {
             unreadRecords($_POST['tableid'], $_POST['itemid']);

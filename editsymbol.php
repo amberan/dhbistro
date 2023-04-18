@@ -38,7 +38,7 @@ if (is_numeric($_REQUEST['rid']) && $user['aclSymbol']) {
 			</datalist>
 		<fieldset class="symbol"><legend><strong>Symbol</strong></legend>
 		<?php if ($rec_s['symbol'] == null) { ?><img src="#" alt="symbol chybí" title="symbol chybí" id="ssymbolimg" class="noname"/>
-		<?php } else { ?><img src="file/symbol/<?php echo $_REQUEST['rid']; ?>" alt="symbol" id="ssymbolimg" />
+		<?php } else { ?><img  loading="lazy" src="file/symbol/<?php echo $_REQUEST['rid']; ?>" alt="symbol" id="ssymbolimg" />
 		<?php } ?>
 			<div id="info">
 				<h3><label for="symbol">Nový&nbsp;symbol:</label></h3><input type="file" name="symbol" id="symbol" /><br />
@@ -113,7 +113,7 @@ if ($user['aclGamemaster'] == 1) {
         while ($perc = mysqli_fetch_assoc($pers)) {
             $i++;
             if ($i == 1) { ?>
-		<ul id=""><?php
+		<br><br><ul id=""><?php
             } ?>
 			<li><a href="readcase.php?rid=<?php echo $perc['id']; ?>"><?php echo $perc['title']; ?></a></li>
 		<?php
@@ -150,7 +150,7 @@ if ($user['aclGamemaster'] == 1) {
         while ($perc = mysqli_fetch_assoc($pers)) {
             $i++;
             if ($i == 1) { ?>
-		<ul id=""><?php
+		<br><br><ul id=""><?php
             } ?>
 			<li><a href="/reports/<?php echo $perc['id']; ?>"><?php echo $perc['label']; ?></a></li>
 		<?php

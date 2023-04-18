@@ -1,57 +1,131 @@
 <?php
 
-//1.11.2
-$text['notificationUpdated'] = 'Záznam uložena!';
-$text['notificationNotUpdated'] = 'Záznam se nepodařilo uložit!';
-$text['notificationDeleted'] = 'Záznam smazán!';
-$text['notificationNotDeleted'] = 'Záznam se nepodařilo smazat!';
-$text['notificationRestored'] = 'Záznam úspešně obnoven!';
-$text['notificationNotRestored'] = 'Záznam se nepodařilo obnovit!';
-$text['notificationCreated'] = 'Záznam vytvořen!';
-$text['notificationNotCreated'] = 'Záznam se nepodařilo vytvořit!';
+# NOTIFICATION
 $text['notificationHttp401'] = 'K této akci nemáte oprávnění!';
 $text['notificationListEmpty'] = 'Nebyly nalezeny žádné položky!';
 $text['notificationRecordNotFound'] = 'Požadovaný záznam nebyl nalezen!';
+$text['notificationInformationUnknown'] = 'nedostupné';
 
-$text['subtitleNewsAdd'] = 'přidat aktualitu';
-$text['subtitleNewsEdit'] = 'upravit aktualitu';
+$text['notificationCreated'] = 'Záznam vytvořen!';
+$text['notificationNotCreated'] = 'Záznam se nepodařilo vytvořit!';
+$text['notificationUpdated'] = 'Záznam upraven!';
+$text['notificationNotUpdated'] = 'Záznam se nepodařilo upravit!';
+$text['notificationArchived'] = 'Záznam byl archivován!';
+$text['notificationNotArchived'] = 'Záznam se nepodařilo archivovat!';
+$text['notificationUnarchived'] = 'Záznam byl vyjmut z archívu!';
+$text['notificationNotUnarchived'] = 'Záznam se nepodačilo vyjmout z archívu!';
+$text['notificationDeleted'] = 'Záznam smazán!';
+$text['notificationNotDeleted'] = 'Záznam se nepodařilo odstranit!';
+$text['notificationRestored'] = 'Záznam úspešně obnoven!';
+$text['notificationNotRestored'] = 'Záznam se nepodařilo obnovit!';
 
-$text['warningInformationUnavailable'] = 'Informace nedostupná';
+# MENU/SUBMENU/TITLE
+$text['menuTitle'] = 'BIStro';
+$text['menuNews'] = 'aktuality';
+$text['subMenuActionNewsList'] = 'zobrazit aktuality';
+$text['subMenuActionNewsAdd'] = 'přidat aktualitu';
+$text['subMenuActionNewsEdit'] = 'upravit aktualitu';
+$text['menuDashboard'] = 'nástěnka';
+$text['subMenuActionDashboardEdit'] = 'upravit nástěnku';
+$text['menuReports'] = 'hlášení';
+$text['menuPersons'] = 'osoby';
+$text['menuSymbols'] = 'symboly';
+$text['menuCases'] = 'případy';
+$text['menuGroups'] = 'skupiny';
+$text['menuForum'] = 'Fórum/Analytika';
+$text['menuBank'] = 'BTB Banka';
+$text['menuGameWebsite'] = 'Pražská Hlídka';
+$text['menuMarkRead'] = 'označit jako přečtené';
+$text['menuNext'] = 'další';
+$text['menuSearch'] = 'hledat';
+$text['menuPoints'] = 'zlobody';
+$text['menuUsers'] = 'uživatelé';
+$text['subMenuActionUsersAdd'] = 'vytvořit uživatele';
+$text['subMenuActionUsersEdit'] = 'upravit uživatele';
+$text['menuDoodle'] = 'časová dostupnost';
+$text['menuAudit'] = 'audit';
+$text['menuSettings'] = 'nastavení';
+$text['menuBackups'] = 'zálohování';
+$text['menuLogout'] = 'odhlásit';
+$text['headingNotes'] = 'poznámky';
 
-$text['subMenuListNews'] = 'Zobrazit aktuality';
+# ACTION
+$text['actionCreate'] = 'vytvořit';
+$text['actionEdit'] = 'upravit';
+$text['actionArchive'] = 'archivovat';
+$text['actionUnarchive'] = 'odarchivovat';
+$text['actionLock'] = 'uzamknout';
+$text['actionUnlock'] = 'odemknout';
+$text['actionRestore'] = 'obnovit';
+$text['actionRemove'] = 'odstranit';
 
-//QUESTIONS/VERITIFICATIONS
-$text['opravduprecist'] = 'opravdu označit vše jako přečtené?';
-$text['opravdugenerovatheslo'] = 'opravdu vygenerovat nové heslo pro uživatele?';
-$text['opravduodemnkout'] = 'opravdu odemknout uživatele?';
-$text['opravduzamknout'] = 'opravdu zamknout uživatele?';
-$text['opravdusmazat'] = 'opravdu smazat uživatele?';
-$text['opravduobnovit'] = 'opravdu obnovit uživatele?';
-$text['opravdusmazatpripad'] = 'opravdu smazat případ?';
-$text['opravduobnovitpripad'] = 'opravdu obnovit případ?';
-$text['opravdusmazatosobu'] = 'opravdu smazat osobu?';
-$text['opravduobnovitosobu'] = 'opravdu obnovit osobu?';
-$text['opravdusmazatskupinu'] = 'opravdu smazat skupinu?';
-$text['opravduobnovitskupinu'] = 'opravdu obnovit skupinu?';
-$text['opravdusmazatreport'] = 'opravdu smazat hlášení?';
-$text['opravduobnovitreport'] = 'opravdu obnovit hlášení?';
-$text['opravduodpojitsymbol'] = 'opravdu odpojit symbol?';
-$text['opravdusmazatpoznamku'] = 'opravdu smazat poznámku?';
-$text['opravdusmazatsoubor'] = 'opravdu smazat soubor?';
-$text['opravdusmazatsymbol'] = 'opravdu smazat symbol?';
-$text['opravduobnovitsymbol'] = 'opravdu obnovit symbol?';
+# ACTION CONFIRMATION
+$text['actionConfirmationReadAll'] = 'opravdu označit vše jako přečtené?';
+$text['actionConfirmationArchive'] = 'opravdu archivovat';
+$text['actionConfirmationUnarchive'] = 'opravdu vyjmnout z archivu';
+$text['actionConfirmationLock'] = 'opravdu uzamknout';
+$text['actionConfirmationUnlock'] = 'opravdu odemknout';
+$text['actionConfirmationGeneratePassword'] = 'opravdu vygenerovat nové heslo';
+$text['actionConfirmationRemove'] = 'opravdu odstranit';
+$text['actionConfirmationRestore'] = 'opravdu obnovit';
+
+# FILTERS
+$text['filterDeleteInclude'] = 'smazané';
+$text['filterSecretInclude'] = 'tajné';
+$text['filterQrContact'] = 'kontakt k importu';
+
+# PERMISSION
+$text['aclNews'] = 'Aktuality';
+$text['aclBoard'] = 'Nástěnka';
+$text['aclReport'] = $text['menuReports'];
+$text['aclPerson'] = $text['menuPersons'];
+$text['aclSymbol'] = $text['menuSymbols'];
+$text['aclCase'] = $text['menuCases'];
+$text['aclGroup'] = $text['menuGroups'];
+$text['aclUser'] = $text['menuUsers'];
+$text['aclAudit'] = $text['menuAudit'];
+$text['aclHunt'] = 'Licence';
+$text['aclSecret'] = 'Tajné';
+$text['aclGamemaster'] = 'Organizátor';
+$text['aclAPI'] = 'API';
+$text['aclRoot'] = 'Administrátor';
+
+$text['aclLevel'][1] = 'čtení';
+$text['aclLevel'][2] = 'zápis';
+$text['aclLevel'][3] = 'správce';
+
+$text['aclSecretLevel'][0] = 'veřejné';
+$text['aclSecretLevel'][1] = 'tajné';
+$text['aclSecretLevel'][2] = 'soukromé';
+
+# DEFAULT TEXTAREA TEXT
+$text['reportDefaultTask'] = '';
+$text['reportDefaultSummary'] = '';
+$text['reportDefaultCost'] = '';
+$text['reportDefaultImpact'] = '';
+$text['reportDefaultDetail'] = '';
+$text['reportDefaultInput'] = '';
+
+# WHATEVER
+$text['searchResults'] = 'výsledky vyhledávaní';
+$text['connectedTo'] = 'připojeno k';
+
+
+
+
+
+
+
 
 //NOTES
 $text['poznamky'] = 'poznámky';
-$text['smazatpoznamku'] = 'smazat poznámku';
+$text['smazatpoznamku'] = 'odstranit poznámku';
 $text['vytvoritpoznamku'] = 'vytvořit poznámku';
 $text['ulozitpoznamku'] = 'uložit poznámku';
-$text['notePublic'] = 'veřejná';
-$text['notePrivate'] = 'soukromá';
-$text['noteSecret'] = 'tajná';
+
+$text['note'] = 'poznámka';
 
 //REPORT
-$text['hlaseni'] = 'hlášení';
 $text['nedokoncenahlaseni'] = 'rozpracovaná nedokončená hlášení';
 $text['zadnanedokoncenahlaseni'] = 'nemáte žádná nedokončená hlášení';
 $text['vypishlaseni'] = 'výpis hlášení';
@@ -60,15 +134,9 @@ $text['hlasenineniprirazenopripadu'] = 'hlášení není přiřazeno k žádném
 $text['neprirazenesymbolyhlaseni'] = 'nepřiřazené symboly spojené s hlášením';
 $text['osobyprirazenekhlaseni'] = 'osoby přiřazené k hlášení';
 $text['nemanedokoncenahlaseni'] = 'uživatel nemá žádná nedokončená hlášení.';
-$text['reportDefaultTask'] = '';
-$text['reportDefaultSummary'] = '';
-$text['reportDefaultCost'] = '';
-$text['reportDefaultImpact'] = '';
-$text['reportDefaultDetail'] = '';
-$text['reportDefaultInput'] = '';
+
 
 // GENERIC
-$text['bistro'] = 'BIStro';
 $text['poslednizmena'] = 'poslední úprava';
 $text['zmenil'] = 'upravil';
 $text['zmeneno'] = 'upraveno';
@@ -76,17 +144,13 @@ $text['nadpis'] = 'nadpis';
 $text['kategorie'] = 'kategorie';
 $text['obsah'] = 'obsah';
 $text['notifikace'] = 'notifikace';
-$text['zapis'] = 'zápis';
-$text['cteni'] = 'čtení';
-$text['spravce'] = 'správce';
-$text['neznamo'] = 'neznámo';
-$text['nekdydavno'] = 'někdy dávno';
+
 $text['nazev'] = 'název';
 $text['stav'] = 'stav';
 
 //BUTTON/ACTIONS
 $text['upravit'] = 'Upravit';
-$text['smazat'] = 'Smazat';
+$text['smazat'] = 'odstranit';
 $text['obnovit'] = 'Obnovit';
 $text['ulozit'] = 'Uložit';
 $text['ano'] = 'Ano';
@@ -95,35 +159,26 @@ $text['zavrit'] = 'Zavřít';
 $text['skryt'] = 'Skrýt';
 $text['zpristupnit'] = 'Zpřístupnit';
 $text['prihlasit'] = 'Přihlásit';
-$text['precistvse'] = 'Přečíst vše';
-$text['hledat'] = 'Hledat';
-$text['dalsi'] = 'Další';
-$text['odhlasit'] = 'Odhlásit';
-$text['odemnkoutuzivatele'] = 'Odemknout uživatele';
-$text['zamknoutuzivatele'] = 'Zamknout uživatele';
-$text['smazatuzivatele'] = 'Smazat uživatele';
-$text['obnovituzivatele'] = 'Obnovit uživatele';
 $text['zalohovatrucne'] = 'Vytvořit zálohu ručně';
 $text['stahnoutzalohu'] = 'Stáhnout zálohu';
 
-$text['upravitnastenku'] = 'Upravit nástěnku';
 $text['pridatpripad'] = 'Přidat případ';
 $text['editpripad'] = 'Upravit případ';
-$text['smazatpripad'] = 'Smazat případ';
+$text['smazatpripad'] = 'odstranit případ';
 $text['obnovitpripad'] = 'Obnovit případ';
 $text['pridatskupinu'] = 'Přidat skupinu';
 $text['upravitskupinu'] = 'Upravit skupinu';
-$text['smazatskupinu'] = 'Smazat skupinu';
+$text['smazatskupinu'] = 'odstranit skupinu';
 $text['obnovitskupinu'] = 'Obnovit skupinu';
 $text['upravitosobu'] = 'Upravit osobu';
-$text['smazatosobu'] = 'Smazat osobu';
+$text['smazatosobu'] = 'odstranit osobu';
 $text['obnovitosobu'] = 'Obnovit osobu';
 $text['pridatosobu'] = 'Přidat osobu';
 $text['upravitreport'] = 'upravit hlášení';
-$text['smazatreport'] = 'smazat hlášení';
+$text['smazatreport'] = 'odstranit hlášení';
 $text['vyhledatsymbol'] = 'Vyhledat symbol';
 $text['odpojitsymbol'] = 'Odpojit symbol';
-$text['smazatsoubor'] = 'Smazat soubor';
+$text['smazatsoubor'] = 'odstranit soubor';
 $text['pridatsoubor'] = 'Přidat soubor';
 $text['nahratsoubor'] = 'Nahrát soubor';
 $text['vybratsoubor'] = 'Vyberte soubor';
@@ -132,25 +187,16 @@ $text['upravitosoby'] = 'Upravit osoby';
 // LOGIN
 $text['jmeno'] = 'Jméno';
 $text['heslo'] = 'Heslo';
-
 $text['odhlaseniuspesne'] = 'Byl jste úspěsně odhlášen.';
 $text['vytvorenadmin'] = 'Vytvořen uživatel `admin` s heslem: ';
 
 // ERRORS/WARNINGS
-$text['zaznamnenalezen'] = 'Požadovaný záznam nebyl nalezen!';
-$text['prazdnyvypis'] = 'Výpis neobsahuje žádné položky!';
-$text['http401'] = 'You are unauthorized to make this request!';
 $text['uzivatelexistuje'] = 'Uživatel již v databázi existuje, použijte jiné přihlašovací jméno!';
-$text['soubornenalezen'] = 'Soubor nenalezen!';
+
 $text['akcinelzeprovest'] = 'Požadovanou akci se nepodařilo uskutečnit!';
 $text['nuceneodhlaseni'] = 'Z bezpečnostních důvodů jste byl odhlášen!';
-$text['accessdeniedrecorded'] = 'Pokus o neoprávněný přístup zaznamenán!';
 $text['heslanesouhlasi'] = 'Hesla nejsou stejná!';
-$text['uzivatelodstranen'] = 'Uživatelský účet odstraněn!';
-$text['uzivatelobnoven'] = 'Uživatelský účet obnoven!';
-$text['uzivatelzablokovan'] = 'Uživatelský účet zablokován!';
-$text['uzivatelodblokovan'] = 'Uživatelský účet odblokován!';
-$text['nastenkaprazdna'] = 'Veřejná nástěnka nemá žádný obsah!';
+
 $text['nevytvoreno'] = 'Chyba při vytváření, ujistěte se, že jste vše provedli správně a máte potřebná práva!';
 $text['timeoutnenicislo'] = 'Timeout není číslo, nastavení nebylo uloženo!';
 $text['timeoutspatne'] = 'Timeout nesouhlasí, je buď příliš malý nebo příliš velký!';
@@ -164,37 +210,16 @@ $text['nevalidniemail'] = 'Zadaná emailová adresa není platná!';
 $text['prazdnyuzivatel'] = 'Přihlašovací jméno nebylo zadáno!';
 
 //NOTIFICATIONS
+$text['uzivatelzablokovan'] = 'Uživatelský účet zablokován!';
+$text['uzivatelodblokovan'] = 'Uživatelský účet odblokován!';
 $text['heslonastaveno'] = 'Nové heslo nastaveno: ';
 $text['uzivatelvytvoren'] = 'Vytvořen uživatel: ';
-$text['nastenkaupravena'] = 'Nástěnka upravena';
-$text['zalohavytvorena'] = 'Záloha vytvořena';
 
-//NONE
-$text['nemaneuzavrenepripady'] = 'Uživatel nemá žádný přiřazený neuzavřený případ.';
-$text['nemanedokonceneukoly'] = 'Uživatel nemá žádné nedokončené úkoly.';
-$text['zadnenadokoncenepripady'] = 'Nemáte žádný přiřazený neuzavřený případ';
-$text['zadnenedokonceneukoly'] = 'Nemáte žádné nedokončené úkoly';
+$text['zalohavytvorena'] = 'Záloha vytvořena';
 
 // MENU
 $text['point'] = 'zlobod';
-$text['menu-zlobody'] = 'Zlobody';
-$text['uzitecneodkazy'] = 'Odkazy';
-$text['zalohovani'] = 'Zálohování';
-$text['nastaveni'] = 'Nastavení';
-$text['audit'] = 'Audit';
-$text['spravauzivatelu'] = 'Správa uživatelů';
-$text['casovadostupnost'] = 'Časová dostupnost';
-$text['ukoly'] = 'Úkoly';
-$text['forum'] = 'Fórum/Analytika';
-$text['skupiny'] = 'Skupiny';
-$text['pripady'] = 'Případy';
-$text['osoby'] = 'Osoby';
-$text['aktuality'] = 'Aktuality';
-$text['cesta'] = 'Cesta';
 $text['akce'] = 'Akce';
-$text['nastenka'] = 'Nástěnka';
-$text['banka'] = 'BTB Banka';
-$text['prazskahlidka'] = 'Pražská Hlídka';
 
 // NASTAVENI
 $text['uzivatel'] = 'Uživatel';
@@ -209,27 +234,13 @@ $text['email'] = 'E-mail';
 
 // UZIVATELE
 $text['uzivatelskejmeno'] = 'Uživatelské jméno';
-$text['upravituzivatele'] = 'Upravit uživatele';
-$text['vytvorituzivatele'] = 'Vytvořit nového uživatele';
+
+
 $text['cisloosoby'] = 'Hraná osoba';
 $text['prava'] = 'Práva';
 $text['vypisuzivatelu'] = 'Výpis uživatelů';
 $text['naposledy'] = 'Naposledy';
-$text['nikdy'] = 'Nikdy';
-$text['aclRoot'] = 'Administrátor';
-$text['aclUser'] = 'Uživatelé';
-$text['aclSecret'] = 'Tajné';
-$text['aclAudit'] = 'Audit';
-$text['aclGroup'] = 'Skupiny';
-$text['aclPerson'] = 'Osoby';
-$text['aclCase'] = 'Případy';
-$text['aclHunt'] = 'Licence';
-$text['aclReport'] = 'Reporty';
-$text['aclSymbol'] = 'Symboly';
-$text['aclGamemaster'] = 'Organizátor';
-$text['aclAPI'] = 'API';
-$text['aclNews'] = 'Aktuality';
-$text['aclBoard'] = 'Nástěnka';
+
 
 // BACKUP
 $text['existujicizalohy'] = 'Existující zálohy';
@@ -237,10 +248,10 @@ $text['existujicizalohy'] = 'Existující zálohy';
 // NASTENKA / AKTUALITY
 $text['obsahnastenky'] = 'Obsah nástěnky';
 $text['osobninastenka'] = 'Osobní nástěnka';
+$text['nezobrazujetajne'] = 'utajené položky nejsou zobrazeny';
 $text['verejnanastenka'] = 'Veřejná nástěnka';
 $text['zobrazitnastenku'] = 'Zobrazit nástěnku';
 $text['neuzavrenepripady'] = 'Přiřazené neuzavřené případy';
-$text['nedokonceneukoly'] = 'Nedokončené úkoly';
 $text['kategorieherni'] = 'herní';
 $text['kategoriesystemova'] = 'systémová';
 
@@ -255,7 +266,7 @@ $text['utajeno'] = 'utajeno';
 $text['smazany'] = 'smazáný';
 $text['smazane'] = 'Smazané';
 $text['portrety'] = 'Portréty';
-$text['symboly'] = 'Symboly';
+
 $text['strana'] = 'Strana';
 $text['specializace'] = 'Specializace';
 $text['vse'] = 'vše';
@@ -353,7 +364,7 @@ $text['nerozhoduje'] = 'nerozhoduje';
 $text['zobrazitreport'] = 'zobrazit hlášení';
 
 //SYMBOLS
-$text['neprirazenesymboly'] = 'nepřiřazené symboly';
+$text['neprirazenesymboly'] = 'POZOR NOVÉ OKNO - nepřiřazené symboly';
 $text['newSymbol'] = 'nový symbol';
 $text['searchSymbol'] = 'vyhledat symbol';
 $text['linked'] = 'přiřazeno';
@@ -361,7 +372,7 @@ $text['notes'] = 'poznámky';
 $text['linkTo'] = 'přiřadit';
 $text['addNote'] = 'přidat poznámku';
 $text['upravitsymbol'] = 'upravit symbol';
-$text['smazatsymbol'] = 'smazat symbol';
+$text['smazatsymbol'] = 'odstranit symbol';
 $text['symbolNotLinkedToCase'] = 'Symbol nebyl přiřazen žádnému případu.';
 $text['linkedCases'] = 'Symbol připojen k případu';
 $text['symbolNotLinkedToReport'] = 'Symbol nebyl přiřazen žádnému hlášení.	';
@@ -384,8 +395,8 @@ $text['unauthorizedAccessToDeletedItem'] = 'pokus o přístup ke smazanému záz
 $text['search'] = 'vyhledávání';
 $text['unauthorizedAccessToSecret'] = 'pokus o neoprávněný přístup k utajovanému';
 $text['passwordReset'] = 'obnovení hesla';
-$text['recovery'] = 'obnovení záznamu';
-$text['lock'] = 'zamknutí';
+$text['restore'] = 'obnovení záznamu';
+$text['lock'] = 'uzamknutí';
 $text['unlock'] = 'odemknutí';
 
 $text['person'] = 'osoba';
@@ -398,7 +409,7 @@ $text['symbol'] = 'symbol';
 $text['user'] = 'uživatel';
 $text['point'] = 'bod';
 $text['task'] = 'úkol';
-$text['audit'] = 'audit';
+$text['menuAudit'] = 'audit';
 $text['other'] = 'jiné';
 $text['file'] = 'soubor';
 $text['backup'] = 'záloha';

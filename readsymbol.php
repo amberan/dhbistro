@@ -71,22 +71,18 @@ if (is_numeric($_REQUEST['rid'])) {
         } else {
             $hidenotes = '&amp;hidenotes=0">zobrazit poznámky</a>';
         }
-        if ($user['aclSymbol']) {
-            $editbutton = '; <a href="editsymbol.php?rid='.$_REQUEST['rid'].'">upravit symbol</a>; číslo symbolu: '.$rec['id'].'';
+        if ($user['aclSymbol'] || $user['aclGamemaster']) {
+            $editbutton = '; <a href="editsymbol.php?rid='.$_REQUEST['rid'].'">upravit symbol</a>';
         } else {
-            if ($user['aclSymbol']) {
-                $editbutton = '; <a href="editsymbol.php?rid='.$_REQUEST['rid'].'">upravit symbol</a>';
-            } else {
-                $editbutton = '';
-            }
+            $editbutton = '';
         }
-        deleteUnread(1, $_REQUEST['rid']);
+        deleteUnread('person', $_REQUEST['rid']);
         sparklets('<a href="/symbols">symboly</a> &raquo; <strong>Zobrazit symbol</strong>', '<a href="readsymbol.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton); ?>
 <div id="obsah">
 	<h1>Symbol</h1>
 	<fieldset><legend><strong>Základní údaje</strong></legend>
 		<?php if ($rec['symbol'] == null) { ?><img src="#" alt="symbol chybí" title="symbol chybí" id="symbolimg" class="noname"/>
-		<?php } else { ?><img src="file/symbol/<?php echo $rec['id']; ?>" id="symbolimg" />
+		<?php } else { ?><img  loading="lazy" src="file/symbol/<?php echo $rec['id']; ?>" id="symbolimg" />
 		<?php } ?>
 		<div id="info">
 			<?php
@@ -276,7 +272,7 @@ if (isset($_GET['hidenotes']) && $_GET['hidenotes'] == 0) { ?>
         header('location: index.php');
     }
 } else {
-    $_SESSION['message'] = $text['accessdeniedrecorded'];
+    $_SESSION['message'] = $text['notificationHttp401'];
     header('location: index.php');
 }
 latteDrawTemplate("footer");

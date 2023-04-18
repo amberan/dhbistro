@@ -1,25 +1,49 @@
 <?php
 
 
-if ($URL[1] == 'reports' && isset($URL[2],$URL[3]) && $URL[2] == 'delete' && is_numeric($URL[3])) {
-    if ($user['aclReport'] < 2) {
-        unauthorizedAccess(4, 11, $URL[3]);
+// archive
+if (isset($URL[3]) && is_numeric($URL[2]) && $URL[3] == 'archive' && $user['aclReport'] > 1) {
+    authorizedAccess('report', 'edit', $URL['2']);
+    $sqlArchive = 'UPDATE ' . DB_PREFIX . 'report SET reportArchived=CURRENT_TIMESTAMP WHERE reportId=' . $URL[2];
+    mysqli_query($database, $sqlArchive);
+    if (mysqli_affected_rows($database) > 0) {
+        $_SESSION['message'] = $text['notificationArchived'];
     } else {
-        authorizedAccess(4, 11, $URL[3]);
-        $deleteReportSql = 'UPDATE '.DB_PREFIX.'report SET reportDeleted=now(), reportModifiedBy='.$user['userId'].' WHERE reportId='.$URL[3];
-        mysqli_query($database, $deleteReportSql);
-        deleteAllUnread(1, $URL[3]);
+        $_SESSION['message'] = $text['notificationNotArchived'];
     }
 }
-
-if ($URL[1] == 'reports' && isset($URL[2],$URL[3]) && $URL[2] == 'restore' && is_numeric($URL[3])) {
-    if ($user['aclRoot'] < 1) {
-        unauthorizedAccess(4, 17, $URL[3]);
+// unarchive
+if (isset($URL[3]) && is_numeric($URL[2]) && $URL[3] == 'unarchive' && $user['aclReport'] > 1) {
+    authorizedAccess('report', 'edit', $URL[2]);
+    $sqlUnarchive = 'UPDATE ' . DB_PREFIX . 'report SET reportArchived=null WHERE reportId=' . $URL[2];
+    mysqli_query($database, $sqlUnarchive);
+    if (mysqli_affected_rows($database) > 0) {
+        $_SESSION['message'] = $text['notificationUnarchived'];
     } else {
-        authorizedAccess(4, 17, $URL[3]);
-        $deleteReportSql = 'UPDATE '.DB_PREFIX.'report SET reportDeleted=0, reportModifiedBy='.$user['userId'].' WHERE reportId='.$URL[3];
-        mysqli_query($database, $deleteReportSql);
-        deleteAllUnread(1, $URL[3]);
+        $_SESSION['message'] = $text['notificationNotUnarchived'];
+    }
+}
+// delete
+if (isset($URL[3]) && is_numeric($URL[2]) && $URL[3] == 'delete' && $user['aclReport'] > 1) {
+    authorizedAccess('report', 'delete', $URL[2]);
+    $sqlDelete = 'UPDATE '.DB_PREFIX.'report SET reportDeleted=now(), reportModifiedBy='.$user['userId'].' WHERE reportId='.$URL[2];
+    mysqli_query($database, $sqlDelete);
+    if (mysqli_affected_rows($database) > 0) {
+        $_SESSION['message'] = $text['notificationDeleted'];
+        deleteAllUnread('person', $URL[2]);
+    } else {
+        $_SESSION['message'] = $text['notificationNotDeleted'];
+    }
+}
+//restore
+if (isset($URL[3]) && is_numeric($URL[2]) && $URL[3] == 'restore' && $user['aclRoot'] >= 1) {
+    authorizedAccess('report', 'restore', $URL[2]);
+    $sqlRestore = 'UPDATE '.DB_PREFIX.'report SET reportDeleted=0, reportModifiedBy='.$user['userId'].' WHERE reportId='.$URL[2];
+    mysqli_query($database, $sqlRestore);
+    if (mysqli_affected_rows($database) > 0) {
+        $_SESSION['message'] = $text['notificationRestored'];
+    } else {
+        $_SESSION['message'] = $text['notificationNotRestored'];
     }
 }
 
@@ -35,7 +59,7 @@ if (isset($_POST['filter']) && sizeof($_POST['filter']) > 0) {
 $filter = filterGet('report');
 $sqlFilter = DB_PREFIX.'report.reportSecret<='.$user['aclSecret'];
 
-if ($user['aclRoot'] < 1) {
+if ($user['aclRoot'] < 1 || ($user['aclRoot'] && !isset($filter['deleted']))) {
     $sqlFilter .= ' AND ('.DB_PREFIX.'report.reportDeleted is null OR '.DB_PREFIX.'report.reportDeleted  < from_unixtime(1)) ';
 }
 if (!isset($filter['archived'])) {
@@ -59,7 +83,7 @@ if (isset($filter['reportStatus']) && @$filter['reportStatus'] != 'all') {
 $latteParameters['filter'] = $filter;
 
 
-//create new bool column for deletion
+
 $reportsSql = "SELECT
     concat(ownerPerson.name,' ',ownerPerson.surname) as reportOwnerName,
     ownerUser.userName as reportOwnerUserName,
@@ -69,7 +93,8 @@ $reportsSql = "SELECT
     modifiedUser.userName as reportModifiedByUserName,
     ".DB_PREFIX."report.*,
     ".DB_PREFIX."unread.id AS 'unread',
-    CASE WHEN ( reportDeleted < from_unixtime(1) OR reportDeleted IS NULL) THEN 'False' ELSE 'True' END AS reportDeletedBool
+    CASE WHEN ( reportDeleted < from_unixtime(1) OR reportDeleted IS NULL) THEN 'False' ELSE 'True' END AS reportDeletedBool,
+    CASE WHEN ( reportArchived < from_unixtime(1) OR reportArchived IS NULL) THEN 'False' ELSE 'True' END AS reportArchivedBool
     FROM ".DB_PREFIX."report
     LEFT JOIN ".DB_PREFIX."unread on  ".DB_PREFIX."report.reportId =  ".DB_PREFIX."unread.idrecord AND  ".DB_PREFIX."unread.idtable = 4 and  ".DB_PREFIX."unread.iduser=".$user['userId']."
     LEFT JOIN ".DB_PREFIX."user as ownerUser on ".DB_PREFIX."report.reportOwner = ownerUser.userId
@@ -111,7 +136,7 @@ if ($reportCount > 0) {
     $latteParameters['reportType'] = reportType();
     $latteParameters['reportStatus'] = reportStatus();
 } else {
-    $latteParameters['warning'] = $text['prazdnyvypis'];
+    $latteParameters['warning'] = $text['notificationListEmpty'];
 }
 
 latteDrawTemplate('sparklet');

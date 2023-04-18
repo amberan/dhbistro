@@ -36,11 +36,12 @@ function reportsAssignedTo($userid): array
 function reportStatus($role = null)
 {
     global $text;
-    $list = [];
-    $list[0] = $text['rozpracovane'];
-    $list[1] = $text['dokoncene'];
-    $list[2] = $text['analyzovane'];
-    $list[3] = $text['archivovane'];
+    $list = [
+        0 => $text['rozpracovane'],
+        1 => $text['dokoncene'],
+        2 => $text['analyzovane'],
+        3 => $text['archivovane'],
+    ];
     $return = $list;
     if (isset($role) && is_numeric($role)) {
         $return = $list[$role];
@@ -53,9 +54,10 @@ function reportStatus($role = null)
 function reportType($role = null)
 {
     global $text;
-    $list = [];
-    $list[1] = $text['vyjezd'];
-    $list[2] = $text['vyslech'];
+    $list = [
+        1 => $text['vyjezd'],
+        2 => $text['vyslech'],
+    ];
     $return = $list;
     if (isset($role) && is_numeric($role)) {
         $return = $list[$role];
@@ -69,12 +71,13 @@ function reportType($role = null)
 function reportRole($role = null)
 {
     global $text;
-    $list = [];
-    $list[0] = $text['pritomny'];
-    $list[1] = $text['vyslychajici'];
-    $list[2] = $text['vyslychajici'];
-    $list[3] = $text['zatceny'];
-    $list[4] = $text['velitel'];
+    $list = [
+        0 => $text['pritomny'],
+        1 => $text['vyslychajici'],
+        2 => $text['vyslychajici'],
+        3 => $text['zatceny'],
+        4 => $text['velitel'],
+    ];
     $return = $list;
     if (isset($role) && is_numeric($role)) {
         $return = $list[$role];
@@ -175,29 +178,23 @@ function reportSymbols($reportId)
         $sqlFilter = " AND ".DB_PREFIX."symbol.deleted = 0 ";
     }
     $symbolSql = "SELECT
-            ".DB_PREFIX."symbol2all.*,
-            ".DB_PREFIX."symbol.*,
-            ".DB_PREFIX."symbol.id as symbolId,
-            ".DB_PREFIX."user.userName,
-            ".DB_PREFIX."person.*
+                ".DB_PREFIX."symbol2all.*,
+                ".DB_PREFIX."symbol.*,
+                ".DB_PREFIX."symbol.id as symbolId
             FROM ".DB_PREFIX."symbol2all
             JOIN ".DB_PREFIX."symbol on ".DB_PREFIX."symbol2all.idsymbol = ".DB_PREFIX."symbol.id
-            JOIN ".DB_PREFIX."user ON ".DB_PREFIX."symbol.created_by = ".DB_PREFIX."user.userId
-            JOIN ".DB_PREFIX."person ON ".DB_PREFIX."user.personId = ".DB_PREFIX."person.id
             WHERE
-            ".DB_PREFIX."symbol.assigned=0
-            AND ".DB_PREFIX."symbol2all.idrecord=".$reportId."
-            AND ".DB_PREFIX."symbol2all.table=4 ".$sqlFilter;
-
+                ".DB_PREFIX."symbol.assigned=0
+                AND ".DB_PREFIX."symbol2all.idrecord=".$reportId."
+                AND ".DB_PREFIX."symbol2all.table=4 ".$sqlFilter;
     if ($symbolList = mysqli_query($database, $symbolSql)) {
         while ($symbol = mysqli_fetch_assoc($symbolList)) {
             $symbols[] = ['symbolId' => $symbol['symbolId'],
                 'symbolHash' => $symbol['symbol'],
                 'symbolDeleted' => $symbol['deleted'],
                 'symbolCreated' => webdateTime($symbol['created']),
-                'symbolCreatedBy' => $symbol['created_by'],
-                'symbolCreatedByPerson' => $symbol['name'].' '.$symbol['surname'],
-                'symbolCreatedByUser' => $symbol['userName'],
+                'symbolCreatedById' => $symbol['created_by'],
+                'symbolCreatedBy' => AuthorDB($symbol['created_by']),
                 'symbolModified' => $symbol['modified'],
                 'symbolModifiedBy' => $symbol['modified_by']];
         }
@@ -213,26 +210,21 @@ function reportNotes($reportId)
 {
     global $database,$user;
     $sqlFilter = '';
-    //        $sqlFilter = 'AND ('.DB_PREFIX.'note.secret <= '.$user['aclSecret'].' OR '.DB_PREFIX.'note.iduser='.$user['userId'].' )';
+    $sqlFilter = 'AND ('.DB_PREFIX.'note.secret <= '.$user['aclSecret'].' OR '.DB_PREFIX.'note.iduser='.$user['userId'].' )';
     if ($user['aclRoot'] < 1) {
         $sqlFilter = " AND ".DB_PREFIX."note.deleted = 0 ";
     }
     $noteSql = "SELECT
-            ".DB_PREFIX."note.*,
-            ".DB_PREFIX."user.userName,
-            ".DB_PREFIX."person.*
+            ".DB_PREFIX."note.*
         FROM ".DB_PREFIX."note
-        JOIN ".DB_PREFIX."user ON ".DB_PREFIX."note.iduser = ".DB_PREFIX."user.userId
-        JOIN ".DB_PREFIX."person ON ".DB_PREFIX."user.personId = ".DB_PREFIX."person.id
         WHERE ".DB_PREFIX."note.iditem=$reportId AND ".DB_PREFIX."note.idtable=4 $sqlFilter
         ORDER BY ".DB_PREFIX."note.datum DESC";
     if ($noteList = mysqli_query($database, $noteSql)) {
         while ($note = mysqli_fetch_assoc($noteList)) {
             $notes[] = ['noteId' => $note['id'],
                 'noteCreated' => webdateTime($note['datum']),
-                'noteCreatedBy' => $note['iduser'],
-                'noteCreatedByPerson' => $note['name'].' '.$note['surname'],
-                'noteCreatedByUser' => $note['userName'],
+                'noteCreatedById' => $note['iduser'],
+                'noteCreatedBy' => AuthorDB($note['iduser']),
                 'noteTitle' => $note['title'],
                 'noteNote' => $note['note'],
                 'noteDeleted' => $note['deleted'],
@@ -253,16 +245,17 @@ function reportFiles($reportId)
     // if ($user['aclRoot'] < 1) {
     //     $sqlFilter = " AND ".DB_PREFIX."symbol.deleted = 0 ";
     // }
+    // ".DB_PREFIX."user.userName,
+    // ".DB_PREFIX."person.*
+    // JOIN ".DB_PREFIX."user ON ".DB_PREFIX."file.iduser = ".DB_PREFIX."user.userId
+    // LEFT JOIN ".DB_PREFIX."person ON ".DB_PREFIX."user.personId = ".DB_PREFIX."person.id
+
     $fileSql = "SELECT
             ".DB_PREFIX."file.*,
             ".DB_PREFIX."file.id as fileId,
             ".DB_PREFIX."file.datum as fileCreated,
-            ".DB_PREFIX."file.iduser as fileCreatedBy,
-            ".DB_PREFIX."user.userName,
-            ".DB_PREFIX."person.*
+            ".DB_PREFIX."file.iduser as fileCreatedBy
             FROM ".DB_PREFIX."file
-            LEFT JOIN ".DB_PREFIX."user ON ".DB_PREFIX."file.iduser = ".DB_PREFIX."user.userId
-            LEFT JOIN ".DB_PREFIX."person ON ".DB_PREFIX."user.personId = ".DB_PREFIX."person.id
             WHERE $sqlFilter AND ".DB_PREFIX."file.iditem=$reportId AND ".DB_PREFIX."file.idtable=4
             ORDER BY ".DB_PREFIX."file.datum ASC";
     if ($fileList = mysqli_query($database, $fileSql)) {
@@ -276,9 +269,8 @@ function reportFiles($reportId)
                 'fileSecret' => $file['secret'],
                 'fileHas' => $file['uniquename'],
                 'fileName' => $file['originalname'],
-                'fileCreatedBy' => $file['fileCreatedBy'],
-                'fileCreatedByPerson' => $file['name'].' '.$file['surname'],
-                'fileCreatedByUser' => $file['userName'],
+                'fileCreatedById' => $file['fileCreatedBy'],
+                'fileCreatedBy' => AuthorDB($file['fileCreatedBy']),
                 'fileCreated' => webDateTime($file['fileCreated']),
                 'fileIsImage' => $image];
         }

@@ -99,11 +99,13 @@ function filterGet($object)//:array
 function filterSide($side = null)
 {
     global $text;
-    $list[0] = $text['vse'];
-    $list[1] = $text['neznama'];
-    $list[2] = $text['svetlo'];
-    $list[3] = $text['tma'];
-    $list[4] = $text['clovek'];
+    $list = [
+        0 => $text['vse'],
+        1 => $text['neznama'],
+        2 => $text['svetlo'],
+        3 => $text['tma'],
+        4 => $text['clovek'],
+    ];
     $return = $list;
     if (isset($side) && is_numeric($side)) {
         $return = $list[$side];
@@ -116,16 +118,18 @@ function filterSide($side = null)
 function filterCategory($category = null)
 {
     global $text;
-    $list[0] = $text['vse'];
-    $list[1] = $text['neznama'];
-    $list[2] = $text['prvni'];
-    $list[3] = $text['druha'];
-    $list[4] = $text['treti'];
-    $list[5] = $text['ctvrta'];
-    $list[6] = $text['pata'];
-    $list[7] = $text['sesta'];
-    $list[8] = $text['sedma'];
-    $list[9] = $text['mimokategorie'];
+    $list = [
+        0 => $text['vse'],
+        1 => $text['neznama'],
+        2 => $text['prvni'],
+        3 => $text['druha'],
+        4 => $text['treti'],
+        5 => $text['ctvrta'],
+        6 => $text['pata'],
+        7 => $text['sesta'],
+        8 => $text['sedma'],
+        9 => $text['mimokategorie'],
+    ];
     $return = $list;
     if (isset($category) && is_numeric($category)) {
         $return = $list[$category];
@@ -138,18 +142,20 @@ function filterCategory($category = null)
 function filterClass($class = null)
 {
     global $text;
-    $list[0] = $text['vse'];
-    $list[1] = $text['neznama'];
-    $list[2] = $text['bilymag'];
-    $list[3] = $text['cernymag'];
-    $list[4] = $text['lecitel'];
-    $list[5] = $text['obraten'];
-    $list[6] = $text['upir'];
-    $list[7] = $text['vlkodlak'];
-    $list[8] = $text['vedma'];
-    $list[9] = $text['zarikavac'];
-    $list[10] = $text['vykladac'];
-    $list[11] = $text['jasnovidec'];
+    $list = [
+        0 => $text['vse'],
+        1 => $text['neznama'],
+        2 => $text['bilymag'],
+        3 => $text['cernymag'],
+        4 => $text['lecitel'],
+        5 => $text['obraten'],
+        6 => $text['upir'],
+        7 => $text['vlkodlak'],
+        8 => $text['vedma'],
+        9 => $text['zarikavac'],
+        10 => $text['vykladac'],
+        11 => $text['jasnovidec'],
+    ];
     $return = $list;
     if (isset($class) && is_numeric($class)) {
         $return = $list[$class];

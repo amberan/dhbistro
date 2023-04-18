@@ -15,13 +15,14 @@ use Tracy\Debugger;
 function personRead($personId): array
 {
     global $database, $user, $text;
-    $sql = 'SELECT * FROM '.DB_PREFIX.'person WHERE id = '.$personId.' AND '.$user['sqlDeleted'].' AND '.$user['sqlSecret'];
+
+    $sql = 'SELECT * FROM '.DB_PREFIX.'person WHERE id = '.$personId.' AND deleted <= '.$user['aclRoot'].' AND secret <= '.$user['aclSecret'];
     $query = mysqli_query($database, $sql);
     if (mysqli_num_rows($query) > 0) {
         $person = mysqli_fetch_assoc($query);
         unset($person['deleted']);
     } else {
-        $person[] = $text['zaznamnenalezen'];
+        $person[] = $text['notificationRecordNotFound'];
     }
 
     return $person;
@@ -47,7 +48,7 @@ function personList($where = 1, $order = 1): array
     if (mb_strlen($order) < 1) {
         $order = 1;
     }
-    $sql = 'SELECT * FROM '.DB_PREFIX.'person WHERE ('.$where.') AND '.$user['sqlDeleted'].' AND '.$user['sqlSecret'].' ORDER BY '.$order;
+    $sql = 'SELECT * FROM '.DB_PREFIX.'person WHERE ('.$where.') AND deleted <='.$user['aclRoot'].' AND secret <='.$user['aclSecret'].' ORDER BY '.$order;
     $query = mysqli_query($database, $sql);
     //echo mysqli_num_rows($query);
     if (mysqli_num_rows($query) > 0) {
@@ -56,7 +57,7 @@ function personList($where = 1, $order = 1): array
             $personList[] = $person;
         }
     } else {
-        $personList[] = $text['prazdnyvypis'];
+        $personList[] = $text['notificationListEmpty'];
     }
 
     return $personList;
@@ -65,41 +66,28 @@ function personList($where = 1, $order = 1): array
 /**
  * if unchecked null $field, if checked and db null update to current timestamp.
  *
- * @param int id of person
+ * @param int $column id of person
  * @param bool checked/unchecked
  * @param mixed $id
  * @param mixed $checkbox
  */
-function personCheckboxUpdate($id, $field, $checkbox): void
+function personCheckboxUpdate($id, $column, $checkbox = null): void
 {
-    global $database;
-    if ($checkbox == null) {
-        $sqlUpdate = 'update '.DB_PREFIX.'person set '.$field.'=null where id='.$id;
-    }
-    if ($checkbox != null) {
-        $sql = 'select '.$field.' from '.DB_PREFIX.'person where id='.$id;
-        $sqlQuery = mysqli_query($database, $sql);
-        $sqlField = mysqli_fetch_assoc($sqlQuery);
-        if ($sqlField['roof'] == null) {
-            $sqlUpdate = 'update '.DB_PREFIX.'person set '.$field.'=CURRENT_TIMESTAMP where id='.$id;
-        }
-    }
-    Debugger::log('PERSON.'.$field.'='.$checkbox.' >> '.$sqlUpdate);
-    mysqli_query($database, $sqlUpdate);
+    DBCheckboxUpdate('person',$id,$column,$checkbox);
 }
 
 function personDelete($id): void
 {
     global $database,$user;
     if ($user['aclPerson'] > 0) {
-        authorizedAccess(1, 11, $id);
+        authorizedAccess('person', 'delete', $id);
         //TODO deleted to timestamp
         $sqlUpdate = 'update '.DB_PREFIX.'person set deleted=1 where id='.$id;
         mysqli_query($database, $sqlUpdate);
         Debugger::log('PERSON.'.$id.' DELETED '.$sqlUpdate);
-        deleteAllUnread(1, $id);
+        deleteAllUnread('person', $id);
     } else {
-        unauthorizedAccess(1, 11, $id);
+        unauthorizedAccess('person', 'delete', $id);
     }
 }
 
@@ -107,13 +95,13 @@ function personRestore($id): void
 {
     global $database,$user;
     if ($user['aclRoot'] > 0) {
-        authorizedAccess(1, 17, $id);
+        authorizedAccess('person', 'restore', $id);
         $sqlUpdate = 'update '.DB_PREFIX.'person set deleted=0 where id='.$id;
         mysqli_query($database, $sqlUpdate);
         Debugger::log('PERSON.'.$id.' RESTORED '.$sqlUpdate);
-        deleteAllUnread(1, $id);
+        deleteAllUnread('person', $id);
     } else {
-        unauthorizedAccess(1, 17, $id);
+        unauthorizedAccess('person', 'restore', $id);
     }
 }
 

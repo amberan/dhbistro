@@ -4,21 +4,31 @@
 
 
 if (isset($URL[3]) && is_numeric($URL[3]) && $URL[2] == 'delete' && $user['aclGroup'] > 0) {
-    authorizedAccess(2, 11, $URL[3]);
+    authorizedAccess('group', 'delete', $URL[3]);
     mysqli_query($database, "UPDATE ".DB_PREFIX."group SET deleted=1 WHERE id=".$URL[3]);
-    deleteAllUnread(2, $URL[3]);
+    deleteAllUnread('group', $URL[3]);
 }
 if (isset($URL[3]) && is_numeric($URL[3]) && $URL[2] == 'restore' && $user['aclGroup'] > 0) {
-    authorizedAccess(2, 11, $URL[3]);
+    authorizedAccess('group', 'restore', $URL[3]);
     mysqli_query($database, "UPDATE ".DB_PREFIX."group SET deleted=0 WHERE id=".$URL[3]);
 }
-if (isset($URL[3]) && is_numeric($URL[3]) && $URL[2] == 'archive' && $user['aclGroup'] > 0) {
-    authorizedAccess(2, 2, $URL[3]);
-    mysqli_query($database, "UPDATE ".DB_PREFIX."group SET archived=1 WHERE id=".$URL[3]);
+if (isset($URL[3]) && is_numeric($URL[2]) && $URL[3] == 'archive' && $user['aclGroup'] > 0) {
+    authorizedAccess('group', 'edit', $URL[2]);
+    mysqli_query($database, "UPDATE ".DB_PREFIX."group SET archived=1 WHERE id=".$URL[2]);
+    if (mysqli_affected_rows($database) > 0) {
+        $_SESSION['message'] = $text['notificationArchived'];
+    } else {
+        $_SESSION['message'] = $text['notificationNotArchived'];
+    }
 }
-if (isset($URL[3]) && is_numeric($URL[3]) && $URL[2] == 'unarchive' && $user['aclGroup'] > 0) {
-    authorizedAccess(2, 2, $URL[3]);
-    mysqli_query($database, "UPDATE ".DB_PREFIX."group SET archived=0 WHERE id=".$URL[3]);
+if (isset($URL[3]) && is_numeric($URL[2]) && $URL[3] == 'unarchive' && $user['aclGroup'] > 0) {
+    authorizedAccess('group', 'edit', $URL[2]);
+    mysqli_query($database, "UPDATE ".DB_PREFIX."group SET archived=0 WHERE id=".$URL[2]);
+    if (mysqli_affected_rows($database) > 0) {
+        $_SESSION['message'] = $text['notificationUnarchived'];
+    } else {
+        $_SESSION['message'] = $text['notificationNotUnarchived'];
+    }
 }
 
 if (isset($_POST['insertgroup']) && !preg_match('/^[[:blank:]]*$/i', $_POST['title']) && !preg_match('/^[[:blank:]]*$/i', $_POST['contents']) && is_numeric($_POST['secret'])) {
@@ -29,7 +39,7 @@ if (isset($_POST['insertgroup']) && !preg_match('/^[[:blank:]]*$/i', $_POST['tit
         mysqli_query($database, "INSERT INTO ".DB_PREFIX."group ( title, contents, datum, iduser, deleted, secret, archived, groupCreated) VALUES('".$_POST['title']."','".$_POST['contents']."','".time()."','".$user['userId']."','0','".$_POST['secret']."',0,CURRENT_TIMESTAMP)");
         $gidarray = mysqli_fetch_assoc(mysqli_query($database, "SELECT id FROM ".DB_PREFIX."group WHERE UCASE(title)=UCASE('".$_POST['title']."')"));
         $gid = $gidarray['id'];
-        authorizedAccess(2, 3, $gid);
+        authorizedAccess('group', 'new', $gid);
         if (!isset($_POST['notnew'])) {
             unreadRecords(2, $gid);
         }
@@ -41,7 +51,7 @@ if (isset($_POST['insertgroup']) && !preg_match('/^[[:blank:]]*$/i', $_POST['tit
     }
 }
 if (isset($_POST['groupid'], $_POST['editgroup']) && $user['aclGroup'] && !preg_match('/^[[:blank:]]*$/i', $_POST['title']) && !preg_match('/i^[[:blank:]]*$/i', $_POST['contents'])) {
-    authorizedAccess(2, 2, $_POST['groupid']);
+    authorizedAccess('group', 'edit', $_POST['groupid']);
     $ures = mysqli_query($database, "SELECT id FROM ".DB_PREFIX."group WHERE UCASE(title)=UCASE('".$_POST['title']."') AND id<>".$_POST['groupid']);
     if (mysqli_num_rows($ures)) {
         echo '<div id="obsah"><p>Skupina již existuje, změňte její jméno.</p></div>';
@@ -66,7 +76,7 @@ if (isset($_GET['delperson']) && is_numeric($_GET['delperson'])) {
     header('Location: editgroup.php?rid='.$_GET['groupid']);
 }
 if (isset($_POST['uploadfile']) && is_uploaded_file($_FILES['attachment']['tmp_name']) && is_numeric($_POST['groupid']) && is_numeric($_POST['secret'])) {
-    authorizedAccess(2, 4, $_POST['groupid']);
+    authorizedAccess('group', 'fileAdd', $_POST['groupid']);
     $newname = time().md5(uniqid(time().random_int(0, getrandmax())));
     move_uploaded_file($_FILES['attachment']['tmp_name'], './files/'.$newname);
     $sql = "INSERT INTO ".DB_PREFIX."file (uniquename,originalname,mime,size,datum,iduser,idtable,iditem,secret) VALUES('".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".time()."','".$user['userId']."','2','".$_POST['groupid']."','".$_POST['secret']."')";
@@ -82,7 +92,7 @@ if (isset($_POST['uploadfile']) && is_uploaded_file($_FILES['attachment']['tmp_n
     }
 }
 if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {
-    authorizedAccess(2, 5, $_GET['groupid']);
+    authorizedAccess('group', 'fileDelete', $_GET['groupid']);
     if ($user['aclGroup']) {
         $fres = mysqli_query($database, "SELECT uniquename FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
         $frec = mysqli_fetch_assoc($fres);
@@ -100,7 +110,11 @@ if (isset($_POST['filter'])) {
     filterSet('group', @$_POST['filter']);
 }
 $filter = filterGet('group');
-$sqlFilter = DB_PREFIX."group.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."group.secret<=".$user['aclSecret'];
+
+$sqlFilter = DB_PREFIX . "group.secret<=" . $user['aclSecret'];
+if ($user['aclRoot'] < 1 || ($user['aclRoot'] && !isset($filter['deleted']))) {
+    $sqlFilter .= ' AND '.DB_PREFIX.'group.deleted = 0 ';
+}
 switch (@$filter['archived']) {
     case 'on': $sqlFilter .= ' AND '.DB_PREFIX.'group.archived in (0,1)';
         break;
@@ -115,18 +129,20 @@ if (@$filter['secret'] != 'on') {
 $latteParameters['filter'] = $filter;
 
 //GROUP LIST
-$sql = "SELECT ".DB_PREFIX."group.secret, ".DB_PREFIX."group.title , ".DB_PREFIX."group.id , ".DB_PREFIX."group.archived , ".DB_PREFIX."group.datum as date_changed, ".DB_PREFIX."group.groupCreated, ".DB_PREFIX."group.deleted,  ".DB_PREFIX."unread.id as unread
+$sql = "SELECT ".DB_PREFIX."group.secret, ".DB_PREFIX."group.title , ".DB_PREFIX."group.id , ".DB_PREFIX."group.archived ,
+    ".DB_PREFIX."group.datum as date_changed, ".DB_PREFIX."group.groupCreated, ".DB_PREFIX."group.deleted,  ".DB_PREFIX."unread.id as unread,
+    CASE WHEN ( archived = 0 OR archived IS NULL) THEN 'False' ELSE 'True' END AS groupArchivedBool
     FROM ".DB_PREFIX."group
     LEFT JOIN  ".DB_PREFIX."unread on  ".DB_PREFIX."group.id =  ".DB_PREFIX."unread.idrecord AND  ".DB_PREFIX."unread.idtable = 2 and  ".DB_PREFIX."unread.iduser=".$user['userId']."
     WHERE ".$sqlFilter." GROUP BY ".DB_PREFIX."group.id ".sortingGet('group');
 $groupList = mysqli_query($database, $sql);
 $groupCount = mysqli_num_rows($groupList);
 if ($groupCount > 0) {
-    $latteParameters['group_count'] = $groupCount;
+    $latteParameters['groupCount'] = $groupCount;
     $latteParameters['group_record'] = $groupList;
 } else {
-    $latteParameters['warning'] = $text['prazdnyvypis'];
+    $latteParameters['warning'] = $text['notificationListEmpty'];
 }
 
 latteDrawTemplate('sparklet');
-latteDrawTemplate('groups');
+latteDrawTemplate('groups_body');

@@ -1,38 +1,82 @@
 <?php
 
-use Tracy\Debugger;
 
-if (isset($_REQUEST['delallnew'])) {
-    mysqli_query($database, "DELETE FROM ".DB_PREFIX."unread WHERE iduser = ".$user['userId']);
+if (isset($_REQUEST['delallnew']) || (isset($URL[1]) && $URL[1] == 'readall') || (isset($URL[2]) && $URL[2] == 'readall')) {
+    if (unreadTableIdReadall($URL[1])) {
+        $sqlReadAll = "DELETE FROM " . DB_PREFIX . "unread WHERE iduser = " . $user['userId'] . " AND idtable=" . unreadTableIdReadall($URL[1]);
+    } else {
+        $sqlReadAll = "DELETE FROM " . DB_PREFIX . "unread WHERE iduser = " . $user['userId'];
+    }
+    mysqli_query($database, $sqlReadAll);
     $_SESSION['message'] = "Označeno jako přečtené";
 }
+
+
+function unreadTableIdReadall($objectId)
+{
+    $object = [
+        1 => 'persons',
+        2 => 'groups',
+        3 => 'cases',
+        4 => 'reports',
+        7 => 'symbols',
+    ];
+    if (isset($objectId) && is_numeric($objectId)) {
+        $return = $object[$objectId];
+    } elseif (isset($objectId) && is_string($objectId)) {
+        $return = array_search($objectId, $object);
+    } else {
+        $return = $object;
+    }
+    return $return;
+}
+
+
+function unreadTableId($objectId)
+{
+    $object = [
+        1 => 'person',
+        2 => 'group',
+        3 => 'case',
+        4 => 'report',
+        5 => 'news',
+        6 => 'board',
+        7 => 'symbol',
+    ];
+    if (isset($objectId) && is_numeric($objectId)) {
+        $return = $object[$objectId];
+    } elseif (isset($objectId) && is_string($objectId)) {
+        $return = array_search($objectId, $object);
+    } else {
+        $return = $object;
+    }
+    return $return;
+}
+
 
 // zaznam do tabulek neprectenych
 function unreadRecords($tablenum, $rid)
 {
-    global $database,$user, $_POST;
+    global $database, $user, $_POST;
+    if (!is_numeric($tablenum)) {
+        $tablenum = unreadTableId($tablenum);
+    }
     $secret = 0;
-    if (isset($_POST['secret'])) {
+    if (isset($_POST['secret'], $_POST['noteSecret'], $_POST['notePrivate'])) {
         $secret = $_POST['secret'];
     }
     if (isset($_POST['nsecret'])) {
         $secret = $_POST['nsecret'];
     }
-    $unreadSql = "SELECT ".DB_PREFIX."user.userId as 'id', ".DB_PREFIX."user.aclSecret, ".DB_PREFIX."user.userDeleted as 'deleted' FROM ".DB_PREFIX."user";
+    $unreadSql = "SELECT " . DB_PREFIX . "user.userId as 'id', " . DB_PREFIX . "user.aclSecret, " . DB_PREFIX . "user.userDeleted as 'deleted' FROM " . DB_PREFIX . "user";
     $unreadResult = mysqli_query($database, $unreadSql);
     while ($unreadRecord = mysqli_fetch_assoc($unreadResult)) {
-        if ($secret > 0 && $unreadRecord['deleted'] <> 1) {
-            if ($unreadRecord['id'] <> $user['userId'] && $unreadRecord['aclSecret'] > 0) {
-                $srsql = "INSERT INTO ".DB_PREFIX."unread (idtable, idrecord, iduser) VALUES('".$tablenum."', '".$rid."', '".$unreadRecord['id']."')";
-                mysqli_query($database, $srsql);
-            }
-        } else {
-            if ($secret == 0 && $unreadRecord['deleted'] <> 1) {
-                if ($unreadRecord['id'] <> $user['userId']) {
-                    $srsql = "INSERT INTO ".DB_PREFIX."unread (idtable, idrecord, iduser) VALUES('".$tablenum."', '".$rid."', '".$unreadRecord['id']."')";
-                    mysqli_query($database, $srsql);
-                }
-            }
+        if (
+            (($secret > 0 && $unreadRecord['deleted'] <> 1) && ($unreadRecord['id'] <> $user['userId'] && $unreadRecord['aclSecret'] > 0))
+            || (($secret == 0 && $unreadRecord['deleted'] <> 1) && ($unreadRecord['id'] <> $user['userId']))
+        ) {
+            $srsql = "INSERT INTO " . DB_PREFIX . "unread (idtable, idrecord, iduser) VALUES('" . $tablenum . "', '" . $rid . "', '" . $unreadRecord['id'] . "')";
+            mysqli_query($database, $srsql);
         }
     }
 }
@@ -41,15 +85,18 @@ function unreadRecords($tablenum, $rid)
 function deleteUnread($tablenum, $rid)
 {
     global $database,$user;
+    if (!is_numeric($tablenum)) {
+        $tablenum = unreadTableId($tablenum);
+    }
     if (isset($user['usedId'])) {
         if ($rid <> 'none' && $user['userId']) {
             $unreadSql = "DELETE FROM ".DB_PREFIX."unread WHERE idtable=".$tablenum." AND idrecord=".$rid." AND iduser=".$user['userId'];
         } elseif ($user['userId']) {
             $unreadSql = "DELETE FROM ".DB_PREFIX."unread WHERE idtable=".$tablenum." AND iduser=".$user['userId'];
         }
-        mysqli_query($database, $unreadSql);
-    } else {
-        Debugger::log("deleteUnread failed: ".$_SERVER['REQUEST_URI'].$_SERVER['QUERY_STRING']);
+        if (isset($unreadSql)) {
+            mysqli_query($database, $unreadSql);
+        }
     }
 }
 
@@ -57,6 +104,10 @@ function deleteUnread($tablenum, $rid)
 function deleteAllUnread($tablenum, $rid)
 {
     global $database;
+    global $database,$user;
+    if (!is_numeric($tablenum)) {
+        $tablenum = unreadTableId($tablenum);
+    }
     $unreadSql = "SELECT ".DB_PREFIX."user.userId as 'id', ".DB_PREFIX."user.aclSecret FROM ".DB_PREFIX."user";
     $unreadResult = mysqli_query($database, $unreadSql);
     while ($unreadRecord = mysqli_fetch_assoc($unreadResult)) {
@@ -87,7 +138,7 @@ function searchRecord($tablenum, $recordnum)
 }
 
 // vyhledani tabulky v neprectenych zaznamech
-function searchTable($tablenum)
+function unreadItems($tablenum)
 {
     global $unread;
     foreach ((array) $unread as $record) {

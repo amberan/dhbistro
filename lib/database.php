@@ -2,6 +2,40 @@
 
 use Tracy\Debugger;
 
+/**
+ * saving checkboxes do db (int and timestamp)
+ * @param mixed $table
+ * @param mixed $id
+ * @param mixed $column
+ * @param mixed $checkbox
+ */
+function DBCheckboxUpdate($table, $id, $column, $checkbox = null): void
+{
+    global $database,$configDB;
+    //! check if $column is timestamp/int and current value
+    //! int == 1 && !checkbox => set null
+    //! int != 1 && $checkbox => set 1
+    //! timestamp != null && !$checkbox => set null
+    //! timestamp == null && $checkbox => set CURRENT_TIMESTAMP
+    //! timestamp != null && $checkbox => nothing to do
+    $sqlCheckColumn = 'select '.$column.' from '.DB_PREFIX.$table.' where id='.$id;
+    $sqlCheckColumnValue = mysqli_fetch_assoc(mysqli_query($database, $sqlCheckColumn));
+    $sqlCheckColumnType = mysqli_fetch_field(mysqli_query($database, $sqlCheckColumn));
+
+    if ($sqlCheckColumnType->type == 3 && $sqlCheckColumnValue[$column] == '1' && !$checkbox) {
+        $sqlUpdate = '0';
+    } elseif ($sqlCheckColumnType->type == 3 && $sqlCheckColumnValue[$column] != '1' && $checkbox) {
+        $sqlUpdate = '1';
+    } elseif ($sqlCheckColumnType->type == 7 && $sqlCheckColumnValue[$column] != null && !$checkbox) {
+        $sqlUpdate = 'null';
+    } elseif ($sqlCheckColumnType->type == 7 && $sqlCheckColumnValue[$column] == null && $checkbox) {
+        $sqlUpdate = 'CURRENT_TIMESTAMP';
+    }
+    // Debugger::log('PERSON.'.$field.' >> '.$sqlUpdate);
+    if (isset($sqlUpdate)) {
+        mysqli_query($database, 'UPDATE '.DB_PREFIX.$table.' set '.$column.' = '.$sqlUpdate.' where id='.$id);
+    }
+}
 
 
 
@@ -108,7 +142,7 @@ function DBcolumntNotEmpty($table, $column)
 function DBListTables()
 {
     global $database;
-    $tables = array();
+    $tables = [];
     $sql = "SHOW TABLES";
     $result = mysqli_query($database, $sql);
 

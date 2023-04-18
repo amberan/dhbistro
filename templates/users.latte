@@ -18,7 +18,7 @@
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
-                            <th>
+                            <th class="text-left">
                                 Jméno <a href="{$URL[0]}{$URL[1]}/?sort=surname">&#8661;</a>
                             </th>
                             <th>
@@ -97,25 +97,34 @@
                                     {/if}
                                 </td>
                                 <td>
-                                    <a class="btn btn-sm btn-brick btn-info mb-1" href="/users/edit/{$users['userId']}" alt="{$text[upravituzivatele]}">
+                                    <a class="btn btn-sm btn-brick btn-info mb-1 tip-wrapper" href="/users/edit/{$users['userId']}" alt="{$text[subMenuActionUsersEdit]}">
                                         {php inject_svg("images/icons/edit-solid.svg")}
+                                        <span class="bubbletip bubbletip-bottom-right">{$text[subMenuActionUsersEdit]}</span>
                                     </a>
 
                                     {if $users['userId'] != $user['userId']}
-                                        <a class="btn btn-sm  btn-info mb-1" href="/users/reset/{$users['userId']}" onclick="return confirm('{$text['opravdugenerovatheslo']} {$users['userName']}?')">{$text[noveheslo]}</a>
+                                        <a class="btn btn-sm  btn-info mb-1" href="/users/reset/{$users['userId']}" onclick="return confirm('{$text['actionConfirmationGeneratePassword']} {$users['userName']}?')">{$text[noveheslo]}</a>
                                         {if $users['userSuspended'] == "1"}
-                                            <a class="btn btn-sm btn-brick btn-success mb-1 mr-1" href="/users/unlock/{$users['userId']}" onclick="return confirm('{$text['opravduodemnkout']} {$users['userName']}?')" alt="{$text[odemnkoutuzivatele]}">
-                                            {php inject_svg("images/icons/lock-open-solid.svg")}</a>
+                                            <a class="btn btn-sm btn-brick btn-success mb-1 mr-1 tip-wrapper" href="/users/unlock/{$users['userId']}" onclick="return confirm('{$text['actionConfirmationUnlock']} {$users['userName']}?')" alt="{$text[actionUnlock]}">
+                                            {php inject_svg("images/icons/lock-open-solid.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text[actionUnlock]}</span>
+                                            </a>
                                         {else}
-                                            <a class="btn btn-sm btn-brick btn-warning mb-1 mr-1" href="/users/lock/{$users['userId']}" onclick="return confirm('{$text['opravduzamknout']} {$users['userName']}?')" alt="{$text[zamknoutuzivatele]}">
-                                            {php inject_svg("images/icons/lock-solid.svg")}</a>
+                                            <a class="btn btn-sm btn-brick btn-warning mb-1 mr-1 tip-wrapper" href="/users/lock/{$users['userId']}" onclick="return confirm('{$text['actionConfirmationLock']} {$users['userName']}?')" alt="{$text[actionLock]}">
+                                            {php inject_svg("images/icons/lock-solid.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text[actionLock]}</span>
+                                            </a>
                                         {/if}
                                         {if $users[userDeleted] == 0}
-                                            <a class="btn btn-sm btn-brick btn-danger mb-1" href="/users/delete/{$users['userId']}" onclick="return confirm('{$text['opravdusmazat']} {$users['userName']}?')" alt="{$text[smazatuzivatele]}">
-                                            {php inject_svg("images/icons/trash-solid.svg")}</a>
+                                            <a class="btn btn-sm btn-brick btn-danger mb-1 tip-wrapper" href="/users/delete/{$users['userId']}" onclick="return confirm('{$text['actionConfirmationRemove']} {$users['userName']}?')" alt="{$text[actionRemove]}">
+                                            {php inject_svg("images/icons/trash-solid.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text[actionRemove]}</span>
+                                            </a>
                                         {elseif $user['userDeleted'] == 1}
-                                            <a class="btn btn-sm btn-brick btn-success mb-1" href="/users/restore/{$users['userId']}" onclick="return confirm('{$text['opravduobnovit']} {$users['userName']}?')" alt="{$text[obnovituzivatele]}">
-                                            {php inject_svg("images/icons/recycle.svg")}</a>
+                                            <a class="btn btn-sm btn-brick btn-success mb-1 tip-wrapper" href="/users/restore/{$users['userId']}" onclick="return confirm('{$text['actionConfirmationRestore']} {$users['userName']}?')" alt="{$text[actionRestore]}">
+                                            {php inject_svg("images/icons/recycle.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text[actionRestore]}</span>
+                                            </a>
                                         {/if}
                                     {/if}
                                 </td>

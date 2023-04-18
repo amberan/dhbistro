@@ -77,10 +77,7 @@ if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || $user['userId'] == $a
                 break;
             default: $fsql_archiv = ' AND ('.DB_PREFIX.'person.archived is null OR '.DB_PREFIX.'person.archived  < from_unixtime(1))  ';
         }
-        function filter(): void
-        {
-            global $filterSort, $sportraits, $ssymbols, $farchiv, $fdead;
-            echo '<form action="addp2ar.php?rid='.$_REQUEST['rid'].'" method="post" id="filter">
+        echo '<form action="addp2ar.php?rid='.$_REQUEST['rid'].'" method="post" id="filter">
 	<fieldset>
 	  <legend>Filtr</legend>
 	  <p>Vypsat osoby a seřadit je podle <select name="sort">
@@ -105,8 +102,6 @@ if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || $user['userId'] == $a
 <input type="hidden" name="farchiv" value="'.$farchiv.'" />
 <input type="hidden" name="reportid" value="'.$_REQUEST['rid'].'" />
 <input type="submit" name="addtoareport" value="Uložit změny"  title="Uložit změny" />';
-        }
-        filter();
         $sqlFilter = DB_PREFIX."person.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."person.secret<=".$user['aclSecret'];
         $sql = "SELECT ".DB_PREFIX."person.secret AS 'secret',
                 ".DB_PREFIX."person.name AS 'name',
@@ -161,7 +156,7 @@ if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || $user['userId'] == $a
 			<option value="1"'.($rec['role'] == 1 ? ' selected="selected"' : '').'>vyslýchaný</option>
 			<option value="2"'.($rec['role'] == 2 ? ' selected="selected"' : '').'>vyslýchající</option>' : '').'
 		</select></td>
-'.($sportraits ? '<td><img src="file/portrait/'.$rec['id'].'" alt="portrét chybí" /></td>' : '').($ssymbols ? '<td><img src="file/symbol/'.$rec['symbol'].'" alt="symbol chybí" /></td>' : '').'
+'.($sportraits ? '<td><img  loading="lazy" src="file/portrait/'.$rec['id'].'" alt="portrét chybí" /></td>' : '').($ssymbols ? '<td><img  loading="lazy" src="file/symbol/'.$rec['symbol'].'" alt="symbol chybí" /></td>' : '').'
 	<td>'.($rec['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$rec['id'].'">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a></span>' : '<a href="readperson.php?rid='.$rec['id'].'">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a>').'</td>
 	</tr>';
             $even++;

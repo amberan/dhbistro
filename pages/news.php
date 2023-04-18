@@ -13,9 +13,9 @@ if (isset($URL[1],$URL[2],$URL[3]) && $URL['1'] == 'news' && is_numeric($URL[2])
             $latteParameters['message'] = newsRestore($URL[2]);
         }
         if ($URL[3] == 'new') {
-            $latteParameters['subtitle'] = $text['subtitleNewsAdd'];
+            $latteParameters['subtitle'] = $text['subMenuActionNewsAdd'];
         } elseif ($URL[3] == 'edit') {
-            $latteParameters['subtitle'] = $text['subtitleNewsEdit'];
+            $latteParameters['subtitle'] = $text['subMenuActionNewsEdit'];
         }
         if ($URL[2] > 0) {
             $latteParameters['newsEdit'] = newsRead($URL[2]);

@@ -5,7 +5,7 @@ require_once $_SERVER['DOCUMENT_ROOT']."/config.php";
 require_once SERVER_ROOT.'/vendor/autoload.php';
 use Tracy\Debugger;
 
-Debugger::enable(Debugger::DETECT, $config['folder_logs']);
+Debugger::enable(Debugger::DEVELOPMENT, $config['folder_logs']);
 
 $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
@@ -63,13 +63,13 @@ $_GET = escape_array($_GET);
 bistroBackup();
 // ! THE LOOP
 if ($URL[1] == 'file' && isset($user)) { // GET FILE type:  attachement,portrait,symbol,backup
-    authorizedAccess(13, 1, $URL[2]);
-    require_once SERVER_ROOT.'/file.php';
+    authorizedAccess('file', 'read', $URL[2]);
+    require_once SERVER_ROOT.'/pages/file.php';
     exit;
 }
-//TODO add templates to queue and render at the end of everything
+//TODO add templates to queue and render at the end of everything #306
 //TODO generic latte for listing objects and sorting
-//TODO generic latte for filters
+//TODO generic latte for filters #307 #296
 latteDrawTemplate('headerMD');
 if (isset($user)) {
     $latteParameters['user'] = $user;
@@ -80,126 +80,142 @@ if (isset($user)) {
     latteDrawTemplate('menu');
 
     switch ($URL[1]) {
+        case 'search':
+            $latteParameters['title'] = 'Vyhledávání';
+            authorizedAccess('search', 'read', 0);
+            $latteParameters['actions'][] = ["/symbol_search.php", $text['searchSymbol']];
+            require_once SERVER_ROOT . '/pages/search.php';
+            break;
         case 'backup':
-            if ($user['aclRoot'] < 1) {
-                unauthorizedAccess(14, 1, 0);
-            } else {
-                $latteParameters['title'] = $text['zalohovani'];
-                authorizedAccess(14, 1, 0);
+            $latteParameters['title'] = $text['menuBackups'];
+            if ($user['aclRoot']) {
+                authorizedAccess('backup', 'read', 0);
                 require_once SERVER_ROOT . '/pages/backup.php';
+            } else {
+                unauthorizedAccess('backup', 'read', 0);
             }
             break;
         case 'board':
-            $latteParameters['title'] = $text['nastenka'];
-            if (isset($URL[2]) && $URL[2] == 'edit' && $user['aclBoard'] < 1) {
-                unauthorizedAccess(6, 2, 0);
+            $latteParameters['title'] = $text['menuDashboard'];
+            if (isset($URL[3]) && $user['aclBoard'] < 1) {
+                unauthorizedAccess('dashboard', 'edit', 0);
             } elseif (isset($URL[2]) && $URL[2] == 'edit') {
-                $latteParameters['subtitle'] = $text['upravitnastenku'];
+                authorizedAccess('dashboard', 'edit', 0);
+                $latteParameters['subtitle'] = $text['subMenuActionDashboardEdit'];
                 $latteParameters['actions'][] = ["/board", $text['zobrazitnastenku']];
-                authorizedAccess(6, 2, 0);
                 require_once SERVER_ROOT . '/pages/board_edit.php';
             } else {
-                authorizedAccess(6, 1, 0);
+                authorizedAccess('dashboard', 'read', 0);
                 if ($user['aclBoard'] > 0) {
-                    $latteParameters['actions'][] = ["/board/edit", $text['upravitnastenku']];
+                    $latteParameters['actions'][] = ["/board/edit", $text['subMenuActionDashboardEdit']];
                 }
                 require_once SERVER_ROOT . '/pages/dashboard.php';
                 require_once SERVER_ROOT . '/pages/board.php';
             }
             break;
         case 'cases':
-            authorizedAccess(3, 1, 0);
-            $latteParameters['title'] = $text['pripady'];
-            $latteParameters['actions'][] = ["/newcase.php", $text['pridatpripad']];
+            $latteParameters['title'] = $text['menuCases'];
+            authorizedAccess('case', 'read', 0);
+            if ($user['aclCase']) {
+                $latteParameters['actions'][] = ["/newcase.php", $text['pridatpripad']];
+            }
             //TODO view case, edit case, new case
             require_once SERVER_ROOT . '/pages/cases.php';
             break;
         case 'groups':
-            authorizedAccess(2, 1, 0);
-            $latteParameters['title'] = $text['skupiny'];
-            $latteParameters['actions'][] = ["/newgroup.php", $text['pridatskupinu']];
+            $latteParameters['title'] = $text['menuGroups'];
+            authorizedAccess('group', 'read', 0);
+            if ($user['aclGroup']) {
+                $latteParameters['actions'][] = ["/newgroup.php", $text['pridatskupinu']];
+            }
             //TODO view group, edit group, new group
             require_once SERVER_ROOT . '/pages/groups.php';
             break;
         case 'persons':
-            authorizedAccess(1, 1, 0);
-            $latteParameters['title'] = $text['osoby'];
-            $latteParameters['actions'][] = ["/persons", $text['osoby']];
-            $latteParameters['actions'][] = ["/newperson.php", $text['pridatosobu']];
-            $latteParameters['actions'][] = ["/symbols", $text['neprirazenesymboly']];
-            $latteParameters['actions'][] = ["/symbol_search.php", $text['vyhledatsymbol']];
+            $latteParameters['title'] = $text['menuPersons'];
+            authorizedAccess('person', 'read', 0);
+            $latteParameters['actions'][] = ["/persons", $text['menuPersons']];
+            if ($user['aclPerson']) {
+                $latteParameters['actions'][] = ["/newperson.php", $text['pridatosobu']];
+            }
             require_once SERVER_ROOT . '/pages/persons.php';
             break;
         case 'reports':
-
-            $latteParameters['title'] = $text['hlaseni'];
-            if (isset($URL[2]) && is_numeric($URL[2])) {
-                // $latteParameters['actions'][] = ["/reports/$URL[2]/names", $text['zobrazitjmena']];
-                // $latteParameters['actions'][] = ["/reports/$URL[2]/symbols", $text['zobrazitsymboly']];
-                // $latteParameters['actions'][] = ["/reports/$URL[2]/notes", $text['zobrazitpoznamky']];
+            $latteParameters['title'] = $text['menuReports'];
+            if (isset($URL[2],$URL[3]) && is_numeric($URL[2]) && $URL[3] == 'edit' && $user['aclReport']) {
                 $latteParameters['actions'][] = ["/reports", $text['vypishlaseni']];
-                if (isset($URL[3]) && $URL[3] == 'edit') {
-                    authorizedAccess(4, 2, $URL[2]);
-                    //$latteParameters['actions'][] = ["/symbols", $text['priraditsymboly']];
-                    $latteParameters['actions'][] = ["/reports/$URL[2]", $text['zobrazitreport']];
-                    require_once SERVER_ROOT . '/pages/report_edit.php';
-                } else {
-                    authorizedAccess(4, 1, $URL[2]);
-                    $latteParameters['actions'][] = ["/reports/$URL[2]/edit", $text['upravitreport']];
-                    require_once SERVER_ROOT . '/pages/report_view.php';
-                }
-            } elseif (isset($URL[2]) && $URL[2] == 'new') {
-                authorizedAccess(4, 3, 0);
+                $latteParameters['actions'][] = ["/reports/$URL[2]", $text['zobrazitreport']];
+                require_once SERVER_ROOT . '/pages/report_edit.php';
+            } elseif (isset($URL[2],$URL[3]) && is_numeric($URL[2]) && $URL[3] == 'link' && $user['aclReport']) {
+                $latteParameters['actions'][] = ["/reports", $text['vypishlaseni']];
+                $latteParameters['actions'][] = ["/reports/$URL[2]", $text['zobrazitreport']];
+                $latteParameters['actions'][] = ["/reports/$URL[2]/edit", $text['upravitreport']];
+            // TODO linking
+            } elseif (isset($URL[2]) && $URL[2] == 0 && $user['aclReport']) {
                 $latteParameters['actions'][] = ["/reports", $text['vypishlaseni']];
                 require_once SERVER_ROOT . '/pages/report_edit.php';
-            } else {
-                authorizedAccess(4, 1, @$URL[2]);
-                $latteParameters['actions'][] = ["/reports/new", $text['zalozithlaseni']];
+            } elseif (isset($URL[2],$URL[3]) && is_numeric($URL[2]) && $URL[3] == 'edit' && $user['aclReport']) {
+                $latteParameters['actions'][] = ["/reports", $text['vypishlaseni']];
+                $latteParameters['actions'][] = ["/reports/$URL[2]", $text['zobrazitreport']];
+                require_once SERVER_ROOT . '/pages/report_view.php';
+            } elseif (isset($URL[2]) && is_numeric($URL[2]) && !isset($URL[3])) {
+                $latteParameters['actions'][] = ["/reports", $text['vypishlaseni']];
+                if ($user['aclReport']) {
+                    $latteParameters['actions'][] = ["/reports/0", $text['zalozithlaseni']];
+                    $latteParameters['actions'][] = ["/reports/$URL[2]/edit", $text['upravitreport']];
+                }
+                require_once SERVER_ROOT . '/pages/report_view.php';
+            } else { //also archive/unarchive/delete/restore
+                if ($user['aclReport']) {
+                    $latteParameters['actions'][] = ["/reports/0", $text['zalozithlaseni']];
+                }
                 require_once SERVER_ROOT . '/pages/reports.php';
             }
             break;
         case 'settings':
-            authorizedAccess(15, 1, $user['userId']);
-            $latteParameters['title'] = $text['nastaveni'];
+            $latteParameters['title'] = $text['menuSettings'];
+            authorizedAccess('settings', 'read', $user['userId']);
             require_once SERVER_ROOT . '/pages/settings.php';
             break;
         case 'symbols':
-            authorizedAccess(7, 1, @$_GET['rid']);
+            $latteParameters['title'] = $text['menuSymbols'];
+            authorizedAccess('symbol', 'read', @$_GET['rid']);
             //TODO view report, edit report, new report
-            $latteParameters['title'] = $text['symboly'];
-            $latteParameters['actions'][] = ["/newsymbol.php", $text['newSymbol']];
+            if ($user['aclSymbol']) {
+                $latteParameters['actions'][] = ["/newsymbol.php", $text['newSymbol']];
+            }
             $latteParameters['actions'][] = ["/symbol_search.php", $text['searchSymbol']];
             require_once SERVER_ROOT . '/pages/symbols.php';
             break;
         case 'users':
-            if ($user['aclUser'] < 1 && $user['aclGamemaster'] < 1 && $user['aclRoot'] < 1) {
-                unauthorizedAccess(8, 1, $URL[3]);
-            } else {
-                $latteParameters['title'] = $text['spravauzivatelu'];
+            if ($user['aclUser'] || $user['aclGamemaster'] || $user['aclRoot']) {
+                $latteParameters['title'] = $text['menuUsers'];
                 if (isset($URL[2]) && $URL[2] == 'new') {
-                    authorizedAccess(8, 3, 0);
-                    $latteParameters['actions'][] = ["/users", $text['spravauzivatelu']];
-                    $latteParameters['subtitle'] = $text['vytvorituzivatele'];
+                    authorizedAccess('user', 'new', 0);
+                    $latteParameters['actions'][] = ["/users", $text['menuUsers']];
+                    $latteParameters['subtitle'] = $text['subMenuActionUsersAdd'];
                     require_once SERVER_ROOT . '/pages/user_add.php';
                 } elseif (isset($URL[2]) && $URL[2] == 'edit') {
-                    authorizedAccess(8, 2, $URL[3]);
-                    $latteParameters['actions'][] = ["/users", $text['spravauzivatelu']];
-                    $latteParameters['actions'][] = ["/users/new", $text['vytvorituzivatele']];
-                    $latteParameters['subtitle'] = $text['upravituzivatele'];
+                    authorizedAccess('user', 'edit', $URL[3]);
+                    $latteParameters['actions'][] = ["/users", $text['menuUsers']];
+                    $latteParameters['actions'][] = ["/users/new", $text['subMenuActionUsersAdd']];
+                    $latteParameters['subtitle'] = $text['subMenuActionUsersEdit'];
                     require_once SERVER_ROOT . '/pages/user_edit.php';
                 } else {
-                    authorizedAccess(8, 1, 0);
-                    $latteParameters['actions'][] = ["/users/new", $text['vytvorituzivatele']];
+                    authorizedAccess('user', 'read', 0);
+                    $latteParameters['actions'][] = ["/users/new", $text['subMenuActionUsersAdd']];
                     require_once SERVER_ROOT . '/pages/users.php';
                 }
+            } else {
+                unauthorizedAccess('user', 'read', $URL[3]);
             }
             break;
         case 'news':
         default:
-            $latteParameters['title'] = $text['aktuality'];
+            $latteParameters['title'] = $text['menuNews'];
             if ($user['aclNews'] || $user['aclRoot']) {
-                $latteParameters['actions'][] = ["/news", $text['subMenuListNews']];
-                $latteParameters['actions'][] = ["/news/0/new", $text['subtitleNewsAdd']];
+                $latteParameters['actions'][] = ["/news", $text['subMenuActionNewsList']];
+                $latteParameters['actions'][] = ["/news/0/new", $text['subMenuActionNewsAdd']];
             }
             authorizedAccess('news', 'read', 0);
             require_once SERVER_ROOT . '/pages/dashboard.php';

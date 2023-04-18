@@ -12,7 +12,7 @@ $sql = "SELECT created_by FROM ".DB_PREFIX."symbol WHERE id=".$_REQUEST['rid'];
 $autharray = mysqli_fetch_assoc(mysqli_query($database, $sql));
 $author = $autharray['created_by'];
 if (is_numeric($_REQUEST['rid']) && ($user['aclCase'] || $user['userId'] == $author)) {
-    $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE reportId=".$_REQUEST['rid']);
+    $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."symbol WHERE id=".$_REQUEST['rid']);
     if ($rec = mysqli_fetch_assoc($res)) {
         ?>
 
@@ -35,9 +35,6 @@ if (!isset($customFilter['sort'])) {
                 break;
             default: $filterSqlSort = ' '.DB_PREFIX.'case.title ASC ';
         }
-        function filter()
-        {
-            global $filterSort;
             echo '<form action="addsy2c.php" method="post" id="filter">
 	<fieldset>
 	<legend>Filtr</legend>
@@ -49,12 +46,10 @@ if (!isset($customFilter['sort'])) {
 	<div id="filtersubmit"><input type="submit" name="filter" value="Filtrovat" /></div>
 	</fieldset>
 	</form>';
-        }
-        filter(); ?>
+        ?>
     <form action="addsymbols.php" method="post" class="otherform">
         <?php // vypis pripadu
-        $sqlFilter = DB_PREFIX."case.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."case.secret<=".$user['aclSecret'];
-
+                $sqlFilter = DB_PREFIX."case.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."case.secret<=".$user['aclSecret'];
         $sql = "SELECT ".DB_PREFIX."case.status AS 'status', ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."symbol2all.iduser
                 FROM ".DB_PREFIX."case
                 LEFT JOIN ".DB_PREFIX."symbol2all ON ".DB_PREFIX."symbol2all.idrecord=".DB_PREFIX."case.id AND ".DB_PREFIX."symbol2all.idsymbol=".$_REQUEST['rid']."

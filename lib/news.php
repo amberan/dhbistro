@@ -7,9 +7,7 @@ function newsRead($newsId)
     if (!isset($user['aclRoot'])) {
         $sqlwhere = " AND deleted = 0";
     }
-    $sql = 'SELECT '.DB_PREFIX.'news.*, '.DB_PREFIX.'user.userName, concat( '.DB_PREFIX.'person.name, " ", '.DB_PREFIX.'person.surname) as person FROM '.DB_PREFIX.'news
-        left join '.DB_PREFIX.'user on '.DB_PREFIX.'news.iduser = '.DB_PREFIX.'user.userId
-        left join '.DB_PREFIX.'person on '.DB_PREFIX.'user.personId = '.DB_PREFIX.'person.id
+    $sql = 'SELECT '.DB_PREFIX.'news.* FROM '.DB_PREFIX.'news
         WHERE '.DB_PREFIX.'news.id='.$newsId.@$sqlwhere;
     $query = mysqli_query($database,$sql);
     if (mysqli_num_rows($query) > 0) {
@@ -18,7 +16,7 @@ function newsRead($newsId)
         $news['newsBody'] = stripslashes($news['obsahMD']);
         $news['newsCreated'] = webDateTime($news['datum']);
         $news['category'] = $news['kategorie'];
-        $news['newsCreatedBy'] = Author($news['userName'],$news['person']);
+        $news['newsCreatedBy'] = AuthorDB($news['iduser']);
     } else {
         $news = $text['notificationRecordNotFound'];
     }
@@ -31,9 +29,7 @@ function newsList()
     if (!isset($user['aclRoot'])) {
         $sqlwhere = " AND deleted = 0";
     }
-    $sql = 'SELECT '.DB_PREFIX.'news.*, '.DB_PREFIX.'user.userName, concat( '.DB_PREFIX.'person.name, " ", '.DB_PREFIX.'person.surname) as person FROM '.DB_PREFIX.'news
-        left join '.DB_PREFIX.'user on '.DB_PREFIX.'news.iduser = '.DB_PREFIX.'user.userId
-        left join '.DB_PREFIX.'person on '.DB_PREFIX.'user.personId = '.DB_PREFIX.'person.id
+    $sql = 'SELECT '.DB_PREFIX.'news.* FROM '.DB_PREFIX.'news
         WHERE 1'.@$sqlwhere.'
         ORDER BY datum desc';
     $query = mysqli_query($database,$sql);
@@ -43,9 +39,9 @@ function newsList()
             $news['newsBody'] = stripslashes($news['obsahMD']);
             $news['newsCreated'] = webDateTime($news['datum']);
             $news['category'] = $news['kategorie'];
-            $news['newsCreatedBy'] = Author($news['userName'],$news['person']);
+            $news['newsCreatedBy'] = AuthorDB($news['iduser']);
             $newsList[] = $news;
-            deleteUnread(5, $news['id']);
+            deleteUnread('news', $news['id']);
         }
         return $newsList;
     }
@@ -101,7 +97,7 @@ function newsEdit($title,$body,$category)
                         WHERE id=' . $URL[2];
     mysqli_query($database, $sqlNewsEdit);
     if (mysqli_affected_rows($database) == 1) {
-        authorizedAccess(5, 11, $URL[2]);
+        authorizedAccess('news', 'delete', $URL[2]);
         unreadRecords(5, $URL[2]);
         return $text['notificationUpdated'];
     } else {

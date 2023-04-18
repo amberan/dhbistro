@@ -9,7 +9,7 @@ filtered by the "bug" label:
 and verify the issue you're about to submit isn't a duplicate.
 --->
 
-### WHERE - Bistro Link
+### WHERE - Link to Bistro page
 
 ### WHEN - Time and Date of when issue was identifies/replicated
 
@@ -35,4 +35,3 @@ and verify the issue you're about to submit isn't a duplicate.
  as it's tough to read otherwise. -->
 
 /label ~bug
-

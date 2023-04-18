@@ -97,12 +97,12 @@ a:hover.button, input[type=submit]:hover {
 	align-items: center;
 	position: relative;
   }
-  
+
   .timeout-triggered {
 	color: red;
 	font-weight: bold;
   }
-  
+
   #js-popup {
 	display: none;
   }
@@ -121,7 +121,7 @@ a:hover.button, input[type=submit]:hover {
 	justify-content: center;
 	align-items: center;
   }
-  
+
   .popup {
 	width: 550px;
 	height: auto;
@@ -142,10 +142,10 @@ a:hover.button, input[type=submit]:hover {
 	justify-content: space-between;
 	align-items: flex-start;
   }
-  
+
   fieldset {border: 1px black solid; padding: 0.5em; }
   ul li, ul li ul li {list-style-type: disc; margin-left: 1em;}
-  
+
 
 /***********************************/
 /*************  menu  **************/
@@ -213,7 +213,7 @@ a:hover.button, input[type=submit]:hover {
 	background-color: #06BB54;
 	border-bottom: 1px solid #808080;
 	padding: 1px 5px 2px 5px;
-}        
+}
 
 #menu ul li.unread {
 	background-color: #FF0000;
@@ -265,7 +265,7 @@ a:hover.button, input[type=submit]:hover {
 
 #filtersubmit input {
 
-	background-color: #ccc ; 
+	background-color: #ccc ;
 	color: #000;
 	padding: 0.3em;
 	position: relative;
@@ -324,11 +324,11 @@ a:hover.button, input[type=submit]:hover {
 	border: 1px inset #DFB96E;
 }
 
-#inputform input#name, 
-#inputform input#surname, 
-#inputform input#phone, 
+#inputform input#name,
+#inputform input#surname,
+#inputform input#phone,
 #inputform input#portrait,
-#inputform input#symbol, 
+#inputform input#symbol,
 #inputform select#side,
 #inputform select#power,
 #inputform select#spec {
@@ -389,7 +389,7 @@ a:hover.button, input[type=submit]:hover {
 	width:48px;
 	height:48px;
 	background:url('../images/Save-Big.png') no-repeat scroll 0 0 transparent;
-} 
+}
 /***********************************/
 /******** dal��  formul��  *********/
 /***********************************/
@@ -548,7 +548,7 @@ div > .poznamka-edit-buttons {position:absolute;right:0px;top:0px;}
 
 #symbolimg {
 	position: absolute;
-	right: 10.2em;
+	right: 9.2em;
 	width: 104px;
 	height: 104px;
 	border: 1px solid #808080;
@@ -576,6 +576,21 @@ div > .poznamka-edit-buttons {position:absolute;right:0px;top:0px;}
 	background:url('../images/nosymbol.png') no-repeat scroll center transparent;
 }
 
+#qrcodeimg {
+	position: absolute;
+	right: 17.2em;
+	width: 104px;
+	height: 104px;
+	border: 1px solid #808080;
+	padding: 1px;
+	margin: 0 0 20px 20px;
+}
+#qrcodeimg.noname {
+	text-indent:-1000px;
+	overflow:hidden;
+	background-color: #0D0D0D;
+}
+
 /***********************************/
 /***********  dashboard  ***********/
 /***********************************/
@@ -599,12 +614,12 @@ div > .poznamka-edit-buttons {position:absolute;right:0px;top:0px;}
 #dashboard p#top-text {margin-top:0px; padding-right:68px;}
 
 #dashboard fieldset {
-	position: relative; 
+	position: relative;
 	margin:0;
 	background:url('../images/corkbg.png') repeat;
 	background-color: #fff9ae;
 	}
-	
+
 #dashboard legend h2 {display:inline-block;}
 #dashboard .field-text {margin:0.2em; padding:0;}
 #dashboard .field-text>p {margin: 0.8em 0 0 0;}

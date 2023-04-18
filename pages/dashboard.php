@@ -1,6 +1,5 @@
 <?php
 
-use Tracy\Debugger;
 
 //
 
@@ -14,8 +13,8 @@ if (sizeof($reportsAssigned) > 1) {
 
 // CASES
 $casesAssigned = casesAssignedTo($user['userId']);
-if (sizeof($casesAssigned)> 1) {
+if (sizeof($casesAssigned) > 1) {
     $latteParameters['cases'] = $casesAssigned;
 } else {
-    $latteParameters['casesnone'] = $text['zadnenadokoncenepripady'];
+    $latteParameters['casesnone'] = $text['notificationListEmpty'];
 }

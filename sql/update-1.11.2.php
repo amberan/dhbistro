@@ -10,7 +10,7 @@ $updateScript[116_7] = 'INSERT INTO '.DB_PREFIX.'record_type (id,name) VALUES (7
 $updateScript[116_8] = 'INSERT INTO '.DB_PREFIX.'record_type (id,name) VALUES (8,"'.$text['user'].'")  ON DUPLICATE KEY UPDATE id=8, name="'.$text['user'].'"';
 $updateScript[116_9] = 'INSERT INTO '.DB_PREFIX.'record_type (id,name) VALUES (9,"'.$text['point'].'")  ON DUPLICATE KEY UPDATE id=9, name="'.$text['point'].'"';
 $updateScript[116_10] = 'INSERT INTO '.DB_PREFIX.'record_type (id,name) VALUES (10,"'.$text['task'].'")  ON DUPLICATE KEY UPDATE id=10, name="'.$text['task'].'"';
-$updateScript[116_11] = 'INSERT INTO '.DB_PREFIX.'record_type (id,name) VALUES (11,"'.$text['audit'].'")  ON DUPLICATE KEY UPDATE id=11, name="'.$text['audit'].'"';
+$updateScript[116_11] = 'INSERT INTO '.DB_PREFIX.'record_type (id,name) VALUES (11,"'.$text['menuAudit'].'")  ON DUPLICATE KEY UPDATE id=11, name="'.$text['menuAudit'].'"';
 $updateScript[116_12] = 'INSERT INTO '.DB_PREFIX.'record_type (id,name) VALUES (12,"'.$text['other'].'")  ON DUPLICATE KEY UPDATE id=12, name="'.$text['other'].'"';
 $updateScript[116_13] = 'INSERT INTO '.DB_PREFIX.'record_type (id,name) VALUES (13,"'.$text['file'].'")  ON DUPLICATE KEY UPDATE id=13, name="'.$text['file'].'"';
 $updateScript[116_14] = 'INSERT INTO '.DB_PREFIX.'record_type (id,name) VALUES (14,"'.$text['backup'].'")  ON DUPLICATE KEY UPDATE id=14, name="'.$text['backup'].'"';
@@ -33,6 +33,6 @@ $updateScript[116_28] = 'INSERT INTO '.DB_PREFIX.'operation_type (id,name) VALUE
 $updateScript[116_29] = 'INSERT INTO '.DB_PREFIX.'operation_type (id,name) VALUES (14,"'.$text['search'].'") ON DUPLICATE KEY UPDATE id=14, name="'.$text['search'].'"';
 $updateScript[116_30] = 'INSERT INTO '.DB_PREFIX.'operation_type (id,name) VALUES (15,"'.$text['unauthorizedAccessToSecret'].'") ON DUPLICATE KEY UPDATE id=15, name="'.$text['unauthorizedAccessToSecret'].'"';
 $updateScript[116_31] = 'INSERT INTO '.DB_PREFIX.'operation_type (id,name) VALUES (16,"'.$text['passwordReset'].'") ON DUPLICATE KEY UPDATE id=16, name="'.$text['passwordReset'].'"';
-$updateScript[116_32] = 'INSERT INTO '.DB_PREFIX.'operation_type (id,name) VALUES (17,"'.$text['recovery'].'") ON DUPLICATE KEY UPDATE id=17, name="'.$text['recovery'].'"';
+$updateScript[116_32] = 'INSERT INTO '.DB_PREFIX.'operation_type (id,name) VALUES (17,"'.$text['restore'].'") ON DUPLICATE KEY UPDATE id=17, name="'.$text['restore'].'"';
 $updateScript[116_33] = 'INSERT INTO '.DB_PREFIX.'operation_type (id,name) VALUES (18,"'.$text['lock'].'") ON DUPLICATE KEY UPDATE id=18, name="'.$text['lock'].'"';
 $updateScript[116_34] = 'INSERT INTO '.DB_PREFIX.'operation_type (id,name) VALUES (19,"'.$text['unlock'].'") ON DUPLICATE KEY UPDATE id=19, name="'.$text['unlock'].'"';

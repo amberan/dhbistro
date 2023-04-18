@@ -1,7 +1,7 @@
 
-            {if @$warning}
+            {ifset $warningPerson}
                 <div>
-                    {$warning}
+                    {$warningPerson}
                 </div>
             {else}
                 <div id="obsah">
@@ -10,17 +10,19 @@
                     <thead class="table-sticky-header">
                         <tr>
                             <th>
-                                <div class="table-no-wrap-left">{$text['jmeno']|firstUpper} <a href="{$URL[0]}{$URL[1]}/?sort=surname,name">&#8661;</a></div>
+                                <div class="table-no-wrap-left">{$text['jmeno']|firstUpper}{if $URL[1] != 'search'} <a href="{$URL[0]}{$URL[1]}/?sort=surname,name">&#8661;</a>{/if}</div>
                             </th>
                             <th class="mobile-no-show">{$text['definitions']|firstUpper}</th>
                             <th class="mobile-no-show">{$text['kontakty']|firstUpper}</th>
                             <th class="tablet-no-show">
-                                <div class="table-no-wrap text-center">{$text['vytvoreno']|firstUpper}  <a href="{$URL[0]}{$URL[1]}/?sort=regdate">&#8661;</a></div>
+                                <div class="table-no-wrap text-center">{$text['vytvoreno']|firstUpper}{if $URL[1] != 'search'} <a href="{$URL[0]}{$URL[1]}/?sort=regdate">&#8661;</a>{/if}</div>
                             </th>
                             <th class="tablet-no-show text-center">
-                                <div class="table-no-wrap">{$text['zmeneno']|firstUpper}  <a href="{$URL[0]}{$URL[1]}/?sort=datum">&#8661;</a></div>
+                                <div class="table-no-wrap">{$text['zmeneno']|firstUpper}{if $URL[1] != 'search'} <a href="{$URL[0]}{$URL[1]}/?sort=datum">&#8661;</a>{/if}</div>
                             </th>
-                            <th class="mobile-no-show">{$text['akce']|firstUpper}</th>
+                            {if $URL[1] != 'search' && $user['aclPerson'] > 0}
+                                <th class="mobile-no-show">{$text['akce']|firstUpper}</th>
+                            {/if}
                         </tr>
                     </thead>
                     <tbody>
@@ -29,32 +31,43 @@
                                 <td class="table-w-full-cell">
                                     <div class="identity-main-wrapper">
                                         <div class="persons-image-wrapper">
-                                            {if isset($filter[portrait])}
+                                            {if isset($filter['portrait'])}
                                                 <div class="persons-image-cropper">
-                                                    <img src="/file/portrait/{$person['id']}" alt="" />
+                                                    <img  loading="lazy" src="/file/portrait/{$person['id']}" alt="" />
                                                 </div>
                                             {/if}
-                                            {if isset($filter[symbol])}
+                                            {if isset($filter['symbol'])}
                                                 <div class="persons-image-cropper">
-                                                    <img src="/file/symbol/{$person['symbol']}" alt="" />
+                                                    <img  loading="lazy" src="/file/symbol/{$person['symbol']}" alt="" />
+                                                </div>
+                                            {/if}
+                                            {if isset($filter['qr'])} <!-- Tady se musi udelat podminka pro zobrazeni, schovani na mobilu hotovo -->
+                                                <div class="persons-image-cropper mobile-no-show bg-dark">
+                                                    <img  loading="lazy" src="/file/qrcontact/{$person['id']}.png" alt="" />
                                                 </div>
                                             {/if}
                                         </div>
                                         <div class="persons-identification-wrapper">
-                                            <p class="table-cell-title"><a href="/readperson.php?rid={$person['id']}&amp;hidenotes=0">{$person['surname']|replace: '\\', NULL} {$person['name']|replace: '\\', NULL}</a></p>
+                                            <p class="table-cell-title">
+                                            {if $person['deleted']}
+                                                {$person['personFullname']}
+                                            {else}
+                                                <a href="/readperson.php?rid={$person['id']}&amp;hidenotes=0">{$person['personFullname']|replace: '\\', NULL}</a>
+                                            {/if}
+                                            </p>
                                             <div class="table-badge-wrapper">
                                                 {if $person['secret']}
                                                     <span class="badge rounded-pill bg-danger text-light">{$text['utajeno']|upper}</span>
                                                 {/if}
-                                                {if $person['archived']}
-                                                    <span class="badge rounded-pill bg-secondary text-light">{$text['archivovano']}</span>
+                                                {if $person['personArchivedBool'] == 'True'}
+                                                    <span class="badge rounded-pill bg-secondary text-light">{$text['archivovano']|upper}</span>
                                                 {/if}
                                                 {if $person['dead']}
                                                     <span class="badge rounded-pill bg-secondary text-light">{$text['mrtvy']}</span>
                                                 {/if}
 
                                                 {if @$person['deleted']}
-                                                    <span class="badge rounded-pill bg-warning text-dark">{$text['smazany']}</span>
+                                                    <span class="badge rounded-pill bg-warning text-dark">{$text['smazany']|upper}</span>
                                                 {/if}
                                             </div>
                                         </div>
@@ -69,27 +82,48 @@
                                     <a href="tel:{$person['phone']}">{$person['phone']}</a>
                                 </td>
                                 <td class="tablet-no-show text-center">
-                                    {if $person['date_created']}<em>{$person['date_created']|date:'d.m.Y'}{else}{$text['neznamo']}</em>{/if}
+                                    {if $person['date_created']}<em>{$person['date_created']|date:'d.m.Y'}{else}{$text['notificationInformationUnknown']}</em>{/if}
                                 </td>
                                 <td class="tablet-no-show text-center"><em>{$person['date_changed']|date:'d.m.Y'}</em></td>
-                                <td class="table-w-full-cell">
+{if $URL[1] != 'search' && $user['aclPerson'] > 0}
+                                <td class="table-w-full-cell text-right">
                                     <div class="table-no-wrap-right">
                                         {if $user['aclPerson'] AND !$person['deleted']}
-                                            <a class="btn btn-sm btn-info btn-brick mb-1" href="/editperson.php?rid={$person['id']}" alt="{$text[upravitosobu]}">
+                                            <a class="btn btn-sm btn-info btn-brick mb-1 tip-wrapper" href="/editperson.php?rid={$person['id']}" alt="{$text[upravitosobu]}">
                                                 {php inject_svg("images/icons/edit-solid.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text[upravitosobu]}</span>
                                             </a>
-                                            <a class="btn btn-sm  btn-info mb-1" href="/newnote.php?rid={$person['id']}&idtable=5">přidat poznámku</a>
-                                            {if $user['aclPerson'] > 1 }
-                                                <a class="btn btn-sm btn-brick btn-danger mb-1" href="/persons/delete/{$person['id']}" onclick="return confirm('{$text['opravdusmazatosobu']} &quot; {$person['surname']|stripHtml} {$person['name']|stripHtml}&quot;?');" alt="{$text[smazatosobu]}">{php inject_svg("images/icons/trash-solid.svg")}</a>
+                                            {if $user['aclPerson'] >= 2 && $person['personArchivedBool'] == 'False' && !@$person['deleted']}
+                                            <a class="btn btn-sm btn-brick btn-dark mb-1 tip-wrapper" href="/persons/{$person['id']}/archive" onclick="return confirm('{$text['actionConfirmationArchive']|noescape} {$person['personFullname']|replace: '\"', NULL}?');" alt="
+                                            {$text['actionArchive']}">
+                                            {php inject_svg("images/icons/box-solid.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text['actionArchive']}</span>
+                                            </a>
+                                        {elseif  $user['aclPerson'] >= 2 && !@$person['deleted']}
+                                            <a class="btn btn-sm btn-brick btn-secondary mb-1 tip-wrapper" href="/persons/{$person['id']}/unarchive" onclick="return confirm('{$text['actionConfirmationUnarchive']|noescape} {$person['personFullname']|replace: '\"', NULL}?');" alt="
+                                            {$text['actionUnarchive']}">
+                                            {php inject_svg("images/icons/box-open-solid.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text['actionUnarchive']}</span>
+                                            </a>
+                                        {/if}
+                                            {if $user['aclPerson'] >= 2 }
+                                                <a class="btn btn-sm btn-brick btn-danger mb-1 tip-wrapper" href="/persons/delete/{$person['id']}" onclick="return confirm('{$text['actionConfirmationRemove']|noescape} {$person['personFullname']}?');" alt="{$text[smazatosobu]}">
+                                                    {php inject_svg("images/icons/trash-solid.svg")}
+                                                    <span class="bubbletip bubbletip-bottom-right">{$text[smazatosobu]}</span>
+                                                </a>
                                             {/if}
                                         {/if}
                                         {if $user['aclRoot'] AND @$person['deleted']}
-                                            <a class="btn btn-sm btn-success mb-1" href="/persons/restore/{$person['id']}" onclick="return confirm('{$text['opravduobnovitosobu']} &quot; {$person['surname']|stripHtml} {$person['name']|stripHtml}&quot;?');">{php inject_svg("images/icons/recycle.svg")}</a>
+                                            <a class="btn btn-sm btn-success mb-1 tip-wrapper" href="/persons/restore/{$person['id']}" onclick="return confirm('{$text['actionConfirmationRestore']|noescape}  {$person['personFullname']}?');">{php inject_svg("images/icons/recycle.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text['actionRestore']}</span>
+                                            </a>
                                         {/if}
                                     </div>
                                 </td>
+{/if}
                             </tr>
                         {/foreach}
                     </tbody>
                 </table>
-            {/if}
+            </div>
+            {/ifset}
