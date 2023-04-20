@@ -18,7 +18,95 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 ### Security
  -->
 
+## 1.12.0 2023-04-20
+### Fixed
+- Fixed: uploading symbol to person without one #345
+
 ## 1.11.4 2023-04-18
+### Added
+- Feature: archive/unarchive from listing for maintainers #309 #331
+- Feature: case can be archived #139
+- Feature: filter deleted in listing for admin #308
+### Changed
+- Refactored: showing date of archived/dead mark on person #274
+- Refactored: notes can be added only from inside the objects, not from listing #303
+- Refactored: unification of terminology in UI (part) #7
+- Refactored: report link unification #321
+- Refactored: improved report creation #259 #342
+- Refactored: search UI to bootstrap #119
+- Refactored: Tooltips on iconized actions #330
+- Refactored: Tooltips on labels #320
+- Refactored: note deletion #312
+- Refactored: floating save button on reports #322
+- Refactored: 'mark all as read' can work per section #186
+- Refactored: filter() removal from item linking #343
+### Fixed
+- Fixed: updating roof/archived on person #274
+- Fixed: creating notes #297
+- Fixed: new symbol creation #305
+- Fixed: all notes on report marked as secret #302
+- Fixed: change user password #276
+- Fixed: note formating while editing person #319
+- Fixed: edit link permisssion check #185
+- Fixed: disable links to deleted items in listings #226
+- Fixed: read all link update on old UI #186
+- Fixed: notes from users without person #332 #340
+- Fixed: note author display #318 #332
+
+## 1.11.3 - 2023-03-30
+### Added
+- Feature: secret symbols #284
+- Feature: editable news #264
+### Changed
+- Refactored: header/listing template separation #273
+- Refactored: report default text #283
+### Fixed
+- Fixed: group filter for secret #59
+- Fixed: after editing symbol return to symbol page #285
+- Fixed: trim whitespaces from username and password #182
+- Fixed: one person cannot be linked to two users #182
+- Fixed: new link for banka #230
+- Fixed: report string escaping #264
+- Fixed: error while refreshing after timeout #279
+- Fixed: symbols to the old top menu #246
+### Removed
+- Database: drop news.obsah_md #300
+
+## 1.11.2 - 2023-02-15
+### Changed
+- Refactored: symbols redesign #116
+- Refactored: groups filter - secret #59
+### Fixed
+- Fixed: random sorting on persons #237
+- Fixed: linking persons to report #262
+
+## 1.11.1 - 2023-02-14
+### Added
+- Feature: report restoration #256
+- Feature: counting of results on search #119
+### Fixed
+- Fixed: twice displayed 'Dosažení stropu zaznamenáno' #256
+- Fixed: linked webapps opening in new tab #230
+- Fixed: display of symbol detail #252
+- Fixed: symbol deletion #254
+- Fixed: link symbol to person #260
+- Fixed: archive symbol #262
+- Fixed: new user creation #251 #182
+- Fixed: report deletion #256
+- Fixed: report listing event date #266
+- Fixed: notes on secret items in search #202 #253
+- Fixed: adding notes to symbols #116 #110
+### Security
+- Update: Latte 3.0 #269
+- Update: Tracy 2.9 #269
+- Update: ECS 11.2.8 #269
+- Update: html-to-markdown 5.1 #269
+
+## 1.11 - 2023-02-09
+### Security
+- Feature: update of composer libs and php to 8.2.2 #270
+
+## 1.11.4 2023-04-04
 ### Added
 - Feature: archive/unarchive from listing for maintainers #309 #331
 - Feature: case can be archived #139

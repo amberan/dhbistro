@@ -48,6 +48,7 @@ if (isset($URL[3]) && is_numeric($URL[2]) && $URL[3] == 'restore' && $user['aclR
 }
 
 
+
 //FILTER
 if (isset($_GET['sort'])) {
     sortingSet('report', $_GET['sort'], 'report');
@@ -107,6 +108,8 @@ $reportsSql = "SELECT
     sortingGet('report'); //."GROUP BY ".DB_PREFIX."report.id";
 $reportList = mysqli_query($database, $reportsSql);
 $reportCount = mysqli_num_rows($reportList);
+
+
 
 
 
