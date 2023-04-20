@@ -114,6 +114,46 @@ $text['connectedTo'] = 'připojeno k';
 
 
 
+# PERMISSION
+$text['aclNews'] = 'Aktuality';
+$text['aclBoard'] = 'Nástěnka';
+$text['aclReport'] = $text['menuReports'];
+$text['aclPerson'] = $text['menuPersons'];
+$text['aclSymbol'] = $text['menuSymbols'];
+$text['aclCase'] = $text['menuCases'];
+$text['aclGroup'] = $text['menuGroups'];
+$text['aclUser'] = $text['menuUsers'];
+$text['aclAudit'] = $text['menuAudit'];
+$text['aclHunt'] = 'Licence';
+$text['aclSecret'] = 'Tajné';
+$text['aclGamemaster'] = 'Organizátor';
+$text['aclAPI'] = 'API';
+$text['aclRoot'] = 'Administrátor';
+
+$text['aclLevel'][1] = 'čtení';
+$text['aclLevel'][2] = 'zápis';
+$text['aclLevel'][3] = 'správce';
+
+$text['aclSecretLevel'][0] = 'veřejné';
+$text['aclSecretLevel'][1] = 'tajné';
+$text['aclSecretLevel'][2] = 'soukromé';
+
+# DEFAULT TEXTAREA TEXT
+$text['reportDefaultTask'] = '';
+$text['reportDefaultSummary'] = '';
+$text['reportDefaultCost'] = '';
+$text['reportDefaultImpact'] = '';
+$text['reportDefaultDetail'] = '';
+$text['reportDefaultInput'] = '';
+
+# WHATEVER
+$text['searchResults'] = 'výsledky vyhledávaní';
+$text['connectedTo'] = 'připojeno k';
+
+
+
+
+
 
 
 
@@ -122,6 +162,8 @@ $text['poznamky'] = 'poznámky';
 $text['smazatpoznamku'] = 'odstranit poznámku';
 $text['vytvoritpoznamku'] = 'vytvořit poznámku';
 $text['ulozitpoznamku'] = 'uložit poznámku';
+
+$text['note'] = 'poznámka';
 
 $text['note'] = 'poznámka';
 
@@ -134,6 +176,7 @@ $text['hlasenineniprirazenopripadu'] = 'hlášení není přiřazeno k žádném
 $text['neprirazenesymbolyhlaseni'] = 'nepřiřazené symboly spojené s hlášením';
 $text['osobyprirazenekhlaseni'] = 'osoby přiřazené k hlášení';
 $text['nemanedokoncenahlaseni'] = 'uživatel nemá žádná nedokončená hlášení.';
+
 
 
 // GENERIC

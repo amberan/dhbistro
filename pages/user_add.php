@@ -28,7 +28,6 @@ if (count(($_POST)) > 1) {
     $userEdit['personId'] = @$_POST['idperson'];
 
 
-
     $latteParameters['userEdit'] = $userEdit;
 
 

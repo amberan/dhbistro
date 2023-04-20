@@ -153,6 +153,7 @@ if (isset($user)) {
             // TODO linking
             } elseif (isset($URL[2]) && $URL[2] == 0 && $user['aclReport']) {
                 $latteParameters['actions'][] = ["/reports", $text['vypishlaseni']];
+                $latteParameters['actions'][] = ["/reports/$URL[2]", $text['zobrazitreport']];
                 require_once SERVER_ROOT . '/pages/report_edit.php';
             } elseif (isset($URL[2],$URL[3]) && is_numeric($URL[2]) && $URL[3] == 'edit' && $user['aclReport']) {
                 $latteParameters['actions'][] = ["/reports", $text['vypishlaseni']];
