@@ -18,6 +18,10 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 ### Security
  -->
 
+## 1.12.0 2023-04-20
+### Fixed
+- Fixed: uploading symbol to person without one #345
+
 ## 1.11.4 2023-04-18
 ### Added
 - Feature: archive/unarchive from listing for maintainers #309 #331

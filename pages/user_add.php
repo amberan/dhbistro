@@ -27,32 +27,6 @@ if (count(($_POST)) > 1) {
     $userEdit['userName'] = trim(@$_POST['login']);
     $userEdit['personId'] = @$_POST['idperson'];
 
-$latteParameters['userId'] = 'new';
-
-if (!isset($_POST['heslo']) || (isset($_POST['heslo']) && strlen($_POST['heslo'])) < 1) {
-    $userEdit['newPassword'] = randomPassword();
-} else {
-    $userEdit['newPassword'] = trim(@$_POST['heslo']);
-}
-if (count(($_POST)) > 1) {
-    $userEdit['aclRoot'] = @$_POST['aclRoot'];
-    $userEdit['aclUser'] = @$_POST['aclUser'];
-    $userEdit['aclBoard'] = @$_POST['aclBoard'];
-    $userEdit['aclNews'] = @$_POST['aclNews'];
-    $userEdit['aclSecret'] = @$_POST['aclSecret'];
-    $userEdit['aclAudit'] = @$_POST['aclAudit'];
-    $userEdit['aclGroup'] = @$_POST['aclGroup'];
-    $userEdit['aclPerson'] = @$_POST['aclPerson'];
-    $userEdit['aclCase'] = @$_POST['aclCase'];
-    $userEdit['aclHunt'] = @$_POST['aclHunt'];
-    $userEdit['aclGamemaster'] = @$_POST['aclGamemaster'];
-    $userEdit['aclReport'] = @$_POST['aclReport'];
-    $userEdit['aclSymbol'] = @$_POST['aclSymbol'];
-    $userEdit['aclAPI'] = @$_POST['aclAPI'];
-    $userEdit['userEmail'] = @$_POST['userEmail'];
-    $userEdit['userName'] = trim(@$_POST['login']);
-    $userEdit['personId'] = @$_POST['idperson'];
-
 
     $latteParameters['userEdit'] = $userEdit;
 
