@@ -625,6 +625,8 @@ input[type='submit'] {
 }
 
 .table-cell-subtitle {
+  max-width: 250px;
+  word-break: break-word;
   margin: 0;
   font-size: 12px;
 }
