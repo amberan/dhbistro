@@ -4,7 +4,7 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 
 latteDrawTemplate("header");
 
-if (is_numeric($_REQUEST['rid'])) {
+if (is_numeric($_REQUEST['rid']) && isset($user)) {
     $sql_a = "SELECT * FROM ".DB_PREFIX."c2s WHERE ".DB_PREFIX."c2s.idsolver=".$user['userId']." AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid'];
     $res_a = mysqli_query($database, $sql_a);
     $rec_a = mysqli_fetch_array($res_a);

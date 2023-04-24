@@ -60,7 +60,7 @@ if (isset($_POST['addsymb2pers'])) {
     $sql_p = "SELECT name, surname FROM ".DB_PREFIX."person WHERE id=".$_POST['person'];
     $res_p = mysqli_query($database, $sql_p);
     $rec_p = mysqli_fetch_assoc($res_p);
-    echo '<div id="obsah"><p>Symbol přiřazen osobě <a href="readperson.php?rid='.$_POST['person'].'&amp;hidenotes=0">'.implode(', ', [StripSlashes($rec_p['surname']), StripSlashes($rec_p['name'])]).'</a></p>';
+    echo '<div id="obsah"><p>Symbol přiřazen osobě <a href="readperson.php?rid='.$_POST['person'].'&amp;hidenotes=0">'.implode(', ', [StripSlashes($rec_p['surname'].' '), StripSlashes($rec_p['name'].' ')]).'</a></p>';
     echo '<p>Zkontroluj prosím poznámky, přiložené k osobě, a případně smaž duplicity.</div>';
     // Hlaseni - priradit osobu tam, kde neni
     $sql_ar = "SELECT idrecord FROM `".DB_PREFIX."symbol2all` WHERE `idsymbol` =".$_POST['symbolid']." AND `table` =4 AND idrecord NOT IN (

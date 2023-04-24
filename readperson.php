@@ -1,10 +1,10 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
-
+use Tracy\Debugger;
 
 latteDrawTemplate("header");
 
-if (is_numeric($_REQUEST['rid'])) {
+if (is_numeric($_REQUEST['rid']) && isset($user)) {
     $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."person WHERE id=".$_REQUEST['rid']);
     if ($rec = mysqli_fetch_assoc($res)) {
         if (($rec['secret'] > $user['aclSecret']) || $rec['deleted'] == 1) {
@@ -150,6 +150,9 @@ if (is_numeric($_REQUEST['rid'])) {
             FROM ".DB_PREFIX."group, ".DB_PREFIX."g2p
             WHERE $sqlFilter AND ".DB_PREFIX."g2p.idgroup=".DB_PREFIX."group.id AND ".DB_PREFIX."g2p.idperson=".$_REQUEST['rid']."
             ORDER BY ".DB_PREFIX."group.title ASC";
+        Debugger::log($config['version'].": ".$sql);
+
+
         $res_g = mysqli_query($database, $sql);
         if (mysqli_num_rows($res_g)) {
             $groups = [];
@@ -214,7 +217,7 @@ if (is_numeric($_REQUEST['rid'])) {
         if (mysqli_num_rows($res_r)) {
             $reports = [];
             while ($rec_r = mysqli_fetch_assoc($res_r)) {
-                $reports[] = '<a href="/reports/'.$rec_r['id'].'">'.stripslashes($rec_r['label']).'</a> | vytvořeno: '.($rec_r['date_created']).' | změněno: '.($rec_r['date_changed']);
+                $reports[] = '<a href="/reports/'.$rec_r['id'].'">'.stripslashes($rec_r['label'].'').'</a> | vytvořeno: '.($rec_r['date_created']).' | změněno: '.($rec_r['date_changed']);
             }
             echo implode('<br />', $reports);
         } else {

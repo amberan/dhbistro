@@ -88,7 +88,7 @@ function deleteUnread($tablenum, $rid)
     if (!is_numeric($tablenum)) {
         $tablenum = unreadTableId($tablenum);
     }
-    if (isset($user['usedId'])) {
+    if (isset($user['userId'])) {
         if ($rid <> 'none' && $user['userId']) {
             $unreadSql = "DELETE FROM ".DB_PREFIX."unread WHERE idtable=".$tablenum." AND idrecord=".$rid." AND iduser=".$user['userId'];
         } elseif ($user['userId']) {

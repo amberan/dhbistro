@@ -125,7 +125,7 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
                         <td><input type="checkbox" name="person[]" value="'.$person['id'].'" class="checkbox"'.($person['iduser'] ? ' checked="checked"' : '').' /></td>
                         '.($sportraits ? '<td><img  loading="lazy" src="file/portrait/'.$person['id'].'" alt="" /></td>' : '').'
                         '.($ssymbols ? '<td><img  loading="lazy" src="file/symbol/'.$person['symbol'].'" alt="" /></td>' : '').'
-                        <td>'.($person['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$person['id'].'&amp;hidenotes=0">'.implode(', ', [stripslashes($person['surname']), stripslashes($person['name'])]).'</a></span>' : '<a href="readperson.php?rid='.$person['id'].'&amp;hidenotes=0">'.implode(', ', [stripslashes($person['surname']), stripslashes($person['name'])]).'</a>').'</td>
+                        <td>'.($person['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$person['id'].'&amp;hidenotes=0">'.implode(', ', [stripslashes($person['surname'].' '), stripslashes($person['name'].' ')]).'</a></span>' : '<a href="readperson.php?rid='.$person['id'].'&amp;hidenotes=0">'.implode(', ', [stripslashes($person['surname'].' '), stripslashes($person['name'].' ')]).'</a>').'</td>
 						<td><a href="tel:'.str_replace(' ', '', $person['phone']).'">'.$person['phone'].'</a></td>
 						<td>'.webdate($person['date_created']).' / '.webdate($person['date_changed']).'</td>
                         <td>'.($person['archived'] > 2 ? 'Archivovaný' : '').''.($person['dead'] == 1 ? ' Mrtvý' : '').''.($person['secret'] == 1 ? ' Tajný' : '').'</td>
@@ -151,7 +151,7 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
         while ($rec = mysqli_fetch_assoc($res)) {
             echo '<tr class="'.($even % 2 == 0 ? 'even' : 'odd').'"><td><input type="checkbox" name="person[]" value="'.$rec['id'].'" class="checkbox"'.($rec['iduser'] ? ' checked="checked"' : '').' /></td>
             '.($sportraits ? '<td><img  loading="lazy" src="file/portrait/'.$rec['id'].'" alt="portrét chybí" /></td>' : '').($ssymbols ? '<td><img  loading="lazy" src="file/symbol/'.$rec['symbol'].'" alt="symbol chybí" /></td>' : '').'
-	<td>'.($rec['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$rec['id'].'">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a></span>' : '<a href="readperson.php?rid='.$rec['id'].'">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a>').'</td>
+	<td>'.($rec['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$rec['id'].'">'.implode(', ', [stripslashes($rec['surname'].' '), stripslashes($rec['name'].' ')]).'</a></span>' : '<a href="readperson.php?rid='.$rec['id'].'">'.implode(', ', [stripslashes($rec['surname'].' '), stripslashes($rec['name'].' ')]).'</a>').'</td>
 	</tr>';
             $even++;
         }
