@@ -91,8 +91,8 @@ if (isset($_POST['personid'], $_POST['editperson']) && $user['aclPerson'] && !pr
         unreadRecords(1, $_POST['personid']);
     }
     if (is_uploaded_file($_FILES['portrait']['tmp_name'])) { //UPLOAD portait
-        $ps = mysqli_query($database, "SELECT portrait FROM ".DB_PREFIX."person WHERE id=".$_POST['personid']);
-        if ($pc = mysqli_fetch_assoc($ps)) {
+        $pc = mysqli_fetch_assoc(mysqli_query($database, "SELECT portrait FROM ".DB_PREFIX."person WHERE id=".$_POST['personid']));
+        if (isset($pc['portrait'])) {
             unlink('./files/portraits/'.$pc['portrait']);
         }
         $file = time().md5(uniqid(time().random_int(0, getrandmax())));
@@ -144,12 +144,11 @@ if (isset($_POST['personid'], $_POST['editperson']) && $user['aclPerson'] && !pr
     }
 }
 //ANTIDATING registration
-if ((isset($_POST['personid'])) && $user['aclGamemaster'] == 1 && is_numeric($_POST['rdatumday']) && is_numeric($_POST['regusr'])) {
+if (isset($_POST['personid']) && $user['aclGamemaster'] == 1 && is_numeric($_POST['rdatumday']) && is_numeric($_POST['regusr'])) {
     authorizedAccess('person', 'GMedit', $_POST['personid']);
     $rdatum = mktime(0, 0, 0, $_POST['rdatummonth'], $_POST['rdatumday'], $_POST['rdatumyear']);
     mysqli_query($database, "UPDATE ".DB_PREFIX."person SET regdate='".$rdatum."', regid='".$_POST['regusr']."' WHERE id=".$_POST['personid']);
     $_SESSION['message'] = 'Osoba upravena.';
-    header('Location: readperson.php?rid='.$_POST['personid'].'&amp;hidenotes=0');
 } else {
     if (isset($_POST['orgperson'])) {
         $_SESSION['message'] = 'Chyba při ukládání změn, ujistěte se, že jste vše provedli správně a máte potřebná práva.';
@@ -163,13 +162,14 @@ if (isset($_POST['setgroups'])) {
     for ($i = 0; $i < count($group); $i++) {
         mysqli_query($database, "INSERT INTO ".DB_PREFIX."g2p VALUES('".$_POST['personid']."','".$group[$i]."','".$user['userId']."')");
     }
-    header('Location: readperson.php?rid='.$_POST['personid'].'&amp;hidenotes=0');
 }
 if (isset($_POST['uploadfile']) && is_uploaded_file($_FILES['attachment']['tmp_name']) && is_numeric($_POST['personid']) && is_numeric($_POST['secret'])) {
     authorizedAccess('person', 'fileAdd', $_POST['personid']);
     $newname = time().md5(uniqid(time().random_int(0, getrandmax())));
     move_uploaded_file($_FILES['attachment']['tmp_name'], './files/'.$newname);
-    $sql = "INSERT INTO ".DB_PREFIX."file (uniquename,originalname,mime,size,datum,iduser,idtable,iditem,secret) VALUES('".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".time()."','".$user['userId']."','1','".$_POST['personid']."','".$_POST['secret']."')";
+    $sql = "INSERT INTO ".DB_PREFIX."file (uniquename,originalname,mime,size,datum,iduser,idtable,iditem,secret)
+    VALUES('".$newname."','".$_FILES['attachment']['name']."','".$_FILES['attachment']['type']."','".$_FILES['attachment']['size']."','".time()."',
+        '".$user['userId']."','1','".$_POST['personid']."','".$_POST['secret']."')";
     mysqli_query($database, $sql);
     if (!isset($_POST['fnotnew'])) {
         unreadRecords(1, $_POST['personid']);
@@ -180,14 +180,13 @@ if (isset($_POST['uploadfile']) && is_uploaded_file($_FILES['attachment']['tmp_n
     }
 }
 if (isset($_GET['deletefile']) && is_numeric($_GET['deletefile'])) {
-    authorizedAccess('person', 'fileDelete', $_POST['personid']);
+    authorizedAccess('person', 'fileDelete', $_GET['personid']);
     if ($user['aclPerson']) {
         $fres = mysqli_query($database, "SELECT uniquename FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
         $frec = mysqli_fetch_assoc($fres);
         unlink('./files/'.$frec['uniquename']);
         mysqli_query($database, "DELETE FROM ".DB_PREFIX."file WHERE ".DB_PREFIX."file.id=".$_GET['deletefile']);
     }
-    header('Location: editperson.php?rid='.$_GET['personid']);
 }
 if (isset($_GET['deletesymbol'])) {
     authorizedAccess('person', 'edit', $_GET['personid']);
@@ -200,7 +199,6 @@ if (isset($_GET['deletesymbol'])) {
         mysqli_query($database, "UPDATE ".DB_PREFIX."symbol SET `desc` = concat('".$sdate."', `desc`), assigned=0 WHERE id=".$spc['symbol']);
         mysqli_query($database, "UPDATE ".DB_PREFIX."person SET symbol='' WHERE id=".$_GET['personid']);
     }
-    header('Location: editperson.php?rid='.$_GET['personid']);
 }
 
 //FILTER

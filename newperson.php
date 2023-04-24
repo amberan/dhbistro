@@ -31,7 +31,7 @@ sparklets('<a href="/persons/">osoby</a> &raquo; <strong>nová osoba</strong>');
 				<h3><label for="regusr">Vytvořil:</label></h3>
 				<select name="regusr" id="regusr">
 <?php while ($rec = mysqli_fetch_assoc($res)) {
-    echo '<option value="'.$rec['userId'].'" '.($rec['userId'] == @$rec_p['regid'] ? ' selected' : '').'>'.stripslashes($rec['userName']).'       -      '.stripslashes($rec['surname']).', '.stripslashes($rec['name']).'</option>';
+    echo '<option value="'.$rec['userId'].'" '.($rec['userId'] == @$rec_p['regid'] ? ' selected' : '').'>'.stripslashes($rec['userName'].' ').'       -      '.stripslashes(''.$rec['surname']).', '.stripslashes($rec['name'].' ').'</option>';
 } ?>
 				</select>
 				</div>

@@ -72,7 +72,7 @@ if (mysqli_num_rows($res)) {
     $even = 0;
     while ($rec = mysqli_fetch_assoc($res)) {
         echo '<tr class="'.(($even % 2 == 0) ? 'even' : 'odd').(($rec['status']) ? ' solved' : '').'">
-		<td><input type="checkbox" name="case[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser']) ? ' checked="checked"' : '').' /></td><td>'.(($rec['secret']) ? '<span class="secret"><a href="readcase.php?rid='.$rec['id'].'">'.StripSlashes($rec['title']).'</a></span>' : '<a href="readcase.php?rid='.$rec['id'].'">'.StripSlashes($rec['title']).'</a>').'</td>
+		<td><input type="checkbox" name="case[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser']) ? ' checked="checked"' : '').' /></td><td>'.(($rec['secret']) ? '<span class="secret"><a href="readcase.php?rid='.$rec['id'].'">'.StripSlashes($rec['title'].' ').'</a></span>' : '<a href="readcase.php?rid='.$rec['id'].'">'.StripSlashes($rec['title'].' ').'</a>').'</td>
 		<td>'.(($rec['status']) ? 'uzavřen' : '&mdash;').'</td>
 		</tr>';
         $even++;

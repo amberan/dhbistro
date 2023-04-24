@@ -14,7 +14,7 @@ function mainMenu()
 	  <li '.((unreadItems(7)) ? ' class="unread"' : '').'><a href="/symbols/">Symboly '.unreadItems(7).'</a></li>
 	  <li '.((unreadItems(3)) ? ' class="unread"' : '').'><a href="/cases/">Případy '.unreadItems(3).'</a></li>
 	  <li '.((unreadItems(2)) ? ' class="unread"' : '').'><a href="groups/">Skupiny '.unreadItems(2).'</a></li>';
-    if ($user['aclUser']) {
+    if (isset($user) && $user['aclUser']) {
         echo '<li><a href="doodle.php">Časová dostupnost</a></li>';
     } else {
         echo '<li><a href="'.$dlink['link'].'" target="_blank">Časová dostupnost</a></li>';
@@ -22,10 +22,10 @@ function mainMenu()
     echo '<li><a href="evilpoints.php">'.$text['menuPoints'].'</a></li>
 	  <li><a href="/settings">Nastavení</a></li>
 			  <li><a href="/search/">Vyhledávání</a></li>';
-    if ($user['aclUser']) {
+    if (isset($user) && $user['aclUser']) {
         echo '<li><a href="/users/">Uživatelé</a></li>';
     }
-    if ($user['aclAudit']) {
+    if (isset($user) && $user['aclAudit']) {
         echo '<li><a href="audit.php">Audit</a></li>';
     }
     echo '<li class="float-right"><a href="/logout">Odhlásit</a></li>

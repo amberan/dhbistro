@@ -53,7 +53,7 @@ $text['headingNotes'] = 'poznámky';
 $text['actionCreate'] = 'vytvořit';
 $text['actionEdit'] = 'upravit';
 $text['actionArchive'] = 'archivovat';
-$text['actionUnarchive'] = 'odarchivovat';
+$text['actionRetrieve'] = 'obnovit';
 $text['actionLock'] = 'uzamknout';
 $text['actionUnlock'] = 'odemknout';
 $text['actionRestore'] = 'obnovit';
@@ -68,6 +68,7 @@ $text['actionConfirmationUnlock'] = 'opravdu odemknout';
 $text['actionConfirmationGeneratePassword'] = 'opravdu vygenerovat nové heslo';
 $text['actionConfirmationRemove'] = 'opravdu odstranit';
 $text['actionConfirmationRestore'] = 'opravdu obnovit';
+$text['actionConfirmationSymbolUnlink'] = 'opravdu odpojit symbol';
 
 # FILTERS
 $text['filterDeleteInclude'] = 'smazané';
@@ -159,7 +160,7 @@ $text['connectedTo'] = 'připojeno k';
 
 //NOTES
 $text['poznamky'] = 'poznámky';
-$text['smazatpoznamku'] = 'odstranit poznámku';
+$text['odstranitpoznamku'] = 'odstranit poznámku';
 $text['vytvoritpoznamku'] = 'vytvořit poznámku';
 $text['ulozitpoznamku'] = 'uložit poznámku';
 
@@ -193,7 +194,7 @@ $text['stav'] = 'stav';
 
 //BUTTON/ACTIONS
 $text['upravit'] = 'Upravit';
-$text['smazat'] = 'odstranit';
+$text['odstranit'] = 'odstranit';
 $text['obnovit'] = 'Obnovit';
 $text['ulozit'] = 'Uložit';
 $text['ano'] = 'Ano';
@@ -207,21 +208,21 @@ $text['stahnoutzalohu'] = 'Stáhnout zálohu';
 
 $text['pridatpripad'] = 'Přidat případ';
 $text['editpripad'] = 'Upravit případ';
-$text['smazatpripad'] = 'odstranit případ';
+$text['odstranitpripad'] = 'odstranit případ';
 $text['obnovitpripad'] = 'Obnovit případ';
 $text['pridatskupinu'] = 'Přidat skupinu';
 $text['upravitskupinu'] = 'Upravit skupinu';
-$text['smazatskupinu'] = 'odstranit skupinu';
+$text['odstranitpripad'] = 'odstranit skupinu';
 $text['obnovitskupinu'] = 'Obnovit skupinu';
 $text['upravitosobu'] = 'Upravit osobu';
-$text['smazatosobu'] = 'odstranit osobu';
+$text['odstranitosobu'] = 'odstranit osobu';
 $text['obnovitosobu'] = 'Obnovit osobu';
 $text['pridatosobu'] = 'Přidat osobu';
 $text['upravitreport'] = 'upravit hlášení';
-$text['smazatreport'] = 'odstranit hlášení';
+$text['odstranitreport'] = 'odstranit hlášení';
 $text['vyhledatsymbol'] = 'Vyhledat symbol';
 $text['odpojitsymbol'] = 'Odpojit symbol';
-$text['smazatsoubor'] = 'odstranit soubor';
+$text['odstranitsoubor'] = 'odstranit soubor';
 $text['pridatsoubor'] = 'Přidat soubor';
 $text['nahratsoubor'] = 'Nahrát soubor';
 $text['vybratsoubor'] = 'Vyberte soubor';
@@ -415,7 +416,7 @@ $text['notes'] = 'poznámky';
 $text['linkTo'] = 'přiřadit';
 $text['addNote'] = 'přidat poznámku';
 $text['upravitsymbol'] = 'upravit symbol';
-$text['smazatsymbol'] = 'odstranit symbol';
+$text['odstranitsymbol'] = 'odstranit symbol';
 $text['symbolNotLinkedToCase'] = 'Symbol nebyl přiřazen žádnému případu.';
 $text['linkedCases'] = 'Symbol připojen k případu';
 $text['symbolNotLinkedToReport'] = 'Symbol nebyl přiřazen žádnému hlášení.	';

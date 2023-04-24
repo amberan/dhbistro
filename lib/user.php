@@ -118,7 +118,7 @@ function userChange($userId, $data, $success = null, $failure = null): string
     global $database, $latteParameters;
     $chain = "";
     foreach ($data as $column => $value) {
-        if (DBcolumnExist('user', $column) and mb_strlen(trim($value)) > 0) {
+        if (DBcolumnExist('user', $column) and mb_strlen(trim($value.'')) > 0) {
             $chain .= " $column = '".trim($value)."',";
         }
     }

@@ -105,15 +105,15 @@
                                             </a>
                                         {elseif  $user['aclSymbol'] >= 2 && !$symbol['symbolDeleted'] }
                                             <a class="btn btn-sm btn-brick btn-secondary mb-1 tip-wrapper" href="/symbols/{$symbol['symbolId']}/unarchive" onclick="return confirm('{$text['actionConfirmationUnarchive']|noescape}?');" alt="
-                                            {$text['actionUnarchive']}">
+                                            {$text['actionRetrieve']}">
                                             {php inject_svg("images/icons/box-open-solid.svg")}
-                                                <span class="bubbletip bubbletip-bottom-right">{$text['actionUnarchive']}</span>
+                                                <span class="bubbletip bubbletip-bottom-right">{$text['actionRetrieve']}</span>
                                             </a>
                                         {/if}
                                         {if $user['aclSymbol'] >= 2 && !$symbol['symbolDeleted'] }
-                                            <a class="btn btn-sm btn-brick btn-danger mb-1 tip-wrapper" href="/symbols/?sdelete={$symbol['symbolId']}" onclick="return confirm('{$text['actionConfirmationRemove']|noescape} {$symbol['symbolDescription']|stripHtml}?');" alt="{$text['smazatsymbol']}">
+                                            <a class="btn btn-sm btn-brick btn-danger mb-1 tip-wrapper" href="/symbols/?sdelete={$symbol['symbolId']}" onclick="return confirm('{$text['actionConfirmationRemove']|noescape} {$symbol['symbolDescription']|stripHtml}?');" alt="{$text['odstranitsymbol']}">
                                             {php inject_svg("images/icons/trash-solid.svg")}
-                                                <span class="bubbletip bubbletip-bottom-right">{$text['smazatsymbol']}</span>
+                                                <span class="bubbletip bubbletip-bottom-right">{$text['odstranitsymbol']}</span>
                                             </a>
                                         {/if}
                                         {if $user['aclRoot'] AND $symbol['symbolDeleted']}
