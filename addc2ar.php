@@ -140,10 +140,10 @@ seřadit je podle <select name="sort">
         <?php
     while ($rec = mysqli_fetch_assoc($res)) {
         echo '<div class="news_div '.(($rec['type'] == 1) ? 'game_news' : 'system_news').'">
-	<div class="news_head"><input type="checkbox" name="report[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser']) ? ' checked="checked"' : '').' /><strong><a href="/reports/'.$rec['id'].'">'.StripSlashes($rec['label']).'</a></strong></span>';
+	<div class="news_head"><input type="checkbox" name="report[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser']) ? ' checked="checked"' : '').' /><strong><a href="/reports/'.$rec['id'].'">'.StripSlashes($rec['label'].' ').'</a></strong></span>';
 
         echo '<p><span>['.($rec['datum']).']</span> '.$rec['autor'].'<br /> <strong>Úkol: </strong>'
-    .StripSlashes($rec['task']).'</p></div>
+    .StripSlashes($rec['task'].' ').'</p></div>
         </div>';
     } ?>
 

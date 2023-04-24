@@ -14,6 +14,7 @@ require_once $config['platformConfig'];
 $latteParameters['config'] = $config;
 require_once SERVER_ROOT.'/vendor/autoload.php';
 use Tracy\Debugger;
+
 Debugger::enable(Debugger::DEVELOPMENT, $config['folder_logs']);
 
 $latte = new Latte\Engine();
@@ -59,72 +60,71 @@ function custom_Filter($idtable, $idrecord = 0)
 {
     global $database,$user;
     switch ($idtable) {
-       case 1: $table = 'person';
+        case 1: $table = 'person';
 
-break;
-       case 2: $table = 'group';
+            break;
+        case 2: $table = 'group';
 
-break;
-       case 3: $table = 'case';
+            break;
+        case 3: $table = 'case';
 
-break;
+            break;
         case 4: $table = 'report';
 
-break;
+            break;
         case 8: $table = 'user';
 
-break;
+            break;
         case 9: $table = 'evilpts';
 
-break;
+            break;
         case 10: $table = 'task';
 
-break;
+            break;
         case 11: $table = 'audit';
 
-break;
+            break;
         case 13: $table = 'search';
 
-break;
+            break;
         case 14: $table = 'group'.$idrecord;
 
-break;
+            break;
         case 15: $table = 'p2c';
 
-break;   //person 2 case
+            break;   //person 2 case
         case 16: $table = 'c2ar';
 
-break;  //case 2 action report
+            break;  //case 2 action report
         case 17: $table = 'p2ar';
 
-break;  //person 2 action report
+            break;  //person 2 action report
         case 18: $table = 'ar2c';
 
-break;  //action report 2 case
+            break;  //action report 2 case
         case 19: $table = 'p2g';
 
-break;   //person 2 group
+            break;   //person 2 group
         case 20: $table = 'sy2p';
 
-break;  //symbol 2 person
+            break;  //symbol 2 person
         case 21: $table = 'sy2c';
 
-break;  //symbol 2 case
+            break;  //symbol 2 case
         case 22: $table = 'sy2ar';
 
-break; //symbol 2 action report
+            break; //symbol 2 action report
         default:
-break;
+            break;
     }
     $sqlCf = 'SELECT filter FROM '.DB_PREFIX.'user WHERE userId = '.$user['userId'];
-    $resCf = mysqli_query($database, $sqlCf);
+    $resCf = mysqli_fetch_assoc(mysqli_query($database, $sqlCf));
     $filter = $_REQUEST;
     // pokud přichází nový filtr a nejedná se o zadání úkolu či přidání zlobodů, případně pokud se jedná o konkrétní záznam a je nově filtrovaný, !$_GET['sort']
     // použij nový filtr a ulož ho do databáze && !isset($_GET['sort'])
-    if ((!empty($filter)  && !isset($_POST['inserttask']) && !isset($_POST['addpoints']) && !isset($filter['rid'])) || (isset($filter['sort'], $filter['rid']))) {
-        if ($resCf) {
-            $recCf = mysqli_fetch_assoc($resCf);
-            $filters = unserialize($recCf['filter']);
+    if ((!empty($filter) && !isset($_POST['inserttask']) && !isset($_POST['addpoints']) && !isset($filter['rid'])) || (isset($filter['sort'], $filter['rid']))) {
+        if (isset($resCf['filter'])) {
+            $filters = unserialize($resCf['filter']);
             $filters[$table] = $filter;
         } else {
             $filters[$table] = $filter;
@@ -134,9 +134,8 @@ break;
         mysqli_query($database, $sqlScf);
     // v opačném případě zkontroluj, zda existuje odpovídající filtr v databázi, a pokud ano, načti jej
     } else {
-        if ($resCf) {
-            $recCf = mysqli_fetch_assoc($resCf);
-            $filters = unserialize($recCf['filter']);
+        if (isset($resCf['filter'])) {
+            $filters = unserialize($resCf['filter']);
             if (!empty($filters)) {
                 if (array_key_exists($table, $filters)) {
                     $filter = $filters[$table];

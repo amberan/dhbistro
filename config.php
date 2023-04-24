@@ -2,7 +2,7 @@
 
 define('SERVER_ROOT', $_SERVER['DOCUMENT_ROOT']);
 
-$config['version'] = '1.12.0';
+$config['version'] = '1.12.1';
 $config['page_prefix'] = ''; // uri cesta mezi domenou a adresarem bistra
 $config['page_free'] = ['', 'favicon.ico']; // to be removed
 $config['folder_backup'] = SERVER_ROOT.'/files/backups/';

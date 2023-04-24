@@ -35,7 +35,7 @@ if (!is_numeric($URL[2]) || $user['aclReport'] < 1 || mysqli_num_rows($reportQue
     }
 
     deleteUnread('report', $URL[2]);
-    $report['reportName'] = stripslashes($report['reportName']);
+    $report['reportName'] = stripslashes($report['reportName'].'');
     $latteParameters['title'] = $text['menuReports']." ".reportType($report['reportType']).": ".stripslashes($report['reportName']);
     $latteParameters['reportType'] = reportType();
     $report['reportOwnerName'] = AuthorDB($report['reportOwner']);
