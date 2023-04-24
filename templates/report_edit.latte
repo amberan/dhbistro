@@ -358,7 +358,7 @@
                         {foreach $reportSymbols as $symbol}
                             <a href="/readsymbol.php?rid={$symbol['symbolId']}"><img  loading="lazy" {if $symbol['symbolDeleted'] > 0}class="deleted"{/if} {ifset $symbol['symbolSecret']}class="secret"{/ifset} src="/file/symbol/{$symbol['symbolId']}" alt="{$symbol['symbolCreatedBy']} {$symbol['symbolCreated']}" /></a>
                             {if $symbol['symbolCreatedById'] == $user['userId'] || $report['reportOwner'] == $user['userId']}
-                                <a class="btn btn-sm btn-danger w-100" title="{$text['smazat']}" href="/reports/{$report['reportId']}/edit/unlinksymbol={$symbol[symbolId]}" onclick="return confirm('{$text['opravduodpojitsymbol']}')">{$text['odpojitsymbol']}</a>
+                                <a class="btn btn-sm btn-danger w-100" title="{$text['odstranit']}" href="/reports/{$report['reportId']}/edit/unlinksymbol={$symbol[symbolId]}" onclick="return confirm('{$text['actionConfirmationSymbolUnlink']}')">{$text['odpojitsymbol']}</a>
                             {/if}
                         {/foreach}
                     {/if}
@@ -413,7 +413,7 @@
                                     </a>
                                 {/if}
                                 {if $file['fileCreatedById'] == $user['userId'] || $report['reportOwner'] == $user['userId'] || $user['aclReport'] > 1}
-                                   <a class="btn btn-sm btn-danger w-100" title="{$text['smazat']}" href="/reports/{$report['reportId']}/edit/?deletefile={$file[fileId]}" onclick="return confirm('{$text['actionConfirmationRemove']}')">{$text['smazatsoubor']}</a>
+                                   <a class="btn btn-sm btn-danger w-100" title="{$text['odstranit']}" href="/reports/{$report['reportId']}/edit/?deletefile={$file[fileId]}" onclick="return confirm('{$text['actionConfirmationRemove']}')">{$text['odstranitsoubor']}</a>
                                 {/if}
                             </div>
                         {/foreach}
@@ -477,7 +477,7 @@
                                         </p>
                                         {if $note['noteCreatedById'] == $user['userId'] || $report['reportOwner'] == $user['userId'] || $user['aclReport'] > 1}
                                             <div class="system-note-delete-wrapper">
-                                                <a class="btn btn-sm btn-brick system-note-delete" title="{$text['smazat']}" href="/procnote.php?deletenote={$note['noteId']}&amp;itemid={$report['reportId']}&amp;backurl=/reports/{$report['reportId']}/edit" onclick="return confirm('{$text['actionConfirmationRemove']}')" alt="{$text['smazatpoznamku']}">
+                                                <a class="btn btn-sm btn-brick system-note-delete" title="{$text['odstranit']}" href="/procnote.php?deletenote={$note['noteId']}&amp;itemid={$report['reportId']}&amp;backurl=/reports/{$report['reportId']}/edit" onclick="return confirm('{$text['actionConfirmationRemove']}')" alt="{$text['odstranitpoznamku']}">
                                                     {php inject_svg("images/icons/xmark-solid.svg")}
                                                 </a>
                                             </div>
@@ -500,7 +500,7 @@
                                         </p>
                                         {if $note['noteCreatedById'] == $user['userId'] || $report['reportOwner'] == $user['userId']}
                                             <div class="system-note-delete-wrapper">
-                                                <a class="btn btn-sm btn-brick system-note-delete" title="{$text['smazat']}" href="/procnote.php?deletenote={$note['noteId']}&amp;itemid={$report['reportId']}&amp;backurl=/reports/{$report['reportId']}/edit" onclick="return confirm('{$text['actionConfirmationRemove']}')" alt="{$text['smazatpoznamku']}">
+                                                <a class="btn btn-sm btn-brick system-note-delete" title="{$text['odstranit']}" href="/procnote.php?deletenote={$note['noteId']}&amp;itemid={$report['reportId']}&amp;backurl=/reports/{$report['reportId']}/edit" onclick="return confirm('{$text['actionConfirmationRemove']}')" alt="{$text['odstranitpoznamku']}">
                                                     {php inject_svg("images/icons/xmark-solid.svg")}
                                                 </a>
                                             </div>
@@ -523,7 +523,7 @@
                                         </p>
                                         {if $note['noteCreatedById'] == $user['userId'] || $report['reportOwner'] == $user['userId']}
                                             <div class="system-note-delete-wrapper">
-                                                <a class="btn btn-sm btn-brick system-note-delete" title="{$text['smazat']}" href="/procnote.php?deletenote={$note['noteId']}&amp;itemid={$report['reportId']}&amp;backurl=/reports/{$report['reportId']}/edit" onclick="return confirm('{$text['actionConfirmationRemove']}')" alt="{$text['smazatpoznamku']}">
+                                                <a class="btn btn-sm btn-brick system-note-delete" title="{$text['odstranit']}" href="/procnote.php?deletenote={$note['noteId']}&amp;itemid={$report['reportId']}&amp;backurl=/reports/{$report['reportId']}/edit" onclick="return confirm('{$text['actionConfirmationRemove']}')" alt="{$text['odstranitpoznamku']}">
                                                     {php inject_svg("images/icons/xmark-solid.svg")}
                                                 </a>
                                             </div>
@@ -545,7 +545,7 @@
                                         </p>
                                         {if $note['noteCreatedById'] == $user['userId'] || $report['reportOwner'] == $user['userId'] || $user['aclReport'] > 1}
                                             <div class="system-note-delete-wrapper">
-                                                <a class="btn btn-sm btn-brick system-note-delete" title="{$text['smazat']}" href="/procnote.php?deletenote={$note['noteId']}&amp;itemid={$report['reportId']}&amp;backurl=/reports/{$report['reportId']}/edit" onclick="return confirm('{$text['actionConfirmationRemove']}')" alt="{$text['smazatpoznamku']}">
+                                                <a class="btn btn-sm btn-brick system-note-delete" title="{$text['odstranit']}" href="/procnote.php?deletenote={$note['noteId']}&amp;itemid={$report['reportId']}&amp;backurl=/reports/{$report['reportId']}/edit" onclick="return confirm('{$text['actionConfirmationRemove']}')" alt="{$text['odstranitpoznamku']}">
                                                     {php inject_svg("images/icons/xmark-solid.svg")}
                                                 </a>
                                             </div>

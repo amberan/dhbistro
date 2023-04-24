@@ -101,15 +101,15 @@
                                             </a>
                                         {elseif  $user['aclPerson'] >= 2 && !@$person['deleted']}
                                             <a class="btn btn-sm btn-brick btn-secondary mb-1 tip-wrapper" href="/persons/{$person['id']}/unarchive" onclick="return confirm('{$text['actionConfirmationUnarchive']|noescape} {$person['personFullname']|replace: '\"', NULL}?');" alt="
-                                            {$text['actionUnarchive']}">
+                                            {$text['actionRetrieve']}">
                                             {php inject_svg("images/icons/box-open-solid.svg")}
-                                                <span class="bubbletip bubbletip-bottom-right">{$text['actionUnarchive']}</span>
+                                                <span class="bubbletip bubbletip-bottom-right">{$text['actionRetrieve']}</span>
                                             </a>
                                         {/if}
                                             {if $user['aclPerson'] >= 2 }
-                                                <a class="btn btn-sm btn-brick btn-danger mb-1 tip-wrapper" href="/persons/delete/{$person['id']}" onclick="return confirm('{$text['actionConfirmationRemove']|noescape} {$person['personFullname']}?');" alt="{$text[smazatosobu]}">
+                                                <a class="btn btn-sm btn-brick btn-danger mb-1 tip-wrapper" href="/persons/delete/{$person['id']}" onclick="return confirm('{$text['actionConfirmationRemove']|noescape} {$person['personFullname']}?');" alt="{$text['odstranitosobu']}">
                                                     {php inject_svg("images/icons/trash-solid.svg")}
-                                                    <span class="bubbletip bubbletip-bottom-right">{$text[smazatosobu]}</span>
+                                                    <span class="bubbletip bubbletip-bottom-right">{$text['odstranitosobu']}</span>
                                                 </a>
                                             {/if}
                                         {/if}

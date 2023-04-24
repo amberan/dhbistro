@@ -69,18 +69,18 @@
                                         </a>
                                     {elseif  $user['aclCase'] >= 2 && !$case['deleted']}
                                         <a class="btn btn-sm btn-brick btn-secondary mb-1" href="/cases/{$case['id']}/unarchive" onclick="return confirm('{$text['actionConfirmationUnarchive']|noescape} {$case['title']}?');" alt="
-                                            {$text['actionUnarchive']}">
+                                            {$text['actionRetrieve']}">
                                             {php inject_svg("images/icons/box-open-solid.svg")}
-                                            <span class="bubbletip bubbletip-bottom-right">{$text['actionUnarchive']}</span>
+                                            <span class="bubbletip bubbletip-bottom-right">{$text['actionRetrieve']}</span>
                                         </a>
                                     {/if}
                                     {if $user['aclCase'] >= 2 && !$case['deleted']}
-                                        <a class="btn btn-sm btn-brick btn-danger mb-1 tip-wrapper" href="/cases/delete/{$case['id']}" onclick="return confirm('{$text['actionConfirmationRemove']} &quot; {$case['title']|stripHtml}&quot;?');" alt="{$text[smazatpripad]}">{php inject_svg("images/icons/trash-solid.svg")}
-                                            <span class="bubbletip bubbletip-bottom-right">{$text[smazatpripad]}</span>
+                                        <a class="btn btn-sm btn-brick btn-danger mb-1 tip-wrapper" href="/cases/delete/{$case['id']}" onclick="return confirm('{$text['actionConfirmationRemove']} &quot; {$case['title']|stripHtml}&quot;?');" alt="{$text['odstranitpripad']}">{php inject_svg("images/icons/trash-solid.svg")}
+                                            <span class="bubbletip bubbletip-bottom-right">{$text['odstranitpripad']}</span>
                                         </a>
                                     {/if}
                                     {if $user['aclRoot'] AND $case['deleted']}
-                                        <a class="btn btn-sm btn-success mb-1 tip-wrapper" href="/cases/restore/{$case['id']}" onclick="return confirm('{$text['actionConfirmationRestore']} &quot; {$case['title']|stripHtml}&quot;?');" alt="{$text[obnovitpripad]}">
+                                        <a class="btn btn-sm btn-success mb-1 tip-wrapper" href="/cases/restore/{$case['id']}" onclick="return confirm('{$text['actionConfirmationRestore']} &quot; {$case['title']|stripHtml}&quot;?');" alt="{$text['obnovitpripad']}">
                                             {php inject_svg("images/icons/recycle.svg")}
                                             <span class="bubbletip bubbletip-bottom-right">{$text[obnovitpripad]}</span>
                                         </a>

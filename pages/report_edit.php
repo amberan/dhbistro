@@ -1,5 +1,6 @@
 <?php
 
+use Tracy\Debugger;
 
 if (isset($_POST['uploadfile']) && is_uploaded_file($_FILES['attachment']['tmp_name']) && is_numeric($_POST['reportId'])) {
     authorizedAccess('report', 'fileAdd', $_POST['reportId']);
@@ -63,10 +64,11 @@ if (isset($_POST['addtoareport'])) {
     if (isset($_POST['role'])) {
         $role = $_POST['role'];
     }
-
     if (isset($_POST['person'])) {
         for ($i = 0; $i < Count($person); $i++) {
-            $insertPersonToReportSql = "INSERT INTO " . DB_PREFIX . "ar2p VALUES('" . $person[$i] . "','" . $_POST['reportid'] . "','" . $user['userId'] . "','0" . $role[$i] . "');";
+            $insertPersonToReportSql = "INSERT INTO " . DB_PREFIX . "ar2p (idperson, idreport, iduser, role)
+                VALUES('" . $person[$i] . "','" . $_POST['reportid'] . "','" . $user['userId'] . "','0" . $role[$i] . "');";
+            Debugger::log($config['version'].': '.$insertPersonToReportSql);
             mysqli_query($database, $insertPersonToReportSql);
         }
     }

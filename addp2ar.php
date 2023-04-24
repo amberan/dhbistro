@@ -4,22 +4,27 @@ require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 
 latteDrawTemplate("header");
 
-// následuje načtení dat reportu a jejich uložení do vybranných proměných
-$reportarray = mysqli_fetch_assoc(mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE reportId=".$_REQUEST['rid'])); // načte data z DB
-$type = intval($reportarray['reportType']); // určuje typ hlášení
-$typestring = $type == 1 ? 'výjezd' : ($type == 2 ? 'výslech' : '?'); //odvozuje slovní typ hlášení
-$author = $reportarray['reportOwner']; // určuje autora hlášení
-$label = ($reportarray['reportName'] ?? ''); // nadpis hlášení, ke kterému je přiřazováno
 
-if ($label != '') {
-    $latteParameters['title'] = $label.' ('.$typestring.')'; // specifikace TITLE
-}
 
-$latteParameters['title'] = 'Prirazeni osob k  hlášení';
+
 mainMenu();
-$customFilter = custom_Filter(17);
-sparklets('<a href="/reports/">hlášení</a> &raquo; <strong>úprava hlášení</strong>'.($label != '' ? ' - "'.$label.' ('.$typestring.')"' : ''));
-if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || $user['userId'] == $author)) {
+
+if (is_numeric($_REQUEST['rid']) && isset($user) && ($user['aclReport'] || $user['userId'] == $author)) {
+    // následuje načtení dat reportu a jejich uložení do vybranných proměných
+    $reportarray = mysqli_fetch_assoc(mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE reportId=".$_REQUEST['rid'])); // načte data z DB
+    $type = intval($reportarray['reportType']); // určuje typ hlášení
+    $typestring = $type == 1 ? 'výjezd' : ($type == 2 ? 'výslech' : '?'); //odvozuje slovní typ hlášení
+    $author = $reportarray['reportOwner']; // určuje autora hlášení
+    $label = ($reportarray['reportName'] ?? ''); // nadpis hlášení, ke kterému je přiřazováno
+
+    if ($label != '') {
+        $latteParameters['title'] = $label.' ('.$typestring.')'; // specifikace TITLE
+    }
+
+    $latteParameters['title'] = 'Prirazeni osob k  hlášení';
+    $customFilter = custom_Filter(17);
+    sparklets('<a href="/reports/">hlášení</a> &raquo; <strong>úprava hlášení</strong>'.($label != '' ? ' - "'.$label.' ('.$typestring.')"' : ''));
+
     $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."report WHERE reportId=".$_REQUEST['rid']);
     if ($rec = mysqli_fetch_assoc($res)) {
         ?>
@@ -157,7 +162,7 @@ if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || $user['userId'] == $a
 			<option value="2"'.($rec['role'] == 2 ? ' selected="selected"' : '').'>vyslýchající</option>' : '').'
 		</select></td>
 '.($sportraits ? '<td><img  loading="lazy" src="file/portrait/'.$rec['id'].'" alt="portrét chybí" /></td>' : '').($ssymbols ? '<td><img  loading="lazy" src="file/symbol/'.$rec['symbol'].'" alt="symbol chybí" /></td>' : '').'
-	<td>'.($rec['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$rec['id'].'">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a></span>' : '<a href="readperson.php?rid='.$rec['id'].'">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a>').'</td>
+	<td>'.($rec['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$rec['id'].'">'.implode(', ', [stripslashes($rec['surname'].' '), stripslashes($rec['name'].' ')]).'</a></span>' : '<a href="readperson.php?rid='.$rec['id'].'">'.implode(', ', [stripslashes($rec['surname'].' '), stripslashes($rec['name'].' ')]).'</a>').'</td>
 	</tr>';
             $even++;
             $iterator++;

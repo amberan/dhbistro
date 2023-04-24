@@ -23,7 +23,7 @@
                         {if ($user['aclNews'] > 0 && $news['deleted'] == 0)}
                             {if $user['aclRoot'] || $news['category'] == 1}
                                 <a href='/news/{$news[id]}/edit' title={$text[upravit]}>{$text[upravit]}</a>
-                                <a href='/news/{$news[id]}/delete' onclick='return confirm("Opravdu smazat aktualitu: {$news['newsTitle']|noescape}?")' title={$text['smazat']}>{$text['smazat']}</a>
+                                <a href='/news/{$news[id]}/delete' onclick='return confirm("Opravdu smazat aktualitu: {$news['newsTitle']|noescape}?")' title={$text['odstranit']}>{$text['odstranit']}</a>
                             {/if}
                         {elseif ($user['aclRoot'] > 0 && $news['deleted'] == 1)}
                             <a href='/news/{$news[id]}/restore' onclick='return confirm("Opravdu obnovit aktualitu: {$news['newsTitle']|noescape}?")' title={$text['obnovit']}>{$text['obnovit']}</a>
