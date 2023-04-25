@@ -1,7 +1,5 @@
 <?php
 
-use Tracy\Debugger;
-
 /**
  * saving checkboxes do db (int and timestamp)
  * @param mixed $table
@@ -31,7 +29,6 @@ function DBCheckboxUpdate($table, $id, $column, $checkbox = null): void
     } elseif ($sqlCheckColumnType->type == 7 && $sqlCheckColumnValue[$column] == null && $checkbox) {
         $sqlUpdate = 'CURRENT_TIMESTAMP';
     }
-    // Debugger::log('PERSON.'.$field.' >> '.$sqlUpdate);
     if (isset($sqlUpdate)) {
         mysqli_query($database, 'UPDATE '.DB_PREFIX.$table.' set '.$column.' = '.$sqlUpdate.' where id='.$id);
     }
@@ -68,10 +65,10 @@ function restoreDB($sqlFile = null)
     if (!file_exists($sqlFile)) {
         $dbScriptFileList = glob(SERVER_ROOT.'/sql/default*.sql');
         $sqlFile = end($dbScriptFileList);
-        Debugger::log("DEBUG: creating new database from ".$sqlFile);
+        DebuggerLog("creating new database from ".$sqlFile,"W");
     }
     if (file_exists($sqlFile)) {
-        Debugger::log("DEBUG: Database EMPTY, creating new from ".$sqlFile);
+        DebuggerLog("Database EMPTY, creating new from ".$sqlFile,"W");
         $tempLine = '';
         $lines = file($sqlFile);
         foreach ($lines as $line) {
@@ -80,14 +77,14 @@ function restoreDB($sqlFile = null)
             }
             $tempLine .= $line;
             if (substr(trim($line), -1, 1) == ';') {
-                mysqli_query($database, $tempLine) || Debugger::log("ERROR SQL IMPORT: " . $tempLine .":". mysqli_error($database));
+                mysqli_query($database, $tempLine) || DebuggerLog("SQL IMPORT: " . $tempLine .":". mysqli_error($database),"E");
                 $tempLine = '';
             }
         }
 
         mysqli_close($database);
     } else {
-        Debugger::log("ERROR: DB restore file ".$sqlFile." does not exist!");
+        DebuggerLog("DB restore file ".$sqlFile." does not exist!","E");
     }
 }
 

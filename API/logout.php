@@ -1,12 +1,9 @@
 <?php
 
 require_once($_SERVER['DOCUMENT_ROOT'].'/API/include.php');
-use Tracy\Debugger;
-
-Debugger::enable(Debugger::DEVELOPMENT,$config['folder_logs']);
 header('Content-Type: application/json');
 
-if (isset($_GET[sessionID])) { # verify user
+if (isset($_GET['sessionID'])) { # verify user
     $user = session_validation($_GET['sessionID']);
 }
 

@@ -1,7 +1,5 @@
 <?php
 
-use Tracy\Debugger;
-
 function bistroBackup()
 {
     global $database;
@@ -138,7 +136,7 @@ function bistroBackupGenerate(): void
     $backupFile = $config['folder_backup']."backup".time().".sql.gz";
     backupBackupSave(backupBackupGetData(), $backupFile);
     if (filesize($backupFile) > 1024) {
-        Debugger::log("BACKUP GENERATED: ".$config['folder_backup'].basename($backupFile)." [".round(filesize($backupFile) / 1024)." kB]");
+        DebuggerLog("BACKUP GENERATED: ".$config['folder_backup'].basename($backupFile)." [".round(filesize($backupFile) / 1024)." kB]","W");
         $backupTable = 'backup';
         $backupColumns = 'time, file, version';
         $backupValues = '"'.time().'","'.$backupFile.'","'.$config['version'].'"';
@@ -177,10 +175,10 @@ function bistroDBTableCreate($table, $file = null): int
             $sqlCreate = "CREATE TABLE ".DB_PREFIX.$key." (".$value." int NOT NULL AUTO_INCREMENT PRIMARY KEY)";
             mysqli_query($database, $sqlCreate);
             if (DBtableExist($key) != 0) {
-                Debugger::log('UPDATER '.$file.': '.$sqlCreate);
+                DebuggerLog($file.': '.$sqlCreate,"W");
                 $alter++;
             } else {
-                Debugger::log('ERROR '.$file.': '.$sqlCreate);
+                DebuggerLog($file.': '.$sqlCreate, "E");
             }
         }
     }
@@ -204,10 +202,10 @@ function bistroDBTableRename($data, $file = null): int
             $renameSql = "ALTER TABLE ".$configDB['dbDatabase'].".".DB_PREFIX."$old RENAME TO ".$configDB['dbDatabase'].".".DB_PREFIX."$new";
             mysqli_query($database, $renameSql);
             if (DBtableExist($new) != 0 && DBtableExist($old) == 0) {
-                Debugger::log('UPDATER '.$file.': '.$renameSql);
+                ($file.': '.$renameSql);
                 $alter++;
             } else {
-                Debugger::log('ERROR '.$file.': '.$renameSql);
+                DebuggerLog($file.': '.$renameSql,"E");
             }
         }
     }
@@ -232,10 +230,10 @@ function bistroDBColumnAdd($data, $file = null): int
                 $alterSql = "ALTER TABLE ".$configDB['dbDatabase'].".".DB_PREFIX."$table ADD COLUMN $column ".$data[$table][$column];
                 mysqli_query($database, $alterSql);
                 if (DBcolumnExist($table, $column) != 0) {
-                    Debugger::log('UPDATER '.$file.': '.$alterSql);
+                    DebuggerLog($file.': '.$alterSql,"W");
                     $alter++;
                 } else {
-                    Debugger::log('ERROR '.$file.': '.$alterSql);
+                    DebuggerLog($file.': '.$alterSql,"E");
                 }
             }
         }
@@ -261,10 +259,10 @@ function bistroDBColumnAlter($data, $file = null): int
                 $alterSql = "ALTER TABLE ".$configDB['dbDatabase'].".".DB_PREFIX."$table CHANGE $column ".$data[$table][$column];
                 mysqli_query($database, $alterSql);
                 if (($column == explode(' ', trim($data[$table][$column]))[0]) || DBcolumnExist($table, $column) == 0 && DBcolumnExist($table, explode(' ', trim($data[$table][$column]))[0]) != 0) {
-                    Debugger::log('UPDATER '.$file.': '.$alterSql);
+                    DebuggerLog($file.': '.$alterSql,"W");
                     $alter++;
                 } else {
-                    Debugger::log('ERROR '.$file.': '.$alterSql);
+                    DebuggerLog($file.': '.$alterSql,"E");
                 }
             }
         }
@@ -284,7 +282,7 @@ function bistroMyisamToInnodb(): int
     $myisamDbQuery = mysqli_query($database, $myisamDbsql);
     while ($mysqisamDb = mysqli_fetch_assoc($myisamDbQuery)) {
         $innoDbQuery = "ALTER TABLE ".$mysqisamDb['table_name']." engine='InnoDB'";
-        Debugger::log('UPDATER '.$config['version'].': '.$mysqisamDb['table_name'].' converted from MyISAM to InnoDB');
+        DebuggerLog($mysqisamDb['table_name'].' converted from MyISAM to InnoDB',"W");
         mysqli_query($database, $innoDbQuery);
         $alter++;
     }
@@ -308,7 +306,7 @@ function bistroDBFulltextAdd($data, $file = null): int
             if (DBtableExist($table) != 0 && (mysqli_num_rows(mysqli_query($database, $checkSql)) == 0)) {
                 $alterSql = "ALTER TABLE ".$configDB['dbDatabase'].".".DB_PREFIX."$table ADD FULLTEXT ($value)";
                 mysqli_query($database, $alterSql);
-                Debugger::log('UPDATER '.$file.': '.$alterSql);
+                DebuggerLog($file.': '.$alterSql,"W");
                 $alter++;
             }
         }
@@ -328,7 +326,7 @@ function bistroDBIndexAdd($data, $file = null): int
             if (DBtableExist($table) != 0 && (mysqli_num_rows(mysqli_query($database, $checkSql)) == 0)) {
                 $alterSql = "ALTER TABLE ".$configDB['dbDatabase'].".".DB_PREFIX."$table ADD INDEX $indexName (" . implode(',', $column) . ")";
                 mysqli_query($database, $alterSql);
-                Debugger::log('UPDATER '.$file.': '.$alterSql);
+                DebuggerLog($file.': '.$alterSql,"W");
                 $alter++;
             }
         }
@@ -356,10 +354,10 @@ function bistroDBColumnDrop($data, $file = null): int
                 $dropSql = "ALTER TABLE ".$configDB['dbDatabase'].".".DB_PREFIX.$table." DROP $column";
                 mysqli_query($database, $dropSql);
                 if (DBColumnExist($table, $column) == 0) {
-                    Debugger::log('UPDATER '.$file.': '.$dropSql);
+                    DebuggerLog($file.': '.$dropSql,"W");
                     $alter++;
                 } else {
-                    Debugger::log('ERROR '.$file.': '.$dropSql);
+                    DebuggerLog($file.': '.$dropSql,"E");
                 }
             }
         }
@@ -384,10 +382,10 @@ function bistroDBTableDrop($data, $file = null): int
             $dropSql = "DROP TABLE ".$config['dbDatabase'].".".DB_PREFIX.$value;
             mysqli_query($database, $dropSql);
             if (DBtableExist($value) == 0) {
-                Debugger::log('UPDATER '.$file.': '.$dropSql);
+                DebuggerLog($file.': '.$dropSql,"W");
                 $alter++;
             } else {
-                Debugger::log('ERROR '.$file.': '.$dropSql);
+                DebuggerLog($file.': '.$dropSql,"E");
             }
         }
     }

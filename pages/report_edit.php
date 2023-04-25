@@ -1,7 +1,5 @@
 <?php
 
-use Tracy\Debugger;
-
 if (isset($_POST['uploadfile']) && is_uploaded_file($_FILES['attachment']['tmp_name']) && is_numeric($_POST['reportId'])) {
     authorizedAccess('report', 'fileAdd', $_POST['reportId']);
     $newname = Time().MD5(uniqid(Time().Rand()));
@@ -68,7 +66,7 @@ if (isset($_POST['addtoareport'])) {
         for ($i = 0; $i < Count($person); $i++) {
             $insertPersonToReportSql = "INSERT INTO " . DB_PREFIX . "ar2p (idperson, idreport, iduser, role)
                 VALUES('" . $person[$i] . "','" . $_POST['reportid'] . "','" . $user['userId'] . "','0" . $role[$i] . "');";
-            Debugger::log($config['version'].': '.$insertPersonToReportSql);
+            DebuggerLog($insertPersonToReportSql,"D");
             mysqli_query($database, $insertPersonToReportSql);
         }
     }

@@ -1,7 +1,5 @@
 <?php
 
-use Tracy\Debugger;
-
 function human_filesize($bytes, $decimals = 2)
 {
     $size = 'BKMGTP';
@@ -110,7 +108,7 @@ function fileGet($object): void
         //fpassthru(fopen($object['fullPath'],"r"));
         readfile($object['fullPath']);
     } else {
-        Debugger::log("DEBUG: unable to locate file: ".$object['fullPath']);
+        DebuggerLog("unable to locate file: ".$object['fullPath'],"W");
     }
 }
 

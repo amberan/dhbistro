@@ -1,17 +1,14 @@
 <?php
 
-use Tracy\Debugger;
 
 /**
  * GET USER INFO.
  *
  * @param string sid session_id();
  * @param mixed $sid
- *
- * @return array
  *               TODO remove legacy login masking
  */
-function sessionUser($sid): array
+function sessionUser($sid)
 {
     global $database, $_SESSION;
     $usersql = "SELECT * FROM ".DB_PREFIX."user
@@ -37,6 +34,8 @@ function sessionUser($sid): array
     }
     if (isset($user)) {
         return $user;
+    } else {
+        return null;
     }
 }
 
@@ -85,7 +84,7 @@ if (isset($_POST['logmein']) and mb_strlen($_POST['loginname']) and mb_strlen($_
         $logonUpdateSql = "UPDATE ".DB_PREFIX."user SET sid='".$_SESSION['sid']."', lastLogin=".time().", ipv4='".$_SERVER['REMOTE_ADDR']."', userAgent='".$_SERVER['HTTP_USER_AGENT']."' WHERE userId=".$logonUser['userId'];
         mysqli_query($database, $logonUpdateSql);
     } else {
-        Debugger::log("LOGIN FAILED: ".$_POST['loginname']);
+        DebuggerLog("LOGIN FAILED: ".$_POST['loginname'],"W");
     }
 }
 

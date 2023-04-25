@@ -110,9 +110,6 @@ $reportList = mysqli_query($database, $reportsSql);
 $reportCount = mysqli_num_rows($reportList);
 
 
-
-
-
 if ($reportCount > 0) {
     while ($report = mysqli_fetch_assoc($reportList)) {
         if ($cases = reportCases($report['reportId'])) {
@@ -136,11 +133,10 @@ if ($reportCount > 0) {
     }
     $latteParameters['reportsRecord'] = $reports;
     $latteParameters['reportCount'] = $reportCount;
-    $latteParameters['reportType'] = reportType();
-    $latteParameters['reportStatus'] = reportStatus();
 } else {
-    $latteParameters['warning'] = $text['notificationListEmpty'];
+    $latteParameters['warningReport'] = $text['notificationListEmpty'];
 }
-
+$latteParameters['reportType'] = reportType();
+$latteParameters['reportStatus'] = reportStatus();
 latteDrawTemplate('sparklet');
 latteDrawTemplate('reports_body');

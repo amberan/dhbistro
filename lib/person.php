@@ -1,7 +1,5 @@
 <?php
 
-use Tracy\Debugger;
-
 //TODO funkce pro prevod id fotek s symbolu na odkazy
 
 /**
@@ -84,7 +82,7 @@ function personDelete($id): void
         //TODO deleted to timestamp
         $sqlUpdate = 'update '.DB_PREFIX.'person set deleted=1 where id='.$id;
         mysqli_query($database, $sqlUpdate);
-        Debugger::log('PERSON.'.$id.' DELETED '.$sqlUpdate);
+        DebuggerLog('PERSON.'.$id.' DELETED '.$sqlUpdate,"D");
         deleteAllUnread('person', $id);
     } else {
         unauthorizedAccess('person', 'delete', $id);
@@ -98,7 +96,7 @@ function personRestore($id): void
         authorizedAccess('person', 'restore', $id);
         $sqlUpdate = 'update '.DB_PREFIX.'person set deleted=0 where id='.$id;
         mysqli_query($database, $sqlUpdate);
-        Debugger::log('PERSON.'.$id.' RESTORED '.$sqlUpdate);
+        DebuggerLog('PERSON.'.$id.' RESTORED '.$sqlUpdate,"D");
         deleteAllUnread('person', $id);
     } else {
         unauthorizedAccess('person', 'restore', $id);
