@@ -59,7 +59,7 @@ function fileIdentify($type, $objectId = 0)
         //set real path to file, and filename
         $tmp = explode("/", $file['file']);
         $file['fileHash'] = $file['fileName'] = $file['file'] = end($tmp);
-        if (isset($file['originalname']) && strlen($file['originalname']) && file_exists($folder . $file['fileHash'])) {
+        if (isset($file['originalname']) && strlen($file['originalname']) && file_exists($folder . $file['soubor'])) {
             $file['fileHash'] = $file['uniquename'];
             $file['fileName'] = $file['originalname'];
         } elseif (isset($file['portrait']) && strlen($file['portrait']) && file_exists($folder . $file['fileHash'])) {
