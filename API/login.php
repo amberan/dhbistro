@@ -1,9 +1,7 @@
 <?php
 
 require_once($_SERVER['DOCUMENT_ROOT'].'/API/include.php');
-use Tracy\Debugger;
 
-Debugger::enable(Debugger::DEVELOPMENT,$config['folder_logs']);
 
 #TODO failsafe count number of failed login attempts in a period of time and if higher, deny servise ? use audit table
 

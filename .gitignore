@@ -3,6 +3,5 @@
 /inc/important.php
 /cache/
 /log/
-/var/
 .env.php
 /doc/pre-commit

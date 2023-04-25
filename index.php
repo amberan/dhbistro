@@ -227,8 +227,8 @@ if (isset($user)) {
     require_once SERVER_ROOT.'/pages/login.php';
 }
 
-Debugger::barDump($_SESSION, 'session');
-Debugger::barDump($latteParameters, 'latte');
+DebuggerDump('session', $_SESSION);
+DebuggerDump('latte', $latteParameters);
 latteDrawTemplate('footerMD');
 
 mysqli_close($database);

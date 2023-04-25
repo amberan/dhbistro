@@ -1,7 +1,6 @@
 <?php
 
 use League\HTMLToMarkdown\HtmlConverter;
-use Tracy\Debugger;
 
 /**
  * returns all update*php files in sql that are never than last backup but at most current version
@@ -65,7 +64,7 @@ function bistroUpdate($updatesToRun)
         if (isset($updateScript)) {
             foreach ($updateScript as $issue => $script) {
                 mysqli_query($database, $script);
-                Debugger::log('UPDATER '.substr($file, 7, -4).'.'.$issue.' '.$script.mysqli_error($database));
+                DebuggerLog('UPDATER '.substr($file, 7, -4).'.'.$issue.' '.$script.mysqli_error($database),"W");
             }
         }
         unset($updateScript,$tableCreate,$tableRename,$columnAdd,$columnAlter,$columnAddFulltext,$columnToMD,$rightsToUpdate,$convertTime,$columnDrop,$tableDrop);
@@ -158,7 +157,7 @@ function bistroDBPasswordEncrypt(): int
         $passwordQuery = mysqli_query($database, $passwordSql);
         while ($passwordData = mysqli_fetch_array($passwordQuery)) {
             mysqli_query($database, "UPDATE ".$configDB['dbDatabase'].".".DB_PREFIX."user set userPassword=md5('".$passwordData['userPassword']."') where userId=".$passwordData['userId']);
-            Debugger::log('UPDATER '.$config['version'].': Hashing '.$passwordData['userName'].'.userPassword');
+            DebuggerLog('UPDATER '.$config['version'].': Hashing '.$passwordData['userName'].'.userPassword',"W");
             $alter++;
         }
     }
@@ -184,13 +183,13 @@ function bistroDBColumnMarkdown($data, $file = null): int
             $preMarkdownQuery = mysqli_query($database, $preMarkdownSql);
             while ($preMarkdown = mysqli_fetch_array($preMarkdownQuery)) {
                 $markdownColumn = $converter->convert(str_replace('\'', '', $preMarkdown[$value[2]]));
-                Debugger::log('UPDATER '.$file.' CONVERTING '.DB_PREFIX.$value[0].'.'.$value[2].'.'.$preMarkdown[$value[1]].' TO MARKDOWN '.$value[3]);
+                DebuggerLog('UPDATER '.$file.' CONVERTING '.DB_PREFIX.$value[0].'.'.$value[2].'.'.$preMarkdown[$value[1]].' TO MARKDOWN '.$value[3],"W");
                 $updateSql = "UPDATE ".DB_PREFIX.$value[0]." SET ".$value[3]."='".$markdownColumn."' WHERE ".$value[1]."=".$preMarkdown[$value[1]];
                 mysqli_query($database, $updateSql);
                 $alter++;
             }
         } else {
-            Debugger::log('DEBUGGER '.$file.' '.$value[0].' expected: 0,1,1; current:'.DBcolumntNotEmpty($value[0], $value[3]).' '.DBcolumnExist($value[0], $value[2]).' '.DBcolumnExist($value[0], $value[3]).'<br/>');
+            DebuggerLog('DEBUGGER '.$file.' '.$value[0].' expected: 0,1,1; current:'.DBcolumntNotEmpty($value[0], $value[3]).' '.DBcolumnExist($value[0], $value[2]).' '.DBcolumnExist($value[0], $value[3]),"W");
         }
     }
 
@@ -212,7 +211,7 @@ function bistroMigratePermissions($data, $file = null): int
                 $alterSql = "UPDATE ".$configDB['dbDatabase'].".".DB_PREFIX."user SET $new=$old;";
                 mysqli_query($database, $alterSql);
                 if (mysqli_affected_rows($database) > 0) {
-                    Debugger::log('UPDATER '.$file.': PERMISSIONS '.$old.' => '.$new);
+                    DebuggerLog('UPDATER '.$file.': PERMISSIONS '.$old.' => '.$new,"W");
                     $alter++;
                 }
             }
@@ -234,10 +233,10 @@ function bistroIntToTimestamp($data, $file = null): int
             $alterSql = "UPDATE ".$configDB['dbDatabase'].".".DB_PREFIX.$change[0]." SET ".$change[2]."=FROM_UNIXTIME(".$change[1].") where ".$change[1].">0 ;";
             mysqli_query($database, $alterSql);
             if (mysqli_affected_rows($database) > 0) {
-                Debugger::log('UPDATER '.$file.': TIME CONVERSION nw'.$change[0].':  '.$change[1].' => '.$change[2]);
+                DebuggerLog('UPDATER '.$file.': TIME CONVERSION nw'.$change[0].':  '.$change[1].' => '.$change[2],"W");
                 $alter++;
             } else {
-                Debugger::log('ERROR '.$file.': '.$alterSql);
+                DebuggerLog($file.': '.$alterSql,"E");
             }
         }
     }

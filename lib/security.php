@@ -1,4 +1,28 @@
 <?php
+
+use Tracy\Debugger;
+
+function DebuggerDump($name,$variable)
+{
+    Debugger::barDump($variable, $name);
+}
+
+function DebuggerLog($value,$logLevel = null)
+{
+    global $config;
+    $logLevelDefinition = [
+        'E' => 'Error',
+        'W' => 'Warning',
+        'D' => 'Debug',
+    ];
+    if (!isset($config['logLevel'])) {
+        $config['logLevel'] = ['E', 'W'];
+    }
+    if (in_array($logLevel,$config['logLevel'])) {
+        Debugger::log($config['version'].": ".$logLevelDefinition[$logLevel]." ".$value);
+    }
+}
+
 /**
  * @SuppressWarnings(PHPMD.Superglobals)
  *

@@ -18,6 +18,10 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 ### Security
  -->
 
+## 1.12.x
+### Changed
+- Refactored: logging #336
+
 ## 1.12.1 2023-04-23
 ### Changed
 - Refactored: unification of terminology in UI (part) #7

@@ -1,7 +1,5 @@
 <?php
 
-use Tracy\Debugger;
-
 /**
  * save user sorting preferencess for current user.
  *
@@ -87,7 +85,7 @@ function filterGet($object)//:array
 {
     global $database,$user,$config;
     $sql = "SELECT * FROM ".DB_PREFIX."filter where objectType='$object' AND userId=".$user['userId'];
-    Debugger::log($config['version'].': '.$sql);
+    DebuggerLog('filterGet: '.$sql,"D");
     $query = mysqli_query($database, $sql);
     if (mysqli_num_rows($query) > 0) {
         $result = mysqli_fetch_array($query);
