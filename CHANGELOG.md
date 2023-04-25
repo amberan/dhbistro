@@ -21,6 +21,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 ## 1.12.x
 ### Changed
 - Refactored: logging #336
+- Configuration: allow webp images to display directly #358
 ### Fixed
 - Fixed: displaying attachements in reports #356
 
