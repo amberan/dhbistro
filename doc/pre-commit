@@ -6,6 +6,7 @@
 # https://github.com/symplify/easy-coding-standard
 ECS="./vendor/bin/ecs"
 ECS_CONFIG=".ecs.php"
+PHPCS=".vendor/bin/php-cs-fixer"
 LATTE="./vendor/bin/latte-lint"
 FILES=` git status --porcelain | grep -e '^[AM]\(.*\).php\|^[AM]\(.*\).md$' | cut -c 3- | tr '\n' ' '`
 
@@ -15,14 +16,13 @@ exec < /dev/tty
 
 function install_tools()
 {
-            sudo apt -qq -y install composer
-            composer install
-            composer require --dev symplify/easy-coding-standard
+    sudo apt -qq -y install composer
+    composer install
+    composer require --dev symplify/easy-coding-standard
+    composer require --dev friendsofphp/php-cs-fixer
 }
 
 echo "### LINTERS pre-commit hook start ###"
-
-
 
 if [ ! -x $ECS ] || [ ! -x $LATTE ]; then
     while read -p "No validation tools found, should I install them? (Y/n) " yn; do
@@ -34,9 +34,10 @@ if [ ! -x $ECS ] || [ ! -x $LATTE ]; then
     done
 fi
 
-if [ -x $ECS ] && [ -x $LATTE ] && [ -n "$FILES" ]; then
+if [ -x $ECS ] && [ -x $LATTE ] && [ -x $PHPCS ] && [ -n "$FILES" ]; then
     echo "### PHP LINTER ###"
     $ECS check --config=$ECS_CONFIG $FILES --fix
+    $PHPCS fix $FILES
     git add $FILES
     echo "### LATTE LINTER  ###"
     $LATTE ./templates

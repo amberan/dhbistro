@@ -1,6 +1,6 @@
 <?php
 
-# NOTIFICATION
+// NOTIFICATION
 $text['notificationHttp401'] = 'K této akci nemáte oprávnění!';
 $text['notificationListEmpty'] = 'Nebyly nalezeny žádné položky!';
 $text['notificationRecordNotFound'] = 'Požadovaný záznam nebyl nalezen!';
@@ -19,7 +19,7 @@ $text['notificationNotDeleted'] = 'Záznam se nepodařilo odstranit!';
 $text['notificationRestored'] = 'Záznam úspešně obnoven!';
 $text['notificationNotRestored'] = 'Záznam se nepodařilo obnovit!';
 
-# MENU/SUBMENU/TITLE
+// MENU/SUBMENU/TITLE
 $text['menuTitle'] = 'BIStro';
 $text['menuNews'] = 'aktuality';
 $text['subMenuActionNewsList'] = 'zobrazit aktuality';
@@ -49,7 +49,7 @@ $text['menuBackups'] = 'zálohování';
 $text['menuLogout'] = 'odhlásit';
 $text['headingNotes'] = 'poznámky';
 
-# ACTION
+// ACTION
 $text['actionCreate'] = 'vytvořit';
 $text['actionEdit'] = 'upravit';
 $text['actionArchive'] = 'archivovat';
@@ -59,7 +59,7 @@ $text['actionUnlock'] = 'odemknout';
 $text['actionRestore'] = 'obnovit';
 $text['actionRemove'] = 'odstranit';
 
-# ACTION CONFIRMATION
+// ACTION CONFIRMATION
 $text['actionConfirmationReadAll'] = 'opravdu označit vše jako přečtené?';
 $text['actionConfirmationArchive'] = 'opravdu archivovat';
 $text['actionConfirmationUnarchive'] = 'opravdu vyjmnout z archivu';
@@ -70,12 +70,12 @@ $text['actionConfirmationRemove'] = 'opravdu odstranit';
 $text['actionConfirmationRestore'] = 'opravdu obnovit';
 $text['actionConfirmationSymbolUnlink'] = 'opravdu odpojit symbol';
 
-# FILTERS
+// FILTERS
 $text['filterDeleteInclude'] = 'smazané';
 $text['filterSecretInclude'] = 'tajné';
 $text['filterQrContact'] = 'kontakt k importu';
 
-# PERMISSION
+// PERMISSION
 $text['aclNews'] = 'Aktuality';
 $text['aclBoard'] = 'Nástěnka';
 $text['aclReport'] = $text['menuReports'];
@@ -99,7 +99,7 @@ $text['aclSecretLevel'][0] = 'veřejné';
 $text['aclSecretLevel'][1] = 'tajné';
 $text['aclSecretLevel'][2] = 'soukromé';
 
-# DEFAULT TEXTAREA TEXT
+// DEFAULT TEXTAREA TEXT
 $text['reportDefaultTask'] = '';
 $text['reportDefaultSummary'] = '';
 $text['reportDefaultCost'] = '';
@@ -107,15 +107,11 @@ $text['reportDefaultImpact'] = '';
 $text['reportDefaultDetail'] = '';
 $text['reportDefaultInput'] = '';
 
-# WHATEVER
+// WHATEVER
 $text['searchResults'] = 'výsledky vyhledávaní';
 $text['connectedTo'] = 'připojeno k';
 
-
-
-
-
-# PERMISSION
+// PERMISSION
 $text['aclNews'] = 'Aktuality';
 $text['aclBoard'] = 'Nástěnka';
 $text['aclReport'] = $text['menuReports'];
@@ -139,7 +135,7 @@ $text['aclSecretLevel'][0] = 'veřejné';
 $text['aclSecretLevel'][1] = 'tajné';
 $text['aclSecretLevel'][2] = 'soukromé';
 
-# DEFAULT TEXTAREA TEXT
+// DEFAULT TEXTAREA TEXT
 $text['reportDefaultTask'] = '';
 $text['reportDefaultSummary'] = '';
 $text['reportDefaultCost'] = '';
@@ -147,16 +143,9 @@ $text['reportDefaultImpact'] = '';
 $text['reportDefaultDetail'] = '';
 $text['reportDefaultInput'] = '';
 
-# WHATEVER
+// WHATEVER
 $text['searchResults'] = 'výsledky vyhledávaní';
 $text['connectedTo'] = 'připojeno k';
-
-
-
-
-
-
-
 
 //NOTES
 $text['poznamky'] = 'poznámky';
@@ -177,8 +166,6 @@ $text['hlasenineniprirazenopripadu'] = 'hlášení není přiřazeno k žádném
 $text['neprirazenesymbolyhlaseni'] = 'nepřiřazené symboly spojené s hlášením';
 $text['osobyprirazenekhlaseni'] = 'osoby přiřazené k hlášení';
 $text['nemanedokoncenahlaseni'] = 'uživatel nemá žádná nedokončená hlášení.';
-
-
 
 // GENERIC
 $text['poslednizmena'] = 'poslední úprava';
@@ -279,12 +266,10 @@ $text['email'] = 'E-mail';
 // UZIVATELE
 $text['uzivatelskejmeno'] = 'Uživatelské jméno';
 
-
 $text['cisloosoby'] = 'Hraná osoba';
 $text['prava'] = 'Práva';
 $text['vypisuzivatelu'] = 'Výpis uživatelů';
 $text['naposledy'] = 'Naposledy';
-
 
 // BACKUP
 $text['existujicizalohy'] = 'Existující zálohy';

@@ -15,7 +15,7 @@ if (isset($user) && $user['aclUser'] > 0) {
 if (isset($user) && $user['aclUser'] > 0) {
     $menuSub[] = [$text['menuDoodle'], "/doodle.php", 0];
 } else {
-    $doodle = mysqli_fetch_assoc(mysqli_query($database, "SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1"));
+    $doodle = mysqli_fetch_assoc(mysqli_query($database, "SELECT link FROM " . DB_PREFIX . "doodle ORDER BY id desc LIMIT 0,1"));
     $menuSub[] = [$text['menuDoodle'], @$doodle['link'], 0];
 }
 if (isset($user) && $user['aclAudit'] > 0) {
@@ -26,7 +26,6 @@ if (isset($user) && $user['aclRoot'] > 0) {
     $menuSub[] = [$text['menuBackups'], '/backup', 0];
 }
 $menuSub[] = [$text['menuLogout'], "/logout", 0];
-
 
 $menuLinks[] = [$text['menuForum'], "http://www.prazskahlidka.cz/forums/index.php", 0, "images/icons/Icon_forum.svg"];
 $menuLinks[] = [$text['menuBank'], "http://banka.prazskahlidka.cz", 0, "images/icons/Icon_bank.svg"];

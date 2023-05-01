@@ -1,10 +1,8 @@
 <?php
 
-
 //TODO separate secret and private flag in DB
 //TODO function for deleting note with timestamp of deletion and person responsible
 //TODO function for editing note
-
 
 function noteType($noteType = null)
 {
@@ -24,8 +22,8 @@ function noteType($noteType = null)
 }
 
 /**
- * when creating a note with name of object, translates into id
- * @param mixed $objectId
+ * when creating a note with name of object, translates into id.
+ * @param  mixed           $objectId
  * @return bool|int|string
  */
 function noteObjectId($objectId = null)
@@ -46,14 +44,14 @@ function noteObjectId($objectId = null)
     return $return;
 }
 
-function noteCreate($object,$objectId,$title,$body,$secret,$userId)
+function noteCreate($object, $objectId, $title, $body, $secret, $userId)
 {
     global $database;
     if (!is_numeric($object)) {
         $object = noteObjectId($object);
     }
-    $noteCreateSql = "INSERT INTO ".DB_PREFIX."note (note, title, datum, iduser, idtable, iditem, secret, deleted)
-            VALUES('".$body."','".$title."','".Time()."','".$userId."','".$object."','".$objectId."',".$secret.",0)";
+    $noteCreateSql = "INSERT INTO " . DB_PREFIX . "note (note, title, datum, iduser, idtable, iditem, secret, deleted)
+            VALUES('" . $body . "','" . $title . "','" . Time() . "','" . $userId . "','" . $object . "','" . $objectId . "'," . $secret . ",0)";
     mysqli_query($database, $noteCreateSql);
     if (mysqli_affected_rows($database)) {
         $noteId = mysqli_insert_id($database);

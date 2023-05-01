@@ -1,15 +1,14 @@
 <?php
 
-
 function newsRead($newsId)
 {
     global $database, $user,$text;
     if (!isset($user['aclRoot'])) {
         $sqlwhere = " AND deleted = 0";
     }
-    $sql = 'SELECT '.DB_PREFIX.'news.* FROM '.DB_PREFIX.'news
-        WHERE '.DB_PREFIX.'news.id='.$newsId.@$sqlwhere;
-    $query = mysqli_query($database,$sql);
+    $sql = 'SELECT ' . DB_PREFIX . 'news.* FROM ' . DB_PREFIX . 'news
+        WHERE ' . DB_PREFIX . 'news.id=' . $newsId . @$sqlwhere;
+    $query = mysqli_query($database, $sql);
     if (mysqli_num_rows($query) > 0) {
         $news = mysqli_fetch_assoc($query);
         $news['newsTitle'] = $news['nadpis'];
@@ -25,14 +24,15 @@ function newsRead($newsId)
 
 function newsList()
 {
-    global $database, $user,$text;
+    global $database, $user;
     if (!isset($user['aclRoot'])) {
         $sqlwhere = " AND deleted = 0";
     }
-    $sql = 'SELECT '.DB_PREFIX.'news.* FROM '.DB_PREFIX.'news
-        WHERE 1'.@$sqlwhere.'
+    $sql = 'SELECT ' . DB_PREFIX . 'news.* FROM ' . DB_PREFIX . 'news
+        WHERE 1' . @$sqlwhere . '
         ORDER BY datum desc';
-    $query = mysqli_query($database,$sql);
+    $query = mysqli_query($database, $sql);
+    $newsList = [];
     if (mysqli_num_rows($query) > 0) {
         while ($news = mysqli_fetch_assoc($query)) {
             $news['newsTitle'] = $news['nadpis'];
@@ -50,11 +50,11 @@ function newsList()
 function newsDelete($newsId)
 {
     global $database,$text,$URL;
-    $sqlNewsDelete = 'UPDATE ' . DB_PREFIX . 'news set deleted=1 where id=' . $URL[2];
+    $sqlNewsDelete = 'UPDATE ' . DB_PREFIX . 'news set deleted=1 where id=' . $newsId;
     mysqli_query($database, $sqlNewsDelete);
     if (mysqli_affected_rows($database) == 1) {
-        authorizedAccess('news', 'delete', $URL[2]);
-        unset($URL[2], $URL[3]);
+        authorizedAccess('news', 'delete', $newsId);
+        unset($newsId, $URL[3]);
         return $text['notificationDeleted'];
     } else {
         return $text['notificationNotDeleted'];
@@ -74,7 +74,7 @@ function newsRestore($newsId)
     }
 }
 
-function newsAdd($title,$body,$category)
+function newsAdd($title, $body, $category)
 {
     global $database,$text,$URL,$user;
     $sqlNewsCreate = "INSERT INTO " . DB_PREFIX . "news ( datum, iduser, kategorie, nadpis, obsahMD, deleted)
@@ -90,10 +90,10 @@ function newsAdd($title,$body,$category)
     }
 }
 
-function newsEdit($title,$body,$category)
+function newsEdit($title, $body, $category)
 {
     global $database,$text,$URL,$user;
-    $sqlNewsEdit = 'UPDATE ' . DB_PREFIX . 'news SET nadpis="' . $title . '", obsahMD="' . $body . '", kategorie ="' . $category . '"
+    $sqlNewsEdit = 'UPDATE ' . DB_PREFIX . 'news SET nadpis="' . $title . '", obsahMD="' . $body . '", kategorie ="' . $category . '", iduser=' . $user['userId'] .'
                         WHERE id=' . $URL[2];
     mysqli_query($database, $sqlNewsEdit);
     if (mysqli_affected_rows($database) == 1) {

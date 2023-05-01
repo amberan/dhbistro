@@ -7,19 +7,19 @@ latteDrawTemplate("header");
 
 if (is_numeric($_REQUEST['rid'])) {
     $res = mysqli_query($database, "SELECT
-				".DB_PREFIX."note.id AS 'id',
-				".DB_PREFIX."note.title AS 'title',
-				".DB_PREFIX."note.note AS 'note',
-				".DB_PREFIX."note.secret AS 'secret',
-				".DB_PREFIX."note.iduser AS 'iduser',
-				".DB_PREFIX."note.deleted AS 'deleted',
-				".DB_PREFIX."note.datum as date_created,
-				".DB_PREFIX."user.userName AS 'nuser',
+                ".DB_PREFIX."note.id AS 'id',
+                ".DB_PREFIX."note.title AS 'title',
+                ".DB_PREFIX."note.note AS 'note',
+                ".DB_PREFIX."note.secret AS 'secret',
+                ".DB_PREFIX."note.iduser AS 'iduser',
+                ".DB_PREFIX."note.deleted AS 'deleted',
+                ".DB_PREFIX."note.datum as date_created,
+                ".DB_PREFIX."user.userName AS 'nuser',
                 ".DB_PREFIX."note.idtable,
                 ".DB_PREFIX."note.iditem
-				 FROM ".DB_PREFIX."note, ".DB_PREFIX."user
-				 WHERE ".DB_PREFIX."note.id=".$_REQUEST['rid']."
-				AND ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId");
+                 FROM ".DB_PREFIX."note, ".DB_PREFIX."user
+                 WHERE ".DB_PREFIX."note.id=".$_REQUEST['rid']."
+                AND ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId");
     if ($rec = mysqli_fetch_assoc($res)) {
         if ((($rec['secret'] <= $user['aclSecret']) || $rec['iduser'] == $user['userId']) && !$rec['deleted'] == 1) {
             $latteParameters['title'] = StripSlashes($rec['title']);
@@ -48,7 +48,7 @@ if (is_numeric($_REQUEST['rid'])) {
             }
             sparklets('<a href="./'.$sourceurl.'">'.$sourcename.'</a> &raquo; <strong>zobrazení poznámky</strong>', $editbutton);
             echo '<h1>'.StripSlashes($rec['title']).'</h1>
-				<h3>'.StripSlashes($rec['nuser']).' ['.webdate($rec['date_created']).']'.'</h3>';
+                <h3>'.StripSlashes($rec['nuser']).' ['.webdate($rec['date_created']).']'.'</h3>';
             if ($rec['secret'] == 0) {
                 echo '<h4>veřejná</h4>';
             }

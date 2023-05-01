@@ -3,8 +3,7 @@
 function mainMenu()
 {
     global $database,$user,$config,$text,$URL;
-    $currentfile = $_SERVER["PHP_SELF"];
-    $dlink = mysqli_fetch_assoc(mysqli_query($database, "SELECT link FROM ".DB_PREFIX."doodle ORDER BY id desc LIMIT 0,1"));
+    $dlink = mysqli_fetch_assoc(mysqli_query($database, "SELECT link FROM " . DB_PREFIX . "doodle ORDER BY id desc LIMIT 0,1"));
     echo '<div id="menu">
   <ul class="'.$config['themeColor'].'">
 	  <li '.((unreadItems(5)) ? ' class="unread"' : '').'><a href="/">Aktuality</a></li>
@@ -17,9 +16,9 @@ function mainMenu()
     if (isset($user) && $user['aclUser']) {
         echo '<li><a href="doodle.php">Časová dostupnost</a></li>';
     } else {
-        echo '<li><a href="'.$dlink['link'].'" target="_blank">Časová dostupnost</a></li>';
+        echo '<li><a href="' . $dlink['link'] . '" target="_blank">Časová dostupnost</a></li>';
     }
-    echo '<li><a href="evilpoints.php">'.$text['menuPoints'].'</a></li>
+    echo '<li><a href="evilpoints.php">' . $text['menuPoints'] . '</a></li>
 	  <li><a href="/settings">Nastavení</a></li>
 			  <li><a href="/search/">Vyhledávání</a></li>';
     if (isset($user) && $user['aclUser']) {
@@ -29,7 +28,7 @@ function mainMenu()
         echo '<li><a href="audit.php">Audit</a></li>';
     }
     echo '<li class="float-right"><a href="/logout">Odhlásit</a></li>
-	  <li class="float-right"><a href="'.$URL[1].'?delallnew=true" onclick="'."return confirm('Opravdu označit vše jako přečtené?');".'">Přečíst vše</a></li>
+	  <li class="float-right"><a href="' . $URL[1] . '?delallnew=true" onclick="' . "return confirm('Opravdu označit vše jako přečtené?');" . '">Přečíst vše</a></li>
   </ul>
   <!-- form id="search_menu">
 	  <input type="text" name="query" />
@@ -41,5 +40,5 @@ function mainMenu()
 
 function sparklets($path, $actions = '')
 {
-    echo '<div id="sparklets">Cesta: '.$path.(($actions != '') ? ' || Akce: '.$actions : '').'</div>';
+    echo '<div id="sparklets">Cesta: ' . $path . (($actions != '') ? ' || Akce: ' . $actions : '') . '</div>';
 }

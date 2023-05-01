@@ -2,4 +2,4 @@
 /*
  * ADD COLUMN
  */
-$columnAdd['backups']['version'] = "varchar(50) NOT NULL DEFAULT '".$config['version']." =<'";
+$columnAdd['backups']['version'] = "varchar(50) NOT NULL DEFAULT '" . $config['version'] . " =<'";

@@ -5,6 +5,7 @@
         "league/html-to-markdown": "^5.1"
     },
     "require-dev": {
-        "symplify/easy-coding-standard": "^11.2"
+        "symplify/easy-coding-standard": "^11.2",
+        "friendsofphp/php-cs-fixer": "^3.16"
     }
 }

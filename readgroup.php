@@ -90,11 +90,11 @@ if (is_numeric($_REQUEST['rid'])) {
             echo '<div id=""><!-- je treba dostylovat -->
 <table>
 <thead>
-	<tr>
+    <tr>
 '.((isset($filter['portrait']) and $filter['portrait'] == 'on') ? '<th>Portrét</th>' : '').'
-	  <th>Jméno <a href="readgroup.php?rid='.$_GET['rid'].'&sort=surname">&#8661;</a></th>
-	  <th>Telefon</th>
-	</tr>
+      <th>Jméno <a href="readgroup.php?rid='.$_GET['rid'].'&sort=surname">&#8661;</a></th>
+      <th>Telefon</th>
+    </tr>
 </thead>
 <tbody>
 ';
@@ -102,8 +102,8 @@ if (is_numeric($_REQUEST['rid'])) {
             while ($rec = mysqli_fetch_assoc($res)) {
                 echo '<tr class="'.($even % 2 == 0 ? 'even' : 'odd').'">
 '.((isset($filter['portrait']) and $filter['portrait'] == 'on') ? '<td><img  loading="lazy" src="file/portrait/'.$rec['id'].'" alt="portrét chybí" /></td>' : '').'
-	<td>'.($rec['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a></span>' : '<a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a>').'</td>
-	<td><a href="tel:'.str_replace(' ', '', $rec['phone']).'">'.$rec['phone'].'</a></td>
+    <td>'.($rec['secret'] ? '<span class="secret"><a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a></span>' : '<a href="readperson.php?rid='.$rec['id'].'&amp;hidenotes=0">'.implode(', ', [stripslashes($rec['surname']), stripslashes($rec['name'])]).'</a>').'</td>
+    <td><a href="tel:'.str_replace(' ', '', $rec['phone']).'">'.$rec['phone'].'</a></td>
 </tr>';
                 $even++;
             }
@@ -140,7 +140,7 @@ if (is_numeric($_REQUEST['rid'])) {
             <?php } //zobrazovani obrazku i jako obrazky
             if (in_array($rec['mime'], $config['mime-image'], true)) { ?>
             <li><a href="file/attachement/<?php echo $rec['id']; ?>"><img  loading="lazy" width="300px" alt="<?php echo stripslashes($rec['title']); ?>" src="file/attachement/<?php echo $rec['id']; ?>"></a></li>
-            <?php	} else { ?>
+            <?php } else { ?>
             <li><?php echo $rec['mime']; ?><a href="file/attachement/<?php echo $rec['id']; ?>"><?php echo stripslashes($rec['title']); ?></a></li>
             <?php } ?>
             <?php

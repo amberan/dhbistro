@@ -1,8 +1,5 @@
 <?php
 
-
-//
-
 // REPORTS
 $reportsAssigned = reportsAssignedTo($user['userId']);
 if (sizeof($reportsAssigned) > 1) {

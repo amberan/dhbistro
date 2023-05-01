@@ -14,7 +14,7 @@ function personRead($personId): array
 {
     global $database, $user, $text;
 
-    $sql = 'SELECT * FROM '.DB_PREFIX.'person WHERE id = '.$personId.' AND deleted <= '.$user['aclRoot'].' AND secret <= '.$user['aclSecret'];
+    $sql = 'SELECT * FROM ' . DB_PREFIX . 'person WHERE id = ' . $personId . ' AND deleted <= ' . $user['aclRoot'] . ' AND secret <= ' . $user['aclSecret'];
     $query = mysqli_query($database, $sql);
     if (mysqli_num_rows($query) > 0) {
         $person = mysqli_fetch_assoc($query);
@@ -46,9 +46,9 @@ function personList($where = 1, $order = 1): array
     if (mb_strlen($order) < 1) {
         $order = 1;
     }
-    $sql = 'SELECT * FROM '.DB_PREFIX.'person WHERE ('.$where.') AND deleted <='.$user['aclRoot'].' AND secret <='.$user['aclSecret'].' ORDER BY '.$order;
+    $sql = 'SELECT * FROM ' . DB_PREFIX . 'person WHERE (' . $where . ') AND deleted <=' . $user['aclRoot'] . ' AND secret <=' . $user['aclSecret'] . ' ORDER BY ' . $order;
     $query = mysqli_query($database, $sql);
-    //echo mysqli_num_rows($query);
+    $personList = [];
     if (mysqli_num_rows($query) > 0) {
         while ($person = mysqli_fetch_assoc($query)) {
             unset($person['deleted']);
@@ -71,7 +71,7 @@ function personList($where = 1, $order = 1): array
  */
 function personCheckboxUpdate($id, $column, $checkbox = null): void
 {
-    DBCheckboxUpdate('person',$id,$column,$checkbox);
+    DBCheckboxUpdate('person', $id, $column, $checkbox);
 }
 
 function personDelete($id): void
@@ -80,7 +80,7 @@ function personDelete($id): void
     if ($user['aclPerson'] > 0) {
         authorizedAccess('person', 'delete', $id);
         //TODO deleted to timestamp
-        $sqlUpdate = 'update '.DB_PREFIX.'person set deleted=1 where id='.$id;
+        $sqlUpdate = 'update ' . DB_PREFIX . 'person set deleted=1 where id=' . $id;
         mysqli_query($database, $sqlUpdate);
         DebuggerLog('PERSON.'.$id.' DELETED '.$sqlUpdate,"D");
         deleteAllUnread('person', $id);
@@ -94,7 +94,7 @@ function personRestore($id): void
     global $database,$user;
     if ($user['aclRoot'] > 0) {
         authorizedAccess('person', 'restore', $id);
-        $sqlUpdate = 'update '.DB_PREFIX.'person set deleted=0 where id='.$id;
+        $sqlUpdate = 'update ' . DB_PREFIX . 'person set deleted=0 where id=' . $id;
         mysqli_query($database, $sqlUpdate);
         DebuggerLog('PERSON.'.$id.' RESTORED '.$sqlUpdate,"D");
         deleteAllUnread('person', $id);
@@ -108,9 +108,9 @@ function personsUnlinked($editedUser = 0): array
 {
     global $database;
 
-    $personLinked[] = [];
+    $personLinked = [];
     //list linked persons except person linked to $editedUser
-    $personLinkedSql = "SELECT ".DB_PREFIX."user.personId FROM ".DB_PREFIX."user where personId != 0 AND userId != ".$editedUser." ORDER BY personId";
+    $personLinkedSql = "SELECT " . DB_PREFIX . "user.personId FROM " . DB_PREFIX . "user where personId != 0 AND userId != " . $editedUser . " ORDER BY personId";
     $personLinkedQuery = mysqli_query($database, $personLinkedSql);
     while ($personLinkedRecord = mysqli_fetch_assoc($personLinkedQuery)) {
         $personLinked[] = $personLinkedRecord['personId'];

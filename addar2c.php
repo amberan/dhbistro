@@ -1,5 +1,5 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 
 latteDrawTemplate("header");
 
@@ -19,12 +19,12 @@ if (is_numeric($_REQUEST['rid']) && ($user['aclReport'] || $user['userId'] == $a
         Hlášení můžete přiřadit k případu (či případům), kterého se týká.
     </p>
 
-    <?php
-if (!isset($customFilter['sort'])) {
-    $filterSort = 1;
-} else {
-    $filterSort = $customFilter['sort'];
-}
+<?php
+        if (!isset($customFilter['sort'])) {
+            $filterSort = 1;
+        } else {
+            $filterSort = $customFilter['sort'];
+        }
         switch ($filterSort) {
             case 1: $filterSqlSort = ' '.DB_PREFIX.'case.title ASC ';
                 break;
@@ -32,7 +32,7 @@ if (!isset($customFilter['sort'])) {
                 break;
             default: $filterSqlSort = ' '.DB_PREFIX.'case.title ASC ';
         }
-    echo '<form action="addar2c.php" method="post" id="filter">
+        echo '<form action="addar2c.php" method="post" id="filter">
 	<fieldset>
 	<legend>Filtr</legend>
 	<p>Vypsat všechny případy a seřadit je podle <select name="sort">
@@ -53,8 +53,8 @@ if (!isset($customFilter['sort'])) {
         $res = mysqli_query($database, $sql); ?>
         <div id="in-form-table">
             <?php
-if (mysqli_num_rows($res)) {
-    echo '	<table>
+            if (mysqli_num_rows($res)) {
+                echo '	<table>
 	<thead>
 	<tr>
 	<th>#</th>
@@ -64,19 +64,19 @@ if (mysqli_num_rows($res)) {
 	</thead>
 	<tbody>
 	';
-    $even = 0;
-    while ($rec = mysqli_fetch_assoc($res)) {
-        echo '<tr class="'.(($even % 2 == 0) ? 'even' : 'odd').(($rec['status']) ? ' solved' : '').'">
-		<td><input type="checkbox" name="case[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser']) ? ' checked="checked"' : '').' /></td><td>'.(($rec['secret']) ? '<span class="secret"><a href="readcase.php?rid='.$rec['id'].'">'.StripSlashes($rec['title'].' ').'</a></span>' : '<a href="readcase.php?rid='.$rec['id'].'">'.StripSlashes($rec['title'].' ').'</a>').'</td>
+                $even = 0;
+                while ($rec = mysqli_fetch_assoc($res)) {
+                    echo '<tr class="'.(($even % 2 == 0) ? 'even' : 'odd').(($rec['status']) ? ' solved' : '').'">
+		<td><input type="checkbox" name="case[]" value="'.$rec['id'].'" class="checkbox"'.(($rec['iduser']) ? ' checked="checked"' : '').' /></td><td>'.(($rec['secret']) ? '<span class="secret"><a href="readcase.php?rid='.$rec['id'].'">'.StripSlashes($rec['title']).'</a></span>' : '<a href="readcase.php?rid='.$rec['id'].'">'.StripSlashes($rec['title']).'</a>').'</td>
 		<td>'.(($rec['status']) ? 'uzavřen' : '&mdash;').'</td>
 		</tr>';
-        $even++;
-    }
-    echo '</table>
+                    $even++;
+                }
+                echo '</table>
 	';
-} else {
-    echo '<p>Žádné případy neodpovídají výběru.</p>';
-} ?>
+            } else {
+                echo '<p>Žádné případy neodpovídají výběru.</p>';
+            } ?>
             <input type="hidden" name="reportid" value="<?php echo $_REQUEST['rid']; ?>" />
             <input id="button-floating-uloz" type="submit" value="Uložit změny" name="addtoareport" class="submitbutton" title="Uložit změny" />
         </div>
