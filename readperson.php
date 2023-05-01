@@ -33,117 +33,117 @@ if (is_numeric($_REQUEST['rid']) && isset($user)) {
         deleteUnread('person', $_REQUEST['rid']);
         sparklets('<a href="/persons">osoby</a> &raquo; <strong>'.StripSlashes($rec['surname']).', '.StripSlashes($rec['name']).'</strong>', '<a href="readperson.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton); ?>
 <div id="obsah">
-	<h1><?php echo stripslashes($rec['surname']).', '.stripslashes($rec['name']); ?></h1>
-	<fieldset>
+    <h1><?php echo stripslashes($rec['surname']).', '.stripslashes($rec['name']); ?></h1>
+    <fieldset>
         <legend>
             <strong>Základní údaje</strong>
         </legend>
-		<?php if ($rec['portrait'] == null) { ?>
+        <?php if ($rec['portrait'] == null) { ?>
             <img src="#" alt="portrét chybí" title="portrét chybí" id="portraitimg" class="noname"/>
-		<?php } else { ?>
+        <?php } else { ?>
             <img  loading="lazy" src="file/portrait/<?php echo $_REQUEST['rid']; ?>" alt="<?php echo stripslashes($rec['name']).' '.stripslashes($rec['surname']); ?>" id="portraitimg" />
-		<?php } ?>
-		<?php if ($rec['symbol'] == null) { ?>
+        <?php } ?>
+        <?php if ($rec['symbol'] == null) { ?>
             <img src="#" alt="symbol chybí" title="symbol chybí" id="symbolimg" class="noname"/>
-		<?php } else { ?>
+        <?php } else { ?>
             <a href="readsymbol.php?rid=<?php echo $rec['symbol']; ?>"><img src="file/symbol/<?php echo $rec['symbol']; ?>" alt="<?php echo stripslashes($rec['name']).' '.stripslashes($rec['surname']); ?>" id="symbolimg" /></a>
-		<?php }
-		if (file_exists('file/qrcontact/'.$rec['id'].'.png')) { ?>
+        <?php }
+        if (file_exists('file/qrcontact/'.$rec['id'].'.png')) { ?>
         <div id="qrcodeimg" class="noname">
             <img loading="lazy" src="/file/qrcontact/<?php echo $rec['id']; ?>.png" alt="" />
         </div>
         <?php } ?>
         <div id="info">
-			<?php
-		if ($rec['secret'] > 0 || $rec['dead'] == 1 || $rec['archived'] > 1 || $rec['deleted'] == 1) {
-		    echo '<h2>';
-		}
-		if ($rec['secret'] > 0) {
-		    echo 'TAJNÉ: '.$rec['secret'];
-		}
-		if ($rec['dead'] == 1) {
-		    echo 'MRTVOLA ';
-		}
-		if ($rec['archived'] > 1) {
-		    echo 'ARCHIV['.$rec['archived'].'] ';
-		}
-		if ($rec['deleted'] == 1) {
-		    echo 'SMAZANÝ ZÁZNAM';
-		}
-		if ($rec['secret'] == 1 || $rec['dead'] == 1 || $rec['archived'] > 1 || $rec['deleted'] == 1) {
-		    echo '</h2>';
-		} ?>
-			<h3>Jméno: </h3><p><?php echo stripslashes($rec['name']); ?></p>
-			<div class="clear">&nbsp;</div>
-			<h3>Příjmení: </h3><p><?php echo stripslashes($rec['surname']); ?></p>
-			<div class="clear">&nbsp;</div>
-			<h3>Strana: </h3><p><?php
-		    switch ($rec['side']) {
-		        case 1: $side = 'světlo';
-		            break;
-		        case 2: $side = 'tma';
-		            break;
-		        case 3: $side = 'člověk';
-		            break;
-		        default: $side = 'neznámá';
-		            break;
-		    }
-		echo $side; ?></p>
-			<div class="clear">&nbsp;</div>
-			<h3>Síla: </h3><p><?php
-		    switch ($rec['power']) {
-		        case 1:
-		        case 2:
-		        case 3:
-		        case 4:
-		        case 5:
-		        case 6:
-		        case 7:
-		            $power = $rec['power'].'. kategorie';
-		            break;
-		        case 8:
-		            $power = 'mimo kategorie';
-		            break;
-		        default: $power = 'neznámá';
-		            break;
-		    }
-		    echo $power; ?></p>
-			<div class="clear">&nbsp;</div>
             <?php
-		    if ($rec['roof'] > null) {
-		        echo '<h3>Dosažení stropu zaznamenáno: </h3><p>'.$rec['roof'].'</p><div class="clear">&nbsp;</div>';
-		    } ?>
-			<div class="clear">&nbsp;</div>
-			<h3>Specializace: </h3><p><?php
-		        switch ($rec['spec']) {
-		            case 1: $side = 'bílý mág';
-		                break;
-		            case 2: $side = 'černý mág';
-		                break;
-		            case 3: $side = 'léčitel';
-		                break;
-		            case 4: $side = 'obrateň';
-		                break;
-		            case 5: $side = 'upír';
-		                break;
-		            case 6: $side = 'vlkodlak';
-		                break;
-		            case 7: $side = 'vědma';
-		                break;
-		            case 8: $side = 'zaříkávač';
-		                break;
-		            case 9: $side = 'vykladač';
-		                break;
-		            case 10: $side = 'jasnovidec';
-		                break;
-		            default: $side = 'neznámá';
-		                break;
-		        }
-		    echo $side; ?></p>
-			<div class="clear">&nbsp;</div>
-			<h3>Telefon: </h3><p><a href ="tel:<?php echo str_replace(' ', '', $rec['phone']); ?>"><?php echo $rec['phone']; ?></a></p>
-			<div class="clear">&nbsp;</div>
-			<h3>Patří do skupin: </h3><p><?php
+        if ($rec['secret'] > 0 || $rec['dead'] == 1 || $rec['archived'] > 1 || $rec['deleted'] == 1) {
+            echo '<h2>';
+        }
+        if ($rec['secret'] > 0) {
+            echo 'TAJNÉ: '.$rec['secret'];
+        }
+        if ($rec['dead'] == 1) {
+            echo 'MRTVOLA ';
+        }
+        if ($rec['archived'] > 1) {
+            echo 'ARCHIV['.$rec['archived'].'] ';
+        }
+        if ($rec['deleted'] == 1) {
+            echo 'SMAZANÝ ZÁZNAM';
+        }
+        if ($rec['secret'] == 1 || $rec['dead'] == 1 || $rec['archived'] > 1 || $rec['deleted'] == 1) {
+            echo '</h2>';
+        } ?>
+            <h3>Jméno: </h3><p><?php echo stripslashes($rec['name']); ?></p>
+            <div class="clear">&nbsp;</div>
+            <h3>Příjmení: </h3><p><?php echo stripslashes($rec['surname']); ?></p>
+            <div class="clear">&nbsp;</div>
+            <h3>Strana: </h3><p><?php
+            switch ($rec['side']) {
+                case 1: $side = 'světlo';
+                    break;
+                case 2: $side = 'tma';
+                    break;
+                case 3: $side = 'člověk';
+                    break;
+                default: $side = 'neznámá';
+                    break;
+            }
+        echo $side; ?></p>
+            <div class="clear">&nbsp;</div>
+            <h3>Síla: </h3><p><?php
+            switch ($rec['power']) {
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                    $power = $rec['power'].'. kategorie';
+                    break;
+                case 8:
+                    $power = 'mimo kategorie';
+                    break;
+                default: $power = 'neznámá';
+                    break;
+            }
+            echo $power; ?></p>
+            <div class="clear">&nbsp;</div>
+            <?php
+            if ($rec['roof'] > null) {
+                echo '<h3>Dosažení stropu zaznamenáno: </h3><p>'.$rec['roof'].'</p><div class="clear">&nbsp;</div>';
+            } ?>
+            <div class="clear">&nbsp;</div>
+            <h3>Specializace: </h3><p><?php
+                switch ($rec['spec']) {
+                    case 1: $side = 'bílý mág';
+                        break;
+                    case 2: $side = 'černý mág';
+                        break;
+                    case 3: $side = 'léčitel';
+                        break;
+                    case 4: $side = 'obrateň';
+                        break;
+                    case 5: $side = 'upír';
+                        break;
+                    case 6: $side = 'vlkodlak';
+                        break;
+                    case 7: $side = 'vědma';
+                        break;
+                    case 8: $side = 'zaříkávač';
+                        break;
+                    case 9: $side = 'vykladač';
+                        break;
+                    case 10: $side = 'jasnovidec';
+                        break;
+                    default: $side = 'neznámá';
+                        break;
+                }
+            echo $side; ?></p>
+            <div class="clear">&nbsp;</div>
+            <h3>Telefon: </h3><p><a href ="tel:<?php echo str_replace(' ', '', $rec['phone']); ?>"><?php echo $rec['phone']; ?></a></p>
+            <div class="clear">&nbsp;</div>
+            <h3>Patří do skupin: </h3><p><?php
             $sqlFilter = DB_PREFIX."group.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."group.secret<=".$user['aclSecret'];
         $sql = "SELECT ".DB_PREFIX."group.secret AS 'secret', ".DB_PREFIX."group.title AS 'title', ".DB_PREFIX."group.id AS 'id', ".DB_PREFIX."g2p.iduser
             FROM ".DB_PREFIX."group, ".DB_PREFIX."g2p
@@ -162,30 +162,30 @@ if (is_numeric($_REQUEST['rid']) && isset($user)) {
         } else {
             echo '&mdash;';
         } ?></p>
-			<div class="clear">&nbsp;</div>
-			<p><strong>Datum vytvoření:</strong> <?php echo webdate($rec['regdate']); ?>
-				<strong>Vytvořil:</strong> <?php
+            <div class="clear">&nbsp;</div>
+            <p><strong>Datum vytvoření:</strong> <?php echo webdate($rec['regdate']); ?>
+                <strong>Vytvořil:</strong> <?php
             $name = AuthorDB($rec['regid']);
         echo $rec['regid'] == 0 ? 'asi Krauz' : $name; ?> </p>
-			<div class="clear">&nbsp;</div>
-			<p><strong>Datum poslední změny:</strong> <?php echo webdate($rec['datum']); ?>
-				<strong>Změnil:</strong> <?php
+            <div class="clear">&nbsp;</div>
+            <p><strong>Datum poslední změny:</strong> <?php echo webdate($rec['datum']); ?>
+                <strong>Změnil:</strong> <?php
             $name = AuthorDB($rec['iduser']);
         echo $name; ?> </p>
-			<div class="clear">&nbsp;</div>
-		</div>
-		<!-- end of #info -->
-	</fieldset>
+            <div class="clear">&nbsp;</div>
+        </div>
+        <!-- end of #info -->
+    </fieldset>
 <!-- náseduje popis osoby -->
-	<fieldset>
-		<legend><strong>Popis osoby</strong></legend>
-		<div class="field-text"><?php echo stripslashes($rec['contents']); ?></div>
-	</fieldset>
+    <fieldset>
+        <legend><strong>Popis osoby</strong></legend>
+        <div class="field-text"><?php echo stripslashes($rec['contents']); ?></div>
+    </fieldset>
 
 <!-- násedují přiřazené případy a hlášení -->
-	<fieldset>
-		<legend><strong>Hlášení a případy</strong></legend>
-		<h3>Figuruje v těchto případech: </h3><p><?php
+    <fieldset>
+        <legend><strong>Hlášení a případy</strong></legend>
+        <h3>Figuruje v těchto případech: </h3><p><?php
         $sqlFilter = DB_PREFIX."case.deleted in (0,".$user['aclRoot'].") AND ".DB_PREFIX."case.secret<=".$user['aclSecret'];
         $sql_c = "SELECT ".DB_PREFIX."case.secret AS 'secret', ".DB_PREFIX."case.title AS 'title', ".DB_PREFIX."case.id AS 'id', ".DB_PREFIX."c2p.iduser
             FROM ".DB_PREFIX."case, ".DB_PREFIX."c2p
@@ -201,7 +201,7 @@ if (is_numeric($_REQUEST['rid']) && isset($user)) {
         } else {
             echo 'Osoba nefiguruje v žádném případu.';
         } ?></p>
-		<div class="clear">&nbsp;</div>
+        <div class="clear">&nbsp;</div>
                 <h3>Figuruje v těchto hlášení: </h3><p><?php
         $sqlFilter = DB_PREFIX."report.reportSecret<=".$user['aclSecret'];
         if ($user['aclRoot'] < 1) {
@@ -222,11 +222,11 @@ if (is_numeric($_REQUEST['rid']) && isset($user)) {
         } else {
             echo 'Osoba nefiguruje v žádném hlášení.';
         } ?></p>
-		<div class="clear">&nbsp;</div>
-	</fieldset>
+        <div class="clear">&nbsp;</div>
+    </fieldset>
 
 <!-- následuje seznam přiložených souborů -->
-	<?php //generování seznamu přiložených souborů
+    <?php //generování seznamu přiložených souborů
         $sqlFilter = DB_PREFIX."file.secret<=".$user['aclSecret'];
         $sql = "SELECT ".DB_PREFIX."file.mime as mime, ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.id AS 'id'
             FROM ".DB_PREFIX."file
@@ -237,27 +237,27 @@ if (is_numeric($_REQUEST['rid']) && isset($user)) {
         while ($rec = mysqli_fetch_assoc($res)) {
             $i++;
             if ($i == 1) { ?>
-	<fieldset><legend><strong>Přiložené soubory</strong></legend>
-	<ul id="prilozenadata">
-			<?php }
+    <fieldset><legend><strong>Přiložené soubory</strong></legend>
+    <ul id="prilozenadata">
+            <?php }
             if (in_array($rec['mime'], $config['mime-image'], true)) { ?>
-							<li><a href="file/attachement/<?php echo $rec['id']; ?>"><img  loading="lazy"  width="300px" alt="<?php echo stripslashes($rec['title']); ?>" src="file/attachement/<?php echo $rec['id']; ?>"></a></li>
-			<?php	} else { ?>
-							<li><a href="file/attachement/<?php echo $rec['id']; ?>"><?php echo stripslashes($rec['title']); ?></a></li>
-			<?php }
-			}
+                            <li><a href="file/attachement/<?php echo $rec['id']; ?>"><img  loading="lazy"  width="300px" alt="<?php echo stripslashes($rec['title']); ?>" src="file/attachement/<?php echo $rec['id']; ?>"></a></li>
+            <?php } else { ?>
+                            <li><a href="file/attachement/<?php echo $rec['id']; ?>"><?php echo stripslashes($rec['title']); ?></a></li>
+            <?php }
+            }
         if ($i != 0) { ?>
-	</ul>
-	<!-- end of #prilozenadata -->
-	</fieldset>
-	<?php
+    </ul>
+    <!-- end of #prilozenadata -->
+    </fieldset>
+    <?php
         }
         // konec seznamu přiložených souborů?>
 
 <?php //skryti poznamek
 if ($hn != 1) { ?>
 <!-- následuje seznam poznámek -->
-	<?php // generování poznámek
+    <?php // generování poznámek
         $sqlFilter = DB_PREFIX."note.deleted in (0,".$user['aclRoot'].") AND (".DB_PREFIX."note.secret<=".$user['aclSecret'].' OR '.DB_PREFIX.'note.iduser='.$user['userId'].' )';
     $sql = "SELECT ".DB_PREFIX."note.datum as date_created, ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.note AS 'note', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id'
         FROM ".DB_PREFIX."note, ".DB_PREFIX."user
@@ -268,14 +268,14 @@ if ($hn != 1) { ?>
     while ($rec = mysqli_fetch_assoc($res)) {
         $i++;
         if ($i == 1) { ?>
-	<fieldset><legend><strong>Poznámky</strong></legend>
-	<div id="poznamky"><?php
+    <fieldset><legend><strong>Poznámky</strong></legend>
+    <div id="poznamky"><?php
         }
         if ($i > 1) {?>
-		<hr /><?php
+        <hr /><?php
         } ?>
-		<div class="poznamka">
-			<h4><?php echo stripslashes($rec['title']).' - '.stripslashes($rec['user']).' ['.webdate($rec['date_created']).']';
+        <div class="poznamka">
+            <h4><?php echo stripslashes($rec['title']).' - '.stripslashes($rec['user']).' ['.webdate($rec['date_created']).']';
         if ($rec['secret'] == 0) {
             echo ' (veřejná)';
         }
@@ -285,24 +285,24 @@ if ($hn != 1) { ?>
         if ($rec['secret'] == 2) {
             echo ' (soukromá)';
         } ?></h4>
-			<div><?php echo stripslashes($rec['note']); ?></div>
-			<span class="poznamka-edit-buttons"><?php
+            <div><?php echo stripslashes($rec['note']); ?></div>
+            <span class="poznamka-edit-buttons"><?php
         if (($rec['iduser'] == $user['userId']) || ($user['aclPerson'])) {
             echo '<a class="edit" href="editnote.php?rid='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=1" title="upravit"><span class="button-text">upravit</span></a> ';
         }
         if (($rec['iduser'] == $user['userId']) || ($user['aclPerson'] > 1)) {
             echo '<a class="delete" href="procnote.php?deletenote='.$rec['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('readperson.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec['title'])."&quot; náležící k osobě?');".'" title="smazat"><span class="button-text">smazat</span></a>';
         } ?>
-			</span>
-		</div>
-		<!-- end of .poznamka -->
-	<?php
+            </span>
+        </div>
+        <!-- end of .poznamka -->
+    <?php
     }
     if ($i != 0) { ?>
-	</div>
-	<!-- end of #poznamky -->
-	</fieldset>
-	<?php }
+    </div>
+    <!-- end of #poznamky -->
+    </fieldset>
+    <?php }
     // konec poznámek?>
 <?php } ?>
 

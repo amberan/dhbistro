@@ -78,10 +78,7 @@ phpcs-security-audit-sast:
   interruptible: true
   allow_failure: true
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      when: manual
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" # Run code quality job in merge request pipelines
-      when: manual
       exists:
         - '**/*.php'
 

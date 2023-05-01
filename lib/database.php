@@ -1,7 +1,7 @@
 <?php
 
 /**
- * saving checkboxes do db (int and timestamp)
+ * saving checkboxes do db (int and timestamp).
  * @param mixed $table
  * @param mixed $id
  * @param mixed $column
@@ -9,14 +9,14 @@
  */
 function DBCheckboxUpdate($table, $id, $column, $checkbox = null): void
 {
-    global $database,$configDB;
+    global $database;
     //! check if $column is timestamp/int and current value
     //! int == 1 && !checkbox => set null
     //! int != 1 && $checkbox => set 1
     //! timestamp != null && !$checkbox => set null
     //! timestamp == null && $checkbox => set CURRENT_TIMESTAMP
     //! timestamp != null && $checkbox => nothing to do
-    $sqlCheckColumn = 'select '.$column.' from '.DB_PREFIX.$table.' where id='.$id;
+    $sqlCheckColumn = 'select ' . $column . ' from ' . DB_PREFIX . $table . ' where id=' . $id;
     $sqlCheckColumnValue = mysqli_fetch_assoc(mysqli_query($database, $sqlCheckColumn));
     $sqlCheckColumnType = mysqli_fetch_field(mysqli_query($database, $sqlCheckColumn));
 
@@ -30,24 +30,21 @@ function DBCheckboxUpdate($table, $id, $column, $checkbox = null): void
         $sqlUpdate = 'CURRENT_TIMESTAMP';
     }
     if (isset($sqlUpdate)) {
-        mysqli_query($database, 'UPDATE '.DB_PREFIX.$table.' set '.$column.' = '.$sqlUpdate.' where id='.$id);
+        mysqli_query($database, 'UPDATE ' . DB_PREFIX . $table . ' set ' . $column . ' = ' . $sqlUpdate . ' where id=' . $id);
     }
 }
-
-
 
 function DBconnect($configDB)
 {
     $database = mysqli_connect($configDB['dbHost'], $configDB['dbUser'], $configDB['dbPassword'], $configDB['dbDatabase'])
-    or die($_SERVER["SERVER_NAME"].":".mysqli_connect_errno()." ".mysqli_connect_error());
+    or die($_SERVER["SERVER_NAME"] . ":" . mysqli_connect_errno() . " " . mysqli_connect_error());
     mysqli_query($database, "SET NAMES 'utf8'");
     return $database;
 }
 
-
 function DBTest($configDB)
 {
-    $dbtest = @mysqli_connect($configDB['dbHost'], $configDB['dbUser'], $configDB['dbPassword'], $configDB['dbDatabase']);
+    mysqli_connect($configDB['dbHost'], $configDB['dbUser'], $configDB['dbPassword'], $configDB['dbDatabase']);
     if (mysqli_connect_errno()) {
         printf("Connect failed: %s\n", mysqli_connect_error());
         return false;
@@ -56,14 +53,14 @@ function DBTest($configDB)
 }
 
 /**
- * populateDB - if $sqlFile not set search for latest /sql/default*sql
+ * populateDB - if $sqlFile not set search for latest /sql/default*sql.
  */
 function restoreDB($sqlFile = null)
 {
     global $database;
-    require $_SERVER['DOCUMENT_ROOT']."/.env.php";
+    require $_SERVER['DOCUMENT_ROOT'] . "/.env.php";
     if (!file_exists($sqlFile)) {
-        $dbScriptFileList = glob(SERVER_ROOT.'/sql/default*.sql');
+        $dbScriptFileList = glob(SERVER_ROOT . '/sql/default*.sql');
         $sqlFile = end($dbScriptFileList);
         DebuggerLog("creating new database from ".$sqlFile,"W");
     }
@@ -88,7 +85,6 @@ function restoreDB($sqlFile = null)
     }
 }
 
-
 /**
  * Check existence of $column in $table.
  *
@@ -98,7 +94,7 @@ function restoreDB($sqlFile = null)
 function DBcolumnExist($table, $column)
 {
     global $configDB,$database;
-    $query = "SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='".$configDB['dbDatabase']."' AND table_name='".DB_PREFIX."$table' and column_name='$column'";
+    $query = "SELECT COLUMN_NAME FROM information_schema.columns WHERE table_schema='" . $configDB['dbDatabase'] . "' AND table_name='" . DB_PREFIX . "$table' and column_name='$column'";
     $checkColumn = mysqli_query($database, $query);
 
     return mysqli_num_rows($checkColumn);
@@ -112,7 +108,7 @@ function DBcolumnExist($table, $column)
 function DBtableExist($table)
 {
     global $configDB,$database;
-    $query = "SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='".$configDB['dbDatabase']."' AND table_name='".DB_PREFIX."$table'";
+    $query = "SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema='" . $configDB['dbDatabase'] . "' AND table_name='" . DB_PREFIX . "$table'";
     $checkTable = mysqli_query($database, $query);
 
     return mysqli_num_rows($checkTable);
@@ -129,7 +125,7 @@ function DBcolumntNotEmpty($table, $column)
     global $configDB,$database;
     $result[] = '1';
     if (DBcolumnExist($table, $column)) {
-        $query = "select count(*) from ".$configDB['dbDatabase'].".".DB_PREFIX.$table." where length($column) > 0;";
+        $query = "select count(*) from " . $configDB['dbDatabase'] . "." . DB_PREFIX . $table . " where length($column) > 0;";
         $result = mysqli_fetch_array(mysqli_query($database, $query));
     }
 

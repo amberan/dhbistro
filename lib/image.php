@@ -2,7 +2,7 @@
 
 // pridat imagemagic manipulaci se symboly
 
-function imageResize($img,$maxWidth,$maxHeight)
+function imageResize($img, $maxWidth, $maxHeight)
 {
     $size = getimagesize($img);
     $width = $size[0];
@@ -30,8 +30,8 @@ function imageResize($img,$maxWidth,$maxHeight)
     if ($size[2] == 3) {
         $src = imagecreatefrompng($img);
     }
-    $dst = imagecreatetruecolor($widthTn,$heightTn);
-    imagecopyresampled($dst,$src,0,0,0,0,$widthTn,$heightTn,$width,$height);
+    $dst = imagecreatetruecolor($widthTn, $heightTn);
+    imagecopyresampled($dst, $src, 0, 0, 0, 0, $widthTn, $heightTn, $width, $height);
     imageinterlace($dst, 1);
     imagedestroy($src);
 

@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-require_once $_SERVER['DOCUMENT_ROOT']."/config.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/config.php";
 if (!file_exists($config['platformConfig'])) {
     echo $config['platformConfig'];
     Header('location: index.php');
@@ -12,7 +12,7 @@ if (!file_exists($config['platformConfig'])) {
 }
 require_once $config['platformConfig'];
 $latteParameters['config'] = $config;
-require_once SERVER_ROOT.'/vendor/autoload.php';
+require_once SERVER_ROOT . '/vendor/autoload.php';
 use Tracy\Debugger;
 
 Debugger::enable(Debugger::DEVELOPMENT, $config['folder_logs']);
@@ -21,31 +21,31 @@ $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 $latteParameters = [];
 
-require_once $config['folder_custom'].'text.php';
+require_once $config['folder_custom'] . 'text.php';
 if (isset($config['themeCustom'])) {
-    require_once $config['folder_custom'].'/text-'.$config['themeCustom'].'.php';
+    require_once $config['folder_custom'] . '/text-' . $config['themeCustom'] . '.php';
 }
 $latteParameters['text'] = $text;
 
 $URL = explode('/', $_SERVER['REQUEST_URI']);
 
-require_once SERVER_ROOT.'/lib/security.php';
-require_once SERVER_ROOT.'/lib/database.php';
-require_once SERVER_ROOT.'/lib/gui.php';
-require_once SERVER_ROOT.'/lib/filters.php';
-require_once SERVER_ROOT.'/lib/file.php';
-require_once SERVER_ROOT.'/lib/audit.php';
-require_once SERVER_ROOT.'/lib/image.php';
-require_once SERVER_ROOT.'/lib/person.php';
-require_once SERVER_ROOT.'/lib/news.php';
-require_once SERVER_ROOT.'/lib/user.php';
+require_once SERVER_ROOT . '/lib/security.php';
+require_once SERVER_ROOT . '/lib/database.php';
+require_once SERVER_ROOT . '/lib/gui.php';
+require_once SERVER_ROOT . '/lib/filters.php';
+require_once SERVER_ROOT . '/lib/file.php';
+require_once SERVER_ROOT . '/lib/audit.php';
+require_once SERVER_ROOT . '/lib/image.php';
+require_once SERVER_ROOT . '/lib/person.php';
+require_once SERVER_ROOT . '/lib/news.php';
+require_once SERVER_ROOT . '/lib/user.php';
 
-$database = mysqli_connect($configDB['dbHost'], $configDB['dbUser'], $configDB['dbPassword'], $configDB['dbDatabase']) or die($_SERVER["SERVER_NAME"].":".mysqli_connect_errno()." ".mysqli_connect_error());
+$database = mysqli_connect($configDB['dbHost'], $configDB['dbUser'], $configDB['dbPassword'], $configDB['dbDatabase']) or die($_SERVER["SERVER_NAME"] . ":" . mysqli_connect_errno() . " " . mysqli_connect_error());
 mysqli_query($database, "SET NAMES 'utf8'");
 
-require_once SERVER_ROOT.'/inc/session.php';
-require_once SERVER_ROOT.'/inc/unread.php';
-require_once SERVER_ROOT.'/inc/menu.php';
+require_once SERVER_ROOT . '/inc/session.php';
+require_once SERVER_ROOT . '/inc/unread.php';
+require_once SERVER_ROOT . '/inc/menu.php';
 
 $_REQUEST = escape_array($_REQUEST);
 $_POST = escape_array($_POST);
@@ -87,7 +87,7 @@ function custom_Filter($idtable, $idrecord = 0)
         case 13: $table = 'search';
 
             break;
-        case 14: $table = 'group'.$idrecord;
+        case 14: $table = 'group' . $idrecord;
 
             break;
         case 15: $table = 'p2c';
@@ -130,7 +130,7 @@ function custom_Filter($idtable, $idrecord = 0)
             $filters[$table] = $filter;
         }
         $sfilters = serialize($filters);
-        $sqlScf = 'UPDATE '.DB_PREFIX."user SET filter='".$sfilters."' WHERE userId=".$user['userId'];
+        $sqlScf = 'UPDATE ' . DB_PREFIX . "user SET filter='" . $sfilters . "' WHERE userId=" . $user['userId'];
         mysqli_query($database, $sqlScf);
     // v opačném případě zkontroluj, zda existuje odpovídající filtr v databázi, a pokud ano, načti jej
     } else {

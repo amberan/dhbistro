@@ -1,8 +1,8 @@
 <?php
 
 session_start();
-require_once $_SERVER['DOCUMENT_ROOT']."/config.php";
-require_once SERVER_ROOT.'/vendor/autoload.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . "/config.php";
+require_once SERVER_ROOT . '/vendor/autoload.php';
 use Tracy\Debugger;
 
 Debugger::enable(Debugger::DEVELOPMENT, $config['folder_logs']);
@@ -11,26 +11,26 @@ $latte = new Latte\Engine();
 $latte->setTempDirectory($config['folder_cache']);
 $latte->addExtension(new Latte\Essential\RawPhpExtension());
 $latteParameters = [];
-require_once $config['folder_custom'].'text.php';
-require_once SERVER_ROOT.'/lib/audit.php';
-require_once SERVER_ROOT.'/lib/case.php';
-require_once SERVER_ROOT.'/lib/database.php';
-require_once SERVER_ROOT.'/lib/backup.php';
-require_once SERVER_ROOT.'/lib/file.php';
-require_once SERVER_ROOT.'/lib/filters.php';
-require_once SERVER_ROOT.'/lib/gui.php';
-require_once SERVER_ROOT.'/lib/image.php';
-require_once SERVER_ROOT.'/lib/news.php';
-require_once SERVER_ROOT.'/lib/person.php';
-require_once SERVER_ROOT.'/lib/report.php';
-require_once SERVER_ROOT.'/lib/security.php';
-require_once SERVER_ROOT.'/lib/update.php';
-require_once SERVER_ROOT."/lib/user.php";
-require_once SERVER_ROOT."/lib/notes.php";
-require_once SERVER_ROOT."/lib/symbols.php";
+require_once $config['folder_custom'] . 'text.php';
+require_once SERVER_ROOT . '/lib/audit.php';
+require_once SERVER_ROOT . '/lib/case.php';
+require_once SERVER_ROOT . '/lib/database.php';
+require_once SERVER_ROOT . '/lib/backup.php';
+require_once SERVER_ROOT . '/lib/file.php';
+require_once SERVER_ROOT . '/lib/filters.php';
+require_once SERVER_ROOT . '/lib/gui.php';
+require_once SERVER_ROOT . '/lib/image.php';
+require_once SERVER_ROOT . '/lib/news.php';
+require_once SERVER_ROOT . '/lib/person.php';
+require_once SERVER_ROOT . '/lib/report.php';
+require_once SERVER_ROOT . '/lib/security.php';
+require_once SERVER_ROOT . '/lib/update.php';
+require_once SERVER_ROOT . "/lib/user.php";
+require_once SERVER_ROOT . "/lib/notes.php";
+require_once SERVER_ROOT . "/lib/symbols.php";
 
 $URL = explode('/', $_SERVER['REQUEST_URI']); // for THE LOOP
-$URL[0] = $_SERVER['REQUEST_SCHEME']."://".$_SERVER['SERVER_NAME']."/";
+$URL[0] = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . "/";
 
 if (!file_exists($config['platformConfig']) || isset($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbDatabase'])) {
     bistroEnvConvert();
@@ -40,7 +40,7 @@ require_once $config['platformConfig'];
 if (DBTest($configDB)) {
     $database = DBconnect($configDB);
     if ($database && !sizeof(DBListTables()) > 0 && isset($_POST['backupFile'])) {
-        restoreDB($config['folder_backup'].$_POST['backupFile']);
+        restoreDB($config['folder_backup'] . $_POST['backupFile']);
     } elseif ($database && !sizeof(DBListTables()) > 0 && !isset($_POST['backupFile'])) {
         restoreDB();
     } elseif (!$database) {
@@ -50,13 +50,13 @@ if (DBTest($configDB)) {
     bistroEnvConvert();
 }
 
-if (isset($config['themeCustom']) && file_exists($config['folder_custom'].'/text-'.$config['themeCustom'].'.php')) {
-    require_once $config['folder_custom'].'/text-'.$config['themeCustom'].'.php';
+if (isset($config['themeCustom']) && file_exists($config['folder_custom'] . '/text-' . $config['themeCustom'] . '.php')) {
+    require_once $config['folder_custom'] . '/text-' . $config['themeCustom'] . '.php';
 }
 
 // require_once SERVER_ROOT.'/inc/backup.php';
-require_once SERVER_ROOT.'/inc/session.php';
-require_once SERVER_ROOT.'/inc/unread.php';
+require_once SERVER_ROOT . '/inc/session.php';
+require_once SERVER_ROOT . '/inc/unread.php';
 $_REQUEST = escape_array($_REQUEST);
 $_POST = escape_array($_POST);
 $_GET = escape_array($_GET);
@@ -64,7 +64,7 @@ bistroBackup();
 // ! THE LOOP
 if ($URL[1] == 'file' && isset($user)) { // GET FILE type:  attachement,portrait,symbol,backup
     authorizedAccess('file', 'read', $URL[2]);
-    require_once SERVER_ROOT.'/pages/file.php';
+    require_once SERVER_ROOT . '/pages/file.php';
     exit;
 }
 //TODO add templates to queue and render at the end of everything #306
@@ -224,7 +224,7 @@ if (isset($user)) {
             break;
     }
 } else {
-    require_once SERVER_ROOT.'/pages/login.php';
+    require_once SERVER_ROOT . '/pages/login.php';
 }
 
 DebuggerDump('session', $_SESSION);

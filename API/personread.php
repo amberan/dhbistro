@@ -16,7 +16,7 @@ if ($user == null) { //invalid user
     //TODO prevadet id fotek s symbolu na odkazy
     } else {
         //TODO strankovani
-        $output = personList($_GET['where'],$_GET['order']);
+        $output = personList($_GET['where'], $_GET['order']);
         //TODO prevadet id fotek s symbolu na odkazy
     }
     http_response_code(200);

@@ -1,8 +1,5 @@
 <?php
 
-
-
-
 if (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] == 'delete') {
     authorizedAccess('user', 'delete', $URL[3]);
     $data['userDeleted'] = 1;
@@ -23,7 +20,7 @@ if (isset($URL[3]) and is_numeric($URL[3]) and $URL[2] == 'delete') {
     authorizedAccess('user', 'passwordReset', @$URL[3]);
     $passwordNew = randomPassword();
     $data['userPassword'] = md5($passwordNew);
-    userChange($URL[3], $data, $text['heslonastaveno'].$passwordNew, $text['akcinelzeprovest']);
+    userChange($URL[3], $data, $text['heslonastaveno'] . $passwordNew, $text['akcinelzeprovest']);
 }
 
 if (isset($_GET['sort'])) {

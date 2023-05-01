@@ -1,4 +1,5 @@
 <?php
+
 // default
 define('DB_PREFIX', 'nw_'); // prefix tabulek
 $config['themeBg'] = 'dark';
@@ -31,7 +32,7 @@ switch ($_SERVER["SERVER_NAME"]) {
         $config['themeCustom'] = 'DH';
         $config['themeBg'] = 'warning';
         $config['themeNavbar'] = 'light';
-    break;
+        break;
     case 'org.dhbistro.cz':
         $config['dbUser'] = $config['dbDatabase'] = 'orgbistro';
         $config['themeColor'] = 'org';
@@ -77,12 +78,12 @@ switch ($_SERVER["SERVER_NAME"]) {
         $config['themeColor'] = 'test';
         $config['themeCustom'] = 'DH';
         $config['themeBg'] = 'secondary';
-    break;
+        break;
     default:
         $config['dbUser'] = $config['dbDatabase'] = 'dhbistrocz';
         $config['themeCustom'] = 'DH';
         $config['themeColor'] = 'local';
         $config['themeBg'] = 'warning';
         $config['themeNavbar'] = 'light';
-    break;
+        break;
 }

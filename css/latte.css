@@ -476,8 +476,8 @@ input[type='submit'] {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-	padding: 5px 15px;
-	margin-top: 10px;
+    padding: 5px 15px;
+    margin-top: 10px;
 }
 
 .help-card > p {
@@ -809,7 +809,7 @@ input[type='submit'] {
   position: relative;
   margin: 0 1rem 1rem 0;
   padding: 10px 45px 5px 10px;
-	box-shadow: 0 -1px 7px 1px #333;
+    box-shadow: 0 -1px 7px 1px #333;
   border-bottom-width: 3px;
   border-bottom-style: solid;
 }

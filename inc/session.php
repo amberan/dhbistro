@@ -11,24 +11,10 @@
 function sessionUser($sid)
 {
     global $database, $_SESSION;
-    $usersql = "SELECT * FROM ".DB_PREFIX."user
-    WHERE userDeleted=0 AND userSuspended=0 AND ".DB_PREFIX."user.sid ='$sid' AND userAgent='".$_SERVER['HTTP_USER_AGENT']."'";
+    $usersql = "SELECT * FROM " . DB_PREFIX . "user
+    WHERE userDeleted=0 AND userSuspended=0 AND " . DB_PREFIX . "user.sid ='$sid' AND userAgent='" . $_SERVER['HTTP_USER_AGENT'] . "'";
     if ($user = mysqli_fetch_assoc(mysqli_query($database, $usersql))) {
-        $usrinfo['userId'] = $user['userId'];
-        $usrinfo['login'] = $user['userName'];
-        $usrinfo['idperson'] = $user['personId'];
-        $usrinfo['lastaction'] = $user['lastLogin'];
-        $usrinfo['currip'] = $user['ipv4'];
-        $usrinfo['user_agent'] = $user['userAgent'];
-        $usrinfo['email'] = $user['userEmail'];
-        $usrinfo['deleted'] = $user['userDeleted'];
-        $usrinfo['suspended'] = $user['userSuspended'];
-        $usrinfo['zlobody'] = $user['zlobod'];
-        // $user['aclUser'] = $user['aclUser'];
-        // $user['aclGamemaster'] = $user['aclGamemaster'];
-        // $user['aclAudit'] = $user['aclAudit'];
-        // $user['aclRoot'] = $user['aclRoot'];
-        $usrinfo['planMD'] = $user['planMD'] = stripslashes($user['planMD'].' ');
+        $user['planMD'] = stripslashes($user['planMD'] . ' ');
     } else {
         unset($_SESSION['sid']);
     }
@@ -48,7 +34,7 @@ function sessionUser($sid)
 function sessionDBwipe($sid): void
 {
     global $database;
-    mysqli_query($database, "UPDATE ".DB_PREFIX."user set sid=null WHERE sid='$sid'");
+    mysqli_query($database, "UPDATE " . DB_PREFIX . "user set sid=null WHERE sid='$sid'");
 }
 
 /**
@@ -69,19 +55,19 @@ function logout_forced($msg): void
     if (isset($msg)) {
         @$_SESSION['message'] .= $msg;
     }
-    header('location: '.$URL[0]);
+    header('location: ' . $URL[0]);
 }
 
 /*
  * PROCESS LOGIN FORM
  */
 if (isset($_POST['logmein']) and mb_strlen($_POST['loginname']) and mb_strlen($_POST['loginpwd'])) {
-    $logonSql = "SELECT userId FROM ".DB_PREFIX."user WHERE userName='".trim($_POST['loginname'])."' AND userPassword='".md5(trim($_POST['loginpwd']))."' and userDeleted=0 and userSuspended=0";
+    $logonSql = "SELECT userId FROM " . DB_PREFIX . "user WHERE userName='" . trim($_POST['loginname']) . "' AND userPassword='" . md5(trim($_POST['loginpwd'])) . "' and userDeleted=0 and userSuspended=0";
     $logon = mysqli_query($database, $logonSql);
     if (mysqli_num_rows($logon) && $logonUser = mysqli_fetch_array($logon)) {
         $_SESSION['sid'] = session_id();
         sessionDBwipe($_SESSION['sid']);
-        $logonUpdateSql = "UPDATE ".DB_PREFIX."user SET sid='".$_SESSION['sid']."', lastLogin=".time().", ipv4='".$_SERVER['REMOTE_ADDR']."', userAgent='".$_SERVER['HTTP_USER_AGENT']."' WHERE userId=".$logonUser['userId'];
+        $logonUpdateSql = "UPDATE " . DB_PREFIX . "user SET sid='" . $_SESSION['sid'] . "', lastLogin=" . time() . ", ipv4='" . $_SERVER['REMOTE_ADDR'] . "', userAgent='" . $_SERVER['HTTP_USER_AGENT'] . "' WHERE userId=" . $logonUser['userId'];
         mysqli_query($database, $logonUpdateSql);
     } else {
         DebuggerLog("LOGIN FAILED: ".$_POST['loginname'],"W");
@@ -90,10 +76,9 @@ if (isset($_POST['logmein']) and mb_strlen($_POST['loginname']) and mb_strlen($_
 
 /*
  * GET $user by SESSION['sid']
- * TODO remove legacy $usrinfo
  */
 if (isset($_SESSION['sid'])) {
-    $latteParameters['user'] = $user = $usrinfo = sessionUser($_SESSION['sid']);
+    $latteParameters['user'] = $user = sessionUser($_SESSION['sid']);
 }
 
 /*

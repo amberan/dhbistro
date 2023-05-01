@@ -8,15 +8,16 @@ function human_filesize($bytes, $decimals = 2)
 }
 
 /**
- * returns array files and size
+ * returns array files and size.
  */
 function fileList($folder)
 {
     $files = (array_diff(scandir($folder), ['.', '..', '.holder', '.htaccess']));
+    $fileList = [];
     foreach (($files) as $value) {
         $fileList[] = [
             basename($value),
-            human_filesize(filesize($folder.$value)),
+            human_filesize(filesize($folder . $value)),
         ];
     }
     return $fileList;
@@ -36,19 +37,19 @@ function fileIdentify($type, $objectId = 0)
     if (isset($objectId)) {
         switch ($type) {
             case 'portrait':
-                $sql = 'SELECT id, portrait, portrait as `file` FROM '.DB_PREFIX.'person WHERE deleted <='.$user['aclRoot'].' AND secret <='.$user['aclSecret'].' AND id='.$objectId;
+                $sql = 'SELECT id, portrait, portrait as `file` FROM ' . DB_PREFIX . 'person WHERE deleted <=' . $user['aclRoot'] . ' AND secret <=' . $user['aclSecret'] . ' AND id=' . $objectId;
                 $folder = $config['folder_portrait'];
                 break;
             case 'symbol':
-                $sql = 'SELECT id, symbol, symbol as `file` FROM '.DB_PREFIX.'symbol WHERE deleted <='.$user['aclRoot'].' AND secret <='.$user['aclSecret'].' AND id='.$objectId;
+                $sql = 'SELECT id, symbol, symbol as `file` FROM ' . DB_PREFIX . 'symbol WHERE deleted <=' . $user['aclRoot'] . ' AND secret <=' . $user['aclSecret'] . ' AND id=' . $objectId;
                 $folder = $config['folder_symbol'];
                 break;
             case 'attachement':
-                $sql = 'SELECT *, uniquename AS soubor, originalname AS nazev, size, originalname as `file` FROM '.DB_PREFIX.'file WHERE secret <='.$user['aclSecret'].' AND id='.$objectId;
+                $sql = 'SELECT *, uniquename AS soubor, originalname AS nazev, size, originalname as `file` FROM ' . DB_PREFIX . 'file WHERE secret <=' . $user['aclSecret'] . ' AND id=' . $objectId;
                 $folder = $config['folder_attachement'];
                 break;
             case 'backup':
-                $sql = 'SELECT `file`  FROM '.DB_PREFIX.'backup where id='.$objectId;
+                $sql = 'SELECT `file`  FROM ' . DB_PREFIX . 'backup where id=' . $objectId;
                 $folder = $config['folder_backup'];
                 break;
             default:
@@ -73,7 +74,7 @@ function fileIdentify($type, $objectId = 0)
         } else {
             return false;
         }
-        $file['fullPath'] = $folder.$file['fileHash'];
+        $file['fullPath'] = $folder . $file['fileHash'];
         //set mimetype
         if (!isset($file['mime'])) {
             $file['mime'] = 'application/octet-stream';
@@ -99,11 +100,11 @@ function fileGet($object): void
     header("Cache-Control: no-cache, no-store, must-revalidate, post-check=0, pre-check=0");
     header("Pragma: no-cache");
     header("Expires: -1");
-    header('Content-Type: '.$object['mime']);
+    header('Content-Type: ' . $object['mime']);
     if (!in_array($object['mime'], $imageMime, true)) {
-        header('Content-Disposition: attachment; filename='.$object['fileName']);
+        header('Content-Disposition: attachment; filename=' . $object['fileName']);
     }
-    header('Content-Length: '.$object['fileSize']);
+    header('Content-Length: ' . $object['fileSize']);
     if (file_exists($object['fullPath'])) {
         //fpassthru(fopen($object['fullPath'],"r"));
         readfile($object['fullPath']);
@@ -121,17 +122,17 @@ function fileGet($object): void
 function filePlaceholder($fileType = 'logo'): void
 {
     switch ($fileType) {
-        case 'portrait': $placeholder = SERVER_ROOT."/images/placeholder.jpg";
+        case 'portrait': $placeholder = SERVER_ROOT . "/images/placeholder.jpg";
             break;
-        case 'symbol': $placeholder = SERVER_ROOT."/images/nosymbol.png";
+        case 'symbol': $placeholder = SERVER_ROOT . "/images/nosymbol.png";
             break;
-        default: $placeholder = SERVER_ROOT."/images/placeholder.jpg";
+        default: $placeholder = SERVER_ROOT . "/images/placeholder.jpg";
             break;
     }
     header("Cache-Control: no-cache, no-store, must-revalidate, post-check=0, pre-check=0");
     header("Pragma: no-cache");
     header("Expires: -1");
-    header('Content-Type: '.mime_content_type($placeholder));
+    header('Content-Type: ' . mime_content_type($placeholder));
     $placeholderFile = fopen($placeholder, "r");
     fpassthru($placeholderFile);
 }

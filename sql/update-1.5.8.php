@@ -1,9 +1,8 @@
 <?php
 /**
- * ALTER COLUMN
+ * ALTER COLUMN.
  */
 $columnAlter['symbol']['archiv'] = 'archived timestamp NULL AFTER deleted;';
-
 
 $columnAlter['users']['sid'] = 'sid varchar(32) NULL AFTER id';
 $columnAlter['users']['idperson'] = 'idperson int(11) NULL AFTER pwd';

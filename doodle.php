@@ -1,14 +1,13 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-use Tracy\Debugger;
 
 
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Časová dostupnost';
-        mainMenu();
-        sparklets('<a href="./doode.php">Časová dostupnost</a>');
-if ($user['aclUser']>0) { ?>
+mainMenu();
+sparklets('<a href="./doode.php">Časová dostupnost</a>');
+if ($user['aclUser'] > 0) { ?>
 <div id="obsah">
 <?php
     //Přidání nového doodlu

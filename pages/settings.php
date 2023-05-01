@@ -1,7 +1,5 @@
 <?php
 
-
-
 $latteParameters['title'] = $text['menuSettings'];
 
 if ((isset($_POST['userid']) and isset($_POST['edituser']) and !is_numeric($_REQUEST['timeout'])) and ($user['userId'] == $_POST['userid'])) {
@@ -28,9 +26,9 @@ if ((isset($_POST['userid']) and isset($_POST['edituser']) and !is_numeric($_REQ
                 'userTimeout' => $_POST['timeout'],
             ];
             userChange($user['userId'], $update, $text['nastaveniulozeno'], $text['akcinelzeprovest']);
-            $latteParameters['user'] = $user = $usrinfo = sessionUser($_SESSION['sid']);
+            $latteParameters['user'] = $user = sessionUser($_SESSION['sid']);
         } else {
-            $latteParameters['message'] = $text['neplatnyemail'].mb_strlen($_POST['email']);
+            $latteParameters['message'] = $text['neplatnyemail'] . mb_strlen($_POST['email']);
         }
     }
 }

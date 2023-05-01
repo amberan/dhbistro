@@ -3,7 +3,7 @@
 use League\HTMLToMarkdown\HtmlConverter;
 
 /**
- * returns all update*php files in sql that are never than last backup but at most current version
+ * returns all update*php files in sql that are never than last backup but at most current version.
  */
 function bistroUpdatesList($updateFiles, $lastBackup)
 {
@@ -18,13 +18,12 @@ function bistroUpdatesList($updateFiles, $lastBackup)
     return $files;
 }
 
-
 function bistroUpdate($updatesToRun)
 {
-    global $database,$text;
+    global $database;
     bistroMyisamToInnodb();
     foreach ($updatesToRun as $file) {
-        require_once $_SERVER['DOCUMENT_ROOT']."/sql/".$file;
+        require_once $_SERVER['DOCUMENT_ROOT'] . "/sql/" . $file;
         if (isset($tableCreate)) {
             bistroDBTableCreate($tableCreate, substr($file, 7, -4));
         }
@@ -71,22 +70,21 @@ function bistroUpdate($updatesToRun)
     }
 }
 
-
 /**
- * converts configuration from password file and platform definition to one
+ * converts configuration from password file and platform definition to one.
  */
 function bistroEnvConvert()
 {
-    global $config,$latteParameters,$_POST,$latteParameters,$latte;
+    global $config,$latteParameters,$_POST,$latteParameters;
     $latteParameters['title'] = 'INSTALLER';
     if (isset($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbDatabase'])
     && DBTest($_POST)) {
         // installer form posted and db connection valid
         bistroEnvFile($_POST);
         require_once $config['platformConfig'];
-    } elseif (file_exists(SERVER_ROOT.'/inc/platform.php')) {
+    } elseif (file_exists(SERVER_ROOT . '/inc/platform.php')) {
         // convert old files
-        require_once SERVER_ROOT.'/inc/platform.php';
+        require_once SERVER_ROOT . '/inc/platform.php';
         $config['dbHost'] = 'localhost';
         $config['dbPrefix'] = DB_PREFIX;
         if (file_exists($config['dbpass'])) {
@@ -111,22 +109,22 @@ function bistroEnvConvert()
 }
 
 /**
- * save instance configuration in file
+ * save instance configuration in file.
  */
 function bistroEnvFile($post)
 {
     global $config;
     $newConfigFile = fopen($config['platformConfig'], "w") or die("Unable to write configuration file!");
     $configList = '<?php
-        define(\'DB_PREFIX\', \''.$post['dbPrefix'].'\');
-        $'.'configDB[\'dbHost\']            = \''.$post['dbHost'].'\';
-        $'.'configDB[\'dbUser\']            = \''.$post['dbUser'].'\';
-        $'.'configDB[\'dbPassword\']          = \''.$post['dbPassword'].'\';
-        $'.'configDB[\'dbDatabase\']        = \''.$post['dbDatabase'].'\';
-        $'.'config[\'themeColor\']             = \''.$post['themeColor'].'\';
-        $'.'config[\'themeCustom\']            = \''.$post['themeCustom'].'\';
-        $'.'config[\'themeBg\']          = \''.$post['themeBg'].'\';
-        $'.'config[\'themeNavbar\']      = \''.$post['themeNavbar'].'\';
+        define(\'DB_PREFIX\', \'' . $post['dbPrefix'] . '\');
+        $' . 'configDB[\'dbHost\']            = \'' . $post['dbHost'] . '\';
+        $' . 'configDB[\'dbUser\']            = \'' . $post['dbUser'] . '\';
+        $' . 'configDB[\'dbPassword\']          = \'' . $post['dbPassword'] . '\';
+        $' . 'configDB[\'dbDatabase\']        = \'' . $post['dbDatabase'] . '\';
+        $' . 'config[\'themeColor\']             = \'' . $post['themeColor'] . '\';
+        $' . 'config[\'themeCustom\']            = \'' . $post['themeCustom'] . '\';
+        $' . 'config[\'themeBg\']          = \'' . $post['themeBg'] . '\';
+        $' . 'config[\'themeNavbar\']      = \'' . $post['themeNavbar'] . '\';
         ';
     fwrite($newConfigFile, $configList);
     fclose($newConfigFile);
@@ -142,7 +140,7 @@ function bistroDBPasswordEncrypt(): int
 {
     global $database,$configDB,$config;
     $alterPassword = $alter = 0;
-    $passwordSql = "SELECT userPassword FROM ".$configDB['dbDatabase'].".".DB_PREFIX."user";
+    $passwordSql = "SELECT userPassword FROM " . $configDB['dbDatabase'] . "." . DB_PREFIX . "user";
     $passwordQuery = mysqli_query($database, $passwordSql);
     if (mysqli_num_rows($passwordQuery) > 0) {
         while ($passwordData = mysqli_fetch_array($passwordQuery)) {
@@ -153,7 +151,7 @@ function bistroDBPasswordEncrypt(): int
     }
     unset($passwordSql);
     if ($alterPassword > 0) {
-        $passwordSql = "SELECT userPassword,userId,userName FROM ".$configDB['dbDatabase'].".".DB_PREFIX."user";
+        $passwordSql = "SELECT userPassword,userId,userName FROM " . $configDB['dbDatabase'] . "." . DB_PREFIX . "user";
         $passwordQuery = mysqli_query($database, $passwordSql);
         while ($passwordData = mysqli_fetch_array($passwordQuery)) {
             mysqli_query($database, "UPDATE ".$configDB['dbDatabase'].".".DB_PREFIX."user set userPassword=md5('".$passwordData['userPassword']."') where userId=".$passwordData['userId']);
@@ -179,7 +177,7 @@ function bistroDBColumnMarkdown($data, $file = null): int
     $converter = new HtmlConverter(['strip_tags' => true]); //https://github.com/thephpleague/html-to-markdown
     foreach ($data as $value) {
         if (DBcolumntNotEmpty($value[0], $value[3]) == 0 && DBcolumnExist($value[0], $value[2]) > 0 && DBcolumnExist($value[0], $value[3]) > 0) {
-            $preMarkdownSql = "SELECT ".$value[1].", ".$value[2]." FROM ".$configDB['dbDatabase'].".".DB_PREFIX.$value[0]." WHERE (length(".$value[3].") = 0  or length(".$value[3].") is null) and length(".$value[2].") > 0";
+            $preMarkdownSql = "SELECT " . $value[1] . ", " . $value[2] . " FROM " . $configDB['dbDatabase'] . "." . DB_PREFIX . $value[0] . " WHERE (length(" . $value[3] . ") = 0  or length(" . $value[3] . ") is null) and length(" . $value[2] . ") > 0";
             $preMarkdownQuery = mysqli_query($database, $preMarkdownSql);
             while ($preMarkdown = mysqli_fetch_array($preMarkdownQuery)) {
                 $markdownColumn = $converter->convert(str_replace('\'', '', $preMarkdown[$value[2]]));
@@ -208,7 +206,7 @@ function bistroMigratePermissions($data, $file = null): int
     foreach (array_keys($data) as $old) {
         foreach ($data[$old] as $new) {
             if (DBcolumnExist('user', $new) && DBcolumnExist('user', $old)) {
-                $alterSql = "UPDATE ".$configDB['dbDatabase'].".".DB_PREFIX."user SET $new=$old;";
+                $alterSql = "UPDATE " . $configDB['dbDatabase'] . "." . DB_PREFIX . "user SET $new=$old;";
                 mysqli_query($database, $alterSql);
                 if (mysqli_affected_rows($database) > 0) {
                     DebuggerLog('UPDATER '.$file.': PERMISSIONS '.$old.' => '.$new,"W");
@@ -222,7 +220,7 @@ function bistroMigratePermissions($data, $file = null): int
 }
 
 /**
- * CONVERT int to timestamp
+ * CONVERT int to timestamp.
  */
 function bistroIntToTimestamp($data, $file = null): int
 {
@@ -230,7 +228,7 @@ function bistroIntToTimestamp($data, $file = null): int
     $alter = 0;
     foreach ($data as $change) {
         if (DBcolumnExist($change[0], $change[1]) && DBcolumnExist($change[0], $change[2])) {
-            $alterSql = "UPDATE ".$configDB['dbDatabase'].".".DB_PREFIX.$change[0]." SET ".$change[2]."=FROM_UNIXTIME(".$change[1].") where ".$change[1].">0 ;";
+            $alterSql = "UPDATE " . $configDB['dbDatabase'] . "." . DB_PREFIX . $change[0] . " SET " . $change[2] . "=FROM_UNIXTIME(" . $change[1] . ") where " . $change[1] . ">0 ;";
             mysqli_query($database, $alterSql);
             if (mysqli_affected_rows($database) > 0) {
                 DebuggerLog('UPDATER '.$file.': TIME CONVERSION nw'.$change[0].':  '.$change[1].' => '.$change[2],"W");

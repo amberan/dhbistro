@@ -33,9 +33,11 @@ return function (ECSConfig $ecsConfig): void {
     $ecsConfig->paths([
         __DIR__ . '/API',
         __DIR__ . '/custom',
+        __DIR__ . '/doc',
         __DIR__ . '/inc',
         __DIR__ . '/lib',
         __DIR__ . '/pages',
+        __DIR__ . '/sql',
     ]);
 
     // this way you add a single rule
@@ -56,7 +58,13 @@ return function (ECSConfig $ecsConfig): void {
     ]);
 
     $ecsConfig->skip([
-        __DIR__ . '/vendor',
+        __DIR__ . '/cache/',
+        __DIR__ . '/css/',
+        __DIR__ . '/files/',
+        __DIR__ . '/images/',
+        __DIR__ . '/js/',
+        __DIR__ . '/log/',
+        __DIR__ . '/vendor/',
 
         ArrayOpenerAndCloserNewlineFixer::class,
         ConcatSpaceFixer::class,

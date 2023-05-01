@@ -1,6 +1,5 @@
 <?php
 
-
 function AuthorDB($userId)
 {
     global $database,$text,$user;
@@ -29,8 +28,7 @@ function AuthorDB($userId)
     }
 }
 
-
-function Author($userName,$personName)
+function Author($userName, $personName)
 {
     if (isset($personName) && strlen($personName) > 0) {
         return $personName;
@@ -38,7 +36,6 @@ function Author($userName,$personName)
         return $userName;
     }
 }
-
 
 /**
  * get user details.
@@ -52,7 +49,7 @@ function Author($userName,$personName)
 function userRead($userId): array
 {
     global $database, $text, $user;
-    $querySql = "SELECT * from ".DB_PREFIX."user where userDeleted <= ".$user['aclRoot']." AND userId=".$userId;
+    $querySql = "SELECT * from " . DB_PREFIX . "user where userDeleted <= " . $user['aclRoot'] . " AND userId=" . $userId;
     $query = mysqli_query($database, $querySql);
     if (mysqli_num_rows($query) > 0) {
         $user = mysqli_fetch_assoc($query);
@@ -82,10 +79,11 @@ function userList($where = 1): array
         $where = 1;
     }
 
-    $sql = "SELECT * FROM ".DB_PREFIX."user  left outer join `".DB_PREFIX."person` on ".DB_PREFIX."user.personId=".DB_PREFIX."person.id WHERE userDeleted <= ".$user['aclRoot']." AND ($where) ".sortingGet('user', 'person');
+    $sql = "SELECT * FROM " . DB_PREFIX . "user  left outer join `" . DB_PREFIX . "person` on " . DB_PREFIX . "user.personId=" . DB_PREFIX . "person.id WHERE userDeleted <= " . $user['aclRoot'] . " AND ($where) " . sortingGet('user', 'person');
     sortingGet('user', 'person');
     $query = mysqli_query($database, $sql);
     if (mysqli_num_rows($query) > 0) {
+        $userList = [];
         while ($users = mysqli_fetch_assoc($query)) {
             if ($users['lastLogin'] < 1) {
                 $users['lastLogin'] = $text['notificationInformationUnknown'];
@@ -123,7 +121,7 @@ function userChange($userId, $data, $success = null, $failure = null): string
         }
     }
     if (mb_strlen($chain) > 0) {
-        $sql = "UPDATE ".DB_PREFIX."user SET ".rtrim($chain, ",")."  where userId=".$userId;
+        $sql = "UPDATE " . DB_PREFIX . "user SET " . rtrim($chain, ",") . "  where userId=" . $userId;
         mysqli_query($database, $sql);
         if (mysqli_affected_rows($database) > 0) {
             $latteParameters['message'] = $success;
@@ -155,6 +153,7 @@ function listUsersSuitable()
         order by userName";
     $listUsers = mysqli_query($database, $listUsersSql);
     if (mysqli_num_rows($listUsers) > 0) {
+        $users = [];
         while ($user = mysqli_fetch_assoc($listUsers)) {
             $users[] = $user;
         }

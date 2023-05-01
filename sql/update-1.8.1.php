@@ -10,7 +10,7 @@ $columnAlter['symbol']['archiv'] = 'archived timestamp NULL AFTER deleted;';
 /*
  * TIME TO CONVERT
  */
-$convertTime[] = ['person','archiv','archived'];
+$convertTime[] = ['person', 'archiv', 'archived'];
 /*
 * DROP COLUMN
 */

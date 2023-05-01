@@ -1,8 +1,8 @@
 <?php
 
 /**
- * when audit is called with name for operationType, translates into id
- * @param mixed $operationType
+ * when audit is called with name for operationType, translates into id.
+ * @param  mixed           $operationType
  * @return bool|int|string
  */
 function operationType($operationType = null)
@@ -38,8 +38,8 @@ function operationType($operationType = null)
 }
 
 /**
- * when audit is called with name for recordType, translates into id
- * @param mixed $recordType
+ * when audit is called with name for recordType, translates into id.
+ * @param  mixed           $recordType
  * @return bool|int|string
  */
 function recordType($recordType = null)
@@ -60,7 +60,7 @@ function recordType($recordType = null)
         13 => 'file',
         14 => 'backup',
         15 => 'settings',
-        16 => 'search'
+        16 => 'search',
     ];
     $return = $list;
     if (isset($recordType) && is_numeric($recordType)) {
@@ -83,14 +83,14 @@ function authorizedAccess($recordType, $operationType, $idrecord): void
     }
     //end of translation layer
     if (isset($user) && is_numeric($recordType) && is_numeric($operationType) && is_numeric($idrecord)) {
-        $auditSql = "INSERT INTO ".DB_PREFIX."audit_trail (iduser, time, operation_type, record_type, idrecord, ip, org) VALUES('".$user['userId']."','".time()."','".$operationType."','".$recordType."','".$idrecord."','".$user['ipv4']."','".$user['aclGamemaster']."')";
+        $auditSql = "INSERT INTO " . DB_PREFIX . "audit_trail (iduser, time, operation_type, record_type, idrecord, ip, org) VALUES('" . $user['userId'] . "','" . time() . "','" . $operationType . "','" . $recordType . "','" . $idrecord . "','" . $user['ipv4'] . "','" . $user['aclGamemaster'] . "')";
         mysqli_query($database, $auditSql);
     }
 }
 
 function unauthorizedAccess($recordType, $operationType, $idrecord): void
 {
-    global $_SESSION,$text;
+    global $_SESSION,$text,$user;
     // translation layer TEXT > ID
     if (is_string($recordType)) {
         $recordType = recordType($recordType);

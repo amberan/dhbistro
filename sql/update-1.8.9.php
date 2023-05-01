@@ -33,10 +33,10 @@ $columnAlter['filter']['userId'] = "userId int(6)";
 /*
  * TIME TO CONVERT
  */
-$convertTime[] = ['report','datum','reportModified'];
-$convertTime[] = ['report','adatum','reportEventDate'];
-$convertTime[] = ['report','adatum','reportCreated'];
-$convertTime[] = ['report','deleted','reportDeleted'];
+$convertTime[] = ['report', 'datum', 'reportModified'];
+$convertTime[] = ['report', 'adatum', 'reportEventDate'];
+$convertTime[] = ['report', 'adatum', 'reportCreated'];
+$convertTime[] = ['report', 'deleted', 'reportDeleted'];
 
 /*
  * CONVERT DATA TO MARKDOWN
@@ -51,17 +51,15 @@ $columnToMD[] = ['report', 'reportId', 'inputs', 'reportInput'];
 /*
  * ADD FULLTEXT INDEX
  */
-$columnAddFulltext['report'] = ['reportTask','reportDetail','reportCost','reportSummary','reportImpact','reportInput'];
+$columnAddFulltext['report'] = ['reportTask', 'reportDetail', 'reportCost', 'reportSummary', 'reportImpact', 'reportInput'];
 
 /*
  * ADD INDEX
  */
 $columnAddIndex['unread']['filter'] = ['idtable', 'idrecord', 'iduser'];
-$columnAddIndex['report']['filter'] = ['reportSecret','reportStatus','reportType','reportDeleted','reportModifiedBy','reportCreatedBy','reportOwner','reportId'];
-$columnAddIndex['user']['filter'] = ['userDeleted','userId','personId'];
-$columnAddIndex['person']['filter'] = ['side','spec','power','dead','surname','regdate','datum','iduser','id','deleted','secret','archived'];
+$columnAddIndex['report']['filter'] = ['reportSecret', 'reportStatus', 'reportType', 'reportDeleted', 'reportModifiedBy', 'reportCreatedBy', 'reportOwner', 'reportId'];
+$columnAddIndex['user']['filter'] = ['userDeleted', 'userId', 'personId'];
+$columnAddIndex['person']['filter'] = ['side', 'spec', 'power', 'dead', 'surname', 'regdate', 'datum', 'iduser', 'id', 'deleted', 'secret', 'archived'];
 
-
-
-$updateScript[114_1] = 'UPDATE '.DB_PREFIX.'report SET reportArchived=FROM_UNIXTIME("1") WHERE reportStatus=3';
-$updateScript[114_2] = 'UPDATE '.DB_PREFIX.'report SET reportOwner = reportCreatedBy, reportModifiedBy = reportCreatedBy';
+$updateScript[114_1] = 'UPDATE ' . DB_PREFIX . 'report SET reportArchived=FROM_UNIXTIME("1") WHERE reportStatus=3';
+$updateScript[114_2] = 'UPDATE ' . DB_PREFIX . 'report SET reportOwner = reportCreatedBy, reportModifiedBy = reportCreatedBy';

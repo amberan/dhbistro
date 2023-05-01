@@ -1,13 +1,13 @@
 <?php
 
-$sqlFilter = DB_PREFIX.'report.reportId = '.$URL[2].' AND ('.DB_PREFIX.'report.reportDeleted is null OR '.DB_PREFIX.'report.reportDeleted  < from_unixtime(1)) ';
+$sqlFilter = DB_PREFIX . 'report.reportId = ' . $URL[2] . ' AND (' . DB_PREFIX . 'report.reportDeleted is null OR ' . DB_PREFIX . 'report.reportDeleted  < from_unixtime(1)) ';
 $reportSql = "SELECT
-    ".DB_PREFIX."report.*,
+    " . DB_PREFIX . "report.*,
 
-    ".DB_PREFIX."unread.id AS 'unread'
-    FROM ".DB_PREFIX."report
-    LEFT JOIN ".DB_PREFIX."unread on  ".DB_PREFIX."report.reportId =  ".DB_PREFIX."unread.idrecord AND  ".DB_PREFIX."unread.idtable = 4 and  ".DB_PREFIX."unread.iduser=".$user['userId']."
-    WHERE ".$sqlFilter;
+    " . DB_PREFIX . "unread.id AS 'unread'
+    FROM " . DB_PREFIX . "report
+    LEFT JOIN " . DB_PREFIX . "unread on  " . DB_PREFIX . "report.reportId =  " . DB_PREFIX . "unread.idrecord AND  " . DB_PREFIX . "unread.idtable = 4 and  " . DB_PREFIX . "unread.iduser=" . $user['userId'] . "
+    WHERE " . $sqlFilter;
 $reportQuery = mysqli_query($database, $reportSql);
 $report = mysqli_fetch_assoc($reportQuery);
 if (!is_numeric($URL[2]) || $user['aclReport'] < 1 || mysqli_num_rows($reportQuery) < 1 || ($report['reportSecret'] > $user['aclSecret'] && $report['reportOwner'] != $user['userId'])) {

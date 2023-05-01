@@ -17,13 +17,13 @@ function sortingSet($object, $column, $linkedTable = null): void
     $currentSorting = sortingGet($object, $linkedTable);
     $columnList = explode(',', $column);
     if (mb_strpos($currentSorting, $columnList[0]) and mb_strpos($currentSorting, 'DESC')) { //update to ASC
-        $sortingSql = "UPDATE ".DB_PREFIX."sort set sortDirection='ASC' where objectType='$object' AND userId=".$user['userId'];
+        $sortingSql = "UPDATE " . DB_PREFIX . "sort set sortDirection='ASC' where objectType='$object' AND userId=" . $user['userId'];
     } elseif (mb_strpos($currentSorting, $columnList[0]) and mb_strpos($currentSorting, 'ASC')) { //update to DESC
-        $sortingSql = "UPDATE ".DB_PREFIX."sort set sortDirection='DESC' where objectType='$object' AND userId=".$user['userId'];
+        $sortingSql = "UPDATE " . DB_PREFIX . "sort set sortDirection='DESC' where objectType='$object' AND userId=" . $user['userId'];
     } elseif ((DBcolumnExist($object, $columnList[0]) or DBcolumnExist($linkedTable, $columnList[0])) and mb_strlen($currentSorting) > 0) { //change column
-        $sortingSql = "UPDATE ".DB_PREFIX."sort set sortColumn='$column' , sortDirection='ASC' where objectType='$object' AND userId=".$user['userId'];
+        $sortingSql = "UPDATE " . DB_PREFIX . "sort set sortColumn='$column' , sortDirection='ASC' where objectType='$object' AND userId=" . $user['userId'];
     } elseif (DBcolumnExist($object, $columnList[0]) or DBcolumnExist($linkedTable, $columnList[0])) { //insert new
-        $sortingSql = "INSERT INTO ".DB_PREFIX."sort (userId,objectType,sortColumn,sortDirection) VALUES (".$user['userId'].",'$object','$column','ASC')";
+        $sortingSql = "INSERT INTO " . DB_PREFIX . "sort (userId,objectType,sortColumn,sortDirection) VALUES (" . $user['userId'] . ",'$object','$column','ASC')";
     } else {
         $sortingSql = 'SELECT NULL LIMIT 0;';
     }
@@ -33,14 +33,14 @@ function sortingSet($object, $column, $linkedTable = null): void
 /**
  * get current preference for sorting output for current user.
  *
- * @param mixed $object - type of object to be sorted
+ * @param mixed      $object      - type of object to be sorted
  * @param mixed|null $linkedTable - db name of table where the sorting column is located
  */
 function sortingGet($object, $linkedTable = null): string
 {
     global $database,$user;
     $result = "";
-    $query = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."sort where objectType='$object' AND userId=".$user['userId']);
+    $query = mysqli_query($database, "SELECT * FROM " . DB_PREFIX . "sort where objectType='$object' AND userId=" . $user['userId']);
     if (mysqli_num_rows($query) > 0) {
         $sorter = mysqli_fetch_array($query);
         $columnListDB = explode(',', $sorter['sortColumn']);
@@ -49,7 +49,7 @@ function sortingGet($object, $linkedTable = null): string
                 $columnList[] = $columnDB;
             }
         }
-        $result = " ORDER BY ".implode(' '.$sorter['sortDirection'].', ', $columnList)." ".$sorter['sortDirection'];
+        $result = " ORDER BY " . implode(' ' . $sorter['sortDirection'] . ', ', $columnList) . " " . $sorter['sortDirection'];
     }
     return $result;
 }
@@ -58,7 +58,7 @@ function sortingGet($object, $linkedTable = null): string
  * saves filter preference for "object" in serialized field of "data" for current user.
  *
  * @param mixed $object - type of object to be filtered
- * @param mixed $data - array of key/value for specific filter
+ * @param mixed $data   - array of key/value for specific filter
  */
 function filterSet($object, $data): void
 {
@@ -66,12 +66,12 @@ function filterSet($object, $data): void
     global $database,$user;
     $currentFilter = filterGet($object);
     if (is_array($data) and sizeof($data) > 0) {
-        $data = json_encode($data,JSON_UNESCAPED_UNICODE);
+        $data = json_encode($data, JSON_UNESCAPED_UNICODE);
     }
     if (@$currentFilter['id'] != 'X') {
-        $sql = "UPDATE ".DB_PREFIX."filter SET filterPreference='".$data."' WHERE userId=".$user['userId']." AND objectType='".$object."'";
+        $sql = "UPDATE " . DB_PREFIX . "filter SET filterPreference='" . $data . "' WHERE userId=" . $user['userId'] . " AND objectType='" . $object . "'";
     } else {
-        $sql = "INSERT INTO ".DB_PREFIX."filter (userId,objectType,filterPreference) VALUES (".$user['userId'].",'".$object."','".$data."')";
+        $sql = "INSERT INTO " . DB_PREFIX . "filter (userId,objectType,filterPreference) VALUES (" . $user['userId'] . ",'" . $object . "','" . $data . "')";
     }
     mysqli_query($database, $sql);
 }

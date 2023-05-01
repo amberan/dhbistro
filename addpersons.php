@@ -1,7 +1,6 @@
 <?php
 
 require_once($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-use Tracy\Debugger;
 
 
 latteDrawTemplate("header");
@@ -38,7 +37,7 @@ if (isset($_POST['addtocase'])) {
     sparklets('<a href="/cases/">případy</a> &raquo; <a href="./editcase.php?rid='.$_POST['caseid'].'">úprava případu</a> &raquo; <strong>uložení změn</strong>', '<a href="readcase.php?rid='.$_POST['caseid'].'&hidenotes=0">zobrazit upravené</a>');
     echo '<div id="obsah"><p>Osoby k případu uloženy.</p></div>';
     if (isset($_POST['person'])) {
-        for ($i = 0;$i < Count($person);$i++) {
+        for ($i = 0; $i < Count($person); $i++) {
             mysqli_query($database, "INSERT INTO ".DB_PREFIX."c2p VALUES('".$person[$i]."','".$_POST['caseid']."','".$user['userId']."')");
         }
     }
@@ -76,7 +75,7 @@ if (isset($_POST['addtogroup'])) {
     sparklets('<a href="./groups/">skupiny</a> &raquo; <a href="./editgroup.php?rid='.$_POST['groupid'].'">úprava skupiny</a> &raquo; <strong>uložení změn</strong>', '<a href="readgroup.php?rid='.$_POST['groupid'].'&hidenotes=0">zobrazit upravené</a>');
     echo '<div id="obsah"><p>Osoby příslušné ke skupině uloženy.</p></div>';
     if (isset($_POST['person'])) {
-        for ($i = 0;$i < Count($person);$i++) {
+        for ($i = 0; $i < Count($person); $i++) {
             mysqli_query($database, "INSERT INTO ".DB_PREFIX."g2p VALUES('".$person[$i]."','".$_POST['groupid']."','".$user['userId']."')");
         }
     }
@@ -93,7 +92,7 @@ if (isset($_POST['addsolver'])) {
     }
     echo '<div id="obsah"><p>Případ přiřazen řešitelům.</p></div>';
     if (isset($_POST['solver'])) {
-        for ($i = 0;$i < Count($solver);$i++) {
+        for ($i = 0; $i < Count($solver); $i++) {
             mysqli_query($database, "INSERT INTO ".DB_PREFIX."c2s VALUES('".$solver[$i]."','".$_POST['caseid']."','".$user['userId']."')");
         }
     }

@@ -1,5 +1,5 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
+require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
 
 
 latteDrawTemplate("header");
@@ -82,44 +82,44 @@ sparklets('<a href="./'.$sourceurl2.'?rid='.$_REQUEST['rid'].'">'.$sourcename.'<
 if (is_numeric($_REQUEST['rid'])) {
     ?>
 <div id="obsah">
-	<form action="procnote.php" method="post" class="otherform">
-		<p>K<?php echo $typ?> si můžete připsat kolik chcete poznámek.</p>
-		<p>Nová poznámka:</p>
-		<div>
-			<label for="notetitle">Nadpis:</label>
-			<input type="text" name="title" id="notetitle" />
-		</div>
-		<div>
-		  <label for="nsecret">Utajení:</label>
-			<select name="secret" id="nsecret">
-			  <?php if (@$_REQUEST['s'] == 0) {
-			      echo '<option value="0">veřejná</option>';
-			  } ?>
-			  <option value="1">tajná</option>
-			  <option value="2">soukromá</option>
-			</select>
-		</div>
-<?php if ($user['aclGamemaster'] == 1) {
-    echo '
+    <form action="procnote.php" method="post" class="otherform">
+        <p>K<?php echo $typ?> si můžete připsat kolik chcete poznámek.</p>
+        <p>Nová poznámka:</p>
+        <div>
+            <label for="notetitle">Nadpis:</label>
+            <input type="text" name="title" id="notetitle" />
+        </div>
+        <div>
+          <label for="nsecret">Utajení:</label>
+            <select name="secret" id="nsecret">
+              <?php if (@$_REQUEST['s'] == 0) {
+                  echo '<option value="0">veřejná</option>';
+              } ?>
+              <option value="1">tajná</option>
+              <option value="2">soukromá</option>
+            </select>
+        </div>
+    <?php if ($user['aclGamemaster'] == 1) {
+        echo '
 				<div>
 				<label for="nnotnew">Není nové</label>
 					<input type="checkbox" name="nnotnew"/><br/>
 				</div>';
-} ?>
-		<div>
-			<label for="notebody">Tělo poznámka:</label>
-			<textarea cols="80" rows="7" name="note" id="notebody"></textarea>
-		</div>
-		<div>
-			<input type="hidden" name="itemid" value="<?php echo $_REQUEST['rid']; ?>" />
-			<input type="hidden" name="backurl" value="<?php echo $sourceurl1; ?>?rid=<?php echo $_REQUEST['rid']; ?>" />
-			<input type="hidden" name="tableid" value="<?php echo $idtable; ?>" />
-			<input type="submit" value="Uložit poznámku" name="setnote" class="submitbutton" />
-		</div>
-	</form>
+    } ?>
+        <div>
+            <label for="notebody">Tělo poznámka:</label>
+            <textarea cols="80" rows="7" name="note" id="notebody"></textarea>
+        </div>
+        <div>
+            <input type="hidden" name="itemid" value="<?php echo $_REQUEST['rid']; ?>" />
+            <input type="hidden" name="backurl" value="<?php echo $sourceurl1; ?>?rid=<?php echo $_REQUEST['rid']; ?>" />
+            <input type="hidden" name="tableid" value="<?php echo $idtable; ?>" />
+            <input type="submit" value="Uložit poznámku" name="setnote" class="submitbutton" />
+        </div>
+    </form>
 </div>
 <!-- end of #obsah -->
-<?php
+    <?php
 } else {
     echo '<div id="obsah"><p>Tohle nezkoušejte.';
 }
