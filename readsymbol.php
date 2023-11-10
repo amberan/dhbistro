@@ -76,7 +76,7 @@ if (is_numeric($_REQUEST['rid'])) {
         } else {
             $editbutton = '';
         }
-        deleteUnread('person', $_REQUEST['rid']);
+        deleteUnread('symbol', $_REQUEST['rid']);
         sparklets('<a href="/symbols">symboly</a> &raquo; <strong>Zobrazit symbol</strong>', '<a href="readsymbol.php?rid='.$_REQUEST['rid'].$hidenotes.$editbutton); ?>
 <div id="obsah">
     <h1>Symbol</h1>
