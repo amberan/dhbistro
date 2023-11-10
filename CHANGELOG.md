@@ -25,6 +25,7 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Configuration: allow webp images to display directly #358
 ### Fixed
 - Fixed: displaying attachements in reports #356
+- Fixed: unread symbols are not highlited #363
 
 ## 1.12.1 2023-04-23
 ### Changed

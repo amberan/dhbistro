@@ -99,6 +99,7 @@ $symbolSql = "SELECT    symbol.id as symbolId,
                         symbol.modified_by as symbolModifiedBy,
                         symbol.assigned as symbolAssignedTo,
                         symbol.secret as symbolSecret,
+                        " . DB_PREFIX . "unread.id as unread,
                         CASE WHEN ( symbol.archived < from_unixtime(1) OR symbol.archived IS NULL) THEN 'False' ELSE 'True' END AS symbolArchivedBool,
                         concat(createdPerson.name,' ',createdPerson.surname) as symbolCreatedByName,
                         createdUser.userName as symbolCreatedByUserName,
@@ -109,6 +110,7 @@ $symbolSql = "SELECT    symbol.id as symbolId,
                 LEFT JOIN " . DB_PREFIX . "person as createdPerson on createdUser.personId = createdPerson.id AND createdPerson.deleted = 0 AND createdPerson.secret <= " . $user['aclSecret'] . "
                 LEFT JOIN " . DB_PREFIX . "user as modifiedUser on symbol.modified_by = modifiedUser.userId
                 LEFT JOIN " . DB_PREFIX . "person as modifiedPerson on modifiedUser.personId = modifiedPerson.id and modifiedPerson.deleted = 0 AND modifiedPerson.secret <= " . $user['aclSecret'] . "
+                LEFT JOIN  " . DB_PREFIX . "unread on symbol.id =  " . DB_PREFIX . "unread.idrecord AND  " . DB_PREFIX . "unread.idtable = 7 and  " . DB_PREFIX . "unread.iduser=" . $user['userId'] . "
                 WHERE " . $sqlFilter . " AND symbol.secret<=" . $user['aclSecret'] . " AND symbol.assigned=0" .
                sortingGet('symbol');
 $symbolList = mysqli_query($database, $symbolSql);

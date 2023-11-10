@@ -114,7 +114,6 @@ function deleteAllUnread($tablenum, $rid)
 // natazeni tabulky neprectenych zaznamu do promenne
 if (isset($_SESSION['sid'])) {
     $unreadSql = "SELECT idtable, count(distinct idrecord) as count FROM " . DB_PREFIX . "unread WHERE iduser=" . $user['userId'] . " GROUP BY idtable";
-    $unreadResult =
     $unreadResult = mysqli_query($database, $unreadSql);
     while ($unread[] = mysqli_fetch_array($unreadResult));
 }

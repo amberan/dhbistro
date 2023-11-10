@@ -54,6 +54,7 @@ if (isset($_POST['addsymbol2ar'])) {
 if (isset($_POST['addsymb2pers'])) {
     authorizedAccess(7, 6, $_POST['symbolid']);
     mysqli_query($database, "UPDATE ".DB_PREFIX."symbol SET assigned=1 WHERE id=".$_POST['symbolid']);
+    deleteAllUnread(7, $_POST['symbolid']);
     mysqli_query($database, "UPDATE ".DB_PREFIX."person SET symbol=".$_POST['symbolid']." WHERE id=".$_POST['person']);
     mainMenu();
     sparklets('<a href="/persons/">osoby</a> &raquo; <a href="/symbols">nepřiřazené symboly</a>');
