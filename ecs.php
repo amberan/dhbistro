@@ -31,13 +31,13 @@ use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
 return function (ECSConfig $ecsConfig): void {
     $ecsConfig->paths([
-        __DIR__ . '/API',
-        __DIR__ . '/custom',
+        __DIR__ . '/source/API',
+        __DIR__ . '/source/custom',
         __DIR__ . '/doc',
-        __DIR__ . '/inc',
-        __DIR__ . '/lib',
-        __DIR__ . '/pages',
-        __DIR__ . '/sql',
+        __DIR__ . '/source/inc',
+        __DIR__ . '/source/lib',
+        __DIR__ . '/source/pages',
+        __DIR__ . '/source/sql',
     ]);
 
     // this way you add a single rule
@@ -58,13 +58,13 @@ return function (ECSConfig $ecsConfig): void {
     ]);
 
     $ecsConfig->skip([
-        __DIR__ . '/cache/',
-        __DIR__ . '/css/',
-        __DIR__ . '/files/',
-        __DIR__ . '/images/',
-        __DIR__ . '/js/',
-        __DIR__ . '/log/',
-        __DIR__ . '/vendor/',
+        __DIR__ . '/source/cache/',
+        __DIR__ . '/source/css/',
+        __DIR__ . '/source/files/',
+        __DIR__ . '/source/images/',
+        __DIR__ . '/sourge/js/',
+        __DIR__ . '/source/log/',
+        __DIR__ . '/source/vendor/',
 
         ArrayOpenerAndCloserNewlineFixer::class,
         ConcatSpaceFixer::class,

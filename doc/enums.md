@@ -2,7 +2,7 @@
 
 ### authorizedAccess
 
-[record type](lib/audit.php#L32-46)      | [operation type](lib/audit.php#L3-19)        | idrecord
+[record type](source/lib/audit.php#L32-46)      | [operation type](source/lib/audit.php#L3-19)        | idrecord
 --- | --- | ---
 1 - person          | 1 - read |
 2 - group           | 2 - edit |
