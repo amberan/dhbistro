@@ -1,8 +1,8 @@
-/vendor/
-/files/
-/inc/important.php
-/cache/
-/log/
-/var/
-.env.php
+/source/vendor/
+/source/files/
+/source/inc/important.php
+/source/cache/
+/source/log/
+/source/.env.php
 /doc/pre-commit
+.php-cs-fixer.cache

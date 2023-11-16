@@ -4,9 +4,10 @@
 # SAST example https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Jobs/SAST.gitlab-ci.yml
 
 include:
-- template: Code-Quality.gitlab-ci.yml
-- template: Security/SAST.gitlab-ci.yml
-- template: Security/Dependency-Scanning.gitlab-ci.yml
+  - template: Code-Quality.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
 variables:
   SAST_EXPERIMENTAL_FEATURES: "true"
   SAST_DEFAULT_ANALYZERS: "phpcs-security-audit"
@@ -16,7 +17,7 @@ variables:
   PROD_FOLDER: "~/cz.prazskahlidka.nhbistro/  ~/cz.prazskahlidka.dhbistro/" # ~/cz.prazskahlidka.ibistro'
 cache:
   paths:
-    - vendor/
+    - source/vendor/
 image: alpine
 
 stages:
@@ -33,12 +34,13 @@ build_test:
   - apk add gzip
   - apk add composer
   script:
+  - cd source
   - find . -type f -name \*.php -exec sed -i -r 's+Debugger::(DETECT|PRODUCTION)+Debugger::DEVELOPMENT+g' {} \;
   - composer install --ignore-platform-reqs
-  - tar czf bistro-$CI_PIPELINE_ID.tgz --exclude .git --exclude bistro.tmp .
+  - tar czf bistro-$CI_PIPELINE_ID.tgz --exclude bistro.tmp .
   artifacts:
     paths:
-    - bistro-$CI_PIPELINE_ID.tgz
+    - source/bistro-$CI_PIPELINE_ID.tgz
     expire_in: 1 days
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "master"
@@ -51,12 +53,13 @@ build_prod:
   - apk add gzip
   - apk add composer
   script:
+  - cd source
   - find . -type f -name \*.php -exec sed -i -r 's+Debugger::(DETECT|DEVELOPMENT)+Debugger::PRODUCTION+g' {} \;
   - composer install --ignore-platform-reqs
-  - tar czf bistro-$CI_PIPELINE_ID.tgz --exclude .git --exclude bistro.tmp .
+  - tar czf bistro-$CI_PIPELINE_ID.tgz --exclude bistro.tmp .
   artifacts:
     paths:
-    - bistro-$CI_PIPELINE_ID.tgz
+    - source/bistro-$CI_PIPELINE_ID.tgz
     expire_in: 1 days
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "master"
@@ -78,10 +81,7 @@ phpcs-security-audit-sast:
   interruptible: true
   allow_failure: true
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      when: manual
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" # Run code quality job in merge request pipelines
-      when: manual
       exists:
         - '**/*.php'
 
@@ -112,7 +112,7 @@ deploy_test:
     - chmod 700 ~/.ssh
     - ssh-keyscan alembiq.net >> ~/.ssh/known_hosts
   script:
-    - scp bistro-$CI_PIPELINE_ID.tgz prazskahlidka@alembiq.net:.
+    - scp source/bistro-$CI_PIPELINE_ID.tgz prazskahlidka@alembiq.net:.
     - for folder in ${TEST_FOLDER} ;
       do
         ssh $TEST_REMOTE "mkdir $folder/$CI_PIPELINE_ID
@@ -144,7 +144,7 @@ deploy_prod:
     - chmod 700 ~/.ssh
     - ssh-keyscan alembiq.net >> ~/.ssh/known_hosts
   script:
-    - scp bistro-$CI_PIPELINE_ID.tgz prazskahlidka@alembiq.net:.
+    - scp source/bistro-$CI_PIPELINE_ID.tgz prazskahlidka@alembiq.net:.
     - for folder in ${PROD_FOLDER} ;
       do
         ssh $PROD_REMOTE "mkdir $folder/$CI_PIPELINE_ID

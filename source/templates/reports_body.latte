@@ -1,0 +1,80 @@
+<div class="container-fluid mt-3 mb-3 mr-2 w-100">
+    <form action="{$URL[0]}{$URL[1]}/" method="POST" id="filter" class="row mb-1">
+	    <div class="col-12 col-md-4 text-left">
+	        <h4>
+                {$text['menuReports']|firstUpper} {ifset $reportCount}({$reportCount}){/ifset}
+            </h4>
+	    </div>
+        <div class="col-12 col-md-8 text-right header-wrapper-right">
+            <input type="hidden" name="filter[placeholder]" />
+            <div class="header-switch">
+                <label class="toggle-control">
+                    <input type="checkbox" name="filter[mine]" {if (isset($filter['mine']) AND $filter['mine'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                    <span class="control"></span>
+                </label>
+                {$text['jenmoje']}
+            </div>
+            <div class="header-switch">
+                <label class="toggle-control">
+                    <input type="checkbox" name="filter[archived]" {if (isset($filter['archived']) AND $filter['archived'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                    <span class="control"></span>
+                </label>
+                {$text['iarchiv']}
+            </div>
+            <div class="header-switch">
+                <label class="toggle-control">
+                    <input type="checkbox" name="filter[new]" {if (isset($filter['new']) AND $filter['new'] == 'on') } checked{/if} onchange="this.form.submit()" />
+                    <span class="control"></span>
+                </label>
+                {$text['jennove']}
+            </div>
+            {if $user['aclSecret'] > 0}
+                <div class="header-switch">
+                    <label class="toggle-control">
+                        <input type="checkbox" name="filter[secret]" {if (isset($filter['secret']) AND $filter['secret'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                        <span class="control"></span>
+                    </label>
+                    {$text['filterSecretInclude']}
+                </div>
+            {/if}
+            {if $user['aclRoot'] > 0}
+                <div class="header-switch">
+                    <label class="toggle-control">
+                        <input type="checkbox" name="filter[deleted]" {if (isset($filter['deleted']) AND $filter['deleted'] == 'on') } checked {/if} onchange="this.form.submit()" />
+                        <span class="control"></span>
+                    </label>
+                    {$text['filterDeleteInclude']}
+                </div>
+            {/if}
+        </div>
+        <div class="col-12 col-lg-6 text-left header-wrapper-left">
+        </div>
+        <div class="col-12 col-lg-6 text-right header-wrapper-right">
+            <div class="header-switch">
+                <label class="header-switch-drop-label-m-right">{$text['vsechnahlaseni']|firstUpper}</label>
+                <select name="filter[reportType]"  onchange="this.form.submit()">
+                    <option value="0">{$text['nerozhoduje']}</option>
+                    {foreach $reportType as $id => $type }
+                        <option value="{$id}" {if (isset($filter['reportType']) AND $filter['reportType'] == $id) } selected {/if}>{$type}</option>
+                    {/foreach}
+                </select>
+            </div>
+            <div class="header-switch">
+                <label class="header-switch-drop-label-m-right">{$text['vestavu']}</label>
+                <select name="filter[reportStatus]"  onchange="this.form.submit()">
+                    <option value="all">{$text['nerozhoduje']}</option>
+                    {foreach $reportStatus as $id => $status }
+                        <option value="{$id}" {if (isset($filter['reportStatus']) AND $filter['reportStatus'] == $id AND $filter['reportStatus'] != 'all') } selected {/if}>{$status}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        {* TODO NEPRIRAZENE *}
+
+    </form>
+    <div class="row mb-1">
+        <div class="col-12">
+{include 'reports.latte'}
+        </div>
+    </div>
+</div>

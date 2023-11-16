@@ -112,12 +112,11 @@ plugins:
     enabled: false
 
 exclude_patterns:
-  - vendor/
-  - js/tiny*
-  - js/jquery*
-  - cache/
-  - css/
-  - files/
-  - images/
-  - log/
-  - nbproject/
+  - source/vendor/
+  - source/js/tiny*
+  - source/js/jquery*
+  - source/cache/
+  - source/css/
+  - source/files/
+  - source/images/
+  - source/log/

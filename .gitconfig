@@ -1,2 +1,3 @@
 [core]
   hooksPath = ./doc/
+  core.autocrlf = true
