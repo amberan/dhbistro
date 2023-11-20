@@ -13,10 +13,11 @@ function DebuggerLog($value,$logLevel = null)
     $logLevelDefinition = [
         'E' => 'Error',
         'W' => 'Warning',
+        'N' => 'Nofitication',
         'D' => 'Debug',
     ];
     if (!isset($config['logLevel'])) {
-        $config['logLevel'] = ['E', 'W'];
+        $config['logLevel'] = ['E', 'W', 'N'];
     }
     if (in_array($logLevel,$config['logLevel'])) {
         Debugger::log($config['version'].": ".$logLevelDefinition[$logLevel]." ".$value);

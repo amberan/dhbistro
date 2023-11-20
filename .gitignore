@@ -6,3 +6,4 @@
 /source/.env.php
 /doc/pre-commit
 .php-cs-fixer.cache
+/docker/mariadb/

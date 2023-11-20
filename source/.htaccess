@@ -1,5 +1,7 @@
 RewriteEngine on
 
+RewriteRule ^favicon\.ico$ /images/icons/favicon_bistro.png [L]
+
 RewriteRule ^.env.php$ - [F]
 RewriteRule ^/inc/important.php$ - [F]
 

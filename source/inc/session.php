@@ -70,7 +70,7 @@ if (isset($_POST['logmein']) and mb_strlen($_POST['loginname']) and mb_strlen($_
         $logonUpdateSql = "UPDATE " . DB_PREFIX . "user SET sid='" . $_SESSION['sid'] . "', lastLogin=" . time() . ", ipv4='" . $_SERVER['REMOTE_ADDR'] . "', userAgent='" . $_SERVER['HTTP_USER_AGENT'] . "' WHERE userId=" . $logonUser['userId'];
         mysqli_query($database, $logonUpdateSql);
     } else {
-        DebuggerLog("LOGIN FAILED: ".$_POST['loginname'],"W");
+        DebuggerLog("LOGIN FAILED: ".$_POST['loginname'],"N");
     }
 }
 

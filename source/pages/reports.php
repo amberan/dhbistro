@@ -128,7 +128,7 @@ if ($reportCount > 0) {
     $latteParameters['reportsRecord'] = $reports;
     $latteParameters['reportCount'] = $reportCount;
 } else {
-    $latteParameters['warningReport'] = $text['notificationListEmpty'];
+    $latteParameters['warning'] = $text['notificationListEmpty'];
 }
 $latteParameters['reportType'] = reportType();
 $latteParameters['reportStatus'] = reportStatus();

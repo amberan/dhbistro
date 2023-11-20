@@ -9,6 +9,7 @@ function human_filesize($bytes, $decimals = 2)
 
 /**
  * returns array files and size.
+ * TODO: sorting, filtering
  */
 function fileList($folder)
 {
@@ -122,11 +123,11 @@ function fileGet($object): void
 function filePlaceholder($fileType = 'logo'): void
 {
     switch ($fileType) {
-        case 'portrait': $placeholder = SERVER_ROOT . "/images/placeholder.jpg";
+        case 'portrait': $placeholder = SERVER_ROOT . "images/placeholder.jpg";
             break;
-        case 'symbol': $placeholder = SERVER_ROOT . "/images/nosymbol.png";
+        case 'symbol': $placeholder = SERVER_ROOT . "images/nosymbol.png";
             break;
-        default: $placeholder = SERVER_ROOT . "/images/placeholder.jpg";
+        default: $placeholder = SERVER_ROOT . "images/placeholder.jpg";
             break;
     }
     header("Cache-Control: no-cache, no-store, must-revalidate, post-check=0, pre-check=0");
@@ -135,4 +136,20 @@ function filePlaceholder($fileType = 'logo'): void
     header('Content-Type: ' . mime_content_type($placeholder));
     $placeholderFile = fopen($placeholder, "r");
     fpassthru($placeholderFile);
+}
+
+/**
+ * Returns only files that contain string in name
+ * @param mixed $directory
+ * @param mixed $string
+ * @return mixed
+ */
+function filterDirectory($directory, $string)
+{
+    $scandir = array_diff(scandir($directory), ['.', '..']);
+    $filteredArray = array_filter($scandir, function ($value) use ($string) {
+        return strpos($value, $string) !== false;
+    });
+    natsort($filteredArray);
+    return $filteredArray;
 }

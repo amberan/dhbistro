@@ -149,7 +149,7 @@ if (is_numeric($_REQUEST['rid']) && isset($user)) {
             FROM ".DB_PREFIX."group, ".DB_PREFIX."g2p
             WHERE $sqlFilter AND ".DB_PREFIX."g2p.idgroup=".DB_PREFIX."group.id AND ".DB_PREFIX."g2p.idperson=".$_REQUEST['rid']."
             ORDER BY ".DB_PREFIX."group.title ASC";
-        DebuggerLog($sql);
+        DebuggerLog($sql,'D');
 
 
         $res_g = mysqli_query($database, $sql);
