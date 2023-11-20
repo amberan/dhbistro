@@ -1,90 +1,89 @@
+# BISTRO
+
 [![pipeline status](https://gitlab.com/alembiq/bistro/badges/master/pipeline.svg)](https://gitlab.com/alembiq/bistro/commits/master)
 [![license](https://img.shields.io/github/license/amberan/dhbistro.svg)](https://gitlab.com/alembiq/bistro/blob/master/LICENSE)
 [![lines of code](https://tokei.rs/b1/github/amberan/dhbistro)](https://tokei.rs/b1/github/amberan/dhbistro)
 [![Latest Release](https://gitlab.com/alembiq/bistro/-/badges/release.svg)](https://gitlab.com/alembiq/bistro/-/releases)
 
+**BISTRO** is a powerful tool designed to help you manage people, groups, investigation cases, and reports in the context of LARP games. Whether you belong to the Night Watch or Day Watch, BISTRO is here to keep you organized in the world of immersive storytelling.
+
+## About
+
+[BiStro](https://gitlab.com/alembiq/bistro/) is actively used by players of the Czech LARP [Pražská Hlídka](http://www.prazskahlidka.cz/), a cyclical LARP inspired by [Sergei Lukyanenko's Night Watch](https://en.wikipedia.org/wiki/Night_Watch_(Lukyanenko_novel)).
+
+The history of BiStro dates back to 2006 when it was created for the first Watch game, part of Dies Irae. The core functionality was initially written in PHP 5 by [Ethan](https://github.com/ethanius). Over the years, [Amberan](https://github.com/amberan) took over and introduced source code management tools. Collaborating with [Atlan](https://github.com/czAtlan), they added numerous new features. Subsequently, [Ernedar](https://github.com/Ernedar) joined the development team.
+
+At the end of 2018, [Charles](https://gitlab.com/alembiq) updated the code to work with PHP 7 and initiated a comprehensive refactoring of the entire system. This effort aimed to understand the system better and explore the possibility of migrating data to a different system. Alongside this, the idea of a new user interface emerged. Currently, the team is in the process of gradually refactoring the old code while updating the UI.
+
+## Features
+
+- Track people, groups, investigation cases, and reports
+- Manage user access permissions, including visibility of secret items
+- Record user actions and browse through activities in the Audit page
+
+## Usage
+
+### Running BISTRO
+
+#### Docker
+- Prerequisites: Docker, Docker-compose
+1. Update [docker/docker-compose.yml](docker/docker-compose.yml#L9) to run under the user (UID:GID) who owns the folder with the source code.
+2. Go to the `docker` directory and run `docker-compose up -d`. Docker will download a few images, and in a few minutes, your BISTRO should be running on [localhost](http://localhost), with [Adminer](http://localhost:8080) available to you.
 
 
-# [BISTRO](https://gitlab.com/alembiq/bistro)
+#### LAMP
+- Prerequisites: Apache2 (modules header, rewrite), MariaDB, PHP 8.x (modules mysql, xml, gd, zip, curl, mbstring), Composer
+1. Clone the repository and run composer:
+   ```bash
+   git clone git@gitlab.com:alembiq/bistro.git && cd bistro && composer install
+2. Point Apache to the BISTRO folder.
+3. Create a database and user.
+4. Open BISTRO in your browser - you'll get the installer.
 
-**Are you one of the Others? A member of the Night Watch or Day Watch? BiStro is here for you and will try to keep you from getting lost in  all the gloom related informations!**
-
-
-[BiStro](https://github.com/amberan/dhbistro/) was originally created to help players of Czech LARP [Pražská Hlídka](http://www.prazskahlidka.cz/). This cyclical larp is inspired by [Sergei Lukyanenko Night Watch](https://en.wikipedia.org/wiki/Night_Watch_(Lukyanenko_novel)).
-In-game it's used by two teams (Day and Night watch) to keep tracks of characters and events especially between iterations of the game.
-
-## BiStro needs you!
-No doubt you've noticed BiStro is not a professional product, and at this moment individual components look quite different. This is due to ongoing refactoring of GUI to be usable also on mobile devices. However, our efforts to rewrite the user interface is much more complicated and time consuming that we expected.
-
-Based on the current knowledge we know that rewriting BiStro in two people (one PHP, one HTML/CSS) is doable, but it would take too long and the user experience in the meantime would be greatly diminished. That's why we are looking for help, we could use more programmers but also some permanent testers.
-
-Just for the context - history of BiStro starts in 2006 - it was created for the first Watch game, part of Dies Irae. That's when Ethan wrote the core functionality in PHP (version 5 at the time). Years later Amberan took over and started using source code management tools. Together with Atlan they've added a lot of new functionality. A few years later, Ernedar joined. At the end of 2018 Charles updated the code to work with PHP 7 and started refactoring the whole system in an effort to understand how it works (and if we shouldn't just moved the data to some other system). While getting some understanding of the code an idea that came, idea of new UI. That's where we're now, slowly chewing up the old code and refactoring it while changing the UI.
-
-At the moment we are targeting the following technologies PHP 7, MariaDB, Bootstrap, Latte and tui.editor. Of course, everything could be written on the green field with a mobile app and everything, but we really don't have the time and energy for that.
-
-P.S. If you don't know how to code but still want to help, you can always help us with testing or create user documentation.
-
-## running BiStro
-It's a simple php website, you need just the basics - LAMP :)
-### Prerequisities
-- Apache2
-    apache modules:
-    - headers
-    - rewrite
-- MariaDB
-- PHP 8.1 / 8.2
-    php modules:
-    - php-mysql
-    - php-xml
-    - php-gd
-    - php-zip
-    - php-curl
-    - php-cli
-    - php-mbstring
-### Installation
-- clone repository & run composer
-```bash
-git clone git@gitlab.com:alembiq/bistro.git && cd bistro && composer install
+## Development
+To turn on debugging mode, add the following line to `source/.env` or `source/config.php`:
 ```
-- point apache to the BiStro folder
-- create database & user
-- open BiStro in your browser - you'll get installer :)
+$config['logLevel'] = ['E', 'W', 'N', 'D'];
+```
+All logs, including exceptions logged by Tracy, are stored in the `log` folder.
 
-## [Changelog](CHANGELOG.md)
-
-## [Contributing](CONTRIBUTING.md)
-
-## Documentation
-There is none:( docs below are just notes created during reverse engeneering phase.
+## Resources
+- [Changelog](CHANGELOG.md)
+- [Contributing](CONTRIBUTING.md)
 - [enumerators](doc/enums.md)
 - [files & folder structure](doc/files.md)
 - [reverse engineered user permissions](doc/rights.md)
 - [API prototype](doc/api.md)
 
+
 ## FAQ
-
 - Lost all passwords?
-```sql
-UPDATE nw_user SET userPassword=md5('newPassword') ;
-```
-- Prepare data for testing
-```sql
-DELETE FROM nw_case WHERE secret>0;
-DELETE FROM nw_file WHERE secret>0;
-DELETE FROM nw_group WHERE secret>0;
-DELETE FROM nw_note WHERE secret>0;
-DELETE FROM nw_person WHERE secret>0;
-DELETE FROM nw_report WHERE secret>0;
-DELETE FROM nw_symbol WHERE secret>0;
+    ```sql
+    UPDATE nw_user SET userPassword=md5('newPassword');
+    ```
 
-UPDATE nw_case SET secret=1 WHERE deleted = 0 AND RAND() < 0.3;
-UPDATE nw_file SET secret=1 WHERE RAND() < 0.3;
-UPDATE nw_group SET secret=1 WHERE deleted = 0 AND RAND() < 0.3;
-UPDATE nw_note SET secret=1 WHERE deleted = 0 AND RAND() < 0.3;
-UPDATE nw_person SET secret=1 WHERE deleted = 0 AND RAND() < 0.3;
-UPDATE nw_report SET reportSecret=1 WHERE reportDeleted = 0 AND RAND() < 0.3;
-UPDATE nw_symbol SET secret=1 WHERE deleted = 0 AND RAND() < 0.3;
+- Updating your production database for testing (removing secret information and randomly marking some as secret)
+    ```sql
+    DELETE FROM nw_case WHERE secret>0;
+    DELETE FROM nw_file WHERE secret>0;
+    DELETE FROM nw_group WHERE secret>0;
+    DELETE FROM nw_note WHERE secret>0;
+    DELETE FROM nw_person WHERE secret>0;
+    DELETE FROM nw_report WHERE secret>0;
+    DELETE FROM nw_symbol WHERE secret>0;
 
-UPDATE nw_user SET aclAPI=1, aclAudit=1, aclCase=2, aclUser=1, aclNews=1, aclBoard=1, aclGamemaster=1, aclGroup=2,
-aclHunt=1, aclPerson=2, aclRoot=1, aclSecret=2, aclReport=2, aclSymbol=2 where userSuspended=0 and userDeleted=0;
-```
+    UPDATE nw_case SET secret=1 WHERE deleted = 0 AND RAND() < 0.3;
+    UPDATE nw_file SET secret=1 WHERE RAND() < 0.3;
+    UPDATE nw_group SET secret=1 WHERE deleted = 0 AND RAND() < 0.3;
+    UPDATE nw_note SET secret=1 WHERE deleted = 0 AND RAND() < 0.3;
+    UPDATE nw_person SET secret=1 WHERE deleted = 0 AND RAND() < 0.3;
+    UPDATE nw_report SET reportSecret=1 WHERE reportDeleted = 0 AND RAND() < 0.3;
+    UPDATE nw_symbol SET secret=1 WHERE deleted = 0 AND RAND() < 0.3;
+
+    UPDATE nw_user SET aclAPI=1, aclAudit=1, aclCase=2, aclUser=1, aclNews=1, aclBoard=1, aclGamemaster=1, aclGroup=2,
+    aclHunt=1, aclPerson=2, aclRoot=1, aclSecret=2, aclReport=2, aclSymbol=2 where userSuspended=0 and userDeleted=0;
+    ```
+
+- Default user after installation: User in the default dataset is Shiva with password Shiva.
+
+**Feel free to customize the content further or let us know if you have any specific requests!**

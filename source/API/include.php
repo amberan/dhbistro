@@ -2,17 +2,16 @@
 
 session_start();
 
-require_once SERVER_ROOT . "/config.php";
+require_once SERVER_ROOT . "config.php";
 
-require_once SERVER_ROOT . '/vendor/autoload.php';
-require_once SERVER_ROOT . '/inc/platform.php'; // server identification/configuration
-require_once SERVER_ROOT . '/lib/database.php'; //db connector, injection mitigation
+require_once SERVER_ROOT . 'vendor/autoload.php';
+require_once SERVER_ROOT . 'lib/database.php'; //db connector, injection mitigation
 
 require_once $config['folder_custom'] . 'text.php';
 if ($config['themeCustom'] != null) {
     include_once $config['folder_custom'] . '/text-' . $config['themeCustom'] . '.php';
 }
-require_once SERVER_ROOT . '/lib/person.php';
+require_once SERVER_ROOT . 'lib/person.php';
 
 function session_validation($sessionID)
 {

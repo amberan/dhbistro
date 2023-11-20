@@ -63,7 +63,7 @@ function bistroUpdate($updatesToRun)
         if (isset($updateScript)) {
             foreach ($updateScript as $issue => $script) {
                 mysqli_query($database, $script);
-                DebuggerLog('UPDATER '.substr($file, 7, -4).'.'.$issue.' '.$script.mysqli_error($database),"W");
+                DebuggerLog('UPDATER '.substr($file, 7, -4).'.'.$issue.' '.$script.mysqli_error($database),"E");
             }
         }
         unset($updateScript,$tableCreate,$tableRename,$columnAdd,$columnAlter,$columnAddFulltext,$columnToMD,$rightsToUpdate,$convertTime,$columnDrop,$tableDrop);
@@ -75,16 +75,15 @@ function bistroUpdate($updatesToRun)
  */
 function bistroEnvConvert()
 {
-    global $config,$latteParameters,$_POST,$latteParameters;
+    global $config,$latteParameters,$_POST,$configDB;
     $latteParameters['title'] = 'INSTALLER';
     if (isset($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbDatabase'])
     && DBTest($_POST)) {
-        // installer form posted and db connection valid
+        DebuggerLog('INSTALLER: form posted and db connection valid',"D");
         bistroEnvFile($_POST);
-        require_once $config['platformConfig'];
-    } elseif (file_exists(SERVER_ROOT . '/inc/platform.php')) {
-        // convert old files
-        require_once SERVER_ROOT . '/inc/platform.php';
+    } elseif (file_exists(SERVER_ROOT . 'inc/platform.php')) {
+        DebuggerLog('INSTALLER: converting old configuration file',"N");
+        require_once SERVER_ROOT . 'inc/platform.php';
         $config['dbHost'] = 'localhost';
         $config['dbPrefix'] = DB_PREFIX;
         if (file_exists($config['dbpass'])) {
@@ -97,12 +96,15 @@ function bistroEnvConvert()
             bistroEnvFile($config);
         } else {
             $latteParameters['config'] = $config;
+
             $latteParameters['backupList'] = fileList($config['folder_backup']);
             latteDrawTemplate('installer');
             exit;
         }
     } else {
+        DebuggerLog('INSTALLER: first time opened',"D");
         $latteParameters['config'] = $_POST;
+        $latteParameters['backupList'] = fileList($config['folder_backup']);
         latteDrawTemplate('installer');
         exit;
     }
@@ -115,19 +117,24 @@ function bistroEnvFile($post)
 {
     global $config;
     $newConfigFile = fopen($config['platformConfig'], "w") or die("Unable to write configuration file!");
-    $configList = '<?php
-        define(\'DB_PREFIX\', \'' . $post['dbPrefix'] . '\');
-        $' . 'configDB[\'dbHost\']            = \'' . $post['dbHost'] . '\';
-        $' . 'configDB[\'dbUser\']            = \'' . $post['dbUser'] . '\';
-        $' . 'configDB[\'dbPassword\']          = \'' . $post['dbPassword'] . '\';
-        $' . 'configDB[\'dbDatabase\']        = \'' . $post['dbDatabase'] . '\';
-        $' . 'config[\'themeColor\']             = \'' . $post['themeColor'] . '\';
-        $' . 'config[\'themeCustom\']            = \'' . $post['themeCustom'] . '\';
-        $' . 'config[\'themeBg\']          = \'' . $post['themeBg'] . '\';
-        $' . 'config[\'themeNavbar\']      = \'' . $post['themeNavbar'] . '\';
-        ';
+    $configList =
+'<?php
+$' . 'config[\'themeColor\']       = \'' . $post['themeColor'] . '\';
+$' . 'config[\'themeBg\']          = \'' . $post['themeBackground'] . '\';
+$' . 'config[\'themeNavbar\']      = \'' . $post['themeNavbar'] . '\';
+
+$' . 'config[\'themeCustom\']      = \'' . $post['themeCustom'] . '\';
+
+
+$' . 'configDB[\'dbHost\']         = \'' . $post['dbHost'] . '\';
+$' . 'configDB[\'dbUser\']         = \'' . $post['dbUser'] . '\';
+$' . 'configDB[\'dbPassword\']     = \'' . $post['dbPassword'] . '\';
+$' . 'configDB[\'dbDatabase\']     = \'' . $post['dbDatabase'] . '\';
+define(\'DB_PREFIX\', \'' . $post['dbPrefix'] . '\');
+';
     fwrite($newConfigFile, $configList);
     fclose($newConfigFile);
+    DebuggerLog('INSTALLER: creating config file based on installer form',"N");
 }
 
 /**
@@ -155,7 +162,7 @@ function bistroDBPasswordEncrypt(): int
         $passwordQuery = mysqli_query($database, $passwordSql);
         while ($passwordData = mysqli_fetch_array($passwordQuery)) {
             mysqli_query($database, "UPDATE ".$configDB['dbDatabase'].".".DB_PREFIX."user set userPassword=md5('".$passwordData['userPassword']."') where userId=".$passwordData['userId']);
-            DebuggerLog('UPDATER '.$config['version'].': Hashing '.$passwordData['userName'].'.userPassword',"W");
+            DebuggerLog('UPDATER '.$config['version'].': Hashing '.$passwordData['userName'].'.userPassword',"D");
             $alter++;
         }
     }
@@ -181,7 +188,7 @@ function bistroDBColumnMarkdown($data, $file = null): int
             $preMarkdownQuery = mysqli_query($database, $preMarkdownSql);
             while ($preMarkdown = mysqli_fetch_array($preMarkdownQuery)) {
                 $markdownColumn = $converter->convert(str_replace('\'', '', $preMarkdown[$value[2]]));
-                DebuggerLog('UPDATER '.$file.' CONVERTING '.DB_PREFIX.$value[0].'.'.$value[2].'.'.$preMarkdown[$value[1]].' TO MARKDOWN '.$value[3],"W");
+                DebuggerLog('UPDATER '.$file.' CONVERTING '.DB_PREFIX.$value[0].'.'.$value[2].'.'.$preMarkdown[$value[1]].' TO MARKDOWN '.$value[3],"D");
                 $updateSql = "UPDATE ".DB_PREFIX.$value[0]." SET ".$value[3]."='".$markdownColumn."' WHERE ".$value[1]."=".$preMarkdown[$value[1]];
                 mysqli_query($database, $updateSql);
                 $alter++;
@@ -209,7 +216,7 @@ function bistroMigratePermissions($data, $file = null): int
                 $alterSql = "UPDATE " . $configDB['dbDatabase'] . "." . DB_PREFIX . "user SET $new=$old;";
                 mysqli_query($database, $alterSql);
                 if (mysqli_affected_rows($database) > 0) {
-                    DebuggerLog('UPDATER '.$file.': PERMISSIONS '.$old.' => '.$new,"W");
+                    DebuggerLog('UPDATER '.$file.': PERMISSIONS '.$old.' => '.$new,"N");
                     $alter++;
                 }
             }
@@ -231,7 +238,7 @@ function bistroIntToTimestamp($data, $file = null): int
             $alterSql = "UPDATE " . $configDB['dbDatabase'] . "." . DB_PREFIX . $change[0] . " SET " . $change[2] . "=FROM_UNIXTIME(" . $change[1] . ") where " . $change[1] . ">0 ;";
             mysqli_query($database, $alterSql);
             if (mysqli_affected_rows($database) > 0) {
-                DebuggerLog('UPDATER '.$file.': TIME CONVERSION nw'.$change[0].':  '.$change[1].' => '.$change[2],"W");
+                DebuggerLog('UPDATER '.$file.': TIME CONVERSION nw'.$change[0].':  '.$change[1].' => '.$change[2],"N");
                 $alter++;
             } else {
                 DebuggerLog($file.': '.$alterSql,"E");
