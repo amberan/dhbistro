@@ -1,9 +1,9 @@
+.env
+.php-cs-fixer.cache
+/doc/pre-commit
 /source/vendor/
 /source/files/
 /source/inc/important.php
 /source/cache/
 /source/log/
 /source/.env.php
-/doc/pre-commit
-.php-cs-fixer.cache
-/docker/mariadb/

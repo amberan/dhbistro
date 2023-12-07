@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/usr/bin/env bash
 # possible improvements https://github.com/BernardoSilva/git-hooks-php/blob/master/pre-commit
 
 repo_root=$(git rev-parse --show-toplevel)
