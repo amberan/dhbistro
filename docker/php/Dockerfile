@@ -1,14 +1,17 @@
-FROM php:8.2-fpm
+FROM php:8.3-fpm
 
-# Installing dependencies for building the PHP modules
+ARG USER_ID
+ARG GROUP_ID
+
 RUN apt update && \
-    apt install -y zip libzip-dev libpng-dev libicu-dev libxml2-dev libcurl4-openssl-dev libonig-dev
+    apt install -y zip libzip-dev libpng-dev libicu-dev libxml2-dev libcurl4-openssl-dev libonig-dev libwebp-dev libjpeg-dev
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+    ln -s /usr/local/bin/composer /usr/bin/composer
 
-# Installing additional PHP modules
-RUN docker-php-ext-install mysqli pdo pdo_mysql gd zip intl xml gd curl mbstring composer
+RUN docker-php-ext-install curl intl mbstring mysqli opcache xml zip
+RUN docker-php-ext-configure gd --with-jpeg --with-webp
 
-# Cleaning APT cache
 RUN apt clean
 
-# installing external libraries
-RUN cd /var/www/html/ && composer install
+RUN groupadd -g $GROUP_ID appuser && \
+    useradd -u $USER_ID -g appuser -m appuser

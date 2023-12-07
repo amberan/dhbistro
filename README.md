@@ -27,9 +27,15 @@ At the end of 2018, [Charles](https://gitlab.com/alembiq) updated the code to wo
 
 #### Docker
 - Prerequisites: Docker, Docker-compose
-1. Update [docker/docker-compose.yml](docker/docker-compose.yml#L9) to run under the user (UID:GID) who owns the folder with the source code.
-2. Go to the `docker` directory and run `docker-compose up -d`. Docker will download a few images, and in a few minutes, your BISTRO should be running on [localhost](http://localhost), with [Adminer](http://localhost:8080) available to you.
-
+1. Create file `.env` where you put your `User ID` and `Group ID`:
+    ```
+    ; .env
+    USER_ID=1000
+    GROUP_ID=1000
+    ```
+2. Go to the `docker` directory and run `docker compose up -d`. Docker will download a few images, this will take few minutes.
+3. To download the composer packages run `docker exec -it bistro-php-1 sh -c 'cd /var/www/html/ && composer install'`. You might need to change `bistro-php-1` accordingly to your situation.
+4. Your BISTRO is running on [localhost](http://localhost) (default login is Shiva/Shiva), with [Adminer](http://localhost:8080) (default login is bistro/bistro) available to you.
 
 #### LAMP
 - Prerequisites: Apache2 (modules header, rewrite), MariaDB, PHP 8.x (modules mysql, xml, gd, zip, curl, mbstring), Composer
@@ -40,12 +46,12 @@ At the end of 2018, [Charles](https://gitlab.com/alembiq) updated the code to wo
 3. Create a database and user.
 4. Open BISTRO in your browser - you'll get the installer.
 
-## Development
+## Logs
+All logs, including exceptions logged by Tracy, are stored in the `log` folder.
 To turn on debugging mode, add the following line to `source/.env` or `source/config.php`:
 ```
 $config['logLevel'] = ['E', 'W', 'N', 'D'];
 ```
-All logs, including exceptions logged by Tracy, are stored in the `log` folder.
 
 ## Resources
 - [Changelog](CHANGELOG.md)
@@ -84,6 +90,8 @@ All logs, including exceptions logged by Tracy, are stored in the `log` folder.
     aclHunt=1, aclPerson=2, aclRoot=1, aclSecret=2, aclReport=2, aclSymbol=2 where userSuspended=0 and userDeleted=0;
     ```
 
-- Default user after installation: User in the default dataset is Shiva with password Shiva.
+- Default user after installation: User in the default dataset is `Shiva` with equal password.
+
+- Database user: default user is `bistro` with equal password.
 
 **Feel free to customize the content further or let us know if you have any specific requests!**
