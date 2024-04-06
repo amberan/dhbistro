@@ -23,6 +23,8 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 - Feature: docker-compose #299
 ### Changed
 - Refactored: Merge request template #354
+### Fixed
+- Fixed: user creation #380
 
 ## 1.12.2 2023-11-16
 ### Changed
