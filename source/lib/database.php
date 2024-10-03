@@ -59,14 +59,12 @@ function DBTest($configDB)
 function restoreDB($sqlFile = null)
 {
     global $database,$config;
-    echo $sqlFile;
 
-    if (!file_exists($sqlFile)) {
-        $sqlDefaultFiles = filterDirectory($_SERVER['DOCUMENT_ROOT'] . "sql", "default");
-        $sqlFile = $_SERVER['DOCUMENT_ROOT'] . "sql/" . end($sqlDefaultFiles);
-    } else {
-        $sqlFile = $config['folder_backup'] . $sqlFile;
+    if (!isset($sqlFile) || !file_exists(@$sqlFile)) {
+        $sqlDefaultFiles = filterDirectory(SERVER_ROOT . "sql/", "default");
+        $sqlFile = SERVER_ROOT . "sql/" . end($sqlDefaultFiles);
     }
+
     if (file_exists($sqlFile)) {
         $tempLine = '';
         $lines = file($sqlFile);

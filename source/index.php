@@ -30,7 +30,12 @@ require_once SERVER_ROOT . "lib/notes.php";
 require_once SERVER_ROOT . "lib/symbols.php";
 
 $URL = explode('/', $_SERVER['REQUEST_URI']); // for THE LOOP
-$URL[0] = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . "/";
+if (isset($_SERVER['REQUEST_SCHEME'])) {
+    $URL[0] = $_SERVER['REQUEST_SCHEME'] . "://" . $_SERVER['SERVER_NAME'] . "/";
+ }
+else {
+    $URL[0] = $_SERVER['SERVER_NAME'] . "/";
+}
 
 if (!file_exists($config['platformConfig']) || isset($_POST['dbHost'], $_POST['dbUser'], $_POST['dbPassword'], $_POST['dbDatabase'])) {
     // no .env.php file OR form posted
@@ -41,7 +46,7 @@ require_once $config['platformConfig'];
 if (isset($configDB) && DBTest($configDB)) {
     $database = DBconnect($configDB);
     if ($database && !sizeof(DBListTables()) > 0 && isset($_POST['backupFile']) && strlen($_POST['backupFile']) > 0) {
-        restoreDB($_POST['backupFile']);
+        restoreDB($config['folder_backup'] . $_POST['backupFile']);
     } elseif ($database && !sizeof(DBListTables()) > 0) {
         restoreDB();
     } elseif (!$database) {

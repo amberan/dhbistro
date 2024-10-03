@@ -10,11 +10,12 @@ function bistroBackup()
         $lastBackupSql = "SELECT time FROM " . DB_PREFIX . "backups ORDER BY time DESC LIMIT 1";
     }
     $lastBackup = mysqli_fetch_assoc(mysqli_query($database, $lastBackupSql));
-    if (strlen($lastBackup['version']) < 1) {
-        $sqlDefaultFiles = filterDirectory($_SERVER['DOCUMENT_ROOT'] . "sql", "default");
+    if (!isset($lastBackup['version'])) {
+        $sqlDefaultFiles = filterDirectory(SERVER_ROOT . "sql", "default");
         $lastBackup['version'] = substr(end($sqlDefaultFiles), 8, -4);
+        $lastBackup['time'] = time();
     }
-    $sqlUpdateFiles = filterDirectory($_SERVER['DOCUMENT_ROOT'] . "sql", "update");
+    $sqlUpdateFiles = filterDirectory(SERVER_ROOT . "sql", "update");
     $updatesToRun = bistroUpdatesList($sqlUpdateFiles, @$lastBackup['version']);
     if (round($lastBackup['time'], -5) < round(time(), -5) || sizeof($updatesToRun) > 0) {
         bistroBackupGenerate();

@@ -55,7 +55,7 @@ function logout_forced($msg): void
     if (isset($msg)) {
         @$_SESSION['message'] .= $msg;
     }
-    header('location: ' . $URL[0]);
+    header('location: /');
 }
 
 /*

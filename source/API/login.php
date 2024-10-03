@@ -1,6 +1,6 @@
 <?php
 
-require_once($_SERVER['DOCUMENT_ROOT'].'/API/include.php');
+require_once(SERVER_ROOT.'API/include.php');
 
 
 // TODO failsafe count number of failed login attempts in a period of time and if higher, deny servise ? use audit table
