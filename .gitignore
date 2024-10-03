@@ -7,3 +7,5 @@
 /source/cache/
 /source/log/
 /source/.env.php
+/mariadb
+/.direnv

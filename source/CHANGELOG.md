@@ -18,13 +18,16 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 ### Security
  -->
 
-## 1.12.3 2023-11-xx
+## 1.12.3 2024-10-04
 ### Added
 - Feature: docker-compose #299
+- Feature: direnv & nix flake #383
 ### Changed
 - Refactored: Merge request template #354
+- Refactored: Removed hardcoded database prefix #381
 ### Fixed
 - Fixed: user creation #380
+- Fixed: new database population #382
 
 ## 1.12.2 2023-11-16
 ### Changed

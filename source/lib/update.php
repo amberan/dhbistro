@@ -23,7 +23,7 @@ function bistroUpdate($updatesToRun)
     global $database;
     bistroMyisamToInnodb();
     foreach ($updatesToRun as $file) {
-        require_once $_SERVER['DOCUMENT_ROOT'] . "/sql/" . $file;
+        require_once SERVER_ROOT . "sql/" . $file;
         if (isset($tableCreate)) {
             bistroDBTableCreate($tableCreate, substr($file, 7, -4));
         }

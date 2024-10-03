@@ -135,20 +135,20 @@ function userChange($userId, $data, $success = null, $failure = null): string
 function listUsersSuitable()
 {
     global $database;
-    $listUsersSql = "(select userId, userName, concat(surname,', ',name,' [',username,']') as personName from nw_report
-        left join nw_user on nw_report.reportOwner = nw_user.userId
-        left join nw_person on nw_user.personId = nw_person.id
+    $listUsersSql = "(select userId, userName, concat(surname,', ',name,' [',username,']') as personName from " . DB_PREFIX . "report
+        left join " . DB_PREFIX . "user on " . DB_PREFIX . "report.reportOwner = " . DB_PREFIX . "user.userId
+        left join " . DB_PREFIX . "person on " . DB_PREFIX . "user.personId = " . DB_PREFIX . "person.id
         where reportOwner > 0
         group by reportOwner)
         union distinct
-        (select userId,  userName, concat(surname,', ',name,' [',username,']') as personName from nw_user
-        left join nw_person on nw_user.personId = nw_person.id
+        (select userId,  userName, concat(surname,', ',name,' [',username,']') as personName from " . DB_PREFIX . "user
+        left join " . DB_PREFIX . "person on " . DB_PREFIX . "user.personId = " . DB_PREFIX . "person.id
         where userDeleted = 0
         group by userId)
         union distinct
-        (select userId, userName, concat(surname,', ',name,' [',username,']') as personName from nw_c2s
-        left join nw_user on nw_c2s.iduser = nw_user.userId
-        left join nw_person on nw_user.personId = nw_person.id
+        (select userId, userName, concat(surname,', ',name,' [',username,']') as personName from " . DB_PREFIX . "c2s
+        left join " . DB_PREFIX . "user on " . DB_PREFIX . "c2s.iduser = " . DB_PREFIX . "user.userId
+        left join " . DB_PREFIX . "person on " . DB_PREFIX . "user.personId = " . DB_PREFIX . "person.id
         group by userId)
         order by userName";
     $listUsers = mysqli_query($database, $listUsersSql);

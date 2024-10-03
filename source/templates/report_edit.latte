@@ -44,7 +44,7 @@
                     </label>
                     <select class="form-control" name="reportType" id="reporttype">
                     {foreach $reportType as $reportTypeValue => $reportTypeName}
-                        <option value={$reportTypeValue}{if $reportTypeValue == @$report[reportType]} SELECTED{/if}> {$reportTypeName}</option>
+                        <option value={$reportTypeValue} {if $reportTypeValue == @$report[reportType]}SELECTED{/if}>{$reportTypeName}</option>
                     {/foreach}
                     </select>
                 </div>
@@ -60,7 +60,7 @@
                     </label>
                     <select name="reportOwner" class="form-control" id="reportowner">
                         {foreach $suitableUsers as $suitableUser}
-                            <option value="{$suitableUser['userId']}" {if @$report['reportOwner'] == $suitableUser['userId']} SELECTED{/if}>{if $suitableUser['personName']}{$suitableUser['personName']}{else}{$suitableUser['userName']}{/if}</option>
+                            <option value="{$suitableUser['userId']}" {if @$report['reportOwner'] == $suitableUser['userId']}SELECTED{/if}>{if $suitableUser['personName']}{$suitableUser['personName']}{else}{$suitableUser['userName']}{/if}</option>
                         {/foreach}
                     </select>
                 </div>
@@ -71,7 +71,7 @@
                         </label>
                         <select class="form-control" name="reportSecret" id="isitsecret">
                             <option value="0">{$text['verejne']|firstUpper}</option>
-                            <option value="1" {if @$report[reportSecret] == 1} SELECTED{/if}>{$text['utajeno']|firstUpper}</option>
+                            <option value="1" {if @$report[reportSecret] == 1}SELECTED{/if}>{$text['utajeno']|firstUpper}</option>
                         </select>
                     </div>
                 {/if}
@@ -98,7 +98,7 @@
                     </label>
                     <select name="reportStatus" id="reportstatusdropdown" class="form-control">
                         {foreach $reportStatus as $reportStatusValue => $reportStatusName}
-                            <option value={$reportStatusValue}{if $reportStatusValue == @$report[reportStatus]} SELECTED{/if}> {$reportStatusName}</option>
+                            <option value={$reportStatusValue} {if $reportStatusValue == @$report[reportStatus]}SELECTED{/if}> {$reportStatusName}</option>
                         {/foreach}
                     </select>
                 </div>

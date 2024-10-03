@@ -1,6 +1,6 @@
 <?php
 
-require_once($_SERVER['DOCUMENT_ROOT'].'/API/include.php');
+require_once(SERVER_ROOT.'API/include.php');
 header('Content-Type: application/json');
 
 if (isset($_GET['sessionID'])) { # verify user

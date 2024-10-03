@@ -1,6 +1,6 @@
 <?php
 
-define('SERVER_ROOT', $_SERVER['DOCUMENT_ROOT']);
+define('SERVER_ROOT', $_SERVER['DOCUMENT_ROOT']."/");
 
 $config['version'] = '1.12.3';
 $config['page_prefix'] = ''; // uri cesta mezi domenou a adresarem bistra
