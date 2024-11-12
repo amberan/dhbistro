@@ -39,7 +39,7 @@
             PHP_PID_FILE="$PWD/logs/.php.pid"
             PHP_LOG_FILE="$PWD/logs/php.log"
 
-            alias mariadb='${pkgs.mariadb}/bin/mariadb -u root'
+            alias mariadb='${pkgs.mariadb}/bin/mariadb -u root --socket=$MARIADB_UNIX_PORT'
             alias mysql=mariadb
 
             if [ ! -d "$MARIADB_HOME" ]; then
@@ -67,7 +67,7 @@
 
             if [ ! -d ./mariadb/bistro/ ]; then
                 echo "Creating database for bistro ..."
-                mariadb -u root -e "CREATE DATABASE bistro; CREATE USER bistro@localhost IDENTIFIED BY 'bistro'; GRANT ALL PRIVILEGES ON bistro.* TO bistro@localhost; FLUSH PRIVILEGES;"
+                mariadb --socket=$MARIADB_UNIX_PORT -u root -e "CREATE DATABASE bistro; CREATE USER bistro@localhost IDENTIFIED BY 'bistro'; GRANT ALL PRIVILEGES ON bistro.* TO bistro@localhost; FLUSH PRIVILEGES;"
             fi
 
             # Function to stop MariaDB && PHP
