@@ -1,13 +1,10 @@
 <?php
 
-
 declare(strict_types=1);
 
 use PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff;
 use PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer;
 use PhpCsFixer\Fixer\FunctionNotation\MethodArgumentSpaceFixer;
-
-
 use PhpCsFixer\Fixer\Import\NoUnusedImportsFixer;
 use PhpCsFixer\Fixer\Operator\ConcatSpaceFixer;
 use PhpCsFixer\Fixer\Operator\IncrementStyleFixer;
@@ -31,13 +28,12 @@ use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
 return function (ECSConfig $ecsConfig): void {
     $ecsConfig->paths([
-        __DIR__ . '/source/API',
-        __DIR__ . '/source/custom',
-        __DIR__ . '/doc',
-        __DIR__ . '/source/inc',
-        __DIR__ . '/source/lib',
-        __DIR__ . '/source/pages',
-        __DIR__ . '/source/sql',
+        __DIR__ . '/../source/custom',
+        __DIR__ . '/../doc',
+        __DIR__ . '/../source/inc',
+        __DIR__ . '/../source/lib',
+        __DIR__ . '/../source/pages',
+        __DIR__ . '/../source/sql',
     ]);
 
     // this way you add a single rule
@@ -82,7 +78,6 @@ return function (ECSConfig $ecsConfig): void {
         YodaStyleFixer::class,
         StrictComparisonFixer::class,
         AssignmentInConditionSniff::class,
-
     ]);
 
     $ecsConfig->indentation('spaces');

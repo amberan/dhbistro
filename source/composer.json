@@ -6,6 +6,7 @@
     },
     "require-dev": {
         "symplify/easy-coding-standard": "^11.2",
-        "friendsofphp/php-cs-fixer": "^3.16"
+        "friendsofphp/php-cs-fixer": "^3.16",
+        "phpstan/phpstan": "^2.0"
     }
 }

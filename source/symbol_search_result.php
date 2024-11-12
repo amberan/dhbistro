@@ -1,6 +1,5 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
-
+require_once $_SERVER['DOCUMENT_ROOT'] . '/inc/func_main.php';
 
 latteDrawTemplate("header");
 
@@ -18,8 +17,6 @@ if (isset($_POST['searchit'])) {
     $input_geometrical = htmlspecialchars($_POST['g']);
     $input_alphabeter = htmlspecialchars($_POST['a']);
     $input_specialchar = htmlspecialchars($_POST['sch']);
-
-
 
     $symbol_query_sql = "
             SELECT id,
@@ -94,15 +91,15 @@ if (isset($_POST['searchit'])) {
                          ELSE p.name END AS name,
                     CASE WHEN ISNULL(p.surname) THEN \"symbol\"
                          ELSE p.surname END AS surname
-                FROM ".DB_PREFIX."symbol AS s
-                LEFT JOIN ".DB_PREFIX."person AS p
+
+                FROM " . DB_PREFIX . "symbol AS s
+                LEFT JOIN " . DB_PREFIX . "person AS p
                 ON s.id = p.symbol
                 ) AS searchsymbol
                 WHERE deleted=0
                 ORDER BY averangepercent DESC
             ";
     $symbol_result = mysqli_query($database, $symbol_query_sql) or die("Vyhledávání a srovnání symbolů neprošlo! SQL: $symbol_query_sql");
-
 
     function colorSwitch($inputSqlColumn)
     {
@@ -132,9 +129,9 @@ if (isset($_POST['searchit'])) {
     function ownerString($personId, $symbolId)
     {
         if ($personId == '') {
-            $segmentOutput = "<a class=\"redirection\" href=\"readsymbol.php?rid=".$symbolId."&hidenotes=0\">Zobrazit info k symbolu</a>";
+            $segmentOutput = "<a class=\"redirection\" href=\"readsymbol.php?rid=" . $symbolId . "&hidenotes=0\">Zobrazit info k symbolu</a>";
         } else {
-            $segmentOutput = "<a class=\"redirection\" href=\"readperson.php?rid=".$personId."&hidenotes=0\">Zobrazit info k vlastníkovi</a>";
+            $segmentOutput = "<a class=\"redirection\" href=\"readperson.php?rid=" . $personId . "&hidenotes=0\">Zobrazit info k vlastníkovi</a>";
         }
 
         return $segmentOutput;
@@ -181,28 +178,28 @@ if (isset($_POST['searchit'])) {
             $result .= '
             <div class="result">
                 <div class="result_symbol_image">
-                    <img  loading="lazy" src="file/symbol/'.$symbol_record['id'].'" height="75" width="75" />
+                    <img  loading="lazy" src="file/symbol/' . $symbol_record['id'] . '" height="75" width="75" />
                 </div>
                 <div class="result_stats">
                     <div class="result_stats_singles">
-                            <img  loading="lazy" class="predis_image" src="images/'.$color_l.'.png" height="5" />
-                            <img  loading="lazy" class="predis_image" src="images/'.$color_c.'.png" height="5" />
-                            <img  loading="lazy" class="predis_image" src="images/'.$color_p.'.png" height="5" />
-                            <img  loading="lazy" class="predis_image" src="images/'.$color_g.'.png" height="5" />
-                            <img  loading="lazy" class="predis_image" src="images/'.$color_a.'.png" height="5" />
-                            <img  loading="lazy" class="predis_image" src="images/'.$color_sch.'.png" height="5" />
+                            <img  loading="lazy" class="predis_image" src="images/' . $color_l . '.png" height="5" />
+                            <img  loading="lazy" class="predis_image" src="images/' . $color_c . '.png" height="5" />
+                            <img  loading="lazy" class="predis_image" src="images/' . $color_p . '.png" height="5" />
+                            <img  loading="lazy" class="predis_image" src="images/' . $color_g . '.png" height="5" />
+                            <img  loading="lazy" class="predis_image" src="images/' . $color_a . '.png" height="5" />
+                            <img  loading="lazy" class="predis_image" src="images/' . $color_sch . '.png" height="5" />
                             <div class="result_stats_singles_parts">
-                                <p class="result_stats_singles_parts_text"><b>Vlastník: '.$symbol_record['title'].'</b></p>
+                                <p class="result_stats_singles_parts_text"><b>Vlastník: ' . $symbol_record['title'] . '</b></p>
                             </div>
                             <div class="result_stats_singles_url">
-                                '.$ownerhttp.'
+                                ' . $ownerhttp . '
                             </div>
                     </div>
                     <div class="result_symbol_avgpercent">
                         <div class="result_symbol_avgpercent_margin">
                             <p class="label_text">&nbsp;&nbsp;&nbsp;&nbsp;%</p>
                         </div>
-                        <p class="avgpercent_text">'.number_format($symbol_record['averangepercent'], 1, '.', '').'</p>
+                        <p class="avgpercent_text">' . number_format($symbol_record['averangepercent'], 1, '.', '') . '</p>
                     </div>
                 </div>
             </div>';

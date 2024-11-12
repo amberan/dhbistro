@@ -1,7 +1,11 @@
 RewriteEngine on
 
+RewriteRule ^favicon\.ico$ /images/icons/favicon_bistro.png [L]
+
 RewriteRule ^.env.php$ - [F]
 RewriteRule ^/inc/important.php$ - [F]
+RewriteRule ^/vendor/$ - [F]
+RewriteRule ^/composer.*$ - [F]
 
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f

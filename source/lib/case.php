@@ -1,12 +1,10 @@
 <?php
 
 /**
- * list unfinished cases assigned to.
+ * Lists unfinished cases assigned to a specific user.
  *
- * @param int userId
- * @param mixed $userid
- *
- * @return array [id][name]
+ * @param  int   $userid the ID of the user to retrieve the cases for
+ * @return array an array of unfinished cases, each containing the case ID and title
  */
 function casesAssignedTo($userid): array
 {
@@ -23,13 +21,20 @@ function casesAssignedTo($userid): array
             $unfinishedcases[] = [$unfinishedcase['id'], $unfinishedcase['title']];
         }
     }
+
     return @$unfinishedcases;
 }
 
-//vypis pripadu musi oznacovat NEW - if (@$filter['new'] == null || ($filter['new'] == on && searchRecord(3,$rec['id']))) {
-//pridat sloupec pro created
-//prejmenovat datum za edited
+//TODO vypis pripadu musi oznacovat NEW - if (@$filter['new'] == null || ($filter['new'] == on && searchRecord(3,$rec['id']))) {
+//TODO pridat sloupec pro created
+//TODO prejmenovat datum za edited
 
+/**
+ * Lists cases based on their status (open or closed).
+ *
+ * @param  bool|null   $closed Optional. If true, lists closed cases; if false, lists open cases; if null, lists all cases.
+ * @return array|false an array of case records if cases are found, or false if no cases are found
+ */
 function listCases($closed = null)
 {
     global $user,$database;
@@ -49,6 +54,7 @@ function listCases($closed = null)
         while ($case = mysqli_fetch_assoc($caseList)) {
             $cases[] = $case;
         }
+
         return $cases;
     } else {
         return false;

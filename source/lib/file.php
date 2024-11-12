@@ -1,16 +1,30 @@
 <?php
 
+/**
+ * Converts bytes to a human-readable file size.
+ *
+ * @param  int    $bytes    the number of bytes to convert
+ * @param  int    $decimals the number of decimal places to include in the result
+ * @return string the human-readable file size
+ */
 function human_filesize($bytes, $decimals = 2)
 {
-    $size = 'BKMGTP';
-    $factor = floor((mb_strlen($bytes) - 1) / 3);
-    return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$size[$factor];
+    $size = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+    $factor = floor(log($bytes, 1024));
+
+    if ($factor >= count($size)) {
+        $factor = count($size) - 1;
+    }
+
+    return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . " " . $size[$factor];
 }
 
 /**
- * returns array files and size.
- */
-function fileList($folder)
+ * Returns an array of files and their sizes in a specified folder.
+ *
+ * @param  string $folder the path to the folder to scan
+ * @return array  an array of files and their sizes
+ */ function fileList($folder)
 {
     $files = (array_diff(scandir($folder), ['.', '..', '.holder', '.htaccess']));
     $fileList = [];
@@ -20,81 +34,78 @@ function fileList($folder)
             human_filesize(filesize($folder . $value)),
         ];
     }
+
     return $fileList;
 }
 
 /**
- * get fileName based on type.
+ * Identifies a file based on its type and object ID.
  *
- * @param string portrait/symbol/attachement/backup
- * @param int fileID
- * @param mixed $type
- * @param mixed $objectId
- */
-function fileIdentify($type, $objectId = 0)
+ * @param  string      $type     the type of file (portrait/symbol/attachement/backup)
+ * @param  int         $objectId the ID of the object associated with the file
+ * @return array|false the file information as an associative array, or false if the file is not found
+ */ function fileIdentify($type, $objectId = 0)
 {
     global $config,$database,$user;
-    if (isset($objectId)) {
-        switch ($type) {
-            case 'portrait':
-                $sql = 'SELECT id, portrait, portrait as `file` FROM ' . DB_PREFIX . 'person WHERE deleted <=' . $user['aclRoot'] . ' AND secret <=' . $user['aclSecret'] . ' AND id=' . $objectId;
-                $folder = $config['folder_portrait'];
-                break;
-            case 'symbol':
-                $sql = 'SELECT id, symbol, symbol as `file` FROM ' . DB_PREFIX . 'symbol WHERE deleted <=' . $user['aclRoot'] . ' AND secret <=' . $user['aclSecret'] . ' AND id=' . $objectId;
-                $folder = $config['folder_symbol'];
-                break;
-            case 'attachement':
-                $sql = 'SELECT *, uniquename AS soubor, originalname AS nazev, size, originalname as `file` FROM ' . DB_PREFIX . 'file WHERE secret <=' . $user['aclSecret'] . ' AND id=' . $objectId;
-                $folder = $config['folder_attachement'];
-                break;
-            case 'backup':
-                $sql = 'SELECT `file`  FROM ' . DB_PREFIX . 'backup where id=' . $objectId;
-                $folder = $config['folder_backup'];
-                break;
-            default:
-                break;
-        }
-        $query = mysqli_query($database, $sql);
-        $file = mysqli_fetch_assoc($query);
-        //set real path to file, and filename
-        $tmp = explode("/", $file['file']);
-        $file['fileHash'] = $file['fileName'] = $file['file'] = end($tmp);
-        if (isset($file['originalname']) && strlen($file['originalname']) && file_exists($folder . $file['soubor'])) {
-            $file['fileHash'] = $file['uniquename'];
-            $file['fileName'] = $file['originalname'];
-        } elseif (isset($file['portrait']) && strlen($file['portrait']) && file_exists($folder . $file['fileHash'])) {
-            $file['fileHash'] = $file['fileName'] = $file['portrait'];
-            $file['fileName'] = $file['id'];
-            $file['mime'] = 'image/jpg';
-        } elseif (isset($file['symbol']) && strlen($file['symbol']) && file_exists($folder . $file['fileHash'])) {
-            $file['fileHash'] = $file['fileName'] = $file['symbol'];
-            $file['fileName'] = $file['id'];
-            $file['mime'] = 'image/jpg';
-        } else {
-            return false;
-        }
-        $file['fullPath'] = $folder . $file['fileHash'];
-        //set mimetype
-        if (!isset($file['mime'])) {
-            $file['mime'] = 'application/octet-stream';
-        }
-        //get size of file
-        $file['fileSize'] = filesize($file['fullPath']);
+    switch ($type) {
+        case 'portrait':
+            $sql = 'SELECT id, portrait, portrait as `file` FROM ' . DB_PREFIX . 'person WHERE deleted <=' . $user['aclRoot'] . ' AND secret <=' . $user['aclSecret'] . ' AND id=' . $objectId;
+            $folder = $config['folder_portrait'];
 
-        return $file;
+            break;
+        case 'symbol':
+            $sql = 'SELECT id, symbol, symbol as `file` FROM ' . DB_PREFIX . 'symbol WHERE deleted <=' . $user['aclRoot'] . ' AND secret <=' . $user['aclSecret'] . ' AND id=' . $objectId;
+            $folder = $config['folder_symbol'];
+
+            break;
+        case 'attachement':
+            $sql = 'SELECT *, uniquename AS soubor, originalname AS nazev, size, originalname as `file` FROM ' . DB_PREFIX . 'file WHERE secret <=' . $user['aclSecret'] . ' AND id=' . $objectId;
+            $folder = $config['folder_attachement'];
+
+            break;
+        case 'backup':
+            $sql = 'SELECT `file`  FROM ' . DB_PREFIX . 'backup where id=' . $objectId;
+            $folder = $config['folder_backup'];
+
+            break;
+        default:
+            break;
+    }
+    $query = mysqli_query($database, $sql);
+    $file = mysqli_fetch_assoc($query);
+    //set real path to file, and filename
+    $tmp = explode("/", $file['file']);
+    $file['fileHash'] = $file['fileName'] = $file['file'] = end($tmp);
+    if (isset($file['originalname']) && strlen($file['originalname']) && file_exists($folder . $file['soubor'])) {
+        $file['fileHash'] = $file['uniquename'];
+        $file['fileName'] = $file['originalname'];
+    } elseif (isset($file['portrait']) && strlen($file['portrait']) && file_exists($folder . $file['fileHash'])) {
+        $file['fileHash'] = $file['fileName'] = $file['portrait'];
+        $file['fileName'] = $file['id'];
+        $file['mime'] = 'image/jpg';
+    } elseif (isset($file['symbol']) && strlen($file['symbol']) && file_exists($folder . $file['fileHash'])) {
+        $file['fileHash'] = $file['fileName'] = $file['symbol'];
+        $file['fileName'] = $file['id'];
+        $file['mime'] = 'image/jpg';
     } else {
         return false;
     }
+    $file['fullPath'] = $folder . $file['fileHash'];
+    //set mimetype
+    if (!isset($file['mime'])) {
+        $file['mime'] = 'application/octet-stream';
+    }
+    //get size of file
+    $file['fileSize'] = filesize($file['fullPath']);
+
+    return $file;
 }
 
 /**
- * show file content.
+ * Displays the content of a file.
  *
- * @param array SQL query describing the file
- * @param mixed $object
- */
-function fileGet($object): void
+ * @param array $object an associative array describing the file
+ */ function fileGet($object): void
 {
     $imageMime = ['image/png', 'image/jpeg', 'image/gif', 'image/bmp', 'image/vnd.microsoft.icon', 'image/tiff', 'image/svg+xml'];
     header("Cache-Control: no-cache, no-store, must-revalidate, post-check=0, pre-check=0");
@@ -109,24 +120,26 @@ function fileGet($object): void
         //fpassthru(fopen($object['fullPath'],"r"));
         readfile($object['fullPath']);
     } else {
-        DebuggerLog("unable to locate file: ".$object['fullPath'],"W");
+        DebuggerLog("unable to locate file: " . $object['fullPath'], "W");
     }
 }
 
 /**
- * return generic placeholder image based on type.
+ * Returns a generic placeholder image based on the file type.
  *
- * @param string fileType portrait/symbol/logo
- * @param mixed $fileType
+ * @param string $fileType the type of file (portrait/symbol/logo)
  */
 function filePlaceholder($fileType = 'logo'): void
 {
     switch ($fileType) {
-        case 'portrait': $placeholder = SERVER_ROOT . "/images/placeholder.jpg";
+        case 'portrait': $placeholder = SERVER_ROOT . "images/placeholder.jpg";
+
             break;
-        case 'symbol': $placeholder = SERVER_ROOT . "/images/nosymbol.png";
+        case 'symbol': $placeholder = SERVER_ROOT . "images/nosymbol.png";
+
             break;
-        default: $placeholder = SERVER_ROOT . "/images/placeholder.jpg";
+        default: $placeholder = SERVER_ROOT . "images/placeholder.jpg";
+
             break;
     }
     header("Cache-Control: no-cache, no-store, must-revalidate, post-check=0, pre-check=0");
@@ -135,4 +148,22 @@ function filePlaceholder($fileType = 'logo'): void
     header('Content-Type: ' . mime_content_type($placeholder));
     $placeholderFile = fopen($placeholder, "r");
     fpassthru($placeholderFile);
+}
+
+/**
+ * Returns only files that contain a specific string in their names.
+ *
+ * @param  string $directory the path to the directory to scan
+ * @param  string $string    the string to search for in the file names
+ * @return array  an array of files that contain the specified string in their names
+ */
+function filterDirectory($directory, $string)
+{
+    $scandir = array_diff(scandir($directory), ['.', '..']);
+    $filteredArray = array_filter($scandir, function ($value) use ($string) {
+        return strpos($value, $string) !== false;
+    });
+    natsort($filteredArray);
+
+    return $filteredArray;
 }

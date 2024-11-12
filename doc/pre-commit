@@ -1,13 +1,19 @@
-#!/usr/bin/sh
+#!/usr/bin/env bash
 # possible improvements https://github.com/BernardoSilva/git-hooks-php/blob/master/pre-commit
 
-# https://github.com/symplify/easy-coding-standard
-ECS="./source/vendor/bin/ecs"
-ECS_CONFIG="ecs.php"
-PHPCS="./source/vendor/bin/php-cs-fixer"
-LATTE="./source/vendor/bin/latte-lint"
-FILES=` git status --porcelain | grep -e '^[AM]\(.*\).php\|^[AM]\(.*\).md$' | cut -c 3- | tr '\n' ' '`
+repo_root=$(git rev-parse --show-toplevel)
+export COMPOSER_HOME="$PWD/.composer"
 
+# https://github.com/symplify/easy-coding-standard
+ECS="$repo_root/source/vendor/bin/ecs"
+ECS_CONFIG="$repo_root/.quality/ecs.php"
+PHPCS="$repo_root/source/vendor/bin/php-cs-fixer"
+PHPCS_CONFIG="$repo_root/.quality/php-cs-fixer.php"
+LATTE="$repo_root/source/vendor/bin/latte-lint"
+PHPSTAN="$repo_root/source/vendor/bin/phpstan"
+PHPSTAN_CONFIG="$repo_root/.quality/phpstan.neon"
+
+FILES=` git status --porcelain | grep '^[AM] .*\.\(php\|md\)$' | cut -c 3- | tr '\n' ' '`
 
 # https://victoria.dev/blog/an-automatic-interactive-pre-commit-checklist-in-the-style-of-infomercials/
 exec < /dev/tty
@@ -18,11 +24,12 @@ function install_tools()
     composer install
     composer require --dev symplify/easy-coding-standard
     composer require --dev friendsofphp/php-cs-fixer
+    composer require --dev phpstan/phpstan
 }
+printf "%.0s#" $(seq 80)
+printf "\n########################### pre-commit hook starting ###########################\n"
 
-echo "### LINTERS pre-commit hook start ###"
-
-if [ ! -x $ECS ] || [ ! -x $LATTE ]; then
+if [ ! -x $ECS ] || [ ! -x $LATTE ] || [ ! -x $PHPCS ] || [ ! -x $PHPSTAN ]; then
     while read -p "No validation tools found, should I install them? (Y/n) " yn; do
         case $yn in
             [Yy] ) install_tools;;
@@ -32,15 +39,22 @@ if [ ! -x $ECS ] || [ ! -x $LATTE ]; then
     done
 fi
 
-if [ -x $ECS ] && [ -x $LATTE ] && [ -x $PHPCS ] && [ -n "$FILES" ]; then
-    echo "### PHP LINTER ###"
-    $ECS check --config=$ECS_CONFIG $FILES --fix
-    $PHPCS fix $FILES
-    git add $FILES
-    echo "### LATTE LINTER  ###"
-    $LATTE ./templates
-fi
+if [ -x $ECS ] && [ -x $LATTE ] && [ -x $PHPCS ] ; then
+# $(git rev-parse --show-toplevel)/source/vendor/bin/ecs check --config=$(git rev-parse --show-toplevel)/.quality/ecs.php $FILES --fix
+    if [ -n "$FILES" ]; then
+        echo "################################## PHP LINTER ##################################"
+        $ECS check  --config=$ECS_CONFIG --fix $FILES
+        $PHPCS --no-interaction --config=$PHPCS_CONFIG fix $FILES
+        git add $FILES
+    fi
 
-echo "### LINTER pre-commit hook finish ###"
+    echo "################################# LATTE LINTER #################################"
+    $LATTE $repo_root/source/templates
+    # git add < git status --porcelain | grep '^[MA] .*\.latte$'
+          ################################################################################
+    echo "################################ STATIC ANALYSIS ###############################"
+    #generate baseline of level 1 (will be cleaned up over time), then run on level 2
+    $PHPSTAN analyse --no-interaction --memory-limit 512M -c $PHPSTAN_CONFIG # --generate-baseline .quality/phpstan-baseline.neon --allow-empty-baseline
+fi
 
 exec <&-

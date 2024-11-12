@@ -2,8 +2,7 @@
 /**
  * Draw Latte Template.
  *
- * @param string template to draw
- * @param mixed $template
+ * @param string $template The name of the template to draw
  */
 function latteDrawTemplate($template): void
 {
@@ -20,8 +19,7 @@ function latteDrawTemplate($template): void
 /**
  * Inject file content (used for injecting SVG into LATTE templates).
  *
- * @param string file to inject
- * @param mixed $file
+ * @param string $file the path to the file to inject
  */
 function inject_svg($file)
 {
@@ -30,8 +28,7 @@ function inject_svg($file)
 
 /**
  * Fill notification modal window if $_SESSION['message'] exists.
- */
-function latteNotification(): void
+ */ function latteNotification(): void
 {
     global $latteParameters,$_SESSION;
     if (isset($_SESSION['message'])) {
@@ -41,12 +38,10 @@ function latteNotification(): void
 }
 
 /**
- * timestamp to date.
+ * Convert timestamp to date.
  *
- * @param int date timestamp
- * @param mixed $date
- *
- * @return string d. m. Y
+ * @param  int    $date the Unix timestamp to convert
+ * @return string The formatted date string in the format 'd. m. Y'.
  */
 function webDate($date): string
 {
@@ -61,14 +56,11 @@ function webDate($date): string
 }
 
 /**
- * timestamp to date and time.
+ * Convert timestamp to date and time.
  *
- * @param int date timestamp
- * @param mixed $date
- *
- * @return string d. m. Y - H:i:s
- */
-function webDateTime($date): string
+ * @param  int    $date the Unix timestamp to convert
+ * @return string The formatted date and time string in the format 'd. m. Y - H:i:s'.
+ */ function webDateTime($date): string
 {
     global $text;
     if ($date < '100') {
@@ -81,14 +73,12 @@ function webDateTime($date): string
 }
 
 /**
- * remove diacritics for search purposes.
+ * Remove diacritics for search purposes.
  *
- * @param string string
- * @param mixed $string
- *
- * @return string string without diacritics
+ * @param  string       $string the string to process
+ * @return string|false the string without diacritics
  */
-function nocs($string): string
+function nocs($string): string|false
 {
     $table = [
         'Š' => 'S',
@@ -159,7 +149,6 @@ function nocs($string): string
         'ú' => 'u',
         'û' => 'u',
         'ý' => 'y',
-        'ý' => 'y',
         'þ' => 'b',
         'ÿ' => 'y',
         'Ŕ' => 'R',
@@ -178,7 +167,6 @@ function nocs($string): string
         'Ť' => 'T',
         'Ů' => 'U',
         'Ę' => 'E',
-        'Ó' => 'O',
         'Ą' => 'A',
         'Ś' => 'S',
         'Ł' => 'L',
@@ -186,7 +174,6 @@ function nocs($string): string
         'Ź' => 'Z',
         'Ń' => 'N',
         'ę' => 'e',
-        'ó' => 'o',
         'ą' => 'a',
         'ś' => 's',
         'ł' => 'l',
@@ -194,13 +181,21 @@ function nocs($string): string
         'ź' => 'z',
         'ń' => 'n',
     ];
-    if ($string != '') {
+    if (strlen($string) > 0) {
         return strtr($string, $table);
     } else {
         return false;
     }
 }
-
+/**
+ * Generate a date picker input.
+ *
+ * @param  string   $name      the name attribute for the date picker input
+ * @param  int|null $startyear The starting year for the year dropdown. Defaults to the current year minus 10.
+ * @param  int|null $endyear   The ending year for the year dropdown. Defaults to the current year.
+ * @param  int|null $preset    the preset timestamp for the date picker
+ * @return string   the HTML for the date picker input
+ */
 function date_picker($name, $startyear = null, $endyear = null, $preset = null)
 {
     if ($startyear == null) {

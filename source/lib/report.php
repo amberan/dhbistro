@@ -1,12 +1,9 @@
 <?php
 
 /**
- * list unfinished reports assigned to.
+ * Retrieves a list of unfinished reports assigned to a specific user.
  *
- * @param int userId
- * @param mixed $userid
- *
- * @return array [id][name]
+ * @param int $userid the ID of the user to retrieve the reports for
  */
 function reportsAssignedTo($userid): array
 {
@@ -25,6 +22,7 @@ function reportsAssignedTo($userid): array
             $unfinishedReports[] = [$unfinishedReport['reportId'], $unfinishedReport['reportName'], $unfinishedReport['reportEventDate']];
         }
     }
+
     return @$unfinishedReports;
 }
 
@@ -43,6 +41,7 @@ function reportStatus($role = null)
     } elseif (isset($role) && is_string($role)) {
         $return = array_search($role, $list);
     }
+
     return $return;
 }
 
@@ -59,6 +58,7 @@ function reportType($role = null)
     } elseif (isset($role) && is_string($role)) {
         $return = array_search($role, $list);
     }
+
     return $return;
 }
 
@@ -78,6 +78,7 @@ function reportRole($role = null)
     } elseif (isset($role) && is_string($role)) {
         $return = array_search($role, $list);
     }
+
     return $return;
 }
 

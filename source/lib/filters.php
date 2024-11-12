@@ -1,14 +1,11 @@
 <?php
 
 /**
- * save user sorting preferencess for current user.
+ * Sets the sorting preference for a specific object and column.
  *
- * @param string object - type of object to be sorted
- * @param string column - name of the column to sort by
- * @param string linkedTable - db name of table where column is located
- * @param mixed      $object
- * @param mixed      $column
- * @param mixed|null $linkedTable
+ * @param string      $object      the type of object to be sorted
+ * @param string      $column      the column to sort by
+ * @param string|null $linkedTable the name of the linked table where the sorting column is located
  */
 function sortingSet($object, $column, $linkedTable = null): void
 {
@@ -31,12 +28,12 @@ function sortingSet($object, $column, $linkedTable = null): void
 }
 
 /**
- * get current preference for sorting output for current user.
+ * Gets the current sorting preference for a specific object and user.
  *
- * @param mixed      $object      - type of object to be sorted
- * @param mixed|null $linkedTable - db name of table where the sorting column is located
- */
-function sortingGet($object, $linkedTable = null): string
+ * @param  string      $object      the type of object to be sorted
+ * @param  string|null $linkedTable the name of the linked table where the sorting column is located
+ * @return string      the ORDER BY clause based on the current sorting preference
+ */ function sortingGet($object, $linkedTable = null): string
 {
     global $database,$user;
     $result = "";
@@ -51,21 +48,22 @@ function sortingGet($object, $linkedTable = null): string
         }
         $result = " ORDER BY " . implode(' ' . $sorter['sortDirection'] . ', ', $columnList) . " " . $sorter['sortDirection'];
     }
+
     return $result;
 }
 
 /**
- * saves filter preference for "object" in serialized field of "data" for current user.
+ * Saves the filter preference for a specific object and user.
  *
- * @param mixed $object - type of object to be filtered
- * @param mixed $data   - array of key/value for specific filter
+ * @param string $object the type of object to be filtered
+ * @param array  $data   an array of key/value pairs for the specific filter
  */
 function filterSet($object, $data): void
 {
     //TODO overeni ze bylo zapsano do db
     global $database,$user;
     $currentFilter = filterGet($object);
-    if (is_array($data) and sizeof($data) > 0) {
+    if (sizeof($data) > 0) { //is_array($data) and
         $data = json_encode($data, JSON_UNESCAPED_UNICODE);
     }
     if (@$currentFilter['id'] != 'X') {
@@ -77,15 +75,16 @@ function filterSet($object, $data): void
 }
 
 /**
- * get value for "object" type of filter for current user.
+ * Gets the filter preference for a specific object and user.
  *
- * @param mixed $object - type of object to be filtered
+ * @param  string $object the type of object to be filtered
+ * @return array  the filter preference as an array
  */
 function filterGet($object)//:array
 {
     global $database,$user,$config;
-    $sql = "SELECT * FROM ".DB_PREFIX."filter where objectType='$object' AND userId=".$user['userId'];
-    DebuggerLog('filterGet: '.$sql,"D");
+    $sql = "SELECT * FROM " . DB_PREFIX . "filter where objectType='$object' AND userId=" . $user['userId'];
+    DebuggerLog('filterGet: ' . $sql, "D");
     $query = mysqli_query($database, $sql);
     if (mysqli_num_rows($query) > 0) {
         $result = mysqli_fetch_array($query);
@@ -113,6 +112,7 @@ function filterSide($side = null)
     } elseif (isset($side) && is_string($side)) {
         $return = array_search($side, $list);
     }
+
     return $return;
 }
 
@@ -137,6 +137,7 @@ function filterCategory($category = null)
     } elseif (isset($category) && is_string($category)) {
         $return = array_search($category, $list);
     }
+
     return $return;
 }
 
@@ -163,5 +164,6 @@ function filterClass($class = null)
     } elseif (isset($class) && is_string($class)) {
         $return = array_search($class, $list);
     }
+
     return $return;
 }

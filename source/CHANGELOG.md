@@ -18,6 +18,30 @@ git-cliff 0e4e3abba94636c210fde5e7d02089298589f26d..HEAD --output CHANGELOG.md
 ### Security
  -->
 
+## 1.13.0 2024-11-12
+### Added
+- Feature: PHPStan #125
+### Changed
+- Refactored: nix develop #383
+### Removed
+- Removed: API prototype and testsuite #384
+### Security
+- Update: Latte 3.0.20 #384
+- Update: Tracy 2.10.9 #384
+- Update: ECS 11.5.0 #384
+- Update: html-to-markdown 5.1.1 #384
+
+## 1.12.3 2024-10-04
+### Added
+- Feature: docker-compose #299
+- Feature: direnv & nix flake #383
+### Changed
+- Refactored: Merge request template #354
+- Refactored: Removed hardcoded database prefix #381
+### Fixed
+- Fixed: user creation #380
+- Fixed: new database population #382
+
 ## 1.12.2 2023-11-16
 ### Changed
 - Refactored: repository structure #327

@@ -32,7 +32,7 @@ function imageResize($img, $maxWidth, $maxHeight)
     }
     $dst = imagecreatetruecolor($widthTn, $heightTn);
     imagecopyresampled($dst, $src, 0, 0, 0, 0, $widthTn, $heightTn, $width, $height);
-    imageinterlace($dst, 1);
+    imageinterlace($dst, true);
     imagedestroy($src);
 
     return $dst;

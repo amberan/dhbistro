@@ -1,54 +1,58 @@
 <?php
 
-require_once($_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php');
-
+require_once $_SERVER['DOCUMENT_ROOT'] . '/inc/func_main.php';
 
 latteDrawTemplate("header");
 
 if (is_numeric($_REQUEST['rid'])) {
     $res = mysqli_query($database, "SELECT
-                ".DB_PREFIX."note.id AS 'id',
-                ".DB_PREFIX."note.title AS 'title',
-                ".DB_PREFIX."note.note AS 'note',
-                ".DB_PREFIX."note.secret AS 'secret',
-                ".DB_PREFIX."note.iduser AS 'iduser',
-                ".DB_PREFIX."note.deleted AS 'deleted',
-                ".DB_PREFIX."note.datum as date_created,
-                ".DB_PREFIX."user.userName AS 'nuser',
-                ".DB_PREFIX."note.idtable,
-                ".DB_PREFIX."note.iditem
-                 FROM ".DB_PREFIX."note, ".DB_PREFIX."user
-                 WHERE ".DB_PREFIX."note.id=".$_REQUEST['rid']."
-                AND ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId");
+                " . DB_PREFIX . "note.id AS 'id',
+                " . DB_PREFIX . "note.title AS 'title',
+                " . DB_PREFIX . "note.note AS 'note',
+                " . DB_PREFIX . "note.secret AS 'secret',
+                " . DB_PREFIX . "note.iduser AS 'iduser',
+                " . DB_PREFIX . "note.deleted AS 'deleted',
+                " . DB_PREFIX . "note.datum as date_created,
+                " . DB_PREFIX . "user.userName AS 'nuser',
+                " . DB_PREFIX . "note.idtable,
+                " . DB_PREFIX . "note.iditem
+                 FROM " . DB_PREFIX . "note, " . DB_PREFIX . "user
+                 WHERE " . DB_PREFIX . "note.id=" . $_REQUEST['rid'] . "
+                AND " . DB_PREFIX . "note.iduser=" . DB_PREFIX . "user.userId");
     if ($rec = mysqli_fetch_assoc($res)) {
         if ((($rec['secret'] <= $user['aclSecret']) || $rec['iduser'] == $user['userId']) && !$rec['deleted'] == 1) {
             $latteParameters['title'] = StripSlashes($rec['title']);
-            mainMenu(0);
+            mainMenu();
             switch ($_REQUEST['idtable']) {
-                case 1: $sourceurl = "readperson.php?rid=".$rec['iditem']."&hidenotes=0";
+                case 1: $sourceurl = "readperson.php?rid=" . $rec['iditem'] . "&hidenotes=0";
                     $sourcename = "osoby";
+
                     break;
-                case 2: $sourceurl = "readgroup.php?rid=".$rec['iditem']."&hidenotes=0";
+                case 2: $sourceurl = "readgroup.php?rid=" . $rec['iditem'] . "&hidenotes=0";
                     $sourcename = "skupiny";
+
                     break;
-                case 3: $sourceurl = "readcase.php?rid=".$rec['iditem']."&hidenotes=0";
+                case 3: $sourceurl = "readcase.php?rid=" . $rec['iditem'] . "&hidenotes=0";
                     $sourcename = "případy";
+
                     break;
-                case 4: $sourceurl = "/reports/".$rec['iditem'];
+                case 4: $sourceurl = "/reports/" . $rec['iditem'];
                     $sourcename = "hlášení";
+
                     break;
                 default: $sourceurl = "";
                     $sourcename = "";
+
                     break;
             }
             if ($user['aclUser']) { //TODO NOTE permission
-                $editbutton = '; <a href="editnote.php?rid='.$_REQUEST['rid'].'&amp;idtable='.$_REQUEST['idtable'].'">upravit poznámku</a>';
+                $editbutton = '; <a href="editnote.php?rid=' . $_REQUEST['rid'] . '&amp;idtable=' . $_REQUEST['idtable'] . '">upravit poznámku</a>';
             } else {
                 $editbutton = '';
             }
-            sparklets('<a href="./'.$sourceurl.'">'.$sourcename.'</a> &raquo; <strong>zobrazení poznámky</strong>', $editbutton);
-            echo '<h1>'.StripSlashes($rec['title']).'</h1>
-                <h3>'.StripSlashes($rec['nuser']).' ['.webdate($rec['date_created']).']'.'</h3>';
+            sparklets('<a href="./' . $sourceurl . '">' . $sourcename . '</a> &raquo; <strong>zobrazení poznámky</strong>', $editbutton);
+            echo '<h1>' . StripSlashes($rec['title']) . '</h1>
+                <h3>' . StripSlashes($rec['nuser']) . ' [' . webdate($rec['date_created']) . ']' . '</h3>';
             if ($rec['secret'] == 0) {
                 echo '<h4>veřejná</h4>';
             }
@@ -58,7 +62,7 @@ if (is_numeric($_REQUEST['rid'])) {
             if ($rec['secret'] == 2) {
                 echo '<h4>soukromá</h4>';
             }
-            echo '<div id="obsah">'.StripSlashes($rec['note']).'</div>';
+            echo '<div id="obsah">' . StripSlashes($rec['note']) . '</div>';
         } else {
             $_SESSION['message'] = $text['notificationHttp401'];
             Header('location: index.php');

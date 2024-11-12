@@ -1,7 +1,7 @@
 
-            {ifset $warningReport}
+            {ifset $warning}
                 <div>
-                    {$warningReport}
+                    {$warning}
                 </div>
             {else}
                 <div id="obsah">
@@ -104,6 +104,19 @@
                                             {$text['actionRetrieve']}">
                                             {php inject_svg("images/icons/box-open-solid.svg")}
                                                 <span class="bubbletip bubbletip-bottom-right">{$text['actionRetrieve']}</span>
+                                            </a>
+                                        {/if}
+                                        {if $user['aclReport'] <= 2 && $report['reportArchivedBool'] == 'False' AND $report['reportDeletedBool'] == 'False'}
+                                            <a class="btn btn-sm btn-brick btn-dark mb-1 tip-wrapper" href="/reports/{$report['reportId']}/archive" onclick="return confirm('{$text['actionConfirmationArchive']|noescape } {$report['reportName']|stripHtml} ?');" alt="
+                                            {$text['actionArchive']}">
+                                            {php inject_svg("images/icons/box-solid.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text['actionArchive']}</span>
+                                            </a>
+                                        {elseif  $user['aclReport'] >= 2 AND $report['reportDeletedBool'] == 'False'}
+                                            <a class="btn btn-sm btn-brick btn-secondary mb-1 tip-wrapper" href="/reports/{$report['reportId']}/unarchive" onclick="return confirm('{$text['actionConfirmationUnarchive']|noescape} {$report['reportName']|stripHtml} ?');" alt="
+                                            {$text['actionUnarchive']}">
+                                            {php inject_svg("images/icons/box-open-solid.svg")}
+                                                <span class="bubbletip bubbletip-bottom-right">{$text['actionUnarchive']}</span>
                                             </a>
                                         {/if}
                                         {if $user['aclReport'] >= 2 AND $report['reportDeletedBool'] == 'False'}

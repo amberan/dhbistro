@@ -47,6 +47,7 @@ function DBTest($configDB)
     mysqli_connect($configDB['dbHost'], $configDB['dbUser'], $configDB['dbPassword'], $configDB['dbDatabase']);
     if (mysqli_connect_errno()) {
         printf("Connect failed: %s\n", mysqli_connect_error());
+        DebuggerLog('DATABASE CONNECTION TEST: '.mysqli_connect_error(), "E");
         return false;
     }
     return true;
@@ -57,15 +58,14 @@ function DBTest($configDB)
  */
 function restoreDB($sqlFile = null)
 {
-    global $database;
-    require $_SERVER['DOCUMENT_ROOT'] . "/.env.php";
-    if (!file_exists($sqlFile)) {
-        $dbScriptFileList = glob(SERVER_ROOT . '/sql/default*.sql');
-        $sqlFile = end($dbScriptFileList);
-        DebuggerLog("creating new database from ".$sqlFile,"W");
+    global $database,$config;
+
+    if (!isset($sqlFile) || !file_exists(@$sqlFile)) {
+        $sqlDefaultFiles = filterDirectory(SERVER_ROOT . "sql/", "default");
+        $sqlFile = SERVER_ROOT . "sql/" . end($sqlDefaultFiles);
     }
+
     if (file_exists($sqlFile)) {
-        DebuggerLog("Database EMPTY, creating new from ".$sqlFile,"W");
         $tempLine = '';
         $lines = file($sqlFile);
         foreach ($lines as $line) {
@@ -78,10 +78,9 @@ function restoreDB($sqlFile = null)
                 $tempLine = '';
             }
         }
-
-        mysqli_close($database);
+        DebuggerLog("INSTALLER: populating database from ".$sqlFile,"W");
     } else {
-        DebuggerLog("DB restore file ".$sqlFile." does not exist!","E");
+        DebuggerLog("INSTALLER: restore file ".$sqlFile." does not exist!","E");
     }
 }
 

@@ -2,24 +2,25 @@
 
 use Tracy\Debugger;
 
-function DebuggerDump($name,$variable)
+function DebuggerDump($name, $variable)
 {
     Debugger::barDump($variable, $name);
 }
 
-function DebuggerLog($value,$logLevel = null)
+function DebuggerLog($value, $logLevel = null)
 {
     global $config;
     $logLevelDefinition = [
         'E' => 'Error',
         'W' => 'Warning',
+        'N' => 'Nofitication',
         'D' => 'Debug',
     ];
     if (!isset($config['logLevel'])) {
-        $config['logLevel'] = ['E', 'W'];
+        $config['logLevel'] = ['E', 'W', 'N'];
     }
-    if (in_array($logLevel,$config['logLevel'])) {
-        Debugger::log($config['version'].": ".$logLevelDefinition[$logLevel]." ".$value);
+    if (in_array($logLevel, $config['logLevel'])) {
+        Debugger::log($config['version'] . ": " . $logLevelDefinition[$logLevel] . " " . $value);
     }
 }
 
@@ -50,12 +51,10 @@ function randomPassword($lenght = 8): string
 }
 
 /**
- * validate email.
+ * Validates an email address.
  *
- * @param string addr email to verify
- * @param mixed $addr
- *
- * @return bool is it a valid email
+ * @param  string $addr the email address to validate
+ * @return bool   true if the email address is valid, false otherwise
  */
 function validate_mail($addr): bool
 {
@@ -74,12 +73,10 @@ function validate_mail($addr): bool
 }
 
 /**
- * SQL injection mitigation.
+ * Escapes all elements in an array for safe use in SQL queries.
  *
- * @param array array
- * @param mixed $array
- *
- * @return array escaped/slashed array
+ * @param  array $array the array to escape
+ * @return array the escaped array
  */
 function escape_array($array): array
 {

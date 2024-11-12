@@ -1,6 +1,7 @@
 <?php
 
 return (new PhpCsFixer\Config())
+    ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect())
     ->setRules([
         '@PSR12' => true,
         'array_indentation' => true,
@@ -21,8 +22,8 @@ return (new PhpCsFixer\Config())
                 // '=' => 'align'
             ],
         ],
-        // 'blank_line_after_opening_tag' => true,
-        // 'blank_line_before_statement' => true,
+        'blank_line_after_opening_tag' => false,
+        'blank_line_before_statement' => true,
         'braces' => [
             'allow_single_line_closure' => true,
         ],
@@ -36,9 +37,8 @@ return (new PhpCsFixer\Config())
         'lowercase_cast' => true,
         // 'native_function_casing' => true,
         // 'new_with_braces' => true,
-        // 'no_blank_lines_after_class_opening' => true,
+        'no_blank_lines_after_class_opening' => true,
         'no_blank_lines_after_phpdoc' => true,
-        // 'no_blank_lines_before_namespace' => true,
         'no_empty_comment' => true,
         'no_empty_phpdoc' => true,
         'no_empty_statement' => true,
@@ -90,7 +90,7 @@ return (new PhpCsFixer\Config())
         // 'return_type_declaration' => true,
         // 'self_accessor' => true,
         // 'short_scalar_cast' => true,
-        'single_blank_line_before_namespace' => true,
+        'blank_lines_before_namespace' => true,
         // 'single_class_element_per_statement' => true,
         // 'space_after_semicolon' => true,
         // 'standardize_not_equals' => true,
@@ -100,7 +100,7 @@ return (new PhpCsFixer\Config())
         'unary_operator_spaces' => true,
         'whitespace_after_comma_in_array' => true,
         'space_after_semicolon' => true,
-        // 'single_blank_line_at_eof' => false
+        'single_blank_line_at_eof' => true
     ])
     ->setIndent("    ")
     ->setLineEnding("\n")

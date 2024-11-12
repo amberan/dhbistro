@@ -10,9 +10,13 @@ function bistroBackup()
         $lastBackupSql = "SELECT time FROM " . DB_PREFIX . "backups ORDER BY time DESC LIMIT 1";
     }
     $lastBackup = mysqli_fetch_assoc(mysqli_query($database, $lastBackupSql));
-    $scandir = array_diff(scandir($_SERVER['DOCUMENT_ROOT'] . "/sql"), ['.', '..']);
-    natsort($scandir);
-    $updatesToRun = bistroUpdatesList($scandir, @$lastBackup['version']);
+    if (!isset($lastBackup['version'])) {
+        $sqlDefaultFiles = filterDirectory(SERVER_ROOT . "sql", "default");
+        $lastBackup['version'] = substr(end($sqlDefaultFiles), 8, -4);
+        $lastBackup['time'] = time();
+    }
+    $sqlUpdateFiles = filterDirectory(SERVER_ROOT . "sql", "update");
+    $updatesToRun = bistroUpdatesList($sqlUpdateFiles, @$lastBackup['version']);
     if (round($lastBackup['time'], -5) < round(time(), -5) || sizeof($updatesToRun) > 0) {
         bistroBackupGenerate();
     }
@@ -35,16 +39,17 @@ function bistroBackupList($empty = null)
             $backup['datetime'] = webDateTime($backup_record['time']);
             $backup['version'] = $backup_record['version'];
             if (file_exists($config['folder_backup'] . $file)) {
-                $backup['filesize'] = human_filesize(filesize($config['folder_backup'] . $file)) . "B";
+                $backup['filesize'] = human_filesize(filesize($config['folder_backup'] . $file));
             } else {
                 $backup['filesize'] = $text['notificationRecordNotFound'];
             }
             $backup_array[] = $backup;
         }
     }
-    if (sizeof($backup_array) < 1) {
+    if (empty($backup_array)) {
         $backup_array = false;
     }
+
     return $backup_array;
 }
 
@@ -92,6 +97,7 @@ function backupBackupGetData()
                     switch ($fields[$i]->type) {
                         case 8: case 3: //int bigint
                             $sqlScript .= $row_content;
+
                             break;
                         case 7: //timestamp
                             if (strlen($row_content) < 1) {
@@ -99,6 +105,7 @@ function backupBackupGetData()
                             } else {
                                 $sqlScript .= "'" . $row_content . "'";
                             }
+
                             break;
                         default:
                             $sqlScript .= "'" . $row_content . "'";
@@ -117,6 +124,7 @@ function backupBackupGetData()
         }
     }
     $sqlScript .= "\n COMMIT; SET unique_checks=1; SET foreign_key_checks=1;";
+
     return $sqlScript;
 }
 
@@ -134,7 +142,7 @@ function bistroBackupGenerate(): void
     $backupFile = $config['folder_backup'] . "backup" . time() . ".sql.gz";
     backupBackupSave(backupBackupGetData(), $backupFile);
     if (filesize($backupFile) > 1024) {
-        DebuggerLog("BACKUP GENERATED: ".$config['folder_backup'].basename($backupFile)." [".round(filesize($backupFile) / 1024)." kB]","W");
+        DebuggerLog("BACKUP GENERATED: " . $config['folder_backup'] . basename($backupFile) . " [" . round(filesize($backupFile) / 1024) . " kB]", "N");
         $backupTable = 'backup';
         $backupColumns = 'time, file, version';
         $backupValues = '"' . time() . '","' . $backupFile . '","' . $config['version'] . '"';
@@ -157,11 +165,15 @@ function bistroBackupGenerate(): void
 }
 
 /**
- * CREATE database.table;.
+ * Creates database tables based on the provided table definitions.
  *
- * @param array create table $table['key'] ($table['value'] auto_increment primary)
+ * This function iterates over the provided table definitions and creates each table
+ * if it does not already exist. It logs the creation process and returns the number
+ * of tables successfully created.
  *
- * @return int of created tables
+ * @param  array       $table an associative array where the keys are table names and the values are column definitions
+ * @param  string|null $file  Optional. The file name to include in the debug log.
+ * @return int         the number of tables successfully created
  */
 function bistroDBTableCreate($table, $file = null): int
 {
@@ -172,10 +184,10 @@ function bistroDBTableCreate($table, $file = null): int
             $sqlCreate = "CREATE TABLE " . DB_PREFIX . $key . " (" . $value . " int NOT NULL AUTO_INCREMENT PRIMARY KEY)";
             mysqli_query($database, $sqlCreate);
             if (DBtableExist($key) != 0) {
-                DebuggerLog($file.': '.$sqlCreate,"W");
+                DebuggerLog($file . ': ' . $sqlCreate, "N");
                 $alter++;
             } else {
-                DebuggerLog($file.': '.$sqlCreate, "E");
+                DebuggerLog($file . ': ' . $sqlCreate, "E");
             }
         }
     }
@@ -199,10 +211,10 @@ function bistroDBTableRename($data, $file = null): int
             $renameSql = "ALTER TABLE " . $configDB['dbDatabase'] . "." . DB_PREFIX . "$old RENAME TO " . $configDB['dbDatabase'] . "." . DB_PREFIX . "$new";
             mysqli_query($database, $renameSql);
             if (DBtableExist($new) != 0 && DBtableExist($old) == 0) {
-                ($file.': '.$renameSql);
+                DebuggerLog($file . ': ' . $renameSql, "N");
                 $alter++;
             } else {
-                DebuggerLog($file.': '.$renameSql,"E");
+                DebuggerLog($file . ': ' . $renameSql, "E");
             }
         }
     }
@@ -227,10 +239,10 @@ function bistroDBColumnAdd($data, $file = null): int
                 $alterSql = "ALTER TABLE " . $configDB['dbDatabase'] . "." . DB_PREFIX . "$table ADD COLUMN $column " . $data[$table][$column];
                 mysqli_query($database, $alterSql);
                 if (DBcolumnExist($table, $column) != 0) {
-                    DebuggerLog($file.': '.$alterSql,"W");
+                    DebuggerLog($file . ': ' . $alterSql, "N");
                     $alter++;
                 } else {
-                    DebuggerLog($file.': '.$alterSql,"E");
+                    DebuggerLog($file . ': ' . $alterSql, "E");
                 }
             }
         }
@@ -256,10 +268,10 @@ function bistroDBColumnAlter($data, $file = null): int
                 $alterSql = "ALTER TABLE " . $configDB['dbDatabase'] . "." . DB_PREFIX . "$table CHANGE $column " . $data[$table][$column];
                 mysqli_query($database, $alterSql);
                 if (($column == explode(' ', trim($data[$table][$column]))[0]) || DBcolumnExist($table, $column) == 0 && DBcolumnExist($table, explode(' ', trim($data[$table][$column]))[0]) != 0) {
-                    DebuggerLog($file.': '.$alterSql,"W");
+                    DebuggerLog($file . ': ' . $alterSql, "N");
                     $alter++;
                 } else {
-                    DebuggerLog($file.': '.$alterSql,"E");
+                    DebuggerLog($file . ': ' . $alterSql, "E");
                 }
             }
         }
@@ -277,11 +289,12 @@ function bistroMyisamToInnodb(): int
     and table_schema = 'bistro' order by table_schema, table_name";
     $myisamDbQuery = mysqli_query($database, $myisamDbsql);
     while ($mysqisamDb = mysqli_fetch_assoc($myisamDbQuery)) {
-        $innoDbQuery = "ALTER TABLE ".$mysqisamDb['table_name']." engine='InnoDB'";
-        DebuggerLog($mysqisamDb['table_name'].' converted from MyISAM to InnoDB',"W");
+        $innoDbQuery = "ALTER TABLE " . $mysqisamDb['table_name'] . " engine='InnoDB'";
+        DebuggerLog($mysqisamDb['table_name'] . ' converted from MyISAM to InnoDB', "N");
         mysqli_query($database, $innoDbQuery);
         $alter++;
     }
+
     return $alter;
 }
 
@@ -302,7 +315,7 @@ function bistroDBFulltextAdd($data, $file = null): int
             if (DBtableExist($table) != 0 && (mysqli_num_rows(mysqli_query($database, $checkSql)) == 0)) {
                 $alterSql = "ALTER TABLE " . $configDB['dbDatabase'] . "." . DB_PREFIX . "$table ADD FULLTEXT ($value)";
                 mysqli_query($database, $alterSql);
-                DebuggerLog($file.': '.$alterSql,"W");
+                DebuggerLog($file . ': ' . $alterSql, "N");
                 $alter++;
             }
         }
@@ -322,7 +335,7 @@ function bistroDBIndexAdd($data, $file = null): int
             if (DBtableExist($table) != 0 && (mysqli_num_rows(mysqli_query($database, $checkSql)) == 0)) {
                 $alterSql = "ALTER TABLE " . $configDB['dbDatabase'] . "." . DB_PREFIX . "$table ADD INDEX $indexName (" . implode(',', $column) . ")";
                 mysqli_query($database, $alterSql);
-                DebuggerLog($file.': '.$alterSql,"W");
+                DebuggerLog($file . ': ' . $alterSql, "N");
                 $alter++;
             }
         }
@@ -346,10 +359,10 @@ function bistroDBColumnDrop($data, $file = null): int
                 $dropSql = "ALTER TABLE " . $configDB['dbDatabase'] . "." . DB_PREFIX . $table . " DROP $column";
                 mysqli_query($database, $dropSql);
                 if (DBColumnExist($table, $column) == 0) {
-                    DebuggerLog($file.': '.$dropSql,"W");
+                    DebuggerLog($file . ': ' . $dropSql, "N");
                     $alter++;
                 } else {
-                    DebuggerLog($file.': '.$dropSql,"E");
+                    DebuggerLog($file . ': ' . $dropSql, "E");
                 }
             }
         }
@@ -374,10 +387,10 @@ function bistroDBTableDrop($data, $file = null): int
             $dropSql = "DROP TABLE " . $config['dbDatabase'] . "." . DB_PREFIX . $value;
             mysqli_query($database, $dropSql);
             if (DBtableExist($value) == 0) {
-                DebuggerLog($file.': '.$dropSql,"W");
+                DebuggerLog($file . ': ' . $dropSql, "N");
                 $alter++;
             } else {
-                DebuggerLog($file.': '.$dropSql,"E");
+                DebuggerLog($file . ': ' . $dropSql, "E");
             }
         }
     }

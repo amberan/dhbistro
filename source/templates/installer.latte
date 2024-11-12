@@ -16,7 +16,7 @@
 			</p>
 		</div>
 	</div>
-
+{* defaults are read from inc/platform.php *}
 	<form action="/" method="post" id="dbconfig">
 		<div class="row">
 			<div class="col-12">
@@ -86,7 +86,7 @@
 					<div class="input-group-prepend">
 						<label class="input-group-text" id="db-hostname">DB Hostname</label>
 					</div>
-					<input name="dbHost" value="localhost" class="form-control" />
+					<input name="dbHost" value="127.0.0.1" class="form-control" />
 				</div>
 			</div>
 			<div class="col-12 col-md-4">
@@ -94,7 +94,7 @@
 					<div class="input-group-prepend">
 						<label class="input-group-text" id="db-user">DB User</label>
 					</div>
-					<input name="dbUser" type="input" value="{@$config[dbUser]}" class="form-control" />
+					<input name="dbUser" type="input" value="{if @$config[dbUser]}{$config[dbUser]}{else}bistro{/if}" class="form-control" />
 				</div>
 			</div>
 			<div class="col-12 col-md-4">
@@ -102,7 +102,7 @@
 					<div class="input-group-prepend">
 						<label class="input-group-text" id="db-password">DB Password</label>
 					</div>
-					<input name="dbPassword" type="Password" class="form-control" />
+					<input name="dbPassword" type="Password" value="{if @$config[dbPassword]}{$config[dbPassword]}{else}bistro{/if}" class="form-control" />
 				</div>
 			</div>
 		</div>
@@ -112,7 +112,7 @@
 					<div class="input-group-prepend">
 						<label class="input-group-text" id="db-database">Database</label>
 					</div>
-					<input name="dbDatabase" value="{@$config[dbDatabase]}" class="form-control" />
+					<input name="dbDatabase" value="{if @$config[dbDatabase]}{$config[dbDatabase]}{else}bistro{/if}" class="form-control" />
 				</div>
 			</div>
 			<div class="col-12 col-md-4">
@@ -121,6 +121,7 @@
 						<label class="input-group-text" id="db-tablefix">Table prefix</label>
 					</div>
 					<input name="dbPrefix" value="{if @$config[dbPrefix]}{$config[dbPrefix]}{else}nw_{/if}" class="form-control" />
+                    <p class="text-danger"><em>Keep in sync with the backup you are restoring!</em></p>
 				</div>
 			</div>
 		</div>
@@ -137,12 +138,12 @@
 		<div class="row">
 			<div class="col-12">
 				<p><strong>If any data will be found in the database, database population will be skipped.</strong></p>
-				{if !$backupList}
+				{if !@$backupList}
 					<p>No backups found in {$config['folder_backup']}, database will be populated by default script.</p>
 					<p>Default user is <mark>`admin`</mark> his password is <mark>`kokot`</mark>.</p>
 				{else}
 					<p>You can select one of the backups listed below to fill the new database (if it is empty).</p>
-					<p>If you wont select any backup to restore, database will be populated by default script (default user is <mark>`admin`</mark> with password <mark>`kokot`</mark>.).</p>
+					<p>If you wont select any backup to restore, database will be populated by default script (default user is <mark>`Shiva`</mark> with password <mark>`Shiva`</mark>.).</p>
 					<label for="themeCustom" class="col-form-label">
 						Files found:
 					</label>

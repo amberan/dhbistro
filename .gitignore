@@ -1,8 +1,18 @@
-/source/vendor/
-/source/files/
-/source/inc/important.php
-/source/cache/
-/source/log/
-/source/.env.php
-/doc/pre-commit
+# docker 
+.env
+# development data
+.composer/
 .php-cs-fixer.cache
+.quality/phpstan-baseline.neon
+# local password 
+/source/.env.php
+/source/inc/important.php
+# runtime data
+/logs/
+/mariadb
+/source/cache/
+/source/files/
+# external 
+/source/vendor/
+# to keep executable flag
+/doc/pre-commit

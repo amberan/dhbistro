@@ -1,24 +1,23 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'].'/inc/func_main.php';
-
+require_once $_SERVER['DOCUMENT_ROOT'] . '/inc/func_main.php';
 
 latteDrawTemplate("header");
 
 $latteParameters['title'] = 'Úprava případu';
 
 if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
-    $sql_a = "SELECT * FROM ".DB_PREFIX."c2s WHERE ".DB_PREFIX."c2s.idsolver=".$user['userId']." AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid'];
+    $sql_a = "SELECT * FROM " . DB_PREFIX . "c2s WHERE " . DB_PREFIX . "c2s.idsolver=" . $user['userId'] . " AND " . DB_PREFIX . "c2s.idcase=" . $_REQUEST['rid'];
     $res_a = mysqli_query($database, $sql_a);
     $rec_a = mysqli_fetch_array($res_a);
-    $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."case WHERE id=".$_REQUEST['rid']);
+    $res = mysqli_query($database, "SELECT * FROM " . DB_PREFIX . "case WHERE id=" . $_REQUEST['rid']);
     $rec = mysqli_fetch_assoc($res);
 
-    if ($user['aclCase'] && (($rec['secret'] == 0) || ($user['aclSecret']) || ($rec_a['iduser']))) {
+    if ((($rec['secret'] == 0) || ($user['aclSecret']) || ($rec_a['iduser'])) && $user['aclCase'] > 0) {
         $symbolbutton = ' <a href="symbols.php">přiřadit symboly</a>';
     } else {
         $symbolbutton = '';
     }
-    $res = mysqli_query($database, "SELECT * FROM ".DB_PREFIX."case WHERE id=".$_REQUEST['rid']);
+    $res = mysqli_query($database, "SELECT * FROM " . DB_PREFIX . "case WHERE id=" . $_REQUEST['rid']);
     if ($rec_c = mysqli_fetch_assoc($res)) {
         if (($rec['secret'] > $user['aclSecret']) || $rec['deleted'] == 1) {
             unauthorizedAccess(3, 1, $_REQUEST['rid']);
@@ -77,7 +76,7 @@ if (is_numeric($_REQUEST['rid']) && $user['aclCase']) {
             <input type="submit" value="Upravit řešitele" name="setsolver" class="submitbutton editbutton" title="Upravit řešitele" />
         </form>
         <p><?php
-$sql = "SELECT ".DB_PREFIX."user.userId AS 'id', ".DB_PREFIX."user.userName AS 'login' FROM ".DB_PREFIX."c2s, ".DB_PREFIX."user WHERE ".DB_PREFIX."user.userId=".DB_PREFIX."c2s.idsolver AND ".DB_PREFIX."c2s.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userDeleted=0 ORDER BY ".DB_PREFIX."user.userName ASC";
+$sql = "SELECT " . DB_PREFIX . "user.userId AS 'id', " . DB_PREFIX . "user.userName AS 'login' FROM " . DB_PREFIX . "c2s, " . DB_PREFIX . "user WHERE " . DB_PREFIX . "user.userId=" . DB_PREFIX . "c2s.idsolver AND " . DB_PREFIX . "c2s.idcase=" . $_REQUEST['rid'] . " AND " . DB_PREFIX . "user.userDeleted=0 ORDER BY " . DB_PREFIX . "user.userName ASC";
             $pers = mysqli_query($database, $sql);
             $solvers = [];
             while ($perc = mysqli_fetch_assoc($pers)) {
@@ -93,13 +92,13 @@ $sql = "SELECT ".DB_PREFIX."user.userId AS 'id', ".DB_PREFIX."user.userName AS '
             <input type="submit" value="Upravit osoby" name="setperson" class="submitbutton editbutton" title="Upravit osoby přiřazené" />
         </form>
         <p><?php
-                $sql = "SELECT ".DB_PREFIX."person.id AS 'id', ".DB_PREFIX."person.name AS 'name', ".DB_PREFIX."person.surname AS 'surname'
-                FROM ".DB_PREFIX."c2p, ".DB_PREFIX."person
-                WHERE ".DB_PREFIX."person.id=".DB_PREFIX."c2p.idperson AND ".DB_PREFIX."c2p.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."person.deleted=0 AND ".DB_PREFIX."person.secret<=".$user['aclSecret']."
-                ORDER BY ".DB_PREFIX."person.surname, ".DB_PREFIX."person.name ASC";
+                $sql = "SELECT " . DB_PREFIX . "person.id AS 'id', " . DB_PREFIX . "person.name AS 'name', " . DB_PREFIX . "person.surname AS 'surname'
+                FROM " . DB_PREFIX . "c2p, " . DB_PREFIX . "person
+                WHERE " . DB_PREFIX . "person.id=" . DB_PREFIX . "c2p.idperson AND " . DB_PREFIX . "c2p.idcase=" . $_REQUEST['rid'] . " AND " . DB_PREFIX . "person.deleted=0 AND " . DB_PREFIX . "person.secret<=" . $user['aclSecret'] . "
+                ORDER BY " . DB_PREFIX . "person.surname, " . DB_PREFIX . "person.name ASC";
             $pers = mysqli_query($database, $sql);
             while ($perc = mysqli_fetch_assoc($pers)) {
-                echo '<a href="readperson.php?rid='.$perc['id'].'">'.$perc['surname'].', '.$perc['name'].'</a>, ';
+                echo '<a href="readperson.php?rid=' . $perc['id'] . '">' . $perc['surname'] . ', ' . $perc['name'] . '</a>, ';
             }
             echo implode('; ', $solvers) != "" ? implode('; ', $solvers) : '<em>Nejsou připojeny žádné osoby.</em>'; ?></p>
     </fieldset>
@@ -113,14 +112,14 @@ $sql = "SELECT ".DB_PREFIX."user.userId AS 'id', ".DB_PREFIX."user.userName AS '
         <ul>
         <?php
         if ($user['aclSecret']) {
-            $sql = "SELECT ".DB_PREFIX."report.reportId AS 'id', ".DB_PREFIX."report.reportName AS 'label', ".DB_PREFIX."report.reportTask AS 'task', ".DB_PREFIX."user.userName AS 'user' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."report, ".DB_PREFIX."user WHERE ".DB_PREFIX."report.reportId=".DB_PREFIX."ar2c.idreport AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userId=".DB_PREFIX."report.reportOwner ORDER BY ".DB_PREFIX."report.reportName ASC";
+            $sql = "SELECT " . DB_PREFIX . "report.reportId AS 'id', " . DB_PREFIX . "report.reportName AS 'label', " . DB_PREFIX . "report.reportTask AS 'task', " . DB_PREFIX . "user.userName AS 'user' FROM " . DB_PREFIX . "ar2c, " . DB_PREFIX . "report, " . DB_PREFIX . "user WHERE " . DB_PREFIX . "report.reportId=" . DB_PREFIX . "ar2c.idreport AND " . DB_PREFIX . "ar2c.idcase=" . $_REQUEST['rid'] . " AND " . DB_PREFIX . "user.userId=" . DB_PREFIX . "report.reportOwner ORDER BY " . DB_PREFIX . "report.reportName ASC";
         } else {
-            $sql = "SELECT ".DB_PREFIX."report.reportId AS 'id', ".DB_PREFIX."report.reportName AS 'label', ".DB_PREFIX."report.reportTask AS 'task', ".DB_PREFIX."user.userName AS 'user' FROM ".DB_PREFIX."ar2c, ".DB_PREFIX."report, ".DB_PREFIX."user WHERE ".DB_PREFIX."report.reportId=".DB_PREFIX."ar2c.idreport AND ".DB_PREFIX."ar2c.idcase=".$_REQUEST['rid']." AND ".DB_PREFIX."user.userId=".DB_PREFIX."report.reportOwner AND ".DB_PREFIX."report.reportSecret=0 ORDER BY ".DB_PREFIX."report.reportName ASC";
+            $sql = "SELECT " . DB_PREFIX . "report.reportId AS 'id', " . DB_PREFIX . "report.reportName AS 'label', " . DB_PREFIX . "report.reportTask AS 'task', " . DB_PREFIX . "user.userName AS 'user' FROM " . DB_PREFIX . "ar2c, " . DB_PREFIX . "report, " . DB_PREFIX . "user WHERE " . DB_PREFIX . "report.reportId=" . DB_PREFIX . "ar2c.idreport AND " . DB_PREFIX . "ar2c.idcase=" . $_REQUEST['rid'] . " AND " . DB_PREFIX . "user.userId=" . DB_PREFIX . "report.reportOwner AND " . DB_PREFIX . "report.reportSecret=0 ORDER BY " . DB_PREFIX . "report.reportName ASC";
         }
             $pers = mysqli_query($database, $sql);
             $reports = [];
             while ($perc = mysqli_fetch_assoc($pers)) {
-                $reports[] = '<li><a href="/reports/'.$perc['id'].'">'.$perc['label'].'</a> - '.$perc['task'].' - <b>'.$perc['user'].'</b>';
+                $reports[] = '<li><a href="/reports/' . $perc['id'] . '">' . $perc['label'] . '</a> - ' . $perc['task'] . ' - <b>' . $perc['user'] . '</b>';
             }
             echo implode('; ', $reports) != "" ? implode('; ', $reports) : '<em>Nejsou připojena žádná hlášení.</em>'; ?>
         </ul>
@@ -130,10 +129,10 @@ $sql = "SELECT ".DB_PREFIX."user.userId AS 'id', ".DB_PREFIX."user.userName AS '
     <fieldset><legend><strong>Přiložené soubory</strong></legend>
         <strong><em>K osobě je možné nahrát neomezené množství souborů, ale velikost jednoho souboru je omezena na 2 MB.</em></strong>
         <?php //generování seznamu přiložených souborů
-            $sql = "SELECT ".DB_PREFIX."file.iduser AS 'iduser', ".DB_PREFIX."file.originalname AS 'title', ".DB_PREFIX."file.secret AS 'secret', ".DB_PREFIX."file.id AS 'id'
-            FROM ".DB_PREFIX."file
-            WHERE ".DB_PREFIX."file.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."file.idtable=3 AND ".DB_PREFIX."file.secret <= ".$user['aclSecret']."
-            ORDER BY ".DB_PREFIX."file.originalname ASC";
+            $sql = "SELECT " . DB_PREFIX . "file.iduser AS 'iduser', " . DB_PREFIX . "file.originalname AS 'title', " . DB_PREFIX . "file.secret AS 'secret', " . DB_PREFIX . "file.id AS 'id'
+            FROM " . DB_PREFIX . "file
+            WHERE " . DB_PREFIX . "file.iditem=" . $_REQUEST['rid'] . " AND " . DB_PREFIX . "file.idtable=3 AND " . DB_PREFIX . "file.secret <= " . $user['aclSecret'] . "
+            ORDER BY " . DB_PREFIX . "file.originalname ASC";
 
             $res = mysqli_query($database, $sql);
             $i = 0;
@@ -144,7 +143,7 @@ $sql = "SELECT ".DB_PREFIX."user.userId AS 'id', ".DB_PREFIX."user.userName AS '
                 <?php } ?>
             <li class="soubor"><a href="file/attachement/<?php echo $rec_f['id']; ?>" title=""><?php echo stripslashes($rec_f['title']); ?></a><?php if ($rec_f['secret'] == 1) { ?> (TAJNÝ)<?php } ?><span class="poznamka-edit-buttons"><?php
                 if (($rec_f['iduser'] == $user['userId']) || ($user['aclSecret'])) {
-                    echo '<a class="delete" title="smazat" href="/cases/?deletefile='.$rec_f['id'].'&amp;caseid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editcase.php?rid='.$_REQUEST['rid']).'" onclick="return confirm(\'Opravdu odebrat soubor &quot;'.stripslashes($rec_f['title']).'&quot; náležící k případu?\')"><span class="button-text">smazat soubor</span></a>';
+                    echo '<a class="delete" title="smazat" href="/cases/?deletefile=' . $rec_f['id'] . '&amp;caseid=' . $_REQUEST['rid'] . '&amp;backurl=' . urlencode('editcase.php?rid=' . $_REQUEST['rid']) . '" onclick="return confirm(\'Opravdu odebrat soubor &quot;' . stripslashes($rec_f['title']) . '&quot; náležící k případu?\')"><span class="button-text">smazat soubor</span></a>';
                 } ?>
                 </span><br><br></li><?php
             }
@@ -184,7 +183,7 @@ $sql = "SELECT ".DB_PREFIX."user.userId AS 'id', ".DB_PREFIX."user.userName AS '
             } ?>
             <div>
                 <input type="hidden" name="caseid" value="<?php echo $_REQUEST['rid']; ?>" />
-                <input type="hidden" name="backurl" value="<?php echo 'editcase.php?rid='.$_REQUEST['rid']; ?>" />
+                <input type="hidden" name="backurl" value="<?php echo 'editcase.php?rid=' . $_REQUEST['rid']; ?>" />
                 <input type="submit" name="uploadfile" value="Nahrát soubor k osobě" class="submitbutton" title="Uložit"/>
             </div>
         </form>
@@ -199,9 +198,9 @@ $sql = "SELECT ".DB_PREFIX."user.userId AS 'id', ".DB_PREFIX."user.userName AS '
         <ul>
         <?php
         if ($user['aclSecret']) {
-            $sql_n = "SELECT ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=3 AND ".DB_PREFIX."note.deleted=0 ORDER BY ".DB_PREFIX."note.datum DESC";
+            $sql_n = "SELECT " . DB_PREFIX . "note.iduser AS 'iduser', " . DB_PREFIX . "note.title AS 'title', " . DB_PREFIX . "note.secret AS 'secret', " . DB_PREFIX . "user.userName AS 'user', " . DB_PREFIX . "note.id AS 'id' FROM " . DB_PREFIX . "note, " . DB_PREFIX . "user WHERE " . DB_PREFIX . "note.iduser=" . DB_PREFIX . "user.userId AND " . DB_PREFIX . "note.iditem=" . $_REQUEST['rid'] . " AND " . DB_PREFIX . "note.idtable=3 AND " . DB_PREFIX . "note.deleted=0 ORDER BY " . DB_PREFIX . "note.datum DESC";
         } else {
-            $sql_n = "SELECT ".DB_PREFIX."note.iduser AS 'iduser', ".DB_PREFIX."note.title AS 'title', ".DB_PREFIX."note.secret AS 'secret', ".DB_PREFIX."user.userName AS 'user', ".DB_PREFIX."note.id AS 'id' FROM ".DB_PREFIX."note, ".DB_PREFIX."user WHERE ".DB_PREFIX."note.iduser=".DB_PREFIX."user.userId AND ".DB_PREFIX."note.iditem=".$_REQUEST['rid']." AND ".DB_PREFIX."note.idtable=3 AND ".DB_PREFIX."note.deleted=0 AND (".DB_PREFIX."note.secret=0 OR ".DB_PREFIX."note.iduser=".$user['userId'].") ORDER BY ".DB_PREFIX."note.datum DESC";
+            $sql_n = "SELECT " . DB_PREFIX . "note.iduser AS 'iduser', " . DB_PREFIX . "note.title AS 'title', " . DB_PREFIX . "note.secret AS 'secret', " . DB_PREFIX . "user.userName AS 'user', " . DB_PREFIX . "note.id AS 'id' FROM " . DB_PREFIX . "note, " . DB_PREFIX . "user WHERE " . DB_PREFIX . "note.iduser=" . DB_PREFIX . "user.userId AND " . DB_PREFIX . "note.iditem=" . $_REQUEST['rid'] . " AND " . DB_PREFIX . "note.idtable=3 AND " . DB_PREFIX . "note.deleted=0 AND (" . DB_PREFIX . "note.secret=0 OR " . DB_PREFIX . "note.iduser=" . $user['userId'] . ") ORDER BY " . DB_PREFIX . "note.datum DESC";
         }
             $res_n = mysqli_query($database, $sql_n);
             while ($rec_n = mysqli_fetch_assoc($res_n)) { ?>
@@ -211,10 +210,10 @@ $sql = "SELECT ".DB_PREFIX."user.userId AS 'id', ".DB_PREFIX."user.userName AS '
                 if ($rec_n['secret'] == 2) { ?> (soukromá)<?php }
                 ?><span class="poznamka-edit-buttons"><?php
                 if (($rec_n['iduser'] == $user['userId']) || ($user['aclCase'] > 0)) {
-                    echo ' <a class="edit" href="editnote.php?rid='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;idtable=3" title="upravit"><span class="button-text">upravit poznámku</span></a>';
+                    echo ' <a class="edit" href="editnote.php?rid=' . $rec_n['id'] . '&amp;itemid=' . $_REQUEST['rid'] . '&amp;idtable=3" title="upravit"><span class="button-text">upravit poznámku</span></a>';
                 }
                 if (($rec_n['iduser'] == $user['userId']) || ($user['aclCase'] > 1)) {
-                    echo ' <a class="delete" href="procnote.php?deletenote='.$rec_n['id'].'&amp;itemid='.$_REQUEST['rid'].'&amp;backurl='.urlencode('editgroup.php?rid='.$_REQUEST['rid']).'" onclick="'."return confirm('Opravdu smazat poznámku &quot;".stripslashes($rec_n['title'])."&quot; náležící k hlášení?');".'" title="smazat"><span class="button-text">smazat poznámku</span></a>';
+                    echo ' <a class="delete" href="procnote.php?deletenote=' . $rec_n['id'] . '&amp;itemid=' . $_REQUEST['rid'] . '&amp;backurl=' . urlencode('editgroup.php?rid=' . $_REQUEST['rid']) . '" onclick="' . "return confirm('Opravdu smazat poznámku &quot;" . stripslashes($rec_n['title']) . "&quot; náležící k hlášení?');" . '" title="smazat"><span class="button-text">smazat poznámku</span></a>';
                 }
                 ?></span></li><?php
             } ?>

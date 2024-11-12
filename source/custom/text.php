@@ -157,6 +157,8 @@ $text['note'] = 'poznámka';
 
 $text['note'] = 'poznámka';
 
+$text['note'] = 'poznámka';
+
 //REPORT
 $text['nedokoncenahlaseni'] = 'rozpracovaná nedokončená hlášení';
 $text['zadnanedokoncenahlaseni'] = 'nemáte žádná nedokončená hlášení';
@@ -166,6 +168,7 @@ $text['hlasenineniprirazenopripadu'] = 'hlášení není přiřazeno k žádném
 $text['neprirazenesymbolyhlaseni'] = 'nepřiřazené symboly spojené s hlášením';
 $text['osobyprirazenekhlaseni'] = 'osoby přiřazené k hlášení';
 $text['nemanedokoncenahlaseni'] = 'uživatel nemá žádná nedokončená hlášení.';
+
 
 // GENERIC
 $text['poslednizmena'] = 'poslední úprava';

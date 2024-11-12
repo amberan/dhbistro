@@ -19,7 +19,7 @@ if ((isset($_POST['userid']) and isset($_POST['edituser']) and !is_numeric($_REQ
             $latteParameters['message'] = $text['puvodniheslospatne'];
         }
     } elseif (isset($_REQUEST['editsettings'])) {
-        if (mb_strlen($_POST['email']) == 0 or (validate_mail($_POST['email']) == true and mb_strlen($_POST['email']))) {
+        if ((validate_mail($_POST['email']) == true && mb_strlen($_POST['email'])) || mb_strlen($_POST['email']) == 0) {
             $update = [
                 'userEmail' => $_POST['email'],
                 'planMD' => $_POST['plan'],

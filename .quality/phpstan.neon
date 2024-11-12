@@ -1,0 +1,16 @@
+parameters:
+    bootstrapFiles:
+        - ../source/.env.php
+    ignoreErrors:
+        - identifier: variable.undefined
+    level: 5
+    paths:
+        - ../source
+    excludePaths:
+        analyse:
+        - ../source/vendor (?)
+        analyseAndScan:
+        - ../source/cache (?)
+    reportUnmatchedIgnoredErrors: false
+# includes:
+# 	- phpstan-baseline.neon

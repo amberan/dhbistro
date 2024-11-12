@@ -1,12 +1,10 @@
 <?php
 
-
 /**
- * GET USER INFO.
+ * Retrieves user information based on the session ID.
  *
- * @param string sid session_id();
- * @param mixed $sid
- *               TODO remove legacy login masking
+ * @param  string     $sid the session ID
+ * @return array|null the user information as an associative array if found, or null if not found
  */
 function sessionUser($sid)
 {
@@ -26,10 +24,9 @@ function sessionUser($sid)
 }
 
 /**
- * DELETE SID FROM DB.
+ * Deletes the session ID from the database.
  *
- * @param string sid
- * @param mixed $sid
+ * @param string $sid the session ID to delete
  */
 function sessionDBwipe($sid): void
 {
@@ -38,10 +35,9 @@ function sessionDBwipe($sid): void
 }
 
 /**
- * FORCED LOGOUT.
+ * Forces the user to log out and displays a message.
  *
- * @param string msg to display
- * @param mixed $msg
+ * @param string $msg the message to display
  */
 function logout_forced($msg): void
 {
@@ -52,10 +48,10 @@ function logout_forced($msg): void
     session_regenerate_id();
     session_destroy();
     session_start();
-    if (isset($msg)) {
+    if (strlen($msg) > 0) {
         @$_SESSION['message'] .= $msg;
     }
-    header('location: ' . $URL[0]);
+    header('location: /');
 }
 
 /*
@@ -70,7 +66,7 @@ if (isset($_POST['logmein']) and mb_strlen($_POST['loginname']) and mb_strlen($_
         $logonUpdateSql = "UPDATE " . DB_PREFIX . "user SET sid='" . $_SESSION['sid'] . "', lastLogin=" . time() . ", ipv4='" . $_SERVER['REMOTE_ADDR'] . "', userAgent='" . $_SERVER['HTTP_USER_AGENT'] . "' WHERE userId=" . $logonUser['userId'];
         mysqli_query($database, $logonUpdateSql);
     } else {
-        DebuggerLog("LOGIN FAILED: ".$_POST['loginname'],"W");
+        DebuggerLog("LOGIN FAILED: " . $_POST['loginname'], "N");
     }
 }
 
@@ -87,7 +83,7 @@ if (isset($_SESSION['sid'])) {
 if (!isset($_SESSION['sid']) and (in_array($URL[1], $config['page_free'], true) == false)) { //neprihlaseny, zkousi, legacy only
     logout_forced($text['notificationHttp401']);
 }
-if (isset($user) and (@$user['userTimeout'] + @$_SESSION['timestamp'] < time()) and !isset($_POST['logmein'])) { //neprihlasuje se, je prihlaseny, ale vyprsel timeout
+if (isset($user) && (intval(@$user['userTimeout']) + intval(@$_SESSION['timestamp']) < time()) && !isset($_POST['logmein'])) { //neprihlasuje se, je prihlaseny, ale vyprsel timeout
     logout_forced($text['nuceneodhlaseni']);
 }
 if ($URL[1] == 'logout') { //user logout

@@ -1,3 +1,75 @@
+# stages:
+#   - install
+#   - lint
+
+# variables:
+#   # Set the default PHP version to be used by all jobs
+#   PHP_VERSION: "8.1"
+
+# cache:
+#   key: ${CI_COMMIT_REF_SLUG}
+#   paths:
+#     - vendor/
+
+# # Step 1: Install dependencies
+# install_dependencies:
+#   stage: install
+#   image: "php:${PHP_VERSION}-cli"
+#   script:
+#     - apt-get update && apt-get install -y git unzip
+#     - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+#     - composer install --prefer-dist --no-progress --no-suggest
+
+#   artifacts:
+#     paths:
+#       - vendor/
+
+# # Step 2: Run PHPStan for static analysis
+# phpstan:
+#   stage: lint
+#   image: "php:${PHP_VERSION}-cli"
+#   script:
+#     - vendor/bin/phpstan analyse src --level max
+#   dependencies:
+#     - install_dependencies
+#   allow_failure: false
+#   # Only run on specific branches if needed
+#   only:
+#     - main
+#     - develop
+#     - merge_requests
+
+# # Step 3: Run ECS for coding standards and fixing issues
+# ecs:
+#   stage: lint
+#   image: "php:${PHP_VERSION}-cli"
+#   script:
+#     - vendor/bin/ecs check src --fix
+#   dependencies:
+#     - install_dependencies
+#   allow_failure: false
+#   only:
+#     - main
+#     - develop
+#     - merge_requests
+
+# # Step 4: Run PHPCS for coding standards enforcement
+# phpcs:
+#   stage: lint
+#   image: "php:${PHP_VERSION}-cli"
+#   script:
+#     - vendor/bin/phpcs src
+#   dependencies:
+#     - install_dependencies
+#   allow_failure: false
+#   only:
+#     - main
+#     - develop
+#     - merge_requests
+
+
+
+
 # .gitlab-ci.yml documentation: https://docs.gitlab.com/ee/ci/yaml/gitlab_ci_yaml.html
 # Code-Quality documentation: https://docs.gitlab.com/ee/ci/testing/code_quality.html
 # Static Application Security Testing documentation: https://docs.gitlab.com/ee/user/application_security/sast/
@@ -26,6 +98,8 @@ stages:
 - deploy
 
 ######################################################## BUILD
+
+#TODO one job for changing Debugger, one job for `build`
 
 build_test:
   stage: build
@@ -66,6 +140,10 @@ build_prod:
 
 ######################################################## TEST
 
+#TODO moved all configs to .quailty
+#TODO checking *php without vendor/
+#TODO PHPStan --error-format=gitlab
+
 code_quality:
   interruptible: true
   allow_failure: true
@@ -97,6 +175,8 @@ semgrep-sast:
         - '**/*.php'
 
 ######################################################## DEPLOY
+
+# TODO generic script for params for selecting folder/platform -> move to one step
 
 deploy_test:
   resource_group: testing
