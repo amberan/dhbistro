@@ -1,7 +1,7 @@
 {
   description = "Bistro localy, services included";
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
     flake-utils.url = "github:numtide/flake-utils";
     phps.url = "github:loophp/nix-shell";
   };
@@ -31,7 +31,7 @@
           shellHook = ''
             MARIADB_BASEDIR=${pkgs.mariadb}
             MARIADB_HOME="$PWD/mariadb"
-            export MARIADB_UNIX_PORT="$MARIADB_HOME/mariadb.sock"
+            MARIADB_UNIX_PORT="$MARIADB_HOME/mariadb.sock"
             export COMPOSER_HOME="$PWD/.composer"
 
             MARIADB_PID_FILE="$PWD/logs/.mariadb.pid"
