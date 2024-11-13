@@ -31,7 +31,7 @@
           shellHook = ''
             MARIADB_BASEDIR=${pkgs.mariadb}
             MARIADB_HOME="$PWD/mariadb"
-            MARIADB_UNIX_PORT="$MARIADB_HOME/mariadb.sock"
+            export MARIADB_UNIX_PORT="$MARIADB_HOME/mariadb.sock"
             export COMPOSER_HOME="$PWD/.composer"
 
             MARIADB_PID_FILE="$PWD/logs/.mariadb.pid"
